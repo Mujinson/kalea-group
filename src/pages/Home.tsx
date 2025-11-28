@@ -5,6 +5,7 @@ import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Bri
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
+import bgProducts from "@/assets/bg-products.jpg";
 
 const Home = () => {
   const productLines = [
@@ -63,8 +64,14 @@ const Home = () => {
       />
 
       {/* Le linee Kalēa */}
-      <section className="section-spacing section-dark">
-        <div className="container-custom">
+      <section className="section-spacing relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img src={bgProducts} alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
+        </div>
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
