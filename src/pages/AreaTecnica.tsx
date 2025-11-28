@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import PageSection from "@/components/PageSection";
 import { FileText, Download, Layers, Shield, Leaf, Home, Building2, Wrench, BookOpen, Video, HelpCircle, FileCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeatureCard from "@/components/FeatureCard";
@@ -93,7 +92,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* Filtri */}
-      <PageSection zIndex={10}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -153,10 +152,10 @@ const AreaTecnica = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* CTA */}
-      <PageSection background="card" zIndex={20}>
+      <section className="section-spacing bg-card">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -175,10 +174,10 @@ const AreaTecnica = () => {
             </Button>
           </motion.div>
         </div>
-      </PageSection>
+      </section>
 
       {/* 1. Struttura del pavimento in MgO */}
-      <PageSection zIndex={30}>
+      <section className="section-spacing">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Colonna sinistra - Testo */}
@@ -229,10 +228,10 @@ const AreaTecnica = () => {
             </motion.div>
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* 2. Prestazioni & Normative */}
-      <PageSection background="muted" zIndex={40}>
+      <section className="section-spacing bg-muted/30">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -293,22 +292,21 @@ const AreaTecnica = () => {
             </div>
           </motion.div>
         </div>
-      </PageSection>
+      </section>
 
       {/* 3. MgO vs SPC/MFC/HPL */}
-      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={50}>
-        <div className="section-spacing relative">
-          <div 
-            className="absolute inset-0 z-0 rounded-[36px] overflow-hidden"
-            style={{
-              backgroundImage: 'url(/src/assets/bg-products.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'brightness(0.4)',
-            }}
-          />
-          
-          <div className="container-custom relative z-10">
+      <section className="section-spacing relative overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/src/assets/bg-products.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'brightness(0.4)',
+          }}
+        />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -351,11 +349,10 @@ const AreaTecnica = () => {
             />
           </div>
         </div>
-        </div>
-      </PageSection>
+      </section>
 
       {/* 4. Applicazioni consigliate */}
-      <PageSection zIndex={60}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -402,22 +399,21 @@ const AreaTecnica = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* 5. Consulenza tecnica */}
-      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={70}>
-        <div className="section-spacing relative">
-          <div 
-            className="absolute inset-0 z-0 rounded-[36px] overflow-hidden"
-            style={{
-              backgroundImage: 'url(/src/assets/bg-products.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'brightness(0.4)',
-            }}
-          />
-          
-          <div className="container-custom relative z-10">
+      <section className="section-spacing relative overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/src/assets/bg-products.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'brightness(0.4)',
+          }}
+        />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -468,11 +464,10 @@ const AreaTecnica = () => {
             </div>
           </motion.div>
         </div>
-        </div>
-      </PageSection>
+      </section>
 
       {/* 6. Risorse tecniche */}
-      <PageSection zIndex={80}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -516,10 +511,10 @@ const AreaTecnica = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* 7. CTA finale */}
-      <PageSection background="muted" zIndex={90}>
+      <section className="section-spacing bg-muted/30">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -550,7 +545,7 @@ const AreaTecnica = () => {
             </div>
           </motion.div>
         </div>
-      </PageSection>
+      </section>
     </div>
   );
 };

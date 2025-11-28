@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
-import PageSection from "@/components/PageSection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Leaf, Clock, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -65,15 +64,14 @@ const Home = () => {
       />
 
       {/* Le linee Kalēa */}
-      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={10}>
-        <div className="section-spacing relative">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0 rounded-[36px] overflow-hidden">
-            <img src={bgProducts} alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
-          </div>
-          
-          <div className="container-custom relative z-10">
+      <section className="section-spacing relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img src={bgProducts} alt="" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
+        </div>
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -95,11 +93,10 @@ const Home = () => {
             ))}
           </div>
         </div>
-        </div>
-      </PageSection>
+      </section>
 
       {/* Perché MgO */}
-      <PageSection zIndex={20}>
+      <section className="section-spacing">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div
@@ -152,10 +149,10 @@ const Home = () => {
             </motion.div>
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* Applicazioni */}
-      <PageSection background="card" zIndex={30}>
+      <section className="section-spacing bg-card">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -192,10 +189,10 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* Sostenibilità */}
-      <PageSection zIndex={40}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -218,10 +215,10 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* CTA Finale */}
-      <PageSection background="primary" zIndex={50}>
+      <section className="section-spacing bg-primary text-primary-foreground">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -251,7 +248,7 @@ const Home = () => {
             </div>
           </motion.div>
         </div>
-      </PageSection>
+      </section>
     </div>
   );
 };

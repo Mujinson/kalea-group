@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import PageSection from "@/components/PageSection";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -85,7 +84,7 @@ const Contatti = () => {
       </section>
 
       {/* Contenuto */}
-      <PageSection zIndex={10}>
+      <section className="section-spacing">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Form */}
@@ -285,7 +284,7 @@ const Contatti = () => {
             </motion.div>
           </div>
         </div>
-      </PageSection>
+      </section>
     </div>
   );
 };

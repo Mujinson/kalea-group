@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
-import PageSection from "@/components/PageSection";
 import { Zap, Shield, Palette, Droplets, Flame, Clock, Grid3x3, Layers, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -81,7 +80,7 @@ const OneWall = () => {
       />
 
       {/* Come funziona */}
-      <PageSection zIndex={10}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -120,10 +119,10 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* Finiture */}
-      <PageSection background="card" zIndex={20}>
+      <section className="section-spacing bg-card">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -163,18 +162,22 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* Vantaggi tecnici */}
-      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={30}>
-        <div className="section-spacing relative">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0 rounded-[36px] overflow-hidden">
-            <img src={bgOneWall} alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/30" />
-          </div>
-          
-          <div className="container-custom relative z-10">
+      <section 
+        className="section-spacing relative"
+        style={{
+          backgroundImage: `url(${bgOneWall})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay scuro */}
+        <div className="absolute inset-0 bg-black/30" />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -194,19 +197,22 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-        </div>
-      </PageSection>
+      </section>
 
       {/* Applicazioni */}
-      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={40}>
-        <div className="section-spacing relative py-24">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0 rounded-[36px] overflow-hidden">
-            <img src={bgOneWallApplications} alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/25" />
-          </div>
-          
-          <div className="container-custom relative z-10">
+      <section 
+        className="section-spacing relative py-24"
+        style={{
+          backgroundImage: `url(${bgOneWallApplications})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/25" />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -255,11 +261,10 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-        </div>
-      </PageSection>
+      </section>
 
       {/* CTA finale */}
-      <PageSection background="primary" zIndex={50}>
+      <section className="section-spacing bg-primary text-primary-foreground">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -278,7 +283,7 @@ const OneWall = () => {
             </Button>
           </motion.div>
         </div>
-      </PageSection>
+      </section>
     </div>
   );
 };

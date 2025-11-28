@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
-import PageSection from "@/components/PageSection";
 import { Target, Lightbulb, Users, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -78,7 +77,7 @@ const ChiSiamo = () => {
       </section>
 
       {/* Storia */}
-      <PageSection zIndex={10}>
+      <section className="section-spacing">
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -107,10 +106,10 @@ const ChiSiamo = () => {
             </div>
           </motion.div>
         </div>
-      </PageSection>
+      </section>
 
       {/* Cosa ci guida */}
-      <PageSection background="card" zIndex={20}>
+      <section className="section-spacing bg-card">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -131,10 +130,10 @@ const ChiSiamo = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* Per chi lavoriamo */}
-      <PageSection zIndex={30}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -165,10 +164,10 @@ const ChiSiamo = () => {
             ))}
           </div>
         </div>
-      </PageSection>
+      </section>
 
       {/* CTA */}
-      <PageSection background="primary" zIndex={40}>
+      <section className="section-spacing bg-primary text-primary-foreground">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -185,7 +184,7 @@ const ChiSiamo = () => {
             </Button>
           </motion.div>
         </div>
-      </PageSection>
+      </section>
     </div>
   );
 };
