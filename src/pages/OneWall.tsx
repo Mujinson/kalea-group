@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
-import { Zap, Shield, Palette, Droplets, Flame, Clock } from "lucide-react";
+import { Zap, Shield, Palette, Droplets, Flame, Clock, Grid3x3, Layers, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-onewall.jpg";
 import bgOneWall from "@/assets/bg-onewall.jpg";
+import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
 
 const OneWall = () => {
   const advantages = [
@@ -199,57 +200,64 @@ const OneWall = () => {
       </section>
 
       {/* Applicazioni */}
-      <section className="section-spacing bg-card">
-        <div className="container-custom">
+      <section 
+        className="section-spacing relative py-24"
+        style={{
+          backgroundImage: `url(${bgOneWallApplications})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/25" />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
               Dove usare OneWall
             </h2>
+            <p className="text-lg text-white/90 max-w-2xl mx-auto">
+              Soluzioni versatili per ogni esigenza architettonica
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
               {
-                title: "Pareti divisorie",
-                items: ["Uffici", "Residenziale", "Negozi", "Hotel"],
+                icon: Grid3x3,
+                title: "Pareti divisorie architettoniche",
+                description: "Soluzione ideale per creare ambienti flessibili e leggeri in uffici, abitazioni e spazi commerciali.",
               },
               {
-                title: "Pareti di rivestimento",
-                items: ["Bagni", "Cucine", "Zone living", "Camere"],
+                icon: Droplets,
+                title: "Pareti di rivestimento impermeabili",
+                description: "Perfette in bagni e cucine grazie alla totale resistenza all'umidità e alla stabilità nel tempo.",
               },
               {
-                title: "Controsoffitti",
-                items: ["Abitazioni", "Locali commerciali", "Spazi pubblici"],
+                icon: Layers,
+                title: "Controsoffitti e pannellature tecniche",
+                description: "Installazione rapida, finitura immediata e prestazioni superiori rispetto al cartongesso tradizionale.",
               },
               {
-                title: "Pareti d'accento",
-                items: ["Reception", "Showroom", "Spazi contract"],
+                icon: Sparkles,
+                title: "Pareti decorative e accent walls",
+                description: "Per creare elementi scenografici in reception, showroom, hotel e zone living.",
               },
             ].map((application, index) => (
-              <motion.div
-                key={application.title}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-background border border-border rounded-xl p-6"
-              >
-                <h3 className="text-xl font-heading font-semibold text-foreground mb-4">{application.title}</h3>
-                <ul className="space-y-2">
-                  {application.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-muted-foreground">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+              <FeatureCard 
+                key={application.title} 
+                icon={application.icon}
+                title={application.title}
+                description={application.description}
+                index={index}
+              />
             ))}
           </div>
         </div>
