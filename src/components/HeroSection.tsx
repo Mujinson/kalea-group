@@ -30,13 +30,16 @@ const HeroSection = ({
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.3]);
 
-  // Split title into lines for staggered animation
-  const titleLines = title.split(' ').reduce((acc, word, i, arr) => {
-    if (i === 0) acc.push(word); // Line 1: "Superfici"
-    else if (i <= 2) acc[1] = (acc[1] || '') + (acc[1] ? ' ' : '') + word; // Line 2: "di nuova generazione"
-    else acc[2] = (acc[2] || '') + (acc[2] ? ' ' : '') + word; // Line 3: "in MgO"
-    return acc;
-  }, [] as string[]);
+  // Split title into 2 lines for staggered animation
+  const titleLines = (() => {
+    const words = title.split(' ');
+    // Line 1: "Superfici di nuova generazione"
+    // Line 2: "in MgO"
+    return [
+      words.slice(0, -2).join(' '), // First line: all except last 2 words
+      words.slice(-2).join(' ')      // Second line: last 2 words
+    ];
+  })();
 
   return (
     <section 
