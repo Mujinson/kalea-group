@@ -105,7 +105,7 @@ const HeroSection = ({
               {ctaPrimary && (
                 <Link 
                   to={ctaPrimary.link}
-                  className="group inline-flex items-center justify-center gap-2 bg-white text-black text-button rounded-full px-10 py-4 hover:bg-gray-50 hover:shadow-lg transition-all duration-150"
+                  className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
                 >
                   {ctaPrimary.text}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -114,7 +114,7 @@ const HeroSection = ({
               {ctaSecondary && (
                 <Link 
                   to={ctaSecondary.link}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-black text-button rounded-full px-10 py-4 hover:bg-gray-50 hover:shadow-lg transition-all duration-150"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
                 >
                   {ctaSecondary.text}
                 </Link>
