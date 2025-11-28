@@ -19,7 +19,7 @@ const HeroSection = ({
   ctaPrimary,
   ctaSecondary,
   backgroundImage,
-  minHeight = "min-h-[80vh]",
+  minHeight = "min-h-screen",
 }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
