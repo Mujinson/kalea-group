@@ -7,7 +7,35 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineeExpanded, setIsLineeExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
+
+  // Auto-hide navbar on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Don't hide navbar if mobile menu is open
+      if (isMobileMenuOpen) {
+        return;
+      }
+
+      // Determine scroll direction
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        // Scrolling down & past navbar height
+        setIsVisible(false);
+      } else {
+        // Scrolling up
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY, isMobileMenuOpen]);
 
   const menuItems = [
     { label: "Area Tecnica", path: "/area-tecnica" },
@@ -26,8 +54,16 @@ const Navbar = () => {
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      animate={{ 
+        opacity: 1, 
+        y: 0,
+        transform: isVisible ? "translateY(0)" : "translateY(-100%)"
+      }}
+      transition={{ 
+        opacity: { duration: 0.6, ease: "easeOut" },
+        y: { duration: 0.6, ease: "easeOut" },
+        transform: { duration: 0.25, ease: "easeOut" }
+      }}
       className="fixed top-0 left-0 right-0 z-50 px-16 md:px-24 lg:px-32"
     >
       <div className="max-w-[1280px] mx-auto bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] rounded-b-[32px] border-b border-x border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
