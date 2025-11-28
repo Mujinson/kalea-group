@@ -112,7 +112,8 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply text-foreground font-sans antialiased;
+    background: hsl(var(--muted) / 0.3);
     font-family: 'DM Sans', sans-serif;
     font-weight: 300;
   }

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
+import PageSection from "@/components/PageSection";
 import { Sparkles, Shield, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -61,19 +62,15 @@ const EdgeLine = () => {
       />
 
       {/* Vantaggi */}
-      <section 
-        className="section-spacing relative"
-        style={{
-          backgroundImage: `url(${bgEdgeLine})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay scuro */}
-        <div className="absolute inset-0 bg-black/35" />
-        
-        <div className="container-custom relative z-10">
+      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={10}>
+        <div className="section-spacing relative">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0 rounded-[36px] overflow-hidden">
+            <img src={bgEdgeLine} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/35" />
+          </div>
+          
+          <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -95,10 +92,11 @@ const EdgeLine = () => {
             ))}
           </div>
         </div>
-      </section>
+        </div>
+      </PageSection>
 
       {/* Griglia prodotti */}
-      <section className="section-spacing bg-card">
+      <PageSection background="card" zIndex={20}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -134,10 +132,10 @@ const EdgeLine = () => {
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* Finiture */}
-      <section className="section-spacing">
+      <PageSection zIndex={30}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -167,10 +165,10 @@ const EdgeLine = () => {
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* CTA finale */}
-      <section className="section-spacing bg-primary text-primary-foreground">
+      <PageSection background="primary" zIndex={40}>
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -189,7 +187,7 @@ const EdgeLine = () => {
             </Button>
           </motion.div>
         </div>
-      </section>
+      </PageSection>
     </div>
   );
 };

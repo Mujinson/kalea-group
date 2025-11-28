@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
+import PageSection from "@/components/PageSection";
 import { Zap, Shield, Palette, Droplets, Flame, Clock, Grid3x3, Layers, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -80,7 +81,7 @@ const OneWall = () => {
       />
 
       {/* Come funziona */}
-      <section className="section-spacing">
+      <PageSection zIndex={10}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -119,10 +120,10 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* Finiture */}
-      <section className="section-spacing bg-card">
+      <PageSection background="card" zIndex={20}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -162,22 +163,18 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* Vantaggi tecnici */}
-      <section 
-        className="section-spacing relative"
-        style={{
-          backgroundImage: `url(${bgOneWall})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay scuro */}
-        <div className="absolute inset-0 bg-black/30" />
-        
-        <div className="container-custom relative z-10">
+      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={30}>
+        <div className="section-spacing relative">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0 rounded-[36px] overflow-hidden">
+            <img src={bgOneWall} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/30" />
+          </div>
+          
+          <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -197,22 +194,19 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-      </section>
+        </div>
+      </PageSection>
 
       {/* Applicazioni */}
-      <section 
-        className="section-spacing relative py-24"
-        style={{
-          backgroundImage: `url(${bgOneWallApplications})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/25" />
-        
-        <div className="container-custom relative z-10">
+      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={40}>
+        <div className="section-spacing relative py-24">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0 rounded-[36px] overflow-hidden">
+            <img src={bgOneWallApplications} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/25" />
+          </div>
+          
+          <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -261,10 +255,11 @@ const OneWall = () => {
             ))}
           </div>
         </div>
-      </section>
+        </div>
+      </PageSection>
 
       {/* CTA finale */}
-      <section className="section-spacing bg-primary text-primary-foreground">
+      <PageSection background="primary" zIndex={50}>
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -283,7 +278,7 @@ const OneWall = () => {
             </Button>
           </motion.div>
         </div>
-      </section>
+      </PageSection>
     </div>
   );
 };

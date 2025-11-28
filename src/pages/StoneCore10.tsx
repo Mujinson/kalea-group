@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
+import PageSection from "@/components/PageSection";
 import { Droplets, Flame, Shield, Volume2, Zap, Layers } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -63,7 +64,7 @@ const StoneCore10 = () => {
       />
 
       {/* Schema multistrato */}
-      <section className="section-spacing">
+      <PageSection zIndex={10}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -102,22 +103,18 @@ const StoneCore10 = () => {
             </div>
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* Vantaggi */}
-      <section 
-        className="section-spacing relative"
-        style={{
-          backgroundImage: `url(${bgStoneCore})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay scuro */}
-        <div className="absolute inset-0 bg-black/30" />
-        
-        <div className="container-custom relative z-10">
+      <PageSection background="transparent" noPadding className="overflow-hidden" zIndex={20}>
+        <div className="section-spacing relative">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0 rounded-[36px] overflow-hidden">
+            <img src={bgStoneCore} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-black/30" />
+          </div>
+          
+          <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -139,10 +136,11 @@ const StoneCore10 = () => {
             ))}
           </div>
         </div>
-      </section>
+        </div>
+      </PageSection>
 
       {/* Finiture */}
-      <section className="section-spacing">
+      <PageSection zIndex={30}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -181,10 +179,10 @@ const StoneCore10 = () => {
             ))}
           </div>
         </div>
-      </section>
+      </PageSection>
 
       {/* Tabs tecnici */}
-      <section className="section-spacing bg-card">
+      <PageSection background="card" zIndex={40}>
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -242,10 +240,10 @@ const StoneCore10 = () => {
             </Tabs>
           </motion.div>
         </div>
-      </section>
+      </PageSection>
 
       {/* CTA Download */}
-      <section className="section-spacing">
+      <PageSection zIndex={50}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -263,7 +261,7 @@ const StoneCore10 = () => {
             </Button>
           </motion.div>
         </div>
-      </section>
+      </PageSection>
     </div>
   );
 };
