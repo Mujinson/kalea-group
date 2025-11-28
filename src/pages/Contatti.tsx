@@ -84,7 +84,7 @@ const Contatti = () => {
       </section>
 
       {/* Contenuto */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 1 }}>
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Form */}
