@@ -8,53 +8,53 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 34 30% 94%;
-    --foreground: 30 10% 11%;
+    --background: 30 8% 15%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 30 10% 11%;
+    --card: 30 8% 18%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 30 10% 11%;
+    --popover: 30 8% 18%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 27 42% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 30 8% 15%;
 
-    --secondary: 34 45% 68%;
-    --secondary-foreground: 30 10% 11%;
+    --secondary: 30 12% 25%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 34 25% 82%;
-    --muted-foreground: 27 9% 39%;
+    --muted: 30 8% 25%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 27 42% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 30 12% 25%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 34 25% 82%;
-    --input: 34 25% 82%;
-    --ring: 27 42% 50%;
+    --border: 30 8% 25%;
+    --input: 30 8% 25%;
+    --ring: 0 0% 98%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
     
-    /* Custom Kalēa tokens */
-    --bg-primary: 34 30% 94%;
-    --bg-secondary: 0 0% 100%;
-    --accent-warm: 27 42% 50%;
-    --accent-gold: 34 45% 68%;
-    --text-main: 30 10% 11%;
-    --text-muted: 27 9% 39%;
-    --border-soft: 34 25% 82%;
+    /* Custom Kalēa tokens - Luzen style */
+    --bg-primary: 30 8% 15%;
+    --bg-secondary: 30 8% 18%;
+    --accent-warm: 35 40% 50%;
+    --accent-gold: 35 50% 60%;
+    --text-main: 0 0% 98%;
+    --text-muted: 0 0% 70%;
+    --border-soft: 30 8% 25%;
     
     /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     
     /* Shadows */
-    --shadow-soft: 0 4px 24px -4px hsla(30, 10%, 11%, 0.08);
-    --shadow-medium: 0 8px 32px -8px hsla(30, 10%, 11%, 0.12);
-    --shadow-large: 0 16px 48px -12px hsla(30, 10%, 11%, 0.16);
+    --shadow-soft: 0 8px 32px -8px hsla(0, 0%, 0%, 0.3);
+    --shadow-medium: 0 12px 48px -12px hsla(0, 0%, 0%, 0.4);
+    --shadow-large: 0 20px 64px -16px hsla(0, 0%, 0%, 0.5);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -67,33 +67,33 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 30 10% 11%;
-    --foreground: 34 30% 94%;
+    --background: 30 8% 12%;
+    --foreground: 0 0% 98%;
 
-    --card: 30 10% 14%;
-    --card-foreground: 34 30% 94%;
+    --card: 30 8% 15%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 30 10% 14%;
-    --popover-foreground: 34 30% 94%;
+    --popover: 30 8% 15%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 27 42% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 30 8% 12%;
 
-    --secondary: 34 45% 68%;
-    --secondary-foreground: 30 10% 11%;
+    --secondary: 30 12% 22%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 30 8% 20%;
-    --muted-foreground: 27 9% 60%;
+    --muted: 30 8% 22%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 27 42% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 30 12% 22%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 34 30% 94%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 30 8% 20%;
-    --input: 30 8% 20%;
-    --ring: 27 42% 50%;
+    --border: 30 8% 22%;
+    --input: 30 8% 22%;
+    --ring: 0 0% 98%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;

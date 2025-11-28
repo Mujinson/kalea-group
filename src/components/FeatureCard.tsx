@@ -9,20 +9,20 @@ interface FeatureCardProps {
 }
 
 const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardProps) => {
+  const delay = index * 0.1;
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group relative bg-card border border-border rounded-2xl p-8 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+      transition={{ duration: 0.6, delay }}
+      className="group bg-card p-8 rounded-2xl border border-border hover-lift shadow-soft hover:shadow-large transition-all duration-500"
     >
-      <div className="mb-6">
-        <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-          <Icon className="w-7 h-7 text-primary" />
-        </div>
+      <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-all duration-300">
+        <Icon className="w-7 h-7 text-foreground" />
       </div>
-      <h3 className="text-xl font-heading font-semibold text-foreground mb-3">{title}</h3>
+      <h3 className="text-xl font-heading font-semibold text-foreground mb-4">{title}</h3>
       <p className="text-muted-foreground leading-relaxed">{description}</p>
     </motion.div>
   );

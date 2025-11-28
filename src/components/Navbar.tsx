@@ -28,15 +28,17 @@ const Navbar = () => {
   ];
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-card/95 backdrop-blur-md shadow-md" : "bg-transparent"
-      }`}
-    >
+    <nav className="fixed top-0 left-0 right-0 z-50 pt-6">
       <div className="container-custom">
-        <div className="flex items-center justify-between h-20">
+        <div
+          className={`flex items-center justify-between h-16 px-8 rounded-full transition-all duration-500 ${
+            isScrolled
+              ? "bg-card/90 backdrop-blur-xl shadow-large"
+              : "bg-card/60 backdrop-blur-md"
+          }`}
+        >
           {/* Logo */}
-          <Link to="/" className="text-2xl font-heading font-bold text-foreground hover:text-primary transition-colors">
+          <Link to="/" className="text-xl font-heading font-bold text-foreground hover:text-muted-foreground transition-colors">
             Kalēa
           </Link>
 
@@ -46,15 +48,15 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition-colors hover:text-primary relative ${
-                  location.pathname === item.path ? "text-primary" : "text-foreground"
+                className={`text-sm font-medium transition-colors hover:text-foreground relative ${
+                  location.pathname === item.path ? "text-foreground" : "text-muted-foreground"
                 }`}
               >
                 {item.label}
                 {location.pathname === item.path && (
                   <motion.div
                     layoutId="navbar-indicator"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                    className="absolute -bottom-1 left-0 right-0 h-px bg-foreground"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -64,54 +66,54 @@ const Navbar = () => {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Button asChild variant="default" size="default">
+            <Button asChild variant="default" size="default" className="rounded-full">
               <Link to="/contatti">Richiedi preventivo</Link>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 text-foreground hover:text-primary transition-colors"
+            className="lg:hidden p-2 text-foreground hover:text-muted-foreground transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-card border-t border-border"
-          >
-            <div className="container-custom py-6 space-y-4">
-              {menuItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`block text-base font-medium transition-colors hover:text-primary ${
-                    location.pathname === item.path ? "text-primary" : "text-foreground"
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <Button asChild variant="default" size="default" className="w-full mt-4">
-                <Link to="/contatti" onClick={() => setIsMobileMenuOpen(false)}>
-                  Richiedi preventivo
-                </Link>
-              </Button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden bg-card/95 backdrop-blur-xl mt-4 rounded-3xl border border-border"
+            >
+              <div className="py-6 px-6 space-y-4">
+                {menuItems.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`block text-base font-medium transition-colors hover:text-foreground ${
+                      location.pathname === item.path ? "text-foreground" : "text-muted-foreground"
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <Button asChild variant="default" size="default" className="w-full mt-4 rounded-full">
+                  <Link to="/contatti" onClick={() => setIsMobileMenuOpen(false)}>
+                    Richiedi preventivo
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </nav>
   );
 };
