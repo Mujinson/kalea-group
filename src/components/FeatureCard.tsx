@@ -19,9 +19,9 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardP
       transition={{ duration: 0.7, delay }}
       className="group relative overflow-hidden transition-all duration-200 h-full flex flex-col"
       style={{
-        background: "rgba(255, 255, 255, 0.08)",
-        backdropFilter: "blur(22px)",
-        WebkitBackdropFilter: "blur(22px)",
+        background: "rgba(255, 255, 255, 0.18)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
         border: "1px solid rgba(255, 255, 255, 0.12)",
         borderRadius: "32px",
         padding: "48px",
