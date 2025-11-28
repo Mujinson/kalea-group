@@ -14,8 +14,18 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        heading: ['Plus Jakarta Sans', 'sans-serif'],
+        sans: ['DM Sans', 'sans-serif'],
+        heading: ['DM Sans', 'sans-serif'],
+      },
+      fontSize: {
+        'hero-xl': ['5rem', { lineHeight: '1.05', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'hero-lg': ['4rem', { lineHeight: '1.05', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'hero-md': ['2.8rem', { lineHeight: '1.08', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'subtitle': ['1.375rem', { lineHeight: '1.5', fontWeight: '300' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.6', fontWeight: '400' }],
+        'body': ['1rem', { lineHeight: '1.6', fontWeight: '300' }],
+        'nav': ['1rem', { lineHeight: '1.5', fontWeight: '400' }],
+        'button': ['1.0625rem', { lineHeight: '1.4', fontWeight: '500' }],
       },
       colors: {
         border: "hsl(var(--border))",

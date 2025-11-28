@@ -10,8 +10,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Logo & Tagline */}
           <div>
-            <h3 className="text-2xl font-heading font-bold text-foreground mb-3">Kalēa</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <h3 className="text-2xl font-heading font-semibold text-foreground mb-3">Kalēa</h3>
+            <p className="text-muted-foreground text-body">
               Superfici di nuova generazione in MgO. Pavimenti, profili e pannelli sviluppati in Italia per durare e
               trasformare gli spazi.
             </p>

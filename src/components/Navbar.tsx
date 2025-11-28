@@ -72,7 +72,7 @@ const Navbar = () => {
             {/* Logo - Left */}
             <Link
               to="/"
-              className="text-2xl font-heading font-bold text-white hover:opacity-80 transition-opacity duration-200 z-10"
+              className="text-2xl font-heading font-semibold text-white hover:opacity-80 transition-opacity duration-200 z-10"
             >
               Kalēa
             </Link>
@@ -81,7 +81,7 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
               <Link
                 to="/"
-                className={`text-[15px] font-semibold transition-all duration-200 relative ${
+                className={`text-nav transition-all duration-200 relative ${
                   location.pathname === "/" ? "text-white" : "text-white/90 hover:text-white"
                 }`}
               >
@@ -102,7 +102,7 @@ const Navbar = () => {
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <button
-                  className={`text-[15px] font-semibold transition-all duration-200 flex items-center gap-1 ${
+                  className={`text-nav transition-all duration-200 flex items-center gap-1 ${
                     isLineePage ? "text-white" : "text-white/90 hover:text-white"
                   }`}
                 >
@@ -133,7 +133,7 @@ const Navbar = () => {
                         <Link
                           key={item.path}
                           to={item.path}
-                          className={`block px-6 py-3 text-[15px] font-semibold transition-all duration-200 ${
+                          className={`block px-6 py-3 text-nav transition-all duration-200 ${
                             location.pathname === item.path
                               ? "text-white bg-white/10"
                               : "text-white/90 hover:text-white hover:bg-white/5"
@@ -151,7 +151,7 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`text-[15px] font-semibold transition-all duration-200 relative ${
+                  className={`text-nav transition-all duration-200 relative ${
                     location.pathname === item.path ? "text-white" : "text-white/90 hover:text-white"
                   }`}
                 >
@@ -171,7 +171,7 @@ const Navbar = () => {
             <div className="hidden lg:block">
               <Link
                 to="/contatti"
-                className="inline-flex items-center justify-center px-8 h-[46px] bg-white text-[#171A1F] rounded-full font-medium text-[15px] hover:bg-white/90 hover:shadow-lg transition-all duration-200"
+                className="inline-flex items-center justify-center px-8 h-[46px] bg-white text-[#171A1F] rounded-full text-button hover:bg-gray-50 hover:shadow-lg transition-all duration-150"
               >
                 Richiedi preventivo
               </Link>
