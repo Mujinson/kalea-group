@@ -31,11 +31,15 @@ const HeroSection = ({
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.3]);
 
   return (
-    <section ref={ref} className={`relative ${minHeight} flex items-center justify-center overflow-hidden`}>
+    <section 
+      ref={ref} 
+      className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden"
+      style={{ minHeight: '100vh', height: '100vh' }}
+    >
       {/* Background */}
       {backgroundImage && (
         <motion.div style={{ y }} className="absolute inset-0 z-0">
-          <img src={backgroundImage} alt="" className="w-full h-full object-cover" />
+          <img src={backgroundImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
         </motion.div>
       )}
@@ -44,7 +48,7 @@ const HeroSection = ({
       )}
 
       {/* Content */}
-      <motion.div style={{ opacity }} className="container-custom relative z-10 pt-20">
+      <motion.div style={{ opacity }} className="container-custom relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
