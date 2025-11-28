@@ -36,7 +36,7 @@ const HeroSection = ({
       {backgroundImage && (
         <motion.div style={{ y }} className="absolute inset-0 z-0">
           <img src={backgroundImage} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/30 to-background/80" />
         </motion.div>
       )}
       {!backgroundImage && (
