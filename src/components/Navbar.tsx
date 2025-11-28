@@ -21,11 +21,11 @@ const Navbar = () => {
     { label: "OneWall", path: "/onewall" },
   ];
 
-  const isLineePage = lineeItems.some(item => location.pathname === item.path);
+  const isLineePage = lineeItems.some((item) => location.pathname === item.path);
 
   return (
-    <motion.nav 
-      initial={{ opacity: 0, y: -20 }}
+    <motion.nav
+      initial={{ opacity: 0, y: -80 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="fixed top-0 left-0 right-0 z-50 px-16 md:px-24 lg:px-32"
@@ -34,8 +34,8 @@ const Navbar = () => {
         <div className="px-8 md:px-12">
           <div className="flex items-center justify-between h-[80px]">
             {/* Logo - Left */}
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="text-2xl font-heading font-bold text-white hover:opacity-80 transition-opacity duration-200 z-10"
             >
               Kalēa
@@ -46,9 +46,7 @@ const Navbar = () => {
               <Link
                 to="/"
                 className={`text-[15px] font-semibold transition-all duration-200 relative ${
-                  location.pathname === "/" 
-                    ? "text-white" 
-                    : "text-white/90 hover:text-white"
+                  location.pathname === "/" ? "text-white" : "text-white/90 hover:text-white"
                 }`}
               >
                 Home
@@ -62,20 +60,21 @@ const Navbar = () => {
               </Link>
 
               {/* Dropdown Linee */}
-              <div 
+              <div
                 className="relative"
                 onMouseEnter={() => setIsDropdownOpen(true)}
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <button
                   className={`text-[15px] font-semibold transition-all duration-200 flex items-center gap-1 ${
-                    isLineePage
-                      ? "text-white" 
-                      : "text-white/90 hover:text-white"
+                    isLineePage ? "text-white" : "text-white/90 hover:text-white"
                   }`}
                 >
                   Linee
-                  <ChevronDown size={16} className={`transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+                  />
                   {isLineePage && (
                     <motion.div
                       layoutId="navbar-underline"
@@ -102,7 +101,7 @@ const Navbar = () => {
                             location.pathname === item.path
                               ? "text-white bg-white/10"
                               : "text-white/90 hover:text-white hover:bg-white/5"
-                          } ${index !== lineeItems.length - 1 ? 'border-b border-white/5' : ''}`}
+                          } ${index !== lineeItems.length - 1 ? "border-b border-white/5" : ""}`}
                         >
                           {item.label}
                         </Link>
@@ -117,9 +116,7 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   className={`text-[15px] font-semibold transition-all duration-200 relative ${
-                    location.pathname === item.path 
-                      ? "text-white" 
-                      : "text-white/90 hover:text-white"
+                    location.pathname === item.path ? "text-white" : "text-white/90 hover:text-white"
                   }`}
                 >
                   {item.label}
@@ -170,9 +167,7 @@ const Navbar = () => {
               <Link
                 to="/"
                 className={`block text-base font-medium transition-colors py-2 ${
-                  location.pathname === "/" 
-                    ? "text-white" 
-                    : "text-white/70 hover:text-white"
+                  location.pathname === "/" ? "text-white" : "text-white/70 hover:text-white"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -184,15 +179,16 @@ const Navbar = () => {
                 <button
                   onClick={() => setIsLineeExpanded(!isLineeExpanded)}
                   className={`flex items-center justify-between w-full text-base font-medium transition-colors py-2 ${
-                    isLineePage
-                      ? "text-white" 
-                      : "text-white/70 hover:text-white"
+                    isLineePage ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                 >
                   Linee
-                  <ChevronDown size={16} className={`transition-transform duration-200 ${isLineeExpanded ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${isLineeExpanded ? "rotate-180" : ""}`}
+                  />
                 </button>
-                
+
                 <AnimatePresence>
                   {isLineeExpanded && (
                     <motion.div
@@ -207,9 +203,7 @@ const Navbar = () => {
                           key={item.path}
                           to={item.path}
                           className={`block text-sm font-medium transition-colors py-2 ${
-                            location.pathname === item.path 
-                              ? "text-white" 
-                              : "text-white/60 hover:text-white"
+                            location.pathname === item.path ? "text-white" : "text-white/60 hover:text-white"
                           }`}
                           onClick={() => {
                             setIsMobileMenuOpen(false);
@@ -229,16 +223,14 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   className={`block text-base font-medium transition-colors py-2 ${
-                    location.pathname === item.path 
-                      ? "text-white" 
-                      : "text-white/70 hover:text-white"
+                    location.pathname === item.path ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
-              
+
               <Link
                 to="/contatti"
                 onClick={() => setIsMobileMenuOpen(false)}
