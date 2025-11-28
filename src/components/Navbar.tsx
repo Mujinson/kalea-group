@@ -1,31 +1,38 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLineeExpanded, setIsLineeExpanded] = useState(false);
   const location = useLocation();
 
   const menuItems = [
     { label: "Home", path: "/" },
-    { label: "StoneCore 10", path: "/stonecore-10" },
-    { label: "EdgeLine", path: "/edgeline" },
-    { label: "OneWall", path: "/onewall" },
     { label: "Area Tecnica", path: "/area-tecnica" },
     { label: "Chi Siamo", path: "/chi-siamo" },
     { label: "Contatti", path: "/contatti" },
   ];
+
+  const lineeItems = [
+    { label: "StoneCore 10", path: "/stonecore-10" },
+    { label: "EdgeLine", path: "/edgeline" },
+    { label: "OneWall", path: "/onewall" },
+  ];
+
+  const isLineePage = lineeItems.some(item => location.pathname === item.path);
 
   return (
     <motion.nav 
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 w-full px-6 md:px-8 lg:px-12"
+      className="fixed top-4 left-0 right-0 z-50 px-6 md:px-8 lg:px-12"
     >
-      <div className="w-full bg-[rgba(23,26,31,0.8)] backdrop-blur-xl rounded-b-[32px] border-b border-white/10 shadow-lg">
-        <div className="max-w-[1400px] mx-auto px-8 md:px-12">
+      <div className="max-w-[1240px] mx-auto bg-[rgba(30,32,36,0.88)] backdrop-blur-[18px] rounded-[32px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+        <div className="px-8 md:px-12">
           <div className="flex items-center justify-between h-[80px]">
             {/* Logo - Left */}
             <Link 
@@ -36,7 +43,76 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Menu - Center */}
-            <div className="hidden lg:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+            <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+              <Link
+                to="/"
+                className={`text-[15px] font-medium transition-all duration-200 relative ${
+                  location.pathname === "/" 
+                    ? "text-white" 
+                    : "text-white/70 hover:text-white"
+                }`}
+              >
+                Home
+                {location.pathname === "/" && (
+                  <motion.div
+                    layoutId="navbar-underline"
+                    className="absolute -bottom-1 left-0 right-0 h-[1px] bg-white"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </Link>
+
+              {/* Dropdown Linee */}
+              <div 
+                className="relative"
+                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseLeave={() => setIsDropdownOpen(false)}
+              >
+                <button
+                  className={`text-[15px] font-medium transition-all duration-200 flex items-center gap-1 ${
+                    isLineePage
+                      ? "text-white" 
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Linee
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  {isLineePage && (
+                    <motion.div
+                      layoutId="navbar-underline"
+                      className="absolute -bottom-1 left-0 right-0 h-[1px] bg-white"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </button>
+
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 bg-[rgba(30,32,36,0.95)] backdrop-blur-[18px] rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50"
+                    >
+                      {lineeItems.map((item, index) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`block px-6 py-3 text-[15px] font-medium transition-all duration-200 ${
+                            location.pathname === item.path
+                              ? "text-white bg-white/10"
+                              : "text-white/70 hover:text-white hover:bg-white/5"
+                          } ${index !== lineeItems.length - 1 ? 'border-b border-white/5' : ''}`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               {menuItems.map((item) => (
                 <Link
                   key={item.path}
@@ -89,14 +165,71 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden bg-[rgba(23,26,31,0.95)] backdrop-blur-xl border-b border-white/10"
+            className="lg:hidden mt-4 mx-6 bg-[rgba(30,32,36,0.95)] backdrop-blur-[18px] rounded-3xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)]"
           >
-            <div className="px-6 py-6 space-y-4">
+            <div className="px-6 py-6 space-y-2">
+              <Link
+                to="/"
+                className={`block text-base font-medium transition-colors py-2 ${
+                  location.pathname === "/" 
+                    ? "text-white" 
+                    : "text-white/70 hover:text-white"
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </Link>
+
+              {/* Mobile Linee Expandable */}
+              <div>
+                <button
+                  onClick={() => setIsLineeExpanded(!isLineeExpanded)}
+                  className={`flex items-center justify-between w-full text-base font-medium transition-colors py-2 ${
+                    isLineePage
+                      ? "text-white" 
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  Linee
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${isLineeExpanded ? 'rotate-180' : ''}`} />
+                </button>
+                
+                <AnimatePresence>
+                  {isLineeExpanded && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="pl-4 space-y-2 mt-2"
+                    >
+                      {lineeItems.map((item) => (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`block text-sm font-medium transition-colors py-2 ${
+                            location.pathname === item.path 
+                              ? "text-white" 
+                              : "text-white/60 hover:text-white"
+                          }`}
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            setIsLineeExpanded(false);
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               {menuItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`block text-base font-medium transition-colors ${
+                  className={`block text-base font-medium transition-colors py-2 ${
                     location.pathname === item.path 
                       ? "text-white" 
                       : "text-white/70 hover:text-white"
@@ -106,6 +239,7 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+              
               <Link
                 to="/contatti"
                 onClick={() => setIsMobileMenuOpen(false)}
