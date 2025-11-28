@@ -26,11 +26,11 @@ const HeroSection = ({
       {backgroundImage && (
         <div className="absolute inset-0 z-0">
           <img src={backgroundImage} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background/90" />
         </div>
       )}
       {!backgroundImage && (
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-background via-muted/20 to-background" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-background via-secondary/30 to-background" />
       )}
 
       {/* Content */}
@@ -39,8 +39,8 @@ const HeroSection = ({
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6 text-balance"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-foreground mb-8 text-balance leading-tight"
           >
             {title}
           </motion.h1>
@@ -48,8 +48,8 @@ const HeroSection = ({
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed"
           >
             {subtitle}
           </motion.p>
@@ -58,11 +58,11 @@ const HeroSection = ({
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               {ctaPrimary && (
-                <Button asChild size="lg" variant="default" className="group">
+                <Button asChild size="lg" variant="default" className="group rounded-full px-8">
                   <Link to={ctaPrimary.link}>
                     {ctaPrimary.text}
                     <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -70,7 +70,7 @@ const HeroSection = ({
                 </Button>
               )}
               {ctaSecondary && (
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg" variant="outline" className="rounded-full px-8">
                   <Link to={ctaSecondary.link}>{ctaSecondary.text}</Link>
                 </Button>
               )}
