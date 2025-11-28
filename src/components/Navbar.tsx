@@ -171,7 +171,7 @@ const Navbar = () => {
             <div className="hidden lg:block">
               <Link
                 to="/contatti"
-                className="inline-flex items-center justify-center px-8 h-[46px] bg-white text-[#171A1F] rounded-full text-button hover:bg-gray-50 hover:shadow-lg transition-all duration-150"
+                className="inline-flex items-center justify-center px-9 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
               >
                 Richiedi preventivo
               </Link>
@@ -270,7 +270,7 @@ const Navbar = () => {
               <Link
                 to="/contatti"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-6 py-3 bg-white text-[#171A1F] rounded-full font-medium text-[15px] hover:bg-white/90 transition-all duration-200 mt-4"
+                className="block w-full text-center px-9 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] transition-all duration-150 mt-4"
               >
                 Richiedi preventivo
               </Link>

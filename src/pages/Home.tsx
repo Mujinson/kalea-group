@@ -233,12 +233,18 @@ const Home = () => {
               Contattaci per ricevere campioni, documentazione tecnica o un preventivo personalizzato
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary">
-                <Link to="/contatti">Richiedi preventivo</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
-                <Link to="/chi-siamo">Diventa partner</Link>
-              </Button>
+              <Link 
+                to="/contatti"
+                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+              >
+                Richiedi preventivo
+              </Link>
+              <Link 
+                to="/chi-siamo"
+                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+              >
+                Diventa partner
+              </Link>
             </div>
           </motion.div>
         </div>
