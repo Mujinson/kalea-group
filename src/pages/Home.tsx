@@ -80,7 +80,7 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             {productLines.map((product, index) => (
               <FeatureCard key={product.title} {...product} index={index} />
             ))}
