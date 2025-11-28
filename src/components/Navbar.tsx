@@ -45,10 +45,10 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
               <Link
                 to="/"
-                className={`text-[15px] font-medium transition-all duration-200 relative ${
+                className={`text-[15px] font-semibold transition-all duration-200 relative ${
                   location.pathname === "/" 
                     ? "text-white" 
-                    : "text-white/70 hover:text-white"
+                    : "text-white/90 hover:text-white"
                 }`}
               >
                 Home
@@ -68,10 +68,10 @@ const Navbar = () => {
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <button
-                  className={`text-[15px] font-medium transition-all duration-200 flex items-center gap-1 ${
+                  className={`text-[15px] font-semibold transition-all duration-200 flex items-center gap-1 ${
                     isLineePage
                       ? "text-white" 
-                      : "text-white/70 hover:text-white"
+                      : "text-white/90 hover:text-white"
                   }`}
                 >
                   Linee
@@ -98,10 +98,10 @@ const Navbar = () => {
                         <Link
                           key={item.path}
                           to={item.path}
-                          className={`block px-6 py-3 text-[15px] font-medium transition-all duration-200 ${
+                          className={`block px-6 py-3 text-[15px] font-semibold transition-all duration-200 ${
                             location.pathname === item.path
                               ? "text-white bg-white/10"
-                              : "text-white/70 hover:text-white hover:bg-white/5"
+                              : "text-white/90 hover:text-white hover:bg-white/5"
                           } ${index !== lineeItems.length - 1 ? 'border-b border-white/5' : ''}`}
                         >
                           {item.label}
@@ -116,10 +116,10 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`text-[15px] font-medium transition-all duration-200 relative ${
+                  className={`text-[15px] font-semibold transition-all duration-200 relative ${
                     location.pathname === item.path 
                       ? "text-white" 
-                      : "text-white/70 hover:text-white"
+                      : "text-white/90 hover:text-white"
                   }`}
                 >
                   {item.label}
