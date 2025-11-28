@@ -4,6 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import { Sparkles, Shield, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/hero-edgeline.jpg";
 
 const EdgeLine = () => {
   const advantages = [
@@ -55,6 +56,7 @@ const EdgeLine = () => {
         subtitle="Profili e battiscopa in alluminio coordinati. La finitura perfetta per ogni progetto."
         ctaPrimary={{ text: "Richiedi catalogo", link: "/contatti" }}
         ctaSecondary={{ text: "Scopri StoneCore 10", link: "/stonecore-10" }}
+        backgroundImage={heroImage}
       />
 
       {/* Vantaggi */}

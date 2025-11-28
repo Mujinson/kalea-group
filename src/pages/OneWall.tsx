@@ -4,6 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import { Zap, Shield, Palette, Droplets, Flame, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/hero-onewall.jpg";
 
 const OneWall = () => {
   const advantages = [
@@ -73,6 +74,7 @@ const OneWall = () => {
         subtitle="Pannelli in MgO per pareti e soffitti. L'evoluzione del cartongesso, già finito."
         ctaPrimary={{ text: "Richiedi campioni", link: "/contatti" }}
         ctaSecondary={{ text: "Scarica catalogo", link: "/area-tecnica" }}
+        backgroundImage={heroImage}
       />
 
       {/* Come funziona */}
