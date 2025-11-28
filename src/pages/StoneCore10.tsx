@@ -5,6 +5,7 @@ import { Droplets, Flame, Shield, Volume2, Zap, Layers } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/hero-stonecore.jpg";
 
 const StoneCore10 = () => {
   const advantages = [
@@ -57,6 +58,7 @@ const StoneCore10 = () => {
         subtitle="Pavimenti in MgO di nuova generazione. Prestazioni professionali, estetica naturale, posa veloce."
         ctaPrimary={{ text: "Richiedi campioni", link: "/contatti" }}
         ctaSecondary={{ text: "Scarica scheda tecnica", link: "/area-tecnica" }}
+        backgroundImage={heroImage}
       />
 
       {/* Schema multistrato */}

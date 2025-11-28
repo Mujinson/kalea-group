@@ -41,6 +41,7 @@ All colors MUST be HSL.
     /* Custom Kalēa tokens - Luzen light style */
     --bg-primary: 30 15% 96%;
     --bg-secondary: 0 0% 100%;
+    --bg-dark: 24 12% 18%;
     --accent-warm: 25 35% 55%;
     --accent-gold: 30 30% 65%;
     --text-main: 30 10% 15%;
@@ -128,6 +129,10 @@ All colors MUST be HSL.
   
   .section-spacing {
     @apply py-12 md:py-20 lg:py-24;
+  }
+  
+  .section-dark {
+    background: hsl(var(--bg-dark));
   }
   
   .hover-lift {

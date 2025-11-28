@@ -4,6 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Leaf, Clock, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import heroImage from "@/assets/hero-home.jpg";
 
 const Home = () => {
   const productLines = [
@@ -57,11 +58,12 @@ const Home = () => {
         subtitle="Pavimenti, profili e pannelli sviluppati in Italia per durare e trasformare gli spazi."
         ctaPrimary={{ text: "Scopri le nostre soluzioni", link: "/stonecore-10" }}
         ctaSecondary={{ text: "Richiedi un preventivo", link: "/contatti" }}
+        backgroundImage={heroImage}
         minHeight="min-h-[85vh]"
       />
 
       {/* Le linee Kalēa */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing section-dark">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -70,10 +72,10 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12 md:mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
               Le linee Kalēa
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
               Tre sistemi integrati per dare forma agli spazi del futuro
             </p>
           </motion.div>
