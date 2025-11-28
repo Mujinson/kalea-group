@@ -63,7 +63,7 @@ const StoneCore10 = () => {
       />
 
       {/* Schema multistrato */}
-      <section className="section-spacing">
+      <section className="section-spacing bg-background" style={{ zIndex: 1 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -106,8 +106,9 @@ const StoneCore10 = () => {
 
       {/* Vantaggi */}
       <section 
-        className="section-spacing relative"
+        className="section-spacing section-overlap relative"
         style={{
+          zIndex: 2,
           backgroundImage: `url(${bgStoneCore})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -142,7 +143,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Finiture */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -184,7 +185,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Tabs tecnici */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing section-overlap bg-card" style={{ zIndex: 4 }}>
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -245,7 +246,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* CTA Download */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 5 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
