@@ -19,15 +19,13 @@ const HeroSection = ({
   ctaPrimary,
   ctaSecondary,
   backgroundImage,
-  minHeight = "min-h-[80vh]",
+  minHeight = "min-h-screen",
 }: HeroSectionProps) => {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  ...
-
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.3]);
