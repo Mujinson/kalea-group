@@ -46,12 +46,12 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardP
         </div>
         
         {/* Title - bold and premium */}
-        <h3 className="text-3xl font-heading font-bold text-white mb-6 leading-tight tracking-tight">
+        <h3 className="text-3xl font-heading font-semibold text-white mb-6 tracking-tight" style={{ lineHeight: '1.15' }}>
           {title}
         </h3>
         
         {/* Description - white with 80% opacity */}
-        <p className="text-white/80 leading-relaxed text-base font-light flex-grow">
+        <p className="text-white/80 text-body flex-grow">
           {description}
         </p>
       </div>

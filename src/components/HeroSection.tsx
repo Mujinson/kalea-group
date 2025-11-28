@@ -66,7 +66,7 @@ const HeroSection = ({
       <motion.div style={{ opacity }} className="container-custom relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Title with staggered line animation */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-8 text-balance leading-tight">
+          <h1 className="text-hero-md lg:text-hero-lg xl:text-hero-xl font-heading text-white mb-8 text-balance">
             {titleLines.map((line, index) => (
               <motion.div
                 key={index}
@@ -87,7 +87,7 @@ const HeroSection = ({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
-            className="text-lg md:text-xl text-white/90 mb-12 max-w-2xl mx-auto leading-relaxed"
+            className="text-subtitle text-white/85 mb-12 max-w-2xl mx-auto"
           >
             {subtitle}
           </motion.p>
@@ -102,7 +102,7 @@ const HeroSection = ({
               {ctaPrimary && (
                 <Link 
                   to={ctaPrimary.link}
-                  className="group inline-flex items-center justify-center gap-2 bg-white text-black font-medium rounded-full px-10 py-4 hover:bg-gray-100 hover:shadow-lg transition-all duration-200"
+                  className="group inline-flex items-center justify-center gap-2 bg-white text-black text-button rounded-full px-10 py-4 hover:bg-gray-50 hover:shadow-lg transition-all duration-150"
                 >
                   {ctaPrimary.text}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -111,7 +111,7 @@ const HeroSection = ({
               {ctaSecondary && (
                 <Link 
                   to={ctaSecondary.link}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-black font-medium rounded-full px-10 py-4 hover:bg-gray-100 hover:shadow-lg transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-black text-button rounded-full px-10 py-4 hover:bg-gray-50 hover:shadow-lg transition-all duration-150"
                 >
                   {ctaSecondary.text}
                 </Link>
