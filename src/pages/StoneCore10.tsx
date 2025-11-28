@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-stonecore.jpg";
+import bgStoneCore from "@/assets/bg-stonecore.jpg";
 
 const StoneCore10 = () => {
   const advantages = [
@@ -104,8 +105,19 @@ const StoneCore10 = () => {
       </section>
 
       {/* Vantaggi */}
-      <section className="section-spacing bg-card">
-        <div className="container-custom">
+      <section 
+        className="section-spacing relative"
+        style={{
+          backgroundImage: `url(${bgStoneCore})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay scuro */}
+        <div className="absolute inset-0 bg-black/30" />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -113,10 +125,10 @@ const StoneCore10 = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
               Vantaggi esclusivi
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-white/90 max-w-2xl mx-auto">
               Prestazioni superiori per ogni esigenza progettuale
             </p>
           </motion.div>

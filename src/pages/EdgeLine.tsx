@@ -5,6 +5,7 @@ import { Sparkles, Shield, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-edgeline.jpg";
+import bgEdgeLine from "@/assets/bg-edgeline.jpg";
 
 const EdgeLine = () => {
   const advantages = [
@@ -60,8 +61,19 @@ const EdgeLine = () => {
       />
 
       {/* Vantaggi */}
-      <section className="section-spacing">
-        <div className="container-custom">
+      <section 
+        className="section-spacing relative"
+        style={{
+          backgroundImage: `url(${bgEdgeLine})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay scuro */}
+        <div className="absolute inset-0 bg-black/35" />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -69,10 +81,10 @@ const EdgeLine = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
               Perché scegliere EdgeLine
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-white/90 max-w-2xl mx-auto">
               La soluzione completa per profili e battiscopa
             </p>
           </motion.div>
