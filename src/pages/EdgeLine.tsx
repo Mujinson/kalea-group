@@ -62,8 +62,9 @@ const EdgeLine = () => {
 
       {/* Vantaggi */}
       <section 
-        className="section-spacing relative"
+        className="section-spacing section-overlap relative"
         style={{
+          zIndex: 1,
           backgroundImage: `url(${bgEdgeLine})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -98,7 +99,7 @@ const EdgeLine = () => {
       </section>
 
       {/* Griglia prodotti */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing section-overlap bg-card" style={{ zIndex: 2 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -137,7 +138,7 @@ const EdgeLine = () => {
       </section>
 
       {/* Finiture */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -170,7 +171,7 @@ const EdgeLine = () => {
       </section>
 
       {/* CTA finale */}
-      <section className="section-spacing bg-primary text-primary-foreground">
+      <section className="section-spacing section-overlap bg-primary text-primary-foreground" style={{ zIndex: 4 }}>
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

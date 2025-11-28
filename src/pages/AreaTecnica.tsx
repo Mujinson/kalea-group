@@ -92,7 +92,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* Filtri */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 1 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -155,7 +155,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* CTA */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing section-overlap bg-card" style={{ zIndex: 2 }}>
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -177,7 +177,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* 1. Struttura del pavimento in MgO */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Colonna sinistra - Testo */}
@@ -231,7 +231,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* 2. Prestazioni & Normative */}
-      <section className="section-spacing bg-muted/30">
+      <section className="section-spacing section-overlap bg-muted/30" style={{ zIndex: 4 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -295,7 +295,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* 3. MgO vs SPC/MFC/HPL */}
-      <section className="section-spacing relative overflow-hidden">
+      <section className="section-spacing section-overlap relative overflow-hidden" style={{ zIndex: 5 }}>
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -352,7 +352,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* 4. Applicazioni consigliate */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 6 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -402,7 +402,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* 5. Consulenza tecnica */}
-      <section className="section-spacing relative overflow-hidden">
+      <section className="section-spacing section-overlap relative overflow-hidden" style={{ zIndex: 7 }}>
         <div 
           className="absolute inset-0 z-0"
           style={{
@@ -467,7 +467,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* 6. Risorse tecniche */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 8 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -514,7 +514,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* 7. CTA finale */}
-      <section className="section-spacing bg-muted/30">
+      <section className="section-spacing section-overlap bg-muted/30" style={{ zIndex: 9 }}>
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

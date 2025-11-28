@@ -64,7 +64,7 @@ const Home = () => {
       />
 
       {/* Le linee Kalēa */}
-      <section className="section-spacing relative overflow-hidden">
+      <section className="section-spacing section-overlap relative overflow-hidden" style={{ zIndex: 1 }}>
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img src={bgProducts} alt="" className="w-full h-full object-cover" />
@@ -96,7 +96,7 @@ const Home = () => {
       </section>
 
       {/* Perché MgO */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 2 }}>
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <motion.div
@@ -152,7 +152,7 @@ const Home = () => {
       </section>
 
       {/* Applicazioni */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing section-overlap bg-card" style={{ zIndex: 3 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -192,7 +192,7 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="section-spacing">
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 4 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -218,7 +218,7 @@ const Home = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="section-spacing bg-primary text-primary-foreground">
+      <section className="section-spacing section-overlap bg-primary text-primary-foreground" style={{ zIndex: 5 }}>
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
