@@ -166,4 +166,16 @@ All colors MUST be HSL.
   .text-balance {
     text-wrap: balance;
   }
+  
+  .section-overlap {
+    position: relative;
+    margin-top: -40px;
+    box-shadow: 0 -4px 12px hsla(0, 0%, 0%, 0.05);
+  }
+  
+  @media (max-width: 768px) {
+    .section-overlap {
+      margin-top: -20px;
+    }
+  }
 }
