@@ -1,7 +1,8 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useRef } from "react";
 
 interface HeroSectionProps {
   title: string;
@@ -20,21 +21,30 @@ const HeroSection = ({
   backgroundImage,
   minHeight = "min-h-[80vh]",
 }: HeroSectionProps) => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.3]);
+
   return (
-    <section className={`relative ${minHeight} flex items-center justify-center overflow-hidden`}>
+    <section ref={ref} className={`relative ${minHeight} flex items-center justify-center overflow-hidden`}>
       {/* Background */}
       {backgroundImage && (
-        <div className="absolute inset-0 z-0">
+        <motion.div style={{ y }} className="absolute inset-0 z-0">
           <img src={backgroundImage} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background/90" />
-        </div>
+        </motion.div>
       )}
       {!backgroundImage && (
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-background via-secondary/30 to-background" />
       )}
 
       {/* Content */}
-      <div className="container-custom relative z-10 pt-20">
+      <motion.div style={{ opacity }} className="container-custom relative z-10 pt-20">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
@@ -77,7 +87,7 @@ const HeroSection = ({
             </motion.div>
           )}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
