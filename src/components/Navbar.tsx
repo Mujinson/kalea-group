@@ -28,35 +28,35 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 pt-6">
-      <div className="container-custom">
+    <nav className="fixed top-0 left-0 right-0 z-50 px-6 pt-8">
+      <div className="max-w-[1400px] mx-auto">
         <div
-          className={`flex items-center justify-between h-16 px-8 rounded-full transition-all duration-500 ${
+          className={`flex items-center justify-between h-[72px] px-10 rounded-full transition-all duration-500 ${
             isScrolled
-              ? "bg-card/90 backdrop-blur-xl shadow-large"
-              : "bg-card/60 backdrop-blur-md"
+              ? "bg-card/95 backdrop-blur-xl shadow-lg"
+              : "bg-card/80 backdrop-blur-md"
           }`}
         >
           {/* Logo */}
-          <Link to="/" className="text-xl font-heading font-bold text-foreground hover:text-muted-foreground transition-colors">
+          <Link to="/" className="text-2xl font-heading font-bold text-foreground hover:opacity-70 transition-opacity">
             Kalēa
           </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-8">
+          {/* Desktop Menu - Centered */}
+          <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
             {menuItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-medium transition-colors hover:text-foreground relative ${
-                  location.pathname === item.path ? "text-foreground" : "text-muted-foreground"
+                className={`text-[15px] font-medium transition-all duration-300 relative ${
+                  location.pathname === item.path ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {item.label}
                 {location.pathname === item.path && (
                   <motion.div
                     layoutId="navbar-indicator"
-                    className="absolute -bottom-1 left-0 right-0 h-px bg-foreground"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-foreground"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -66,7 +66,7 @@ const Navbar = () => {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Button asChild variant="default" size="default" className="rounded-full">
+            <Button asChild variant="default" size="default" className="rounded-full px-8 h-[48px]">
               <Link to="/contatti">Richiedi preventivo</Link>
             </Button>
           </div>
@@ -81,38 +81,38 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="lg:hidden bg-card/95 backdrop-blur-xl mt-4 rounded-3xl border border-border"
-            >
-              <div className="py-6 px-6 space-y-4">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`block text-base font-medium transition-colors hover:text-foreground ${
-                      location.pathname === item.path ? "text-foreground" : "text-muted-foreground"
-                    }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-                <Button asChild variant="default" size="default" className="w-full mt-4 rounded-full">
-                  <Link to="/contatti" onClick={() => setIsMobileMenuOpen(false)}>
-                    Richiedi preventivo
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden bg-card/95 backdrop-blur-xl mt-4 rounded-3xl border border-border"
+          >
+            <div className="py-6 px-6 space-y-4">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`block text-base font-medium transition-colors hover:text-foreground ${
+                    location.pathname === item.path ? "text-foreground" : "text-muted-foreground"
+                  }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Button asChild variant="default" size="default" className="w-full mt-4 rounded-full">
+                <Link to="/contatti" onClick={() => setIsMobileMenuOpen(false)}>
+                  Richiedi preventivo
+                </Link>
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       </div>
     </nav>
   );
