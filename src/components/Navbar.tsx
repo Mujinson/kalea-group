@@ -22,10 +22,10 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 w-full"
+      className="fixed top-0 left-0 right-0 z-50 w-full px-6 md:px-8 lg:px-12"
     >
-      <div className="w-full bg-[rgba(23,26,31,0.7)] backdrop-blur-xl rounded-b-[32px] border-b border-white/10 shadow-lg">
-        <div className="max-w-[1280px] mx-auto px-8 md:px-12">
+      <div className="w-full bg-[rgba(23,26,31,0.8)] backdrop-blur-xl rounded-b-[32px] border-b border-white/10 shadow-lg">
+        <div className="max-w-[1400px] mx-auto px-8 md:px-12">
           <div className="flex items-center justify-between h-[80px]">
             {/* Logo - Left */}
             <Link 
