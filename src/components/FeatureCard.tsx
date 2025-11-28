@@ -17,22 +17,43 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardP
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, delay }}
-      className="group relative overflow-hidden rounded-3xl p-10 hover-lift transition-all duration-500"
+      className="group relative overflow-hidden transition-all duration-200 h-full flex flex-col"
       style={{
-        background: "rgba(255, 255, 255, 0.03)",
-        backdropFilter: "blur(20px)",
-        border: "1px solid rgba(255, 255, 255, 0.08)",
+        background: "rgba(255, 255, 255, 0.08)",
+        backdropFilter: "blur(22px)",
+        WebkitBackdropFilter: "blur(22px)",
+        border: "1px solid rgba(255, 255, 255, 0.12)",
+        borderRadius: "32px",
+        padding: "48px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.25)",
       }}
     >
-      {/* Glassmorphism overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {/* Hover overlay */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none"
+        style={{
+          background: "rgba(255, 255, 255, 0.12)",
+          border: "1px solid rgba(255, 255, 255, 0.18)",
+          borderRadius: "32px",
+          boxShadow: "0 12px 40px rgba(0, 0, 0, 0.35)",
+        }}
+      />
       
-      <div className="relative z-10">
-        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-8 group-hover:bg-white/10 group-hover:scale-110 transition-all duration-300">
-          <Icon className="w-8 h-8 text-white" />
+      <div className="relative z-10 flex flex-col h-full">
+        {/* Icon - no background, just floating */}
+        <div className="mb-8">
+          <Icon className="w-12 h-12 text-white" strokeWidth={1.5} />
         </div>
-        <h3 className="text-2xl font-heading font-semibold text-white mb-5 leading-tight">{title}</h3>
-        <p className="text-white/70 leading-relaxed text-[15px]">{description}</p>
+        
+        {/* Title - bold and premium */}
+        <h3 className="text-3xl font-heading font-bold text-white mb-6 leading-tight tracking-tight">
+          {title}
+        </h3>
+        
+        {/* Description - white with 80% opacity */}
+        <p className="text-white/80 leading-relaxed text-base font-light flex-grow">
+          {description}
+        </p>
       </div>
     </motion.div>
   );
