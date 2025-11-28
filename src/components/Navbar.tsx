@@ -10,7 +10,6 @@ const Navbar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { label: "Home", path: "/" },
     { label: "Area Tecnica", path: "/area-tecnica" },
     { label: "Chi Siamo", path: "/chi-siamo" },
     { label: "Contatti", path: "/contatti" },
@@ -31,7 +30,7 @@ const Navbar = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="fixed top-4 left-0 right-0 z-50 px-6 md:px-8 lg:px-12"
     >
-      <div className="max-w-[1240px] mx-auto bg-[rgba(30,32,36,0.88)] backdrop-blur-[18px] rounded-[32px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+      <div className="max-w-[1240px] mx-auto bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] rounded-[32px] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
         <div className="px-8 md:px-12">
           <div className="flex items-center justify-between h-[80px]">
             {/* Logo - Left */}
@@ -93,7 +92,7 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 bg-[rgba(30,32,36,0.95)] backdrop-blur-[18px] rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50"
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50"
                     >
                       {lineeItems.map((item, index) => (
                         <Link
@@ -165,7 +164,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden mt-4 mx-6 bg-[rgba(30,32,36,0.95)] backdrop-blur-[18px] rounded-3xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)]"
+            className="lg:hidden mt-4 mx-6 bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] rounded-3xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)]"
           >
             <div className="px-6 py-6 space-y-2">
               <Link
