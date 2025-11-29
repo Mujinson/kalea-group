@@ -9,6 +9,7 @@ import bgProducts from "@/assets/bg-products.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
 import bgSustainabilityMaintenance from "@/assets/bg-sustainability-maintenance.jpg";
+import bgApplicationResidential from "@/assets/bg-application-residential.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -296,6 +297,14 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group relative aspect-square rounded-2xl bg-muted overflow-hidden hover-lift"
               >
+                {/* Background image for residential card */}
+                {index === 0 && (
+                  <img 
+                    src={bgApplicationResidential} 
+                    alt="" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-foreground/80" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
                   <app.icon className="w-12 h-12 text-background mb-4" />
