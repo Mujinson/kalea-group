@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-stonecore.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
+import finishCorteccia from "@/assets/finish-corteccia.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const StoneCore10 = () => {
@@ -46,7 +47,7 @@ const StoneCore10 = () => {
   ];
 
   const finishes = [
-    { name: t('stonecore.finishes.corteccia'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.corteccia'), image: finishCorteccia },
     { name: t('stonecore.finishes.cenere'), image: "/placeholder.svg" },
     { name: t('stonecore.finishes.sabbia'), image: "/placeholder.svg" },
     { name: t('stonecore.finishes.silven'), image: "/placeholder.svg" },
