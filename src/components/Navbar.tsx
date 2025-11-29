@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo.png";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -72,9 +73,9 @@ const Navbar = () => {
             {/* Logo - Left */}
             <Link
               to="/"
-              className="text-2xl font-heading font-semibold text-white hover:opacity-80 transition-opacity duration-200 z-10"
+              className="hover:opacity-80 transition-opacity duration-200 z-10"
             >
-              Kalēa
+              <img src={logo} alt="Kalēa" className="h-8 md:h-10" />
             </Link>
 
             {/* Desktop Menu - Center */}
