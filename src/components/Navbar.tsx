@@ -61,6 +61,19 @@ const Navbar = () => {
 
   const isLineePage = lineeItems.some((item) => location.pathname === item.path);
 
+  // Adaptive font size for DE/FR languages
+  useEffect(() => {
+    if (language === "de" || language === "fr") {
+      document.body.classList.add("navbar-compact");
+    } else {
+      document.body.classList.remove("navbar-compact");
+    }
+    
+    return () => {
+      document.body.classList.remove("navbar-compact");
+    };
+  }, [language]);
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
