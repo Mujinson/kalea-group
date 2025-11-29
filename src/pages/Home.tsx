@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
 import bgProducts from "@/assets/bg-products.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
+import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -332,10 +333,17 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group relative aspect-square rounded-2xl bg-muted overflow-hidden hover-lift"
               >
-                {/* Background image only for first card (Ridotto impatto ambientale) */}
+                {/* Background images for sustainability cards */}
                 {index === 0 && (
                   <img 
                     src={bgSustainabilityForest} 
+                    alt="" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+                {index === 1 && (
+                  <img 
+                    src={bgSustainabilityDurability} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
                   />
