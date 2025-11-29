@@ -8,6 +8,7 @@ import heroImage from "@/assets/hero-home.jpg";
 import bgProducts from "@/assets/bg-products.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
+import bgSustainabilityMaintenance from "@/assets/bg-sustainability-maintenance.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -344,6 +345,13 @@ const Home = () => {
                 {index === 1 && (
                   <img 
                     src={bgSustainabilityDurability} 
+                    alt="" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+                {index === 2 && (
+                  <img 
+                    src={bgSustainabilityMaintenance} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
                   />
