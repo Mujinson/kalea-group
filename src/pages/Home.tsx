@@ -210,7 +210,21 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {sustainability.map((item, index) => (
-              <FeatureCard key={item.title} {...item} index={index} />
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative aspect-square rounded-2xl bg-muted overflow-hidden hover-lift"
+              >
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-foreground/80" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                  <item.icon className="w-12 h-12 text-background mb-4" />
+                  <h3 className="text-xl font-heading font-semibold text-background mb-2">{item.title}</h3>
+                  <p className="text-sm text-background/80">{item.description}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
