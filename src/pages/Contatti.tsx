@@ -8,8 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const Contatti = () => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     nome: "",
@@ -27,16 +29,16 @@ const Contatti = () => {
     
     if (!formData.privacy) {
       toast({
-        title: "Errore",
-        description: "Devi accettare la privacy policy per inviare il messaggio",
+        title: t('contacts.errorTitle'),
+        description: t('contacts.errorMessage'),
         variant: "destructive",
       });
       return;
     }
 
     toast({
-      title: "Messaggio inviato!",
-      description: "Ti risponderemo il prima possibile.",
+      title: t('contacts.successTitle'),
+      description: t('contacts.successMessage'),
     });
     
     // Reset form
@@ -52,7 +54,12 @@ const Contatti = () => {
     });
   };
 
-  const interests = ["StoneCore 10", "EdgeLine", "OneWall", "Partnership"];
+  const interests = [
+    t('contacts.interestsList.stonecore'), 
+    t('contacts.interestsList.edgeline'), 
+    t('contacts.interestsList.onewall'), 
+    t('contacts.interestsList.partnership')
+  ];
 
   const handleInterestToggle = (interest: string) => {
     setFormData(prev => ({
@@ -74,10 +81,10 @@ const Contatti = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6">
-              Contatti
+              {t('contacts.title')}
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Siamo qui per rispondere a tutte le tue domande su Kalēa e i nostri prodotti
+              {t('contacts.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -94,12 +101,12 @@ const Contatti = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-heading font-bold text-foreground mb-6">Invia una richiesta</h2>
+              <h2 className="text-3xl font-heading font-bold text-foreground mb-6">{t('contacts.formTitle')}</h2>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="nome">Nome *</Label>
+                    <Label htmlFor="nome">{t('contacts.firstName')} *</Label>
                     <Input
                       id="nome"
                       required
@@ -109,7 +116,7 @@ const Contatti = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="cognome">Cognome *</Label>
+                    <Label htmlFor="cognome">{t('contacts.lastName')} *</Label>
                     <Input
                       id="cognome"
                       required
@@ -121,7 +128,7 @@ const Contatti = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="email">Email *</Label>
+                  <Label htmlFor="email">{t('contacts.email')} *</Label>
                   <Input
                     id="email"
                     type="email"
@@ -133,7 +140,7 @@ const Contatti = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="telefono">Telefono</Label>
+                  <Label htmlFor="telefono">{t('contacts.phone')}</Label>
                   <Input
                     id="telefono"
                     type="tel"
@@ -144,24 +151,24 @@ const Contatti = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="tipoUtente">Tipo utente *</Label>
+                  <Label htmlFor="tipoUtente">{t('contacts.userType')} *</Label>
                   <Select value={formData.tipoUtente} onValueChange={(value) => setFormData({ ...formData, tipoUtente: value })}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Seleziona..." />
+                      <SelectValue placeholder={t('contacts.userTypePlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="architetto">Architetto / Progettista</SelectItem>
-                      <SelectItem value="designer">Interior Designer</SelectItem>
-                      <SelectItem value="impresa">Impresa edile</SelectItem>
-                      <SelectItem value="rivenditore">Rivenditore</SelectItem>
-                      <SelectItem value="privato">Privato</SelectItem>
-                      <SelectItem value="altro">Altro</SelectItem>
+                      <SelectItem value="architetto">{t('contacts.userTypes.architect')}</SelectItem>
+                      <SelectItem value="designer">{t('contacts.userTypes.designer')}</SelectItem>
+                      <SelectItem value="impresa">{t('contacts.userTypes.builder')}</SelectItem>
+                      <SelectItem value="rivenditore">{t('contacts.userTypes.retailer')}</SelectItem>
+                      <SelectItem value="privato">{t('contacts.userTypes.private')}</SelectItem>
+                      <SelectItem value="altro">{t('contacts.userTypes.other')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label className="mb-3 block">Interessi</Label>
+                  <Label className="mb-3 block">{t('contacts.interests')}</Label>
                   <div className="space-y-3">
                     {interests.map((interest) => (
                       <div key={interest} className="flex items-center space-x-2">
@@ -179,13 +186,13 @@ const Contatti = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="messaggio">Messaggio *</Label>
+                  <Label htmlFor="messaggio">{t('contacts.message')} *</Label>
                   <Textarea
                     id="messaggio"
                     required
                     value={formData.messaggio}
                     onChange={(e) => setFormData({ ...formData, messaggio: e.target.value })}
-                    placeholder="Scrivi qui il tuo messaggio..."
+                    placeholder={t('contacts.messagePlaceholder')}
                     rows={5}
                   />
                 </div>
@@ -197,12 +204,12 @@ const Contatti = () => {
                     onCheckedChange={(checked) => setFormData({ ...formData, privacy: checked as boolean })}
                   />
                   <label htmlFor="privacy" className="text-sm text-muted-foreground cursor-pointer leading-relaxed">
-                    Accetto la privacy policy e autorizzo il trattamento dei miei dati personali *
+                    {t('contacts.privacy')} *
                   </label>
                 </div>
 
                 <Button type="submit" size="lg" className="w-full">
-                  Invia richiesta
+                  {t('contacts.submit')}
                 </Button>
               </form>
             </motion.div>
@@ -216,10 +223,9 @@ const Contatti = () => {
               className="space-y-8"
             >
               <div>
-                <h2 className="text-3xl font-heading font-bold text-foreground mb-6">Informazioni</h2>
+                <h2 className="text-3xl font-heading font-bold text-foreground mb-6">{t('contacts.infoTitle')}</h2>
                 <p className="text-muted-foreground leading-relaxed mb-8">
-                  Il nostro team è a tua disposizione per fornirti tutte le informazioni necessarie sui prodotti
-                  Kalēa, richiedere campioni, preventivi o per diventare partner.
+                  {t('contacts.infoText')}
                 </p>
 
                 <div className="space-y-6">
@@ -228,7 +234,7 @@ const Contatti = () => {
                       <Mail className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-heading font-semibold text-foreground mb-1">Email</h3>
+                      <h3 className="font-heading font-semibold text-foreground mb-1">{t('contacts.emailLabel')}</h3>
                       <a href="mailto:info@kalea.it" className="text-muted-foreground hover:text-primary transition-colors">
                         info@kalea.it
                       </a>
@@ -244,11 +250,11 @@ const Contatti = () => {
                       <Phone className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-heading font-semibold text-foreground mb-1">Telefono</h3>
+                      <h3 className="font-heading font-semibold text-foreground mb-1">{t('contacts.phoneLabel')}</h3>
                       <a href="tel:+390123456789" className="text-muted-foreground hover:text-primary transition-colors">
                         +39 012 345 6789
                       </a>
-                      <p className="text-sm text-muted-foreground mt-1">Lun-Ven: 9:00 - 18:00</p>
+                      <p className="text-sm text-muted-foreground mt-1">{t('contacts.phoneHours')}</p>
                     </div>
                   </div>
 
@@ -257,27 +263,27 @@ const Contatti = () => {
                       <MapPin className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-heading font-semibold text-foreground mb-1">Sede</h3>
-                      <p className="text-muted-foreground">Italia</p>
+                      <h3 className="font-heading font-semibold text-foreground mb-1">{t('contacts.locationLabel')}</h3>
+                      <p className="text-muted-foreground">{t('contacts.locationValue')}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="bg-card border border-border rounded-2xl p-8">
-                <h3 className="text-xl font-heading font-semibold text-foreground mb-4">Orari di apertura</h3>
+                <h3 className="text-xl font-heading font-semibold text-foreground mb-4">{t('contacts.hoursTitle')}</h3>
                 <div className="space-y-2 text-muted-foreground">
                   <div className="flex justify-between">
-                    <span>Lunedì - Venerdì</span>
+                    <span>{t('contacts.hoursWeekdays')}</span>
                     <span className="font-medium">9:00 - 18:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Sabato</span>
+                    <span>{t('contacts.hoursSaturday')}</span>
                     <span className="font-medium">9:00 - 13:00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Domenica</span>
-                    <span className="font-medium">Chiuso</span>
+                    <span>{t('contacts.hoursSunday')}</span>
+                    <span className="font-medium">{t('contacts.hoursClosed')}</span>
                   </div>
                 </div>
               </div>

@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import FeatureCard from "@/components/FeatureCard";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const AreaTecnica = () => {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const documents = [
@@ -82,10 +84,10 @@ const AreaTecnica = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6">
-              Area Tecnica
+              {t('technicalArea.title')}
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Scarica schede tecniche, certificazioni e guide di posa per tutti i prodotti Kalēa
+              {t('technicalArea.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -111,7 +113,7 @@ const AreaTecnica = () => {
                     : "bg-muted text-muted-foreground hover:bg-muted/70"
                 }`}
               >
-                {category === "all" ? "Tutti i documenti" : category}
+                {category === "all" ? t('technicalArea.allDocuments') : category}
               </button>
             ))}
           </motion.div>
@@ -145,7 +147,7 @@ const AreaTecnica = () => {
                   <span className="text-xs text-muted-foreground">{doc.size}</span>
                   <Button size="sm" variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors">
                     <Download className="w-4 h-4 mr-2" />
-                    Scarica
+                    {t('technicalArea.download')}
                   </Button>
                 </div>
               </motion.div>
@@ -164,13 +166,13 @@ const AreaTecnica = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Hai bisogno di supporto tecnico?
+              {t('technicalArea.ctaTitle')}
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Il nostro team è a disposizione per rispondere a tutte le tue domande tecniche
+              {t('technicalArea.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="default">
-              <a href="mailto:tecnico@kalea.it">Contatta il supporto tecnico</a>
+              <a href="mailto:tecnico@kalea.it">{t('technicalArea.ctaButton')}</a>
             </Button>
           </motion.div>
         </div>

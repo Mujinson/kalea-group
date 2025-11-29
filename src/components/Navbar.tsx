@@ -91,7 +91,7 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
               <Link
                 to={`/${language}`}
-                className={`text-nav transition-all duration-200 relative ${
+                className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
                   location.pathname === `/${language}` || location.pathname === `/${language}/` ? "text-white" : "text-white/90 hover:text-white"
                 }`}
               >
@@ -112,7 +112,7 @@ const Navbar = () => {
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <button
-                  className={`text-nav transition-all duration-200 flex items-center gap-1 ${
+                  className={`text-nav transition-all duration-200 flex items-center gap-1 whitespace-nowrap ${
                     isLineePage ? "text-white" : "text-white/90 hover:text-white"
                   }`}
                 >
@@ -161,7 +161,7 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`text-nav transition-all duration-200 relative ${
+                  className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
                     location.pathname === item.path ? "text-white" : "text-white/90 hover:text-white"
                   }`}
                 >
@@ -177,7 +177,7 @@ const Navbar = () => {
               ))}
               
               {/* Language Selector */}
-              <div className="flex items-center gap-2 text-nav">
+              <div className="flex items-center gap-2 text-nav whitespace-nowrap">
                 {languages.map((lang, index) => (
                   <React.Fragment key={lang}>
                     <button
@@ -200,7 +200,7 @@ const Navbar = () => {
             <div className="hidden lg:block">
               <Link
                 to={`/${language}/contatti`}
-                className="inline-flex items-center justify-center px-9 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                className="inline-flex items-center justify-center w-[180px] px-6 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150 truncate"
               >
                 {t('nav.requestQuote')}
               </Link>
