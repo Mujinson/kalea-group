@@ -2,14 +2,13 @@ import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
 
 interface FeatureCardProps {
-  icon?: LucideIcon;
-  customIcon?: string;
+  icon: LucideIcon;
   title: string;
   description: string;
   index?: number;
 }
 
-const FeatureCard = ({ icon: Icon, customIcon, title, description, index = 0 }: FeatureCardProps) => {
+const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardProps) => {
   const delay = index * 0.15;
   
   return (
@@ -43,11 +42,7 @@ const FeatureCard = ({ icon: Icon, customIcon, title, description, index = 0 }: 
       <div className="relative z-10 flex flex-col h-full">
         {/* Icon - no background, just floating */}
         <div className="mb-8">
-          {customIcon ? (
-            <img src={customIcon} alt="" className="w-12 h-12 object-contain" />
-          ) : Icon ? (
-            <Icon className="w-12 h-12 text-white" strokeWidth={1.5} />
-          ) : null}
+          <Icon className="w-12 h-12 text-white" strokeWidth={1.5} />
         </div>
         
         {/* Title - bold and premium */}
