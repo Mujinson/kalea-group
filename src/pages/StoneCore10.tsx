@@ -43,12 +43,14 @@ const StoneCore10 = () => {
   ];
 
   const finishes = [
-    { name: "Rovere Naturale", color: "#C4A574" },
-    { name: "Noce Scuro", color: "#5D4E37" },
-    { name: "Grigio Cemento", color: "#B0B0B0" },
-    { name: "Pietra Bianca", color: "#E8E8E8" },
-    { name: "Legno Chiaro", color: "#D4B896" },
-    { name: "Grafite", color: "#4A4A4A" },
+    { name: "Corteccia", image: "/placeholder.svg" },
+    { name: "Cenere", image: "/placeholder.svg" },
+    { name: "Sabbia", image: "/placeholder.svg" },
+    { name: "Silven", image: "/placeholder.svg" },
+    { name: "Terram", image: "/placeholder.svg" },
+    { name: "Perla", image: "/placeholder.svg" },
+    { name: "Velora", image: "/placeholder.svg" },
+    { name: "Aurora", image: "/placeholder.svg" },
   ];
 
   return (
@@ -156,29 +158,33 @@ const StoneCore10 = () => {
               Finiture disponibili
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Scegli tra le nostre esclusive texture naturali
+              Scegli tra le nostre 8 finiture effetto legno in MgO
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {finishes.map((finish, index) => (
-              <motion.button
+              <motion.div
                 key={finish.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                whileHover={{ scale: 1.05 }}
-                className="group relative aspect-square rounded-xl overflow-hidden border-2 border-border hover:border-primary transition-all"
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                className="group relative aspect-square rounded-2xl overflow-hidden border border-border/40 shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <div className="absolute inset-0" style={{ backgroundColor: finish.color }} />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
-                  <p className="text-xs font-medium text-background opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* Image background with zoom effect */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                  style={{ backgroundImage: `url(${finish.image})` }}
+                />
+                
+                {/* Bottom gradient overlay with name */}
+                <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center pb-4">
+                  <p className="text-base md:text-lg font-heading font-medium text-white tracking-wide">
                     {finish.name}
                   </p>
                 </div>
-              </motion.button>
+              </motion.div>
             ))}
           </div>
         </div>
