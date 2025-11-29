@@ -529,7 +529,7 @@ export const translations: Record<Language, Translations> = {
       },
       section10: {
         title: "10. Legge Applicabile e Foro Competente",
-        content1: "I presenti Termini e Condizioni sono regolati dalla legge italiana. Per qualsiasi controversia sarà competente il Foro di [Città], salvo diverse disposizioni di legge.",
+        content1: "I presenti Termini e Condizioni sono regolati dalla legge italiana. Per qualsiasi controversia sarà competente il Foro di Brescia, salvo diverse disposizioni di legge.",
         content2: "In conformità con il Regolamento UE 524/2013, gli utenti consumatori hanno diritto di accedere alla piattaforma europea di risoluzione delle controversie online (ODR).",
       },
       section11: {
@@ -1066,7 +1066,7 @@ export const translations: Record<Language, Translations> = {
       },
       section10: {
         title: "10. Applicable Law and Jurisdiction",
-        content1: "These Terms and Conditions are governed by Italian law. For any dispute, the Court of [City] will have jurisdiction, subject to different legal provisions.",
+        content1: "These Terms and Conditions are governed by Italian law. For any dispute, the Court of Brescia will have jurisdiction, subject to different legal provisions.",
         content2: "In accordance with EU Regulation 524/2013, consumer users have the right to access the European online dispute resolution platform (ODR).",
       },
       section11: {
@@ -1603,7 +1603,7 @@ export const translations: Record<Language, Translations> = {
       },
       section10: {
         title: "10. Anwendbares Recht und Gerichtsstand",
-        content1: "Diese Allgemeinen Geschäftsbedingungen unterliegen italienischem Recht. Für Streitigkeiten ist das Gericht von [Stadt] zuständig, vorbehaltlich anderer gesetzlicher Bestimmungen.",
+        content1: "Diese Allgemeinen Geschäftsbedingungen unterliegen italienischem Recht. Für Streitigkeiten ist das Gericht von Brescia zuständig, vorbehaltlich anderer gesetzlicher Bestimmungen.",
         content2: "Gemäß der EU-Verordnung 524/2013 haben Verbraucher das Recht auf Zugang zur europäischen Online-Plattform zur Streitbeilegung (ODR).",
       },
       section11: {
@@ -2140,7 +2140,7 @@ export const translations: Record<Language, Translations> = {
       },
       section10: {
         title: "10. Loi applicable et juridiction",
-        content1: "Ces Termes et Conditions sont régis par la loi italienne. Pour tout litige, le tribunal de [Ville] sera compétent, sous réserve de dispositions légales différentes.",
+        content1: "Ces Termes et Conditions sont régis par la loi italienne. Pour tout litige, le tribunal de Brescia sera compétent, sous réserve de dispositions légales différentes.",
         content2: "Conformément au Règlement UE 524/2013, les utilisateurs consommateurs ont le droit d'accéder à la plateforme européenne de règlement en ligne des litiges (ODR).",
       },
       section11: {
