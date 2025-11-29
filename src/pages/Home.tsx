@@ -64,7 +64,7 @@ const Home = () => {
       />
 
       {/* Le linee Kalēa */}
-      <section className="section-spacing relative overflow-hidden w-full" style={{ zIndex: 1 }}>
+      <section className="section-spacing section-overlap relative overflow-hidden w-full" style={{ zIndex: 1 }}>
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img src={bgProducts} alt="" className="w-full h-full object-cover" />
