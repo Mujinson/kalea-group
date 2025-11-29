@@ -11,6 +11,7 @@ import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jp
 import bgSustainabilityMaintenance from "@/assets/bg-sustainability-maintenance.jpg";
 import bgApplicationResidential from "@/assets/bg-application-residential.jpg";
 import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
+import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -310,6 +311,14 @@ const Home = () => {
                 {index === 1 && (
                   <img 
                     src={bgApplicationHospitality} 
+                    alt="" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+                {/* Background image for retail card */}
+                {index === 2 && (
+                  <img 
+                    src={bgApplicationRetail} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
                   />
