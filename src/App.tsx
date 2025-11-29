@@ -11,6 +11,8 @@ import OneWall from "./pages/OneWall";
 import AreaTecnica from "./pages/AreaTecnica";
 import ChiSiamo from "./pages/ChiSiamo";
 import Contatti from "./pages/Contatti";
+import Privacy from "./pages/Privacy";
+import Termini from "./pages/Termini";
 import NotFound from "./pages/NotFound";
 import { I18nProvider } from "./i18n/context";
 import { useEffect } from "react";
@@ -68,6 +70,8 @@ const App = () => (
             <Route path="/it/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/it/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/it/contatti" element={<Layout><Contatti /></Layout>} />
+            <Route path="/it/privacy" element={<Layout><Privacy /></Layout>} />
+            <Route path="/it/termini" element={<Layout><Termini /></Layout>} />
             
             {/* English routes */}
             <Route path="/en" element={<Layout><Home /></Layout>} />
@@ -77,6 +81,8 @@ const App = () => (
             <Route path="/en/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/en/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/en/contatti" element={<Layout><Contatti /></Layout>} />
+            <Route path="/en/privacy" element={<Layout><Privacy /></Layout>} />
+            <Route path="/en/termini" element={<Layout><Termini /></Layout>} />
             
             {/* German routes */}
             <Route path="/de" element={<Layout><Home /></Layout>} />
@@ -86,6 +92,8 @@ const App = () => (
             <Route path="/de/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/de/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/de/contatti" element={<Layout><Contatti /></Layout>} />
+            <Route path="/de/privacy" element={<Layout><Privacy /></Layout>} />
+            <Route path="/de/termini" element={<Layout><Termini /></Layout>} />
             
             {/* French routes */}
             <Route path="/fr" element={<Layout><Home /></Layout>} />
@@ -95,6 +103,8 @@ const App = () => (
             <Route path="/fr/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/fr/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/fr/contatti" element={<Layout><Contatti /></Layout>} />
+            <Route path="/fr/privacy" element={<Layout><Privacy /></Layout>} />
+            <Route path="/fr/termini" element={<Layout><Termini /></Layout>} />
             
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
