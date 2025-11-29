@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Leaf, Clock, Wrench } from "lucide-react";
+import { Shield, Layers, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Leaf, Clock, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
 import bgProducts from "@/assets/bg-products.jpg";
+import iconStoneCore from "@/assets/icon-stonecore.png";
+import iconEdgeLine from "@/assets/icon-edgeline.png";
+import iconOneWall from "@/assets/icon-onewall.png";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -13,17 +16,17 @@ const Home = () => {
   
   const productLines = [
     {
-      icon: Layers,
+      customIcon: iconStoneCore,
       title: t('home.stonecore.title'),
       description: t('home.stonecore.description'),
     },
     {
-      icon: Shield,
+      customIcon: iconEdgeLine,
       title: t('home.edgeline.title'),
       description: t('home.edgeline.description'),
     },
     {
-      icon: Sparkles,
+      customIcon: iconOneWall,
       title: t('home.onewall.title'),
       description: t('home.onewall.description'),
     },
