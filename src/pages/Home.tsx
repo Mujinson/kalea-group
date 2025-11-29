@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
 import bgProducts from "@/assets/bg-products.jpg";
+import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -331,7 +332,15 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group relative aspect-square rounded-2xl bg-muted overflow-hidden hover-lift"
               >
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-foreground/80" />
+                {/* Background image only for first card (Ridotto impatto ambientale) */}
+                {index === 0 && (
+                  <img 
+                    src={bgSustainabilityForest} 
+                    alt="" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-b from-foreground/75 to-foreground/85" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
                   <item.icon className="w-12 h-12 text-background mb-4" />
                   <h3 className="text-xl font-heading font-semibold text-background mb-2">{item.title}</h3>
