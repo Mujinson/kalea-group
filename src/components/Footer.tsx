@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const Footer = () => {
+  const { t, language } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -12,40 +14,39 @@ const Footer = () => {
           <div>
             <h3 className="text-2xl font-heading font-semibold text-foreground mb-3">Kalēa</h3>
             <p className="text-muted-foreground text-body">
-              Superfici di nuova generazione in MgO. Pavimenti, profili e pannelli sviluppati in Italia per durare e
-              trasformare gli spazi.
+              {t('footer.tagline')}
             </p>
           </div>
 
           {/* Link Rapidi */}
           <div>
             <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
-              Link Rapidi
+              {t('footer.quickLinks')}
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/stonecore-10" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to={`/${language}/stonecore-10`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   StoneCore 10
                 </Link>
               </li>
               <li>
-                <Link to="/edgeline" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to={`/${language}/edgeline`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   EdgeLine
                 </Link>
               </li>
               <li>
-                <Link to="/onewall" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <Link to={`/${language}/onewall`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   OneWall
                 </Link>
               </li>
               <li>
-                <Link to="/area-tecnica" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Area Tecnica
+                <Link to={`/${language}/area-tecnica`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  {t('nav.technicalArea')}
                 </Link>
               </li>
               <li>
-                <Link to="/chi-siamo" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Chi Siamo
+                <Link to={`/${language}/chi-siamo`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  {t('nav.aboutUs')}
                 </Link>
               </li>
             </ul>
@@ -54,7 +55,7 @@ const Footer = () => {
           {/* Contatti */}
           <div>
             <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
-              Contatti
+              {t('footer.contactsTitle')}
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
@@ -77,7 +78,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-primary mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-muted-foreground">Italia</span>
+                <span className="text-sm text-muted-foreground">{t('contacts.locationValue')}</span>
               </li>
             </ul>
           </div>
@@ -85,13 +86,13 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">© {currentYear} Kalēa. Tutti i diritti riservati.</p>
+          <p className="text-sm text-muted-foreground">© {currentYear} Kalēa. {t('footer.copyright')}</p>
           <div className="flex gap-6">
-            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Privacy Policy
+            <Link to={`/${language}/privacy`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              {t('footer.privacy')}
             </Link>
-            <Link to="/termini" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Termini e Condizioni
+            <Link to={`/${language}/termini`} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              {t('footer.terms')}
             </Link>
           </div>
         </div>

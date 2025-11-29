@@ -6,46 +6,49 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-edgeline.jpg";
 import bgEdgeLine from "@/assets/bg-edgeline.jpg";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const EdgeLine = () => {
+  const { t, language } = useTranslation();
+  
   const advantages = [
     {
       icon: Sparkles,
-      title: "Design minimal",
-      description: "Profili eleganti che valorizzano il pavimento senza invadere l'estetica degli spazi.",
+      title: t('edgeline.advantages.design.title'),
+      description: t('edgeline.advantages.design.description'),
     },
     {
       icon: Shield,
-      title: "Resistenza superiore",
-      description: "Alluminio di alta qualità che garantisce durata e stabilità nel tempo.",
+      title: t('edgeline.advantages.resistance.title'),
+      description: t('edgeline.advantages.resistance.description'),
     },
     {
       icon: Ruler,
-      title: "Versatilità",
-      description: "Soluzioni per ogni esigenza: terminali, giunzioni, dilatazioni, scalini.",
+      title: t('edgeline.advantages.versatility.title'),
+      description: t('edgeline.advantages.versatility.description'),
     },
   ];
 
   const products = [
     {
-      title: "Profilo terminale",
-      description: "Finitura perfetta per terminazioni a vista del pavimento",
+      title: t('edgeline.products.terminal.title'),
+      description: t('edgeline.products.terminal.description'),
     },
     {
-      title: "Profilo di giunzione",
-      description: "Raccordo tra pavimenti dello stesso livello",
+      title: t('edgeline.products.junction.title'),
+      description: t('edgeline.products.junction.description'),
     },
     {
-      title: "Profilo di dilatazione",
-      description: "Gestione dei giunti di dilatazione strutturali",
+      title: t('edgeline.products.expansion.title'),
+      description: t('edgeline.products.expansion.description'),
     },
     {
-      title: "Battiscopa",
-      description: "Coordinato con i pavimenti StoneCore 10",
+      title: t('edgeline.products.baseboard.title'),
+      description: t('edgeline.products.baseboard.description'),
     },
     {
-      title: "Profilo scalino",
-      description: "Protezione e finitura per gradini e dislivelli",
+      title: t('edgeline.products.step.title'),
+      description: t('edgeline.products.step.description'),
     },
   ];
 
@@ -53,10 +56,10 @@ const EdgeLine = () => {
     <div>
       {/* Hero */}
       <HeroSection
-        title="Kalēa EdgeLine"
-        subtitle="Profili e battiscopa in alluminio coordinati. La finitura perfetta per ogni progetto."
-        ctaPrimary={{ text: "Richiedi catalogo", link: "/contatti" }}
-        ctaSecondary={{ text: "Scopri StoneCore 10", link: "/stonecore-10" }}
+        title={t('hero.edgeline.title')}
+        subtitle={t('hero.edgeline.subtitle')}
+        ctaPrimary={{ text: t('hero.edgeline.ctaPrimary'), link: `/${language}/contatti` }}
+        ctaSecondary={{ text: t('hero.edgeline.ctaSecondary'), link: `/${language}/stonecore-10` }}
         backgroundImage={heroImage}
       />
 
@@ -82,10 +85,10 @@ const EdgeLine = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              Perché scegliere EdgeLine
+              {t('edgeline.advantagesTitle')}
             </h2>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              La soluzione completa per profili e battiscopa
+              {t('edgeline.advantagesSubtitle')}
             </p>
           </motion.div>
 
@@ -107,9 +110,9 @@ const EdgeLine = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Gamma prodotti</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.productsTitle')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Soluzioni tecniche per ogni situazione di posa
+              {t('edgeline.productsSubtitle')}
             </p>
           </motion.div>
 
@@ -146,14 +149,19 @@ const EdgeLine = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Finiture disponibili</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.finishesTitle')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Coordinati con i pavimenti Kalēa StoneCore 10
+              {t('edgeline.finishesSubtitle')}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-            {["Alluminio naturale", "Bronzo satinato", "Nero opaco", "Argento lucido"].map((finish, index) => (
+            {[
+              t('edgeline.finishes.natural'),
+              t('edgeline.finishes.bronze'),
+              t('edgeline.finishes.black'),
+              t('edgeline.finishes.silver')
+            ].map((finish, index) => (
               <motion.div
                 key={finish}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -179,13 +187,13 @@ const EdgeLine = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
-              Completa il tuo progetto con EdgeLine
+              {t('edgeline.ctaTitle')}
             </h2>
             <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-              Richiedi un preventivo personalizzato o campioni gratuiti
+              {t('edgeline.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="secondary">
-              <Link to="/contatti">Contattaci</Link>
+              <Link to={`/${language}/contatti`}>{t('edgeline.ctaButton')}</Link>
             </Button>
           </motion.div>
         </div>

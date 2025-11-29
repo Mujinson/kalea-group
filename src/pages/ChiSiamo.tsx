@@ -3,36 +3,51 @@ import FeatureCard from "@/components/FeatureCard";
 import { Target, Lightbulb, Users, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const ChiSiamo = () => {
+  const { t, language } = useTranslation();
+  
   const values = [
     {
       icon: Target,
-      title: "Innovazione",
-      description: "Ricerca continua di materiali e soluzioni all'avanguardia per il settore delle costruzioni.",
+      title: t('aboutUs.values.innovation.title'),
+      description: t('aboutUs.values.innovation.description'),
     },
     {
       icon: Lightbulb,
-      title: "Design",
-      description: "Estetica minimal e funzionalità si fondono in ogni prodotto che sviluppiamo.",
+      title: t('aboutUs.values.design.title'),
+      description: t('aboutUs.values.design.description'),
     },
     {
       icon: Users,
-      title: "Collaborazione",
-      description: "Lavoriamo a fianco di architetti, interior designer e imprese per realizzare progetti unici.",
+      title: t('aboutUs.values.collaboration.title'),
+      description: t('aboutUs.values.collaboration.description'),
     },
     {
       icon: Award,
-      title: "Qualità",
-      description: "Standard produttivi elevati e controllo rigoroso in ogni fase, dal design alla consegna.",
+      title: t('aboutUs.values.quality.title'),
+      description: t('aboutUs.values.quality.description'),
     },
   ];
 
   const customers = [
-    { title: "Architetti e progettisti", description: "Soluzioni tecniche per progetti residenziali e commerciali" },
-    { title: "Interior designer", description: "Materiali premium per spazi dal design curato" },
-    { title: "Imprese edili", description: "Prodotti affidabili con posa veloce e certificazioni complete" },
-    { title: "Rivenditori", description: "Partner commerciali per distribuzione e supporto territoriale" },
+    { 
+      title: t('aboutUs.customers.architects.title'), 
+      description: t('aboutUs.customers.architects.description')
+    },
+    { 
+      title: t('aboutUs.customers.designers.title'), 
+      description: t('aboutUs.customers.designers.description')
+    },
+    { 
+      title: t('aboutUs.customers.builders.title'), 
+      description: t('aboutUs.customers.builders.description')
+    },
+    { 
+      title: t('aboutUs.customers.retailers.title'), 
+      description: t('aboutUs.customers.retailers.description')
+    },
   ];
 
   return (
@@ -47,16 +62,13 @@ const ChiSiamo = () => {
               transition={{ duration: 0.6 }}
             >
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6">
-                Chi Siamo
+                {t('aboutUs.title')}
               </h1>
               <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                Kalēa nasce dall'esperienza nel settore delle costruzioni e dalla passione per l'innovazione dei
-                materiali. Sviluppiamo superfici in MgO (ossido di magnesio) che ridefiniscono gli standard di
-                prestazione, estetica e sostenibilità.
+                {t('aboutUs.intro1')}
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Ogni prodotto della gamma Kalēa è progettato in Italia con l'obiettivo di semplificare la posa,
-                garantire durata nel tempo e offrire soluzioni all'avanguardia per architetti, designer e imprese.
+                {t('aboutUs.intro2')}
               </p>
             </motion.div>
 
@@ -86,23 +98,11 @@ const ChiSiamo = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">La nostra storia</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">{t('aboutUs.historyTitle')}</h2>
             <div className="space-y-6 text-left text-muted-foreground leading-relaxed">
-              <p>
-                Il progetto Kalēa nasce dalla volontà di superare i limiti dei materiali tradizionali nel settore
-                dell'edilizia e dell'interior design. L'ossido di magnesio (MgO) si è rivelato la chiave per
-                sviluppare una gamma di prodotti dalle prestazioni eccezionali.
-              </p>
-              <p>
-                Dopo anni di ricerca e sviluppo, abbiamo creato tre linee integrate: <strong>StoneCore 10</strong> per
-                i pavimenti, <strong>EdgeLine</strong> per profili e battiscopa, e <strong>OneWall</strong> per pareti
-                e soffitti. Ogni prodotto è pensato per essere semplice da posare, bello da vedere e capace di durare
-                nel tempo.
-              </p>
-              <p>
-                Oggi Kalēa è sinonimo di innovazione italiana nel campo delle superfici tecniche, scelto da
-                professionisti che cercano qualità, design e affidabilità.
-              </p>
+              <p>{t('aboutUs.history1')}</p>
+              <p>{t('aboutUs.history2')}</p>
+              <p>{t('aboutUs.history3')}</p>
             </div>
           </motion.div>
         </div>
@@ -118,9 +118,9 @@ const ChiSiamo = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Cosa ci guida</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('aboutUs.valuesTitle')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              I valori che ispirano ogni decisione e ogni prodotto Kalēa
+              {t('aboutUs.valuesSubtitle')}
             </p>
           </motion.div>
 
@@ -142,9 +142,9 @@ const ChiSiamo = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Per chi lavoriamo</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('aboutUs.customersTitle')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              I professionisti che scelgono Kalēa per i loro progetti
+              {t('aboutUs.customersSubtitle')}
             </p>
           </motion.div>
 
@@ -175,12 +175,12 @@ const ChiSiamo = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">Vuoi collaborare con noi?</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">{t('aboutUs.ctaTitle')}</h2>
             <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-              Cerchiamo partner, rivenditori e professionisti che condividono la nostra visione
+              {t('aboutUs.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="secondary">
-              <Link to="/contatti">Contattaci</Link>
+              <Link to={`/${language}/contatti`}>{t('aboutUs.ctaButton')}</Link>
             </Button>
           </motion.div>
         </div>

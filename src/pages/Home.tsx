@@ -6,59 +6,59 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
 import bgProducts from "@/assets/bg-products.jpg";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
+  const { t, language } = useTranslation();
+  
   const productLines = [
     {
       icon: Layers,
-      title: "Kalēa StoneCore 10",
-      description:
-        "Pavimenti in MgO da 10 mm, flottanti, waterproof e ignifughi. Posa veloce, prestazioni professionali, estetica naturale.",
+      title: t('home.stonecore.title'),
+      description: t('home.stonecore.description'),
     },
     {
       icon: Shield,
-      title: "Kalēa EdgeLine",
-      description:
-        "Profili e battiscopa in alluminio coordinati. Design minimal, resistenza superiore, finitura perfetta per ogni spazio.",
+      title: t('home.edgeline.title'),
+      description: t('home.edgeline.description'),
     },
     {
       icon: Sparkles,
-      title: "Kalēa OneWall",
-      description:
-        "Pannelli in MgO per pareti e soffitti, già finiti. Alternativa avanzata al cartongesso, versatile e rapida da installare.",
+      title: t('home.onewall.title'),
+      description: t('home.onewall.description'),
     },
   ];
 
   const mgoAdvantages = [
-    { icon: Shield, text: "Fireproof - Ignifugo" },
-    { icon: Layers, text: "Waterproof - Impermeabile" },
-    { icon: Sparkles, text: "Stabilità dimensionale" },
-    { icon: Shield, text: "Anti-muffa" },
-    { icon: Layers, text: "Comfort acustico" },
-    { icon: Sparkles, text: "Posa flottante" },
+    { icon: Shield, text: t('home.mgoAdvantages.fireproof') },
+    { icon: Layers, text: t('home.mgoAdvantages.waterproof') },
+    { icon: Sparkles, text: t('home.mgoAdvantages.stability') },
+    { icon: Shield, text: t('home.mgoAdvantages.antimold') },
+    { icon: Layers, text: t('home.mgoAdvantages.acoustic') },
+    { icon: Sparkles, text: t('home.mgoAdvantages.floating') },
   ];
 
   const applications = [
-    { icon: HomeIcon, title: "Residenziale", description: "Abitazioni private di design" },
-    { icon: Building2, title: "Hospitality", description: "Hotel e strutture ricettive" },
-    { icon: ShoppingBag, title: "Retail", description: "Negozi e showroom" },
-    { icon: Briefcase, title: "Uffici", description: "Spazi di lavoro contemporanei" },
+    { icon: HomeIcon, title: t('home.applications.residential.title'), description: t('home.applications.residential.description') },
+    { icon: Building2, title: t('home.applications.hospitality.title'), description: t('home.applications.hospitality.description') },
+    { icon: ShoppingBag, title: t('home.applications.retail.title'), description: t('home.applications.retail.description') },
+    { icon: Briefcase, title: t('home.applications.offices.title'), description: t('home.applications.offices.description') },
   ];
 
   const sustainability = [
-    { icon: Leaf, title: "Ridotto impatto ambientale", description: "Materiali sostenibili e processi ecocompatibili" },
-    { icon: Clock, title: "Lunga durata", description: "Investimento che dura nel tempo" },
-    { icon: Wrench, title: "Manutenzione minima", description: "Risparmio di risorse e tempo" },
+    { icon: Leaf, title: t('home.sustainability.impact.title'), description: t('home.sustainability.impact.description') },
+    { icon: Clock, title: t('home.sustainability.durability.title'), description: t('home.sustainability.durability.description') },
+    { icon: Wrench, title: t('home.sustainability.maintenance.title'), description: t('home.sustainability.maintenance.description') },
   ];
 
   return (
     <div>
       {/* Hero */}
       <HeroSection
-        title="Superfici di nuova generazione in MgO"
-        subtitle="Pavimenti, profili e pannelli sviluppati in Italia per durare e trasformare gli spazi."
-        ctaPrimary={{ text: "Scopri le nostre soluzioni", link: "/stonecore-10" }}
-        ctaSecondary={{ text: "Richiedi un preventivo", link: "/contatti" }}
+        title={t('hero.home.title')}
+        subtitle={t('hero.home.subtitle')}
+        ctaPrimary={{ text: t('hero.home.ctaPrimary'), link: `/${language}/stonecore-10` }}
+        ctaSecondary={{ text: t('hero.home.ctaSecondary'), link: `/${language}/contatti` }}
         backgroundImage={heroImage}
         minHeight="min-h-[85vh]"
       />
@@ -80,10 +80,10 @@ const Home = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-              Le linee Kalēa
+              {t('home.linesTitle')}
             </h2>
             <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              Tre sistemi integrati per dare forma agli spazi del futuro
+              {t('home.linesSubtitle')}
             </p>
           </motion.div>
 
@@ -105,10 +105,9 @@ const Home = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">Perché MgO</h2>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">{t('home.mgoTitle')}</h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                L'ossido di magnesio (MgO) rappresenta il futuro delle costruzioni. Un materiale dalle prestazioni
-                eccezionali che supera i limiti dei sistemi tradizionali.
+                {t('home.mgoDescription')}
               </p>
 
               <div className="grid grid-cols-2 gap-4">
@@ -129,7 +128,7 @@ const Home = () => {
 
               <div className="mt-8">
                 <Button asChild variant="default">
-                  <Link to="/area-tecnica">Approfondisci</Link>
+                  <Link to={`/${language}/area-tecnica`}>{t('home.mgoButton')}</Link>
                 </Button>
               </div>
             </motion.div>
@@ -162,10 +161,10 @@ const Home = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Applicazioni
+              {t('home.applicationsTitle')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Kalēa si adatta a ogni contesto, dal residenziale al commerciale
+              {t('home.applicationsSubtitle')}
             </p>
           </motion.div>
 
@@ -202,10 +201,10 @@ const Home = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Sostenibilità
+              {t('home.sustainabilityTitle')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Investire in Kalēa significa scegliere il futuro
+              {t('home.sustainabilitySubtitle')}
             </p>
           </motion.div>
 
@@ -227,23 +226,23 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6">
-              Vuoi usare Kalēa nei tuoi progetti?
+              {t('home.ctaTitle')}
             </h2>
             <p className="text-lg mb-10 max-w-2xl mx-auto opacity-90">
-              Contattaci per ricevere campioni, documentazione tecnica o un preventivo personalizzato
+              {t('home.ctaSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                to="/contatti"
+                to={`/${language}/contatti`}
                 className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
               >
-                Richiedi preventivo
+                {t('home.ctaButton1')}
               </Link>
               <Link 
-                to="/chi-siamo"
+                to={`/${language}/chi-siamo`}
                 className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
               >
-                Diventa partner
+                {t('home.ctaButton2')}
               </Link>
             </div>
           </motion.div>

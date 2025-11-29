@@ -7,75 +7,93 @@ import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-onewall.jpg";
 import bgOneWall from "@/assets/bg-onewall.jpg";
 import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const OneWall = () => {
+  const { t, language } = useTranslation();
+  
   const advantages = [
     {
       icon: Zap,
-      title: "Posa velocissima",
-      description: "Pannelli già finiti pronti all'uso. Installazione 3 volte più rapida del cartongesso tradizionale.",
+      title: t('onewall.advantages.fast.title'),
+      description: t('onewall.advantages.fast.description'),
     },
     {
       icon: Shield,
-      title: "Resistenza superiore",
-      description: "Core in MgO che garantisce stabilità, durezza e resistenza agli urti.",
+      title: t('onewall.advantages.resistance.title'),
+      description: t('onewall.advantages.resistance.description'),
     },
     {
       icon: Droplets,
-      title: "Waterproof",
-      description: "Perfetto per ambienti umidi come bagni e cucine senza rischio di degrado.",
+      title: t('onewall.advantages.waterproof.title'),
+      description: t('onewall.advantages.waterproof.description'),
     },
     {
       icon: Flame,
-      title: "Fireproof",
-      description: "Ignifugo certificato. Sicurezza massima per pareti e soffitti.",
+      title: t('onewall.advantages.fireproof.title'),
+      description: t('onewall.advantages.fireproof.description'),
     },
     {
       icon: Palette,
-      title: "Versatilità estetica",
-      description: "Disponibile in finiture legno, marmo, cemento, carta da parati e decorative.",
+      title: t('onewall.advantages.aesthetic.title'),
+      description: t('onewall.advantages.aesthetic.description'),
     },
     {
       icon: Clock,
-      title: "Manutenzione zero",
-      description: "Non richiede ritocchi, tinteggiature o trattamenti periodici.",
+      title: t('onewall.advantages.maintenance.title'),
+      description: t('onewall.advantages.maintenance.description'),
     },
   ];
 
   const howItWorks = [
     {
       step: "1",
-      title: "Preparazione",
-      description: "Installazione di struttura portante a secco (opzionale per pareti esistenti)",
+      title: t('onewall.howItWorks.step1.title'),
+      description: t('onewall.howItWorks.step1.description'),
     },
     {
       step: "2",
-      title: "Posa pannelli",
-      description: "Fissaggio dei pannelli OneWall con viti e tasselli. Taglio e adattamento semplici",
+      title: t('onewall.howItWorks.step2.title'),
+      description: t('onewall.howItWorks.step2.description'),
     },
     {
       step: "3",
-      title: "Finitura",
-      description: "Stuccatura giunti e applicazione profili. Pronto all'uso senza ulteriori finiture",
+      title: t('onewall.howItWorks.step3.title'),
+      description: t('onewall.howItWorks.step3.description'),
     },
   ];
 
   const finishes = [
-    { name: "Effetto legno", description: "Texture naturali per ambienti caldi" },
-    { name: "Effetto marmo", description: "Eleganza senza tempo per spazi raffinati" },
-    { name: "Effetto cemento", description: "Stile industriale e contemporaneo" },
-    { name: "Carta da parati", description: "Personalizzazione infinita con pattern esclusivi" },
-    { name: "Finiture decorative", description: "Texture tridimensionali per pareti d'accento" },
+    { 
+      name: t('onewall.finishes.wood.title'), 
+      description: t('onewall.finishes.wood.description')
+    },
+    { 
+      name: t('onewall.finishes.marble.title'), 
+      description: t('onewall.finishes.marble.description')
+    },
+    { 
+      name: t('onewall.finishes.concrete.title'), 
+      description: t('onewall.finishes.concrete.description')
+    },
+    { 
+      name: t('onewall.finishes.wallpaper.title'), 
+      description: t('onewall.finishes.wallpaper.description')
+    },
+    { 
+      name: t('onewall.finishes.decorative.title'), 
+      description: t('onewall.finishes.decorative.description')
+    },
   ];
 
   return (
     <div>
       {/* Hero */}
       <HeroSection
-        title="Kalēa OneWall"
-        subtitle="Pannelli in MgO per pareti e soffitti. L'evoluzione del cartongesso, già finito."
-        ctaPrimary={{ text: "Richiedi campioni", link: "/contatti" }}
-        ctaSecondary={{ text: "Scarica catalogo", link: "/area-tecnica" }}
+        title={t('hero.onewall.title')}
+        subtitle={t('hero.onewall.subtitle')}
+        ctaPrimary={{ text: t('hero.onewall.ctaPrimary'), link: `/${language}/contatti` }}
+        ctaSecondary={{ text: t('hero.onewall.ctaSecondary'), link: `/${language}/area-tecnica` }}
         backgroundImage={heroImage}
       />
 
@@ -89,9 +107,9 @@ const OneWall = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Come funziona</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('onewall.howItWorksTitle')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Sistema semplice e veloce per pareti e soffitti perfetti
+              {t('onewall.howItWorksSubtitle')}
             </p>
           </motion.div>
 
@@ -132,10 +150,10 @@ const OneWall = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Finiture disponibili
+              {t('onewall.finishesTitle')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Personalizza pareti e soffitti secondo il tuo stile
+              {t('onewall.finishesSubtitle')}
             </p>
           </motion.div>
 
@@ -185,9 +203,9 @@ const OneWall = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">Vantaggi tecnici</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">{t('onewall.advantagesTitle')}</h2>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              Prestazioni superiori al cartongesso tradizionale
+              {t('onewall.advantagesSubtitle')}
             </p>
           </motion.div>
 
@@ -221,10 +239,10 @@ const OneWall = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              Dove usare OneWall
+              {t('onewall.applicationsTitle')}
             </h2>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              Soluzioni versatili per ogni esigenza architettonica
+              {t('onewall.applicationsSubtitle')}
             </p>
           </motion.div>
 
@@ -273,13 +291,13 @@ const OneWall = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
-              Scopri le possibilità di OneWall
+              {t('onewall.ctaTitle')}
             </h2>
             <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-              Contattaci per una consulenza personalizzata sul tuo progetto
+              {t('onewall.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="secondary">
-              <Link to="/contatti">Richiedi consulenza</Link>
+              <Link to={`/${language}/contatti`}>{t('onewall.ctaButton')}</Link>
             </Button>
           </motion.div>
         </div>

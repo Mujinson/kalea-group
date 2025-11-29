@@ -7,60 +7,63 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-stonecore.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const StoneCore10 = () => {
+  const { t, language } = useTranslation();
+  
   const advantages = [
     {
       icon: Droplets,
-      title: "Waterproof",
-      description: "100% impermeabile. Perfetto per bagni, cucine e ambienti umidi senza preoccupazioni.",
+      title: t('stonecore.advantages.waterproof.title'),
+      description: t('stonecore.advantages.waterproof.description'),
     },
     {
       icon: Flame,
-      title: "Fireproof",
-      description: "Ignifugo certificato. Sicurezza massima per spazi residenziali e commerciali.",
+      title: t('stonecore.advantages.fireproof.title'),
+      description: t('stonecore.advantages.fireproof.description'),
     },
     {
       icon: Shield,
-      title: "Anti-muffa",
-      description: "Naturalmente resistente a muffe e batteri. Ambiente più sano e salubre.",
+      title: t('stonecore.advantages.antimold.title'),
+      description: t('stonecore.advantages.antimold.description'),
     },
     {
       icon: Volume2,
-      title: "Comfort acustico",
-      description: "Riduce la trasmissione del rumore. Silenzio e tranquillità in ogni stanza.",
+      title: t('stonecore.advantages.acoustic.title'),
+      description: t('stonecore.advantages.acoustic.description'),
     },
     {
       icon: Zap,
-      title: "Posa flottante",
-      description: "Installazione rapida senza colla. Pronto all'uso in poche ore.",
+      title: t('stonecore.advantages.floating.title'),
+      description: t('stonecore.advantages.floating.description'),
     },
     {
       icon: Layers,
-      title: "Stabilità dimensionale",
-      description: "Non si espande né si contrae. Perfetto per grandi superfici continue.",
+      title: t('stonecore.advantages.stability.title'),
+      description: t('stonecore.advantages.stability.description'),
     },
   ];
 
   const finishes = [
-    { name: "Corteccia", image: "/placeholder.svg" },
-    { name: "Cenere", image: "/placeholder.svg" },
-    { name: "Sabbia", image: "/placeholder.svg" },
-    { name: "Silven", image: "/placeholder.svg" },
-    { name: "Terram", image: "/placeholder.svg" },
-    { name: "Perla", image: "/placeholder.svg" },
-    { name: "Velora", image: "/placeholder.svg" },
-    { name: "Aurora", image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.corteccia'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.cenere'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.sabbia'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.silven'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.terram'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.perla'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.velora'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.aurora'), image: "/placeholder.svg" },
   ];
 
   return (
     <div>
       {/* Hero */}
       <HeroSection
-        title="Kalēa StoneCore 10"
-        subtitle="Pavimenti in MgO di nuova generazione. Prestazioni professionali, estetica naturale, posa veloce."
-        ctaPrimary={{ text: "Richiedi campioni", link: "/contatti" }}
-        ctaSecondary={{ text: "Scarica scheda tecnica", link: "/area-tecnica" }}
+        title={t('hero.stonecore.title')}
+        subtitle={t('hero.stonecore.subtitle')}
+        ctaPrimary={{ text: t('hero.stonecore.ctaPrimary'), link: `/${language}/contatti` }}
+        ctaSecondary={{ text: t('hero.stonecore.ctaSecondary'), link: `/${language}/area-tecnica` }}
         backgroundImage={heroImage}
       />
 
@@ -75,20 +78,20 @@ const StoneCore10 = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Struttura multistrato avanzata
+              {t('stonecore.structureTitle')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              10 mm totali: 8,5 mm core MgO + 1,5 mm strato di usura decorativo
+              {t('stonecore.structureSubtitle')}
             </p>
           </motion.div>
 
           <div className="max-w-3xl mx-auto">
             <div className="space-y-3">
               {[
-                { label: "Strato decorativo", height: "h-8", bg: "bg-secondary" },
-                { label: "Strato di usura", height: "h-6", bg: "bg-primary/30" },
-                { label: "Core MgO", height: "h-32", bg: "bg-primary" },
-                { label: "Tappetino", height: "h-4", bg: "bg-muted" },
+                { label: t('stonecore.layers.decorative'), height: "h-8", bg: "bg-secondary" },
+                { label: t('stonecore.layers.wear'), height: "h-6", bg: "bg-primary/30" },
+                { label: t('stonecore.layers.core'), height: "h-32", bg: "bg-primary" },
+                { label: t('stonecore.layers.mat'), height: "h-4", bg: "bg-muted" },
               ].map((layer, index) => (
                 <motion.div
                   key={layer.label}
@@ -129,10 +132,10 @@ const StoneCore10 = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              Vantaggi esclusivi
+              {t('stonecore.advantagesTitle')}
             </h2>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              Prestazioni superiori per ogni esigenza progettuale
+              {t('stonecore.advantagesSubtitle')}
             </p>
           </motion.div>
 
@@ -155,10 +158,10 @@ const StoneCore10 = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Finiture disponibili
+              {t('stonecore.finishesTitle')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Scegli tra le nostre 8 finiture effetto legno in MgO
+              {t('stonecore.finishesSubtitle')}
             </p>
           </motion.div>
 
@@ -201,9 +204,9 @@ const StoneCore10 = () => {
           >
             <Tabs defaultValue="caratteristiche" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="caratteristiche">Caratteristiche</TabsTrigger>
-                <TabsTrigger value="posa">Posa</TabsTrigger>
-                <TabsTrigger value="manutenzione">Manutenzione</TabsTrigger>
+                <TabsTrigger value="caratteristiche">{t('stonecore.techTitle')}</TabsTrigger>
+                <TabsTrigger value="posa">{t('stonecore.techPosa')}</TabsTrigger>
+                <TabsTrigger value="manutenzione">{t('stonecore.techMaintenance')}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="caratteristiche" className="mt-8 space-y-4">
@@ -261,12 +264,12 @@ const StoneCore10 = () => {
             transition={{ duration: 0.6 }}
             className="bg-primary rounded-2xl p-8 md:p-12 text-center text-primary-foreground"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">Scarica la documentazione completa</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">{t('stonecore.ctaTitle')}</h2>
             <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
-              Schede tecniche, certificazioni e guide di posa disponibili nell'Area Tecnica
+              {t('stonecore.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="secondary">
-              <Link to="/area-tecnica">Vai all'Area Tecnica</Link>
+              <Link to={`/${language}/area-tecnica`}>{t('stonecore.ctaButton')}</Link>
             </Button>
           </motion.div>
         </div>
