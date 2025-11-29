@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-stonecore.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
+import bgWoodFinishes from "@/assets/bg-wood-finishes.jpg";
 
 const StoneCore10 = () => {
   const advantages = [
@@ -145,8 +146,19 @@ const StoneCore10 = () => {
       </section>
 
       {/* Finiture */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
-        <div className="container-custom">
+      <section 
+        className="section-spacing section-overlap relative" 
+        style={{
+          zIndex: 3,
+          backgroundImage: `url(${bgWoodFinishes})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Overlay per migliorare la leggibilità */}
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -154,10 +166,10 @@ const StoneCore10 = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
               Finiture disponibili
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-white/90 max-w-2xl mx-auto">
               Scegli tra le nostre 8 finiture effetto legno in MgO
             </p>
           </motion.div>
