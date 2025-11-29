@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Leaf, Clock, Wrench, Flame, Droplets, Bug, Box, Volume2 } from "lucide-react";
+import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench, Flame, Droplets, Bug, Box, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
@@ -52,6 +52,8 @@ const Home = () => {
     { icon: Building2, title: t('home.applications.hospitality.title'), description: t('home.applications.hospitality.description') },
     { icon: ShoppingBag, title: t('home.applications.retail.title'), description: t('home.applications.retail.description') },
     { icon: Briefcase, title: t('home.applications.offices.title'), description: t('home.applications.offices.description') },
+    { icon: Heart, title: t('home.applications.healthcare.title'), description: t('home.applications.healthcare.description') },
+    { icon: ShoppingCart, title: t('home.applications.commercial.title'), description: t('home.applications.commercial.description') },
   ];
 
   const sustainability = [
@@ -284,7 +286,7 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {applications.map((app, index) => (
               <motion.div
                 key={app.title}
