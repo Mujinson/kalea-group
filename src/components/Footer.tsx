@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
+import logoFooter from "@/assets/logo-footer.png";
 
 const Footer = () => {
   const { t, language } = useTranslation();
@@ -12,7 +13,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Logo & Tagline */}
           <div>
-            <h3 className="text-2xl font-heading font-semibold text-foreground mb-3">Kalēa</h3>
+            <img src={logoFooter} alt="Kalēa" className="h-8 mb-3" />
             <p className="text-muted-foreground text-body">{t("footer.tagline")}</p>
           </div>
 
