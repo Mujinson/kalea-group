@@ -14,6 +14,8 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
+  const mobileMenuRef = React.useRef<HTMLDivElement>(null);
+  const mobileMenuButtonRef = React.useRef<HTMLButtonElement>(null);
 
   const languages: Language[] = ['it', 'en', 'de', 'fr'];
   
@@ -73,6 +75,27 @@ const Navbar = () => {
       document.body.classList.remove("navbar-compact");
     };
   }, [language]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isMobileMenuOpen &&
+        mobileMenuRef.current &&
+        mobileMenuButtonRef.current &&
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        !mobileMenuButtonRef.current.contains(event.target as Node)
+      ) {
+        setIsMobileMenuOpen(false);
+        setIsLineeExpanded(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <motion.nav
@@ -221,6 +244,7 @@ const Navbar = () => {
 
             {/* Mobile Menu Button */}
             <button
+              ref={mobileMenuButtonRef}
               className="lg:hidden p-2 text-white hover:text-white/70 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
@@ -235,6 +259,7 @@ const Navbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            ref={mobileMenuRef}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
