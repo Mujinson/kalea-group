@@ -542,8 +542,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     cookies: {
-      title: "Un'esperienza su misura per te",
-      description: "Ogni click conta. Accetta i cookies e lascia che il tuo viaggio su Kalēa sia fluido, elegante e senza intoppi. Utilizziamo i cookies per migliorare la tua esperienza e offrirti contenuti personalizzati.",
+      title: "Usiamo i cookies",
+      description: "Per offrirti un'esperienza più fluida e personalizzata.",
       acceptAll: "Accetta tutti i cookies",
       managePreferences: "Gestisci preferenze",
       rejectAll: "Rifiuta tutti",
@@ -1109,8 +1109,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     cookies: {
-      title: "A Tailored Experience for You",
-      description: "Every click counts. Accept cookies and let your journey on Kalēa be smooth, elegant, and seamless. We use cookies to enhance your experience and offer personalized content.",
+      title: "We use cookies",
+      description: "To offer you a smoother and more personalized experience.",
       acceptAll: "Accept All Cookies",
       managePreferences: "Manage Preferences",
       rejectAll: "Reject All",
@@ -1676,8 +1676,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     cookies: {
-      title: "Ein maßgeschneidertes Erlebnis für Sie",
-      description: "Jeder Klick zählt. Akzeptieren Sie Cookies und lassen Sie Ihre Reise auf Kalēa reibungslos, elegant und nahtlos verlaufen. Wir verwenden Cookies, um Ihr Erlebnis zu verbessern und personalisierte Inhalte anzubieten.",
+      title: "Wir verwenden Cookies",
+      description: "Um Ihnen ein reibungsloseres und personalisierteres Erlebnis zu bieten.",
       acceptAll: "Alle Cookies akzeptieren",
       managePreferences: "Einstellungen verwalten",
       rejectAll: "Alle ablehnen",
@@ -2243,8 +2243,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     cookies: {
-      title: "Une expérience sur mesure pour vous",
-      description: "Chaque clic compte. Acceptez les cookies et laissez votre voyage sur Kalēa être fluide, élégant et sans accroc. Nous utilisons des cookies pour améliorer votre expérience et offrir du contenu personnalisé.",
+      title: "Nous utilisons des cookies",
+      description: "Pour vous offrir une expérience plus fluide et personnalisée.",
       acceptAll: "Accepter tous les cookies",
       managePreferences: "Gérer les préférences",
       rejectAll: "Tout rejeter",
