@@ -310,7 +310,7 @@ const Navbar = () => {
               ))}
               
               {/* Mobile Language Selector */}
-              <div className="flex items-center justify-center gap-3 py-4 border-t border-white/10 mt-4">
+              <div className="flex items-center justify-center gap-2 py-4 border-t border-white/10 mt-4">
                 {languages.map((lang) => (
                   <button
                     key={lang}
@@ -318,7 +318,7 @@ const Navbar = () => {
                       handleLanguageChange(lang);
                       setIsMobileMenuOpen(false);
                     }}
-                    className={`px-4 py-1.5 rounded-lg transition-all ${
+                    className={`px-3 py-1 rounded-lg transition-all text-xs ${
                       language === lang 
                         ? "bg-white text-[#111] font-semibold" 
                         : "text-white/70 hover:text-white hover:bg-white/10"
@@ -332,7 +332,7 @@ const Navbar = () => {
               <Link
                 to={`/${language}/contatti`}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-9 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] transition-all duration-150"
+                className="block w-full text-center px-6 py-2 bg-white text-[#111] rounded-xl text-sm hover:bg-[#F3F3F3] transition-all duration-150"
               >
                 {t('nav.requestQuote')}
               </Link>
