@@ -75,7 +75,7 @@ const Navbar = () => {
               to="/"
               className="hover:opacity-80 transition-opacity duration-200 z-10"
             >
-              <img src={logo} alt="Kalēa" className="h-8 md:h-10" />
+              <img src={logo} alt="Kalēa" className="h-8 md:h-10 brightness-0 invert" />
             </Link>
 
             {/* Desktop Menu - Center */}
