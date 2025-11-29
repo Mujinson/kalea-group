@@ -95,6 +95,14 @@ export const translations: Record<Language, Translations> = {
           title: "Uffici",
           description: "Spazi di lavoro contemporanei",
         },
+        healthcare: {
+          title: "Healthcare",
+          description: "Strutture sanitarie, cliniche e RSA",
+        },
+        commercial: {
+          title: "Centri commerciali",
+          description: "Aree ad alto traffico e grandi superfici",
+        },
       },
       sustainabilityTitle: "Sostenibilità",
       sustainabilitySubtitle: "Investire in Kalēa significa scegliere il futuro",
