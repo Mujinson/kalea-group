@@ -77,7 +77,7 @@ const ChiSiamo = () => {
       </section>
 
       {/* Storia */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 1 }}>
+      <section className="section-spacing">
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -109,7 +109,7 @@ const ChiSiamo = () => {
       </section>
 
       {/* Cosa ci guida */}
-      <section className="section-spacing section-overlap bg-card" style={{ zIndex: 2 }}>
+      <section className="section-spacing bg-card">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -133,7 +133,7 @@ const ChiSiamo = () => {
       </section>
 
       {/* Per chi lavoriamo */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -167,7 +167,7 @@ const ChiSiamo = () => {
       </section>
 
       {/* CTA */}
-      <section className="section-spacing section-overlap bg-primary text-primary-foreground" style={{ zIndex: 4 }}>
+      <section className="section-spacing bg-primary text-primary-foreground">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

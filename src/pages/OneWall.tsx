@@ -80,7 +80,7 @@ const OneWall = () => {
       />
 
       {/* Come funziona */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 1 }}>
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -122,7 +122,7 @@ const OneWall = () => {
       </section>
 
       {/* Finiture */}
-      <section className="section-spacing section-overlap bg-card" style={{ zIndex: 2 }}>
+      <section className="section-spacing bg-card">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -166,9 +166,8 @@ const OneWall = () => {
 
       {/* Vantaggi tecnici */}
       <section 
-        className="section-spacing section-overlap relative"
+        className="section-spacing relative"
         style={{
-          zIndex: 3,
           backgroundImage: `url(${bgOneWall})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -202,9 +201,8 @@ const OneWall = () => {
 
       {/* Applicazioni */}
       <section 
-        className="section-spacing section-overlap relative py-24"
+        className="section-spacing relative py-24"
         style={{
-          zIndex: 4,
           backgroundImage: `url(${bgOneWallApplications})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -266,7 +264,7 @@ const OneWall = () => {
       </section>
 
       {/* CTA finale */}
-      <section className="section-spacing section-overlap bg-primary text-primary-foreground" style={{ zIndex: 5 }}>
+      <section className="section-spacing bg-primary text-primary-foreground">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
