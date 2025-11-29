@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Leaf, Clock, Wrench } from "lucide-react";
+import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Leaf, Clock, Wrench, Flame, Droplets, Bug, Box, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-home.jpg";
@@ -30,12 +30,18 @@ const Home = () => {
   ];
 
   const mgoAdvantages = [
-    { icon: Shield, text: t('home.mgoAdvantages.fireproof') },
-    { icon: Layers, text: t('home.mgoAdvantages.waterproof') },
-    { icon: Sparkles, text: t('home.mgoAdvantages.stability') },
-    { icon: Shield, text: t('home.mgoAdvantages.antimold') },
-    { icon: Layers, text: t('home.mgoAdvantages.acoustic') },
-    { icon: Sparkles, text: t('home.mgoAdvantages.floating') },
+    { icon: Flame, text: t('home.mgoAdvantages.fireproof') },
+    { icon: Droplets, text: t('home.mgoAdvantages.waterproof') },
+    { icon: Box, text: t('home.mgoAdvantages.stability') },
+    { icon: Bug, text: t('home.mgoAdvantages.antimold') },
+    { icon: Volume2, text: t('home.mgoAdvantages.acoustic') },
+  ];
+
+  const comparativeData = [
+    { material: 'MgO', fire: '✓', water: '✓', mold: '✓', stability: '✓', acoustic: '✓' },
+    { material: 'SPC', fire: '○', water: '✓', mold: '○', stability: '✓', acoustic: '○' },
+    { material: 'MFC', fire: '✗', water: '✗', mold: '✗', stability: '○', acoustic: '○' },
+    { material: 'HPL', fire: '○', water: '○', mold: '○', stability: '✓', acoustic: '✗' },
   ];
 
   const applications = [
@@ -98,51 +104,158 @@ const Home = () => {
       {/* Perché MgO */}
       <section className="section-spacing">
         <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+            {/* Left Column - Text & Icons */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-2"
             >
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">{t('home.mgoTitle')}</h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6 leading-tight"
+              >
+                {t('home.mgoTitle')}
+              </motion.h2>
+              
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-xl text-muted-foreground mb-10 leading-relaxed"
+              >
                 {t('home.mgoDescription')}
-              </p>
+              </motion.p>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-5 mb-10">
                 {mgoAdvantages.map((advantage, index) => (
                   <motion.div
                     key={advantage.text}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    className="flex items-start gap-3"
+                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                    className="flex items-center gap-4 group"
                   >
-                    <advantage.icon className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                    <span className="text-sm text-foreground">{advantage.text}</span>
+                    <div className="p-2.5 rounded-xl bg-muted/50 group-hover:bg-muted transition-colors duration-200">
+                      <advantage.icon className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                    </div>
+                    <span className="text-base text-foreground font-medium">{advantage.text}</span>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="mt-8">
-                <Button asChild variant="default">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                <Button asChild variant="outline" size="sm" className="rounded-xl border-border hover:bg-muted">
                   <Link to={`/${language}/area-tecnica`}>{t('home.mgoButton')}</Link>
                 </Button>
-              </div>
+              </motion.div>
             </motion.div>
 
+            {/* Right Column - Glass Card with Comparison */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="lg:col-span-3"
             >
-              <div className="aspect-square rounded-2xl bg-muted overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                  <p className="text-muted-foreground text-sm">Schema comparativo MgO</p>
+              <div 
+                className="relative overflow-hidden h-full"
+                style={{
+                  background: "rgba(255, 255, 255, 0.05)",
+                  backdropFilter: "blur(20px)",
+                  WebkitBackdropFilter: "blur(20px)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  borderRadius: "32px",
+                  padding: "48px",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
+                }}
+              >
+                <h3 className="text-2xl font-heading font-semibold text-foreground mb-8">
+                  {t('home.mgoComparison.title')}
+                </h3>
+
+                {/* Comparative Table */}
+                <div className="space-y-3">
+                  {/* Header */}
+                  <div className="grid grid-cols-6 gap-2 pb-3 border-b border-border/20">
+                    <div className="col-span-1 text-sm font-medium text-muted-foreground"></div>
+                    <div className="flex flex-col items-center">
+                      <Flame className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
+                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.fire')}</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <Droplets className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
+                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.water')}</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <Bug className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
+                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.mold')}</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <Box className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
+                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.stability')}</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <Volume2 className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
+                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.acoustic')}</span>
+                    </div>
+                  </div>
+
+                  {/* Rows */}
+                  {comparativeData.map((row, index) => (
+                    <motion.div
+                      key={row.material}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
+                      className={`grid grid-cols-6 gap-2 py-3 rounded-xl ${
+                        row.material === 'MgO' 
+                          ? 'bg-primary/10 border border-primary/20 px-4' 
+                          : 'px-4'
+                      }`}
+                    >
+                      <div className={`col-span-1 text-sm font-semibold ${
+                        row.material === 'MgO' ? 'text-primary' : 'text-foreground'
+                      }`}>
+                        {row.material}
+                      </div>
+                      <div className="text-center text-lg">{row.fire}</div>
+                      <div className="text-center text-lg">{row.water}</div>
+                      <div className="text-center text-lg">{row.mold}</div>
+                      <div className="text-center text-lg">{row.stability}</div>
+                      <div className="text-center text-lg">{row.acoustic}</div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Legend */}
+                <div className="mt-6 pt-6 border-t border-border/20 flex gap-6 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">✓</span>
+                    <span>{t('home.mgoComparison.excellent')}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">○</span>
+                    <span>{t('home.mgoComparison.good')}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">✗</span>
+                    <span>{t('home.mgoComparison.poor')}</span>
+                  </div>
                 </div>
               </div>
             </motion.div>
