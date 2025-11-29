@@ -3,14 +3,23 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
+import { useTranslation } from "@/i18n/useTranslation";
+import type { Language } from "@/i18n/translations";
 
 const Navbar = () => {
+  const { language, setLanguage, t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLineeExpanded, setIsLineeExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
+
+  const languages: Language[] = ['it', 'en', 'de', 'fr'];
+  
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+  };
 
   // Auto-hide navbar on scroll
   useEffect(() => {
@@ -39,15 +48,15 @@ const Navbar = () => {
   }, [lastScrollY, isMobileMenuOpen]);
 
   const menuItems = [
-    { label: "Area Tecnica", path: "/area-tecnica" },
-    { label: "Chi Siamo", path: "/chi-siamo" },
-    { label: "Contatti", path: "/contatti" },
+    { label: t('nav.technicalArea'), path: `/${language}/area-tecnica` },
+    { label: t('nav.aboutUs'), path: `/${language}/chi-siamo` },
+    { label: t('nav.contacts'), path: `/${language}/contatti` },
   ];
 
   const lineeItems = [
-    { label: "StoneCore 10", path: "/stonecore-10" },
-    { label: "EdgeLine", path: "/edgeline" },
-    { label: "OneWall", path: "/onewall" },
+    { label: "StoneCore 10", path: `/${language}/stonecore-10` },
+    { label: "EdgeLine", path: `/${language}/edgeline` },
+    { label: "OneWall", path: `/${language}/onewall` },
   ];
 
   const isLineePage = lineeItems.some((item) => location.pathname === item.path);
@@ -72,7 +81,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-[80px]">
             {/* Logo - Left */}
             <Link
-              to="/"
+              to={`/${language}`}
               className="hover:opacity-80 transition-opacity duration-200 z-10"
             >
               <img src={logo} alt="Kalēa" className="h-8 md:h-10 brightness-0 invert" />
@@ -81,13 +90,13 @@ const Navbar = () => {
             {/* Desktop Menu - Center */}
             <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
               <Link
-                to="/"
+                to={`/${language}`}
                 className={`text-nav transition-all duration-200 relative ${
-                  location.pathname === "/" ? "text-white" : "text-white/90 hover:text-white"
+                  location.pathname === `/${language}` || location.pathname === `/${language}/` ? "text-white" : "text-white/90 hover:text-white"
                 }`}
               >
-                Home
-                {location.pathname === "/" && (
+                {t('nav.home')}
+                {(location.pathname === `/${language}` || location.pathname === `/${language}/`) && (
                   <motion.div
                     layoutId="navbar-underline"
                     className="absolute -bottom-1 left-0 right-0 h-[1px] bg-white"
@@ -107,7 +116,7 @@ const Navbar = () => {
                     isLineePage ? "text-white" : "text-white/90 hover:text-white"
                   }`}
                 >
-                  Linee
+                  {t('nav.lines')}
                   <ChevronDown
                     size={16}
                     className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
@@ -166,15 +175,34 @@ const Navbar = () => {
                   )}
                 </Link>
               ))}
+              
+              {/* Language Selector */}
+              <div className="flex items-center gap-2 text-nav">
+                {languages.map((lang, index) => (
+                  <React.Fragment key={lang}>
+                    <button
+                      onClick={() => handleLanguageChange(lang)}
+                      className={`transition-all duration-200 ${
+                        language === lang ? "text-white font-semibold" : "text-white/70 hover:text-white"
+                      }`}
+                    >
+                      {lang.toUpperCase()}
+                    </button>
+                    {index < languages.length - 1 && (
+                      <span className="text-white/30">|</span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
 
             {/* CTA Button - Right */}
             <div className="hidden lg:block">
               <Link
-                to="/contatti"
+                to={`/${language}/contatti`}
                 className="inline-flex items-center justify-center px-9 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
               >
-                Richiedi preventivo
+                {t('nav.requestQuote')}
               </Link>
             </div>
 
@@ -202,13 +230,13 @@ const Navbar = () => {
           >
             <div className="px-6 py-6 space-y-2">
               <Link
-                to="/"
+                to={`/${language}`}
                 className={`block text-base font-medium transition-colors py-2 ${
-                  location.pathname === "/" ? "text-white" : "text-white/70 hover:text-white"
+                  location.pathname === `/${language}` || location.pathname === `/${language}/` ? "text-white" : "text-white/70 hover:text-white"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Home
+                {t('nav.home')}
               </Link>
 
               {/* Mobile Linee Expandable */}
@@ -219,7 +247,7 @@ const Navbar = () => {
                     isLineePage ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                 >
-                  Linee
+                  {t('nav.lines')}
                   <ChevronDown
                     size={16}
                     className={`transition-transform duration-200 ${isLineeExpanded ? "rotate-180" : ""}`}
@@ -267,13 +295,33 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+              
+              {/* Mobile Language Selector */}
+              <div className="flex items-center justify-center gap-3 py-4 border-t border-white/10 mt-4">
+                {languages.map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => {
+                      handleLanguageChange(lang);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`px-4 py-1.5 rounded-lg transition-all ${
+                      language === lang 
+                        ? "bg-white text-[#111] font-semibold" 
+                        : "text-white/70 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    {lang.toUpperCase()}
+                  </button>
+                ))}
+              </div>
 
               <Link
-                to="/contatti"
+                to={`/${language}/contatti`}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-9 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] transition-all duration-150 mt-4"
+                className="block w-full text-center px-9 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] transition-all duration-150"
               >
-                Richiedi preventivo
+                {t('nav.requestQuote')}
               </Link>
             </div>
           </motion.div>
