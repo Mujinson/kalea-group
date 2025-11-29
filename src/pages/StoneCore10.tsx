@@ -11,6 +11,7 @@ import finishCorteccia from "@/assets/finish-corteccia.jpg";
 import finishSabbia from "@/assets/finish-sabbia.jpg";
 import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
+import finishPerla from "@/assets/finish-perla.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const StoneCore10 = () => {
@@ -55,7 +56,7 @@ const StoneCore10 = () => {
     { name: t('stonecore.finishes.sabbia'), image: finishSabbia },
     { name: t('stonecore.finishes.silven'), image: finishSilven },
     { name: t('stonecore.finishes.terram'), image: finishTerram },
-    { name: t('stonecore.finishes.perla'), image: "/placeholder.svg" },
+    { name: t('stonecore.finishes.perla'), image: finishPerla },
     { name: t('stonecore.finishes.velora'), image: "/placeholder.svg" },
     { name: t('stonecore.finishes.aurora'), image: "/placeholder.svg" },
   ];
