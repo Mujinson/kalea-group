@@ -178,4 +178,15 @@ All colors MUST be HSL.
       margin-top: -20px;
     }
   }
+  
+  /* Navbar adaptive sizing for longer languages (DE/FR) */
+  body.navbar-compact .text-nav {
+    font-size: 0.85em !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Keep CTA button unchanged */
+  body.navbar-compact .text-button {
+    font-size: 0.875rem !important;
+  }
 }
