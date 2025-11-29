@@ -340,7 +340,7 @@ const Home = () => {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-b from-foreground/75 to-foreground/85" />
+                <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 to-foreground/65" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
                   <item.icon className="w-12 h-12 text-background mb-4" />
                   <h3 className="text-xl font-heading font-semibold text-background mb-2">{item.title}</h3>
