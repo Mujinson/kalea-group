@@ -71,65 +71,52 @@ const CookieConsent = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
+            className="fixed bottom-6 right-6 z-50 w-[90%] max-w-[360px] md:w-full md:bottom-6 md:right-6 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0"
           >
-            <div className="container-custom max-w-6xl mx-auto">
-              <div className="bg-background/95 backdrop-blur-xl border border-border rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] p-6 md:p-8">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 mt-1">
-                    <Cookie className="w-6 h-6 text-primary" />
-                  </div>
-                  
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-2 text-foreground">
-                      {t('cookies.title')}
-                    </h3>
-                    <p className="text-muted-foreground text-sm md:text-base mb-4 leading-relaxed">
-                      {t('cookies.description')}
-                    </p>
-                    
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <Button
-                        onClick={acceptAll}
-                        size="lg"
-                        className="font-medium"
-                      >
-                        {t('cookies.acceptAll')}
-                      </Button>
-                      <Button
-                        onClick={() => setShowPreferences(true)}
-                        variant="outline"
-                        size="lg"
-                        className="font-medium"
-                      >
-                        {t('cookies.managePreferences')}
-                      </Button>
-                      <Button
-                        onClick={rejectAll}
-                        variant="ghost"
-                        size="lg"
-                        className="font-medium"
-                      >
-                        {t('cookies.rejectAll')}
-                      </Button>
-                    </div>
-                    
-                    <div className="mt-4 text-xs text-muted-foreground">
-                      {t('cookies.readMore')}{" "}
-                      <a href="/privacy" className="underline hover:text-foreground transition-colors">
-                        {t('cookies.privacyPolicy')}
-                      </a>
-                    </div>
-                  </div>
-                  
-                  <button
-                    onClick={rejectAll}
-                    className="flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label="Close"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
+            <div className="bg-background/80 backdrop-blur-xl border border-border/40 rounded-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <Cookie className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-semibold text-foreground mb-1">
+                    {t('cookies.title')}
+                  </h3>
+                  <p className="text-muted-foreground text-xs leading-relaxed">
+                    {t('cookies.description')}
+                  </p>
                 </div>
+                
+                <button
+                  onClick={rejectAll}
+                  className="flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors -mt-1"
+                  aria-label="Close"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              
+              <div className="flex flex-col gap-2">
+                <Button
+                  onClick={acceptAll}
+                  size="sm"
+                  className="w-full font-medium"
+                >
+                  {t('cookies.acceptAll')}
+                </Button>
+                <Button
+                  onClick={() => setShowPreferences(true)}
+                  variant="outline"
+                  size="sm"
+                  className="w-full font-medium"
+                >
+                  {t('cookies.managePreferences')}
+                </Button>
+                <button
+                  onClick={rejectAll}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
+                >
+                  {t('cookies.rejectAll')}
+                </button>
               </div>
             </div>
           </motion.div>
