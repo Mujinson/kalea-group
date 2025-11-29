@@ -541,6 +541,36 @@ export const translations: Record<Language, Translations> = {
         content: "Per qualsiasi domanda riguardo ai presenti Termini e Condizioni, è possibile contattarci ai seguenti recapiti:",
       },
     },
+    cookies: {
+      title: "Un'esperienza su misura per te",
+      description: "Ogni click conta. Accetta i cookies e lascia che il tuo viaggio su Kalēa sia fluido, elegante e senza intoppi. Utilizziamo i cookies per migliorare la tua esperienza e offrirti contenuti personalizzati.",
+      acceptAll: "Accetta tutti i cookies",
+      managePreferences: "Gestisci preferenze",
+      rejectAll: "Rifiuta tutti",
+      savePreferences: "Salva preferenze",
+      readMore: "Per maggiori informazioni, consulta la nostra",
+      privacyPolicy: "Privacy Policy",
+      preferences: {
+        title: "Gestisci le tue preferenze",
+        description: "Scegli quali categorie di cookies accettare. I cookies necessari sono sempre attivi per garantire il funzionamento del sito.",
+        necessary: {
+          title: "Cookies Necessari",
+          description: "Essenziali per il funzionamento del sito. Non possono essere disattivati e non raccolgono informazioni personali.",
+        },
+        functional: {
+          title: "Cookies di Preferenza",
+          description: "Memorizzano le tue scelte (lingua, regione) per offrirti un'esperienza personalizzata.",
+        },
+        analytics: {
+          title: "Cookies Analitici",
+          description: "Ci aiutano a capire come utilizzi il sito per migliorare le prestazioni e l'usabilità.",
+        },
+        marketing: {
+          title: "Cookies di Marketing",
+          description: "Utilizzati per mostrarti contenuti e pubblicità rilevanti in base ai tuoi interessi.",
+        },
+      },
+    },
   },
   en: {
     nav: {
@@ -1076,6 +1106,36 @@ export const translations: Record<Language, Translations> = {
       contact: {
         title: "Contact",
         content: "For any questions regarding these Terms and Conditions, you can contact us at:",
+      },
+    },
+    cookies: {
+      title: "A Tailored Experience for You",
+      description: "Every click counts. Accept cookies and let your journey on Kalēa be smooth, elegant, and seamless. We use cookies to enhance your experience and offer personalized content.",
+      acceptAll: "Accept All Cookies",
+      managePreferences: "Manage Preferences",
+      rejectAll: "Reject All",
+      savePreferences: "Save Preferences",
+      readMore: "For more information, see our",
+      privacyPolicy: "Privacy Policy",
+      preferences: {
+        title: "Manage Your Preferences",
+        description: "Choose which cookie categories to accept. Necessary cookies are always active to ensure the site functions properly.",
+        necessary: {
+          title: "Necessary Cookies",
+          description: "Essential for the site to function. Cannot be disabled and do not collect personal information.",
+        },
+        functional: {
+          title: "Preference Cookies",
+          description: "Store your choices (language, region) to provide a personalized experience.",
+        },
+        analytics: {
+          title: "Analytics Cookies",
+          description: "Help us understand how you use the site to improve performance and usability.",
+        },
+        marketing: {
+          title: "Marketing Cookies",
+          description: "Used to show you relevant content and advertising based on your interests.",
+        },
       },
     },
   },
@@ -1615,6 +1675,36 @@ export const translations: Record<Language, Translations> = {
         content: "Bei Fragen zu diesen Allgemeinen Geschäftsbedingungen können Sie uns kontaktieren unter:",
       },
     },
+    cookies: {
+      title: "Ein maßgeschneidertes Erlebnis für Sie",
+      description: "Jeder Klick zählt. Akzeptieren Sie Cookies und lassen Sie Ihre Reise auf Kalēa reibungslos, elegant und nahtlos verlaufen. Wir verwenden Cookies, um Ihr Erlebnis zu verbessern und personalisierte Inhalte anzubieten.",
+      acceptAll: "Alle Cookies akzeptieren",
+      managePreferences: "Einstellungen verwalten",
+      rejectAll: "Alle ablehnen",
+      savePreferences: "Einstellungen speichern",
+      readMore: "Weitere Informationen finden Sie in unserer",
+      privacyPolicy: "Datenschutzerklärung",
+      preferences: {
+        title: "Verwalten Sie Ihre Einstellungen",
+        description: "Wählen Sie, welche Cookie-Kategorien Sie akzeptieren möchten. Notwendige Cookies sind immer aktiv, um die Funktionsfähigkeit der Website zu gewährleisten.",
+        necessary: {
+          title: "Notwendige Cookies",
+          description: "Wesentlich für die Funktion der Website. Können nicht deaktiviert werden und sammeln keine persönlichen Informationen.",
+        },
+        functional: {
+          title: "Präferenz-Cookies",
+          description: "Speichern Ihre Auswahl (Sprache, Region), um ein personalisiertes Erlebnis zu bieten.",
+        },
+        analytics: {
+          title: "Analytische Cookies",
+          description: "Helfen uns zu verstehen, wie Sie die Website nutzen, um Leistung und Benutzerfreundlichkeit zu verbessern.",
+        },
+        marketing: {
+          title: "Marketing-Cookies",
+          description: "Werden verwendet, um Ihnen relevante Inhalte und Werbung basierend auf Ihren Interessen anzuzeigen.",
+        },
+      },
+    },
   },
   fr: {
     nav: {
@@ -2150,6 +2240,36 @@ export const translations: Record<Language, Translations> = {
       contact: {
         title: "Contact",
         content: "Pour toute question concernant ces Termes et Conditions, vous pouvez nous contacter à:",
+      },
+    },
+    cookies: {
+      title: "Une expérience sur mesure pour vous",
+      description: "Chaque clic compte. Acceptez les cookies et laissez votre voyage sur Kalēa être fluide, élégant et sans accroc. Nous utilisons des cookies pour améliorer votre expérience et offrir du contenu personnalisé.",
+      acceptAll: "Accepter tous les cookies",
+      managePreferences: "Gérer les préférences",
+      rejectAll: "Tout rejeter",
+      savePreferences: "Enregistrer les préférences",
+      readMore: "Pour plus d'informations, consultez notre",
+      privacyPolicy: "Politique de confidentialité",
+      preferences: {
+        title: "Gérez vos préférences",
+        description: "Choisissez quelles catégories de cookies accepter. Les cookies nécessaires sont toujours actifs pour garantir le fonctionnement du site.",
+        necessary: {
+          title: "Cookies nécessaires",
+          description: "Essentiels au fonctionnement du site. Ne peuvent pas être désactivés et ne collectent pas d'informations personnelles.",
+        },
+        functional: {
+          title: "Cookies de préférence",
+          description: "Mémorisent vos choix (langue, région) pour offrir une expérience personnalisée.",
+        },
+        analytics: {
+          title: "Cookies analytiques",
+          description: "Nous aident à comprendre comment vous utilisez le site pour améliorer les performances et l'utilisabilité.",
+        },
+        marketing: {
+          title: "Cookies marketing",
+          description: "Utilisés pour vous montrer du contenu et des publicités pertinents en fonction de vos intérêts.",
+        },
       },
     },
   },
