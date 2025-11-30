@@ -7,6 +7,24 @@ const Footer = () => {
   const { t, language } = useTranslation();
   const currentYear = new Date().getFullYear();
 
+  // Pinterest SVG Icon Component
+  const PinterestIcon = ({ size = 24, className = "", strokeWidth = 1.5 }: { size?: number; className?: string; strokeWidth?: number }) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M12 2a10 10 0 0 0-3.58 19.3c-.07-1.35-.13-3.43.03-4.91.14-1.33.92-3.92.92-3.92s-.24-.47-.24-1.17c0-1.1.64-1.92 1.43-1.92.67 0 1 .51 1 1.11 0 .68-.43 1.69-.65 2.63-.19.77.39 1.4 1.15 1.4 1.38 0 2.44-1.45 2.44-3.55 0-1.86-1.34-3.16-3.25-3.16-2.21 0-3.51 1.66-3.51 3.37 0 .67.26 1.38.58 1.77a.3.3 0 0 1 .07.29c-.08.31-.25 1.02-.28 1.16-.04.18-.14.22-.33.13-1.02-.48-1.66-1.97-1.66-3.17 0-2.45 1.78-4.7 5.13-4.7 2.7 0 4.79 1.92 4.79 4.48 0 2.67-1.68 4.82-4.02 4.82-.78 0-1.52-.41-1.77-.89 0 0-.39 1.48-.48 1.84-.17.68-.64 1.53-.96 2.05a10 10 0 1 0 5.59-18.3z" />
+    </svg>
+  );
+
   return (
     <footer className="bg-card border-t border-border">
       <div className="container-custom py-12 md:py-16">
@@ -137,6 +155,15 @@ const Footer = () => {
                   aria-label="Instagram"
                 >
                   <Instagram size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+                </a>
+                <a
+                  href="https://pinterest.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 -m-2 group"
+                  aria-label="Pinterest"
+                >
+                  <PinterestIcon size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
                 </a>
               </div>
             </div>
