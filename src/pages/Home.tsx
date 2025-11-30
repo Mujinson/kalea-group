@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import ApplicationCard from "@/components/ApplicationCard";
+import KaleaIntroSection from "@/components/KaleaIntroSection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench, Flame, Droplets, Bug, Box, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -285,6 +286,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Chi è Kalēa */}
+      <KaleaIntroSection variant="home" />
 
       {/* Applicazioni */}
       <section className="section-spacing bg-card">

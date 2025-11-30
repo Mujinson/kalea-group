@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
+import KaleaIntroSection from "@/components/KaleaIntroSection";
 import { Target, Lightbulb, Users, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -87,6 +88,9 @@ const ChiSiamo = () => {
           </div>
         </div>
       </section>
+
+      {/* Chi è Kalēa */}
+      <KaleaIntroSection variant="about" />
 
       {/* Storia */}
       <section className="section-spacing">
