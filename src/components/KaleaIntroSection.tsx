@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Leaf, Zap, Shield } from "lucide-react";
+import { Leaf, Zap, Shield, ShieldCheck, Award, Sparkles } from "lucide-react";
 
 interface KaleaIntroSectionProps {
   variant?: "home" | "about";
@@ -97,14 +97,34 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   className="flex items-start gap-4 group"
                 >
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-200 flex-shrink-0">
-                    <Leaf className="w-6 h-6 text-white" strokeWidth={1.5} />
+                    <Leaf className="w-6 h-6 text-white" strokeWidth={2} />
                   </div>
                   <div>
                     <p className="text-white font-medium text-lg leading-tight">
                       Materiali avanzati in MgO
                     </p>
-                    <p className="text-white/70 text-sm mt-1">
+                    <p className="text-white/70 text-sm mt-1 font-light">
                       Nuova generazione di superfici
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.65 }}
+                  className="flex items-start gap-4 group"
+                >
+                  <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-200 flex-shrink-0">
+                    <Zap className="w-6 h-6 text-white" strokeWidth={2} />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-lg leading-tight">
+                      Fino a 1/10 dell'energia produttiva
+                    </p>
+                    <p className="text-white/70 text-sm mt-1 font-light">
+                      Minori emissioni, minori rifiuti, maggiore sostenibilità
                     </p>
                   </div>
                 </motion.div>
@@ -117,14 +137,34 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   className="flex items-start gap-4 group"
                 >
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-200 flex-shrink-0">
-                    <Zap className="w-6 h-6 text-white" strokeWidth={1.5} />
+                    <Shield className="w-6 h-6 text-white" strokeWidth={2} />
                   </div>
                   <div>
                     <p className="text-white font-medium text-lg leading-tight">
-                      Fino a 1/10 dell'energia produttiva
+                      Superfici pensate per durare
                     </p>
-                    <p className="text-white/70 text-sm mt-1">
-                      Rispetto ai materiali tradizionali
+                    <p className="text-white/70 text-sm mt-1 font-light">
+                      Massima resistenza e longevità
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.75 }}
+                  className="flex items-start gap-4 group"
+                >
+                  <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-200 flex-shrink-0">
+                    <ShieldCheck className="w-6 h-6 text-white" strokeWidth={2} />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-lg leading-tight">
+                      Sicurezza superiore in ogni ambiente
+                    </p>
+                    <p className="text-white/70 text-sm mt-1 font-light">
+                      Ignifugo, impermeabile, antimuffa
                     </p>
                   </div>
                 </motion.div>
@@ -137,14 +177,34 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   className="flex items-start gap-4 group"
                 >
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-200 flex-shrink-0">
-                    <Shield className="w-6 h-6 text-white" strokeWidth={1.5} />
+                    <Award className="w-6 h-6 text-white" strokeWidth={2} />
                   </div>
                   <div>
                     <p className="text-white font-medium text-lg leading-tight">
-                      Superfici pensate per durare
+                      Garanzie fino a 25 anni
                     </p>
-                    <p className="text-white/70 text-sm mt-1">
-                      Massima resistenza e longevità
+                    <p className="text-white/70 text-sm mt-1 font-light">
+                      25 anni residenziale — 15 anni commerciale
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.85 }}
+                  className="flex items-start gap-4 group"
+                >
+                  <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm group-hover:bg-white/15 transition-all duration-200 flex-shrink-0">
+                    <Sparkles className="w-6 h-6 text-white" strokeWidth={2} />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium text-lg leading-tight">
+                      Design contemporaneo ispirato all'eccellenza italiana
+                    </p>
+                    <p className="text-white/70 text-sm mt-1 font-light">
+                      Superfici curate, versatili e pensate per ogni ambiente
                     </p>
                   </div>
                 </motion.div>
