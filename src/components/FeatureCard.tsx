@@ -11,7 +11,7 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardProps) => {
   const delay = index * 0.15;
-  const { cardRef, tilt, handleMouseMove, handleMouseLeave } = useCardTilt(8);
+  const { cardRef, tilt, isHovered, handleMouseEnter, handleMouseMove, handleMouseLeave } = useCardTilt(8);
   
   return (
     <motion.div
@@ -20,6 +20,7 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardP
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.7, delay }}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="kalea-card group relative overflow-hidden h-full flex flex-col"
@@ -30,8 +31,8 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardP
         border: "1px solid rgba(255, 255, 255, 0.12)",
         borderRadius: "32px",
         padding: "48px",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.25)",
-        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(0px)`,
+        boxShadow: isHovered ? "0 16px 48px rgba(0, 0, 0, 0.35)" : "0 8px 32px rgba(0, 0, 0, 0.25)",
+        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${isHovered ? '-6px' : '0px'})`,
         transition: "transform 0.3s ease-out, box-shadow 0.3s ease-out",
       }}
     >

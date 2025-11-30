@@ -11,7 +11,7 @@ interface ApplicationCardProps {
 }
 
 const ApplicationCard = ({ icon: Icon, title, description, backgroundImage, index }: ApplicationCardProps) => {
-  const { cardRef, tilt, handleMouseMove, handleMouseLeave } = useCardTilt(6);
+  const { cardRef, tilt, isHovered, handleMouseEnter, handleMouseMove, handleMouseLeave } = useCardTilt(6);
   
   return (
     <motion.div
@@ -20,11 +20,12 @@ const ApplicationCard = ({ icon: Icon, title, description, backgroundImage, inde
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="kalea-card group relative aspect-square rounded-2xl bg-muted overflow-hidden"
       style={{
-        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(0px)`,
+        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${isHovered ? '-6px' : '0px'})`,
         transition: "transform 0.3s ease-out, box-shadow 0.3s ease-out",
       }}
     >

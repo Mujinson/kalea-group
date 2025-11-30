@@ -8,6 +8,11 @@ interface TiltState {
 export const useCardTilt = (intensity: number = 10) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState<TiltState>({ rotateX: 0, rotateY: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -27,12 +32,15 @@ export const useCardTilt = (intensity: number = 10) => {
   };
 
   const handleMouseLeave = () => {
+    setIsHovered(false);
     setTilt({ rotateX: 0, rotateY: 0 });
   };
 
   return {
     cardRef,
     tilt,
+    isHovered,
+    handleMouseEnter,
     handleMouseMove,
     handleMouseLeave,
   };
