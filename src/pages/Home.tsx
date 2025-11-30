@@ -375,7 +375,7 @@ const Home = () => {
                 style={{ 
                   filter: 'brightness(0) invert(1)',
                   verticalAlign: 'middle',
-                  transform: 'translateY(-0.05em)'
+                  transform: 'translateY(0.02em)'
                 }}
               />
               <span>nei tuoi progetti?</span>
