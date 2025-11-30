@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Twitter, Linkedin, Facebook, Instagram } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import logoFooter from "@/assets/logo-footer.png";
 
@@ -71,7 +71,7 @@ const Footer = () => {
             <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
               {t("footer.contactsTitle")}
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3 mb-8">
               <li className="flex items-start gap-3">
                 <Mail size={18} className="text-primary mt-0.5 flex-shrink-0" />
                 <a
@@ -95,6 +95,51 @@ const Footer = () => {
                 <span className="text-sm text-muted-foreground">{t("contacts.locationValue")}</span>
               </li>
             </ul>
+
+            {/* Social Media */}
+            <div className="footer-social">
+              <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
+                Seguici
+              </h4>
+              <div className="flex items-center gap-6">
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 -m-2 group"
+                  aria-label="Twitter"
+                >
+                  <Twitter size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 -m-2 group"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 -m-2 group"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 -m-2 group"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
