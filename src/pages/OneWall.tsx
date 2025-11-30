@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
+import ProductCard from "@/components/ProductCard";
 import { Zap, Shield, Palette, Droplets, Flame, Clock, Grid3x3, Layers, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -159,24 +160,12 @@ const OneWall = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {finishes.map((finish, index) => (
-              <motion.div
+              <ProductCard
                 key={finish.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="kalea-card group bg-background border border-border rounded-xl overflow-hidden"
-              >
-                <div className="aspect-video bg-muted">
-                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <p className="text-muted-foreground text-xs">Immagine finitura</p>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-heading font-semibold text-foreground mb-2">{finish.name}</h3>
-                  <p className="text-muted-foreground text-sm">{finish.description}</p>
-                </div>
-              </motion.div>
+                title={finish.name}
+                description={finish.description}
+                index={index}
+              />
             ))}
           </div>
         </div>

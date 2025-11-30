@@ -192,12 +192,8 @@ All colors MUST be HSL.
   
   /* Kalēa premium card hover effect */
   .kalea-card {
-    transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-                box-shadow 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-                background 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
     cursor: pointer;
-    perspective: 1000px;
-    transform-style: preserve-3d;
+    will-change: transform;
   }
   
   /* Image fade-in effect on hover */
@@ -213,8 +209,7 @@ All colors MUST be HSL.
   
   @media (hover: hover) {
     .kalea-card:hover {
-      transform: translateY(-12px) scale(1.02) rotateX(-2deg) rotateY(1deg);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.20);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25) !important;
     }
     
     .kalea-card:hover::before {

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
+import FinishCard from "@/components/FinishCard";
 import { Droplets, Flame, Shield, Volume2, Zap, Layers } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -174,29 +175,13 @@ const StoneCore10 = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {finishes.map((finish, index) => (
-              <motion.div
+              <FinishCard
                 key={finish.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="kalea-card group relative aspect-square rounded-2xl overflow-hidden border border-border/40 shadow-lg"
-              >
-                {/* Image background with zoom effect */}
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                  style={{ backgroundImage: `url(${finish.image})` }}
-                  role="img"
-                  aria-label={finish.name}
-                />
-                
-                {/* Bottom gradient overlay with name */}
-                <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center pb-4">
-                  <p className="text-base md:text-lg font-heading font-medium text-white tracking-wide">
-                    {finish.name}
-                  </p>
-                </div>
-              </motion.div>
+                name={finish.name}
+                image={finish.image}
+                index={index}
+                variant="image"
+              />
             ))}
           </div>
         </div>
