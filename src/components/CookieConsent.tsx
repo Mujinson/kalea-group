@@ -71,7 +71,7 @@ const CookieConsent = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed z-50 w-[calc(100%-2rem)] max-w-[400px] left-1/2 -translate-x-1/2 bottom-6 md:w-full md:max-w-[420px] md:bottom-6 md:right-6 md:left-auto md:translate-x-0"
+            className="fixed z-50 inset-x-4 bottom-6 max-w-[420px] mx-auto translate-x-0 md:w-full md:max-w-[420px] md:bottom-6 md:right-6 md:left-auto md:mx-0"
           >
             <div className="bg-background/80 backdrop-blur-xl border border-border/40 rounded-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.08)] p-5">
               <div className="flex items-start gap-3 mb-4">
