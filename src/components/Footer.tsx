@@ -7,26 +7,6 @@ const Footer = () => {
   const { t, language } = useTranslation();
   const currentYear = new Date().getFullYear();
 
-  // Pinterest SVG Icon Component
-  const PinterestIcon = ({ size = 24, className = "", strokeWidth = 1.5 }: { size?: number; className?: string; strokeWidth?: number }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M11 6v11M11 6c0 0 5 0 5 3.5s-2.5 4-5 4" />
-      <path d="M10 17l-1.5 4" />
-    </svg>
-  );
-
   return (
     <footer className="bg-card border-t border-border">
       <div className="container-custom py-12 md:py-16">
@@ -157,15 +137,6 @@ const Footer = () => {
                   aria-label="Instagram"
                 >
                   <Instagram size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
-                </a>
-                <a
-                  href="https://pinterest.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 -m-2 group"
-                  aria-label="Pinterest"
-                >
-                  <PinterestIcon size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
                 </a>
               </div>
             </div>
