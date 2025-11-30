@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-edgeline.jpg";
 import bgEdgeLine from "@/assets/bg-edgeline.jpg";
-import profiloTerminaleImage from "@/assets/edgeline-profilo-terminale.jpg";
+import profiloTerminaleImage from "@/assets/edgeline-profilo-terminale-2.png";
 import battiscopaImage from "@/assets/edgeline-battiscopa.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
