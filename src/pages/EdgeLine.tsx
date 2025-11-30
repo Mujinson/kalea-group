@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-edgeline.jpg";
 import bgEdgeLine from "@/assets/bg-edgeline.jpg";
 import profiloTerminaleImage from "@/assets/edgeline-profilo-terminale.jpg";
+import battiscopaImage from "@/assets/edgeline-battiscopa.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const EdgeLine = () => {
@@ -49,6 +50,7 @@ const EdgeLine = () => {
     {
       title: t('edgeline.products.baseboard.title'),
       description: t('edgeline.products.baseboard.description'),
+      image: battiscopaImage,
     },
     {
       title: t('edgeline.products.step.title'),
