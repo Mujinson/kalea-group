@@ -116,22 +116,26 @@ const Home = () => {
 
       {/* Perché MgO */}
       <section className="section-spacing">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
-            {/* Left Column - Text & Icons */}
+        <div className="w-full px-6 md:px-12 lg:px-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 max-w-[1400px] mx-auto">
+            {/* Left Column - Text & Icons with Gradient Background */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="lg:col-span-2"
+              className="relative p-8 lg:p-12"
+              style={{
+                background: "radial-gradient(circle at top left, rgba(245, 242, 238, 0.55), rgba(40, 35, 30, 0.40))",
+                borderRadius: "32px 0 0 32px",
+              }}
             >
               <motion.h2 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6 leading-tight"
+                className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6 leading-tight"
               >
                 {t('home.mgoTitle')}
               </motion.h2>
@@ -141,12 +145,12 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-xl text-muted-foreground mb-10 leading-relaxed"
+                className="text-lg text-muted-foreground mb-12 leading-relaxed"
               >
                 {t('home.mgoDescription')}
               </motion.p>
 
-              <div className="space-y-5 mb-10">
+              <div className="space-y-6 mb-12">
                 {mgoAdvantages.map((advantage, index) => (
                   <motion.div
                     key={advantage.text}
@@ -154,12 +158,12 @@ const Home = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                    className="flex items-center gap-4 group"
+                    className="flex items-center gap-5 group"
                   >
-                    <div className="p-2.5 rounded-xl bg-muted/50 group-hover:bg-muted transition-colors duration-200">
-                      <advantage.icon className="w-5 h-5 text-foreground" strokeWidth={1.5} />
+                    <div className="p-3 rounded-xl bg-background/40 backdrop-blur-sm group-hover:bg-background/60 transition-all duration-200">
+                      <advantage.icon className="w-6 h-6 text-foreground" strokeWidth={1.5} />
                     </div>
-                    <span className="text-base text-foreground font-medium">{advantage.text}</span>
+                    <span className="text-lg text-foreground font-medium">{advantage.text}</span>
                   </motion.div>
                 ))}
               </div>
@@ -170,7 +174,7 @@ const Home = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.8 }}
               >
-                <Button asChild variant="outline" size="sm" className="rounded-xl border-border hover:bg-muted">
+                <Button asChild variant="outline" size="default" className="rounded-xl border-border hover:bg-muted">
                   <Link to={`/${language}/area-tecnica`}>{t('home.mgoButton')}</Link>
                 </Button>
               </motion.div>
@@ -178,22 +182,28 @@ const Home = () => {
 
             {/* Right Column - Glass Card with Comparison */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, x: 50, scale: 0.97 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="lg:col-span-3"
+              className="relative"
             >
-              <div 
-                className="relative overflow-hidden h-full"
+              <motion.div 
+                className="relative overflow-hidden h-full flex flex-col"
                 style={{
-                  background: "rgba(255, 255, 255, 0.05)",
-                  backdropFilter: "blur(20px)",
-                  WebkitBackdropFilter: "blur(20px)",
+                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.40))",
+                  backdropFilter: "blur(24px)",
+                  WebkitBackdropFilter: "blur(24px)",
                   border: "1px solid rgba(255, 255, 255, 0.12)",
-                  borderRadius: "32px",
-                  padding: "48px",
-                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
+                  borderRadius: "0 32px 32px 0",
+                  padding: "32px 36px",
+                  boxShadow: "0 28px 80px rgba(0, 0, 0, 0.35)",
+                }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                  boxShadow: "0 36px 90px rgba(0, 0, 0, 0.45)",
+                  transition: { duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }
                 }}
               >
                 <h3 className="text-2xl font-heading font-semibold text-foreground mb-8">
@@ -201,29 +211,29 @@ const Home = () => {
                 </h3>
 
                 {/* Comparative Table */}
-                <div className="space-y-3">
-                  {/* Header */}
-                  <div className="grid grid-cols-6 gap-2 pb-3 border-b border-border/20">
-                    <div className="col-span-1 text-sm font-medium text-muted-foreground"></div>
-                    <div className="flex flex-col items-center">
-                      <Flame className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
-                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.fire')}</span>
+                <div className="space-y-4 flex-1">
+                  {/* Header - Horizontal Icons */}
+                  <div className="grid grid-cols-6 gap-3 pb-4 border-b border-white/20">
+                    <div className="col-span-1"></div>
+                    <div className="flex flex-col items-center gap-1">
+                      <Flame className="w-5 h-5 text-white/90" strokeWidth={1.5} />
+                      <span className="text-[10px] text-white/70 text-center leading-tight">{t('home.mgoComparison.fire')}</span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <Droplets className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
-                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.water')}</span>
+                    <div className="flex flex-col items-center gap-1">
+                      <Droplets className="w-5 h-5 text-white/90" strokeWidth={1.5} />
+                      <span className="text-[10px] text-white/70 text-center leading-tight">{t('home.mgoComparison.water')}</span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <Bug className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
-                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.mold')}</span>
+                    <div className="flex flex-col items-center gap-1">
+                      <Bug className="w-5 h-5 text-white/90" strokeWidth={1.5} />
+                      <span className="text-[10px] text-white/70 text-center leading-tight">{t('home.mgoComparison.mold')}</span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <Box className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
-                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.stability')}</span>
+                    <div className="flex flex-col items-center gap-1">
+                      <Box className="w-5 h-5 text-white/90" strokeWidth={1.5} />
+                      <span className="text-[10px] text-white/70 text-center leading-tight">{t('home.mgoComparison.stability')}</span>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <Volume2 className="w-4 h-4 text-foreground/70 mb-1" strokeWidth={1.5} />
-                      <span className="text-xs text-muted-foreground">{t('home.mgoComparison.acoustic')}</span>
+                    <div className="flex flex-col items-center gap-1">
+                      <Volume2 className="w-5 h-5 text-white/90" strokeWidth={1.5} />
+                      <span className="text-[10px] text-white/70 text-center leading-tight">{t('home.mgoComparison.acoustic')}</span>
                     </div>
                   </div>
 
@@ -235,42 +245,42 @@ const Home = () => {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                      className={`grid grid-cols-6 gap-2 py-3 rounded-xl ${
+                      className={`grid grid-cols-6 gap-3 py-4 rounded-2xl transition-colors duration-200 ${
                         row.material === 'MgO' 
-                          ? 'bg-primary/10 border border-primary/20 px-4' 
-                          : 'px-4'
+                          ? 'bg-white/14 px-4' 
+                          : 'px-4 hover:bg-white/5'
                       }`}
                     >
-                      <div className={`col-span-1 text-sm font-semibold ${
-                        row.material === 'MgO' ? 'text-primary' : 'text-foreground'
+                      <div className={`col-span-1 text-base font-bold flex items-center ${
+                        row.material === 'MgO' ? 'text-white' : 'text-white/80'
                       }`}>
                         {row.material}
                       </div>
-                      <div className="text-center text-lg">{row.fire}</div>
-                      <div className="text-center text-lg">{row.water}</div>
-                      <div className="text-center text-lg">{row.mold}</div>
-                      <div className="text-center text-lg">{row.stability}</div>
-                      <div className="text-center text-lg">{row.acoustic}</div>
+                      <div className="text-center text-xl text-white flex items-center justify-center">{row.fire}</div>
+                      <div className="text-center text-xl text-white flex items-center justify-center">{row.water}</div>
+                      <div className="text-center text-xl text-white flex items-center justify-center">{row.mold}</div>
+                      <div className="text-center text-xl text-white flex items-center justify-center">{row.stability}</div>
+                      <div className="text-center text-xl text-white flex items-center justify-center">{row.acoustic}</div>
                     </motion.div>
                   ))}
                 </div>
 
                 {/* Legend */}
-                <div className="mt-6 pt-6 border-t border-border/20 flex gap-6 text-xs text-muted-foreground">
+                <div className="mt-6 pt-6 border-t border-white/20 flex gap-6 text-xs text-white/60">
                   <div className="flex items-center gap-2">
-                    <span className="text-base">✓</span>
+                    <span className="text-base text-white">✓</span>
                     <span>{t('home.mgoComparison.excellent')}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-base">○</span>
+                    <span className="text-base text-white">○</span>
                     <span>{t('home.mgoComparison.good')}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-base">✗</span>
+                    <span className="text-base text-white">✗</span>
                     <span>{t('home.mgoComparison.poor')}</span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
