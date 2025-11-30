@@ -371,10 +371,11 @@ const Home = () => {
               <img 
                 src={logo} 
                 alt="Kalēa" 
-                className="inline-block h-[1.4em] w-auto"
+                className="inline-block h-[1.2em] w-auto"
                 style={{ 
                   filter: 'brightness(0) invert(1)',
-                  verticalAlign: 'baseline'
+                  verticalAlign: 'middle',
+                  transform: 'translateY(-0.05em)'
                 }}
               />
               <span>nei tuoi progetti?</span>
