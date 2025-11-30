@@ -5,9 +5,10 @@ interface ProductCardProps {
   description: string;
   index: number;
   imagePlaceholder?: boolean;
+  image?: string;
 }
 
-const ProductCard = ({ title, description, index, imagePlaceholder = true }: ProductCardProps) => {
+const ProductCard = ({ title, description, index, imagePlaceholder = true, image }: ProductCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,9 +25,17 @@ const ProductCard = ({ title, description, index, imagePlaceholder = true }: Pro
     >
       {imagePlaceholder && (
         <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-            <p className="text-muted-foreground text-xs">Immagine prodotto</p>
-          </div>
+          {image ? (
+            <img 
+              src={image} 
+              alt={title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+              <p className="text-muted-foreground text-xs">Immagine prodotto</p>
+            </div>
+          )}
         </div>
       )}
       <h3 className="text-xl font-heading font-semibold text-foreground mb-2">{title}</h3>
