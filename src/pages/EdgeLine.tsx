@@ -124,7 +124,7 @@ const EdgeLine = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group bg-background border border-border rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="kalea-card group bg-background border border-border rounded-xl p-6"
               >
                 <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
                   <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
@@ -168,7 +168,7 @@ const EdgeLine = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="aspect-square rounded-xl bg-muted border-2 border-border hover:border-primary transition-colors flex items-center justify-center text-center p-4 cursor-pointer hover-lift"
+                className="kalea-card aspect-square rounded-xl bg-muted border-2 border-border hover:border-primary transition-colors flex items-center justify-center text-center p-4"
               >
                 <p className="text-sm font-medium text-foreground">{finish}</p>
               </motion.div>
