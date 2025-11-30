@@ -371,7 +371,7 @@ const Home = () => {
               <img 
                 src={logo} 
                 alt="Kalēa" 
-                className="inline-block h-[1em] w-auto"
+                className="inline-block h-[1.4em] w-auto"
                 style={{ 
                   filter: 'brightness(0) invert(1)',
                   verticalAlign: 'baseline'
