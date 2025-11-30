@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-edgeline.jpg";
 import bgEdgeLine from "@/assets/bg-edgeline.jpg";
+import profiloTerminaleImage from "@/assets/edgeline-profilo-terminale.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const EdgeLine = () => {
@@ -35,6 +36,7 @@ const EdgeLine = () => {
     {
       title: t('edgeline.products.terminal.title'),
       description: t('edgeline.products.terminal.description'),
+      image: profiloTerminaleImage,
     },
     {
       title: t('edgeline.products.junction.title'),
@@ -125,6 +127,7 @@ const EdgeLine = () => {
                 title={product.title}
                 description={product.description}
                 index={index}
+                image={product.image}
               />
             ))}
           </div>
