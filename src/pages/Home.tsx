@@ -7,6 +7,7 @@ import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Bri
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-kalea-surfaces.jpg";
+import logo from "@/assets/logo.png";
 import bgProducts from "@/assets/bg-products.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
@@ -365,8 +366,18 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6">
-              {t('home.ctaTitle')}
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3">
+              <span>Vuoi usare</span>
+              <img 
+                src={logo} 
+                alt="Kalēa" 
+                className="inline-block h-[1em] w-auto"
+                style={{ 
+                  filter: 'brightness(0) invert(1)',
+                  verticalAlign: 'baseline'
+                }}
+              />
+              <span>nei tuoi progetti?</span>
             </h2>
             <p className="text-lg mb-10 max-w-2xl mx-auto opacity-90">
               {t('home.ctaSubtitle')}
