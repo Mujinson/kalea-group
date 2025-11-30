@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
-import { useCardTilt } from "@/hooks/useCardTilt";
 
 interface FeatureCardProps {
   icon: LucideIcon;
@@ -11,18 +10,19 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardProps) => {
   const delay = index * 0.15;
-  const { cardRef, tilt, isHovered, handleMouseEnter, handleMouseMove, handleMouseLeave } = useCardTilt(8);
   
   return (
     <motion.div
-      ref={cardRef}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.7, delay }}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      whileHover={{
+        y: -6,
+        rotateX: 2,
+        rotateY: -2,
+        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+      }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 0.61, 0.36, 1] }}
       className="kalea-card group relative overflow-hidden h-full flex flex-col"
       style={{
         background: "rgba(255, 255, 255, 0.18)",
@@ -31,9 +31,6 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardP
         border: "1px solid rgba(255, 255, 255, 0.12)",
         borderRadius: "32px",
         padding: "48px",
-        boxShadow: isHovered ? "0 16px 48px rgba(0, 0, 0, 0.35)" : "0 8px 32px rgba(0, 0, 0, 0.25)",
-        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${isHovered ? '-6px' : '0px'})`,
-        transition: "transform 0.3s ease-out, box-shadow 0.3s ease-out",
       }}
     >
       <div className="relative z-10 flex flex-col h-full">

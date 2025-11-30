@@ -209,7 +209,7 @@ All colors MUST be HSL.
   
   @media (hover: hover) {
     .kalea-card:hover {
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25) !important;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.20);
     }
     
     .kalea-card:hover::before {
