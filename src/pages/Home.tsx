@@ -84,7 +84,7 @@ const Home = () => {
       <section className="section-spacing relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
-          <img src={bgProducts} alt="" className="w-full h-full object-cover" />
+          <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
         </div>
         
@@ -300,7 +300,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative aspect-square rounded-2xl bg-muted overflow-hidden hover-lift"
+                className="kalea-card group relative aspect-square rounded-2xl bg-muted overflow-hidden"
               >
                 {/* Background image for residential card */}
                 {index === 0 && (
@@ -308,6 +308,7 @@ const Home = () => {
                     src={bgApplicationResidential} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 {/* Background image for hospitality card */}
@@ -316,6 +317,7 @@ const Home = () => {
                     src={bgApplicationHospitality} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 {/* Background image for retail card */}
@@ -324,6 +326,7 @@ const Home = () => {
                     src={bgApplicationRetail} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 {/* Background image for offices card */}
@@ -332,6 +335,7 @@ const Home = () => {
                     src={bgApplicationOffices} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 {/* Background image for healthcare card */}
@@ -340,6 +344,7 @@ const Home = () => {
                     src={bgApplicationHealthcare} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 {/* Background image for commercial card */}
@@ -348,6 +353,7 @@ const Home = () => {
                     src={bgApplicationCommercial} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-foreground/80" />
@@ -388,7 +394,7 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative aspect-square rounded-2xl bg-muted overflow-hidden hover-lift"
+                className="kalea-card group relative aspect-square rounded-2xl bg-muted overflow-hidden"
               >
                 {/* Background images for sustainability cards */}
                 {index === 0 && (
@@ -396,6 +402,7 @@ const Home = () => {
                     src={bgSustainabilityForest} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 {index === 1 && (
@@ -403,6 +410,7 @@ const Home = () => {
                     src={bgSustainabilityDurability} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 {index === 2 && (
@@ -410,6 +418,7 @@ const Home = () => {
                     src={bgSustainabilityMaintenance} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
                   />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 to-foreground/65" />

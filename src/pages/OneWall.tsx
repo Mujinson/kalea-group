@@ -165,7 +165,7 @@ const OneWall = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group bg-background border border-border rounded-xl overflow-hidden hover-lift"
+                className="kalea-card group bg-background border border-border rounded-xl overflow-hidden"
               >
                 <div className="aspect-video bg-muted">
                   <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">

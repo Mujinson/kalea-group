@@ -127,7 +127,7 @@ const AreaTecnica = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="group bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="kalea-card group bg-card border border-border rounded-xl p-6"
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
@@ -388,7 +388,7 @@ const AreaTecnica = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="flex items-start gap-4 p-6 rounded-xl border border-border bg-card hover:shadow-lg transition-all"
+                className="kalea-card flex items-start gap-4 p-6 rounded-xl border border-border bg-card"
               >
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                   <app.icon className="w-6 h-6 text-primary" />

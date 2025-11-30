@@ -156,7 +156,7 @@ const ChiSiamo = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-card border border-border rounded-xl p-8 hover:shadow-lg transition-all duration-300"
+                className="kalea-card bg-card border border-border rounded-xl p-8"
               >
                 <h3 className="text-xl font-heading font-semibold text-foreground mb-3">{customer.title}</h3>
                 <p className="text-muted-foreground">{customer.description}</p>

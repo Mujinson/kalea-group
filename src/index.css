@@ -189,4 +189,35 @@ All colors MUST be HSL.
   body.navbar-compact .text-button {
     font-size: 0.875rem !important;
   }
+  
+  /* Kalēa premium card hover effect */
+  .kalea-card {
+    transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+                box-shadow 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
+                background 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+    cursor: pointer;
+  }
+  
+  @media (hover: hover) {
+    .kalea-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.20);
+    }
+    
+    .kalea-card:hover::before {
+      opacity: 1;
+    }
+  }
+  
+  .kalea-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.26));
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 1;
+  }
 }

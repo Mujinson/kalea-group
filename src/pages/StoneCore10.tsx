@@ -180,12 +180,14 @@ const StoneCore10 = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="group relative aspect-square rounded-2xl overflow-hidden border border-border/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="kalea-card group relative aspect-square rounded-2xl overflow-hidden border border-border/40 shadow-lg"
               >
                 {/* Image background with zoom effect */}
                 <div 
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                   style={{ backgroundImage: `url(${finish.image})` }}
+                  role="img"
+                  aria-label={finish.name}
                 />
                 
                 {/* Bottom gradient overlay with name */}
