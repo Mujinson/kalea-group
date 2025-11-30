@@ -10,7 +10,7 @@ import heroImage from "@/assets/hero-edgeline.jpg";
 import bgEdgeLine from "@/assets/bg-edgeline.jpg";
 import profiloTerminaleImage from "@/assets/edgeline-profilo-terminale-2.png";
 import battiscopaImage from "@/assets/edgeline-battiscopa.jpg";
-import giuntoImage from "@/assets/edgeline-giunto.jpg";
+import espansioneImage from "@/assets/edgeline-espansione.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const EdgeLine = () => {
@@ -43,11 +43,11 @@ const EdgeLine = () => {
     {
       title: t('edgeline.products.junction.title'),
       description: t('edgeline.products.junction.description'),
-      image: giuntoImage,
     },
     {
       title: t('edgeline.products.expansion.title'),
       description: t('edgeline.products.expansion.description'),
+      image: espansioneImage,
     },
     {
       title: t('edgeline.products.baseboard.title'),
