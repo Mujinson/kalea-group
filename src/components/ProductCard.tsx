@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useCardTilt } from "@/hooks/useCardTilt";
 
 interface ProductCardProps {
   title: string;
@@ -9,23 +8,19 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ title, description, index, imagePlaceholder = true }: ProductCardProps) => {
-  const { cardRef, tilt, isHovered, handleMouseEnter, handleMouseMove, handleMouseLeave } = useCardTilt(6);
-  
   return (
     <motion.div
-      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="kalea-card group bg-background border border-border rounded-xl p-6"
-      style={{
-        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${isHovered ? '-6px' : '0px'})`,
-        transition: "transform 0.3s ease-out, box-shadow 0.3s ease-out",
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
+      whileHover={{
+        y: -6,
+        rotateX: 2,
+        rotateY: -2,
+        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
       }}
+      className="kalea-card group bg-background border border-border rounded-xl p-6"
     >
       {imagePlaceholder && (
         <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
