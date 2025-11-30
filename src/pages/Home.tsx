@@ -14,6 +14,7 @@ import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
 import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
 import bgApplicationOffices from "@/assets/bg-application-offices.jpg";
 import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
+import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -337,6 +338,14 @@ const Home = () => {
                 {index === 4 && (
                   <img 
                     src={bgApplicationHealthcare} 
+                    alt="" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+                {/* Background image for commercial card */}
+                {index === 5 && (
+                  <img 
+                    src={bgApplicationCommercial} 
                     alt="" 
                     className="absolute inset-0 w-full h-full object-cover"
                   />
