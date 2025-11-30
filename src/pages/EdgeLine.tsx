@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
+import ProductCard from "@/components/ProductCard";
+import FinishCard from "@/components/FinishCard";
 import { Sparkles, Shield, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -118,22 +120,12 @@ const EdgeLine = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product, index) => (
-              <motion.div
+              <ProductCard
                 key={product.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="kalea-card group bg-background border border-border rounded-xl p-6"
-              >
-                <div className="aspect-video bg-muted rounded-lg mb-4 overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <p className="text-muted-foreground text-xs">Immagine prodotto</p>
-                  </div>
-                </div>
-                <h3 className="text-xl font-heading font-semibold text-foreground mb-2">{product.title}</h3>
-                <p className="text-muted-foreground text-sm">{product.description}</p>
-              </motion.div>
+                title={product.title}
+                description={product.description}
+                index={index}
+              />
             ))}
           </div>
         </div>
@@ -162,16 +154,12 @@ const EdgeLine = () => {
               t('edgeline.finishes.black'),
               t('edgeline.finishes.silver')
             ].map((finish, index) => (
-              <motion.div
+              <FinishCard
                 key={finish}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="kalea-card aspect-square rounded-xl bg-muted border-2 border-border hover:border-primary transition-colors flex items-center justify-center text-center p-4"
-              >
-                <p className="text-sm font-medium text-foreground">{finish}</p>
-              </motion.div>
+                name={finish}
+                index={index}
+                variant="simple"
+              />
             ))}
           </div>
         </div>
