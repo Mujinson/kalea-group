@@ -6,7 +6,7 @@ import KaleaIntroSection from "@/components/KaleaIntroSection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench, Flame, Droplets, Bug, Box, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-home.jpg";
+import heroImage from "@/assets/hero-kalea-surfaces.jpg";
 import bgProducts from "@/assets/bg-products.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
