@@ -9,7 +9,7 @@ interface FinishCardProps {
 }
 
 const FinishCard = ({ name, image, index, variant = "simple" }: FinishCardProps) => {
-  const { cardRef, tilt, handleMouseMove, handleMouseLeave } = useCardTilt(5);
+  const { cardRef, tilt, isHovered, handleMouseEnter, handleMouseMove, handleMouseLeave } = useCardTilt(5);
   
   if (variant === "image" && image) {
     return (
@@ -19,11 +19,12 @@ const FinishCard = ({ name, image, index, variant = "simple" }: FinishCardProps)
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: index * 0.08 }}
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         className="kalea-card group relative aspect-square rounded-2xl overflow-hidden border border-border/40 shadow-lg"
         style={{
-          transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+          transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${isHovered ? '-6px' : '0px'})`,
           transition: "transform 0.3s ease-out, box-shadow 0.3s ease-out",
         }}
       >
@@ -49,11 +50,12 @@ const FinishCard = ({ name, image, index, variant = "simple" }: FinishCardProps)
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="kalea-card aspect-square rounded-xl bg-muted border-2 border-border hover:border-primary transition-colors flex items-center justify-center text-center p-4"
       style={{
-        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${isHovered ? '-6px' : '0px'})`,
         transition: "transform 0.3s ease-out, box-shadow 0.3s ease-out, border-color 0.3s ease-out",
       }}
     >

@@ -9,7 +9,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ title, description, index, imagePlaceholder = true }: ProductCardProps) => {
-  const { cardRef, tilt, handleMouseMove, handleMouseLeave } = useCardTilt(6);
+  const { cardRef, tilt, isHovered, handleMouseEnter, handleMouseMove, handleMouseLeave } = useCardTilt(6);
   
   return (
     <motion.div
@@ -18,11 +18,12 @@ const ProductCard = ({ title, description, index, imagePlaceholder = true }: Pro
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="kalea-card group bg-background border border-border rounded-xl p-6"
       style={{
-        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+        transform: `perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) translateY(${isHovered ? '-6px' : '0px'})`,
         transition: "transform 0.3s ease-out, box-shadow 0.3s ease-out",
       }}
     >
