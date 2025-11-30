@@ -278,7 +278,7 @@ const Home = () => {
 
       {/* Applicazioni */}
       <section className="section-spacing bg-card">
-        <div className="container-custom">
+        <div className="w-full px-6 md:px-12 lg:px-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -294,7 +294,7 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {applications.map((app, index) => (
               <ApplicationCard
                 key={app.title}
