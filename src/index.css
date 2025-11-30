@@ -198,6 +198,17 @@ All colors MUST be HSL.
     cursor: pointer;
   }
   
+  /* Image fade-in effect on hover */
+  .kalea-card img {
+    transition: opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1), 
+                transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  
+  /* Overlay gradient fade effect */
+  .kalea-card .bg-gradient-to-b {
+    transition: opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  
   @media (hover: hover) {
     .kalea-card:hover {
       transform: translateY(-8px) scale(1.02);
@@ -206,6 +217,16 @@ All colors MUST be HSL.
     
     .kalea-card:hover::before {
       opacity: 1;
+    }
+    
+    /* Lighten overlay to reveal image more on hover */
+    .kalea-card:hover .bg-gradient-to-b {
+      opacity: 0.6;
+    }
+    
+    /* Slight zoom on image */
+    .kalea-card:hover img {
+      transform: scale(1.05);
     }
   }
   
