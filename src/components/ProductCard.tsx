@@ -29,7 +29,7 @@ const ProductCard = ({ title, description, index, imagePlaceholder = true, image
             <img 
               src={image} 
               alt={title}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
