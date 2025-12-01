@@ -57,21 +57,21 @@ const ChiSiamo = () => {
   return (
     <div className="min-h-screen pt-20">
       {/* Hero */}
-      <section className="section-spacing bg-gradient-to-b from-muted/30 to-background">
+      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-muted/30 to-background">
         <div className="w-full px-6 md:px-12 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
                 {t('aboutUs.title')}
               </h1>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+              <p className="text-base md:text-lg text-muted-foreground mb-4 leading-relaxed">
                 {t('aboutUs.intro1')}
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                 {t('aboutUs.intro2')}
               </p>
             </motion.div>
@@ -82,7 +82,7 @@ const ChiSiamo = () => {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
+              <div className="aspect-[16/10] rounded-2xl overflow-hidden shadow-xl">
                 <img 
                   src={aziendaTeam} 
                   alt="Stabilimento produttivo Kalēa" 
