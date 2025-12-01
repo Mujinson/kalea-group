@@ -58,7 +58,7 @@ const ChiSiamo = () => {
     <div className="min-h-screen pt-20">
       {/* Hero */}
       <section className="section-spacing bg-gradient-to-b from-muted/30 to-background">
-        <div className="container-custom">
+        <div className="w-full px-6 md:px-12 lg:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
