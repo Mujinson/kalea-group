@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import fondatore1 from "@/assets/fondatore-1.png";
 import fondatore2 from "@/assets/fondatore-2.png";
+import aziendaTeam from "@/assets/azienda-team.png";
 
 const ChiSiamo = () => {
   const { t, language } = useTranslation();
@@ -81,10 +82,12 @@ const ChiSiamo = () => {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="aspect-[4/3] rounded-2xl bg-muted overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                  <p className="text-muted-foreground text-sm">Immagine azienda / team</p>
-                </div>
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
+                <img 
+                  src={aziendaTeam} 
+                  alt="Stabilimento produttivo Kalēa" 
+                  className="w-full h-full object-cover"
+                />
               </div>
             </motion.div>
           </div>
