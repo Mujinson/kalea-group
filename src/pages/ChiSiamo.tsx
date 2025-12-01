@@ -107,13 +107,13 @@ const ChiSiamo = () => {
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">{t('aboutUs.historyTitle')}</h2>
             
             {/* Founder Images */}
-            <div className="flex justify-center gap-6 mb-8">
+            <div className="flex justify-center gap-8 mb-8">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="w-24 h-24 rounded-lg overflow-hidden border-2 border-border shadow-lg"
+                className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg"
               >
                 <img 
                   src={fondatore1} 
@@ -126,7 +126,7 @@ const ChiSiamo = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="w-24 h-24 rounded-lg overflow-hidden border-2 border-border shadow-lg"
+                className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg"
               >
                 <img 
                   src={fondatore2} 
