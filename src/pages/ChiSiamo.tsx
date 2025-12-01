@@ -5,6 +5,8 @@ import { Target, Lightbulb, Users, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
+import fondatore1 from "@/assets/fondatore-1.png";
+import fondatore2 from "@/assets/fondatore-2.png";
 
 const ChiSiamo = () => {
   const { t, language } = useTranslation();
@@ -111,22 +113,26 @@ const ChiSiamo = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="w-24 h-24 rounded-lg bg-muted overflow-hidden border-2 border-border"
+                className="w-24 h-24 rounded-lg overflow-hidden border-2 border-border shadow-lg"
               >
-                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                  <p className="text-xs text-muted-foreground">Fondatore 1</p>
-                </div>
+                <img 
+                  src={fondatore1} 
+                  alt="Fondatore 1" 
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="w-24 h-24 rounded-lg bg-muted overflow-hidden border-2 border-border"
+                className="w-24 h-24 rounded-lg overflow-hidden border-2 border-border shadow-lg"
               >
-                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                  <p className="text-xs text-muted-foreground">Fondatore 2</p>
-                </div>
+                <img 
+                  src={fondatore2} 
+                  alt="Fondatore 2" 
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
             </div>
 
