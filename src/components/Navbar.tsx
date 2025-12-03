@@ -101,12 +101,18 @@ const Navbar = () => {
     };
   }, [isMobileMenuOpen]);
 
+  // Pages that should always have dark navbar (no dark hero)
+  const forceDarkNavbar = location.pathname.includes('/area-tecnica') || location.pathname.includes('/chi-siamo');
+  
+  // Use scrolled style if actually scrolled OR if on pages without dark hero
+  const useDarkStyle = isScrolled || forceDarkNavbar;
+
   // Dynamic color classes based on scroll state
-  const textColor = isScrolled ? "text-[#3F3B33]" : "text-white";
-  const textColorMuted = isScrolled ? "text-[#3F3B33]/70" : "text-white/90";
-  const textColorActive = isScrolled ? "text-[#3F3B33]" : "text-white";
-  const underlineColor = isScrolled ? "bg-[#3F3B33]" : "bg-white";
-  const dividerColor = isScrolled ? "text-[#3F3B33]/30" : "text-white/30";
+  const textColor = useDarkStyle ? "text-[#3F3B33]" : "text-white";
+  const textColorMuted = useDarkStyle ? "text-[#3F3B33]/70" : "text-white/90";
+  const textColorActive = useDarkStyle ? "text-[#3F3B33]" : "text-white";
+  const underlineColor = useDarkStyle ? "bg-[#3F3B33]" : "bg-white";
+  const dividerColor = useDarkStyle ? "text-[#3F3B33]/30" : "text-white/30";
 
   return (
     <motion.nav
@@ -125,7 +131,7 @@ const Navbar = () => {
     >
       <div 
         className={`max-w-[1280px] mx-auto rounded-b-[32px] transition-all duration-300 ${
-          isScrolled 
+          useDarkStyle 
             ? "bg-[rgba(255,255,255,0.94)] border-b border-x border-[#EBE2D8] shadow-[0_8px_32px_rgba(0,0,0,0.08)]" 
             : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border-b border-x border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
         }`}
@@ -142,7 +148,7 @@ const Navbar = () => {
                 src={logo} 
                 alt="Kalēa" 
                 className={`h-8 md:h-10 transition-all duration-300 ${
-                  isScrolled ? "" : "brightness-0 invert"
+                  useDarkStyle ? "" : "brightness-0 invert"
                 }`} 
               />
             </Link>
@@ -202,7 +208,7 @@ const Navbar = () => {
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
                         className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
-                          isScrolled 
+                          useDarkStyle 
                             ? "bg-white border border-[#EBE2D8]" 
                             : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
                         }`}
@@ -212,14 +218,14 @@ const Navbar = () => {
                             key={item.path}
                             to={item.path}
                             className={`block px-6 py-3 text-nav transition-all duration-200 ${
-                              isScrolled
+                              useDarkStyle
                                 ? location.pathname === item.path
                                   ? "text-[#3F3B33] bg-[#EBE2D8]/50"
                                   : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
                                 : location.pathname === item.path
                                   ? "text-white bg-white/10"
                                   : "text-white/90 hover:text-white hover:bg-white/5"
-                            } ${index !== lineeItems.length - 1 ? `border-b ${isScrolled ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
+                            } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
                           >
                             {item.label}
                           </Link>
@@ -260,7 +266,7 @@ const Navbar = () => {
                       className={`transition-all duration-200 ${
                         language === lang 
                           ? `${textColorActive} font-semibold` 
-                          : `${isScrolled ? "text-[#3F3B33]/60 hover:text-[#3F3B33]" : "text-white/70 hover:text-white"}`
+                          : `${useDarkStyle ? "text-[#3F3B33]/60 hover:text-[#3F3B33]" : "text-white/70 hover:text-white"}`
                       }`}
                     >
                       {lang.toUpperCase()}
@@ -278,7 +284,7 @@ const Navbar = () => {
               <Link
                 to={`/${language}/diventa-partner`}
                 className={`inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-button transition-all duration-150 whitespace-nowrap ${
-                  isScrolled 
+                  useDarkStyle 
                     ? "bg-white text-[#3F3B33] border border-[#E0D7CB] hover:bg-[#EBE2D8]" 
                     : "bg-white text-[#111] hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
                 }`}
@@ -291,7 +297,7 @@ const Navbar = () => {
             <button
               ref={mobileMenuButtonRef}
               className={`xl:hidden p-2 transition-colors shrink-0 ${
-                isScrolled ? "text-[#3F3B33] hover:text-[#3F3B33]/70" : "text-white hover:text-white/70"
+                useDarkStyle ? "text-[#3F3B33] hover:text-[#3F3B33]/70" : "text-white hover:text-white/70"
               }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
@@ -312,7 +318,7 @@ const Navbar = () => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className={`xl:hidden mt-4 mx-4 md:mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] ${
-              isScrolled 
+              useDarkStyle 
                 ? "bg-white border border-[#EBE2D8]" 
                 : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
             }`}
@@ -321,7 +327,7 @@ const Navbar = () => {
               <Link
                 to={`/${language}`}
                 className={`block text-base font-medium transition-colors py-2 ${
-                  isScrolled
+                  useDarkStyle
                     ? location.pathname === `/${language}` || location.pathname === `/${language}/` 
                       ? "text-[#3F3B33]" 
                       : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
@@ -339,7 +345,7 @@ const Navbar = () => {
                 <button
                   onClick={() => setIsLineeExpanded(!isLineeExpanded)}
                   className={`flex items-center justify-between w-full text-base font-medium transition-colors py-2 ${
-                    isScrolled
+                    useDarkStyle
                       ? isLineePage ? "text-[#3F3B33]" : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
                       : isLineePage ? "text-white" : "text-white/70 hover:text-white"
                   }`}
@@ -365,7 +371,7 @@ const Navbar = () => {
                           key={item.path}
                           to={item.path}
                           className={`block text-sm font-medium transition-colors py-2 ${
-                            isScrolled
+                            useDarkStyle
                               ? location.pathname === item.path 
                                 ? "text-[#3F3B33]" 
                                 : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
@@ -391,7 +397,7 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   className={`block text-base font-medium transition-colors py-2 ${
-                    isScrolled
+                    useDarkStyle
                       ? location.pathname === item.path 
                         ? "text-[#3F3B33]" 
                         : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
@@ -407,7 +413,7 @@ const Navbar = () => {
               
               {/* Mobile Language Selector */}
               <div className={`flex items-center justify-center gap-2 py-4 border-t mt-4 ${
-                isScrolled ? "border-[#EBE2D8]" : "border-white/10"
+                useDarkStyle ? "border-[#EBE2D8]" : "border-white/10"
               }`}>
                 {languages.map((lang) => (
                   <button
@@ -417,7 +423,7 @@ const Navbar = () => {
                       setIsMobileMenuOpen(false);
                     }}
                     className={`px-3 py-1 rounded-lg transition-all text-xs ${
-                      isScrolled
+                      useDarkStyle
                         ? language === lang 
                           ? "bg-[#3F3B33] text-white font-semibold" 
                           : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]"
@@ -435,7 +441,7 @@ const Navbar = () => {
                 to={`/${language}/diventa-partner`}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block w-full text-center px-6 py-2 rounded-xl text-sm transition-all duration-150 ${
-                  isScrolled 
+                  useDarkStyle 
                     ? "bg-[#3F3B33] text-white hover:bg-[#3F3B33]/90" 
                     : "bg-white text-[#111] hover:bg-[#F3F3F3]"
                 }`}
