@@ -16,6 +16,7 @@ import finishPerla from "@/assets/finish-perla.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 import finishAurora from "@/assets/finish-aurora.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const StoneCore10 = () => {
@@ -94,27 +95,19 @@ const StoneCore10 = () => {
             </p>
           </motion.div>
 
-          <div className="max-w-3xl mx-auto">
-            <div className="space-y-3">
-              {[
-                { label: t('stonecore.layers.decorative'), height: "h-8", bg: "bg-secondary" },
-                { label: t('stonecore.layers.wear'), height: "h-6", bg: "bg-primary/30" },
-                { label: t('stonecore.layers.core'), height: "h-32", bg: "bg-primary" },
-                { label: t('stonecore.layers.mat'), height: "h-4", bg: "bg-muted" },
-              ].map((layer, index) => (
-                <motion.div
-                  key={layer.label}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className={`${layer.height} ${layer.bg} rounded-lg flex items-center px-6 text-foreground font-medium`}
-                >
-                  {layer.label}
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto"
+          >
+            <img 
+              src={stonecoreLayers} 
+              alt="Struttura multistrato StoneCore 10" 
+              className="w-full h-auto rounded-2xl shadow-lg"
+            />
+          </motion.div>
         </div>
       </section>
 
