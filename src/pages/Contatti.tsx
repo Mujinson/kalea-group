@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/i18n/useTranslation";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contatti = () => {
   const { t } = useTranslation();
@@ -24,7 +25,9 @@ const Contatti = () => {
     privacy: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.privacy) {
@@ -36,22 +39,51 @@ const Contatti = () => {
       return;
     }
 
-    toast({
-      title: t('contacts.successTitle'),
-      description: t('contacts.successMessage'),
-    });
-    
-    // Reset form
-    setFormData({
-      nome: "",
-      cognome: "",
-      email: "",
-      telefono: "",
-      tipoUtente: "",
-      interessi: [],
-      messaggio: "",
-      privacy: false,
-    });
+    setIsSubmitting(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name: formData.nome,
+          surname: formData.cognome,
+          email: formData.email,
+          phone: formData.telefono,
+          userType: formData.tipoUtente,
+          interests: formData.interessi,
+          message: formData.messaggio,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: t('contacts.successTitle'),
+        description: t('contacts.successMessage'),
+      });
+      
+      // Reset form
+      setFormData({
+        nome: "",
+        cognome: "",
+        email: "",
+        telefono: "",
+        tipoUtente: "",
+        interessi: [],
+        messaggio: "",
+        privacy: false,
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Errore",
+        description: "Si è verificato un errore nell'invio del messaggio. Riprova più tardi.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const interests = [
@@ -208,8 +240,8 @@ const Contatti = () => {
                   </label>
                 </div>
 
-                <Button type="submit" size="lg" className="w-full">
-                  {t('contacts.submit')}
+                <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Invio in corso..." : t('contacts.submit')}
                 </Button>
               </form>
             </motion.div>
