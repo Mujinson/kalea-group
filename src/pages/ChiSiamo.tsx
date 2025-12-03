@@ -196,11 +196,23 @@ const ChiSiamo = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="kalea-card bg-card border border-border rounded-xl p-8"
+                whileHover={{
+                  y: -6,
+                  rotateX: 2,
+                  rotateY: -2,
+                  boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+                }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
+                className="kalea-card relative overflow-hidden rounded-2xl"
               >
-                <h3 className="text-xl font-heading font-semibold text-foreground mb-3">{customer.title}</h3>
-                <p className="text-muted-foreground">{customer.description}</p>
+                {/* Background gradient */}
+                <div className="absolute inset-0 bg-foreground/85" />
+                <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 to-foreground/80" />
+                
+                <div className="relative z-10 p-8 md:p-10">
+                  <h3 className="text-xl md:text-2xl font-heading font-semibold text-background mb-3">{customer.title}</h3>
+                  <p className="text-background/80">{customer.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
