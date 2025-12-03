@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-onewall.jpg";
 import bgOneWall from "@/assets/bg-onewall.jpg";
 import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
+import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const OneWall = () => {
@@ -271,18 +272,37 @@ const OneWall = () => {
       </section>
 
       {/* CTA finale */}
-      <section className="section-spacing bg-primary text-primary-foreground">
-        <div className="container-custom text-center">
+      <section className="section-spacing relative overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+        />
+        {/* Gradient Overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+          }}
+        />
+        
+        <div className="container-custom text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
+            <h2 
+              className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
               {t('onewall.ctaTitle')}
             </h2>
-            <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+            <p 
+              className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
               {t('onewall.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="secondary">
