@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isLineeExpanded, setIsLineeExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const mobileMenuRef = React.useRef<HTMLDivElement>(null);
   const mobileMenuButtonRef = React.useRef<HTMLButtonElement>(null);
@@ -23,10 +24,13 @@ const Navbar = () => {
     setLanguage(lang);
   };
 
-  // Auto-hide navbar on scroll
+  // Auto-hide navbar on scroll + detect scroll position for style change
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+      
+      // Update scrolled state for style change
+      setIsScrolled(currentScrollY > 80);
       
       // Don't hide navbar if mobile menu is open
       if (isMobileMenuOpen) {
@@ -97,6 +101,13 @@ const Navbar = () => {
     };
   }, [isMobileMenuOpen]);
 
+  // Dynamic color classes based on scroll state
+  const textColor = isScrolled ? "text-[#3F3B33]" : "text-white";
+  const textColorMuted = isScrolled ? "text-[#3F3B33]/70" : "text-white/90";
+  const textColorActive = isScrolled ? "text-[#3F3B33]" : "text-white";
+  const underlineColor = isScrolled ? "bg-[#3F3B33]" : "bg-white";
+  const dividerColor = isScrolled ? "text-[#3F3B33]/30" : "text-white/30";
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
@@ -112,7 +123,13 @@ const Navbar = () => {
       }}
       className="fixed top-0 left-0 right-0 z-50 px-16 md:px-24 lg:px-32"
     >
-      <div className="max-w-[1280px] mx-auto bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] rounded-b-[32px] border-b border-x border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
+      <div 
+        className={`max-w-[1280px] mx-auto rounded-b-[32px] transition-all duration-300 ${
+          isScrolled 
+            ? "bg-[rgba(255,255,255,0.94)] border-b border-x border-[#EBE2D8] shadow-[0_8px_32px_rgba(0,0,0,0.08)]" 
+            : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border-b border-x border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
+        }`}
+      >
         <div className="px-8 md:px-12">
           <div className="flex items-center justify-between h-[80px]">
             {/* Logo - Left */}
@@ -120,7 +137,13 @@ const Navbar = () => {
               to={`/${language}`}
               className="hover:opacity-80 transition-opacity duration-200 z-10"
             >
-              <img src={logo} alt="Kalēa" className="h-8 md:h-10 brightness-0 invert" />
+              <img 
+                src={logo} 
+                alt="Kalēa" 
+                className={`h-8 md:h-10 transition-all duration-300 ${
+                  isScrolled ? "" : "brightness-0 invert"
+                }`} 
+              />
             </Link>
 
             {/* Desktop Menu - Center */}
@@ -128,14 +151,16 @@ const Navbar = () => {
               <Link
                 to={`/${language}`}
                 className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
-                  location.pathname === `/${language}` || location.pathname === `/${language}/` ? "text-white" : "text-white/90 hover:text-white"
+                  location.pathname === `/${language}` || location.pathname === `/${language}/` 
+                    ? textColorActive 
+                    : `${textColorMuted} hover:${textColor}`
                 }`}
               >
                 {t('nav.home')}
                 {(location.pathname === `/${language}` || location.pathname === `/${language}/`) && (
                   <motion.div
                     layoutId="navbar-underline"
-                    className="absolute -bottom-1 left-0 right-0 h-[1px] bg-white"
+                    className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -149,7 +174,7 @@ const Navbar = () => {
               >
                 <button
                   className={`text-nav transition-all duration-200 flex items-center gap-1 whitespace-nowrap ${
-                    isLineePage ? "text-white" : "text-white/90 hover:text-white"
+                    isLineePage ? textColorActive : `${textColorMuted} hover:${textColor}`
                   }`}
                 >
                   {t('nav.lines')}
@@ -160,7 +185,7 @@ const Navbar = () => {
                   {isLineePage && (
                     <motion.div
                       layoutId="navbar-underline"
-                      className="absolute -bottom-1 left-0 right-0 h-[1px] bg-white"
+                      className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -173,17 +198,25 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] rounded-2xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50"
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
+                        isScrolled 
+                          ? "bg-white border border-[#EBE2D8]" 
+                          : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
+                      }`}
                     >
                       {lineeItems.map((item, index) => (
                         <Link
                           key={item.path}
                           to={item.path}
                           className={`block px-6 py-3 text-nav transition-all duration-200 ${
-                            location.pathname === item.path
-                              ? "text-white bg-white/10"
-                              : "text-white/90 hover:text-white hover:bg-white/5"
-                          } ${index !== lineeItems.length - 1 ? "border-b border-white/5" : ""}`}
+                            isScrolled
+                              ? location.pathname === item.path
+                                ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+                                : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+                              : location.pathname === item.path
+                                ? "text-white bg-white/10"
+                                : "text-white/90 hover:text-white hover:bg-white/5"
+                          } ${index !== lineeItems.length - 1 ? `border-b ${isScrolled ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
                         >
                           {item.label}
                         </Link>
@@ -198,14 +231,16 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
-                    location.pathname === item.path ? "text-white" : "text-white/90 hover:text-white"
+                    location.pathname === item.path 
+                      ? textColorActive 
+                      : `${textColorMuted} hover:${textColor}`
                   }`}
                 >
                   {item.label}
                   {location.pathname === item.path && (
                     <motion.div
                       layoutId="navbar-underline"
-                      className="absolute -bottom-1 left-0 right-0 h-[1px] bg-white"
+                      className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -219,13 +254,15 @@ const Navbar = () => {
                     <button
                       onClick={() => handleLanguageChange(lang)}
                       className={`transition-all duration-200 ${
-                        language === lang ? "text-white font-semibold" : "text-white/70 hover:text-white"
+                        language === lang 
+                          ? `${textColorActive} font-semibold` 
+                          : `${isScrolled ? "text-[#3F3B33]/60 hover:text-[#3F3B33]" : "text-white/70 hover:text-white"}`
                       }`}
                     >
                       {lang.toUpperCase()}
                     </button>
                     {index < languages.length - 1 && (
-                      <span className="text-white/30">|</span>
+                      <span className={dividerColor}>|</span>
                     )}
                   </React.Fragment>
                 ))}
@@ -236,7 +273,11 @@ const Navbar = () => {
             <div className="hidden lg:block">
               <Link
                 to={`/${language}/contatti`}
-                className="inline-flex items-center justify-center w-[180px] px-6 py-3 bg-white text-[#111] rounded-xl text-button hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150 truncate"
+                className={`inline-flex items-center justify-center w-[180px] px-6 py-3 rounded-xl text-button transition-all duration-150 truncate ${
+                  isScrolled 
+                    ? "bg-white text-[#3F3B33] border border-[#E0D7CB] hover:bg-[#EBE2D8]" 
+                    : "bg-white text-[#111] hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
+                }`}
               >
                 {t('nav.requestQuote')}
               </Link>
@@ -245,7 +286,9 @@ const Navbar = () => {
             {/* Mobile Menu Button */}
             <button
               ref={mobileMenuButtonRef}
-              className="lg:hidden p-2 text-white hover:text-white/70 transition-colors"
+              className={`lg:hidden p-2 transition-colors ${
+                isScrolled ? "text-[#3F3B33] hover:text-[#3F3B33]/70" : "text-white hover:text-white/70"
+              }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -264,13 +307,23 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden mt-4 mx-6 bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] rounded-3xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.24)]"
+            className={`lg:hidden mt-4 mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] ${
+              isScrolled 
+                ? "bg-white border border-[#EBE2D8]" 
+                : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
+            }`}
           >
             <div className="px-6 py-6 space-y-2">
               <Link
                 to={`/${language}`}
                 className={`block text-base font-medium transition-colors py-2 ${
-                  location.pathname === `/${language}` || location.pathname === `/${language}/` ? "text-white" : "text-white/70 hover:text-white"
+                  isScrolled
+                    ? location.pathname === `/${language}` || location.pathname === `/${language}/` 
+                      ? "text-[#3F3B33]" 
+                      : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
+                    : location.pathname === `/${language}` || location.pathname === `/${language}/` 
+                      ? "text-white" 
+                      : "text-white/70 hover:text-white"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -282,7 +335,9 @@ const Navbar = () => {
                 <button
                   onClick={() => setIsLineeExpanded(!isLineeExpanded)}
                   className={`flex items-center justify-between w-full text-base font-medium transition-colors py-2 ${
-                    isLineePage ? "text-white" : "text-white/70 hover:text-white"
+                    isScrolled
+                      ? isLineePage ? "text-[#3F3B33]" : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
+                      : isLineePage ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                 >
                   {t('nav.lines')}
@@ -306,7 +361,13 @@ const Navbar = () => {
                           key={item.path}
                           to={item.path}
                           className={`block text-sm font-medium transition-colors py-2 ${
-                            location.pathname === item.path ? "text-white" : "text-white/60 hover:text-white"
+                            isScrolled
+                              ? location.pathname === item.path 
+                                ? "text-[#3F3B33]" 
+                                : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
+                              : location.pathname === item.path 
+                                ? "text-white" 
+                                : "text-white/60 hover:text-white"
                           }`}
                           onClick={() => {
                             setIsMobileMenuOpen(false);
@@ -326,7 +387,13 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   className={`block text-base font-medium transition-colors py-2 ${
-                    location.pathname === item.path ? "text-white" : "text-white/70 hover:text-white"
+                    isScrolled
+                      ? location.pathname === item.path 
+                        ? "text-[#3F3B33]" 
+                        : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
+                      : location.pathname === item.path 
+                        ? "text-white" 
+                        : "text-white/70 hover:text-white"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -335,7 +402,9 @@ const Navbar = () => {
               ))}
               
               {/* Mobile Language Selector */}
-              <div className="flex items-center justify-center gap-2 py-4 border-t border-white/10 mt-4">
+              <div className={`flex items-center justify-center gap-2 py-4 border-t mt-4 ${
+                isScrolled ? "border-[#EBE2D8]" : "border-white/10"
+              }`}>
                 {languages.map((lang) => (
                   <button
                     key={lang}
@@ -344,9 +413,13 @@ const Navbar = () => {
                       setIsMobileMenuOpen(false);
                     }}
                     className={`px-3 py-1 rounded-lg transition-all text-xs ${
-                      language === lang 
-                        ? "bg-white text-[#111] font-semibold" 
-                        : "text-white/70 hover:text-white hover:bg-white/10"
+                      isScrolled
+                        ? language === lang 
+                          ? "bg-[#3F3B33] text-white font-semibold" 
+                          : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]"
+                        : language === lang 
+                          ? "bg-white text-[#111] font-semibold" 
+                          : "text-white/70 hover:text-white hover:bg-white/10"
                     }`}
                   >
                     {lang.toUpperCase()}
@@ -357,7 +430,11 @@ const Navbar = () => {
               <Link
                 to={`/${language}/contatti`}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full text-center px-6 py-2 bg-white text-[#111] rounded-xl text-sm hover:bg-[#F3F3F3] transition-all duration-150"
+                className={`block w-full text-center px-6 py-2 rounded-xl text-sm transition-all duration-150 ${
+                  isScrolled 
+                    ? "bg-[#3F3B33] text-white hover:bg-[#3F3B33]/90" 
+                    : "bg-white text-[#111] hover:bg-[#F3F3F3]"
+                }`}
               >
                 {t('nav.requestQuote')}
               </Link>
