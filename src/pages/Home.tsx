@@ -228,7 +228,7 @@ const Home = () => {
                 {t('home.ctaButton1')}
               </Link>
               <Link 
-                to={`/${language}/chi-siamo`}
+                to={`/${language}/diventa-partner`}
                 className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
               >
                 {t('home.ctaButton2')}
