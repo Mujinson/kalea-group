@@ -316,10 +316,10 @@ const AreaTecnica = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground md:text-white mb-4">
               MgO vs SPC / MFC / HPL
             </h2>
-            <p className="text-subtitle text-white/80 max-w-2xl mx-auto">
+            <p className="text-subtitle text-muted-foreground md:text-white/80 max-w-2xl mx-auto">
               Perché il MgO rappresenta la scelta superiore per pavimenti e rivestimenti
             </p>
           </motion.div>
