@@ -155,7 +155,7 @@ export const translations: Record<Language, Translations> = {
         },
         floating: {
           title: "Posa flottante",
-          description: "Installazione rapida senza colla. Pronto all'uso in poche ore.",
+          description: "Installazione rapida senza colla. Totale assenza di fughe. Pronto all'uso in poche ore.",
         },
         stability: {
           title: "Stabilità dimensionale",
@@ -732,7 +732,7 @@ export const translations: Record<Language, Translations> = {
         },
         floating: {
           title: "Floating installation",
-          description: "Fast installation without glue. Ready to use in a few hours.",
+          description: "Fast installation without glue. Completely groutless. Ready to use in a few hours.",
         },
         stability: {
           title: "Dimensional stability",
@@ -1309,7 +1309,7 @@ export const translations: Record<Language, Translations> = {
         },
         floating: {
           title: "Schwimmende Verlegung",
-          description: "Schnelle Installation ohne Klebstoff. In wenigen Stunden einsatzbereit.",
+          description: "Schnelle Installation ohne Klebstoff. Völlig fugenlos. In wenigen Stunden einsatzbereit.",
         },
         stability: {
           title: "Dimensionale Stabilität",
@@ -1886,7 +1886,7 @@ export const translations: Record<Language, Translations> = {
         },
         floating: {
           title: "Pose flottante",
-          description: "Installation rapide sans colle. Prêt à l'emploi en quelques heures.",
+          description: "Installation rapide sans colle. Totalement sans joints. Prêt à l'emploi en quelques heures.",
         },
         stability: {
           title: "Stabilité dimensionnelle",
