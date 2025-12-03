@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import FinishCard from "@/components/FinishCard";
+import LayerDiagram from "@/components/LayerDiagram";
 import { Droplets, Flame, Shield, Volume2, Zap, Layers } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -160,24 +161,36 @@ const StoneCore10 = () => {
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
               {t('stonecore.structureTitle')}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               {t('stonecore.structureSubtitle')}
             </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-2xl mx-auto"
-          >
-            <img 
-              src={stonecoreLayers} 
-              alt="Struttura multistrato StoneCore 10" 
-              className="w-full h-auto rounded-2xl shadow-lg"
-            />
-          </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Left: Photo */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <img 
+                src={stonecoreLayers} 
+                alt="Struttura multistrato StoneCore 10" 
+                className="w-full h-auto rounded-2xl shadow-lg"
+              />
+            </motion.div>
+
+            {/* Right: Layer Diagram */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <LayerDiagram />
+            </motion.div>
+          </div>
         </div>
       </section>
 
