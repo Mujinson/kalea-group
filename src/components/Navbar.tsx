@@ -121,7 +121,7 @@ const Navbar = () => {
         y: { duration: 0.6, ease: "easeOut" },
         transform: { duration: 0.25, ease: "easeOut" }
       }}
-      className="fixed top-0 left-0 right-0 z-50 px-16 md:px-24 lg:px-32"
+      className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 lg:px-16 xl:px-32"
     >
       <div 
         className={`max-w-[1280px] mx-auto rounded-b-[32px] transition-all duration-300 ${
@@ -130,12 +130,13 @@ const Navbar = () => {
             : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border-b border-x border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.12)]"
         }`}
       >
-        <div className="px-8 md:px-12">
-          <div className="flex items-center justify-between h-[80px]">
-            {/* Logo - Left */}
+        <div className="px-4 md:px-6 lg:px-8 xl:px-12">
+          {/* Main flex container - no wrap */}
+          <div className="flex items-center justify-between h-[80px] flex-nowrap">
+            {/* Logo - Left - shrink-0 to prevent shrinking */}
             <Link
               to={`/${language}`}
-              className="hover:opacity-80 transition-opacity duration-200 z-10"
+              className="hover:opacity-80 transition-opacity duration-200 shrink-0"
             >
               <img 
                 src={logo} 
@@ -146,98 +147,20 @@ const Navbar = () => {
               />
             </Link>
 
-            {/* Desktop Menu - Center */}
-            <div className="hidden lg:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
-              <Link
-                to={`/${language}`}
-                className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
-                  location.pathname === `/${language}` || location.pathname === `/${language}/` 
-                    ? textColorActive 
-                    : `${textColorMuted} hover:${textColor}`
-                }`}
-              >
-                {t('nav.home')}
-                {(location.pathname === `/${language}` || location.pathname === `/${language}/`) && (
-                  <motion.div
-                    layoutId="navbar-underline"
-                    className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </Link>
-
-              {/* Dropdown Linee */}
-              <div
-                className="relative"
-                onMouseEnter={() => setIsDropdownOpen(true)}
-                onMouseLeave={() => setIsDropdownOpen(false)}
-              >
-                <button
-                  className={`text-nav transition-all duration-200 flex items-center gap-1 whitespace-nowrap ${
-                    isLineePage ? textColorActive : `${textColorMuted} hover:${textColor}`
-                  }`}
-                >
-                  {t('nav.lines')}
-                  <ChevronDown
-                    size={16}
-                    className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
-                  />
-                  {isLineePage && (
-                    <motion.div
-                      layoutId="navbar-underline"
-                      className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </button>
-
-                <AnimatePresence>
-                  {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
-                        isScrolled 
-                          ? "bg-white border border-[#EBE2D8]" 
-                          : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
-                      }`}
-                    >
-                      {lineeItems.map((item, index) => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          className={`block px-6 py-3 text-nav transition-all duration-200 ${
-                            isScrolled
-                              ? location.pathname === item.path
-                                ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-                                : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
-                              : location.pathname === item.path
-                                ? "text-white bg-white/10"
-                                : "text-white/90 hover:text-white hover:bg-white/5"
-                          } ${index !== lineeItems.length - 1 ? `border-b ${isScrolled ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {menuItems.map((item) => (
+            {/* Desktop Menu + Language - Center wrapper with flex-nowrap */}
+            <div className="hidden xl:flex items-center gap-6 2xl:gap-8 flex-nowrap shrink-0">
+              {/* Menu Links */}
+              <div className="flex items-center gap-5 2xl:gap-8 flex-nowrap">
                 <Link
-                  key={item.path}
-                  to={item.path}
+                  to={`/${language}`}
                   className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
-                    location.pathname === item.path 
+                    location.pathname === `/${language}` || location.pathname === `/${language}/` 
                       ? textColorActive 
                       : `${textColorMuted} hover:${textColor}`
                   }`}
                 >
-                  {item.label}
-                  {location.pathname === item.path && (
+                  {t('nav.home')}
+                  {(location.pathname === `/${language}` || location.pathname === `/${language}/`) && (
                     <motion.div
                       layoutId="navbar-underline"
                       className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
@@ -245,10 +168,91 @@ const Navbar = () => {
                     />
                   )}
                 </Link>
-              ))}
+
+                {/* Dropdown Linee */}
+                <div
+                  className="relative"
+                  onMouseEnter={() => setIsDropdownOpen(true)}
+                  onMouseLeave={() => setIsDropdownOpen(false)}
+                >
+                  <button
+                    className={`text-nav transition-all duration-200 flex items-center gap-1 whitespace-nowrap ${
+                      isLineePage ? textColorActive : `${textColorMuted} hover:${textColor}`
+                    }`}
+                  >
+                    {t('nav.lines')}
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+                    />
+                    {isLineePage && (
+                      <motion.div
+                        layoutId="navbar-underline"
+                        className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </button>
+
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
+                          isScrolled 
+                            ? "bg-white border border-[#EBE2D8]" 
+                            : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
+                        }`}
+                      >
+                        {lineeItems.map((item, index) => (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`block px-6 py-3 text-nav transition-all duration-200 ${
+                              isScrolled
+                                ? location.pathname === item.path
+                                  ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+                                  : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+                                : location.pathname === item.path
+                                  ? "text-white bg-white/10"
+                                  : "text-white/90 hover:text-white hover:bg-white/5"
+                            } ${index !== lineeItems.length - 1 ? `border-b ${isScrolled ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {menuItems.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
+                      location.pathname === item.path 
+                        ? textColorActive 
+                        : `${textColorMuted} hover:${textColor}`
+                    }`}
+                  >
+                    {item.label}
+                    {location.pathname === item.path && (
+                      <motion.div
+                        layoutId="navbar-underline"
+                        className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+                ))}
+              </div>
               
-              {/* Language Selector */}
-              <div className="flex items-center gap-2 text-nav whitespace-nowrap">
+              {/* Language Selector - shrink-0 to prevent shrinking */}
+              <div className="flex items-center gap-1.5 text-nav whitespace-nowrap shrink-0">
                 {languages.map((lang, index) => (
                   <React.Fragment key={lang}>
                     <button
@@ -269,11 +273,11 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* CTA Button - Right */}
-            <div className="hidden lg:block">
+            {/* CTA Button - Right - shrink-0 */}
+            <div className="hidden xl:block shrink-0">
               <Link
                 to={`/${language}/contatti`}
-                className={`inline-flex items-center justify-center w-[180px] px-6 py-3 rounded-xl text-button transition-all duration-150 truncate ${
+                className={`inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-button transition-all duration-150 whitespace-nowrap ${
                   isScrolled 
                     ? "bg-white text-[#3F3B33] border border-[#E0D7CB] hover:bg-[#EBE2D8]" 
                     : "bg-white text-[#111] hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
@@ -283,10 +287,10 @@ const Navbar = () => {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - shown on < xl */}
             <button
               ref={mobileMenuButtonRef}
-              className={`lg:hidden p-2 transition-colors ${
+              className={`xl:hidden p-2 transition-colors shrink-0 ${
                 isScrolled ? "text-[#3F3B33] hover:text-[#3F3B33]/70" : "text-white hover:text-white/70"
               }`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -307,7 +311,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className={`lg:hidden mt-4 mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] ${
+            className={`xl:hidden mt-4 mx-4 md:mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] ${
               isScrolled 
                 ? "bg-white border border-[#EBE2D8]" 
                 : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
