@@ -33,8 +33,8 @@ const LayerDiagram = () => {
   ];
 
   return (
-    <div className="w-full max-w-lg mx-auto">
-      <div className="flex flex-col gap-1 p-6 bg-muted/30 rounded-2xl">
+    <div className="w-full h-full">
+      <div className="flex flex-col gap-1 p-8 bg-muted/30 rounded-2xl h-full justify-center">
         {layers.map((layer, index) => (
           <motion.div
             key={layer.name}
