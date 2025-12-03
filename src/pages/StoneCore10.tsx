@@ -167,6 +167,7 @@ const StoneCore10 = () => {
             </p>
           </motion.div>
 
+          {/* Top row: Image left, Prestazioni del materiale right */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             {/* Left: Photo - preserves full aspect ratio */}
             <motion.div
@@ -185,27 +186,27 @@ const StoneCore10 = () => {
               />
             </motion.div>
 
-            {/* Right: Stacked Cards - auto height */}
-            <div className="flex flex-col gap-7">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <LayerDiagram />
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <MaterialPerformanceCard />
-              </motion.div>
-            </div>
+            {/* Right: Prestazioni del materiale - top aligned */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <MaterialPerformanceCard />
+            </motion.div>
           </div>
+
+          {/* Bottom row: Composizione strati centered */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-12 max-w-2xl mx-auto"
+          >
+            <LayerDiagram />
+          </motion.div>
         </div>
       </section>
 
