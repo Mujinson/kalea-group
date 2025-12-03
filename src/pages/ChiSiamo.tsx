@@ -8,6 +8,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import fondatore1 from "@/assets/fondatore-1.png";
 import fondatore2 from "@/assets/fondatore-2.png";
 import aziendaTeam from "@/assets/azienda-team.png";
+import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 
 const ChiSiamo = () => {
   const { t, language } = useTranslation();
@@ -207,16 +208,37 @@ const ChiSiamo = () => {
       </section>
 
       {/* CTA */}
-      <section className="section-spacing bg-primary text-primary-foreground">
-        <div className="container-custom text-center">
+      <section className="section-spacing relative overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+        />
+        {/* Gradient Overlay - lighter at top, darker at bottom */}
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+          }}
+        />
+        
+        <div className="container-custom text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">{t('aboutUs.ctaTitle')}</h2>
-            <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+            <h2 
+              className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
+              {t('aboutUs.ctaTitle')}
+            </h2>
+            <p 
+              className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
               {t('aboutUs.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="secondary">
