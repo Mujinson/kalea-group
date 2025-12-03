@@ -270,7 +270,7 @@ const StoneCore10 = () => {
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Posa a spina di pesce o dritta</span>
+                      <span>Totale assenza di fughe</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
