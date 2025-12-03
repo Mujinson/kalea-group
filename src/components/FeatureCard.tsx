@@ -20,32 +20,31 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0 }: FeatureCardP
         y: -6,
         rotateX: 2,
         rotateY: -2,
-        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.15)",
       }}
       transition={{ duration: 0.7, delay, ease: [0.22, 0.61, 0.36, 1] }}
       className="kalea-card group relative overflow-hidden h-full flex flex-col"
       style={{
-        background: "rgba(255, 255, 255, 0.18)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255, 255, 255, 0.12)",
+        background: "hsl(var(--background))",
+        border: "1px solid hsl(var(--border))",
         borderRadius: "32px",
         padding: "48px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
       }}
     >
       <div className="relative z-10 flex flex-col h-full">
-        {/* Icon - no background, just floating */}
+        {/* Icon */}
         <div className="mb-8">
-          <Icon className="w-12 h-12 text-white" strokeWidth={1.5} />
+          <Icon className="w-12 h-12 text-primary" strokeWidth={1.5} />
         </div>
         
-        {/* Title - bold and premium */}
-        <h3 className="text-3xl font-heading font-semibold text-white mb-6 tracking-tight" style={{ lineHeight: '1.15' }}>
+        {/* Title */}
+        <h3 className="text-2xl font-heading font-semibold text-foreground mb-4 tracking-tight" style={{ lineHeight: '1.15' }}>
           {title}
         </h3>
         
-        {/* Description - white with 80% opacity */}
-        <p className="text-white/80 text-body flex-grow">
+        {/* Description */}
+        <p className="text-muted-foreground text-body flex-grow">
           {description}
         </p>
       </div>
