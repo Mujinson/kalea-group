@@ -167,33 +167,31 @@ const StoneCore10 = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-            {/* Left: Photo */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            {/* Left: Photo - preserves full aspect ratio */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="h-full"
             >
               <img 
                 src={stonecoreLayers} 
                 alt="Struttura multistrato StoneCore 10" 
-                className="w-full h-full object-cover rounded-[18px]"
+                className="w-full h-auto rounded-[18px]"
                 style={{ 
                   boxShadow: '0 4px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
                 }}
               />
             </motion.div>
 
-            {/* Right: Stacked Cards */}
+            {/* Right: Stacked Cards - auto height */}
             <div className="flex flex-col gap-7">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="flex-1"
               >
                 <LayerDiagram />
               </motion.div>
@@ -203,7 +201,6 @@ const StoneCore10 = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="flex-1"
               >
                 <MaterialPerformanceCard />
               </motion.div>
