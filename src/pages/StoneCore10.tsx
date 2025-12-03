@@ -15,6 +15,7 @@ import finishTerram from "@/assets/finish-terram.jpg";
 import finishPerla from "@/assets/finish-perla.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 import finishAurora from "@/assets/finish-aurora.jpg";
+import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const StoneCore10 = () => {
@@ -249,17 +250,38 @@ const StoneCore10 = () => {
       </section>
 
       {/* CTA Download */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 5 }}>
-        <div className="container-custom">
+      <section className="section-spacing section-overlap relative overflow-hidden" style={{ zIndex: 5 }}>
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+        />
+        {/* Gradient Overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+          }}
+        />
+        
+        <div className="container-custom relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-primary rounded-2xl p-8 md:p-12 text-center text-primary-foreground"
+            className="text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">{t('stonecore.ctaTitle')}</h2>
-            <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+            <h2 
+              className="text-3xl md:text-4xl font-heading font-bold mb-4 text-white"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
+              {t('stonecore.ctaTitle')}
+            </h2>
+            <p 
+              className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
               {t('stonecore.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="secondary">

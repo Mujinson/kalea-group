@@ -18,6 +18,7 @@ import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
 import bgApplicationOffices from "@/assets/bg-application-offices.jpg";
 import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
 import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
+import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useCardTilt } from "@/hooks/useCardTilt";
 
@@ -358,15 +359,31 @@ const Home = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="section-spacing bg-primary text-primary-foreground">
-        <div className="container-custom text-center">
+      <section className="section-spacing relative overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+        />
+        {/* Gradient Overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+          }}
+        />
+        
+        <div className="container-custom text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3">
+            <h2 
+              className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
               <span>Vuoi usare</span>
               <img 
                 src={logo} 
@@ -380,7 +397,10 @@ const Home = () => {
               />
               <span>nei tuoi progetti?</span>
             </h2>
-            <p className="text-lg mb-10 max-w-2xl mx-auto opacity-90">
+            <p 
+              className="text-lg mb-10 max-w-2xl mx-auto text-white/90"
+              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+            >
               {t('home.ctaSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
