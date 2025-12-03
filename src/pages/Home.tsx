@@ -3,7 +3,8 @@ import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import ApplicationCard from "@/components/ApplicationCard";
 import KaleaIntroSection from "@/components/KaleaIntroSection";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench, Flame, Droplets, Bug, Box, Volume2 } from "lucide-react";
+import MgoBook from "@/components/MgoBook";
+import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-kalea-surfaces.jpg";
@@ -41,21 +42,6 @@ const Home = () => {
       title: t('home.onewall.title'),
       description: t('home.onewall.description'),
     },
-  ];
-
-  const mgoAdvantages = [
-    { icon: Flame, text: t('home.mgoAdvantages.fireproof') },
-    { icon: Droplets, text: t('home.mgoAdvantages.waterproof') },
-    { icon: Box, text: t('home.mgoAdvantages.stability') },
-    { icon: Bug, text: t('home.mgoAdvantages.antimold') },
-    { icon: Volume2, text: t('home.mgoAdvantages.acoustic') },
-  ];
-
-  const comparativeData = [
-    { material: 'MgO', fire: '✓', water: '✓', mold: '✓', stability: '✓', acoustic: '✓' },
-    { material: 'SPC', fire: '○', water: '✓', mold: '○', stability: '✓', acoustic: '○' },
-    { material: 'MFC', fire: '✗', water: '✗', mold: '✗', stability: '○', acoustic: '○' },
-    { material: 'HPL', fire: '○', water: '○', mold: '○', stability: '✓', acoustic: '✗' },
   ];
 
   const applications = [
@@ -117,177 +103,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Perché MgO */}
-      <section className="section-spacing">
-        <div className="w-full px-6 md:px-12 lg:px-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 max-w-[1400px] mx-auto">
-            {/* Left Column - Text & Icons with Gradient Background */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="relative p-8 lg:p-12"
-              style={{
-                background: "radial-gradient(circle at top left, rgba(245, 242, 238, 0.55), rgba(40, 35, 30, 0.40))",
-                borderRadius: "32px 0 0 32px",
-              }}
-            >
-              <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6 leading-tight"
-              >
-                {t('home.mgoTitle')}
-              </motion.h2>
-              
-              <motion.p 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-lg text-muted-foreground mb-12 leading-relaxed"
-              >
-                {t('home.mgoDescription')}
-              </motion.p>
-
-              <div className="space-y-6 mb-12">
-                {mgoAdvantages.map((advantage, index) => (
-                  <motion.div
-                    key={advantage.text}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                    className="flex items-center gap-5 group"
-                  >
-                    <div className="p-3 rounded-xl bg-background/40 backdrop-blur-sm group-hover:bg-background/60 transition-all duration-200">
-                      <advantage.icon className="w-6 h-6 text-foreground" strokeWidth={1.5} />
-                    </div>
-                    <span className="text-lg text-foreground font-medium">{advantage.text}</span>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.8 }}
-              >
-                <Button asChild variant="outline" size="default" className="rounded-xl border-border hover:bg-muted">
-                  <Link to={`/${language}/area-tecnica`}>{t('home.mgoButton')}</Link>
-                </Button>
-              </motion.div>
-            </motion.div>
-
-            {/* Right Column - Glass Card with Comparison */}
-            <motion.div
-              initial={{ opacity: 0, x: 50, scale: 0.97 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="relative"
-            >
-              <motion.div 
-                className="relative overflow-hidden h-full flex flex-col"
-                style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.40))",
-                  backdropFilter: "blur(24px)",
-                  WebkitBackdropFilter: "blur(24px)",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
-                  borderRadius: "0 32px 32px 0",
-                  padding: "32px 36px",
-                  boxShadow: "0 28px 80px rgba(0, 0, 0, 0.35)",
-                }}
-                whileHover={{
-                  y: -8,
-                  scale: 1.02,
-                  boxShadow: "0 36px 90px rgba(0, 0, 0, 0.45)",
-                  transition: { duration: 0.3, ease: [0.22, 0.61, 0.36, 1] }
-                }}
-              >
-                <h3 className="text-2xl font-heading font-semibold text-foreground mb-8">
-                  {t('home.mgoComparison.title')}
-                </h3>
-
-                {/* Comparative Table */}
-                <div className="space-y-4 flex-1">
-                  {/* Header - Horizontal Icons */}
-                  <div className="grid grid-cols-6 gap-3 pb-4 border-b border-foreground/20">
-                    <div className="col-span-1"></div>
-                    <div className="flex flex-col items-center gap-1">
-                      <Flame className="w-5 h-5 text-foreground/90" strokeWidth={1.5} />
-                      <span className="text-[10px] text-foreground/70 text-center leading-tight">{t('home.mgoComparison.fire')}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <Droplets className="w-5 h-5 text-foreground/90" strokeWidth={1.5} />
-                      <span className="text-[10px] text-foreground/70 text-center leading-tight">{t('home.mgoComparison.water')}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <Bug className="w-5 h-5 text-foreground/90" strokeWidth={1.5} />
-                      <span className="text-[10px] text-foreground/70 text-center leading-tight">{t('home.mgoComparison.mold')}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <Box className="w-5 h-5 text-foreground/90" strokeWidth={1.5} />
-                      <span className="text-[10px] text-foreground/70 text-center leading-tight">{t('home.mgoComparison.stability')}</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <Volume2 className="w-5 h-5 text-foreground/90" strokeWidth={1.5} />
-                      <span className="text-[10px] text-foreground/70 text-center leading-tight">{t('home.mgoComparison.acoustic')}</span>
-                    </div>
-                  </div>
-
-                  {/* Rows */}
-                  {comparativeData.map((row, index) => (
-                    <motion.div
-                      key={row.material}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
-                      className={`grid grid-cols-6 gap-3 py-4 rounded-2xl transition-colors duration-200 ${
-                        row.material === 'MgO' 
-                          ? 'bg-foreground/10 px-4' 
-                          : 'px-4 hover:bg-foreground/5'
-                      }`}
-                    >
-                      <div className={`col-span-1 text-base font-bold flex items-center ${
-                        row.material === 'MgO' ? 'text-foreground' : 'text-foreground/80'
-                      }`}>
-                        {row.material}
-                      </div>
-                      <div className="text-center text-xl text-foreground flex items-center justify-center">{row.fire}</div>
-                      <div className="text-center text-xl text-foreground flex items-center justify-center">{row.water}</div>
-                      <div className="text-center text-xl text-foreground flex items-center justify-center">{row.mold}</div>
-                      <div className="text-center text-xl text-foreground flex items-center justify-center">{row.stability}</div>
-                      <div className="text-center text-xl text-foreground flex items-center justify-center">{row.acoustic}</div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Legend */}
-                <div className="mt-6 pt-6 border-t border-foreground/20 flex gap-6 text-xs text-foreground/60">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base text-foreground">✓</span>
-                    <span>{t('home.mgoComparison.excellent')}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-base text-foreground">○</span>
-                    <span>{t('home.mgoComparison.good')}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-base text-foreground">✗</span>
-                    <span>{t('home.mgoComparison.poor')}</span>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/* Perché MgO - 3D Book */}
+      <MgoBook />
 
       {/* Chi è Kalēa */}
       <KaleaIntroSection variant="home" />
