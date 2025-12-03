@@ -31,8 +31,8 @@ const MaterialPerformanceCard = () => {
 
   return (
     <div 
-      className="rounded-[18px] p-8 md:p-10"
-      style={{ 
+      className="h-full rounded-[18px] p-8 md:p-10"
+      style={{
         backgroundColor: '#FAF9F6',
         boxShadow: '0 4px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04)'
       }}
