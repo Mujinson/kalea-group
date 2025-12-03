@@ -76,6 +76,23 @@ export const translations: Record<Language, Translations> = {
         good: "Buono",
         poor: "Scarso",
       },
+      mgoBook: {
+        sustainability: {
+          title: "Sostenibilità e salute",
+          description: "Un materiale pensato per il benessere delle persone e dell'ambiente.",
+          bullet1: "Privo di formaldeide e VOC nocivi",
+          bullet2: "Resistenza naturale alla muffa e ai batteri",
+          bullet3: "Lunga durata, meno sostituzioni",
+          bullet4: "Materiale riciclabile e recuperabile",
+        },
+        applications: {
+          title: "Applicazioni consigliate",
+          residential: "Residenziale moderno",
+          commercial: "Spazi commerciali ad alto traffico",
+          hospitality: "Hotel & hospitality",
+          humid: "Bagni, cucine e ambienti umidi",
+        },
+      },
       applicationsTitle: "Applicazioni",
       applicationsSubtitle: "Kalēa si adatta a ogni contesto, dal residenziale al commerciale",
       applications: {
@@ -661,6 +678,23 @@ export const translations: Record<Language, Translations> = {
         good: "Good",
         poor: "Poor",
       },
+      mgoBook: {
+        sustainability: {
+          title: "Sustainability and health",
+          description: "A material designed for the well-being of people and the environment.",
+          bullet1: "Free from formaldehyde and harmful VOCs",
+          bullet2: "Natural resistance to mold and bacteria",
+          bullet3: "Long-lasting, fewer replacements",
+          bullet4: "Recyclable and recoverable material",
+        },
+        applications: {
+          title: "Recommended applications",
+          residential: "Modern residential",
+          commercial: "High-traffic commercial spaces",
+          hospitality: "Hotels & hospitality",
+          humid: "Bathrooms, kitchens and humid environments",
+        },
+      },
       applicationsTitle: "Applications",
       applicationsSubtitle: "Kalēa adapts to every context, from residential to commercial",
       applications: {
@@ -1238,6 +1272,23 @@ export const translations: Record<Language, Translations> = {
         good: "Gut",
         poor: "Schlecht",
       },
+      mgoBook: {
+        sustainability: {
+          title: "Nachhaltigkeit und Gesundheit",
+          description: "Ein Material, das für das Wohlbefinden von Mensch und Umwelt entwickelt wurde.",
+          bullet1: "Frei von Formaldehyd und schädlichen VOCs",
+          bullet2: "Natürliche Resistenz gegen Schimmel und Bakterien",
+          bullet3: "Langlebig, weniger Ersatz notwendig",
+          bullet4: "Recycelbares und verwertbares Material",
+        },
+        applications: {
+          title: "Empfohlene Anwendungen",
+          residential: "Moderner Wohnbereich",
+          commercial: "Gewerbliche Räume mit hohem Verkehr",
+          hospitality: "Hotels & Gastgewerbe",
+          humid: "Bäder, Küchen und feuchte Räume",
+        },
+      },
       applicationsTitle: "Anwendungen",
       applicationsSubtitle: "Kalēa passt sich jedem Kontext an, vom Wohnbereich bis zum Gewerbe",
       applications: {
@@ -1814,6 +1865,23 @@ export const translations: Record<Language, Translations> = {
         excellent: "Excellent",
         good: "Bon",
         poor: "Faible",
+      },
+      mgoBook: {
+        sustainability: {
+          title: "Durabilité et santé",
+          description: "Un matériau conçu pour le bien-être des personnes et de l'environnement.",
+          bullet1: "Sans formaldéhyde ni COV nocifs",
+          bullet2: "Résistance naturelle aux moisissures et bactéries",
+          bullet3: "Longue durée, moins de remplacements",
+          bullet4: "Matériau recyclable et récupérable",
+        },
+        applications: {
+          title: "Applications recommandées",
+          residential: "Résidentiel moderne",
+          commercial: "Espaces commerciaux à fort trafic",
+          hospitality: "Hôtels & hôtellerie",
+          humid: "Salles de bains, cuisines et environnements humides",
+        },
       },
       applicationsTitle: "Applications",
       applicationsSubtitle: "Kalēa s'adapte à tous les contextes, du résidentiel au commercial",
