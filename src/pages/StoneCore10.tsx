@@ -77,45 +77,11 @@ const StoneCore10 = () => {
         backgroundImage={heroImage}
       />
 
-      {/* Schema multistrato */}
-      <section className="section-spacing bg-background" style={{ zIndex: 1 }}>
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('stonecore.structureTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('stonecore.structureSubtitle')}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto"
-          >
-            <img 
-              src={stonecoreLayers} 
-              alt="Struttura multistrato StoneCore 10" 
-              className="w-full h-auto rounded-2xl shadow-lg"
-            />
-          </motion.div>
-        </div>
-      </section>
-
       {/* Vantaggi */}
       <section 
-        className="section-spacing section-overlap relative"
+        className="section-spacing relative"
         style={{
-          zIndex: 2,
+          zIndex: 1,
           backgroundImage: `url(${bgStoneCore})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
@@ -150,7 +116,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Finiture */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 2 }}>
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -178,6 +144,40 @@ const StoneCore10 = () => {
               />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Schema multistrato */}
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              {t('stonecore.structureTitle')}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {t('stonecore.structureSubtitle')}
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-2xl mx-auto"
+          >
+            <img 
+              src={stonecoreLayers} 
+              alt="Struttura multistrato StoneCore 10" 
+              className="w-full h-auto rounded-2xl shadow-lg"
+            />
+          </motion.div>
         </div>
       </section>
 
