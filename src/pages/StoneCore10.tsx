@@ -204,45 +204,114 @@ const StoneCore10 = () => {
                 <TabsTrigger value="manutenzione">{t('stonecore.techMaintenance')}</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="caratteristiche" className="mt-8 space-y-4">
-                <div className="prose prose-sm max-w-none">
-                  <h3 className="text-xl font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h3>
-                  <ul className="space-y-2 text-muted-foreground">
-                    <li>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</li>
-                    <li>Dimensioni plancia: 1220 x 180 mm</li>
-                    <li>Classe di reazione al fuoco: A2-s1, d0</li>
-                    <li>Resistenza all'acqua: IP68</li>
-                    <li>Resistenza all'abrasione: AC5</li>
-                    <li>Riduzione acustica: 19 dB</li>
+              <TabsContent value="caratteristiche" className="mt-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+                >
+                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Specifiche tecniche</h3>
+                  <ul className="space-y-3 text-background/85">
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Dimensioni plancia: 1220 x 180 mm</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Classe di reazione al fuoco: A2-s1, d0</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Resistenza all'acqua: IP68</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Resistenza all'abrasione: AC5</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Riduzione acustica: 19 dB</span>
+                    </li>
                   </ul>
-                </div>
+                </motion.div>
               </TabsContent>
 
-              <TabsContent value="posa" className="mt-8 space-y-4">
-                <div className="prose prose-sm max-w-none">
-                  <h3 className="text-xl font-heading font-semibold text-foreground mb-4">Istruzioni di posa</h3>
-                  <ul className="space-y-2 text-muted-foreground">
-                    <li>Sistema flottante senza colla</li>
-                    <li>Preparazione sottofondo: livellato e pulito</li>
-                    <li>Acclimatazione: 24-48 ore in ambiente</li>
-                    <li>Giunto perimetrale: 8-10 mm</li>
-                    <li>Posa a spina di pesce o dritta</li>
-                    <li>Calpestabile immediatamente dopo la posa</li>
+              <TabsContent value="posa" className="mt-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+                >
+                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Istruzioni di posa</h3>
+                  <ul className="space-y-3 text-background/85">
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Sistema flottante senza colla</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Preparazione sottofondo: livellato e pulito</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Acclimatazione: 24-48 ore in ambiente</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Giunto perimetrale: 8-10 mm</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Posa a spina di pesce o dritta</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Calpestabile immediatamente dopo la posa</span>
+                    </li>
                   </ul>
-                </div>
+                </motion.div>
               </TabsContent>
 
-              <TabsContent value="manutenzione" className="mt-8 space-y-4">
-                <div className="prose prose-sm max-w-none">
-                  <h3 className="text-xl font-heading font-semibold text-foreground mb-4">Cura e manutenzione</h3>
-                  <ul className="space-y-2 text-muted-foreground">
-                    <li>Pulizia quotidiana: panno umido o aspirapolvere</li>
-                    <li>Detergenti neutri per macchie ostinate</li>
-                    <li>Evitare prodotti abrasivi o solventi aggressivi</li>
-                    <li>Protezioni in feltro sotto mobili pesanti</li>
-                    <li>Nessuna ceratura o trattamento periodico necessario</li>
+              <TabsContent value="manutenzione" className="mt-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+                >
+                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Cura e manutenzione</h3>
+                  <ul className="space-y-3 text-background/85">
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Pulizia quotidiana: panno umido o aspirapolvere</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Detergenti neutri per macchie ostinate</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Evitare prodotti abrasivi o solventi aggressivi</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Protezioni in feltro sotto mobili pesanti</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Nessuna ceratura o trattamento periodico necessario</span>
+                    </li>
                   </ul>
-                </div>
+                </motion.div>
               </TabsContent>
             </Tabs>
           </motion.div>
