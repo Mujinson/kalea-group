@@ -168,7 +168,7 @@ const StoneCore10 = () => {
           </motion.div>
 
           {/* Top row: Image left, Prestazioni del materiale right */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
             {/* Left: Photo - preserves full aspect ratio */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -192,6 +192,7 @@ const StoneCore10 = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
+              className="h-full"
             >
               <MaterialPerformanceCard />
             </motion.div>
