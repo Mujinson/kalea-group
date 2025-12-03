@@ -225,8 +225,14 @@ const DiventaPartner = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-8 shadow-[0_4px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-shadow duration-300"
+                transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
+                whileHover={{
+                  y: -6,
+                  rotateX: 2,
+                  rotateY: -2,
+                  boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+                }}
+                className="kalea-card bg-white rounded-2xl p-8 shadow-[0_4px_24px_rgba(0,0,0,0.08)]"
               >
                 <div className="w-14 h-14 rounded-xl bg-foreground/5 flex items-center justify-center mb-6">
                   <item.icon className="w-7 h-7 text-foreground" strokeWidth={1.5} />
@@ -301,8 +307,14 @@ const DiventaPartner = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-                className="flex items-center gap-4 p-5 bg-white rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
+                transition={{ duration: 0.5, delay: index * 0.05, ease: [0.22, 0.61, 0.36, 1] }}
+                whileHover={{
+                  y: -6,
+                  rotateX: 2,
+                  rotateY: -2,
+                  boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+                }}
+                className="kalea-card flex items-center gap-4 p-5 bg-white rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
               >
                 <div className="w-10 h-10 rounded-lg bg-foreground/5 flex items-center justify-center shrink-0">
                   <item.icon className="w-5 h-5 text-foreground" strokeWidth={1.5} />
