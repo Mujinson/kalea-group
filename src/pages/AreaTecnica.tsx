@@ -405,8 +405,9 @@ const AreaTecnica = () => {
 
       {/* 5. Consulenza tecnica */}
       <section className="section-spacing relative overflow-hidden">
+        {/* Background image - only visible on md+ */}
         <div 
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 z-0 hidden md:block"
           style={{
             backgroundImage: 'url(/src/assets/bg-products.jpg)',
             backgroundSize: 'cover',
@@ -414,6 +415,9 @@ const AreaTecnica = () => {
             filter: 'brightness(0.4)',
           }}
         />
+        
+        {/* Mobile background */}
+        <div className="absolute inset-0 z-0 md:hidden bg-[#F8F6F3]" />
         
         <div className="container-custom relative z-10">
           <motion.div
@@ -424,21 +428,12 @@ const AreaTecnica = () => {
             className="max-w-4xl mx-auto"
           >
             <div
-              className="relative overflow-hidden transition-all duration-200"
-              style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                backdropFilter: "blur(22px)",
-                WebkitBackdropFilter: "blur(22px)",
-                border: "1px solid rgba(255, 255, 255, 0.12)",
-                borderRadius: "32px",
-                padding: "48px",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.25)",
-              }}
+              className="relative overflow-hidden transition-all duration-200 rounded-[32px] p-8 md:p-12 bg-white/95 md:bg-white/[0.08] md:backdrop-blur-[22px] border border-border md:border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.08)] md:shadow-[0_8px_32px_rgba(0,0,0,0.25)]"
             >
-              <h2 className="text-3xl md:text-4xl font-heading font-semibold text-white mb-6">
+              <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground md:text-white mb-6">
                 Consulenza tecnica dedicata
               </h2>
-              <p className="text-body text-white/80 mb-6">
+              <p className="text-body text-muted-foreground md:text-white/80 mb-6">
                 Il nostro ufficio tecnico offre supporto completo per progettisti, imprese e studi di architettura.
               </p>
               
@@ -451,15 +446,15 @@ const AreaTecnica = () => {
                   "Supporto tecnico dedicato per imprese e progettisti"
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-white mt-2 flex-shrink-0" />
-                    <span className="text-body text-white/90">{item}</span>
+                    <div className="w-2 h-2 rounded-full bg-foreground md:bg-white mt-2 flex-shrink-0" />
+                    <span className="text-body text-foreground md:text-white/90">{item}</span>
                   </li>
                 ))}
               </ul>
 
               <Link
                 to="/contatti"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-button transition-all duration-150 px-10 py-3.5 bg-white text-[#111] hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-button transition-all duration-150 px-10 py-3.5 bg-foreground md:bg-white text-background md:text-[#111] hover:opacity-90 hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
               >
                 Richiedi consulenza tecnica
               </Link>
