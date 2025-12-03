@@ -126,8 +126,8 @@ export const translations: Record<Language, Translations> = {
       ctaButton2: "Diventa partner",
     },
     stonecore: {
-      structureTitle: "Struttura multistrato avanzata",
-      structureSubtitle: "10 mm totali: 8,5 mm core MgO + 1,5 mm strato di usura decorativo",
+      structureTitle: "Struttura multistrato ad alte prestazioni",
+      structureSubtitle: "Ogni tavola Kalēa è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in MgO da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Alla base, il tappetino integrato da 1,5 mm migliora l'isolamento acustico, aumenta il comfort al calpestio e semplifica l'installazione. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
       layers: {
         decorative: "Strato decorativo",
         wear: "Strato di usura",
@@ -703,8 +703,8 @@ export const translations: Record<Language, Translations> = {
       ctaButton2: "Become partner",
     },
     stonecore: {
-      structureTitle: "Advanced multilayer structure",
-      structureSubtitle: "10 mm total: 8.5 mm MgO core + 1.5 mm decorative wear layer",
+      structureTitle: "High-performance multilayer structure",
+      structureSubtitle: "Every Kalēa plank is designed to offer dimensional stability, strength, and flawless installation. The 8.5 mm MgO core ensures superior rigidity and perfect performance on large surfaces, while the decorative layer is completed by a protective layer designed to resist scratches, impacts, and abrasions, keeping the surface beautiful over time. At the base, the integrated 1.5 mm mat improves acoustic insulation, increases walking comfort, and simplifies installation. A solution designed for installers, architects, and professionals seeking reliable, durable, and high-end materials.",
       layers: {
         decorative: "Decorative layer",
         wear: "Wear layer",
@@ -1280,8 +1280,8 @@ export const translations: Record<Language, Translations> = {
       ctaButton2: "Partner werden",
     },
     stonecore: {
-      structureTitle: "Fortschrittliche Mehrschichtstruktur",
-      structureSubtitle: "10 mm gesamt: 8,5 mm MgO-Kern + 1,5 mm dekorative Verschleißschicht",
+      structureTitle: "Hochleistungs-Mehrschichtstruktur",
+      structureSubtitle: "Jede Kalēa-Diele ist für dimensionale Stabilität, Festigkeit und einwandfreie Verlegung konzipiert. Der 8,5 mm MgO-Kern gewährleistet überlegene Steifigkeit und perfektes Verhalten auf großen Flächen, während die Dekorschicht durch eine Schutzschicht ergänzt wird, die gegen Kratzer, Stöße und Abrieb beständig ist und die Schönheit der Oberfläche über die Zeit bewahrt. An der Basis verbessert die integrierte 1,5 mm Matte die Schalldämmung, erhöht den Gehkomfort und vereinfacht die Installation. Eine Lösung für Installateure, Architekten und Fachleute, die zuverlässige, langlebige und hochwertige Materialien suchen.",
       layers: {
         decorative: "Dekorschicht",
         wear: "Verschleißschicht",
@@ -1857,8 +1857,8 @@ export const translations: Record<Language, Translations> = {
       ctaButton2: "Devenir partenaire",
     },
     stonecore: {
-      structureTitle: "Structure multicouche avancée",
-      structureSubtitle: "10 mm au total : 8,5 mm noyau MgO + 1,5 mm couche d'usure décorative",
+      structureTitle: "Structure multicouche haute performance",
+      structureSubtitle: "Chaque lame Kalēa est conçue pour offrir stabilité dimensionnelle, résistance et une pose impeccable. Le noyau MgO de 8,5 mm garantit une rigidité supérieure et un comportement parfait sur de grandes surfaces, tandis que la couche décorative est complétée par une couche protectrice conçue pour résister aux rayures, aux chocs et à l'abrasion, préservant la beauté de la surface dans le temps. À la base, le tapis intégré de 1,5 mm améliore l'isolation acoustique, augmente le confort de marche et simplifie l'installation. Une solution conçue pour les installateurs, architectes et professionnels à la recherche de matériaux fiables, durables et haut de gamme.",
       layers: {
         decorative: "Couche décorative",
         wear: "Couche d'usure",
