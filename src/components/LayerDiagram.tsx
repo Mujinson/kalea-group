@@ -7,50 +7,64 @@ const LayerDiagram = () => {
   const layers = [
     {
       name: t('stonecore.layers.wear'),
-      height: "h-4",
-      bgColor: "bg-[#9E9E9E]",
-      textColor: "text-foreground",
+      thickness: "0.3 mm",
+      bgColor: "bg-[#A8A29E]",
     },
     {
       name: t('stonecore.layers.decorative'),
-      height: "h-8",
-      bgColor: "bg-[#E0D6C8]",
-      textColor: "text-foreground",
+      thickness: "0.7 mm",
+      bgColor: "bg-[#D4C8B8]",
     },
     {
       name: t('stonecore.layers.core'),
-      height: "h-32",
-      bgColor: "bg-[#2A2520]",
-      textColor: "text-white",
-      rounded: true,
+      thickness: "8.5 mm",
+      bgColor: "bg-[#3D3833]",
+      isCore: true,
     },
     {
       name: t('stonecore.layers.mat'),
-      height: "h-8",
-      bgColor: "bg-[#D5D5D5]",
-      textColor: "text-foreground",
+      thickness: "1.5 mm",
+      bgColor: "bg-[#B8B8B8]",
     },
   ];
 
   return (
-    <div className="w-full h-full">
-      <div className="flex flex-col gap-1 p-8 bg-muted/30 rounded-2xl h-full justify-center">
+    <div 
+      className="h-full rounded-[18px] p-8 md:p-10"
+      style={{ 
+        backgroundColor: '#FAF9F6',
+        boxShadow: '0 4px 40px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04)'
+      }}
+    >
+      <h3 className="text-lg font-medium text-foreground/90 mb-6 tracking-tight">
+        Composizione strati
+      </h3>
+      
+      <div className="space-y-0">
         {layers.map((layer, index) => (
           <motion.div
             key={layer.name}
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 10 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className={`
-              ${layer.height} 
-              ${layer.bgColor} 
-              ${layer.textColor}
-              ${layer.rounded ? 'rounded-xl' : 'rounded-sm'}
-              flex items-center px-4 font-medium text-sm
-            `}
+            transition={{ duration: 0.4, delay: index * 0.08 }}
           >
-            {layer.name}
+            <div className="flex items-center justify-between py-4">
+              <div className="flex items-center gap-4">
+                <div 
+                  className={`w-10 ${layer.isCore ? 'h-6' : 'h-3'} rounded-sm ${layer.bgColor}`}
+                />
+                <span className="text-sm font-normal text-foreground/80">
+                  {layer.name}
+                </span>
+              </div>
+              <span className="text-xs font-light text-foreground/50 tracking-wide">
+                {layer.thickness}
+              </span>
+            </div>
+            {index < layers.length - 1 && (
+              <div className="h-px bg-foreground/8" />
+            )}
           </motion.div>
         ))}
       </div>

@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import FinishCard from "@/components/FinishCard";
 import LayerDiagram from "@/components/LayerDiagram";
+import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import { Droplets, Flame, Shield, Volume2, Zap, Layers } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -166,30 +167,47 @@ const StoneCore10 = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* Left: Photo */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="h-full"
             >
               <img 
                 src={stonecoreLayers} 
                 alt="Struttura multistrato StoneCore 10" 
-                className="w-full h-auto rounded-2xl shadow-lg"
+                className="w-full h-full object-cover rounded-[18px]"
+                style={{ 
+                  boxShadow: '0 4px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
+                }}
               />
             </motion.div>
 
-            {/* Right: Layer Diagram */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <LayerDiagram />
-            </motion.div>
+            {/* Right: Stacked Cards */}
+            <div className="flex flex-col gap-7">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="flex-1"
+              >
+                <LayerDiagram />
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex-1"
+              >
+                <MaterialPerformanceCard />
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
