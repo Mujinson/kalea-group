@@ -276,7 +276,7 @@ const Navbar = () => {
             {/* CTA Button - Right - shrink-0 */}
             <div className="hidden xl:block shrink-0">
               <Link
-                to={`/${language}/contatti`}
+                to={`/${language}/diventa-partner`}
                 className={`inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-button transition-all duration-150 whitespace-nowrap ${
                   isScrolled 
                     ? "bg-white text-[#3F3B33] border border-[#E0D7CB] hover:bg-[#EBE2D8]" 
@@ -432,7 +432,7 @@ const Navbar = () => {
               </div>
 
               <Link
-                to={`/${language}/contatti`}
+                to={`/${language}/diventa-partner`}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block w-full text-center px-6 py-2 rounded-xl text-sm transition-all duration-150 ${
                   isScrolled 
