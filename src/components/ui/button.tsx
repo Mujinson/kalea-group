@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
@@ -36,28 +35,54 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
+// Animated decorations
+const ButtonDecorations = () => (
+  <>
+    {/* Light sweep effect */}
+    <span className="absolute left-[-75%] top-0 h-full w-[50%] bg-white/20 rotate-12 z-10 blur-lg group-hover:left-[125%] transition-all duration-1000 ease-in-out pointer-events-none" />
+    
+    {/* Corner borders */}
+    <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[20%] rounded-tl-lg border-l-2 border-t-2 top-0 left-0 pointer-events-none" />
+    <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute group-hover:h-[90%] h-[60%] rounded-tr-lg border-r-2 border-t-2 top-0 right-0 pointer-events-none" />
+    <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[60%] group-hover:h-[90%] rounded-bl-lg border-l-2 border-b-2 left-0 bottom-0 pointer-events-none" />
+    <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[20%] rounded-br-lg border-r-2 border-b-2 right-0 bottom-0 pointer-events-none" />
+  </>
+);
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
     const isLink = variant === "link";
+    const classes = cn(buttonVariants({ variant, size, className }));
     
+    // For link variant, no decorations
     if (isLink) {
-      return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>{children}</Comp>;
+      return (
+        <button className={classes} ref={ref} {...props}>
+          {children}
+        </button>
+      );
     }
     
+    // For asChild, clone the child element and inject decorations
+    if (asChild && React.isValidElement(children)) {
+      const child = children as React.ReactElement<{ className?: string; children?: React.ReactNode }>;
+      return React.cloneElement(child, {
+        className: cn(classes, child.props.className),
+        children: (
+          <>
+            <span className="relative z-20 flex items-center gap-2">{child.props.children}</span>
+            <ButtonDecorations />
+          </>
+        ),
+      } as React.HTMLAttributes<HTMLElement>);
+    }
+    
+    // For regular buttons
     return (
-      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
+      <button className={classes} ref={ref} {...props}>
         <span className="relative z-20 flex items-center gap-2">{children}</span>
-        
-        {/* Light sweep effect */}
-        <span className="absolute left-[-75%] top-0 h-full w-[50%] bg-white/20 rotate-12 z-10 blur-lg group-hover:left-[125%] transition-all duration-1000 ease-in-out pointer-events-none" />
-        
-        {/* Corner borders */}
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[20%] rounded-tl-lg border-l-2 border-t-2 top-0 left-0 pointer-events-none" />
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute group-hover:h-[90%] h-[60%] rounded-tr-lg border-r-2 border-t-2 top-0 right-0 pointer-events-none" />
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[60%] group-hover:h-[90%] rounded-bl-lg border-l-2 border-b-2 left-0 bottom-0 pointer-events-none" />
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[20%] rounded-br-lg border-r-2 border-b-2 right-0 bottom-0 pointer-events-none" />
-      </Comp>
+        <ButtonDecorations />
+      </button>
     );
   },
 );
