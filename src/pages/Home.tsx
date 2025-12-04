@@ -221,12 +221,12 @@ const Home = () => {
               {t('home.ctaSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-foreground text-background">
+              <Button asChild size="lg">
                 <Link to={`/${language}/contatti`}>
                   {t('home.ctaButton1')}
                 </Link>
               </Button>
-              <Button asChild size="lg" className="bg-foreground text-background">
+              <Button asChild size="lg">
                 <Link to={`/${language}/diventa-partner`}>
                   {t('home.ctaButton2')}
                 </Link>

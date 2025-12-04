@@ -452,7 +452,7 @@ const AreaTecnica = () => {
                 ))}
               </ul>
 
-              <Button asChild size="lg" className="bg-foreground text-background">
+              <Button asChild size="lg">
                 <Link to="/contatti">
                   Richiedi consulenza tecnica
                 </Link>
@@ -526,12 +526,12 @@ const AreaTecnica = () => {
               Il nostro team è pronto ad aiutarti a realizzare il tuo progetto con le soluzioni Kalēa
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="bg-foreground text-background">
+              <Button asChild size="lg">
                 <Link to="/contatti">
                   Contatta l'ufficio tecnico
                 </Link>
               </Button>
-              <Button asChild size="lg" className="bg-foreground text-background">
+              <Button asChild size="lg">
                 <Link to="/contatti">
                   Richiedi un preventivo
                 </Link>

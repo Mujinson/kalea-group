@@ -282,11 +282,7 @@ const Navbar = () => {
 
             {/* CTA Button - Right - shrink-0 */}
             <div className="hidden xl:block shrink-0">
-              <Button asChild size="sm" className={`whitespace-nowrap ${
-                useDarkStyle 
-                  ? "bg-foreground text-background" 
-                  : "bg-foreground text-background"
-              }`}>
+              <Button asChild size="sm" className="whitespace-nowrap">
                 <Link to={`/${language}/diventa-partner`}>
                   {t('nav.requestQuote')}
                 </Link>
@@ -437,11 +433,7 @@ const Navbar = () => {
                 ))}
               </div>
 
-              <Button asChild size="sm" className={`w-full ${
-                useDarkStyle 
-                  ? "bg-foreground text-background" 
-                  : "bg-foreground text-background"
-              }`}>
+              <Button asChild size="sm" className="w-full">
                 <Link 
                   to={`/${language}/diventa-partner`}
                   onClick={() => setIsMobileMenuOpen(false)}
