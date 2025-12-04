@@ -452,12 +452,11 @@ const AreaTecnica = () => {
                 ))}
               </ul>
 
-              <Link
-                to="/contatti"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-button transition-all duration-150 px-10 py-3.5 bg-foreground md:bg-white text-background md:text-[#111] hover:opacity-90 hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
-              >
-                Richiedi consulenza tecnica
-              </Link>
+              <Button asChild size="lg" className="bg-foreground text-background">
+                <Link to="/contatti">
+                  Richiedi consulenza tecnica
+                </Link>
+              </Button>
             </div>
           </motion.div>
         </div>
@@ -527,18 +526,16 @@ const AreaTecnica = () => {
               Il nostro team è pronto ad aiutarti a realizzare il tuo progetto con le soluzioni Kalēa
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/contatti"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-button transition-all duration-150 px-10 py-3.5 bg-white text-[#111] hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
-              >
-                Contatta l'ufficio tecnico
-              </Link>
-              <Link
-                to="/contatti"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-button transition-all duration-150 px-10 py-3.5 bg-white text-[#111] hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
-              >
-                Richiedi un preventivo
-              </Link>
+              <Button asChild size="lg" className="bg-foreground text-background">
+                <Link to="/contatti">
+                  Contatta l'ufficio tecnico
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="bg-foreground text-background">
+                <Link to="/contatti">
+                  Richiedi un preventivo
+                </Link>
+              </Button>
             </div>
           </motion.div>
         </div>

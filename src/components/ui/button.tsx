@@ -41,22 +41,22 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     const isLink = variant === "link";
     
-    if (isLink || asChild) {
+    if (isLink) {
       return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>{children}</Comp>;
     }
     
     return (
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
-        <span className="relative z-20">{children}</span>
+        <span className="relative z-20 flex items-center gap-2">{children}</span>
         
         {/* Light sweep effect */}
-        <span className="absolute left-[-75%] top-0 h-full w-[50%] bg-white/20 rotate-12 z-10 blur-lg group-hover:left-[125%] transition-all duration-1000 ease-in-out" />
+        <span className="absolute left-[-75%] top-0 h-full w-[50%] bg-white/20 rotate-12 z-10 blur-lg group-hover:left-[125%] transition-all duration-1000 ease-in-out pointer-events-none" />
         
         {/* Corner borders */}
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-white/40 absolute h-[20%] rounded-tl-lg border-l-2 border-t-2 top-0 left-0" />
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-white/40 absolute group-hover:h-[90%] h-[60%] rounded-tr-lg border-r-2 border-t-2 top-0 right-0" />
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-white/40 absolute h-[60%] group-hover:h-[90%] rounded-bl-lg border-l-2 border-b-2 left-0 bottom-0" />
-        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-white/40 absolute h-[20%] rounded-br-lg border-r-2 border-b-2 right-0 bottom-0" />
+        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[20%] rounded-tl-lg border-l-2 border-t-2 top-0 left-0 pointer-events-none" />
+        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute group-hover:h-[90%] h-[60%] rounded-tr-lg border-r-2 border-t-2 top-0 right-0 pointer-events-none" />
+        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[60%] group-hover:h-[90%] rounded-bl-lg border-l-2 border-b-2 left-0 bottom-0 pointer-events-none" />
+        <span className="w-1/2 drop-shadow-lg transition-all duration-300 block border-[#D4EDF9] absolute h-[20%] rounded-br-lg border-r-2 border-b-2 right-0 bottom-0 pointer-events-none" />
       </Comp>
     );
   },
