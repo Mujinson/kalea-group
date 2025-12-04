@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import logo from "@/assets/logo.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Language } from "@/i18n/translations";
@@ -282,11 +281,16 @@ const Navbar = () => {
 
             {/* CTA Button - Right - shrink-0 */}
             <div className="hidden xl:block shrink-0">
-              <Button asChild size="sm" className="whitespace-nowrap">
-                <Link to={`/${language}/diventa-partner`}>
-                  {t('nav.requestQuote')}
-                </Link>
-              </Button>
+              <Link
+                to={`/${language}/diventa-partner`}
+                className={`inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-button transition-all duration-150 whitespace-nowrap ${
+                  useDarkStyle 
+                    ? "bg-white text-[#3F3B33] border border-[#E0D7CB] hover:bg-[#EBE2D8]" 
+                    : "bg-white text-[#111] hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)]"
+                }`}
+              >
+                {t('nav.requestQuote')}
+              </Link>
             </div>
 
             {/* Mobile Menu Button - shown on < xl */}
@@ -433,14 +437,17 @@ const Navbar = () => {
                 ))}
               </div>
 
-              <Button asChild size="sm" className="w-full">
-                <Link 
-                  to={`/${language}/diventa-partner`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {t('nav.requestQuote')}
-                </Link>
-              </Button>
+              <Link
+                to={`/${language}/diventa-partner`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block w-full text-center px-6 py-2 rounded-xl text-sm transition-all duration-150 ${
+                  useDarkStyle 
+                    ? "bg-[#3F3B33] text-white hover:bg-[#3F3B33]/90" 
+                    : "bg-white text-[#111] hover:bg-[#F3F3F3]"
+                }`}
+              >
+                {t('nav.requestQuote')}
+              </Link>
             </div>
           </motion.div>
         )}

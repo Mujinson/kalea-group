@@ -103,19 +103,21 @@ const HeroSection = ({
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               {ctaPrimary && (
-                <Button asChild size="lg">
-                  <Link to={ctaPrimary.link}>
-                    {ctaPrimary.text}
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
+                <Link 
+                  to={ctaPrimary.link}
+                  className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                >
+                  {ctaPrimary.text}
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               )}
               {ctaSecondary && (
-                <Button asChild size="lg">
-                  <Link to={ctaSecondary.link}>
-                    {ctaSecondary.text}
-                  </Link>
-                </Button>
+                <Link 
+                  to={ctaSecondary.link}
+                  className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                >
+                  {ctaSecondary.text}
+                </Link>
               )}
             </motion.div>
           )}

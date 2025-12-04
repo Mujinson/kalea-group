@@ -221,16 +221,18 @@ const Home = () => {
               {t('home.ctaSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg">
-                <Link to={`/${language}/contatti`}>
-                  {t('home.ctaButton1')}
-                </Link>
-              </Button>
-              <Button asChild size="lg">
-                <Link to={`/${language}/diventa-partner`}>
-                  {t('home.ctaButton2')}
-                </Link>
-              </Button>
+              <Link 
+                to={`/${language}/contatti`}
+                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+              >
+                {t('home.ctaButton1')}
+              </Link>
+              <Link 
+                to={`/${language}/diventa-partner`}
+                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+              >
+                {t('home.ctaButton2')}
+              </Link>
             </div>
           </motion.div>
         </div>
