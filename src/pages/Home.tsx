@@ -63,8 +63,8 @@ const Home = () => {
     <div>
       {/* Sticky Stacking Container */}
       <div className="relative">
-        {/* Hero - First sticky section */}
-        <section className="sticky top-0 z-10 relative min-h-screen h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
+        {/* Hero Section */}
+        <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
           {/* Background */}
           <motion.div 
             className="absolute inset-0 z-0"
@@ -196,8 +196,8 @@ const Home = () => {
         </div>
         </section>
 
-        {/* Manifesto Section - Second sticky section */}
-        <section className="sticky top-0 z-20 relative h-screen max-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
+        {/* Manifesto Section */}
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
           {/* Background */}
           <div className="absolute inset-0 z-0">
             <img 
@@ -286,8 +286,8 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Le linee Kalēa - Third sticky section */}
-        <section className="sticky top-0 z-30 relative h-screen max-h-screen flex items-center overflow-hidden py-12 md:py-24 lg:py-32">
+        {/* Le linee Kalēa Section */}
+        <section className="relative min-h-screen flex items-center overflow-hidden py-12 md:py-24 lg:py-32">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
