@@ -90,7 +90,7 @@ const Home = () => {
               <img 
                 src={logo} 
                 alt="Kalēa" 
-                className="h-[1.1em] w-auto inline-block"
+                className="h-[1.43em] w-auto inline-block"
                 style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
               />
               <span>— SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup></span>
