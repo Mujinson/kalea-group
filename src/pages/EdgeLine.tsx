@@ -20,206 +20,77 @@ const EdgeLine = () => {
   const { t, language } = useTranslation();
   
   const advantages = [
-    {
-      icon: Sparkles,
-      title: t('edgeline.advantages.design.title'),
-      description: t('edgeline.advantages.design.description'),
-    },
-    {
-      icon: Shield,
-      title: t('edgeline.advantages.resistance.title'),
-      description: t('edgeline.advantages.resistance.description'),
-    },
-    {
-      icon: Ruler,
-      title: t('edgeline.advantages.versatility.title'),
-      description: t('edgeline.advantages.versatility.description'),
-    },
+    { icon: Sparkles, title: t('edgeline.advantages.design.title'), description: t('edgeline.advantages.design.description') },
+    { icon: Shield, title: t('edgeline.advantages.resistance.title'), description: t('edgeline.advantages.resistance.description') },
+    { icon: Ruler, title: t('edgeline.advantages.versatility.title'), description: t('edgeline.advantages.versatility.description') },
   ];
 
   const products = [
-    {
-      title: t('edgeline.products.terminal.title'),
-      description: t('edgeline.products.terminal.description'),
-      image: profiloTerminaleImage,
-    },
-    {
-      title: t('edgeline.products.junction.title'),
-      description: t('edgeline.products.junction.description'),
-      image: giuntoImage,
-    },
-    {
-      title: t('edgeline.products.expansion.title'),
-      description: t('edgeline.products.expansion.description'),
-      image: espansioneImage,
-    },
-    {
-      title: t('edgeline.products.baseboard.title'),
-      description: t('edgeline.products.baseboard.description'),
-      image: battiscopaImage,
-    },
-    {
-      title: t('edgeline.products.step.title'),
-      description: t('edgeline.products.step.description'),
-    },
+    { title: t('edgeline.products.terminal.title'), description: t('edgeline.products.terminal.description'), image: profiloTerminaleImage },
+    { title: t('edgeline.products.junction.title'), description: t('edgeline.products.junction.description'), image: giuntoImage },
+    { title: t('edgeline.products.expansion.title'), description: t('edgeline.products.expansion.description'), image: espansioneImage },
+    { title: t('edgeline.products.baseboard.title'), description: t('edgeline.products.baseboard.description'), image: battiscopaImage },
+    { title: t('edgeline.products.step.title'), description: t('edgeline.products.step.description') },
   ];
 
   return (
-    <div className="overflow-hidden">
-      {/* Hero */}
-      <HeroSection
-        title={t('hero.edgeline.title')}
-        subtitle={t('hero.edgeline.subtitle')}
-        ctaPrimary={{ text: t('hero.edgeline.ctaPrimary'), link: `/${language}/contatti` }}
-        ctaSecondary={{ text: t('hero.edgeline.ctaSecondary'), link: `/${language}/stonecore-10` }}
-        backgroundImage={heroImage}
-      />
+    <div>
+      <ScrollSection zIndex={1}>
+        <HeroSection title={t('hero.edgeline.title')} subtitle={t('hero.edgeline.subtitle')} ctaPrimary={{ text: t('hero.edgeline.ctaPrimary'), link: `/${language}/contatti` }} ctaSecondary={{ text: t('hero.edgeline.ctaSecondary'), link: `/${language}/stonecore-10` }} backgroundImage={heroImage} />
+      </ScrollSection>
 
-      {/* Vantaggi */}
-      <ScrollSection>
-        <section 
-          className="section-spacing relative"
-          style={{
-            backgroundImage: `url(${bgEdgeLine})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
-          {/* Overlay scuro */}
+      <ScrollSection zIndex={2}>
+        <section className="section-spacing relative" style={{ backgroundImage: `url(${bgEdgeLine})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <div className="absolute inset-0 bg-black/35" />
-          
           <div className="container-custom relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-                {t('edgeline.advantagesTitle')}
-              </h2>
-              <p className="text-lg text-white/90 max-w-2xl mx-auto">
-                {t('edgeline.advantagesSubtitle')}
-              </p>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">{t('edgeline.advantagesTitle')}</h2>
+              <p className="text-lg text-white/90 max-w-2xl mx-auto">{t('edgeline.advantagesSubtitle')}</p>
             </motion.div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              {advantages.map((advantage, index) => (
-                <FeatureCard key={advantage.title} {...advantage} index={index} />
-              ))}
+              {advantages.map((advantage, index) => (<FeatureCard key={advantage.title} {...advantage} index={index} />))}
             </div>
           </div>
         </section>
       </ScrollSection>
 
-      {/* Griglia prodotti */}
-      <ScrollSection>
+      <ScrollSection zIndex={3}>
         <section className="section-spacing bg-card">
           <div className="container-custom">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.productsTitle')}</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                {t('edgeline.productsSubtitle')}
-              </p>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t('edgeline.productsSubtitle')}</p>
             </motion.div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map((product, index) => (
-                <ProductCard
-                  key={product.title}
-                  title={product.title}
-                  description={product.description}
-                  index={index}
-                  image={product.image}
-                />
-              ))}
+              {products.map((product, index) => (<ProductCard key={product.title} title={product.title} description={product.description} index={index} image={product.image} />))}
             </div>
           </div>
         </section>
       </ScrollSection>
 
-      {/* Finiture */}
-      <ScrollSection>
-        <section className="section-spacing">
+      <ScrollSection zIndex={4}>
+        <section className="section-spacing bg-background">
           <div className="container-custom">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.finishesTitle')}</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                {t('edgeline.finishesSubtitle')}
-              </p>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t('edgeline.finishesSubtitle')}</p>
             </motion.div>
-
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-              {[
-                t('edgeline.finishes.natural'),
-                t('edgeline.finishes.bronze'),
-                t('edgeline.finishes.black'),
-                t('edgeline.finishes.silver')
-              ].map((finish, index) => (
-                <FinishCard
-                  key={finish}
-                  name={finish}
-                  index={index}
-                  variant="simple"
-                />
-              ))}
+              {[t('edgeline.finishes.natural'), t('edgeline.finishes.bronze'), t('edgeline.finishes.black'), t('edgeline.finishes.silver')].map((finish, index) => (<FinishCard key={finish} name={finish} index={index} variant="simple" />))}
             </div>
           </div>
         </section>
       </ScrollSection>
 
-      {/* CTA finale */}
-      <ScrollSection>
+      <ScrollSection zIndex={5}>
         <section className="section-spacing relative overflow-hidden">
-          {/* Background Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${bgCtaCollabora})` }}
-          />
-          {/* Gradient Overlay */}
-          <div 
-            className="absolute inset-0"
-            style={{ 
-              background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
-            }}
-          />
-          
+          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${bgCtaCollabora})` }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' }} />
           <div className="container-custom text-center relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 
-                className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
-                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-              >
-                {t('edgeline.ctaTitle')}
-              </h2>
-              <p 
-                className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
-                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-              >
-                {t('edgeline.ctaSubtitle')}
-              </p>
-              <Button asChild size="lg" variant="secondary">
-                <Link to={`/${language}/contatti`}>{t('edgeline.ctaButton')}</Link>
-              </Button>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white" style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}>{t('edgeline.ctaTitle')}</h2>
+              <p className="text-lg mb-8 max-w-2xl mx-auto text-white/90" style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}>{t('edgeline.ctaSubtitle')}</p>
+              <Button asChild size="lg" variant="secondary"><Link to={`/${language}/contatti`}>{t('edgeline.ctaButton')}</Link></Button>
             </motion.div>
           </div>
         </section>
