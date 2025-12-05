@@ -3,6 +3,7 @@ import FeatureCard from "@/components/FeatureCard";
 import ApplicationCard from "@/components/ApplicationCard";
 import KaleaIntroSection from "@/components/KaleaIntroSection";
 import MgoBook from "@/components/MgoBook";
+import ScrollSection from "@/components/ScrollSection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -60,7 +61,7 @@ const Home = () => {
   ];
 
   return (
-    <div>
+    <div className="overflow-hidden">
       {/* Hero */}
       <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
         {/* Background */}
@@ -196,261 +197,275 @@ const Home = () => {
       </section>
 
       {/* Manifesto Section */}
-      <section className="relative h-screen max-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={bgManifesto} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
-        </div>
+      <ScrollSection>
+        <section className="relative h-screen max-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
+          {/* Background */}
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={bgManifesto} 
+              alt="" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
+          </div>
 
-        {/* Content */}
-        <div className="container-custom relative z-10 text-center px-6 md:px-12">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto space-y-6 md:space-y-8"
-          >
-            {/* Opening Statement */}
-            <div className="space-y-1">
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
-                LA SUPERFICIE NON È DECORAZIONE.
-              </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
-                È STRUTTURA.
-              </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
-                È LA PELLE DELL'ARCHITETTURA.
-              </p>
-            </div>
+          {/* Content */}
+          <div className="container-custom relative z-10 text-center px-6 md:px-12">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="max-w-4xl mx-auto space-y-6 md:space-y-8"
+            >
+              {/* Opening Statement */}
+              <div className="space-y-1">
+                <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+                  LA SUPERFICIE NON È DECORAZIONE.
+                </p>
+                <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+                  È STRUTTURA.
+                </p>
+                <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+                  È LA PELLE DELL'ARCHITETTURA.
+                </p>
+              </div>
 
-            {/* Divider */}
-            <div className="w-12 h-px bg-white/30 mx-auto" />
+              {/* Divider */}
+              <div className="w-12 h-px bg-white/30 mx-auto" />
 
-            {/* Problem Statement */}
-            <div>
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
-                PER ANNI ABBIAMO ACCETTATO MATERIALI NATI PER SEMPLIFICARE,<br />
-                NON PER EVOLVERE.
-              </p>
-            </div>
+              {/* Problem Statement */}
+              <div>
+                <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+                  PER ANNI ABBIAMO ACCETTATO MATERIALI NATI PER SEMPLIFICARE,<br />
+                  NON PER EVOLVERE.
+                </p>
+              </div>
 
-            {/* Question */}
-            <div>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug mb-1">
-                KALĒA NASCE DA UNA DOMANDA:
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white font-light italic tracking-wide leading-snug">
-                "E SE POTESSIMO PROGETTARE IN MODO DIVERSO?"
-              </p>
-            </div>
+              {/* Question */}
+              <div>
+                <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug mb-1">
+                  KALĒA NASCE DA UNA DOMANDA:
+                </p>
+                <p className="text-base md:text-lg lg:text-xl text-white font-light italic tracking-wide leading-snug">
+                  "E SE POTESSIMO PROGETTARE IN MODO DIVERSO?"
+                </p>
+              </div>
 
-            {/* Divider */}
-            <div className="w-12 h-px bg-white/30 mx-auto" />
+              {/* Divider */}
+              <div className="w-12 h-px bg-white/30 mx-auto" />
 
-            {/* Value Proposition */}
-            <div className="space-y-0.5">
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UN SISTEMA CONTINUO TRA PAVIMENTI, PARETI E DETTAGLI.
-              </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UNA MATERIA CHE NON INTERROMPE.
-              </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UN'ESTETICA CHE NON STANCA.
-              </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UNA TECNOLOGIA CHE SEMPLIFICA.
-              </p>
-            </div>
+              {/* Value Proposition */}
+              <div className="space-y-0.5">
+                <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+                  UN SISTEMA CONTINUO TRA PAVIMENTI, PARETI E DETTAGLI.
+                </p>
+                <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+                  UNA MATERIA CHE NON INTERROMPE.
+                </p>
+                <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+                  UN'ESTETICA CHE NON STANCA.
+                </p>
+                <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+                  UNA TECNOLOGIA CHE SEMPLIFICA.
+                </p>
+              </div>
 
-            {/* Brand Statement */}
-            <div className="pt-4 space-y-2">
-              <p className="text-xl md:text-2xl lg:text-3xl text-white font-semibold tracking-wider">
-                KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
-              </p>
-              <p className="text-sm md:text-base text-white/70 font-light tracking-wide">
-                Il nuovo riferimento nei sistemi di superfici.
-              </p>
-              <p className="text-xs md:text-sm text-white/50 font-light tracking-widest uppercase">
-                Design italiano delle superfici — Concezione e visione italiana.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+              {/* Brand Statement */}
+              <div className="pt-4 space-y-2">
+                <p className="text-xl md:text-2xl lg:text-3xl text-white font-semibold tracking-wider">
+                  KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
+                </p>
+                <p className="text-sm md:text-base text-white/70 font-light tracking-wide">
+                  Il nuovo riferimento nei sistemi di superfici.
+                </p>
+                <p className="text-xs md:text-sm text-white/50 font-light tracking-widest uppercase">
+                  Design italiano delle superfici — Concezione e visione italiana.
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </ScrollSection>
 
       {/* Le linee Kalēa */}
-      <section className="section-spacing relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
-        </div>
-        
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-              {t('home.linesTitle')}
-            </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              {t('home.linesSubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-            {productLines.map((product, index) => (
-              <FeatureCard key={product.title} {...product} index={index} />
-            ))}
+      <ScrollSection>
+        <section className="section-spacing relative overflow-hidden">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
           </div>
-        </div>
-      </section>
+          
+          <div className="container-custom relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12 md:mb-16"
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
+                {t('home.linesTitle')}
+              </h2>
+              <p className="text-lg text-white/70 max-w-2xl mx-auto">
+                {t('home.linesSubtitle')}
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+              {productLines.map((product, index) => (
+                <FeatureCard key={product.title} {...product} index={index} />
+              ))}
+            </div>
+          </div>
+        </section>
+      </ScrollSection>
 
       {/* Perché MgO - 3D Book */}
-      <MgoBook />
+      <ScrollSection>
+        <MgoBook />
+      </ScrollSection>
 
       {/* Chi è Kalēa */}
-      <KaleaIntroSection variant="home" />
+      <ScrollSection>
+        <KaleaIntroSection variant="home" />
+      </ScrollSection>
 
       {/* Applicazioni */}
-      <section className="section-spacing bg-card">
-        <div className="w-full px-6 md:px-12 lg:px-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              {t('home.applicationsTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('home.applicationsSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section className="section-spacing bg-card">
+          <div className="w-full px-6 md:px-12 lg:px-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12 md:mb-16"
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+                {t('home.applicationsTitle')}
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('home.applicationsSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {applications.map((app, index) => (
-              <ApplicationCard
-                key={app.title}
-                icon={app.icon}
-                title={app.title}
-                description={app.description}
-                backgroundImage={app.bg}
-                index={index}
-              />
-            ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {applications.map((app, index) => (
+                <ApplicationCard
+                  key={app.title}
+                  icon={app.icon}
+                  title={app.title}
+                  description={app.description}
+                  backgroundImage={app.bg}
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* Sostenibilità */}
-      <section className="section-spacing">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              {t('home.sustainabilityTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('home.sustainabilitySubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section className="section-spacing">
+          <div className="container-custom">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12 md:mb-16"
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+                {t('home.sustainabilityTitle')}
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('home.sustainabilitySubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {sustainability.map((item, index) => (
-              <ApplicationCard
-                key={item.title}
-                icon={item.icon}
-                title={item.title}
-                description={item.description}
-                backgroundImage={item.bg}
-                index={index}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              {sustainability.map((item, index) => (
+                <ApplicationCard
+                  key={item.title}
+                  icon={item.icon}
+                  title={item.title}
+                  description={item.description}
+                  backgroundImage={item.bg}
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* CTA Finale */}
-      <section className="section-spacing relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
-        />
-        {/* Gradient Overlay */}
-        <div 
-          className="absolute inset-0"
-          style={{ 
-            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
-          }}
-        />
-        
-        <div className="container-custom text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 
-              className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+      <ScrollSection>
+        <section className="section-spacing relative overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+          />
+          {/* Gradient Overlay */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+            }}
+          />
+          
+          <div className="container-custom text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
-              <span>Vuoi usare</span>
-              <img 
-                src={logo} 
-                alt="Kalēa" 
-                className="inline-block h-[1.2em] w-auto"
-                style={{ 
-                  filter: 'brightness(0) invert(1)',
-                  verticalAlign: 'middle',
-                  transform: 'translateY(0.02em)'
-                }}
-              />
-              <span>nei tuoi progetti?</span>
-            </h2>
-            <p 
-              className="text-lg mb-10 max-w-2xl mx-auto text-white/90"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-            >
-              {t('home.ctaSubtitle')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                to={`/${language}/contatti`}
-                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+              <h2 
+                className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
+                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
               >
-                {t('home.ctaButton1')}
-              </Link>
-              <Link 
-                to={`/${language}/diventa-partner`}
-                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                <span>Vuoi usare</span>
+                <img 
+                  src={logo} 
+                  alt="Kalēa" 
+                  className="inline-block h-[1.2em] w-auto"
+                  style={{ 
+                    filter: 'brightness(0) invert(1)',
+                    verticalAlign: 'middle',
+                    transform: 'translateY(0.02em)'
+                  }}
+                />
+                <span>nei tuoi progetti?</span>
+              </h2>
+              <p 
+                className="text-lg mb-10 max-w-2xl mx-auto text-white/90"
+                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
               >
-                {t('home.ctaButton2')}
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+                {t('home.ctaSubtitle')}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  to={`/${language}/contatti`}
+                  className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                >
+                  {t('home.ctaButton1')}
+                </Link>
+                <Link 
+                  to={`/${language}/diventa-partner`}
+                  className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                >
+                  {t('home.ctaButton2')}
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </ScrollSection>
     </div>
   );
 };
