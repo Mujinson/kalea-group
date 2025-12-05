@@ -100,7 +100,7 @@ const Home = () => {
               transition={{ duration: 0.7, delay: 0.4 }}
               className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-2 tracking-wide"
             >
-              The New Standard in Surface Systems.
+              {t('hero.home.newStandard')}
             </motion.p>
 
             {/* Tagline */}
@@ -110,7 +110,7 @@ const Home = () => {
               transition={{ duration: 0.7, delay: 0.55 }}
               className="text-base md:text-lg text-white/65 font-light mb-12 tracking-widest uppercase"
             >
-              Italian Surface Design — Designed in Italy.
+              {t('hero.home.tagline')}
             </motion.p>
 
             {/* Divider */}
@@ -129,8 +129,7 @@ const Home = () => {
               className="max-w-3xl mx-auto mb-12"
             >
               <p className="text-white/75 text-base md:text-lg leading-relaxed mb-8">
-                KALĒA è un sistema integrato di superfici architettoniche in MgO, progettato per offrire 
-                soluzioni complete e coordinate a professionisti del design e dell'architettura.
+                {t('hero.home.systemDescription')}
               </p>
 
               {/* Product Lines */}
@@ -143,7 +142,7 @@ const Home = () => {
                 >
                   <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:mb-2">STONECORE 10</h3>
                   <p className="hidden md:block text-white/60 text-sm leading-relaxed text-center">
-                    Superfici tecniche in MgO con texture wood per pavimenti e rivestimenti.
+                    {t('hero.home.stonecoreHero')}
                   </p>
                 </motion.div>
 
@@ -155,7 +154,7 @@ const Home = () => {
                 >
                   <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:mb-2">EDGELINE</h3>
                   <p className="hidden md:block text-white/60 text-sm leading-relaxed text-center">
-                    Profili e battiscopa architettonici per finiture di pregio.
+                    {t('hero.home.edgelineHero')}
                   </p>
                 </motion.div>
 
@@ -167,7 +166,7 @@ const Home = () => {
                 >
                   <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:mb-2">ONEWALL</h3>
                   <p className="hidden md:block text-white/60 text-sm leading-relaxed text-center">
-                    Pannelli verticali in MgO per pareti e boiserie contemporanee.
+                    {t('hero.home.onewallHero')}
                   </p>
                 </motion.div>
               </div>
@@ -184,13 +183,13 @@ const Home = () => {
                 to={`/${language}/diventa-partner`}
                 className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
               >
-                Richiedi informazioni
+                {t('hero.home.ctaInfo')}
               </Link>
               <Link 
                 to={`/${language}/stonecore-10`}
                 className="inline-flex items-center justify-center gap-2 border border-white/30 text-white text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-white/10 transition-all duration-150"
               >
-                Scopri i prodotti
+                {t('hero.home.ctaProducts')}
               </Link>
             </motion.div>
           </div>
@@ -221,13 +220,13 @@ const Home = () => {
             {/* Opening Statement */}
             <div className="space-y-1">
               <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
-                LA SUPERFICIE NON È DECORAZIONE.
+                {t('hero.manifesto.line1')}
               </p>
               <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
-                È STRUTTURA.
+                {t('hero.manifesto.line2')}
               </p>
               <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
-                È LA PELLE DELL'ARCHITETTURA.
+                {t('hero.manifesto.line3')}
               </p>
             </div>
 
@@ -237,18 +236,18 @@ const Home = () => {
             {/* Problem Statement */}
             <div>
               <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
-                PER ANNI ABBIAMO ACCETTATO MATERIALI NATI PER SEMPLIFICARE,<br />
-                NON PER EVOLVERE.
+                {t('hero.manifesto.problem1')}<br />
+                {t('hero.manifesto.problem2')}
               </p>
             </div>
 
             {/* Question */}
             <div>
               <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug mb-1">
-                KALĒA NASCE DA UNA DOMANDA:
+                {t('hero.manifesto.question1')}
               </p>
               <p className="text-base md:text-lg lg:text-xl text-white font-light italic tracking-wide leading-snug">
-                "E SE POTESSIMO PROGETTARE IN MODO DIVERSO?"
+                {t('hero.manifesto.question2')}
               </p>
             </div>
 
@@ -258,16 +257,16 @@ const Home = () => {
             {/* Value Proposition */}
             <div className="space-y-0.5">
               <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UN SISTEMA CONTINUO TRA PAVIMENTI, PARETI E DETTAGLI.
+                {t('hero.manifesto.value1')}
               </p>
               <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UNA MATERIA CHE NON INTERROMPE.
+                {t('hero.manifesto.value2')}
               </p>
               <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UN'ESTETICA CHE NON STANCA.
+                {t('hero.manifesto.value3')}
               </p>
               <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
-                UNA TECNOLOGIA CHE SEMPLIFICA.
+                {t('hero.manifesto.value4')}
               </p>
             </div>
 
@@ -277,10 +276,10 @@ const Home = () => {
                 KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
               </p>
               <p className="text-sm md:text-base text-white/70 font-light tracking-wide">
-                Il nuovo riferimento nei sistemi di superfici.
+                {t('hero.manifesto.brandStatement')}
               </p>
               <p className="text-xs md:text-sm text-white/50 font-light tracking-widest uppercase">
-                Design italiano delle superfici — Concezione e visione italiana.
+                {t('hero.manifesto.brandTagline')}
               </p>
             </div>
             </motion.div>
