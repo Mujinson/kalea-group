@@ -53,7 +53,7 @@ export const translations: Record<Language, Translations> = {
       },
       onewall: {
         title: "Kalēa OneWall",
-        description: "Pannelli verticali in MgO già finiti. Superfici continue per architettura degli interni.",
+        description: "Il verticale oltre il cartongesso. Zero stuccatura. Zero polvere. Zero pittura. La superficie è già design.",
       },
       mgoTitle: "Perché MgO",
       mgoDescription: "Un materiale che ridefinisce le prestazioni delle superfici tecniche.",
@@ -752,7 +752,7 @@ export const translations: Record<Language, Translations> = {
       },
       onewall: {
         title: "Kalēa OneWall",
-        description: "Pre-finished vertical MgO panels. Continuous surfaces for interior architecture.",
+        description: "The vertical beyond drywall. Zero plastering. Zero dust. Zero painting. The surface is already design.",
       },
       mgoTitle: "Why MgO",
       mgoDescription: "A material that redefines the performance of technical surfaces.",
@@ -1451,7 +1451,7 @@ export const translations: Record<Language, Translations> = {
       },
       onewall: {
         title: "Kalēa OneWall",
-        description: "Fertige vertikale MgO-Paneele. Durchgehende Oberflächen für Innenarchitektur.",
+        description: "Das Vertikale jenseits von Trockenbau. Keine Verspachtelung. Kein Staub. Keine Farbe. Die Oberfläche ist bereits Design.",
       },
       mgoTitle: "Warum MgO",
       mgoDescription: "Ein Material, das die Leistung technischer Oberflächen neu definiert.",
@@ -2150,7 +2150,7 @@ export const translations: Record<Language, Translations> = {
       },
       onewall: {
         title: "Kalēa OneWall",
-        description: "Panneaux verticaux MgO pré-finis. Surfaces continues pour l'architecture d'intérieur.",
+        description: "Le vertical au-delà du placo. Zéro enduit. Zéro poussière. Zéro peinture. La surface est déjà design.",
       },
       mgoTitle: "Pourquoi MgO",
       mgoDescription: "Un matériau qui redéfinit la performance des surfaces techniques.",
