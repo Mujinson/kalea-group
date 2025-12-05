@@ -196,7 +196,7 @@ const Home = () => {
       </section>
 
       {/* Manifesto Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-32 md:py-40">
+      <section className="relative h-screen max-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
         {/* Background */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -214,72 +214,70 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto space-y-12 md:space-y-16"
+            className="max-w-4xl mx-auto space-y-6 md:space-y-8"
           >
             {/* Opening Statement */}
-            <div className="space-y-2">
-              <p className="text-xl md:text-2xl lg:text-3xl text-white font-light tracking-wide leading-relaxed">
+            <div className="space-y-1">
+              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
                 LA SUPERFICIE NON È DECORAZIONE.
               </p>
-              <p className="text-xl md:text-2xl lg:text-3xl text-white font-light tracking-wide leading-relaxed">
+              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
                 È STRUTTURA.
               </p>
-              <p className="text-xl md:text-2xl lg:text-3xl text-white font-light tracking-wide leading-relaxed">
+              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
                 È LA PELLE DELL'ARCHITETTURA.
               </p>
             </div>
 
             {/* Divider */}
-            <div className="w-16 h-px bg-white/30 mx-auto" />
+            <div className="w-12 h-px bg-white/30 mx-auto" />
 
             {/* Problem Statement */}
-            <div className="space-y-1">
-              <p className="text-base md:text-lg lg:text-xl text-white/80 font-light tracking-wide leading-relaxed">
-                PER ANNI ABBIAMO ACCETTATO MATERIALI NATI PER SEMPLIFICARE,
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/80 font-light tracking-wide leading-relaxed">
+            <div>
+              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+                PER ANNI ABBIAMO ACCETTATO MATERIALI NATI PER SEMPLIFICARE,<br />
                 NON PER EVOLVERE.
               </p>
             </div>
 
             {/* Question */}
-            <div className="space-y-1">
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+            <div>
+              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug mb-1">
                 KALĒA NASCE DA UNA DOMANDA:
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light italic tracking-wide leading-relaxed">
+              <p className="text-base md:text-lg lg:text-xl text-white font-light italic tracking-wide leading-snug">
                 "E SE POTESSIMO PROGETTARE IN MODO DIVERSO?"
               </p>
             </div>
 
             {/* Divider */}
-            <div className="w-16 h-px bg-white/30 mx-auto" />
+            <div className="w-12 h-px bg-white/30 mx-auto" />
 
             {/* Value Proposition */}
-            <div className="space-y-2">
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+            <div className="space-y-0.5">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
                 UN SISTEMA CONTINUO TRA PAVIMENTI, PARETI E DETTAGLI.
               </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
                 UNA MATERIA CHE NON INTERROMPE.
               </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
                 UN'ESTETICA CHE NON STANCA.
               </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
                 UNA TECNOLOGIA CHE SEMPLIFICA.
               </p>
             </div>
 
             {/* Brand Statement */}
-            <div className="pt-8 space-y-4">
-              <p className="text-2xl md:text-3xl lg:text-4xl text-white font-semibold tracking-wider">
+            <div className="pt-4 space-y-2">
+              <p className="text-xl md:text-2xl lg:text-3xl text-white font-semibold tracking-wider">
                 KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
               </p>
-              <p className="text-base md:text-lg text-white/70 font-light tracking-wide">
+              <p className="text-sm md:text-base text-white/70 font-light tracking-wide">
                 Il nuovo riferimento nei sistemi di superfici.
               </p>
-              <p className="text-sm md:text-base text-white/50 font-light tracking-widest uppercase">
+              <p className="text-xs md:text-sm text-white/50 font-light tracking-widest uppercase">
                 Design italiano delle superfici — Concezione e visione italiana.
               </p>
             </div>
