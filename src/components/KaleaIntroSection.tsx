@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import { Leaf, Zap, Shield, ShieldCheck, Award, Sparkles } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface KaleaIntroSectionProps {
   variant?: "home" | "about";
 }
 
 const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
+  const { t } = useTranslation();
+  
   const bgStyle = variant === "about" 
     ? "bg-gradient-to-b from-muted/20 to-background" 
     : "";
@@ -50,8 +53,8 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
             >
               <div>
                 <p className="text-xl leading-relaxed mb-8" style={{ color: "#2B2B2B", lineHeight: "1.7" }}>
-                  Un sistema integrato per la progettazione degli interni contemporanei.<br />
-                  Superficie orizzontale. Superficie verticale. Dettaglio.
+                  {t("home.kaleaIntro.description")}<br />
+                  {t("home.kaleaIntro.descriptionLine2")}
                 </p>
               </div>
 
@@ -61,7 +64,7 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                     STONECORE 10
                   </h4>
                   <p className="text-base mt-1" style={{ color: "rgba(43, 43, 43, 0.75)" }}>
-                    Pavimenti tecnici in MgO con texture wood
+                    {t("home.kaleaIntro.stonecoreDesc")}
                   </p>
                 </div>
 
@@ -70,7 +73,7 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                     EDGELINE
                   </h4>
                   <p className="text-base mt-1" style={{ color: "rgba(43, 43, 43, 0.75)" }}>
-                    Profili e battiscopa architettonici
+                    {t("home.kaleaIntro.edgelineDesc")}
                   </p>
                 </div>
 
@@ -79,15 +82,15 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                     ONEWALL
                   </h4>
                   <p className="text-base mt-1" style={{ color: "rgba(43, 43, 43, 0.75)" }}>
-                    Pannelli in MgO, evoluzione del cartongesso tradizionale
+                    {t("home.kaleaIntro.onewallDesc")}
                   </p>
                 </div>
               </div>
 
               <div className="pt-4">
                 <p className="text-lg font-light italic" style={{ color: "#2B2B2B", lineHeight: "1.6" }}>
-                  Continuità visiva. Calma estetica.<br />
-                  Materiali contemporanei e precisione architettonica.
+                  {t("home.kaleaIntro.closing")}<br />
+                  {t("home.kaleaIntro.closingLine2")}
                 </p>
               </div>
             </motion.div>
@@ -120,7 +123,7 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
               }}
             >
               <h3 className="text-2xl font-heading font-semibold mb-8" style={{ color: "#2B2B2B" }}>
-                La nostra visione
+                {t("home.kaleaIntro.visionTitle")}
               </h3>
 
               <div className="space-y-6">
@@ -136,10 +139,10 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   </div>
                   <div>
                     <p className="font-medium text-lg leading-tight" style={{ color: "#2B2B2B" }}>
-                      Materiali avanzati in MgO
+                      {t("home.kaleaIntro.vision.materials")}
                     </p>
                     <p className="text-sm mt-1 font-light" style={{ color: "rgba(43, 43, 43, 0.65)" }}>
-                      Nuova generazione di superfici
+                      {t("home.kaleaIntro.vision.materialsDesc")}
                     </p>
                   </div>
                 </motion.div>
@@ -156,10 +159,10 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   </div>
                   <div>
                     <p className="font-medium text-lg leading-tight" style={{ color: "#2B2B2B" }}>
-                      Fino a 1/10 dell'energia produttiva
+                      {t("home.kaleaIntro.vision.energy")}
                     </p>
                     <p className="text-sm mt-1 font-light" style={{ color: "rgba(43, 43, 43, 0.65)" }}>
-                      Minori emissioni, minori rifiuti, maggiore sostenibilità
+                      {t("home.kaleaIntro.vision.energyDesc")}
                     </p>
                   </div>
                 </motion.div>
@@ -176,10 +179,10 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   </div>
                   <div>
                     <p className="font-medium text-lg leading-tight" style={{ color: "#2B2B2B" }}>
-                      Superfici pensate per durare
+                      {t("home.kaleaIntro.vision.durability")}
                     </p>
                     <p className="text-sm mt-1 font-light" style={{ color: "rgba(43, 43, 43, 0.65)" }}>
-                      Massima resistenza e longevità
+                      {t("home.kaleaIntro.vision.durabilityDesc")}
                     </p>
                   </div>
                 </motion.div>
@@ -196,10 +199,10 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   </div>
                   <div>
                     <p className="font-medium text-lg leading-tight" style={{ color: "#2B2B2B" }}>
-                      Sicurezza superiore in ogni ambiente
+                      {t("home.kaleaIntro.vision.safety")}
                     </p>
                     <p className="text-sm mt-1 font-light" style={{ color: "rgba(43, 43, 43, 0.65)" }}>
-                      Ignifugo, impermeabile, antimuffa
+                      {t("home.kaleaIntro.vision.safetyDesc")}
                     </p>
                   </div>
                 </motion.div>
@@ -216,10 +219,10 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   </div>
                   <div>
                     <p className="font-medium text-lg leading-tight" style={{ color: "#2B2B2B" }}>
-                      Garanzie fino a 25 anni
+                      {t("home.kaleaIntro.vision.warranty")}
                     </p>
                     <p className="text-sm mt-1 font-light" style={{ color: "rgba(43, 43, 43, 0.65)" }}>
-                      25 anni residenziale — 15 anni commerciale
+                      {t("home.kaleaIntro.vision.warrantyDesc")}
                     </p>
                   </div>
                 </motion.div>
@@ -236,10 +239,10 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
                   </div>
                   <div>
                     <p className="font-medium text-lg leading-tight" style={{ color: "#2B2B2B" }}>
-                      Design contemporaneo ispirato all'eccellenza italiana
+                      {t("home.kaleaIntro.vision.design")}
                     </p>
                     <p className="text-sm mt-1 font-light" style={{ color: "rgba(43, 43, 43, 0.65)" }}>
-                      Superfici curate, versatili e pensate per ogni ambiente
+                      {t("home.kaleaIntro.vision.designDesc")}
                     </p>
                   </div>
                 </motion.div>
