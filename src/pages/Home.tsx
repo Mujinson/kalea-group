@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import ApplicationCard from "@/components/ApplicationCard";
 import KaleaIntroSection from "@/components/KaleaIntroSection";
@@ -62,14 +61,138 @@ const Home = () => {
   return (
     <div>
       {/* Hero */}
-      <HeroSection
-        title={t('hero.home.title')}
-        subtitle={t('hero.home.subtitle')}
-        ctaPrimary={{ text: t('hero.home.ctaPrimary'), link: `/${language}/stonecore-10` }}
-        ctaSecondary={{ text: t('hero.home.ctaSecondary'), link: `/${language}/contatti` }}
-        backgroundImage={heroImage}
-        minHeight="min-h-[85vh]"
-      />
+      <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden">
+        {/* Background */}
+        <motion.div 
+          className="absolute inset-0 z-0"
+          initial={{ scale: 1.05 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.4, ease: "easeOut" }}
+        >
+          <img 
+            src={heroImage} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/80" />
+        </motion.div>
+
+        {/* Content */}
+        <div className="container-custom relative z-10 text-center">
+          <div className="max-w-5xl mx-auto">
+            {/* Main Title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-white mb-4 tracking-tight"
+            >
+              KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-2 tracking-wide"
+            >
+              The New Standard in Surface Systems.
+            </motion.p>
+
+            {/* Tagline */}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.55 }}
+              className="text-base md:text-lg text-white/65 font-light mb-12 tracking-widest uppercase"
+            >
+              Italian Surface Design — Designed in Italy.
+            </motion.p>
+
+            {/* Divider */}
+            <motion.div
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: 1, scaleX: 1 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+              className="w-24 h-px bg-white/30 mx-auto mb-10"
+            />
+
+            {/* System Description */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.85 }}
+              className="max-w-3xl mx-auto mb-12"
+            >
+              <p className="text-white/75 text-base md:text-lg leading-relaxed mb-8">
+                KALĒA è un sistema integrato di superfici architettoniche in MgO, progettato per offrire 
+                soluzioni complete e coordinate a professionisti del design e dell'architettura.
+              </p>
+
+              {/* Product Lines */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-left">
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 1.0 }}
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="text-white font-semibold text-sm tracking-wider mb-2">STONECORE 10</h3>
+                  <p className="text-white/60 text-sm leading-relaxed">
+                    Superfici tecniche in MgO con texture wood per pavimenti e rivestimenti.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 1.1 }}
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="text-white font-semibold text-sm tracking-wider mb-2">EDGELINE</h3>
+                  <p className="text-white/60 text-sm leading-relaxed">
+                    Profili e battiscopa architettonici per finiture di pregio.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 1.2 }}
+                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:bg-white/10 transition-colors"
+                >
+                  <h3 className="text-white font-semibold text-sm tracking-wider mb-2">ONEWALL</h3>
+                  <p className="text-white/60 text-sm leading-relaxed">
+                    Pannelli verticali in MgO per pareti e boiserie contemporanee.
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 1.35 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <Link 
+                to={`/${language}/diventa-partner`}
+                className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+              >
+                Richiedi informazioni
+              </Link>
+              <Link 
+                to={`/${language}/stonecore-10`}
+                className="inline-flex items-center justify-center gap-2 border border-white/30 text-white text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-white/10 transition-all duration-150"
+              >
+                Scopri i prodotti
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Le linee Kalēa */}
       <section className="section-spacing relative overflow-hidden">
