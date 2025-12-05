@@ -85,9 +85,15 @@ const Home = () => {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-white mb-4 tracking-tight"
+              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-white mb-4 tracking-tight flex items-center justify-center gap-3 flex-wrap"
             >
-              KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
+              <img 
+                src={logo} 
+                alt="Kalēa" 
+                className="h-[0.85em] w-auto inline-block"
+                style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+              />
+              <span>— SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup></span>
             </motion.h1>
 
             {/* Subtitle */}
