@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-kalea-surfaces.jpg";
 import logo from "@/assets/logo.png";
 import bgProducts from "@/assets/bg-products.jpg";
+import bgManifesto from "@/assets/bg-manifesto.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
 import bgSustainabilityMaintenance from "@/assets/bg-sustainability-maintenance.jpg";
@@ -191,6 +192,98 @@ const Home = () => {
               </Link>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Manifesto Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-32 md:py-40">
+        {/* Background */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={bgManifesto} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
+        </div>
+
+        {/* Content */}
+        <div className="container-custom relative z-10 text-center px-6 md:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto space-y-12 md:space-y-16"
+          >
+            {/* Opening Statement */}
+            <div className="space-y-2">
+              <p className="text-xl md:text-2xl lg:text-3xl text-white font-light tracking-wide leading-relaxed">
+                LA SUPERFICIE NON È DECORAZIONE.
+              </p>
+              <p className="text-xl md:text-2xl lg:text-3xl text-white font-light tracking-wide leading-relaxed">
+                È STRUTTURA.
+              </p>
+              <p className="text-xl md:text-2xl lg:text-3xl text-white font-light tracking-wide leading-relaxed">
+                È LA PELLE DELL'ARCHITETTURA.
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div className="w-16 h-px bg-white/30 mx-auto" />
+
+            {/* Problem Statement */}
+            <div className="space-y-1">
+              <p className="text-base md:text-lg lg:text-xl text-white/80 font-light tracking-wide leading-relaxed">
+                PER ANNI ABBIAMO ACCETTATO MATERIALI NATI PER SEMPLIFICARE,
+              </p>
+              <p className="text-base md:text-lg lg:text-xl text-white/80 font-light tracking-wide leading-relaxed">
+                NON PER EVOLVERE.
+              </p>
+            </div>
+
+            {/* Question */}
+            <div className="space-y-1">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+                KALĒA NASCE DA UNA DOMANDA:
+              </p>
+              <p className="text-lg md:text-xl lg:text-2xl text-white font-light italic tracking-wide leading-relaxed">
+                "E SE POTESSIMO PROGETTARE IN MODO DIVERSO?"
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div className="w-16 h-px bg-white/30 mx-auto" />
+
+            {/* Value Proposition */}
+            <div className="space-y-2">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+                UN SISTEMA CONTINUO TRA PAVIMENTI, PARETI E DETTAGLI.
+              </p>
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+                UNA MATERIA CHE NON INTERROMPE.
+              </p>
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+                UN'ESTETICA CHE NON STANCA.
+              </p>
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+                UNA TECNOLOGIA CHE SEMPLIFICA.
+              </p>
+            </div>
+
+            {/* Brand Statement */}
+            <div className="pt-8 space-y-4">
+              <p className="text-2xl md:text-3xl lg:text-4xl text-white font-semibold tracking-wider">
+                KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
+              </p>
+              <p className="text-base md:text-lg text-white/70 font-light tracking-wide">
+                Il nuovo riferimento nei sistemi di superfici.
+              </p>
+              <p className="text-sm md:text-base text-white/50 font-light tracking-widest uppercase">
+                Design italiano delle superfici — Concezione e visione italiana.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
