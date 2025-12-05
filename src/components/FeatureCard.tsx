@@ -7,9 +7,10 @@ interface FeatureCardProps {
   description: string;
   index?: number;
   backgroundImage?: string;
+  compact?: boolean;
 }
 
-const FeatureCard = ({ icon: Icon, title, description, index = 0, backgroundImage }: FeatureCardProps) => {
+const FeatureCard = ({ icon: Icon, title, description, index = 0, backgroundImage, compact = false }: FeatureCardProps) => {
   const delay = index * 0.15;
   
   return (
@@ -41,19 +42,19 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0, backgroundImag
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 to-foreground/80" />
       
-      <div className="relative z-10 flex flex-col h-full p-8 md:p-10">
+      <div className={`relative z-10 flex flex-col h-full ${compact ? 'p-4 md:p-8 lg:p-10' : 'p-8 md:p-10'}`}>
         {/* Icon */}
-        <div className="mb-6">
-          <Icon className="w-10 h-10 text-background" strokeWidth={1.5} />
+        <div className={compact ? 'mb-2 md:mb-6' : 'mb-6'}>
+          <Icon className={`${compact ? 'w-6 h-6 md:w-10 md:h-10' : 'w-10 h-10'} text-background`} strokeWidth={1.5} />
         </div>
         
         {/* Title */}
-        <h3 className="text-xl md:text-2xl font-heading font-semibold text-background mb-3 tracking-tight" style={{ lineHeight: '1.15' }}>
+        <h3 className={`font-heading font-semibold text-background tracking-tight ${compact ? 'text-base md:text-2xl mb-1 md:mb-3' : 'text-xl md:text-2xl mb-3'}`} style={{ lineHeight: '1.15' }}>
           {title}
         </h3>
         
         {/* Description */}
-        <p className="text-background/80 text-body flex-grow">
+        <p className={`text-background/80 flex-grow ${compact ? 'text-xs md:text-base leading-snug' : 'text-body'}`}>
           {description}
         </p>
       </div>
