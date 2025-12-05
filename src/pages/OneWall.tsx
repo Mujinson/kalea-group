@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import ProductCard from "@/components/ProductCard";
+import ScrollSection from "@/components/ScrollSection";
 import { Zap, Shield, Palette, Droplets, Flame, Clock, Grid3x3, Layers, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -89,7 +90,7 @@ const OneWall = () => {
   ];
 
   return (
-    <div>
+    <div className="overflow-hidden">
       {/* Hero */}
       <HeroSection
         title={t('hero.onewall.title')}
@@ -100,217 +101,227 @@ const OneWall = () => {
       />
 
       {/* Come funziona */}
-      <section className="section-spacing">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('onewall.howItWorksTitle')}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('onewall.howItWorksSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section className="section-spacing">
+          <div className="container-custom">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('onewall.howItWorksTitle')}</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('onewall.howItWorksSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {howItWorks.map((item, index) => (
-              <motion.div
-                key={item.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                className="relative"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-heading font-bold mb-4">
-                    {item.step}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {howItWorks.map((item, index) => (
+                <motion.div
+                  key={item.step}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  className="relative"
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-heading font-bold mb-4">
+                      {item.step}
+                    </div>
+                    <h3 className="text-xl font-heading font-semibold text-foreground mb-3">{item.title}</h3>
+                    <p className="text-muted-foreground">{item.description}</p>
                   </div>
-                  <h3 className="text-xl font-heading font-semibold text-foreground mb-3">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
-                </div>
-                {index < howItWorks.length - 1 && (
-                  <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-border" />
-                )}
-              </motion.div>
-            ))}
+                  {index < howItWorks.length - 1 && (
+                    <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-border" />
+                  )}
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* Finiture */}
-      <section className="section-spacing bg-card">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('onewall.finishesTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('onewall.finishesSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section className="section-spacing bg-card">
+          <div className="container-custom">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+                {t('onewall.finishesTitle')}
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('onewall.finishesSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {finishes.map((finish, index) => (
-              <ProductCard
-                key={finish.name}
-                title={finish.name}
-                description={finish.description}
-                index={index}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {finishes.map((finish, index) => (
+                <ProductCard
+                  key={finish.name}
+                  title={finish.name}
+                  description={finish.description}
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* Vantaggi tecnici */}
-      <section 
-        className="section-spacing relative"
-        style={{
-          backgroundImage: `url(${bgOneWall})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay scuro */}
-        <div className="absolute inset-0 bg-black/30" />
-        
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">{t('onewall.advantagesTitle')}</h2>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              {t('onewall.advantagesSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section 
+          className="section-spacing relative"
+          style={{
+            backgroundImage: `url(${bgOneWall})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          {/* Overlay scuro */}
+          <div className="absolute inset-0 bg-black/30" />
+          
+          <div className="container-custom relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">{t('onewall.advantagesTitle')}</h2>
+              <p className="text-lg text-white/90 max-w-2xl mx-auto">
+                {t('onewall.advantagesSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {advantages.map((advantage, index) => (
-              <FeatureCard key={advantage.title} {...advantage} index={index} />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {advantages.map((advantage, index) => (
+                <FeatureCard key={advantage.title} {...advantage} index={index} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* Applicazioni */}
-      <section 
-        className="section-spacing relative py-24"
-        style={{
-          backgroundImage: `url(${bgOneWallApplications})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/25" />
-        
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              {t('onewall.applicationsTitle')}
-            </h2>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              {t('onewall.applicationsSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section 
+          className="section-spacing relative py-24"
+          style={{
+            backgroundImage: `url(${bgOneWallApplications})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/25" />
+          
+          <div className="container-custom relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
+                {t('onewall.applicationsTitle')}
+              </h2>
+              <p className="text-lg text-white/90 max-w-2xl mx-auto">
+                {t('onewall.applicationsSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {[
-              {
-                icon: Grid3x3,
-                title: "Pareti divisorie architettoniche",
-                description: "Soluzione ideale per creare ambienti flessibili e leggeri in uffici, abitazioni e spazi commerciali.",
-              },
-              {
-                icon: Droplets,
-                title: "Pareti di rivestimento impermeabili",
-                description: "Perfette in bagni e cucine grazie alla totale resistenza all'umidità e alla stabilità nel tempo.",
-              },
-              {
-                icon: Layers,
-                title: "Controsoffitti e pannellature tecniche",
-                description: "Installazione rapida, finitura immediata e prestazioni superiori rispetto al cartongesso tradizionale.",
-              },
-              {
-                icon: Sparkles,
-                title: "Pareti decorative e accent walls",
-                description: "Per creare elementi scenografici in reception, showroom, hotel e zone living.",
-              },
-            ].map((application, index) => (
-              <FeatureCard 
-                key={application.title} 
-                icon={application.icon}
-                title={application.title}
-                description={application.description}
-                index={index}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+              {[
+                {
+                  icon: Grid3x3,
+                  title: "Pareti divisorie architettoniche",
+                  description: "Soluzione ideale per creare ambienti flessibili e leggeri in uffici, abitazioni e spazi commerciali.",
+                },
+                {
+                  icon: Droplets,
+                  title: "Pareti di rivestimento impermeabili",
+                  description: "Perfette in bagni e cucine grazie alla totale resistenza all'umidità e alla stabilità nel tempo.",
+                },
+                {
+                  icon: Layers,
+                  title: "Controsoffitti e pannellature tecniche",
+                  description: "Installazione rapida, finitura immediata e prestazioni superiori rispetto al cartongesso tradizionale.",
+                },
+                {
+                  icon: Sparkles,
+                  title: "Pareti decorative e accent walls",
+                  description: "Per creare elementi scenografici in reception, showroom, hotel e zone living.",
+                },
+              ].map((application, index) => (
+                <FeatureCard 
+                  key={application.title} 
+                  icon={application.icon}
+                  title={application.title}
+                  description={application.description}
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* CTA finale */}
-      <section className="section-spacing relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
-        />
-        {/* Gradient Overlay */}
-        <div 
-          className="absolute inset-0"
-          style={{ 
-            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
-          }}
-        />
-        
-        <div className="container-custom text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 
-              className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+      <ScrollSection>
+        <section className="section-spacing relative overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+          />
+          {/* Gradient Overlay */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+            }}
+          />
+          
+          <div className="container-custom text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
-              {t('onewall.ctaTitle')}
-            </h2>
-            <p 
-              className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-            >
-              {t('onewall.ctaSubtitle')}
-            </p>
-            <Button asChild size="lg" variant="secondary">
-              <Link to={`/${language}/contatti`}>{t('onewall.ctaButton')}</Link>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
+              <h2 
+                className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
+                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+              >
+                {t('onewall.ctaTitle')}
+              </h2>
+              <p 
+                className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
+                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+              >
+                {t('onewall.ctaSubtitle')}
+              </p>
+              <Button asChild size="lg" variant="secondary">
+                <Link to={`/${language}/contatti`}>{t('onewall.ctaButton')}</Link>
+              </Button>
+            </motion.div>
+          </div>
+        </section>
+      </ScrollSection>
     </div>
   );
 };

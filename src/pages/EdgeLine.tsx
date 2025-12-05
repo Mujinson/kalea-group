@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import ProductCard from "@/components/ProductCard";
 import FinishCard from "@/components/FinishCard";
+import ScrollSection from "@/components/ScrollSection";
 import { Sparkles, Shield, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -64,7 +65,7 @@ const EdgeLine = () => {
   ];
 
   return (
-    <div>
+    <div className="overflow-hidden">
       {/* Hero */}
       <HeroSection
         title={t('hero.edgeline.title')}
@@ -75,146 +76,154 @@ const EdgeLine = () => {
       />
 
       {/* Vantaggi */}
-      <section 
-        className="section-spacing relative"
-        style={{
-          backgroundImage: `url(${bgEdgeLine})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay scuro */}
-        <div className="absolute inset-0 bg-black/35" />
-        
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              {t('edgeline.advantagesTitle')}
-            </h2>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              {t('edgeline.advantagesSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section 
+          className="section-spacing relative"
+          style={{
+            backgroundImage: `url(${bgEdgeLine})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          {/* Overlay scuro */}
+          <div className="absolute inset-0 bg-black/35" />
+          
+          <div className="container-custom relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
+                {t('edgeline.advantagesTitle')}
+              </h2>
+              <p className="text-lg text-white/90 max-w-2xl mx-auto">
+                {t('edgeline.advantagesSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {advantages.map((advantage, index) => (
-              <FeatureCard key={advantage.title} {...advantage} index={index} />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+              {advantages.map((advantage, index) => (
+                <FeatureCard key={advantage.title} {...advantage} index={index} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* Griglia prodotti */}
-      <section className="section-spacing bg-card">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.productsTitle')}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('edgeline.productsSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section className="section-spacing bg-card">
+          <div className="container-custom">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.productsTitle')}</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('edgeline.productsSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product, index) => (
-              <ProductCard
-                key={product.title}
-                title={product.title}
-                description={product.description}
-                index={index}
-                image={product.image}
-              />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product, index) => (
+                <ProductCard
+                  key={product.title}
+                  title={product.title}
+                  description={product.description}
+                  index={index}
+                  image={product.image}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* Finiture */}
-      <section className="section-spacing">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.finishesTitle')}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('edgeline.finishesSubtitle')}
-            </p>
-          </motion.div>
+      <ScrollSection>
+        <section className="section-spacing">
+          <div className="container-custom">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('edgeline.finishesTitle')}</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('edgeline.finishesSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-            {[
-              t('edgeline.finishes.natural'),
-              t('edgeline.finishes.bronze'),
-              t('edgeline.finishes.black'),
-              t('edgeline.finishes.silver')
-            ].map((finish, index) => (
-              <FinishCard
-                key={finish}
-                name={finish}
-                index={index}
-                variant="simple"
-              />
-            ))}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+              {[
+                t('edgeline.finishes.natural'),
+                t('edgeline.finishes.bronze'),
+                t('edgeline.finishes.black'),
+                t('edgeline.finishes.silver')
+              ].map((finish, index) => (
+                <FinishCard
+                  key={finish}
+                  name={finish}
+                  index={index}
+                  variant="simple"
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollSection>
 
       {/* CTA finale */}
-      <section className="section-spacing relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
-        />
-        {/* Gradient Overlay */}
-        <div 
-          className="absolute inset-0"
-          style={{ 
-            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
-          }}
-        />
-        
-        <div className="container-custom text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 
-              className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+      <ScrollSection>
+        <section className="section-spacing relative overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+          />
+          {/* Gradient Overlay */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+            }}
+          />
+          
+          <div className="container-custom text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
-              {t('edgeline.ctaTitle')}
-            </h2>
-            <p 
-              className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-            >
-              {t('edgeline.ctaSubtitle')}
-            </p>
-            <Button asChild size="lg" variant="secondary">
-              <Link to={`/${language}/contatti`}>{t('edgeline.ctaButton')}</Link>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
+              <h2 
+                className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
+                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+              >
+                {t('edgeline.ctaTitle')}
+              </h2>
+              <p 
+                className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
+                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+              >
+                {t('edgeline.ctaSubtitle')}
+              </p>
+              <Button asChild size="lg" variant="secondary">
+                <Link to={`/${language}/contatti`}>{t('edgeline.ctaButton')}</Link>
+              </Button>
+            </motion.div>
+          </div>
+        </section>
+      </ScrollSection>
     </div>
   );
 };
