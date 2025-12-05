@@ -136,27 +136,36 @@ const Home = () => {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 1.0 }}
-                  className="aspect-square bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
+                  className="aspect-square md:aspect-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center md:flex-col md:items-start md:justify-start md:p-5 hover:bg-white/10 transition-colors"
                 >
-                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center">STONECORE 10</h3>
+                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:text-left md:mb-2">STONECORE 10</h3>
+                  <p className="hidden md:block text-white/60 text-sm leading-relaxed">
+                    Superfici tecniche in MgO con texture wood per pavimenti e rivestimenti.
+                  </p>
                 </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 1.1 }}
-                  className="aspect-square bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
+                  className="aspect-square md:aspect-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center md:flex-col md:items-start md:justify-start md:p-5 hover:bg-white/10 transition-colors"
                 >
-                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center">EDGELINE</h3>
+                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:text-left md:mb-2">EDGELINE</h3>
+                  <p className="hidden md:block text-white/60 text-sm leading-relaxed">
+                    Profili e battiscopa architettonici per finiture di pregio.
+                  </p>
                 </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 1.2 }}
-                  className="aspect-square bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center hover:bg-white/10 transition-colors"
+                  className="aspect-square md:aspect-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center md:flex-col md:items-start md:justify-start md:p-5 hover:bg-white/10 transition-colors"
                 >
-                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center">ONEWALL</h3>
+                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:text-left md:mb-2">ONEWALL</h3>
+                  <p className="hidden md:block text-white/60 text-sm leading-relaxed">
+                    Pannelli verticali in MgO per pareti e boiserie contemporanee.
+                  </p>
                 </motion.div>
               </div>
             </motion.div>
