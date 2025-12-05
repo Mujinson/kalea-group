@@ -61,22 +61,24 @@ const Home = () => {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
-        {/* Background */}
-        <motion.div 
-          className="absolute inset-0 z-0"
-          initial={{ scale: 1.05 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.4, ease: "easeOut" }}
-        >
-          <img 
-            src={heroImage} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/80" />
-        </motion.div>
+      {/* Sticky Stacking Container */}
+      <div className="relative">
+        {/* Hero - First sticky section */}
+        <section className="sticky top-0 z-10 relative min-h-screen h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
+          {/* Background */}
+          <motion.div 
+            className="absolute inset-0 z-0"
+            initial={{ scale: 1.05 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.4, ease: "easeOut" }}
+          >
+            <img 
+              src={heroImage} 
+              alt="" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/80" />
+          </motion.div>
 
         {/* Content */}
         <div className="container-custom relative z-10 text-center pt-8 md:pt-12">
@@ -193,19 +195,19 @@ const Home = () => {
             </motion.div>
           </div>
         </div>
-      </section>
+        </section>
 
-      {/* Manifesto Section */}
-      <section className="relative h-screen max-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={bgManifesto} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
-        </div>
+        {/* Manifesto Section - Second sticky section */}
+        <section className="sticky top-0 z-20 relative h-screen max-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
+          {/* Background */}
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={bgManifesto} 
+              alt="" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
+          </div>
 
         {/* Content */}
         <div className="container-custom relative z-10 text-center px-6 md:px-12">
@@ -281,19 +283,19 @@ const Home = () => {
                 Design italiano delle superfici — Concezione e visione italiana.
               </p>
             </div>
-          </motion.div>
-        </div>
-      </section>
+            </motion.div>
+          </div>
+        </section>
 
-      {/* Le linee Kalēa */}
-      <section className="section-spacing relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
-        </div>
-        
-        <div className="container-custom relative z-10">
+        {/* Le linee Kalēa - Third sticky section */}
+        <section className="sticky top-0 z-30 relative min-h-screen flex items-center overflow-hidden py-24 md:py-32">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
+          </div>
+          
+          <div className="container-custom relative z-10 w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -313,9 +315,11 @@ const Home = () => {
             {productLines.map((product, index) => (
               <FeatureCard key={product.title} {...product} index={index} />
             ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
+      {/* End Sticky Stacking Container */}
 
       {/* Perché MgO - 3D Book */}
       <MgoBook />
