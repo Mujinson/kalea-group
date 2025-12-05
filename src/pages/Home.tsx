@@ -288,33 +288,33 @@ const Home = () => {
         </section>
 
         {/* Le linee Kalēa - Third sticky section */}
-        <section className="sticky top-0 z-30 relative min-h-screen flex items-center overflow-hidden py-24 md:py-32">
+        <section className="sticky top-0 z-30 relative h-screen max-h-screen flex items-center overflow-hidden py-12 md:py-24 lg:py-32">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
           </div>
           
-          <div className="container-custom relative z-10 w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
-              {t('home.linesTitle')}
-            </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              {t('home.linesSubtitle')}
-            </p>
-          </motion.div>
+          <div className="container-custom relative z-10 w-full px-4 md:px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-6 md:mb-12 lg:mb-16"
+            >
+              <h2 className="text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-2 md:mb-4">
+                {t('home.linesTitle')}
+              </h2>
+              <p className="text-sm md:text-lg text-white/70 max-w-2xl mx-auto">
+                {t('home.linesSubtitle')}
+              </p>
+            </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-            {productLines.map((product, index) => (
-              <FeatureCard key={product.title} {...product} index={index} />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-8 lg:gap-10">
+              {productLines.map((product, index) => (
+                <FeatureCard key={product.title} {...product} index={index} compact />
+              ))}
             </div>
           </div>
         </section>
