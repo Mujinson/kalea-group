@@ -61,7 +61,7 @@ const Home = () => {
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Background */}
         <motion.div 
           className="absolute inset-0 z-0"
@@ -78,20 +78,20 @@ const Home = () => {
         </motion.div>
 
         {/* Content */}
-        <div className="container-custom relative z-10 text-center">
+        <div className="container-custom relative z-10 text-center pt-8 md:pt-12">
           <div className="max-w-5xl mx-auto">
             {/* Main Title */}
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-white mb-4 tracking-tight flex items-center justify-center gap-3 flex-wrap"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-white mb-4 tracking-tight flex items-center justify-center gap-2 md:gap-3 flex-wrap"
             >
               <img 
                 src={logo} 
                 alt="Kalēa" 
-                className="h-[1.43em] w-auto inline-block"
-                style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'baseline', transform: 'translateY(-0.1em)' }}
+                className="h-[1.3em] w-auto inline-block"
+                style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'baseline', transform: 'translateY(-0.05em)' }}
               />
               <span>— SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup></span>
             </motion.h1>
