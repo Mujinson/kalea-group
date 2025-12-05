@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight, Flame, Droplets, Bug, Box, Volume2, Leaf, He
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import bgManifesto from "@/assets/bg-manifesto.jpg";
 
 const MgoBook = () => {
   const { t, language } = useTranslation();
@@ -237,17 +236,13 @@ const MgoBook = () => {
 
   if (isMobile) {
     return (
-      <section className="section-spacing relative overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={bgManifesto} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
-        </div>
-        <div className="container-custom relative z-10">
+      <section 
+        className="section-spacing"
+        style={{
+          background: "linear-gradient(135deg, #F5F4F2 0%, #FFFFFF 40%, #F5F4F2 100%)"
+        }}
+      >
+        <div className="container-custom">
           <motion.div
             ref={bookRef}
             initial={{ opacity: 0, y: 30 }}
@@ -313,17 +308,13 @@ const MgoBook = () => {
   }
 
   return (
-    <section className="section-spacing overflow-hidden relative">
-      {/* Background */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={bgManifesto} 
-          alt="" 
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
-      </div>
-      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
+    <section 
+      className="section-spacing overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, #F5F4F2 0%, #FFFFFF 40%, #F5F4F2 100%)"
+      }}
+    >
+      <div className="w-full px-6 md:px-12 lg:px-20">
         <motion.div
           ref={bookRef}
           initial={{ opacity: 0, scale: 0.9 }}
