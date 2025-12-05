@@ -236,12 +236,7 @@ const MgoBook = () => {
 
   if (isMobile) {
     return (
-      <section 
-        className="section-spacing"
-        style={{
-          background: "linear-gradient(135deg, #F5F4F2 0%, #FFFFFF 40%, #F5F4F2 100%)"
-        }}
-      >
+      <section className="section-spacing">
         <div className="container-custom">
           <motion.div
             ref={bookRef}
@@ -308,12 +303,7 @@ const MgoBook = () => {
   }
 
   return (
-    <section 
-      className="section-spacing overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #F5F4F2 0%, #FFFFFF 40%, #F5F4F2 100%)"
-      }}
-    >
+    <section className="section-spacing overflow-hidden">
       <div className="w-full px-6 md:px-12 lg:px-20">
         <motion.div
           ref={bookRef}
