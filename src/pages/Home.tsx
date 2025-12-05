@@ -91,7 +91,7 @@ const Home = () => {
                 src={logo} 
                 alt="Kalēa" 
                 className="h-[1.43em] w-auto inline-block"
-                style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'middle' }}
+                style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'baseline', transform: 'translateY(-0.1em)' }}
               />
               <span>— SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup></span>
             </motion.h1>
