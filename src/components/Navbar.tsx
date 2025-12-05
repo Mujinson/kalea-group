@@ -102,7 +102,7 @@ const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   // Pages that should always have dark navbar (no dark hero)
-  const forceDarkNavbar = location.pathname.includes('/area-tecnica') || location.pathname.includes('/chi-siamo');
+  const forceDarkNavbar = location.pathname.includes('/area-tecnica') || location.pathname.includes('/chi-siamo') || location.pathname.includes('/contatti');
   
   // Use scrolled style if actually scrolled OR if on pages without dark hero
   const useDarkStyle = isScrolled || forceDarkNavbar;
