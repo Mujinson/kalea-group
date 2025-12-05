@@ -418,7 +418,7 @@ const Home = () => {
               className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
               style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
             >
-              <span>Vuoi usare</span>
+              <span>{t('home.ctaTitleBefore')}</span>
               <img 
                 src={logo} 
                 alt="Kalēa" 
@@ -429,7 +429,7 @@ const Home = () => {
                   transform: 'translateY(0.02em)'
                 }}
               />
-              <span>nei tuoi progetti?</span>
+              <span>{t('home.ctaTitleAfter')}</span>
             </h2>
             <p 
               className="text-lg mb-10 max-w-2xl mx-auto text-white/90"
