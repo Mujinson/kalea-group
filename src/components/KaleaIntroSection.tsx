@@ -37,7 +37,7 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
               className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-10 leading-tight"
               style={{ color: "#2B2B2B" }}
             >
-              Kalēa è la nuova generazione di superfici in MgO.
+              KALĒA — SURFACE SYSTEM®
             </motion.h2>
 
             <motion.div
@@ -49,27 +49,46 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
               style={{ maxWidth: "65ch" }}
             >
               <div>
-                <h4 className="text-xl font-heading font-semibold mb-3" style={{ color: "#2B2B2B" }}>
-                  Responsabilità verso il pianeta.
-                </h4>
-                <p className="text-lg leading-relaxed" style={{ color: "#2B2B2B", lineHeight: "1.6" }}>
-                  La produzione dei nostri pannelli in MgO richiede fino a 1/10 dell'energia necessaria per realizzare SPC, laminati, legno ingegnerizzato o HPL. Meno energia significa meno emissioni, meno rifiuti e una filiera più trasparente.
+                <p className="text-xl leading-relaxed mb-8" style={{ color: "#2B2B2B", lineHeight: "1.7" }}>
+                  Un sistema integrato per la progettazione degli interni contemporanei.<br />
+                  Superficie orizzontale. Superficie verticale. Dettaglio.
                 </p>
               </div>
 
-              <div>
-                <h4 className="text-xl font-heading font-semibold mb-3" style={{ color: "#2B2B2B" }}>
-                  Superfici progettate per durare.
-                </h4>
-                <p className="text-lg leading-relaxed" style={{ color: "#2B2B2B", lineHeight: "1.6" }}>
-                  Resistono al fuoco, all'acqua, agli urti, alla muffa e alle condizioni più estreme. Durano nel tempo, richiedono poca manutenzione e migliorano la qualità della vita in ogni ambiente.
-                </p>
+              <div className="space-y-5">
+                <div className="border-l-2 border-foreground/20 pl-5">
+                  <h4 className="text-lg font-heading font-semibold" style={{ color: "#2B2B2B" }}>
+                    STONECORE 10
+                  </h4>
+                  <p className="text-base mt-1" style={{ color: "rgba(43, 43, 43, 0.75)" }}>
+                    Pavimenti tecnici in MgO con texture wood
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-foreground/20 pl-5">
+                  <h4 className="text-lg font-heading font-semibold" style={{ color: "#2B2B2B" }}>
+                    EDGELINE
+                  </h4>
+                  <p className="text-base mt-1" style={{ color: "rgba(43, 43, 43, 0.75)" }}>
+                    Profili e battiscopa architettonici
+                  </p>
+                </div>
+
+                <div className="border-l-2 border-foreground/20 pl-5">
+                  <h4 className="text-lg font-heading font-semibold" style={{ color: "#2B2B2B" }}>
+                    ONEWALL
+                  </h4>
+                  <p className="text-base mt-1" style={{ color: "rgba(43, 43, 43, 0.75)" }}>
+                    Pannelli in MgO, evoluzione del cartongesso tradizionale
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <h4 className="text-xl font-heading font-semibold" style={{ color: "#2B2B2B" }}>
-                  Kalēa è un modo nuovo di costruire: più intelligente, più sicuro, più sostenibile.
-                </h4>
+              <div className="pt-4">
+                <p className="text-lg font-light italic" style={{ color: "#2B2B2B", lineHeight: "1.6" }}>
+                  Continuità visiva. Calma estetica.<br />
+                  Materiali contemporanei e precisione architettonica.
+                </p>
               </div>
             </motion.div>
           </motion.div>
