@@ -64,7 +64,7 @@ const Home = () => {
       {/* Sticky Stacking Container */}
       <div className="relative">
         {/* Hero Section */}
-        <section className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-20">
+        <section className="relative min-h-screen md:h-screen flex items-center justify-center overflow-hidden pt-32 pb-12 md:pt-20 md:pb-0">
           {/* Background */}
           <motion.div 
             className="absolute inset-0 z-0"
