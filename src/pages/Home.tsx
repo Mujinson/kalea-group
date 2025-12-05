@@ -85,15 +85,9 @@ const Home = () => {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-heading font-bold text-white mb-4 tracking-tight flex items-center justify-center gap-2 md:gap-3 flex-wrap"
+              className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-white/90 font-light mb-4 tracking-wide"
             >
-              <img 
-                src={logo} 
-                alt="Kalēa" 
-                className="h-[1.3em] w-auto inline-block"
-                style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'baseline', transform: 'translateY(-0.05em)' }}
-              />
-              <span>— SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup></span>
+              SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
             </motion.h1>
 
             {/* Subtitle */}
