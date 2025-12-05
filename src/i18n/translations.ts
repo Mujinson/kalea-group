@@ -41,7 +41,7 @@ export const translations: Record<Language, Translations> = {
       },
     },
     home: {
-      linesTitle: "Il sistema Kalēa",
+      linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Tre linee integrate per la continuità visiva degli spazi",
       stonecore: {
         title: "Kalēa StoneCore 10",
@@ -740,7 +740,7 @@ export const translations: Record<Language, Translations> = {
       },
     },
     home: {
-      linesTitle: "The Kalēa System",
+      linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Three integrated lines for visual continuity across spaces",
       stonecore: {
         title: "Kalēa StoneCore 10",
@@ -1439,7 +1439,7 @@ export const translations: Record<Language, Translations> = {
       },
     },
     home: {
-      linesTitle: "Das Kalēa System",
+      linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Drei integrierte Linien für visuelle Kontinuität in Räumen",
       stonecore: {
         title: "Kalēa StoneCore 10",
@@ -2138,7 +2138,7 @@ export const translations: Record<Language, Translations> = {
       },
     },
     home: {
-      linesTitle: "Le système Kalēa",
+      linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Trois lignes intégrées pour la continuité visuelle des espaces",
       stonecore: {
         title: "Kalēa StoneCore 10",
