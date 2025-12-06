@@ -58,14 +58,14 @@ const StoneCore10 = () => {
   ];
 
   const finishes = [
-    { name: t('stonecore.finishes.corteccia'), image: finishCorteccia },
-    { name: t('stonecore.finishes.cenere'), image: "/placeholder.svg" },
-    { name: t('stonecore.finishes.sabbia'), image: finishSabbia },
-    { name: t('stonecore.finishes.silven'), image: finishSilven },
-    { name: t('stonecore.finishes.terram'), image: finishTerram },
-    { name: t('stonecore.finishes.perla'), image: finishPerla },
-    { name: t('stonecore.finishes.velora'), image: finishVelora },
-    { name: t('stonecore.finishes.aurora'), image: finishAurora },
+    { name: t('stonecore.finishes.corteccia'), image: finishCorteccia, slug: 'corteccia' },
+    { name: t('stonecore.finishes.cenere'), image: finishCorteccia, slug: 'cenere' },
+    { name: t('stonecore.finishes.sabbia'), image: finishSabbia, slug: 'sabbia' },
+    { name: t('stonecore.finishes.silven'), image: finishSilven, slug: 'silven' },
+    { name: t('stonecore.finishes.terram'), image: finishTerram, slug: 'terram' },
+    { name: t('stonecore.finishes.perla'), image: finishPerla, slug: 'perla' },
+    { name: t('stonecore.finishes.velora'), image: finishVelora, slug: 'velora' },
+    { name: t('stonecore.finishes.aurora'), image: finishAurora, slug: 'aurora' },
   ];
 
   return (
@@ -143,6 +143,7 @@ const StoneCore10 = () => {
                 image={finish.image}
                 index={index}
                 variant="image"
+                slug={finish.slug}
               />
             ))}
           </div>
