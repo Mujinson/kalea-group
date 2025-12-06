@@ -278,7 +278,7 @@ const Home = () => {
               <p className="text-sm md:text-base text-white/70 font-light tracking-wide">
                 {t('hero.manifesto.brandStatement')}
               </p>
-              <p className="text-xs md:text-sm text-white/50 font-light tracking-widest uppercase">
+              <p className="text-xs md:text-sm text-white/50 font-light tracking-widest">
                 {t('hero.manifesto.brandTagline')}
               </p>
             </div>
