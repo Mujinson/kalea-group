@@ -213,7 +213,7 @@ const Home = () => {
           </div>
 
         {/* Content */}
-        <div className="container-custom relative z-10 text-center px-6 md:px-12">
+        <div className="w-full relative z-10 text-center px-6 md:px-12 lg:px-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
