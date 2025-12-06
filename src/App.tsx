@@ -15,6 +15,7 @@ import DiventaPartner from "./pages/DiventaPartner";
 import Privacy from "./pages/Privacy";
 import Termini from "./pages/Termini";
 import NotFound from "./pages/NotFound";
+import ColorProductPage from "./pages/ColorProductPage";
 import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
@@ -76,6 +77,7 @@ const App = () => (
             <Route path="/it/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
             <Route path="/it/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/it/termini" element={<Layout><Termini /></Layout>} />
+            <Route path="/it/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
             
             {/* English routes */}
             <Route path="/en" element={<Layout><Home /></Layout>} />
@@ -88,6 +90,7 @@ const App = () => (
             <Route path="/en/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
             <Route path="/en/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/en/termini" element={<Layout><Termini /></Layout>} />
+            <Route path="/en/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
             
             {/* German routes */}
             <Route path="/de" element={<Layout><Home /></Layout>} />
@@ -100,6 +103,7 @@ const App = () => (
             <Route path="/de/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
             <Route path="/de/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/de/termini" element={<Layout><Termini /></Layout>} />
+            <Route path="/de/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
             
             {/* French routes */}
             <Route path="/fr" element={<Layout><Home /></Layout>} />
@@ -112,6 +116,7 @@ const App = () => (
             <Route path="/fr/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
             <Route path="/fr/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/fr/termini" element={<Layout><Termini /></Layout>} />
+            <Route path="/fr/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
             
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
