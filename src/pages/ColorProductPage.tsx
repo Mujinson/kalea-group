@@ -79,10 +79,10 @@ const ColorProductPage = () => {
             Kalēa — {color.name}
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto font-light opacity-95 drop-shadow-md">
-            {language === 'it' && 'Pavimento in MgO 8,5 mm effetto legno. Stabilità totale. Eleganza senza tempo.'}
-            {language === 'en' && 'MgO 8.5 mm wood effect flooring. Total stability. Timeless elegance.'}
-            {language === 'de' && 'MgO 8,5 mm Bodenbelag in Holzoptik. Totale Stabilität. Zeitlose Eleganz.'}
-            {language === 'fr' && 'Revêtement de sol MgO 8,5 mm effet bois. Stabilité totale. Élégance intemporelle.'}
+            {language === 'it' && 'Pavimento in MgO 8,5 mm wood texture. Stabilità totale. Eleganza senza tempo.'}
+            {language === 'en' && 'MgO 8.5 mm wood texture flooring. Total stability. Timeless elegance.'}
+            {language === 'de' && 'MgO 8,5 mm Bodenbelag wood texture. Totale Stabilität. Zeitlose Eleganz.'}
+            {language === 'fr' && 'Revêtement de sol MgO 8,5 mm wood texture. Stabilité totale. Élégance intemporelle.'}
           </p>
         </motion.div>
       </section>
