@@ -191,6 +191,12 @@ export const translations: Record<Language, Translations> = {
         },
       },
     },
+    gallery: {
+      title: "Esplora la Collezione Kalēa",
+      subtitle: "Texture, colori e dettagli del nostro pavimento in MgO texture wood.",
+      description: "Il pavimento Kalēa combina tecnologia in MgO, resistenza superiore e un design naturale ispirato al legno autentico. Scopri tutte le finiture disponibili per showroom, rivenditori e professionisti.",
+      cta: "Scopri tutte le finiture",
+    },
     stonecore: {
       structureTitle: "Struttura multistrato ad alte prestazioni",
       structureSubtitle: "Ogni tavola Kalēa è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in MgO da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Alla base, il tappetino integrato da 1,5 mm migliora l'isolamento acustico, aumenta il comfort al calpestio e semplifica l'installazione. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
@@ -936,7 +942,13 @@ export const translations: Record<Language, Translations> = {
           warrantyDesc: "25 years residential — 15 years commercial",
           design: "Contemporary design inspired by Italian excellence",
           designDesc: "Curated, versatile surfaces designed for every environment",
-        },
+    },
+    gallery: {
+      title: "Explore the Kalēa Collection",
+      subtitle: "Textures, colors and details of our MgO wood texture flooring.",
+      description: "Kalēa flooring combines MgO technology, superior resistance and a natural design inspired by authentic wood. Discover all finishes available for showrooms, retailers and professionals.",
+      cta: "Discover all finishes",
+    },
       },
     },
     stonecore: {
@@ -1684,7 +1696,13 @@ export const translations: Record<Language, Translations> = {
           warrantyDesc: "25 Jahre Wohnbereich — 15 Jahre Gewerbe",
           design: "Zeitgenössisches Design inspiriert von italienischer Exzellenz",
           designDesc: "Kuratierte, vielseitige Oberflächen für jede Umgebung",
-        },
+    },
+    gallery: {
+      title: "Entdecken Sie die Kalēa Kollektion",
+      subtitle: "Texturen, Farben und Details unseres MgO-Holzstruktur-Bodens.",
+      description: "Der Kalēa-Boden kombiniert MgO-Technologie, überlegene Beständigkeit und ein natürliches Design, inspiriert von echtem Holz. Entdecken Sie alle Oberflächen für Showrooms, Händler und Fachleute.",
+      cta: "Alle Oberflächen entdecken",
+    },
       },
     },
     stonecore: {
@@ -2404,7 +2422,13 @@ export const translations: Record<Language, Translations> = {
           title: "Entretien minimal",
           description: "Gestion simple",
         },
-      },
+    },
+    gallery: {
+      title: "Explorez la Collection Kalēa",
+      subtitle: "Textures, couleurs et détails de notre revêtement de sol MgO texture bois.",
+      description: "Le revêtement Kalēa combine la technologie MgO, une résistance supérieure et un design naturel inspiré du bois authentique. Découvrez toutes les finitions disponibles pour showrooms, revendeurs et professionnels.",
+      cta: "Découvrir toutes les finitions",
+    },
       ctaTitleBefore: "Vous souhaitez utiliser",
       ctaTitleAfter: "dans vos projets ?",
       ctaSubtitle: "Contactez-nous pour des échantillons, de la documentation technique ou une consultation dédiée",

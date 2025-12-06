@@ -238,4 +238,40 @@ All colors MUST be HSL.
     border-radius: inherit;
     z-index: 1;
   }
+  
+  /* Infinite scroll animation for product gallery */
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-360px * 7 - 32px * 7));
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-320px * 7 - 32px * 7));
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-280px * 7 - 24px * 7));
+      }
+    }
+  }
+  
+  .animate-scroll {
+    animation: scroll 40s linear infinite;
+  }
 }

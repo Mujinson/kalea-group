@@ -3,6 +3,7 @@ import FeatureCard from "@/components/FeatureCard";
 import ApplicationCard from "@/components/ApplicationCard";
 import KaleaIntroSection from "@/components/KaleaIntroSection";
 import MgoBook from "@/components/MgoBook";
+import ProductGallerySection from "@/components/ProductGallerySection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -195,6 +196,9 @@ const Home = () => {
           </div>
         </div>
         </section>
+
+        {/* Product Gallery Section */}
+        <ProductGallerySection />
 
         {/* Manifesto Section */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
