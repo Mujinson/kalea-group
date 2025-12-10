@@ -146,10 +146,21 @@ const ChiSiamo = () => {
               </motion.div>
             </div>
 
-            <div className="space-y-6 text-left text-muted-foreground leading-relaxed">
-              <p>{t('aboutUs.history1')}</p>
-              <p>{t('aboutUs.history2')}</p>
-              <p>{t('aboutUs.history3')}</p>
+            <div className="space-y-6 text-center text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+              <p className="whitespace-pre-line text-lg font-medium text-foreground">{t('aboutUs.historyIntro')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyAndrea')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyGabriel')}</p>
+              <p className="whitespace-pre-line italic text-foreground/80">{t('aboutUs.historyQuestions')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyIntuition')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyMgo')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyJourney')}</p>
+              <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyResult')}</p>
+              <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyProducts')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historySystem')}</p>
+              <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyToday')}</p>
+              <p className="whitespace-pre-line text-left inline-block">{t('aboutUs.historyValues')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyProfessionals')}</p>
+              <p className="whitespace-pre-line text-lg font-semibold text-foreground">{t('aboutUs.historyConclusion')}</p>
             </div>
           </motion.div>
         </div>
