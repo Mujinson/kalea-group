@@ -117,26 +117,32 @@ const ChiSiamo = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg"
+                className="flex flex-col items-center"
               >
-                <img 
-                  src={fondatore1} 
-                  alt="Fondatore 1" 
-                  className="w-full h-full object-cover"
-                />
+                <div className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg mb-3">
+                  <img 
+                    src={fondatore1} 
+                    alt="Andrea Facchinetti" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-foreground font-medium">Andrea Facchinetti</span>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg"
+                className="flex flex-col items-center"
               >
-                <img 
-                  src={fondatore2} 
-                  alt="Fondatore 2" 
-                  className="w-full h-full object-cover"
-                />
+                <div className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg mb-3">
+                  <img 
+                    src={fondatore2} 
+                    alt="Gabriel Vladu" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-foreground font-medium">Gabriel Vladu</span>
               </motion.div>
             </div>
 
