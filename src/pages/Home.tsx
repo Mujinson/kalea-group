@@ -223,19 +223,19 @@ const Home = () => {
           >
             {/* Opening Statement */}
             <div className="space-y-1">
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.line1')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.line2')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.line3')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.line4')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.line5')}
               </p>
             </div>
@@ -245,7 +245,7 @@ const Home = () => {
 
             {/* Problem Statement */}
             <div>
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.problem1')}<br />
                 {t('hero.manifesto.problem2')}
               </p>
@@ -253,10 +253,10 @@ const Home = () => {
 
             {/* Question */}
             <div>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug mb-1">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed mb-1">
                 {t('hero.manifesto.question1')}
               </p>
-              <p className="text-base md:text-lg lg:text-xl text-white font-light italic tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light italic tracking-wide leading-relaxed">
                 {t('hero.manifesto.question2')}
               </p>
             </div>
@@ -266,59 +266,56 @@ const Home = () => {
 
             {/* Reflection */}
             <div className="space-y-0.5">
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.reflection1')}
               </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.reflection2')}
               </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.reflection3')}
               </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.reflection4')}
               </p>
             </div>
 
             {/* Value Proposition */}
             <div className="space-y-0.5">
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.value1')}
               </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.value2')}
               </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.value3')}
               </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/90 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.value4')}
               </p>
             </div>
 
             {/* Conclusion */}
             <div>
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.conclusion1')}
               </p>
-              <p className="text-sm md:text-base lg:text-lg text-white/80 font-light tracking-wide leading-snug">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.conclusion2')}
               </p>
             </div>
 
             {/* Brand Statement */}
             <div className="pt-4 space-y-2">
-              <p className="text-xl md:text-2xl lg:text-3xl text-white font-semibold tracking-wider">
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 font-semibold tracking-wider">
                 KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
               </p>
-              <p className="text-sm md:text-base text-white/70 font-light tracking-wide">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.brandStatement')}
               </p>
-              <p className="text-sm md:text-base text-white/70 font-light tracking-wide">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
                 {t('hero.manifesto.brandStatement2')}
-              </p>
-              <p className="text-xs md:text-sm text-white/50 font-light tracking-widest">
-                {t('hero.manifesto.brandTagline')}
               </p>
             </div>
             </motion.div>
