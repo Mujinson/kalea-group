@@ -115,70 +115,11 @@ const Home = () => {
               {t('hero.home.tagline')}
             </motion.p>
 
-            {/* Divider */}
-            <motion.div
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ opacity: 1, scaleX: 1 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="w-24 h-px bg-white/30 mx-auto mb-10"
-            />
-
-            {/* System Description */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.85 }}
-              className="max-w-3xl mx-auto mb-12"
-            >
-              <p className="text-white/75 text-base md:text-lg leading-relaxed mb-8">
-                {t('hero.home.systemDescription')}
-              </p>
-
-              {/* Product Lines */}
-              <div className="grid grid-cols-3 gap-3 md:gap-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 1.0 }}
-                  className="aspect-square md:aspect-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center md:flex-col md:p-5 hover:bg-white/10 transition-colors"
-                >
-                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:mb-2">STONECORE 10</h3>
-                  <p className="hidden md:block text-white/60 text-sm leading-relaxed text-center">
-                    {t('hero.home.stonecoreHero')}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 1.1 }}
-                  className="aspect-square md:aspect-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center md:flex-col md:p-5 hover:bg-white/10 transition-colors"
-                >
-                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:mb-2">EDGELINE</h3>
-                  <p className="hidden md:block text-white/60 text-sm leading-relaxed text-center">
-                    {t('hero.home.edgelineHero')}
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 1.2 }}
-                  className="aspect-square md:aspect-auto bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl flex items-center justify-center md:flex-col md:p-5 hover:bg-white/10 transition-colors"
-                >
-                  <h3 className="text-white font-semibold text-[10px] md:text-sm tracking-wider text-center md:mb-2">ONEWALL</h3>
-                  <p className="hidden md:block text-white/60 text-sm leading-relaxed text-center">
-                    {t('hero.home.onewallHero')}
-                  </p>
-                </motion.div>
-              </div>
-            </motion.div>
-
             {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.35 }}
+              transition={{ duration: 0.7, delay: 0.85 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Link 
@@ -196,6 +137,59 @@ const Home = () => {
             </motion.div>
           </div>
         </div>
+        </section>
+
+        {/* System Overview Section - 3 Product Cards */}
+        <section className="relative py-20 md:py-28 overflow-hidden">
+          {/* Background */}
+          <div className="absolute inset-0 z-0">
+            <img 
+              src={bgProducts} 
+              alt="" 
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
+          </div>
+
+          <div className="container-custom relative z-10 text-center">
+            {/* System Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-12"
+            >
+              {t('hero.home.systemDescription')}
+            </motion.p>
+
+            {/* Product Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+              {productLines.map((product, index) => (
+                <Link key={product.title} to={product.link}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    whileHover={{
+                      y: -6,
+                      scale: 1.02,
+                      boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+                    }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 md:p-8 hover:bg-white/15 transition-colors cursor-pointer"
+                  >
+                    <h3 className="text-white font-semibold text-sm md:text-base tracking-wider mb-3">
+                      {product.title.toUpperCase()}
+                    </h3>
+                    <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                      {product.description}
+                    </p>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </section>
 
       {/* Manifesto Section - below hero */}
@@ -240,67 +234,6 @@ const Home = () => {
 
       {/* Product Gallery Section */}
       <ProductGallerySection />
-
-        {/* Le linee Kalēa Section */}
-        <section className="relative min-h-screen flex items-center overflow-hidden py-12 md:py-24 lg:py-32">
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0">
-            <img src={bgProducts} alt="" className="w-full h-full object-cover" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/70 to-black/75" />
-          </div>
-          
-          <div className="container-custom relative z-10 w-full px-4 md:px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-6 md:mb-12 lg:mb-16"
-            >
-              <h2 className="text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-2 md:mb-4">
-                {t('home.linesTitle')}
-              </h2>
-              <p className="text-sm md:text-lg text-white/70 max-w-2xl mx-auto">
-                {t('home.linesSubtitle')}
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-8 lg:gap-10">
-              {productLines.map((product, index) => (
-                <Link key={product.title} to={product.link}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    whileHover={{
-                      y: -6,
-                      rotateX: 2,
-                      rotateY: -2,
-                      boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
-                    }}
-                    transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 0.61, 0.36, 1] }}
-                    className="kalea-card group relative overflow-hidden h-full flex flex-col rounded-2xl"
-                  >
-                    <div className="absolute inset-0 bg-foreground/85" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 to-foreground/80" />
-                    
-                    <div className="relative z-10 flex flex-col h-full p-4 md:p-8 lg:p-10">
-                      <div className="mb-2 md:mb-6">
-                        <product.icon className="w-6 h-6 md:w-10 md:h-10 text-background" strokeWidth={1.5} />
-                      </div>
-                      <h3 className="font-heading font-semibold text-background tracking-tight text-base md:text-2xl mb-1 md:mb-3" style={{ lineHeight: '1.15' }}>
-                        {product.title}
-                      </h3>
-                      <p className="text-background/80 flex-grow text-xs md:text-base leading-snug">
-                        {product.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
       </div>
       {/* End Sticky Stacking Container */}
 
