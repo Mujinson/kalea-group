@@ -85,9 +85,9 @@ const ProductGallerySection = () => {
   const { t, language } = useTranslation();
 
   return (
-    <section className="relative py-20 md:py-28 bg-background overflow-hidden">
+    <section className="relative h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-background overflow-hidden">
       {/* Header */}
-      <div className="container-custom text-center mb-12 md:mb-16">
+      <div className="container-custom text-center mb-8 md:mb-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -118,7 +118,7 @@ const ProductGallerySection = () => {
       </div>
 
       {/* Description */}
-      <div className="container-custom text-center mt-16 md:mt-20">
+      <div className="container-custom text-center mt-8 md:mt-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

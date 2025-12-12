@@ -66,7 +66,7 @@ const Home = () => {
       {/* Sticky Stacking Container */}
       <div className="relative">
         {/* Hero Section */}
-        <section className="relative min-h-screen md:h-screen flex items-center justify-center overflow-hidden pt-32 pb-12 md:pt-20 md:pb-0">
+        <section className="relative h-screen min-h-[600px] max-h-screen flex items-center justify-center overflow-hidden">
           {/* Background */}
           <motion.div 
             className="absolute inset-0 z-0"
@@ -83,7 +83,7 @@ const Home = () => {
           </motion.div>
 
         {/* Content */}
-        <div className="container-custom relative z-10 text-center pt-8 md:pt-12">
+        <div className="container-custom relative z-10 text-center">
           <div className="max-w-5xl mx-auto">
             {/* Main Title */}
             <motion.h1
@@ -140,7 +140,7 @@ const Home = () => {
         </section>
 
         {/* System Overview Section - 3 Product Cards */}
-        <section className="relative py-20 md:py-28 overflow-hidden">
+        <section className="relative h-screen min-h-[500px] max-h-screen flex items-center justify-center overflow-hidden">
           {/* Background */}
           <div className="absolute inset-0 z-0">
             <img 
@@ -193,7 +193,7 @@ const Home = () => {
         </section>
 
       {/* Manifesto Section - full text */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen min-h-[700px] max-h-screen flex items-center justify-center overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -205,53 +205,53 @@ const Home = () => {
         </div>
 
         {/* Content */}
-        <div className="w-full relative z-10 px-6 md:px-12 lg:px-16 py-20 md:py-28 flex items-center justify-center">
+        <div className="w-full relative z-10 px-6 md:px-12 lg:px-16 flex items-center justify-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9 }}
-            className="max-w-3xl mx-auto text-center space-y-4 md:space-y-5"
+            className="max-w-3xl mx-auto text-center space-y-3 md:space-y-4"
           >
             {/* Opening lines */}
-            <div className="space-y-2 md:space-y-3">
-              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+            <div className="space-y-1.5 md:space-y-2">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
                 {t('hero.manifesto.line1')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
                 {t('hero.manifesto.line2')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
                 {t('hero.manifesto.line3')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
                 {t('hero.manifesto.line4')}
               </p>
-              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
                 {t('hero.manifesto.line5')}
               </p>
             </div>
 
             {/* Divider */}
-            <div className="h-px w-16 mx-auto bg-white/40 my-4" />
+            <div className="h-px w-16 mx-auto bg-white/40 my-3" />
 
             {/* Core manifesto text */}
-            <div className="space-y-2 text-sm md:text-base text-white/85 font-light leading-relaxed">
+            <div className="space-y-1.5 text-xs md:text-sm text-white/85 font-light leading-relaxed">
               <p>{t('hero.manifesto.problem1')}<br />{t('hero.manifesto.problem2')}</p>
-              <p className="mt-4">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
-              <p className="mt-4">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
-              <p className="mt-4">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
-              <p className="mt-4">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
+              <p className="mt-2">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
+              <p className="mt-2">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
+              <p className="mt-2">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
+              <p className="mt-2">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
             </div>
 
-            <div className="pt-6 md:pt-8 space-y-2">
-              <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-white/90 font-medium uppercase">
+            <div className="pt-4 md:pt-6 space-y-1.5">
+              <p className="text-xs md:text-sm lg:text-base tracking-[0.25em] text-white/90 font-medium uppercase">
                 KALĒA — SURFACE SYSTEM®
               </p>
-              <p className="text-sm md:text-base text-white/85 font-light">
+              <p className="text-xs md:text-sm text-white/85 font-light">
                 {t('hero.manifesto.brandStatement')}
               </p>
-              <p className="text-sm md:text-base text-white/85 font-light">
+              <p className="text-xs md:text-sm text-white/85 font-light">
                 {t('hero.manifesto.brandStatement2')}
               </p>
             </div>
@@ -268,24 +268,24 @@ const Home = () => {
       <MgoBook />
 
       {/* Applicazioni */}
-      <section className="section-spacing bg-card">
-        <div className="w-full px-6 md:px-12 lg:px-16">
+      <section className="h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-card overflow-hidden">
+        <div className="w-full px-6 md:px-12 lg:px-16 py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
+            className="text-center mb-8 md:mb-12"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
               {t('home.applicationsTitle')}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
               {t('home.applicationsSubtitle')}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 max-w-7xl mx-auto">
             {applications.map((app, index) => (
               <ApplicationCard
                 key={app.title}
@@ -301,24 +301,24 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="section-spacing">
-        <div className="container-custom">
+      <section className="h-screen min-h-[500px] max-h-screen flex flex-col justify-center overflow-hidden">
+        <div className="container-custom py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
+            className="text-center mb-8 md:mb-12"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
               {t('home.sustainabilityTitle')}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
               {t('home.sustainabilitySubtitle')}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
             {sustainability.map((item, index) => (
               <ApplicationCard
                 key={item.title}
@@ -334,7 +334,7 @@ const Home = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="section-spacing relative overflow-hidden">
+      <section className="h-screen min-h-[500px] max-h-screen relative flex items-center justify-center overflow-hidden">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -356,7 +356,7 @@ const Home = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 
-              className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
+              className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
               style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
             >
               <span>{t('home.ctaTitleBefore')}</span>
@@ -373,7 +373,7 @@ const Home = () => {
               <span>{t('home.ctaTitleAfter')}</span>
             </h2>
             <p 
-              className="text-lg mb-10 max-w-2xl mx-auto text-white/90"
+              className="text-base mb-10 max-w-2xl mx-auto text-white/90"
               style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
             >
               {t('home.ctaSubtitle')}
