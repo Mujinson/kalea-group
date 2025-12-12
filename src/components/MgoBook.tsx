@@ -236,7 +236,7 @@ const MgoBook = () => {
 
   if (isMobile) {
     return (
-      <section className="section-spacing">
+      <section className="h-screen min-h-[550px] max-h-screen flex items-center justify-center overflow-hidden">
         <div className="container-custom">
           <motion.div
             ref={bookRef}
@@ -307,7 +307,7 @@ const MgoBook = () => {
   }
 
   return (
-    <section className="section-spacing overflow-hidden">
+    <section className="h-screen min-h-[600px] max-h-screen flex items-center justify-center overflow-hidden">
       <div className="w-full px-6 md:px-12 lg:px-20">
         <motion.div
           ref={bookRef}
