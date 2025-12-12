@@ -4,7 +4,6 @@ import { ChevronLeft, ChevronRight, Flame, Droplets, Bug, Box, Volume2, Leaf, He
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import bgMgoFloor from "@/assets/finish-corteccia.jpg";
 
 const MgoBook = () => {
   const { t, language } = useTranslation();
@@ -237,18 +236,8 @@ const MgoBook = () => {
 
   if (isMobile) {
     return (
-      <section className="section-spacing relative overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={bgMgoFloor} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
-        </div>
-        
-        <div className="container-custom relative z-10">
+      <section className="section-spacing">
+        <div className="container-custom">
           <motion.div
             ref={bookRef}
             initial={{ opacity: 0, y: 30 }}
@@ -260,8 +249,10 @@ const MgoBook = () => {
             <div
               className="relative mx-auto rounded-2xl overflow-hidden"
               style={{
-                background: "radial-gradient(circle at top left, rgba(245, 242, 238, 0.7), rgba(235, 230, 225, 0.5))",
-                boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08)",
+                background:
+                  "radial-gradient(circle at top left, rgba(245, 242, 238, 0.7), rgba(235, 230, 225, 0.5))",
+                boxShadow:
+                  "0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08)",
                 minHeight: "420px",
               }}
             >
@@ -294,13 +285,15 @@ const MgoBook = () => {
                     key={idx}
                     onClick={() => setMobilePageIndex(idx)}
                     className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                      idx === mobilePageIndex ? 'bg-foreground' : 'bg-foreground/20'
+                      idx === mobilePageIndex ? "bg-foreground" : "bg-foreground/20"
                     }`}
                   />
                 ))}
               </div>
               <button
-                onClick={() => setMobilePageIndex(Math.min(mobilePages.length - 1, mobilePageIndex + 1))}
+                onClick={() =>
+                  setMobilePageIndex(Math.min(mobilePages.length - 1, mobilePageIndex + 1))
+                }
                 disabled={mobilePageIndex === mobilePages.length - 1}
                 className="p-2 rounded-full bg-foreground/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/20 transition-colors"
               >
@@ -314,18 +307,8 @@ const MgoBook = () => {
   }
 
   return (
-    <section className="section-spacing overflow-hidden relative">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={bgMgoFloor} 
-          alt="" 
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
-      </div>
-      
-      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
+    <section className="section-spacing overflow-hidden">
+      <div className="w-full px-6 md:px-12 lg:px-20">
         <motion.div
           ref={bookRef}
           initial={{ opacity: 0, scale: 0.9 }}
@@ -351,8 +334,10 @@ const MgoBook = () => {
               <div
                 className="absolute inset-0 rounded-l-[32px] overflow-hidden"
                 style={{
-                  background: "radial-gradient(circle at top left, rgba(245, 242, 238, 0.7), rgba(235, 230, 225, 0.5))",
-                  boxShadow: "-8px 0 30px rgba(0, 0, 0, 0.08), inset -2px 0 8px rgba(0, 0, 0, 0.03)",
+                  background:
+                    "radial-gradient(circle at top left, rgba(245, 242, 238, 0.7), rgba(235, 230, 225, 0.5))",
+                  boxShadow:
+                    "-8px 0 30px rgba(0, 0, 0, 0.08), inset -2px 0 8px rgba(0, 0, 0, 0.03)",
                 }}
               >
                 <AnimatePresence mode="wait">
@@ -374,7 +359,8 @@ const MgoBook = () => {
             <div
               className="absolute left-1/2 top-0 bottom-0 w-8 -translate-x-1/2 z-10 pointer-events-none"
               style={{
-                background: "linear-gradient(90deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.02) 30%, rgba(0,0,0,0.02) 70%, rgba(0,0,0,0.12) 100%)",
+                background:
+                  "linear-gradient(90deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.02) 30%, rgba(0,0,0,0.02) 70%, rgba(0,0,0,0.12) 100%)",
               }}
             />
 
@@ -393,9 +379,11 @@ const MgoBook = () => {
               <div
                 className="absolute inset-0 rounded-r-[32px] overflow-hidden"
                 style={{
-                  background: "linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(245, 242, 238, 0.6))",
+                  background:
+                    "linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(245, 242, 238, 0.6))",
                   backdropFilter: "blur(20px)",
-                  boxShadow: "8px 0 30px rgba(0, 0, 0, 0.1), inset 2px 0 8px rgba(0, 0, 0, 0.02)",
+                  boxShadow:
+                    "8px 0 30px rgba(0, 0, 0, 0.1), inset 2px 0 8px rgba(0, 0, 0, 0.02)",
                 }}
               >
                 <AnimatePresence mode="wait">
@@ -419,7 +407,8 @@ const MgoBook = () => {
                     className="absolute inset-0 rounded-r-[32px] overflow-hidden z-20"
                     style={{
                       transformOrigin: "left center",
-                      background: "linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(245, 242, 238, 0.7))",
+                      background:
+                        "linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(245, 242, 238, 0.7))",
                       boxShadow: "8px 0 40px rgba(0, 0, 0, 0.2)",
                     }}
                     initial={{ rotateY: flipDirection === 'next' ? 0 : -180 }}
@@ -458,8 +447,8 @@ const MgoBook = () => {
                   }}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
                     idx === currentSpread
-                      ? 'bg-foreground scale-110'
-                      : 'bg-foreground/20 hover:bg-foreground/40'
+                      ? "bg-foreground scale-110"
+                      : "bg-foreground/20 hover:bg-foreground/40"
                   }`}
                 />
               ))}
