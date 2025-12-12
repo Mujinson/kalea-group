@@ -55,7 +55,6 @@ const Navbar = () => {
 
   const menuItems = [
     { label: t('nav.technicalArea'), path: `/${language}/area-tecnica` },
-    { label: t('nav.aboutUs'), path: `/${language}/chi-siamo` },
     { label: t('nav.contacts'), path: `/${language}/contatti` },
   ];
 

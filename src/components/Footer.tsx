@@ -1,7 +1,25 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Twitter, Linkedin, Facebook, Instagram } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Facebook, Instagram } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import logoFooter from "@/assets/logo-footer.png";
+
+// X (formerly Twitter) icon component
+const XIcon = ({ size = 24, className = "", strokeWidth = 1.5 }: { size?: number; className?: string; strokeWidth?: number }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth={strokeWidth} 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+    <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+  </svg>
+);
 
 const Footer = () => {
   const { t, language } = useTranslation();
@@ -103,13 +121,13 @@ const Footer = () => {
               </h4>
               <div className="flex items-center gap-6">
                 <a
-                  href="https://twitter.com"
+                  href="https://x.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 -m-2 group"
-                  aria-label="Twitter"
+                  aria-label="X"
                 >
-                  <Twitter size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+                  <XIcon size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
                 </a>
                 <a
                   href="https://linkedin.com"
