@@ -7,9 +7,10 @@ interface ApplicationCardProps {
   description: string;
   backgroundImage?: string;
   index: number;
+  compact?: boolean;
 }
 
-const ApplicationCard = ({ icon: Icon, title, description, backgroundImage, index }: ApplicationCardProps) => {
+const ApplicationCard = ({ icon: Icon, title, description, backgroundImage, index, compact = false }: ApplicationCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -22,7 +23,9 @@ const ApplicationCard = ({ icon: Icon, title, description, backgroundImage, inde
         rotateY: -2,
         boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
       }}
-      className="kalea-card group relative aspect-square rounded-2xl bg-muted overflow-hidden"
+      className={`kalea-card group relative rounded-2xl bg-muted overflow-hidden ${
+        compact ? 'aspect-[4/3]' : 'aspect-square'
+      }`}
     >
       {backgroundImage && (
         <img 
@@ -33,10 +36,10 @@ const ApplicationCard = ({ icon: Icon, title, description, backgroundImage, inde
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-foreground/80" />
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-        <Icon className="w-12 h-12 text-background mb-4" />
-        <h3 className="text-xl font-heading font-semibold text-background mb-2">{title}</h3>
-        <p className="text-sm text-background/80">{description}</p>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-3 md:p-4">
+        <Icon className={`text-background mb-2 ${compact ? 'w-8 h-8 md:w-10 md:h-10' : 'w-12 h-12'}`} />
+        <h3 className={`font-heading font-semibold text-background mb-1 ${compact ? 'text-sm md:text-base' : 'text-xl'}`}>{title}</h3>
+        <p className={`text-background/80 ${compact ? 'text-[10px] md:text-xs hidden sm:block' : 'text-sm'}`}>{description}</p>
       </div>
     </motion.div>
   );
