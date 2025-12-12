@@ -192,8 +192,8 @@ const Home = () => {
           </div>
         </section>
 
-      {/* Manifesto Section - below hero */}
-      <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden">
+      {/* Manifesto Section - full text */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -201,33 +201,60 @@ const Home = () => {
             alt="" 
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-black/45" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60" />
         </div>
 
         {/* Content */}
-        <div className="w-full relative z-10 text-center px-6 md:px-12 lg:px-16 py-16 md:py-24">
+        <div className="w-full relative z-10 px-6 md:px-12 lg:px-16 py-20 md:py-28 flex items-center justify-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl mx-auto space-y-3 md:space-y-4"
+            transition={{ duration: 0.9 }}
+            className="max-w-3xl mx-auto text-center space-y-4 md:space-y-5"
           >
-            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
-              {t('hero.manifesto.line1')}
-            </p>
-            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
-              {t('hero.manifesto.line2')}
-            </p>
-            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
-              {t('hero.manifesto.line3')}
-            </p>
-            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
-              {t('hero.manifesto.line4')}
-            </p>
-            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
-              {t('hero.manifesto.line5')}
-            </p>
+            {/* Opening lines */}
+            <div className="space-y-2 md:space-y-3">
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                {t('hero.manifesto.line1')}
+              </p>
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                {t('hero.manifesto.line2')}
+              </p>
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                {t('hero.manifesto.line3')}
+              </p>
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                {t('hero.manifesto.line4')}
+              </p>
+              <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                {t('hero.manifesto.line5')}
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px w-16 mx-auto bg-white/40 my-4" />
+
+            {/* Core manifesto text */}
+            <div className="space-y-2 text-sm md:text-base text-white/85 font-light leading-relaxed">
+              <p>{t('hero.manifesto.problem1')}<br />{t('hero.manifesto.problem2')}</p>
+              <p className="mt-4">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
+              <p className="mt-4">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
+              <p className="mt-4">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
+              <p className="mt-4">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
+            </div>
+
+            <div className="pt-6 md:pt-8 space-y-2">
+              <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-white/90 font-medium uppercase">
+                KALĒA — SURFACE SYSTEM®
+              </p>
+              <p className="text-sm md:text-base text-white/85 font-light">
+                {t('hero.manifesto.brandStatement')}
+              </p>
+              <p className="text-sm md:text-base text-white/85 font-light">
+                {t('hero.manifesto.brandStatement2')}
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
