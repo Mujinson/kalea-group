@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Flame, Droplets, Bug, Box, Volume2, Leaf, He
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
+import bgMgoFloor from "@/assets/finish-corteccia.jpg";
 
 const MgoBook = () => {
   const { t, language } = useTranslation();
@@ -236,8 +237,18 @@ const MgoBook = () => {
 
   if (isMobile) {
     return (
-      <section className="section-spacing">
-        <div className="container-custom">
+      <section className="section-spacing relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={bgMgoFloor} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
+        </div>
+        
+        <div className="container-custom relative z-10">
           <motion.div
             ref={bookRef}
             initial={{ opacity: 0, y: 30 }}
@@ -303,8 +314,18 @@ const MgoBook = () => {
   }
 
   return (
-    <section className="section-spacing overflow-hidden">
-      <div className="w-full px-6 md:px-12 lg:px-20">
+    <section className="section-spacing overflow-hidden relative">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={bgMgoFloor} 
+          alt="" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
+      </div>
+      
+      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
         <motion.div
           ref={bookRef}
           initial={{ opacity: 0, scale: 0.9 }}

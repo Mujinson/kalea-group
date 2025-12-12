@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
-import FeatureCard from "@/components/FeatureCard";
 import ApplicationCard from "@/components/ApplicationCard";
-import KaleaIntroSection from "@/components/KaleaIntroSection";
 import MgoBook from "@/components/MgoBook";
 import ProductGallerySection from "@/components/ProductGallerySection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
@@ -32,16 +30,19 @@ const Home = () => {
       icon: Layers,
       title: t('home.stonecore.title'),
       description: t('home.stonecore.description'),
+      link: `/${language}/stonecore-10`,
     },
     {
       icon: Shield,
       title: t('home.edgeline.title'),
       description: t('home.edgeline.description'),
+      link: `/${language}/edgeline`,
     },
     {
       icon: Sparkles,
       title: t('home.onewall.title'),
       description: t('home.onewall.description'),
+      link: `/${language}/onewall`,
     },
   ];
 
@@ -197,20 +198,17 @@ const Home = () => {
         </div>
         </section>
 
-        {/* Product Gallery Section */}
-        <ProductGallerySection />
-
-        {/* Manifesto Section */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 md:py-20">
-          {/* Background */}
-          <div className="absolute inset-0 z-0">
-            <img 
-              src={bgManifesto} 
-              alt="" 
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
-          </div>
+      {/* Manifesto Section - below hero */}
+      <section className="relative py-16 md:py-24 overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={bgManifesto} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
+        </div>
 
         {/* Content */}
         <div className="w-full relative z-10 text-center px-6 md:px-12 lg:px-16">
@@ -219,108 +217,29 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto space-y-6 md:space-y-8"
+            className="max-w-3xl mx-auto space-y-2"
           >
-            {/* Opening Statement */}
-            <div className="space-y-1">
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.line1')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.line2')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.line3')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.line4')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.line5')}
-              </p>
-            </div>
+            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              {t('hero.manifesto.line1')}
+            </p>
+            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              {t('hero.manifesto.line2')}
+            </p>
+            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              {t('hero.manifesto.line3')}
+            </p>
+            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              {t('hero.manifesto.line4')}
+            </p>
+            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+              {t('hero.manifesto.line5')}
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
-            {/* Divider */}
-            <div className="w-12 h-px bg-white/30 mx-auto" />
-
-            {/* Problem Statement */}
-            <div>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.problem1')}<br />
-                {t('hero.manifesto.problem2')}
-              </p>
-            </div>
-
-            {/* Question */}
-            <div>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed mb-1">
-                {t('hero.manifesto.question1')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light italic tracking-wide leading-relaxed">
-                {t('hero.manifesto.question2')}
-              </p>
-            </div>
-
-            {/* Divider */}
-            <div className="w-12 h-px bg-white/30 mx-auto" />
-
-            {/* Reflection */}
-            <div className="space-y-0.5">
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.reflection1')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.reflection2')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.reflection3')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.reflection4')}
-              </p>
-            </div>
-
-            {/* Value Proposition */}
-            <div className="space-y-0.5">
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.value1')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.value2')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.value3')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.value4')}
-              </p>
-            </div>
-
-            {/* Conclusion */}
-            <div>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.conclusion1')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.conclusion2')}
-              </p>
-            </div>
-
-            {/* Brand Statement */}
-            <div className="pt-4 space-y-2">
-              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 font-semibold tracking-wider">
-                KALĒA — SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.brandStatement')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
-                {t('hero.manifesto.brandStatement2')}
-              </p>
-            </div>
-            </motion.div>
-          </div>
-        </section>
+      {/* Product Gallery Section */}
+      <ProductGallerySection />
 
         {/* Le linee Kalēa Section */}
         <section className="relative min-h-screen flex items-center overflow-hidden py-12 md:py-24 lg:py-32">
@@ -348,7 +267,36 @@ const Home = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-8 lg:gap-10">
               {productLines.map((product, index) => (
-                <FeatureCard key={product.title} {...product} index={index} compact />
+                <Link key={product.title} to={product.link}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    whileHover={{
+                      y: -6,
+                      rotateX: 2,
+                      rotateY: -2,
+                      boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+                    }}
+                    transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 0.61, 0.36, 1] }}
+                    className="kalea-card group relative overflow-hidden h-full flex flex-col rounded-2xl"
+                  >
+                    <div className="absolute inset-0 bg-foreground/85" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 to-foreground/80" />
+                    
+                    <div className="relative z-10 flex flex-col h-full p-4 md:p-8 lg:p-10">
+                      <div className="mb-2 md:mb-6">
+                        <product.icon className="w-6 h-6 md:w-10 md:h-10 text-background" strokeWidth={1.5} />
+                      </div>
+                      <h3 className="font-heading font-semibold text-background tracking-tight text-base md:text-2xl mb-1 md:mb-3" style={{ lineHeight: '1.15' }}>
+                        {product.title}
+                      </h3>
+                      <p className="text-background/80 flex-grow text-xs md:text-base leading-snug">
+                        {product.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                </Link>
               ))}
             </div>
           </div>
@@ -358,9 +306,6 @@ const Home = () => {
 
       {/* Perché MgO - 3D Book */}
       <MgoBook />
-
-      {/* Chi è Kalēa */}
-      <KaleaIntroSection variant="home" />
 
       {/* Applicazioni */}
       <section className="section-spacing bg-card">
