@@ -269,23 +269,23 @@ const Home = () => {
 
       {/* Applicazioni */}
       <section className="h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-card overflow-hidden">
-        <div className="w-full px-6 md:px-12 lg:px-16 py-8">
+        <div className="w-full px-6 md:px-12 lg:px-16 py-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-8 md:mb-12"
+            className="text-center mb-6 md:mb-8"
           >
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-2">
               {t('home.applicationsTitle')}
             </h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
               {t('home.applicationsSubtitle')}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 max-w-6xl mx-auto">
             {applications.map((app, index) => (
               <ApplicationCard
                 key={app.title}
@@ -294,6 +294,7 @@ const Home = () => {
                 description={app.description}
                 backgroundImage={app.bg}
                 index={index}
+                compact
               />
             ))}
           </div>
@@ -301,24 +302,24 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="h-screen min-h-[500px] max-h-screen flex flex-col justify-center overflow-hidden">
-        <div className="container-custom py-8">
+      <section className="section-spacing">
+        <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-8 md:mb-12"
+            className="text-center mb-12 md:mb-16"
           >
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
               {t('home.sustainabilityTitle')}
             </h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {t('home.sustainabilitySubtitle')}
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {sustainability.map((item, index) => (
               <ApplicationCard
                 key={item.title}
