@@ -193,7 +193,7 @@ const Home = () => {
         </section>
 
       {/* Manifesto Section - below hero */}
-      <section className="relative py-16 md:py-24 overflow-hidden">
+      <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -201,31 +201,31 @@ const Home = () => {
             alt="" 
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/55" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/35 to-black/45" />
         </div>
 
         {/* Content */}
-        <div className="w-full relative z-10 text-center px-6 md:px-12 lg:px-16">
+        <div className="w-full relative z-10 text-center px-6 md:px-12 lg:px-16 py-16 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="max-w-3xl mx-auto space-y-2"
+            className="max-w-3xl mx-auto space-y-3 md:space-y-4"
           >
-            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
               {t('hero.manifesto.line1')}
             </p>
-            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
               {t('hero.manifesto.line2')}
             </p>
-            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
               {t('hero.manifesto.line3')}
             </p>
-            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
               {t('hero.manifesto.line4')}
             </p>
-            <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-white/90 font-light tracking-wide leading-relaxed italic">
               {t('hero.manifesto.line5')}
             </p>
           </motion.div>
