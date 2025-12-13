@@ -59,9 +59,9 @@ const Navbar = () => {
   ];
 
   const lineeItems = [
-    { label: "StoneCore 10", path: `/${language}/stonecore-10` },
-    { label: "EdgeLine", path: `/${language}/edgeline` },
-    { label: "OneWall", path: `/${language}/onewall` },
+    { label: t('nav.menuStonecore'), path: `/${language}/stonecore-10` },
+    { label: t('nav.menuEdgeline'), path: `/${language}/edgeline` },
+    { label: t('nav.menuOnewall'), path: `/${language}/onewall` },
   ];
 
   const isLineePage = lineeItems.some((item) => location.pathname === item.path);

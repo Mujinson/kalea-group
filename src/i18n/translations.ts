@@ -13,6 +13,9 @@ export const translations: Record<Language, Translations> = {
       aboutUs: "Chi Siamo",
       contacts: "Contatti",
       requestQuote: "Diventa Partner",
+      menuStonecore: "Pavimenti",
+      menuEdgeline: "Profili e battiscopa",
+      menuOnewall: "Pannelli",
     },
     hero: {
       home: {
@@ -787,6 +790,9 @@ export const translations: Record<Language, Translations> = {
       aboutUs: "About Us",
       contacts: "Contacts",
       requestQuote: "Become Partner",
+      menuStonecore: "Floors",
+      menuEdgeline: "Profiles & Baseboards",
+      menuOnewall: "Panels",
     },
     hero: {
       home: {
@@ -1561,6 +1567,9 @@ export const translations: Record<Language, Translations> = {
       aboutUs: "Über uns",
       contacts: "Kontakte",
       requestQuote: "Partner werden",
+      menuStonecore: "Böden",
+      menuEdgeline: "Profile & Sockelleisten",
+      menuOnewall: "Paneele",
     },
     hero: {
       home: {
@@ -2335,6 +2344,9 @@ export const translations: Record<Language, Translations> = {
       aboutUs: "Qui sommes-nous",
       contacts: "Contacts",
       requestQuote: "Devenir Partenaire",
+      menuStonecore: "Sols",
+      menuEdgeline: "Profilés & Plinthes",
+      menuOnewall: "Panneaux",
     },
     hero: {
       home: {
