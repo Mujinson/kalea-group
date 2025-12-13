@@ -1,68 +1,74 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { motion } from "framer-motion";
 
+const AUDIO_STATE_KEY = "kalea-audio-enabled";
+
 const AudioPlayer = () => {
+  // Always start muted - user must explicitly enable
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  // On mount, check localStorage but DO NOT autoplay
   useEffect(() => {
-    // Try to autoplay when component mounts
-    const attemptAutoplay = async () => {
-      if (audioRef.current) {
-        try {
-          audioRef.current.volume = 0.3;
-          await audioRef.current.play();
-          setIsPlaying(true);
-          setHasInteracted(true);
-        } catch (error) {
-          // Autoplay blocked by browser, wait for user interaction
-          console.log("Autoplay blocked, waiting for user interaction");
-        }
-      }
-    };
-
-    attemptAutoplay();
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+      // Ensure audio is paused on load - NO AUTOPLAY EVER
+      audioRef.current.pause();
+    }
   }, []);
 
-  // Handle first user interaction to enable audio
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (!hasInteracted && audioRef.current) {
-        audioRef.current.volume = 0.3;
-        audioRef.current.play()
-          .then(() => {
-            setIsPlaying(true);
-            setHasInteracted(true);
-          })
-          .catch(console.error);
-      }
-      document.removeEventListener('click', handleFirstInteraction);
-    };
-
-    if (!hasInteracted) {
-      document.addEventListener('click', handleFirstInteraction);
-    }
-
-    return () => {
-      document.removeEventListener('click', handleFirstInteraction);
-    };
-  }, [hasInteracted]);
-
-  const toggleAudio = (e: React.MouseEvent) => {
+  // Handle explicit user toggle - ONLY way to start audio
+  const toggleAudio = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-      setHasInteracted(true);
+    
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      // User wants to stop audio
+      audioRef.current.pause();
+      setIsPlaying(false);
+      localStorage.setItem(AUDIO_STATE_KEY, "false");
+    } else {
+      // User explicitly wants to play audio
+      audioRef.current.volume = 0.3;
+      audioRef.current.play()
+        .then(() => {
+          setIsPlaying(true);
+          localStorage.setItem(AUDIO_STATE_KEY, "true");
+        })
+        .catch((error) => {
+          console.log("Audio play failed:", error);
+          setIsPlaying(false);
+        });
     }
-  };
+  }, [isPlaying]);
+
+  // Restore audio state on navigation (only if user previously enabled it)
+  useEffect(() => {
+    const savedState = localStorage.getItem(AUDIO_STATE_KEY);
+    
+    // Only restore if user had explicitly enabled audio before
+    if (savedState === "true" && audioRef.current) {
+      // Wait for user gesture requirement - try to play
+      // If blocked by browser, it will fail silently
+      const tryRestore = async () => {
+        try {
+          audioRef.current!.volume = 0.3;
+          await audioRef.current!.play();
+          setIsPlaying(true);
+        } catch {
+          // Browser blocked - user needs to click again
+          // Reset saved state since we couldn't restore
+          setIsPlaying(false);
+        }
+      };
+      
+      // Small delay to ensure DOM is ready
+      const timer = setTimeout(tryRestore, 100);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   return (
     <>
@@ -71,6 +77,7 @@ const AudioPlayer = () => {
         src="/audio/kalea-intro.mp3"
         loop
         preload="auto"
+        muted={false}
       />
       <motion.button
         onClick={toggleAudio}
@@ -80,7 +87,8 @@ const AudioPlayer = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1 }}
-        aria-label={isPlaying ? "Mute audio" : "Play audio"}
+        aria-label={isPlaying ? "Sound ON" : "Sound OFF"}
+        title={isPlaying ? "Sound ON" : "Sound OFF"}
       >
         {isPlaying ? (
           <Volume2 className="w-5 h-5" />
