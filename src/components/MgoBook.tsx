@@ -266,7 +266,7 @@ const MgoBook = () => {
               className="relative mx-auto rounded-2xl overflow-hidden"
               style={{
                 background:
-                  "radial-gradient(circle at top left, rgba(245, 242, 238, 0.7), rgba(235, 230, 225, 0.5))",
+                  "radial-gradient(circle at top left, rgba(255, 255, 255, 0.97), rgba(250, 248, 245, 0.95))",
                 boxShadow:
                   "0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08)",
                 minHeight: "420px",
@@ -367,7 +367,7 @@ const MgoBook = () => {
                 className="absolute inset-0 rounded-l-[32px] overflow-hidden"
                 style={{
                   background:
-                    "radial-gradient(circle at top left, rgba(245, 242, 238, 0.7), rgba(235, 230, 225, 0.5))",
+                    "radial-gradient(circle at top left, rgba(255, 255, 255, 0.97), rgba(250, 248, 245, 0.95))",
                   boxShadow:
                     "-8px 0 30px rgba(0, 0, 0, 0.08), inset -2px 0 8px rgba(0, 0, 0, 0.03)",
                 }}
@@ -412,8 +412,7 @@ const MgoBook = () => {
                 className="absolute inset-0 rounded-r-[32px] overflow-hidden"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(245, 242, 238, 0.6))",
-                  backdropFilter: "blur(20px)",
+                    "linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(250, 248, 245, 0.95))",
                   boxShadow:
                     "8px 0 30px rgba(0, 0, 0, 0.1), inset 2px 0 8px rgba(0, 0, 0, 0.02)",
                 }}
