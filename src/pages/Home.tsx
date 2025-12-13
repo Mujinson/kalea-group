@@ -279,6 +279,11 @@ const Home = () => {
       </div>
       {/* End Sticky Stacking Container */}
 
+      {/* Section Separator */}
+      <div className="w-full flex justify-center py-2 bg-card">
+        <div className="w-32 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
+      </div>
+
       {/* Perché MgO - 3D Book */}
       <MgoBook />
 
