@@ -8,7 +8,7 @@ export const translations: Record<Language, Translations> = {
   it: {
     nav: {
       home: "Home",
-      lines: "Linee",
+      lines: "Prodotti",
       technicalArea: "Area Tecnica",
       aboutUs: "Chi Siamo",
       contacts: "Contatti",
@@ -782,7 +782,7 @@ export const translations: Record<Language, Translations> = {
   en: {
     nav: {
       home: "Home",
-      lines: "Lines",
+      lines: "Products",
       technicalArea: "Technical Area",
       aboutUs: "About Us",
       contacts: "Contacts",
@@ -1556,7 +1556,7 @@ export const translations: Record<Language, Translations> = {
   de: {
     nav: {
       home: "Home",
-      lines: "Linien",
+      lines: "Produkte",
       technicalArea: "Technischer Bereich",
       aboutUs: "Über uns",
       contacts: "Kontakte",
@@ -2330,7 +2330,7 @@ export const translations: Record<Language, Translations> = {
   fr: {
     nav: {
       home: "Accueil",
-      lines: "Lignes",
+      lines: "Produits",
       technicalArea: "Espace Technique",
       aboutUs: "Qui sommes-nous",
       contacts: "Contacts",
