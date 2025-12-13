@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Facebook, Instagram } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
-import logoFooter from "@/assets/logo-footer.png";
+import logoFooter from "@/assets/logo-new.png";
 
 // X (formerly Twitter) icon component
 const XIcon = ({ size = 24, className = "", strokeWidth = 1.5 }: { size?: number; className?: string; strokeWidth?: number }) => (

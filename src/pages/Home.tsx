@@ -6,7 +6,7 @@ import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Bri
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-kalea.webp";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import bgProducts from "@/assets/bg-products.jpg";
 import bgManifesto from "@/assets/bg-manifesto.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
@@ -82,8 +82,8 @@ const Home = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/80" />
           </motion.div>
 
-        {/* Content */}
-        <div className="container-custom relative z-10 text-center">
+        {/* Content - positioned in the bottom half to avoid covering the Kalea logo in bg */}
+        <div className="container-custom relative z-10 text-center pt-[45vh] md:pt-[50vh]">
           <div className="max-w-5xl mx-auto">
             {/* Main Title */}
             <motion.h1
@@ -100,26 +100,16 @@ const Home = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-2 tracking-wide"
+              className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-10 tracking-wide"
             >
               {t('hero.home.newStandard')}
-            </motion.p>
-
-            {/* Tagline */}
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.55 }}
-              className="text-base md:text-lg text-white/65 font-light mb-12 tracking-widest uppercase"
-            >
-              {t('hero.home.tagline')}
             </motion.p>
 
             {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.85 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
               <Link 
