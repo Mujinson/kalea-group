@@ -83,7 +83,7 @@ const Home = () => {
           </motion.div>
 
         {/* Content - positioned in the bottom half to avoid covering the Kalea logo in bg */}
-        <div className="container-custom relative z-10 text-center pt-[45vh] md:pt-[50vh]">
+        <div className="container-custom relative z-10 text-center pt-[55vh] md:pt-[58vh]">
           <div className="max-w-5xl mx-auto">
             {/* Main Title */}
             <motion.h1
