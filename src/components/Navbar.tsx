@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Clock } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo-new.png";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -59,9 +60,9 @@ const Navbar = () => {
   ];
 
   const lineeItems = [
-    { label: t('nav.menuStonecore'), path: `/${language}/stonecore-10` },
-    { label: t('nav.menuEdgeline'), path: `/${language}/edgeline` },
-    { label: t('nav.menuOnewall'), path: `/${language}/onewall` },
+    { label: t('nav.menuStonecore'), path: `/${language}/stonecore-10`, comingSoon: false },
+    { label: t('nav.menuEdgeline'), path: `/${language}/edgeline`, comingSoon: false },
+    { label: t('nav.menuOnewall'), path: `/${language}/onewall`, comingSoon: true },
   ];
 
   const isLineePage = lineeItems.some((item) => location.pathname === item.path);
@@ -213,21 +214,40 @@ const Navbar = () => {
                         }`}
                       >
                         {lineeItems.map((item, index) => (
-                          <Link
-                            key={item.path}
-                            to={item.path}
-                            className={`block px-6 py-3 text-nav transition-all duration-200 ${
-                              useDarkStyle
-                                ? location.pathname === item.path
-                                  ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-                                  : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
-                                : location.pathname === item.path
-                                  ? "text-white bg-white/10"
-                                  : "text-white/90 hover:text-white hover:bg-white/5"
-                            } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
-                          >
-                            {item.label}
-                          </Link>
+                          item.comingSoon ? (
+                            <Tooltip key={item.path}>
+                              <TooltipTrigger asChild>
+                                <div
+                                  className={`block px-6 py-3 text-nav cursor-not-allowed opacity-50 ${
+                                    useDarkStyle
+                                      ? "text-[#3F3B33]/60"
+                                      : "text-white/60"
+                                  } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
+                                >
+                                  {item.label}
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="bg-foreground text-background text-xs px-3 py-1.5 rounded-lg">
+                                Coming soon
+                              </TooltipContent>
+                            </Tooltip>
+                          ) : (
+                            <Link
+                              key={item.path}
+                              to={item.path}
+                              className={`block px-6 py-3 text-nav transition-all duration-200 ${
+                                useDarkStyle
+                                  ? location.pathname === item.path
+                                    ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+                                    : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+                                  : location.pathname === item.path
+                                    ? "text-white bg-white/10"
+                                    : "text-white/90 hover:text-white hover:bg-white/5"
+                              } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
+                            >
+                              {item.label}
+                            </Link>
+                          )
                         ))}
                       </motion.div>
                     )}
@@ -366,25 +386,38 @@ const Navbar = () => {
                       className="pl-4 space-y-2 mt-2"
                     >
                       {lineeItems.map((item) => (
-                        <Link
-                          key={item.path}
-                          to={item.path}
-                          className={`block text-sm font-medium transition-colors py-2 ${
-                            useDarkStyle
-                              ? location.pathname === item.path 
-                                ? "text-[#3F3B33]" 
-                                : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
-                              : location.pathname === item.path 
-                                ? "text-white" 
-                                : "text-white/60 hover:text-white"
-                          }`}
-                          onClick={() => {
-                            setIsMobileMenuOpen(false);
-                            setIsLineeExpanded(false);
-                          }}
-                        >
-                          {item.label}
-                        </Link>
+                        item.comingSoon ? (
+                          <div
+                            key={item.path}
+                            className={`block text-sm font-medium py-2 cursor-not-allowed opacity-50 ${
+                              useDarkStyle
+                                ? "text-[#3F3B33]/60"
+                                : "text-white/60"
+                            }`}
+                          >
+                            {item.label} – <span className="italic">Coming soon</span>
+                          </div>
+                        ) : (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`block text-sm font-medium transition-colors py-2 ${
+                              useDarkStyle
+                                ? location.pathname === item.path 
+                                  ? "text-[#3F3B33]" 
+                                  : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
+                                : location.pathname === item.path 
+                                  ? "text-white" 
+                                  : "text-white/60 hover:text-white"
+                            }`}
+                            onClick={() => {
+                              setIsMobileMenuOpen(false);
+                              setIsLineeExpanded(false);
+                            }}
+                          >
+                            {item.label}
+                          </Link>
+                        )
                       ))}
                     </motion.div>
                   )}

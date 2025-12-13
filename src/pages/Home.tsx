@@ -31,18 +31,22 @@ const Home = () => {
       title: t('home.stonecore.title'),
       description: t('home.stonecore.description'),
       link: `/${language}/stonecore-10`,
+      comingSoon: false,
     },
     {
       icon: Shield,
       title: t('home.edgeline.title'),
       description: t('home.edgeline.description'),
       link: `/${language}/edgeline`,
+      comingSoon: false,
     },
     {
       icon: Sparkles,
       title: t('home.onewall.title'),
       description: t('home.onewall.description'),
       link: `/${language}/onewall`,
+      comingSoon: true,
+      comingSoonLabel: t('home.onewall.comingSoonLabel'),
     },
   ];
 
@@ -156,27 +160,48 @@ const Home = () => {
             {/* Product Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
               {productLines.map((product, index) => (
-                <Link key={product.title} to={product.link}>
+                product.comingSoon ? (
                   <motion.div
+                    key={product.title}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    whileHover={{
-                      y: -6,
-                      scale: 1.02,
-                      boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
-                    }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 md:p-8 hover:bg-white/15 transition-colors cursor-pointer"
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8 cursor-default relative"
                   >
-                    <h3 className="text-white font-semibold text-sm md:text-base tracking-wider mb-3">
+                    <div className="absolute top-3 right-3 bg-white/20 text-white text-[10px] font-medium px-2 py-1 rounded-full">
+                      {product.comingSoonLabel || "Novità in arrivo"}
+                    </div>
+                    <h3 className="text-white/60 font-semibold text-sm md:text-base tracking-wider mb-3">
                       {product.title.toUpperCase()}
                     </h3>
-                    <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                    <p className="text-white/40 text-sm md:text-base leading-relaxed">
                       {product.description}
                     </p>
                   </motion.div>
-                </Link>
+                ) : (
+                  <Link key={product.title} to={product.link}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      whileHover={{
+                        y: -6,
+                        scale: 1.02,
+                        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+                      }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 md:p-8 hover:bg-white/15 transition-colors cursor-pointer"
+                    >
+                      <h3 className="text-white font-semibold text-sm md:text-base tracking-wider mb-3">
+                        {product.title.toUpperCase()}
+                      </h3>
+                      <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                        {product.description}
+                      </p>
+                    </motion.div>
+                  </Link>
+                )
               ))}
             </div>
           </div>
