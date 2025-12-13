@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Language } from "@/i18n/translations";
 
@@ -147,7 +147,7 @@ const Navbar = () => {
                 src={logo} 
                 alt="Kalēa" 
                 className={`h-8 md:h-10 transition-all duration-300 ${
-                  useDarkStyle ? "" : "brightness-0 invert"
+                  useDarkStyle ? "brightness-0" : "brightness-0 invert"
                 }`} 
               />
             </Link>
