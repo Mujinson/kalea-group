@@ -7,7 +7,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import StoneCore10 from "./pages/StoneCore10";
 import EdgeLine from "./pages/EdgeLine";
-import OneWall from "./pages/OneWall";
+// OneWall page is Coming Soon - routes redirect to home
 import AreaTecnica from "./pages/AreaTecnica";
 import ChiSiamo from "./pages/ChiSiamo";
 import Contatti from "./pages/Contatti";
@@ -70,7 +70,7 @@ const App = () => (
             <Route path="/it" element={<Layout><Home /></Layout>} />
             <Route path="/it/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
             <Route path="/it/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/it/onewall" element={<Layout><OneWall /></Layout>} />
+            <Route path="/it/onewall" element={<Navigate to="/it" replace />} />
             <Route path="/it/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/it/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/it/contatti" element={<Layout><Contatti /></Layout>} />
@@ -83,7 +83,7 @@ const App = () => (
             <Route path="/en" element={<Layout><Home /></Layout>} />
             <Route path="/en/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
             <Route path="/en/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/en/onewall" element={<Layout><OneWall /></Layout>} />
+            <Route path="/en/onewall" element={<Navigate to="/en" replace />} />
             <Route path="/en/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/en/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/en/contatti" element={<Layout><Contatti /></Layout>} />
@@ -96,7 +96,7 @@ const App = () => (
             <Route path="/de" element={<Layout><Home /></Layout>} />
             <Route path="/de/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
             <Route path="/de/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/de/onewall" element={<Layout><OneWall /></Layout>} />
+            <Route path="/de/onewall" element={<Navigate to="/de" replace />} />
             <Route path="/de/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/de/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/de/contatti" element={<Layout><Contatti /></Layout>} />
@@ -109,7 +109,7 @@ const App = () => (
             <Route path="/fr" element={<Layout><Home /></Layout>} />
             <Route path="/fr/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
             <Route path="/fr/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/fr/onewall" element={<Layout><OneWall /></Layout>} />
+            <Route path="/fr/onewall" element={<Navigate to="/fr" replace />} />
             <Route path="/fr/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
             <Route path="/fr/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
             <Route path="/fr/contatti" element={<Layout><Contatti /></Layout>} />

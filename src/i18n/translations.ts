@@ -90,6 +90,7 @@ export const translations: Record<Language, Translations> = {
       onewall: {
         title: "Kalēa OneWall",
         description: "Il verticale oltre il cartongesso. Zero stuccatura. Zero polvere. Zero pittura. La superficie è già design.",
+        comingSoonLabel: "Novità in arrivo",
       },
       mgoTitle: "Perché MgO",
       mgoDescription: "Un materiale che ridefinisce le prestazioni delle superfici tecniche.",
@@ -867,6 +868,7 @@ export const translations: Record<Language, Translations> = {
       onewall: {
         title: "Kalēa OneWall",
         description: "The vertical beyond drywall. Zero plastering. Zero dust. Zero painting. The surface is already design.",
+        comingSoonLabel: "Coming soon",
       },
       mgoTitle: "Why MgO",
       mgoDescription: "A material that redefines the performance of technical surfaces.",
@@ -1644,6 +1646,7 @@ export const translations: Record<Language, Translations> = {
       onewall: {
         title: "Kalēa OneWall",
         description: "Das Vertikale jenseits von Trockenbau. Keine Verspachtelung. Kein Staub. Keine Farbe. Die Oberfläche ist bereits Design.",
+        comingSoonLabel: "Bald verfügbar",
       },
       mgoTitle: "Warum MgO",
       mgoDescription: "Ein Material, das die Leistung technischer Oberflächen neu definiert.",
@@ -2421,6 +2424,7 @@ export const translations: Record<Language, Translations> = {
       onewall: {
         title: "Kalēa OneWall",
         description: "Le vertical au-delà du placo. Zéro enduit. Zéro poussière. Zéro peinture. La surface est déjà design.",
+        comingSoonLabel: "Bientôt disponible",
       },
       mgoTitle: "Pourquoi MgO",
       mgoDescription: "Un matériau qui redéfinit la performance des surfaces techniques.",
