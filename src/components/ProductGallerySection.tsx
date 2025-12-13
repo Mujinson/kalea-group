@@ -70,7 +70,7 @@ const ProductCard = ({ product, language }: { product: typeof products[0]; langu
           {/* Content */}
           <div className="p-5 bg-card">
             <h3 className="text-lg font-semibold text-foreground tracking-wide">
-              Kalēa {product.name}
+              {product.name}
             </h3>
             <p className="text-sm text-muted-foreground mt-1">
               {product.tagline}

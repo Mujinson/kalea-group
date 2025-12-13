@@ -205,8 +205,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     gallery: {
-      title: "Esplora la Collezione Kalēa",
-      subtitle: "Texture, colori e dettagli del nostro pavimento in MgO texture wood.",
+      title: "Esplora la Collezione StoneCore 10",
+      subtitle: "Texture, colori e dettagli del nostro pavimento in ossido di magnesio texture wood.",
       description: "Il pavimento Kalēa combina tecnologia in MgO, resistenza superiore e un design naturale ispirato al legno autentico. Scopri tutte le finiture disponibili per showroom, rivenditori e professionisti.",
       cta: "Scopri tutte le finiture",
     },
@@ -981,8 +981,8 @@ export const translations: Record<Language, Translations> = {
           designDesc: "Curated, versatile surfaces designed for every environment",
     },
     gallery: {
-      title: "Explore the Kalēa Collection",
-      subtitle: "Textures, colors and details of our MgO wood texture flooring.",
+      title: "Explore the StoneCore 10 Collection",
+      subtitle: "Textures, colors and details of our magnesium oxide wood texture flooring.",
       description: "Kalēa flooring combines MgO technology, superior resistance and a natural design inspired by authentic wood. Discover all finishes available for showrooms, retailers and professionals.",
       cta: "Discover all finishes",
     },
@@ -1759,8 +1759,8 @@ export const translations: Record<Language, Translations> = {
           designDesc: "Kuratierte, vielseitige Oberflächen für jede Umgebung",
     },
     gallery: {
-      title: "Entdecken Sie die Kalēa Kollektion",
-      subtitle: "Texturen, Farben und Details unseres MgO-Holzstruktur-Bodens.",
+      title: "Entdecken Sie die StoneCore 10 Kollektion",
+      subtitle: "Texturen, Farben und Details unseres Magnesiumoxid-Holzstruktur-Bodens.",
       description: "Der Kalēa-Boden kombiniert MgO-Technologie, überlegene Beständigkeit und ein natürliches Design, inspiriert von echtem Holz. Entdecken Sie alle Oberflächen für Showrooms, Händler und Fachleute.",
       cta: "Alle Oberflächen entdecken",
     },
@@ -2509,8 +2509,8 @@ export const translations: Record<Language, Translations> = {
         },
     },
     gallery: {
-      title: "Explorez la Collection Kalēa",
-      subtitle: "Textures, couleurs et détails de notre revêtement de sol MgO texture bois.",
+      title: "Explorez la Collection StoneCore 10",
+      subtitle: "Textures, couleurs et détails de notre revêtement de sol en oxyde de magnésium texture bois.",
       description: "Le revêtement Kalēa combine la technologie MgO, une résistance supérieure et un design naturel inspiré du bois authentique. Découvrez toutes les finitions disponibles pour showrooms, revendeurs et professionnels.",
       cta: "Découvrir toutes les finitions",
     },
