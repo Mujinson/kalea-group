@@ -236,8 +236,17 @@ const MgoBook = () => {
 
   if (isMobile) {
     return (
-      <section className="h-screen min-h-[550px] max-h-screen flex items-center justify-center overflow-hidden">
+      <section className="h-screen min-h-[550px] max-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="container-custom">
+          {/* Section Title */}
+          <div className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">
+              {t('home.mgoTitle')}
+            </h2>
+            <p className="text-sm md:text-base text-muted-foreground max-w-md mx-auto">
+              {t('home.mgoDescription')}
+            </p>
+          </div>
           <motion.div
             ref={bookRef}
             initial={{ opacity: 0, y: 30 }}
@@ -307,8 +316,17 @@ const MgoBook = () => {
   }
 
   return (
-    <section className="h-screen min-h-[600px] max-h-screen flex items-center justify-center overflow-hidden">
+    <section className="h-screen min-h-[600px] max-h-screen flex flex-col items-center justify-center overflow-hidden">
       <div className="w-full px-6 md:px-12 lg:px-20">
+        {/* Section Title */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+            {t('home.mgoTitle')}
+          </h2>
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            {t('home.mgoDescription')}
+          </p>
+        </div>
         <motion.div
           ref={bookRef}
           initial={{ opacity: 0, scale: 0.9 }}
