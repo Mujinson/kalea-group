@@ -240,8 +240,9 @@ const MgoBook = () => {
         className="h-screen min-h-[550px] max-h-screen flex flex-col items-center justify-center overflow-hidden relative"
         style={{
           backgroundImage: `url(${bgMgoSection})`,
-          backgroundSize: 'cover',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <div className="container-custom relative z-10">
@@ -327,8 +328,9 @@ const MgoBook = () => {
       className="h-screen min-h-[600px] max-h-screen flex flex-col items-center justify-center overflow-hidden relative"
       style={{
         backgroundImage: `url(${bgMgoSection})`,
-        backgroundSize: 'cover',
+        backgroundSize: '100% 100%',
         backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
       <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
