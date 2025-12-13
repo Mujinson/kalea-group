@@ -12,21 +12,26 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
-const products = [
-  { id: 1, name: "Aurora", slug: "aurora", image: finishAurora, tagline: "Luce calda del mattino" },
-  { id: 2, name: "Corteccia", slug: "corteccia", image: finishCorteccia, tagline: "Profondità legno vissuto" },
-  { id: 3, name: "Sabbia", slug: "sabbia", image: finishSabbia, tagline: "Toni chiari senza tempo" },
-  { id: 4, name: "Terram", slug: "terram", image: finishTerram, tagline: "Terra compatta naturale" },
-  { id: 5, name: "Velora", slug: "velora", image: finishVelora, tagline: "Eleganza morbida contemporanea" },
-  { id: 6, name: "Perla", slug: "perla", image: finishPerla, tagline: "Chiarezza raffinata luminosa" },
-  { id: 7, name: "Silven", slug: "silven", image: finishSilven, tagline: "Grigio nobile setoso" },
-  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia, tagline: "Carattere intenso minerale" },
+const getProducts = (t: (key: string) => string) => [
+  { id: 1, name: "Aurora", slug: "aurora", image: finishAurora, tagline: t('colors.aurora.tagline') },
+  { id: 2, name: "Corteccia", slug: "corteccia", image: finishCorteccia, tagline: t('colors.corteccia.tagline') },
+  { id: 3, name: "Sabbia", slug: "sabbia", image: finishSabbia, tagline: t('colors.sabbia.tagline') },
+  { id: 4, name: "Terram", slug: "terram", image: finishTerram, tagline: t('colors.terram.tagline') },
+  { id: 5, name: "Velora", slug: "velora", image: finishVelora, tagline: t('colors.velora.tagline') },
+  { id: 6, name: "Perla", slug: "perla", image: finishPerla, tagline: t('colors.perla.tagline') },
+  { id: 7, name: "Silven", slug: "silven", image: finishSilven, tagline: t('colors.silven.tagline') },
+  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia, tagline: t('colors.cenere.tagline') },
 ];
 
-// Duplicate for infinite scroll effect
-const extendedProducts = [...products, ...products, ...products];
+interface ProductType {
+  id: number;
+  name: string;
+  slug: string;
+  image: string;
+  tagline: string;
+}
 
-const ProductCard = ({ product, language }: { product: typeof products[0]; language: string }) => {
+const ProductCard = ({ product, language }: { product: ProductType; language: string }) => {
   return (
     <Link to={`/${language}/colore/${product.slug}`}>
       <motion.div
@@ -84,6 +89,8 @@ const ProductCard = ({ product, language }: { product: typeof products[0]; langu
 
 const ProductGallerySection = () => {
   const { t, language } = useTranslation();
+  const products = getProducts(t);
+  const extendedProducts = [...products, ...products, ...products];
 
   return (
     <section className="relative h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-background overflow-hidden">
