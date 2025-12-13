@@ -13,13 +13,14 @@ import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
 const products = [
-  { id: 1, name: "Aurora", slug: "aurora", image: finishAurora },
-  { id: 2, name: "Corteccia", slug: "corteccia", image: finishCorteccia },
-  { id: 3, name: "Perla", slug: "perla", image: finishPerla },
-  { id: 4, name: "Sabbia", slug: "sabbia", image: finishSabbia },
-  { id: 5, name: "Silven", slug: "silven", image: finishSilven },
-  { id: 6, name: "Terram", slug: "terram", image: finishTerram },
-  { id: 7, name: "Velora", slug: "velora", image: finishVelora },
+  { id: 1, name: "Aurora", slug: "aurora", image: finishAurora, tagline: "Luce calda del mattino" },
+  { id: 2, name: "Corteccia", slug: "corteccia", image: finishCorteccia, tagline: "Profondità legno vissuto" },
+  { id: 3, name: "Sabbia", slug: "sabbia", image: finishSabbia, tagline: "Toni chiari senza tempo" },
+  { id: 4, name: "Terram", slug: "terram", image: finishTerram, tagline: "Terra compatta naturale" },
+  { id: 5, name: "Velora", slug: "velora", image: finishVelora, tagline: "Eleganza morbida contemporanea" },
+  { id: 6, name: "Perla", slug: "perla", image: finishPerla, tagline: "Chiarezza raffinata luminosa" },
+  { id: 7, name: "Silven", slug: "silven", image: finishSilven, tagline: "Grigio nobile setoso" },
+  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia, tagline: "Carattere intenso minerale" },
 ];
 
 // Duplicate for infinite scroll effect
@@ -72,7 +73,7 @@ const ProductCard = ({ product, language }: { product: typeof products[0]; langu
               Kalēa {product.name}
             </h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Texture wood naturale
+              {product.tagline}
             </p>
           </div>
         </div>
