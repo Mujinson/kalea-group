@@ -16,6 +16,9 @@ import Privacy from "./pages/Privacy";
 import Termini from "./pages/Termini";
 import NotFound from "./pages/NotFound";
 import ColorProductPage from "./pages/ColorProductPage";
+import SustainabilityImpact from "./pages/SustainabilityImpact";
+import SustainabilityDurability from "./pages/SustainabilityDurability";
+import SustainabilityMaintenance from "./pages/SustainabilityMaintenance";
 import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
@@ -78,6 +81,9 @@ const App = () => (
             <Route path="/it/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/it/termini" element={<Layout><Termini /></Layout>} />
             <Route path="/it/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+            <Route path="/it/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+            <Route path="/it/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+            <Route path="/it/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
             
             {/* English routes */}
             <Route path="/en" element={<Layout><Home /></Layout>} />
@@ -91,6 +97,9 @@ const App = () => (
             <Route path="/en/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/en/termini" element={<Layout><Termini /></Layout>} />
             <Route path="/en/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+            <Route path="/en/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+            <Route path="/en/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+            <Route path="/en/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
             
             {/* German routes */}
             <Route path="/de" element={<Layout><Home /></Layout>} />
@@ -104,6 +113,9 @@ const App = () => (
             <Route path="/de/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/de/termini" element={<Layout><Termini /></Layout>} />
             <Route path="/de/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+            <Route path="/de/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+            <Route path="/de/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+            <Route path="/de/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
             
             {/* French routes */}
             <Route path="/fr" element={<Layout><Home /></Layout>} />
@@ -117,6 +129,9 @@ const App = () => (
             <Route path="/fr/privacy" element={<Layout><Privacy /></Layout>} />
             <Route path="/fr/termini" element={<Layout><Termini /></Layout>} />
             <Route path="/fr/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+            <Route path="/fr/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+            <Route path="/fr/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+            <Route path="/fr/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
             
             {/* 404 */}
             <Route path="*" element={<NotFound />} />

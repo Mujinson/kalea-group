@@ -60,9 +60,9 @@ const Home = () => {
   ];
 
   const sustainability = [
-    { icon: Leaf, title: t('home.sustainability.impact.title'), description: t('home.sustainability.impact.description'), bg: bgSustainabilityForest },
-    { icon: Clock, title: t('home.sustainability.durability.title'), description: t('home.sustainability.durability.description'), bg: bgSustainabilityDurability },
-    { icon: Wrench, title: t('home.sustainability.maintenance.title'), description: t('home.sustainability.maintenance.description'), bg: bgSustainabilityMaintenance },
+    { icon: Leaf, title: t('home.sustainability.impact.title'), description: t('home.sustainability.impact.description'), bg: bgSustainabilityForest, link: `/${language}/sostenibilita/impatto-ambientale` },
+    { icon: Clock, title: t('home.sustainability.durability.title'), description: t('home.sustainability.durability.description'), bg: bgSustainabilityDurability, link: `/${language}/sostenibilita/lunga-durata` },
+    { icon: Wrench, title: t('home.sustainability.maintenance.title'), description: t('home.sustainability.maintenance.description'), bg: bgSustainabilityMaintenance, link: `/${language}/sostenibilita/manutenzione` },
   ];
 
   return (
@@ -336,14 +336,15 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {sustainability.map((item, index) => (
-              <ApplicationCard
-                key={item.title}
-                icon={item.icon}
-                title={item.title}
-                description={item.description}
-                backgroundImage={item.bg}
-                index={index}
-              />
+              <Link key={item.title} to={item.link}>
+                <ApplicationCard
+                  icon={item.icon}
+                  title={item.title}
+                  description={item.description}
+                  backgroundImage={item.bg}
+                  index={index}
+                />
+              </Link>
             ))}
           </div>
         </div>

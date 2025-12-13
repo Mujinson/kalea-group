@@ -4,7 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import FinishCard from "@/components/FinishCard";
 import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
-import { Droplets, Flame, Shield, Volume2, Zap, Layers } from "lucide-react";
+import { Droplets, Flame, Shield, Volume2, Zap, Layers, ThermometerSun, Check } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -338,6 +338,84 @@ const StoneCore10 = () => {
                 </motion.div>
               </TabsContent>
             </Tabs>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Riscaldamento a pavimento */}
+      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 5 }}>
+        <div className="container-custom max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
+              <ThermometerSun className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              Perfetto per impianti di riscaldamento a pavimento
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              StoneCore 10 è particolarmente indicato per l'utilizzo con impianti di riscaldamento a pavimento grazie alla sua elevata conducibilità e stabilità termica.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="prose prose-lg max-w-none text-center mb-12"
+          >
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              L'ossido di magnesio permette una trasmissione uniforme del calore, trattenendolo più a lungo rispetto a molti pavimenti tradizionali. Questo si traduce in un comfort superiore e in un risparmio energetico reale nel tempo, poiché l'impianto lavora in modo più efficiente.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+            style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+          >
+            <h3 className="text-xl font-heading font-semibold text-background mb-6">
+              Perché è migliore
+            </h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Distribuzione del calore più omogenea</span>
+              </li>
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Minore dispersione termica</span>
+              </li>
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Superficie sempre confortevole</span>
+              </li>
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Riduzione dei consumi energetici nel lungo periodo</span>
+              </li>
+            </ul>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-8 p-6 rounded-2xl bg-card border border-border text-center"
+          >
+            <p className="text-lg text-foreground italic">
+              Un pavimento che lavora insieme all'impianto, non contro di esso.
+            </p>
           </motion.div>
         </div>
       </section>
