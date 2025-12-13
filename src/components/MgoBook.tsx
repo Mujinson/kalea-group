@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Flame, Droplets, Bug, Box, Volume2, Leaf, He
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-
+import bgMgoSection from "@/assets/bg-mgo-section.jpg";
 const MgoBook = () => {
   const { t, language } = useTranslation();
   const [currentSpread, setCurrentSpread] = useState(0);
@@ -236,8 +236,15 @@ const MgoBook = () => {
 
   if (isMobile) {
     return (
-      <section className="h-screen min-h-[550px] max-h-screen flex flex-col items-center justify-center overflow-hidden">
-        <div className="container-custom">
+      <section 
+        className="h-screen min-h-[550px] max-h-screen flex flex-col items-center justify-center overflow-hidden relative"
+        style={{
+          backgroundImage: `url(${bgMgoSection})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="container-custom relative z-10">
           {/* Section Title */}
           <div className="text-center mb-6">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">
@@ -316,8 +323,15 @@ const MgoBook = () => {
   }
 
   return (
-    <section className="h-screen min-h-[600px] max-h-screen flex flex-col items-center justify-center overflow-hidden">
-      <div className="w-full px-6 md:px-12 lg:px-20">
+    <section 
+      className="h-screen min-h-[600px] max-h-screen flex flex-col items-center justify-center overflow-hidden relative"
+      style={{
+        backgroundImage: `url(${bgMgoSection})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
         {/* Section Title */}
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
