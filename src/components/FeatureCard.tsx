@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
+import React from "react";
 
 interface FeatureCardProps {
-  icon: LucideIcon;
+  icon: LucideIcon | React.ComponentType<{ className?: string; strokeWidth?: number; size?: number }>;
   title: string;
   description: string;
   index?: number;
