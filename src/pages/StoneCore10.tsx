@@ -4,7 +4,8 @@ import FeatureCard from "@/components/FeatureCard";
 import FinishCard from "@/components/FinishCard";
 import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
-import { Droplets, Flame, ShieldOff, AudioWaveform, LayoutGrid, Layers, ThermometerSun, Check } from "lucide-react";
+import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check } from "lucide-react";
+import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -46,7 +47,7 @@ const StoneCore10 = () => {
       description: t('stonecore.advantages.acoustic.description'),
     },
     {
-      icon: LayoutGrid,
+      icon: FloatingFloorIcon,
       title: t('stonecore.advantages.floating.title'),
       description: t('stonecore.advantages.floating.description'),
     },
