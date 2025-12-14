@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Flame, Droplets, Bug, Box, Volume2, Leaf, He
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import bgMgoSection from "@/assets/bg-mgo-section.jpg";
+import bgMgoSection from "@/assets/bg-mgo-section.webp";
 const MgoBook = () => {
   const { t, language } = useTranslation();
   const [currentSpread, setCurrentSpread] = useState(0);
