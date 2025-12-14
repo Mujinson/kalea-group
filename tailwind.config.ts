@@ -64,6 +64,10 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         'bg-dark': "hsl(var(--bg-dark))",
+        'kalea-logo': "hsl(var(--kalea-logo))",
+        'status-excellent': "hsl(var(--status-excellent))",
+        'status-good': "hsl(var(--status-good))",
+        'status-poor': "hsl(var(--status-poor))",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Flame, Droplets, Bug, Box, Volume2, Leaf, Heart, Home as HomeIcon, Building2, ShowerHead } from "lucide-react";
+import { ChevronLeft, ChevronRight, Flame, Droplets, ShieldOff, Layers, AudioWaveform, Leaf, Heart, Home as HomeIcon, Building2, ShowerHead, CheckCircle2, Circle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -41,9 +41,9 @@ const MgoBook = () => {
   const mgoAdvantages = [
     { icon: Flame, text: t('home.mgoAdvantages.fireproof') },
     { icon: Droplets, text: t('home.mgoAdvantages.waterproof') },
-    { icon: Box, text: t('home.mgoAdvantages.stability') },
-    { icon: Bug, text: t('home.mgoAdvantages.antimold') },
-    { icon: Volume2, text: t('home.mgoAdvantages.acoustic') },
+    { icon: Layers, text: t('home.mgoAdvantages.stability') },
+    { icon: ShieldOff, text: t('home.mgoAdvantages.antimold') },
+    { icon: AudioWaveform, text: t('home.mgoAdvantages.acoustic') },
   ];
 
   const comparativeData = [
@@ -66,6 +66,17 @@ const MgoBook = () => {
     { icon: Heart, label: t('home.mgoBook.applications.hospitality') },
     { icon: ShowerHead, label: t('home.mgoBook.applications.humid') },
   ];
+
+  // Helper function to render status icons with colors
+  const renderStatusIcon = (status: string) => {
+    if (status === '✓') {
+      return <CheckCircle2 className="w-4 h-4 text-[hsl(var(--status-excellent))]" strokeWidth={2} />;
+    } else if (status === '○') {
+      return <Circle className="w-4 h-4 text-[hsl(var(--status-good))]" strokeWidth={2} />;
+    } else {
+      return <X className="w-4 h-4 text-[hsl(var(--status-poor))]" strokeWidth={2} />;
+    }
+  };
 
   const handleNext = () => {
     if (currentSpread < 1 && !isFlipping) {
@@ -101,8 +112,8 @@ const MgoBook = () => {
       <div className="space-y-3 flex-1">
         {mgoAdvantages.map((advantage) => (
           <div key={advantage.text} className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-foreground/5">
-              <advantage.icon className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
+            <div className="p-2 rounded-lg bg-[hsl(var(--kalea-logo))]/10">
+              <advantage.icon className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
             </div>
             <span className="text-sm text-foreground font-medium">{advantage.text}</span>
           </div>
@@ -125,23 +136,23 @@ const MgoBook = () => {
         <div className="grid grid-cols-6 gap-2 pb-2 border-b border-foreground/15 text-[10px] lg:text-xs">
           <div></div>
           <div className="flex flex-col items-center gap-0.5">
-            <Flame className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
+            <Flame className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
             <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.fire')}</span>
           </div>
           <div className="flex flex-col items-center gap-0.5">
-            <Droplets className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
+            <Droplets className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
             <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.water')}</span>
           </div>
           <div className="flex flex-col items-center gap-0.5">
-            <Bug className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
+            <ShieldOff className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
             <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.mold')}</span>
           </div>
           <div className="flex flex-col items-center gap-0.5">
-            <Box className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
+            <Layers className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
             <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.stability')}</span>
           </div>
           <div className="flex flex-col items-center gap-0.5">
-            <Volume2 className="w-4 h-4 text-foreground/70" strokeWidth={1.5} />
+            <AudioWaveform className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
             <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.acoustic')}</span>
           </div>
         </div>
@@ -156,26 +167,26 @@ const MgoBook = () => {
             <div className={`font-bold ${row.material === 'MgO' ? 'text-foreground' : 'text-foreground/70'}`}>
               {row.material}
             </div>
-            <div className="text-center text-foreground">{row.fire}</div>
-            <div className="text-center text-foreground">{row.water}</div>
-            <div className="text-center text-foreground">{row.mold}</div>
-            <div className="text-center text-foreground">{row.stability}</div>
-            <div className="text-center text-foreground">{row.acoustic}</div>
+            <div className="flex justify-center">{renderStatusIcon(row.fire)}</div>
+            <div className="flex justify-center">{renderStatusIcon(row.water)}</div>
+            <div className="flex justify-center">{renderStatusIcon(row.mold)}</div>
+            <div className="flex justify-center">{renderStatusIcon(row.stability)}</div>
+            <div className="flex justify-center">{renderStatusIcon(row.acoustic)}</div>
           </div>
         ))}
       </div>
       {/* Legend */}
       <div className="mt-4 pt-3 border-t border-foreground/15 flex flex-wrap gap-4 text-xs text-foreground/50">
-        <div className="flex items-center gap-1">
-          <span className="text-foreground">✓</span>
+        <div className="flex items-center gap-1.5">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[hsl(var(--status-excellent))]" strokeWidth={2} />
           <span>{t('home.mgoComparison.excellent')}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <span className="text-foreground">○</span>
+        <div className="flex items-center gap-1.5">
+          <Circle className="w-3.5 h-3.5 text-[hsl(var(--status-good))]" strokeWidth={2} />
           <span>{t('home.mgoComparison.good')}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <span className="text-foreground">✗</span>
+        <div className="flex items-center gap-1.5">
+          <X className="w-3.5 h-3.5 text-[hsl(var(--status-poor))]" strokeWidth={2} />
           <span>{t('home.mgoComparison.poor')}</span>
         </div>
       </div>

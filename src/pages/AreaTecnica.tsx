@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FileText, Download, Layers, Shield, Leaf, Home, Building2, Wrench, BookOpen, Video, HelpCircle, FileCode } from "lucide-react";
+import { FileText, Download, Layers, ShieldCheck, Leaf, Home, Building2, Wrench, BookOpen, Video, HelpCircle, FileCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeatureCard from "@/components/FeatureCard";
 import { useState } from "react";
@@ -326,7 +326,7 @@ const AreaTecnica = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FeatureCard
-              icon={Shield}
+              icon={ShieldCheck}
               title="Sicurezza antincendio"
               description="MgO raggiunge la classe A1 (massima sicurezza), mentre SPC, MFC e HPL si fermano alla classe B."
               index={0}
@@ -377,7 +377,7 @@ const AreaTecnica = () => {
               { icon: Building2, title: "Hotel e ospitalità", desc: "Strutture ricettive e turistiche" },
               { icon: Building2, title: "Retail e uffici", desc: "Spazi commerciali e direzionali" },
               { icon: Wrench, title: "Cucine e bagni", desc: "Ambienti umidi e ad alto traffico" },
-              { icon: Shield, title: "Strutture sanitarie", desc: "Ospedali, cliniche e RSA" },
+              { icon: ShieldCheck, title: "Strutture sanitarie", desc: "Ospedali, cliniche e RSA" },
               { icon: BookOpen, title: "Scuole e spazi pubblici", desc: "Istruzione e aree comuni" },
               { icon: Home, title: "Case con animali", desc: "Resistenza a graffi e usura" },
               { icon: Wrench, title: "Progetti con riscaldamento", desc: "Compatibilità perfetta con sistemi radianti" }

@@ -4,7 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import FinishCard from "@/components/FinishCard";
 import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
-import { Droplets, Flame, Shield, Volume2, Zap, Layers, ThermometerSun, Check } from "lucide-react";
+import { Droplets, Flame, ShieldOff, AudioWaveform, LayoutGrid, Layers, ThermometerSun, Check } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -36,17 +36,17 @@ const StoneCore10 = () => {
       description: t('stonecore.advantages.fireproof.description'),
     },
     {
-      icon: Shield,
+      icon: ShieldOff,
       title: t('stonecore.advantages.antimold.title'),
       description: t('stonecore.advantages.antimold.description'),
     },
     {
-      icon: Volume2,
+      icon: AudioWaveform,
       title: t('stonecore.advantages.acoustic.title'),
       description: t('stonecore.advantages.acoustic.description'),
     },
     {
-      icon: Zap,
+      icon: LayoutGrid,
       title: t('stonecore.advantages.floating.title'),
       description: t('stonecore.advantages.floating.description'),
     },

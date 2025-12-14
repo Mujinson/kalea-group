@@ -48,6 +48,14 @@ All colors MUST be HSL.
     --text-muted: 30 8% 40%;
     --border-soft: 30 10% 85%;
     
+    /* Kalēa Logo Color */
+    --kalea-logo: 20 30% 60%;
+    
+    /* Comparison Table Status Colors */
+    --status-excellent: 145 45% 50%;
+    --status-good: 35 85% 55%;
+    --status-poor: 0 65% 55%;
+    
     /* Transitions */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
