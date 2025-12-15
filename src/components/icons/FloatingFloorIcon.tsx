@@ -9,16 +9,13 @@ interface FloatingFloorIconProps {
 
 const FloatingFloorIcon: React.FC<FloatingFloorIconProps> = ({ 
   className = "", 
-  size = 24,
 }) => {
   return (
     <img
       src={floatingFloorImg}
       alt="Posa flottante"
-      width={size}
-      height={size}
-      className={`${className} invert`}
-      style={{ width: size, height: size, objectFit: 'contain' }}
+      className={`w-10 h-10 brightness-0 invert ${className}`}
+      style={{ objectFit: 'contain', background: 'transparent' }}
     />
   );
 };
