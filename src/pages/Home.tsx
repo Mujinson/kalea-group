@@ -167,7 +167,7 @@ const Home = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8 cursor-default relative"
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8 cursor-default relative h-full min-h-[180px] flex flex-col justify-center"
                   >
                     <div className="absolute top-3 right-3 bg-white/20 text-white text-[10px] font-medium px-2 py-1 rounded-full">
                       {product.comingSoonLabel || "Novità in arrivo"}
@@ -180,7 +180,7 @@ const Home = () => {
                     </p>
                   </motion.div>
                 ) : (
-                  <Link key={product.title} to={product.link}>
+                  <Link key={product.title} to={product.link} className="h-full">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -191,7 +191,7 @@ const Home = () => {
                         boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
                       }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 md:p-8 hover:bg-white/15 transition-colors cursor-pointer"
+                      className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 md:p-8 hover:bg-white/15 transition-colors cursor-pointer h-full min-h-[180px] flex flex-col justify-center"
                     >
                       <h3 className="text-white font-semibold text-sm md:text-base tracking-wider mb-3">
                         {product.title.toUpperCase()}
