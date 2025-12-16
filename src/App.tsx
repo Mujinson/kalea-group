@@ -23,6 +23,7 @@ import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
 
+
 // Admin pages
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -33,6 +34,7 @@ import AdminCosts from "./pages/admin/AdminCosts";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminImport from "./pages/admin/AdminImport";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
 
 const queryClient = new QueryClient();
 
@@ -75,15 +77,27 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
+          {/* Redirect /it/admin/* to /admin/* */}
+          <Route path="/:lang/admin/*" element={<AdminLangRedirect />} />
+
           {/* Admin routes - outside I18nProvider */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminOverview />} />
+
+            {/* Italian slugs (used in sidebar) */}
+            <Route path="vendite" element={<AdminSales />} />
+            <Route path="magazzino" element={<AdminInventory />} />
+            <Route path="costi" element={<AdminCosts />} />
+            <Route path="pagamenti" element={<AdminPayments />} />
+            <Route path="import" element={<AdminImport />} />
+            <Route path="impostazioni" element={<AdminSettings />} />
+
+            {/* English aliases (keep compatibility) */}
             <Route path="sales" element={<AdminSales />} />
             <Route path="inventory" element={<AdminInventory />} />
             <Route path="costs" element={<AdminCosts />} />
             <Route path="payments" element={<AdminPayments />} />
-            <Route path="import" element={<AdminImport />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
           
