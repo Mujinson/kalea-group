@@ -29,6 +29,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminSales from "./pages/admin/AdminSales";
+import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminInventory from "./pages/admin/AdminInventory";
 import AdminCosts from "./pages/admin/AdminCosts";
 import AdminPayments from "./pages/admin/AdminPayments";
@@ -87,6 +88,7 @@ const App = () => (
 
             {/* Italian slugs (used in sidebar) */}
             <Route path="vendite" element={<AdminSales />} />
+            <Route path="clienti" element={<AdminCustomers />} />
             <Route path="magazzino" element={<AdminInventory />} />
             <Route path="costi" element={<AdminCosts />} />
             <Route path="pagamenti" element={<AdminPayments />} />
@@ -95,6 +97,7 @@ const App = () => (
 
             {/* English aliases (keep compatibility) */}
             <Route path="sales" element={<AdminSales />} />
+            <Route path="customers" element={<AdminCustomers />} />
             <Route path="inventory" element={<AdminInventory />} />
             <Route path="costs" element={<AdminCosts />} />
             <Route path="payments" element={<AdminPayments />} />

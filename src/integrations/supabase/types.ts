@@ -14,10 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
+      customers: {
+        Row: {
+          address: string | null
+          city: string | null
+          company_name: string | null
+          country: string | null
+          created_at: string
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          email: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          notes: string | null
+          pec: string | null
+          phone: string | null
+          postal_code: string | null
+          province: string | null
+          sdi_code: string | null
+          updated_at: string
+          vat_number: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          company_name?: string | null
+          country?: string | null
+          created_at?: string
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          notes?: string | null
+          pec?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          province?: string | null
+          sdi_code?: string | null
+          updated_at?: string
+          vat_number?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          company_name?: string | null
+          country?: string | null
+          created_at?: string
+          customer_type?: Database["public"]["Enums"]["customer_type"]
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          notes?: string | null
+          pec?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          province?: string | null
+          sdi_code?: string | null
+          updated_at?: string
+          vat_number?: string | null
+        }
+        Relationships: []
+      }
       inventory: {
         Row: {
+          color: string | null
           created_at: string
           id: string
+          low_stock_threshold: number | null
           movement_date: string
           movement_type: string
           notes: string | null
@@ -26,8 +91,10 @@ export type Database = {
           quantity_sqm: number
         }
         Insert: {
+          color?: string | null
           created_at?: string
           id?: string
+          low_stock_threshold?: number | null
           movement_date?: string
           movement_type?: string
           notes?: string | null
@@ -36,8 +103,10 @@ export type Database = {
           quantity_sqm: number
         }
         Update: {
+          color?: string | null
           created_at?: string
           id?: string
+          low_stock_threshold?: number | null
           movement_date?: string
           movement_type?: string
           notes?: string | null
@@ -80,41 +149,211 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_schedules: {
+        Row: {
+          amount: number
+          created_at: string
+          due_date: string
+          id: string
+          is_paid: boolean
+          notes: string | null
+          paid_date: string | null
+          payment_type: string | null
+          sale_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          due_date: string
+          id?: string
+          is_paid?: boolean
+          notes?: string | null
+          paid_date?: string | null
+          payment_type?: string | null
+          sale_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          due_date?: string
+          id?: string
+          is_paid?: boolean
+          notes?: string | null
+          paid_date?: string | null
+          payment_type?: string | null
+          sale_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_schedules_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sale_additional_costs: {
+        Row: {
+          cost_type: string
+          created_at: string
+          id: string
+          quantity: number | null
+          sale_id: string
+          total_price: number
+          unit: string | null
+          unit_price: number
+        }
+        Insert: {
+          cost_type: string
+          created_at?: string
+          id?: string
+          quantity?: number | null
+          sale_id: string
+          total_price?: number
+          unit?: string | null
+          unit_price?: number
+        }
+        Update: {
+          cost_type?: string
+          created_at?: string
+          id?: string
+          quantity?: number | null
+          sale_id?: string
+          total_price?: number
+          unit?: string | null
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sale_additional_costs_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sale_items: {
+        Row: {
+          created_at: string
+          id: string
+          product_type: string
+          product_variant: string | null
+          quantity_sqm: number
+          sale_id: string
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_type: string
+          product_variant?: string | null
+          quantity_sqm: number
+          sale_id: string
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_type?: string
+          product_variant?: string | null
+          quantity_sqm?: number
+          sale_id?: string
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sale_items_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales: {
         Row: {
+          balance_amount: number | null
+          balance_due_date: string | null
           channel: string
+          color: string | null
           created_at: string
+          customer_id: string | null
           customer_name: string | null
+          deposit_amount: number | null
+          deposit_date: string | null
           id: string
           notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"] | null
+          payment_notes: string | null
+          payment_terms: string | null
           product_type: string
           quantity_sqm: number
           sale_date: string
           sale_price: number
+          vat_amount: number | null
+          vat_included: boolean
         }
         Insert: {
+          balance_amount?: number | null
+          balance_due_date?: string | null
           channel?: string
+          color?: string | null
           created_at?: string
+          customer_id?: string | null
           customer_name?: string | null
+          deposit_amount?: number | null
+          deposit_date?: string | null
           id?: string
           notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          payment_notes?: string | null
+          payment_terms?: string | null
           product_type: string
           quantity_sqm: number
           sale_date?: string
           sale_price: number
+          vat_amount?: number | null
+          vat_included?: boolean
         }
         Update: {
+          balance_amount?: number | null
+          balance_due_date?: string | null
           channel?: string
+          color?: string | null
           created_at?: string
+          customer_id?: string | null
           customer_name?: string | null
+          deposit_amount?: number | null
+          deposit_date?: string | null
           id?: string
           notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          payment_notes?: string | null
+          payment_terms?: string | null
           product_type?: string
           quantity_sqm?: number
           sale_date?: string
           sale_price?: number
+          vat_amount?: number | null
+          vat_included?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "sales_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       static_costs: {
         Row: {
@@ -218,6 +457,17 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      customer_type:
+        | "cliente_privato"
+        | "rivenditore"
+        | "costruttore"
+        | "posatore"
+        | "architetto"
+        | "interior_designer"
+        | "showroom"
+        | "studio_design"
+        | "azienda_pubblica"
+      payment_method: "carta_credito" | "bonifico" | "contanti" | "assegno"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -346,6 +596,18 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      customer_type: [
+        "cliente_privato",
+        "rivenditore",
+        "costruttore",
+        "posatore",
+        "architetto",
+        "interior_designer",
+        "showroom",
+        "studio_design",
+        "azienda_pubblica",
+      ],
+      payment_method: ["carta_credito", "bonifico", "contanti", "assegno"],
     },
   },
 } as const
