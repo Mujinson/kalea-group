@@ -73,93 +73,98 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <I18nProvider>
-          <ScrollToTop />
-          <SEOHandler />
-          <Routes>
-            {/* Redirect root to /it */}
-            <Route path="/" element={<Navigate to="/it" replace />} />
-            
-            {/* Italian routes */}
-            <Route path="/it" element={<Layout><Home /></Layout>} />
-            <Route path="/it/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
-            <Route path="/it/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/it/onewall" element={<Navigate to="/it" replace />} />
-            <Route path="/it/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
-            <Route path="/it/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
-            <Route path="/it/contatti" element={<Layout><Contatti /></Layout>} />
-            <Route path="/it/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
-            <Route path="/it/privacy" element={<Layout><Privacy /></Layout>} />
-            <Route path="/it/termini" element={<Layout><Termini /></Layout>} />
-            <Route path="/it/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
-            <Route path="/it/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
-            <Route path="/it/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
-            <Route path="/it/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
-            
-            {/* English routes */}
-            <Route path="/en" element={<Layout><Home /></Layout>} />
-            <Route path="/en/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
-            <Route path="/en/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/en/onewall" element={<Navigate to="/en" replace />} />
-            <Route path="/en/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
-            <Route path="/en/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
-            <Route path="/en/contatti" element={<Layout><Contatti /></Layout>} />
-            <Route path="/en/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
-            <Route path="/en/privacy" element={<Layout><Privacy /></Layout>} />
-            <Route path="/en/termini" element={<Layout><Termini /></Layout>} />
-            <Route path="/en/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
-            <Route path="/en/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
-            <Route path="/en/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
-            <Route path="/en/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
-            
-            {/* German routes */}
-            <Route path="/de" element={<Layout><Home /></Layout>} />
-            <Route path="/de/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
-            <Route path="/de/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/de/onewall" element={<Navigate to="/de" replace />} />
-            <Route path="/de/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
-            <Route path="/de/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
-            <Route path="/de/contatti" element={<Layout><Contatti /></Layout>} />
-            <Route path="/de/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
-            <Route path="/de/privacy" element={<Layout><Privacy /></Layout>} />
-            <Route path="/de/termini" element={<Layout><Termini /></Layout>} />
-            <Route path="/de/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
-            <Route path="/de/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
-            <Route path="/de/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
-            <Route path="/de/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
-            
-            {/* French routes */}
-            <Route path="/fr" element={<Layout><Home /></Layout>} />
-            <Route path="/fr/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
-            <Route path="/fr/edgeline" element={<Layout><EdgeLine /></Layout>} />
-            <Route path="/fr/onewall" element={<Navigate to="/fr" replace />} />
-            <Route path="/fr/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
-            <Route path="/fr/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
-            <Route path="/fr/contatti" element={<Layout><Contatti /></Layout>} />
-            <Route path="/fr/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
-            <Route path="/fr/privacy" element={<Layout><Privacy /></Layout>} />
-            <Route path="/fr/termini" element={<Layout><Termini /></Layout>} />
-            <Route path="/fr/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
-            <Route path="/fr/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
-            <Route path="/fr/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
-            <Route path="/fr/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
-            
-            {/* Admin routes - outside I18nProvider */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminOverview />} />
-              <Route path="sales" element={<AdminSales />} />
-              <Route path="inventory" element={<AdminInventory />} />
-              <Route path="costs" element={<AdminCosts />} />
-              <Route path="payments" element={<AdminPayments />} />
-              <Route path="import" element={<AdminImport />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Route>
-            
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </I18nProvider>
+        <ScrollToTop />
+        <Routes>
+          {/* Admin routes - outside I18nProvider */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminOverview />} />
+            <Route path="sales" element={<AdminSales />} />
+            <Route path="inventory" element={<AdminInventory />} />
+            <Route path="costs" element={<AdminCosts />} />
+            <Route path="payments" element={<AdminPayments />} />
+            <Route path="import" element={<AdminImport />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
+          
+          {/* Main site routes with I18nProvider */}
+          <Route path="/*" element={
+            <I18nProvider>
+              <SEOHandler />
+              <Routes>
+                {/* Redirect root to /it */}
+                <Route path="/" element={<Navigate to="/it" replace />} />
+                
+                {/* Italian routes */}
+                <Route path="/it" element={<Layout><Home /></Layout>} />
+                <Route path="/it/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
+                <Route path="/it/edgeline" element={<Layout><EdgeLine /></Layout>} />
+                <Route path="/it/onewall" element={<Navigate to="/it" replace />} />
+                <Route path="/it/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
+                <Route path="/it/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
+                <Route path="/it/contatti" element={<Layout><Contatti /></Layout>} />
+                <Route path="/it/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
+                <Route path="/it/privacy" element={<Layout><Privacy /></Layout>} />
+                <Route path="/it/termini" element={<Layout><Termini /></Layout>} />
+                <Route path="/it/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+                <Route path="/it/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+                <Route path="/it/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+                <Route path="/it/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
+                
+                {/* English routes */}
+                <Route path="/en" element={<Layout><Home /></Layout>} />
+                <Route path="/en/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
+                <Route path="/en/edgeline" element={<Layout><EdgeLine /></Layout>} />
+                <Route path="/en/onewall" element={<Navigate to="/en" replace />} />
+                <Route path="/en/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
+                <Route path="/en/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
+                <Route path="/en/contatti" element={<Layout><Contatti /></Layout>} />
+                <Route path="/en/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
+                <Route path="/en/privacy" element={<Layout><Privacy /></Layout>} />
+                <Route path="/en/termini" element={<Layout><Termini /></Layout>} />
+                <Route path="/en/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+                <Route path="/en/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+                <Route path="/en/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+                <Route path="/en/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
+                
+                {/* German routes */}
+                <Route path="/de" element={<Layout><Home /></Layout>} />
+                <Route path="/de/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
+                <Route path="/de/edgeline" element={<Layout><EdgeLine /></Layout>} />
+                <Route path="/de/onewall" element={<Navigate to="/de" replace />} />
+                <Route path="/de/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
+                <Route path="/de/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
+                <Route path="/de/contatti" element={<Layout><Contatti /></Layout>} />
+                <Route path="/de/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
+                <Route path="/de/privacy" element={<Layout><Privacy /></Layout>} />
+                <Route path="/de/termini" element={<Layout><Termini /></Layout>} />
+                <Route path="/de/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+                <Route path="/de/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+                <Route path="/de/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+                <Route path="/de/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
+                
+                {/* French routes */}
+                <Route path="/fr" element={<Layout><Home /></Layout>} />
+                <Route path="/fr/stonecore-10" element={<Layout><StoneCore10 /></Layout>} />
+                <Route path="/fr/edgeline" element={<Layout><EdgeLine /></Layout>} />
+                <Route path="/fr/onewall" element={<Navigate to="/fr" replace />} />
+                <Route path="/fr/area-tecnica" element={<Layout><AreaTecnica /></Layout>} />
+                <Route path="/fr/chi-siamo" element={<Layout><ChiSiamo /></Layout>} />
+                <Route path="/fr/contatti" element={<Layout><Contatti /></Layout>} />
+                <Route path="/fr/diventa-partner" element={<Layout><DiventaPartner /></Layout>} />
+                <Route path="/fr/privacy" element={<Layout><Privacy /></Layout>} />
+                <Route path="/fr/termini" element={<Layout><Termini /></Layout>} />
+                <Route path="/fr/colore/:colorSlug" element={<Layout><ColorProductPage /></Layout>} />
+                <Route path="/fr/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
+                <Route path="/fr/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
+                <Route path="/fr/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
+                
+                {/* 404 */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </I18nProvider>
+          } />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
