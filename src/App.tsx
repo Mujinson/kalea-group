@@ -23,6 +23,17 @@ import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
 
+// Admin pages
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminOverview from "./pages/admin/AdminOverview";
+import AdminSales from "./pages/admin/AdminSales";
+import AdminInventory from "./pages/admin/AdminInventory";
+import AdminCosts from "./pages/admin/AdminCosts";
+import AdminPayments from "./pages/admin/AdminPayments";
+import AdminImport from "./pages/admin/AdminImport";
+import AdminSettings from "./pages/admin/AdminSettings";
+
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -132,6 +143,18 @@ const App = () => (
             <Route path="/fr/sostenibilita/impatto-ambientale" element={<Layout><SustainabilityImpact /></Layout>} />
             <Route path="/fr/sostenibilita/lunga-durata" element={<Layout><SustainabilityDurability /></Layout>} />
             <Route path="/fr/sostenibilita/manutenzione" element={<Layout><SustainabilityMaintenance /></Layout>} />
+            
+            {/* Admin routes - outside I18nProvider */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminOverview />} />
+              <Route path="sales" element={<AdminSales />} />
+              <Route path="inventory" element={<AdminInventory />} />
+              <Route path="costs" element={<AdminCosts />} />
+              <Route path="payments" element={<AdminPayments />} />
+              <Route path="import" element={<AdminImport />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
             
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
