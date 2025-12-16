@@ -22,6 +22,7 @@ import {
   LogOut,
   Settings,
   Users,
+  BarChart3,
 } from 'lucide-react';
 
 const menuItems = [
@@ -29,6 +30,7 @@ const menuItems = [
   { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart },
   { title: 'Clienti', url: '/admin/clienti', icon: Users },
   { title: 'Magazzino', url: '/admin/magazzino', icon: Package },
+  { title: 'Analytics', url: '/admin/analytics', icon: BarChart3 },
   { title: 'Costi', url: '/admin/costi', icon: DollarSign },
   { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard },
   { title: 'Import Dati', url: '/admin/import', icon: Upload },
