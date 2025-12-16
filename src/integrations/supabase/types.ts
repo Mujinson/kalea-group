@@ -14,16 +14,210 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      inventory: {
+        Row: {
+          created_at: string
+          id: string
+          movement_date: string
+          movement_type: string
+          notes: string | null
+          product_type: string
+          purchase_cost: number
+          quantity_sqm: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          movement_date?: string
+          movement_type?: string
+          notes?: string | null
+          product_type: string
+          purchase_cost: number
+          quantity_sqm: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          movement_date?: string
+          movement_type?: string
+          notes?: string | null
+          product_type?: string
+          purchase_cost?: number
+          quantity_sqm?: number
+        }
+        Relationships: []
+      }
+      payment_agreements: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          notes: string | null
+          start_date: string
+          supplier_name: string
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          notes?: string | null
+          start_date: string
+          supplier_name: string
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          notes?: string | null
+          start_date?: string
+          supplier_name?: string
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sales: {
+        Row: {
+          channel: string
+          created_at: string
+          customer_name: string | null
+          id: string
+          notes: string | null
+          product_type: string
+          quantity_sqm: number
+          sale_date: string
+          sale_price: number
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          customer_name?: string | null
+          id?: string
+          notes?: string | null
+          product_type: string
+          quantity_sqm: number
+          sale_date?: string
+          sale_price: number
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          customer_name?: string | null
+          id?: string
+          notes?: string | null
+          product_type?: string
+          quantity_sqm?: number
+          sale_date?: string
+          sale_price?: number
+        }
+        Relationships: []
+      }
+      static_costs: {
+        Row: {
+          created_at: string
+          duty_percentage: number
+          fob_cost: number
+          id: string
+          import_logistics_cost: number
+          internal_transport_cost: number | null
+          product_type: string
+          updated_at: string
+          vat_percentage: number
+        }
+        Insert: {
+          created_at?: string
+          duty_percentage?: number
+          fob_cost: number
+          id?: string
+          import_logistics_cost?: number
+          internal_transport_cost?: number | null
+          product_type: string
+          updated_at?: string
+          vat_percentage?: number
+        }
+        Update: {
+          created_at?: string
+          duty_percentage?: number
+          fob_cost?: number
+          id?: string
+          import_logistics_cost?: number
+          internal_transport_cost?: number | null
+          product_type?: string
+          updated_at?: string
+          vat_percentage?: number
+        }
+        Relationships: []
+      }
+      supplier_payments: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          payment_amount: number
+          payment_date: string
+          supplier_name: string
+          total_debt: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_amount: number
+          payment_date?: string
+          supplier_name?: string
+          total_debt: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_amount?: number
+          payment_date?: string
+          supplier_name?: string
+          total_debt?: number
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +344,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
