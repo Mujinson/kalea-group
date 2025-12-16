@@ -26,6 +26,12 @@ const AdminLogin = () => {
       return;
     }
 
+    // Validate email domain for signup
+    if (isSignUp && !email.toLowerCase().endsWith('@kalea.space')) {
+      toast.error('Solo email @kalea.space sono autorizzate');
+      return;
+    }
+
     if (isSignUp && password !== confirmPassword) {
       toast.error('Le password non coincidono');
       return;
