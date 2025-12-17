@@ -201,18 +201,22 @@ const AdminQuotes = () => {
     }
 
     try {
-      const quoteItems = quote.items || [];
+      // Parse items and amounts safely as numbers
+      const quoteItems = Array.isArray(quote.items) ? quote.items : [];
       const firstItem = quoteItems[0];
+      const totalAmount = Number(quote.total_amount) || 0;
+      const vatAmount = Number(quote.vat_amount) || 0;
+      const totalQty = quoteItems.reduce((sum, i) => sum + (Number(i.quantity_sqm) || 0), 0);
 
       // Create sale
       const { data: saleData, error: saleError } = await supabase.from('sales').insert({
         customer_id: quote.customer_id,
         product_type: firstItem?.product_type || 'MgO',
         color: firstItem?.color || null,
-        quantity_sqm: quoteItems.reduce((sum, i) => sum + (i.quantity_sqm || 0), 0),
-        sale_price: quote.total_amount,
+        quantity_sqm: totalQty,
+        sale_price: totalAmount,
         vat_included: quote.vat_included,
-        vat_amount: quote.vat_amount,
+        vat_amount: vatAmount,
         notes: `Convertito da preventivo ${quote.quote_number}`,
       }).select().single();
 
@@ -225,15 +229,17 @@ const AdminQuotes = () => {
         accepted_date: new Date().toISOString(),
       }).eq('id', quote.id);
 
-      // Update customer
+      // Update customer - set to "working" status since they now have a sale
       const { data: custData } = await supabase.from('customers')
         .select('total_value')
         .eq('id', quote.customer_id)
         .single();
 
+      const newTotalValue = (Number(custData?.total_value) || 0) + totalAmount;
+      
       await supabase.from('customers').update({
-        status: 'signed' as const,
-        total_value: (Number(custData?.total_value) || 0) + quote.total_amount,
+        status: 'working' as const,
+        total_value: newTotalValue,
       }).eq('id', quote.customer_id);
 
       toast.success('Preventivo convertito in vendita');
