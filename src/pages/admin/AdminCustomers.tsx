@@ -12,6 +12,7 @@ import { Plus, Search, Eye, Users, TrendingUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import CustomerDetailSheet from '@/components/admin/CustomerDetailSheet';
+import { ITALIAN_REGIONS, getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
 
 const CUSTOMER_TYPES = [
   { value: 'cliente_privato', label: 'Cliente privato' },
@@ -26,9 +27,9 @@ const CUSTOMER_TYPES = [
 ];
 
 const CUSTOMER_STATUSES = [
-  { value: 'lead', label: 'Lead', color: 'bg-yellow-500' },
-  { value: 'attivo', label: 'Attivo', color: 'bg-green-500' },
-  { value: 'inattivo', label: 'Inattivo', color: 'bg-muted' },
+  { value: 'opportunity', label: 'Opportunity', color: 'bg-yellow-500' },
+  { value: 'signed', label: 'Signed', color: 'bg-green-500' },
+  { value: 'working', label: 'Working', color: 'bg-blue-500' },
 ];
 
 interface Customer {
@@ -132,7 +133,7 @@ const AdminCustomers = () => {
         pec: formData.pec || null,
         sdi_code: formData.sdi_code || null,
         notes: formData.notes || null,
-        status: 'lead' as const,
+        status: 'opportunity' as const,
       };
 
       const { data, error } = await supabase.from('customers').insert(insertData).select().single();
@@ -269,15 +270,47 @@ const AdminCustomers = () => {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div className="space-y-2">
                   <Label>Regione</Label>
-                  <Input value={formData.region} onChange={(e) => setFormData({...formData, region: e.target.value})} placeholder="Umbria" />
+                  <Select 
+                    value={formData.region} 
+                    onValueChange={(v) => setFormData({...formData, region: v, province: '', city: ''})}
+                  >
+                    <SelectTrigger><SelectValue placeholder="Seleziona regione" /></SelectTrigger>
+                    <SelectContent className="max-h-60">
+                      {getRegionNames().map(region => (
+                        <SelectItem key={region} value={region}>{region}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label>Provincia</Label>
-                  <Input value={formData.province} onChange={(e) => setFormData({...formData, province: e.target.value})} placeholder="TR" />
+                  <Select 
+                    value={formData.province} 
+                    onValueChange={(v) => setFormData({...formData, province: v, city: ''})}
+                    disabled={!formData.region}
+                  >
+                    <SelectTrigger><SelectValue placeholder="Seleziona provincia" /></SelectTrigger>
+                    <SelectContent className="max-h-60">
+                      {getProvincesForRegion(formData.region).map(p => (
+                        <SelectItem key={p.code} value={p.code}>{p.name} ({p.code})</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label>Città</Label>
-                  <Input value={formData.city} onChange={(e) => setFormData({...formData, city: e.target.value})} placeholder="Terni" />
+                  <Select 
+                    value={formData.city} 
+                    onValueChange={(v) => setFormData({...formData, city: v})}
+                    disabled={!formData.province}
+                  >
+                    <SelectTrigger><SelectValue placeholder="Seleziona città" /></SelectTrigger>
+                    <SelectContent className="max-h-60">
+                      {getCitiesForProvince(formData.region, formData.province).map(city => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-2">
                   <Label>CAP</Label>
@@ -320,8 +353,8 @@ const AdminCustomers = () => {
         </Card>
         <Card>
           <CardContent className="p-3">
-            <div className="text-xs text-muted-foreground">Lead</div>
-            <div className="text-2xl font-bold">{customers.filter(c => c.status === 'lead').length}</div>
+            <div className="text-xs text-muted-foreground">Opportunity</div>
+            <div className="text-2xl font-bold">{customers.filter(c => c.status === 'opportunity').length}</div>
           </CardContent>
         </Card>
         <Card>

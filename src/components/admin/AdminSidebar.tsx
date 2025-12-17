@@ -24,11 +24,13 @@ import {
   Settings,
   Users,
   BarChart3,
+  FileText,
 } from 'lucide-react';
 
 const menuItems = [
   { title: 'Overview', url: '/admin', icon: LayoutDashboard },
   { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart },
+  { title: 'Preventivi', url: '/admin/preventivi', icon: FileText },
   { title: 'Clienti', url: '/admin/clienti', icon: Users },
   { title: 'Magazzino', url: '/admin/magazzino', icon: Package },
   { title: 'Analytics', url: '/admin/analytics', icon: BarChart3 },

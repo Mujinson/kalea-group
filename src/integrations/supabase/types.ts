@@ -586,6 +586,81 @@ export type Database = {
           },
         ]
       }
+      quotes: {
+        Row: {
+          accepted_date: string | null
+          additional_costs: Json | null
+          converted_sale_id: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          id: string
+          items: Json | null
+          notes: string | null
+          quote_number: string | null
+          sent_date: string | null
+          status: string
+          total_amount: number
+          updated_at: string
+          valid_until: string | null
+          vat_amount: number | null
+          vat_included: boolean | null
+        }
+        Insert: {
+          accepted_date?: string | null
+          additional_costs?: Json | null
+          converted_sale_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          items?: Json | null
+          notes?: string | null
+          quote_number?: string | null
+          sent_date?: string | null
+          status?: string
+          total_amount?: number
+          updated_at?: string
+          valid_until?: string | null
+          vat_amount?: number | null
+          vat_included?: boolean | null
+        }
+        Update: {
+          accepted_date?: string | null
+          additional_costs?: Json | null
+          converted_sale_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          items?: Json | null
+          notes?: string | null
+          quote_number?: string | null
+          sent_date?: string | null
+          status?: string
+          total_amount?: number
+          updated_at?: string
+          valid_until?: string | null
+          vat_amount?: number | null
+          vat_included?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_converted_sale_id_fkey"
+            columns: ["converted_sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sale_additional_costs: {
         Row: {
           cost_type: string
@@ -1087,7 +1162,7 @@ export type Database = {
       app_role: "admin" | "moderator" | "user"
       contract_status: "in_corso" | "completato" | "annullato"
       cost_frequency: "mensile" | "trimestrale" | "annuale" | "una_tantum"
-      customer_status: "lead" | "attivo" | "inattivo"
+      customer_status: "opportunity" | "signed" | "working"
       customer_type:
         | "cliente_privato"
         | "rivenditore"
@@ -1245,7 +1320,7 @@ export const Constants = {
       app_role: ["admin", "moderator", "user"],
       contract_status: ["in_corso", "completato", "annullato"],
       cost_frequency: ["mensile", "trimestrale", "annuale", "una_tantum"],
-      customer_status: ["lead", "attivo", "inattivo"],
+      customer_status: ["opportunity", "signed", "working"],
       customer_type: [
         "cliente_privato",
         "rivenditore",
