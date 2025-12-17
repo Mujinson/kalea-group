@@ -18,9 +18,9 @@ interface DashboardData {
   opportunityCustomers: number;
   signedCustomers: number; // Partners pronti ma senza ordini
   workingCustomers: number; // Clienti che hanno ordinato
-  // Sales - using subtotal (without VAT)
-  totalRevenue: number; // subtotal_amount sum
-  totalRevenueWithVat: number; // total_amount sum
+  // Sales - fatturato = total_amount (con IVA)
+  totalRevenue: number; // total_amount sum (fatturato)
+  totalMargin: number; // margin_amount sum
   avgMargin: number;
   totalSalesMq: number;
   salesCount: number;
@@ -57,7 +57,7 @@ const AdminOverview = () => {
     signedCustomers: 0,
     workingCustomers: 0,
     totalRevenue: 0,
-    totalRevenueWithVat: 0,
+    totalMargin: 0,
     avgMargin: 0,
     totalSalesMq: 0,
     salesCount: 0,
@@ -106,9 +106,9 @@ const AdminOverview = () => {
       const signedCustomers = customers?.filter(c => c.status === 'signed').length || 0;
       const workingCustomers = customers?.filter(c => c.status === 'working').length || 0;
 
-      // Sales stats - CORRECT: use subtotal_amount for revenue (without VAT)
-      const totalRevenue = sales?.reduce((sum, s) => sum + Number(s.subtotal_amount || 0), 0) || 0;
-      const totalRevenueWithVat = sales?.reduce((sum, s) => sum + Number(s.total_amount || 0), 0) || 0;
+      // Sales stats - CORRECT: use total_amount for fatturato (includes VAT)
+      const totalRevenue = sales?.reduce((sum, s) => sum + Number(s.total_amount || 0), 0) || 0;
+      const totalMargin = sales?.reduce((sum, s) => sum + Number(s.margin_amount || 0), 0) || 0;
       const totalSalesMq = sales?.reduce((sum, s) => sum + Number(s.quantity_sqm || 0), 0) || 0;
       const salesWithMargin = sales?.filter(s => Number(s.margin_percentage) > 0) || [];
       const avgMargin = salesWithMargin.length 
@@ -182,7 +182,7 @@ const AdminOverview = () => {
         signedCustomers,
         workingCustomers,
         totalRevenue,
-        totalRevenueWithVat,
+        totalMargin,
         avgMargin,
         totalSalesMq,
         salesCount: sales?.length || 0,
@@ -315,26 +315,26 @@ const AdminOverview = () => {
           <KPICard
             title="Fatturato"
             value={formatCurrency(data.totalRevenue)}
-            subtitle="Imponibile (senza IVA)"
+            subtitle="Totale con IVA"
             icon={TrendingUp}
             iconColor="text-green-500"
             onClick={() => navigate('/admin/vendite')}
           />
           <KPICard
+            title="Margine Totale"
+            value={formatCurrency(data.totalMargin)}
+            subtitle={`${data.avgMargin.toFixed(1)}% medio`}
+            icon={Target}
+            iconColor="text-green-600"
+            onClick={() => navigate('/admin/analytics')}
+          />
+          <KPICard
             title="Mq Venduti"
-            value={`${data.totalSalesMq.toFixed(1)} mq`}
+            value={`${data.totalSalesMq.toFixed(0)} mq`}
             subtitle={`${data.salesCount} vendite totali`}
             icon={BarChart3}
             iconColor="text-primary"
             onClick={() => navigate('/admin/vendite')}
-          />
-          <KPICard
-            title="Margine Medio"
-            value={`${data.avgMargin.toFixed(1)}%`}
-            subtitle="Su vendite con margine"
-            icon={Target}
-            iconColor="text-green-600"
-            onClick={() => navigate('/admin/analytics')}
           />
           <KPICard
             title="Preventivi"
