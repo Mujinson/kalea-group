@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X } from 'lucide-react';
+import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X, Eye, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 
@@ -144,6 +144,9 @@ const AdminSales = () => {
   const [staticCosts, setStaticCosts] = useState<StaticCost[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [viewingSale, setViewingSale] = useState<Sale | null>(null);
+  const [editingSaleId, setEditingSaleId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('customer');
   
   // Form state
@@ -281,6 +284,12 @@ const AdminSales = () => {
   };
 
   const handleSubmit = async () => {
+    // If editing, use update function
+    if (editingSaleId) {
+      await handleUpdateSale();
+      return;
+    }
+    
     if (!isNewCustomer && !selectedCustomerId) {
       toast.error('Seleziona un cliente');
       return;
@@ -478,6 +487,7 @@ const AdminSales = () => {
     setSaleData({ channel: 'B2B', sale_date: format(new Date(), 'yyyy-MM-dd'), vat_included: false, notes: '' });
     setPaymentData({ payment_method: '', payment_terms: '', deposit_amount: '', deposit_date: '', balance_due_date: '', is_paid: false });
     setActiveTab('customer');
+    setEditingSaleId(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -509,6 +519,89 @@ const AdminSales = () => {
       fetchSales();
     } catch (error) {
       toast.error('Errore aggiornamento stato pagamento');
+    }
+  };
+
+  const viewSaleDetails = (sale: Sale) => {
+    setViewingSale(sale);
+    setDetailDialogOpen(true);
+  };
+
+  const editSale = async (sale: Sale) => {
+    setEditingSaleId(sale.id);
+    
+    // Load sale data into form
+    setSelectedCustomerId(sale.customer_id || '');
+    setSaleData({
+      channel: sale.channel,
+      sale_date: sale.sale_date,
+      vat_included: sale.vat_included,
+      notes: sale.notes || '',
+    });
+    setPaymentData({
+      payment_method: sale.payment_method || '',
+      payment_terms: sale.payment_terms || '',
+      deposit_amount: String(sale.deposit_amount || ''),
+      deposit_date: '',
+      balance_due_date: sale.balance_due_date || '',
+      is_paid: sale.is_paid || false,
+    });
+    
+    // Set sale items (simplified - single item from main sale)
+    setSaleItems([{
+      product_type: sale.product_type,
+      product_variant: sale.color || '',
+      quantity_sqm: sale.quantity_sqm,
+      unit_price: sale.sale_price,
+    }]);
+    
+    setDialogOpen(true);
+    setActiveTab('products');
+  };
+
+  const handleUpdateSale = async () => {
+    try {
+      const firstItem = saleItems[0];
+      const costInfo = staticCosts.find(c => c.product_type === firstItem.product_type);
+      const costPerSqm = costInfo ? (costInfo.fob_cost + costInfo.import_logistics_cost) * (1 + costInfo.duty_percentage / 100) : 15.49;
+      
+      const subtotal = saleItems.reduce((sum, item) => sum + (item.quantity_sqm * item.unit_price), 0);
+      const vatAmount = saleData.vat_included ? 0 : subtotal * 0.22;
+      const total = subtotal + vatAmount;
+      const totalQty = saleItems.reduce((sum, item) => sum + item.quantity_sqm, 0);
+      const marginAmount = subtotal - (totalQty * costPerSqm);
+      const marginPercentage = subtotal > 0 ? (marginAmount / subtotal) * 100 : 0;
+
+      const { error } = await supabase.from('sales').update({
+        product_type: firstItem.product_type,
+        color: firstItem.product_variant || null,
+        quantity_sqm: totalQty,
+        sale_price: firstItem.unit_price,
+        channel: saleData.channel,
+        sale_date: saleData.sale_date,
+        vat_included: saleData.vat_included,
+        vat_rate: 0.22,
+        subtotal_amount: subtotal,
+        vat_amount: vatAmount,
+        total_amount: total,
+        margin_amount: marginAmount,
+        margin_percentage: marginPercentage,
+        payment_method: (paymentData.payment_method || null) as "assegno" | "bonifico" | "carta_credito" | "contanti" | null,
+        payment_terms: paymentData.payment_terms || null,
+        is_paid: paymentData.is_paid,
+        notes: saleData.notes || null,
+      }).eq('id', editingSaleId);
+
+      if (error) throw error;
+
+      toast.success('Vendita aggiornata');
+      setDialogOpen(false);
+      setEditingSaleId(null);
+      resetForm();
+      fetchAll();
+    } catch (error) {
+      console.error('Error updating sale:', error);
+      toast.error("Errore nell'aggiornamento della vendita");
     }
   };
 
@@ -563,8 +656,8 @@ const AdminSales = () => {
           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Registra Vendita</DialogTitle>
-              <DialogDescription>Compila tutti i dati della vendita</DialogDescription>
+              <DialogTitle>{editingSaleId ? 'Modifica Vendita' : 'Registra Vendita'}</DialogTitle>
+              <DialogDescription>{editingSaleId ? 'Modifica i dati della vendita' : 'Compila tutti i dati della vendita'}</DialogDescription>
             </DialogHeader>
             
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -828,6 +921,8 @@ const AdminSales = () => {
                     <span className="text-green-600">{formatCurrency(Number(sale.margin_amount) || 0)}</span>
                   </div>
                   <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => viewSaleDetails(sale)}><Eye className="w-4 h-4" /></Button>
+                    <Button size="sm" variant="outline" onClick={() => editSale(sale)}><Pencil className="w-4 h-4" /></Button>
                     <Button size="sm" variant="outline" onClick={() => togglePaidStatus(sale)}>{sale.is_paid ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />}</Button>
                     <Button size="sm" variant="ghost" onClick={() => handleDelete(sale.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                   </div>
@@ -862,13 +957,119 @@ const AdminSales = () => {
                       {sale.is_paid ? <><Check className="w-3 h-3 mr-1" />Pagato</> : 'Non pagato'}
                     </Button>
                   </TableCell>
-                  <TableCell><Button variant="ghost" size="icon" onClick={() => handleDelete(sale.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button></TableCell>
+                  <TableCell className="flex gap-1">
+                    <Button variant="ghost" size="icon" onClick={() => viewSaleDetails(sale)}><Eye className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => editSale(sale)}><Pencil className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(sale.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
+
+      {/* Sale Detail Dialog */}
+      <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Dettaglio Vendita</DialogTitle>
+            <DialogDescription>
+              {viewingSale && format(new Date(viewingSale.sale_date), 'dd MMMM yyyy', { locale: it })}
+            </DialogDescription>
+          </DialogHeader>
+          {viewingSale && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-muted-foreground">Cliente</Label>
+                  <p className="font-medium">{viewingSale.customer_name || '-'}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Canale</Label>
+                  <p className="font-medium">{viewingSale.channel}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-muted-foreground">Prodotto</Label>
+                  <p className="font-medium">{viewingSale.product_type} {viewingSale.color && `(${viewingSale.color})`}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Quantità</Label>
+                  <p className="font-medium">{Number(viewingSale.quantity_sqm).toFixed(1)} mq</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-muted-foreground">Prezzo Unitario</Label>
+                  <p className="font-medium">{formatCurrency(Number(viewingSale.sale_price))}/mq</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">IVA Inclusa</Label>
+                  <p className="font-medium">{viewingSale.vat_included ? 'Sì' : 'No'}</p>
+                </div>
+              </div>
+
+              <div className="border-t pt-4 space-y-2">
+                <div className="flex justify-between">
+                  <span>Subtotale (mq × prezzo)</span>
+                  <span className="font-medium">{formatCurrency(Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price))}</span>
+                </div>
+                {!viewingSale.vat_included && (
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>IVA (22%)</span>
+                    <span>{formatCurrency(Number(viewingSale.vat_amount) || (Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price) * 0.22))}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold text-lg border-t pt-2">
+                  <span>Totale</span>
+                  <span>{formatCurrency(
+                    viewingSale.vat_included 
+                      ? Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price)
+                      : (Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price)) * 1.22
+                  )}</span>
+                </div>
+                <div className="flex justify-between text-green-600">
+                  <span>Margine ({Number(viewingSale.margin_percentage || 0).toFixed(1)}%)</span>
+                  <span>{formatCurrency(Number(viewingSale.margin_amount) || 0)}</span>
+                </div>
+              </div>
+
+              <div className="border-t pt-4 grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-muted-foreground">Metodo Pagamento</Label>
+                  <p className="font-medium">{viewingSale.payment_method || '-'}</p>
+                </div>
+                <div>
+                  <Label className="text-muted-foreground">Stato</Label>
+                  <Badge variant={viewingSale.is_paid ? "default" : "secondary"}>
+                    {viewingSale.is_paid ? 'Pagato' : 'Non pagato'}
+                  </Badge>
+                </div>
+              </div>
+
+              {viewingSale.notes && (
+                <div className="border-t pt-4">
+                  <Label className="text-muted-foreground">Note</Label>
+                  <p className="text-sm">{viewingSale.notes}</p>
+                </div>
+              )}
+
+              <div className="flex gap-2 pt-4">
+                <Button variant="outline" className="flex-1" onClick={() => { setDetailDialogOpen(false); editSale(viewingSale); }}>
+                  <Pencil className="w-4 h-4 mr-2" /> Modifica
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => setDetailDialogOpen(false)}>
+                  Chiudi
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
