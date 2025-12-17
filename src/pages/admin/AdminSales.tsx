@@ -493,11 +493,15 @@ const AdminSales = () => {
   const handleDelete = async (id: string) => {
     if (!confirm('Sei sicuro di voler eliminare questa vendita?')) return;
     try {
+      // Remove references from related tables
+      await supabase.from('quotes').update({ converted_sale_id: null }).eq('converted_sale_id', id);
+      await supabase.from('customer_contracts').update({ sale_id: null }).eq('sale_id', id);
       await supabase.from('sale_items').delete().eq('sale_id', id);
       await supabase.from('sale_additional_costs').delete().eq('sale_id', id);
       await supabase.from('payment_schedules').delete().eq('sale_id', id);
       await supabase.from('sale_salespeople').delete().eq('sale_id', id);
       await supabase.from('inventory').delete().eq('sale_id_link', id);
+      await supabase.from('variable_costs').update({ sale_id: null }).eq('sale_id', id);
       const { error } = await supabase.from('sales').delete().eq('id', id);
       if (error) throw error;
       toast.success('Vendita eliminata');
