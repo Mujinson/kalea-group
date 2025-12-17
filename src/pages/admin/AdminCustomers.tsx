@@ -430,7 +430,17 @@ const AdminCustomers = () => {
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-medium truncate">{getCustomerName(customer)}</span>
                           <Badge variant="outline" className="text-xs shrink-0">{getTypeLabel(customer.customer_type)}</Badge>
-                          <span className={`w-2 h-2 rounded-full shrink-0 ${statusInfo.color}`} />
+                          <Badge 
+                            variant="secondary" 
+                            className={`text-xs shrink-0 ${
+                              statusInfo.value === 'opportunity' ? 'bg-yellow-100 text-yellow-800' :
+                              statusInfo.value === 'signed' ? 'bg-green-100 text-green-800' :
+                              'bg-blue-100 text-blue-800'
+                            }`}
+                          >
+                            <span className={`w-1.5 h-1.5 rounded-full mr-1 ${statusInfo.color}`} />
+                            {statusInfo.label}
+                          </Badge>
                         </div>
                         <div className="text-sm text-muted-foreground mt-1 flex flex-wrap gap-x-3 gap-y-1">
                           {customer.email && <span className="truncate">{customer.email}</span>}

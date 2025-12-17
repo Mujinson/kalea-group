@@ -273,12 +273,36 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     }
   };
 
+  // Delete sale
+  const deleteSale = async (saleId: string, salePrice: number) => {
+    if (!customerId) return;
+    try {
+      await supabase.from('sales').delete().eq('id', saleId);
+      
+      // Update customer total_value
+      const newTotalValue = Math.max(0, (customer?.total_value || 0) - Number(salePrice));
+      await supabase.from('customers').update({
+        total_value: newTotalValue,
+      }).eq('id', customerId);
+      
+      fetchAllData();
+      onUpdate();
+      toast.success('Vendita eliminata');
+    } catch (error) {
+      console.error('Error deleting sale:', error);
+      toast.error('Errore eliminazione vendita');
+    }
+  };
+
   // Convert quote to sale
   const convertQuoteToSale = async (quote: any) => {
     if (!customerId) return;
     try {
-      const items = quote.items || [];
-      const totalAmount = quote.total_amount || 0;
+      // Parse items safely
+      const items = Array.isArray(quote.items) ? quote.items : [];
+      const totalAmount = Number(quote.total_amount) || 0;
+      const vatAmount = Number(quote.vat_amount) || 0;
+      const totalQty = items.reduce((sum: number, i: any) => sum + (Number(i.quantity_sqm) || 0), 0);
       
       // Create sale from quote
       const { data: saleData, error: saleError } = await supabase.from('sales').insert({
@@ -286,10 +310,10 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         customer_name: customer?.company_name || `${customer?.first_name} ${customer?.last_name}`,
         product_type: items[0]?.product_type || 'MgO',
         color: items[0]?.color || null,
-        quantity_sqm: items.reduce((sum: number, i: any) => sum + (i.quantity_sqm || 0), 0),
+        quantity_sqm: totalQty,
         sale_price: totalAmount,
         vat_included: quote.vat_included || false,
-        vat_amount: quote.vat_amount || 0,
+        vat_amount: vatAmount,
         notes: `Convertito da preventivo ${quote.quote_number || quote.id}`,
       }).select().single();
 
@@ -302,10 +326,11 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         accepted_date: new Date().toISOString(),
       }).eq('id', quote.id);
 
-      // Update customer status to signed
+      // Update customer status to working (has sales) and total value
+      const newTotalValue = Number(customer?.total_value || 0) + totalAmount;
       await supabase.from('customers').update({
-        status: 'signed' as const,
-        total_value: (customer?.total_value || 0) + totalAmount,
+        status: 'working' as const,
+        total_value: newTotalValue,
       }).eq('id', customerId);
 
       fetchAllData();
@@ -413,13 +438,24 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
                   sales.map(sale => (
                     <Card key={sale.id}>
                       <CardContent className="p-3 text-sm">
-                        <div className="flex justify-between">
-                          <span className="font-medium">{sale.product_type} {sale.color && `- ${sale.color}`}</span>
-                          <span className="font-bold">€{sale.sale_price?.toLocaleString()}</span>
-                        </div>
-                        <div className="flex justify-between text-muted-foreground text-xs mt-1">
-                          <span>{sale.quantity_sqm} mq</span>
-                          <span>{format(new Date(sale.sale_date), 'dd/MM/yyyy')}</span>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="font-medium">{sale.product_type} {sale.color && `- ${sale.color}`}</span>
+                            <div className="text-muted-foreground text-xs mt-1">
+                              {sale.quantity_sqm} mq • {format(new Date(sale.sale_date), 'dd/MM/yyyy')}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold">€{Number(sale.sale_price || 0).toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
+                            <Button 
+                              size="icon" 
+                              variant="ghost" 
+                              className="h-6 w-6 text-destructive hover:text-destructive"
+                              onClick={(e) => { e.stopPropagation(); deleteSale(sale.id, sale.sale_price || 0); }}
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
