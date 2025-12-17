@@ -208,13 +208,17 @@ const AdminQuotes = () => {
       const vatAmount = Number(quote.vat_amount) || 0;
       const totalQty = quoteItems.reduce((sum, i) => sum + (Number(i.quantity_sqm) || 0), 0);
 
-      // Create sale
+      // Calculate unit price (sale_price is €/mq, not total)
+      const subtotal = totalAmount - vatAmount;
+      const unitPrice = totalQty > 0 ? subtotal / totalQty : 0;
+
+      // Create sale - sale_price is €/mq!
       const { data: saleData, error: saleError } = await supabase.from('sales').insert({
         customer_id: quote.customer_id,
         product_type: firstItem?.product_type || 'MgO',
         color: firstItem?.color || null,
         quantity_sqm: totalQty,
-        sale_price: totalAmount,
+        sale_price: unitPrice, // €/mq, not total!
         vat_included: quote.vat_included,
         vat_amount: vatAmount,
         notes: `Convertito da preventivo ${quote.quote_number}`,
@@ -235,7 +239,9 @@ const AdminQuotes = () => {
         .eq('id', quote.customer_id)
         .single();
 
-      const newTotalValue = (Number(custData?.total_value) || 0) + totalAmount;
+      // Calculate actual sale total (qty * unit_price)
+      const saleTotal = totalQty * unitPrice;
+      const newTotalValue = (Number(custData?.total_value) || 0) + saleTotal;
       
       await supabase.from('customers').update({
         status: 'working' as const,
