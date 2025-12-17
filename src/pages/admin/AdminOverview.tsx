@@ -7,33 +7,38 @@ import { Progress } from '@/components/ui/progress';
 import { 
   Users, TrendingUp, Package, CreditCard, FileText, 
   AlertTriangle, Clock, ChevronRight, CalendarDays,
-  Receipt, Wallet, BarChart3, ExternalLink
+  Receipt, Wallet, BarChart3, Target, CheckCircle2,
+  UserPlus, Handshake, ShoppingCart, Bell, Calendar
 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import { it } from 'date-fns/locale';
 
 interface DashboardData {
-  // Customers
-  totalCustomers: number;
+  // Customers by status
   opportunityCustomers: number;
-  signedCustomers: number;
-  workingCustomers: number;
-  // Performance
-  totalRevenue: number;
+  signedCustomers: number; // Partners pronti ma senza ordini
+  workingCustomers: number; // Clienti che hanno ordinato
+  // Sales - using subtotal (without VAT)
+  totalRevenue: number; // subtotal_amount sum
+  totalRevenueWithVat: number; // total_amount sum
   avgMargin: number;
   totalSalesMq: number;
+  salesCount: number;
   // Inventory
   totalStock: number;
-  lowStockProducts: number;
+  lowStockCount: number;
   // Payments
   pendingPayments: number;
   overduePayments: number;
+  // Quotes
+  quotesCount: number;
+  pendingQuotes: number;
+  // Tasks & Reminders
+  weeklyReminders: number;
+  overdueReminders: number;
+  // Debt
   debtRemaining: number;
   debtTotal: number;
-  // Activity
-  recentSalesCount: number;
-  recentQuotesCount: number;
-  pendingQuotes: number;
 }
 
 interface RecentItem {
@@ -48,25 +53,26 @@ interface RecentItem {
 const AdminOverview = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<DashboardData>({
-    totalCustomers: 0,
     opportunityCustomers: 0,
     signedCustomers: 0,
     workingCustomers: 0,
     totalRevenue: 0,
+    totalRevenueWithVat: 0,
     avgMargin: 0,
     totalSalesMq: 0,
+    salesCount: 0,
     totalStock: 0,
-    lowStockProducts: 0,
+    lowStockCount: 0,
     pendingPayments: 0,
     overduePayments: 0,
+    quotesCount: 0,
+    pendingQuotes: 0,
+    weeklyReminders: 0,
+    overdueReminders: 0,
     debtRemaining: 0,
     debtTotal: 0,
-    recentSalesCount: 0,
-    recentQuotesCount: 0,
-    pendingQuotes: 0,
   });
   const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
-  const [alerts, setAlerts] = useState<{ type: string; message: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -82,7 +88,8 @@ const AdminOverview = () => {
         { data: quotes },
         { data: paymentSchedules },
         { data: agreement },
-        { data: payments }
+        { data: payments },
+        { data: reminders }
       ] = await Promise.all([
         supabase.from('customers').select('*'),
         supabase.from('sales').select('*').order('created_at', { ascending: false }),
@@ -90,19 +97,22 @@ const AdminOverview = () => {
         supabase.from('quotes').select('*').order('created_at', { ascending: false }),
         supabase.from('payment_schedules').select('*'),
         supabase.from('payment_agreements').select('*').maybeSingle(),
-        supabase.from('supplier_payments').select('*')
+        supabase.from('supplier_payments').select('*'),
+        supabase.from('customer_reminders').select('*')
       ]);
 
-      // Customer stats
+      // Customer stats by status
       const opportunityCustomers = customers?.filter(c => c.status === 'opportunity').length || 0;
       const signedCustomers = customers?.filter(c => c.status === 'signed').length || 0;
       const workingCustomers = customers?.filter(c => c.status === 'working').length || 0;
 
-      // Sales stats
-      const totalRevenue = sales?.reduce((sum, s) => sum + Number(s.total_amount || 0), 0) || 0;
+      // Sales stats - CORRECT: use subtotal_amount for revenue (without VAT)
+      const totalRevenue = sales?.reduce((sum, s) => sum + Number(s.subtotal_amount || 0), 0) || 0;
+      const totalRevenueWithVat = sales?.reduce((sum, s) => sum + Number(s.total_amount || 0), 0) || 0;
       const totalSalesMq = sales?.reduce((sum, s) => sum + Number(s.quantity_sqm || 0), 0) || 0;
-      const avgMargin = sales?.length 
-        ? sales.reduce((sum, s) => sum + Number(s.margin_percentage || 0), 0) / sales.length 
+      const salesWithMargin = sales?.filter(s => Number(s.margin_percentage) > 0) || [];
+      const avgMargin = salesWithMargin.length 
+        ? salesWithMargin.reduce((sum, s) => sum + Number(s.margin_percentage || 0), 0) / salesWithMargin.length 
         : 0;
 
       // Inventory stats
@@ -110,8 +120,15 @@ const AdminOverview = () => {
       const stockOut = inventory?.filter(i => i.movement_type === 'OUT').reduce((sum, i) => sum + Number(i.quantity_sqm), 0) || 0;
       const totalStock = stockIn - stockOut;
       
-      // Low stock check (simplified)
-      const lowStockProducts = 0; // Will implement proper check
+      // Low stock check by product/color
+      const stockByProduct: Record<string, number> = {};
+      inventory?.forEach(i => {
+        const key = `${i.product_type}-${i.color || 'default'}`;
+        if (!stockByProduct[key]) stockByProduct[key] = 0;
+        if (i.movement_type === 'IN') stockByProduct[key] += Number(i.quantity_sqm);
+        else stockByProduct[key] -= Number(i.quantity_sqm);
+      });
+      const lowStockCount = Object.values(stockByProduct).filter(v => v < 100 && v > 0).length;
 
       // Payment stats
       const today = new Date().toISOString().split('T')[0];
@@ -126,21 +143,29 @@ const AdminOverview = () => {
       // Quote stats
       const pendingQuotes = quotes?.filter(q => q.status === 'inviato').length || 0;
 
+      // Reminders this week
+      const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
+      const weekEnd = endOfWeek(new Date(), { weekStartsOn: 1 });
+      const activeReminders = reminders?.filter(r => !r.is_completed) || [];
+      const weeklyReminders = activeReminders.filter(r => {
+        const reminderDate = new Date(r.reminder_date);
+        return isWithinInterval(reminderDate, { start: weekStart, end: weekEnd });
+      }).length;
+      const overdueReminders = activeReminders.filter(r => new Date(r.reminder_date) < new Date()).length;
+
       // Recent items
       const recent: RecentItem[] = [];
-      
       sales?.slice(0, 5).forEach(s => {
         recent.push({
           id: s.id,
           type: 'sale',
           title: s.customer_name || 'Vendita',
-          subtitle: `${s.quantity_sqm} mq - ${s.product_type}`,
+          subtitle: `${s.quantity_sqm} mq`,
           date: s.created_at,
-          value: Number(s.total_amount || 0)
+          value: Number(s.subtotal_amount || 0)
         });
       });
-
-      quotes?.slice(0, 5).forEach(q => {
+      quotes?.slice(0, 3).forEach(q => {
         recent.push({
           id: q.id,
           type: 'quote',
@@ -150,41 +175,29 @@ const AdminOverview = () => {
           value: Number(q.total_amount || 0)
         });
       });
-
       recent.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-      // Build alerts
-      const alertsList: { type: string; message: string; count: number }[] = [];
-      if (overduePayments > 0) {
-        alertsList.push({ type: 'error', message: 'Pagamenti scaduti', count: overduePayments });
-      }
-      if (pendingPayments > 0) {
-        alertsList.push({ type: 'warning', message: 'Pagamenti in scadenza', count: pendingPayments });
-      }
-      if (pendingQuotes > 0) {
-        alertsList.push({ type: 'info', message: 'Preventivi da confermare', count: pendingQuotes });
-      }
-
       setData({
-        totalCustomers: customers?.length || 0,
         opportunityCustomers,
         signedCustomers,
         workingCustomers,
         totalRevenue,
+        totalRevenueWithVat,
         avgMargin,
         totalSalesMq,
+        salesCount: sales?.length || 0,
         totalStock,
-        lowStockProducts,
+        lowStockCount,
         pendingPayments,
         overduePayments,
+        quotesCount: quotes?.length || 0,
+        pendingQuotes,
+        weeklyReminders,
+        overdueReminders,
         debtRemaining,
         debtTotal,
-        recentSalesCount: sales?.length || 0,
-        recentQuotesCount: quotes?.length || 0,
-        pendingQuotes,
       });
-      setRecentItems(recent.slice(0, 10));
-      setAlerts(alertsList);
+      setRecentItems(recent.slice(0, 8));
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -201,63 +214,43 @@ const AdminOverview = () => {
     return format(new Date(dateStr), 'dd MMM HH:mm', { locale: it });
   };
 
-  // Clickable card component
-  const DashboardCard = ({ 
+  // Small clickable KPI card
+  const KPICard = ({ 
     title, 
-    onClick, 
-    children,
-    className = ''
+    value, 
+    subtitle,
+    icon: Icon,
+    iconColor = 'text-primary',
+    onClick,
+    badge,
+    badgeVariant = 'secondary'
   }: { 
     title: string; 
-    onClick?: () => void; 
-    children: React.ReactNode;
-    className?: string;
+    value: string | number;
+    subtitle?: string;
+    icon: any;
+    iconColor?: string;
+    onClick?: () => void;
+    badge?: string | number;
+    badgeVariant?: 'default' | 'secondary' | 'destructive' | 'outline';
   }) => (
     <Card 
-      className={`cursor-pointer transition-all hover:shadow-md hover:border-primary/30 ${className}`}
+      className={`${onClick ? 'cursor-pointer hover:shadow-md hover:border-primary/30 transition-all' : ''}`}
       onClick={onClick}
     >
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            {title}
-          </CardTitle>
-          {onClick && <ChevronRight className="w-4 h-4 text-muted-foreground" />}
+      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
+        <CardTitle className="text-xs font-medium text-muted-foreground">{title}</CardTitle>
+        <div className="flex items-center gap-2">
+          {badge !== undefined && <Badge variant={badgeVariant}>{badge}</Badge>}
+          <Icon className={`w-4 h-4 ${iconColor}`} />
         </div>
       </CardHeader>
-      <CardContent>{children}</CardContent>
+      <CardContent className="px-4 pb-4">
+        <div className="text-2xl font-bold">{value}</div>
+        {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
+      </CardContent>
     </Card>
   );
-
-  // Stat row for list items
-  const StatRow = ({ 
-    label, 
-    value, 
-    color = 'primary',
-    onClick
-  }: { 
-    label: string; 
-    value: number | string;
-    color?: 'primary' | 'green' | 'orange' | 'red';
-    onClick?: () => void;
-  }) => {
-    const colorClasses = {
-      primary: 'text-primary',
-      green: 'text-green-600',
-      orange: 'text-orange-500',
-      red: 'text-red-500'
-    };
-    
-    return (
-      <div 
-        className={`flex justify-between items-center py-1 ${onClick ? 'cursor-pointer hover:bg-muted/50 -mx-2 px-2 rounded' : ''}`}
-        onClick={onClick}
-      >
-        <span className="text-sm text-muted-foreground">{label}</span>
-        <span className={`font-semibold ${colorClasses[color]}`}>{value}</span>
-      </div>
-    );
-  };
 
   if (loading) {
     return <div className="flex items-center justify-center h-64">Caricamento...</div>;
@@ -266,238 +259,234 @@ const AdminOverview = () => {
   const debtProgress = data.debtTotal > 0 ? ((data.debtTotal - data.debtRemaining) / data.debtTotal) * 100 : 0;
 
   return (
-    <div className="flex gap-6">
-      {/* Main Content */}
-      <div className="flex-1 space-y-6">
-        <div>
-          <h2 className="text-2xl font-bold">Dashboard</h2>
-          <p className="text-muted-foreground">Panoramica aziendale</p>
-        </div>
-
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          {/* CLIENTI Section */}
-          <DashboardCard title="Clienti" onClick={() => navigate('/admin/clienti')}>
-            <div className="space-y-1">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-primary" />
-                  <span className="text-2xl font-bold text-primary">{data.totalCustomers}</span>
-                </div>
-                <Badge variant="outline">Totale</Badge>
-              </div>
-              <StatRow 
-                label="Opportunity" 
-                value={data.opportunityCustomers} 
-                color="orange"
-                onClick={() => navigate('/admin/clienti?status=opportunity')}
-              />
-              <StatRow 
-                label="Signed" 
-                value={data.signedCustomers} 
-                color="green"
-                onClick={() => navigate('/admin/clienti?status=signed')}
-              />
-              <StatRow 
-                label="Working" 
-                value={data.workingCustomers} 
-                color="primary"
-                onClick={() => navigate('/admin/clienti?status=working')}
-              />
-            </div>
-          </DashboardCard>
-
-          {/* VENDITE Section */}
-          <DashboardCard title="Vendite" onClick={() => navigate('/admin/vendite')}>
-            <div className="space-y-1">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-primary" />
-                  <span className="text-2xl font-bold text-primary">{data.recentSalesCount}</span>
-                </div>
-                <Badge variant="outline">Totale</Badge>
-              </div>
-              <StatRow label="Fatturato" value={formatCurrency(data.totalRevenue)} color="green" />
-              <StatRow label="Mq venduti" value={`${data.totalSalesMq.toFixed(0)} mq`} />
-              <StatRow label="Margine medio" value={`${data.avgMargin.toFixed(1)}%`} color="green" />
-            </div>
-          </DashboardCard>
-
-          {/* PREVENTIVI Section */}
-          <DashboardCard title="Preventivi" onClick={() => navigate('/admin/preventivi')}>
-            <div className="space-y-1">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <FileText className="w-5 h-5 text-primary" />
-                  <span className="text-2xl font-bold text-primary">{data.recentQuotesCount}</span>
-                </div>
-                <Badge variant="outline">Totale</Badge>
-              </div>
-              <StatRow 
-                label="Da confermare" 
-                value={data.pendingQuotes} 
-                color={data.pendingQuotes > 0 ? 'orange' : 'primary'}
-              />
-            </div>
-          </DashboardCard>
-
-          {/* MAGAZZINO Section */}
-          <DashboardCard title="Magazzino" onClick={() => navigate('/admin/magazzino')}>
-            <div className="space-y-1">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <Package className="w-5 h-5 text-blue-500" />
-                  <span className="text-2xl font-bold text-blue-500">{data.totalStock.toFixed(0)} mq</span>
-                </div>
-                <Badge variant="outline">Stock</Badge>
-              </div>
-              <StatRow 
-                label="Prodotti sotto scorta" 
-                value={data.lowStockProducts} 
-                color={data.lowStockProducts > 0 ? 'red' : 'green'}
-              />
-            </div>
-          </DashboardCard>
-
-          {/* PAGAMENTI Section */}
-          <DashboardCard title="Pagamenti" onClick={() => navigate('/admin/pagamenti')}>
-            <div className="space-y-1">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <Wallet className="w-5 h-5 text-orange-500" />
-                  <span className="text-sm font-medium">Scadenze</span>
-                </div>
-              </div>
-              <StatRow 
-                label="Pagamenti scaduti" 
-                value={data.overduePayments} 
-                color={data.overduePayments > 0 ? 'red' : 'green'}
-              />
-              <StatRow 
-                label="In scadenza" 
-                value={data.pendingPayments} 
-                color={data.pendingPayments > 0 ? 'orange' : 'green'}
-              />
-            </div>
-          </DashboardCard>
-
-          {/* COSTI Section */}
-          <DashboardCard title="Costi & Finanze" onClick={() => navigate('/admin/costi')}>
-            <div className="space-y-1">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <CreditCard className="w-5 h-5 text-purple-500" />
-                  <span className="text-sm font-medium">Gestione costi</span>
-                </div>
-              </div>
-              {data.debtTotal > 0 && (
-                <>
-                  <StatRow label="Debito residuo" value={formatCurrency(data.debtRemaining)} color="orange" />
-                  <div className="mt-2">
-                    <Progress value={debtProgress} className="h-2" />
-                    <p className="text-xs text-muted-foreground mt-1">{debtProgress.toFixed(0)}% saldato</p>
-                  </div>
-                </>
-              )}
-            </div>
-          </DashboardCard>
-        </div>
-
-        {/* Analytics Link */}
-        <DashboardCard 
-          title="Analisi Avanzata" 
-          onClick={() => navigate('/admin/analytics')}
-          className="bg-gradient-to-r from-primary/5 to-primary/10"
-        >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <TrendingUp className="w-6 h-6 text-primary" />
-              <div>
-                <p className="font-medium">Report e statistiche dettagliate</p>
-                <p className="text-sm text-muted-foreground">Margini, trend, analisi per cliente e prodotto</p>
-              </div>
-            </div>
-            <ExternalLink className="w-5 h-5 text-muted-foreground" />
-          </div>
-        </DashboardCard>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold">Dashboard</h2>
+        <p className="text-muted-foreground">Panoramica aziendale</p>
       </div>
 
-      {/* Right Sidebar - Alerts & Recent */}
-      <div className="w-80 space-y-6 hidden xl:block">
-        
-        {/* Alerts Section */}
-        {alerts.length > 0 && (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-orange-500" />
-                Attenzione
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {alerts.map((alert, index) => (
-                <div 
-                  key={index}
-                  className={`flex justify-between items-center p-2 rounded-md ${
-                    alert.type === 'error' ? 'bg-red-50 dark:bg-red-950/20' :
-                    alert.type === 'warning' ? 'bg-orange-50 dark:bg-orange-950/20' :
-                    'bg-blue-50 dark:bg-blue-950/20'
-                  }`}
-                >
-                  <span className="text-sm">{alert.message}</span>
-                  <Badge variant={alert.type === 'error' ? 'destructive' : 'secondary'}>
-                    {alert.count}
-                  </Badge>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        )}
+      {/* CLIENTI Section */}
+      <div>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+          <Users className="w-4 h-4" /> Clienti
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <KPICard
+            title="Opportunity"
+            value={data.opportunityCustomers}
+            subtitle="Potenziali lead"
+            icon={UserPlus}
+            iconColor="text-orange-500"
+            onClick={() => navigate('/admin/clienti?status=opportunity')}
+          />
+          <KPICard
+            title="Signed"
+            value={data.signedCustomers}
+            subtitle="Partner pronti, no ordini"
+            icon={Handshake}
+            iconColor="text-blue-500"
+            onClick={() => navigate('/admin/clienti?status=signed')}
+          />
+          <KPICard
+            title="Working"
+            value={data.workingCustomers}
+            subtitle="Hanno ordinato"
+            icon={ShoppingCart}
+            iconColor="text-green-500"
+            onClick={() => navigate('/admin/clienti?status=working')}
+          />
+          <KPICard
+            title="Totale Clienti"
+            value={data.opportunityCustomers + data.signedCustomers + data.workingCustomers}
+            subtitle="Database completo"
+            icon={Users}
+            iconColor="text-primary"
+            onClick={() => navigate('/admin/clienti')}
+          />
+        </div>
+      </div>
 
-        {/* Recent Activity */}
-        <Card>
+      {/* VENDITE Section */}
+      <div>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+          <BarChart3 className="w-4 h-4" /> Vendite
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <KPICard
+            title="Fatturato"
+            value={formatCurrency(data.totalRevenue)}
+            subtitle="Imponibile (senza IVA)"
+            icon={TrendingUp}
+            iconColor="text-green-500"
+            onClick={() => navigate('/admin/vendite')}
+          />
+          <KPICard
+            title="Mq Venduti"
+            value={`${data.totalSalesMq.toFixed(1)} mq`}
+            subtitle={`${data.salesCount} vendite totali`}
+            icon={BarChart3}
+            iconColor="text-primary"
+            onClick={() => navigate('/admin/vendite')}
+          />
+          <KPICard
+            title="Margine Medio"
+            value={`${data.avgMargin.toFixed(1)}%`}
+            subtitle="Su vendite con margine"
+            icon={Target}
+            iconColor="text-green-600"
+            onClick={() => navigate('/admin/analytics')}
+          />
+          <KPICard
+            title="Preventivi"
+            value={data.quotesCount}
+            subtitle={data.pendingQuotes > 0 ? `${data.pendingQuotes} da confermare` : 'Tutti gestiti'}
+            icon={FileText}
+            iconColor="text-blue-500"
+            badge={data.pendingQuotes > 0 ? data.pendingQuotes : undefined}
+            badgeVariant="destructive"
+            onClick={() => navigate('/admin/preventivi')}
+          />
+        </div>
+      </div>
+
+      {/* ATTIVITÀ Section */}
+      <div>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+          <Calendar className="w-4 h-4" /> Attività
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <KPICard
+            title="Task Settimana"
+            value={data.weeklyReminders}
+            subtitle="Promemoria questa settimana"
+            icon={CalendarDays}
+            iconColor="text-purple-500"
+            onClick={() => navigate('/admin/clienti')}
+          />
+          <KPICard
+            title="In Scadenza"
+            value={data.overdueReminders}
+            subtitle="Task scaduti"
+            icon={AlertTriangle}
+            iconColor={data.overdueReminders > 0 ? 'text-red-500' : 'text-green-500'}
+            badge={data.overdueReminders > 0 ? '!' : undefined}
+            badgeVariant="destructive"
+            onClick={() => navigate('/admin/clienti')}
+          />
+          <KPICard
+            title="Pagamenti Scaduti"
+            value={data.overduePayments}
+            subtitle="Da incassare"
+            icon={CreditCard}
+            iconColor={data.overduePayments > 0 ? 'text-red-500' : 'text-green-500'}
+            badge={data.overduePayments > 0 ? '!' : undefined}
+            badgeVariant="destructive"
+            onClick={() => navigate('/admin/pagamenti')}
+          />
+          <KPICard
+            title="Pagamenti Pendenti"
+            value={data.pendingPayments}
+            subtitle="In scadenza"
+            icon={Clock}
+            iconColor="text-orange-500"
+            onClick={() => navigate('/admin/pagamenti')}
+          />
+        </div>
+      </div>
+
+      {/* MAGAZZINO & FINANZE Section */}
+      <div>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+          <Package className="w-4 h-4" /> Magazzino & Finanze
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <KPICard
+            title="Stock Totale"
+            value={`${data.totalStock.toFixed(0)} mq`}
+            subtitle="Disponibile in magazzino"
+            icon={Package}
+            iconColor="text-blue-500"
+            onClick={() => navigate('/admin/magazzino')}
+          />
+          <KPICard
+            title="Sotto Scorta"
+            value={data.lowStockCount}
+            subtitle="Prodotti < 100 mq"
+            icon={AlertTriangle}
+            iconColor={data.lowStockCount > 0 ? 'text-orange-500' : 'text-green-500'}
+            badge={data.lowStockCount > 0 ? '!' : undefined}
+            badgeVariant="destructive"
+            onClick={() => navigate('/admin/magazzino')}
+          />
+          <KPICard
+            title="Costi Fissi"
+            value="Gestione"
+            subtitle="Stipendi, affitti, utenze"
+            icon={Wallet}
+            iconColor="text-purple-500"
+            onClick={() => navigate('/admin/costi')}
+          />
+          <KPICard
+            title="Analytics"
+            value="Report"
+            subtitle="Analisi dettagliate"
+            icon={TrendingUp}
+            iconColor="text-primary"
+            onClick={() => navigate('/admin/analytics')}
+          />
+        </div>
+      </div>
+
+      {/* DEBT Progress (if exists) */}
+      {data.debtTotal > 0 && (
+        <Card className="cursor-pointer hover:shadow-md transition-all" onClick={() => navigate('/admin/pagamenti')}>
           <CardHeader className="pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                Attività recente
-              </CardTitle>
-              <Badge variant="outline">Oggi</Badge>
-            </div>
+            <CardTitle className="text-sm font-medium">Accordo Pagamento Fornitore</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-1 max-h-[400px] overflow-y-auto">
+          <CardContent>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Pagato: {formatCurrency(data.debtTotal - data.debtRemaining)}</span>
+              <span>Residuo: {formatCurrency(data.debtRemaining)}</span>
+            </div>
+            <Progress value={debtProgress} className="h-2" />
+            <p className="text-xs text-muted-foreground mt-1 text-center">{debtProgress.toFixed(0)}% completato</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Recent Activity Sidebar */}
+      <div>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
+          <Clock className="w-4 h-4" /> Attività Recente
+        </h3>
+        <Card>
+          <CardContent className="p-4">
             {recentItems.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">
-                Nessuna attività recente
-              </p>
+              <p className="text-sm text-muted-foreground py-4 text-center">Nessuna attività recente</p>
             ) : (
-              recentItems.map((item) => (
-                <div 
-                  key={item.id}
-                  className="flex items-start gap-3 py-2 px-2 -mx-2 rounded hover:bg-muted/50 cursor-pointer"
-                  onClick={() => {
-                    if (item.type === 'sale') navigate('/admin/vendite');
-                    if (item.type === 'quote') navigate('/admin/preventivi');
-                  }}
-                >
-                  <div className="mt-0.5">
-                    {item.type === 'sale' && <Receipt className="w-4 h-4 text-green-500" />}
-                    {item.type === 'quote' && <FileText className="w-4 h-4 text-blue-500" />}
-                    {item.type === 'customer' && <Users className="w-4 h-4 text-purple-500" />}
+              <div className="space-y-3">
+                {recentItems.map((item) => (
+                  <div 
+                    key={item.id}
+                    className="flex items-center gap-3 p-2 -m-2 rounded hover:bg-muted/50 cursor-pointer"
+                    onClick={() => {
+                      if (item.type === 'sale') navigate('/admin/vendite');
+                      if (item.type === 'quote') navigate('/admin/preventivi');
+                    }}
+                  >
+                    {item.type === 'sale' && <Receipt className="w-4 h-4 text-green-500 shrink-0" />}
+                    {item.type === 'quote' && <FileText className="w-4 h-4 text-blue-500 shrink-0" />}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">{item.title}</p>
+                      <p className="text-xs text-muted-foreground">{item.subtitle}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      {item.value !== undefined && <p className="text-sm font-medium">{formatCurrency(item.value)}</p>}
+                      <p className="text-xs text-muted-foreground">{formatDate(item.date)}</p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{item.title}</p>
-                    <p className="text-xs text-muted-foreground">{item.subtitle}</p>
-                  </div>
-                  <div className="text-right">
-                    {item.value && (
-                      <p className="text-xs font-medium">{formatCurrency(item.value)}</p>
-                    )}
-                    <p className="text-xs text-muted-foreground">{formatDate(item.date)}</p>
-                  </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
           </CardContent>
         </Card>
