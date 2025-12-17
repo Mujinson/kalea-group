@@ -37,6 +37,7 @@ import AdminPayments from "./pages/admin/AdminPayments";
 import AdminImport from "./pages/admin/AdminImport";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
+import AdminQuotes from "./pages/admin/AdminQuotes";
 
 const queryClient = new QueryClient();
 
@@ -89,6 +90,7 @@ const App = () => (
 
             {/* Italian slugs (used in sidebar) */}
             <Route path="vendite" element={<AdminSales />} />
+            <Route path="preventivi" element={<AdminQuotes />} />
             <Route path="clienti" element={<AdminCustomers />} />
             <Route path="magazzino" element={<AdminInventory />} />
             <Route path="analytics" element={<AdminAnalytics />} />

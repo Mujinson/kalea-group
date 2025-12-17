@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,7 +14,8 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { 
   User, Phone, Mail, MapPin, Building, Euro, TrendingUp, 
-  Calendar, Plus, FileText, Clock, MessageSquare, CheckCircle2
+  Calendar, Plus, FileText, Clock, MessageSquare, CheckCircle2,
+  Upload, Download, Eye, Send, Trash2, File
 } from 'lucide-react';
 
 interface CustomerDetailSheetProps {
@@ -25,9 +26,9 @@ interface CustomerDetailSheetProps {
 }
 
 const CUSTOMER_STATUSES = [
-  { value: 'lead', label: 'Lead', color: 'bg-yellow-500' },
-  { value: 'attivo', label: 'Attivo', color: 'bg-green-500' },
-  { value: 'inattivo', label: 'Inattivo', color: 'bg-gray-500' },
+  { value: 'opportunity', label: 'Opportunity', color: 'bg-yellow-500' },
+  { value: 'signed', label: 'Signed', color: 'bg-green-500' },
+  { value: 'working', label: 'Working', color: 'bg-blue-500' },
 ];
 
 const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDetailSheetProps) => {
@@ -37,7 +38,11 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   const [reminders, setReminders] = useState<any[]>([]);
   const [actionLogs, setActionLogs] = useState<any[]>([]);
   const [contracts, setContracts] = useState<any[]>([]);
+  const [quotes, setQuotes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedContractId, setSelectedContractId] = useState<string | null>(null);
   
   // Form states
   const [newVisit, setNewVisit] = useState({ visit_date: '', visit_type: '', outcome: '', notes: '' });
@@ -56,13 +61,14 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     setLoading(true);
     
     try {
-      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes] = await Promise.all([
+      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes, quotesRes] = await Promise.all([
         supabase.from('customers').select('*').eq('id', customerId).single(),
         supabase.from('sales').select('*').eq('customer_id', customerId).order('sale_date', { ascending: false }),
         supabase.from('customer_visits').select('*').eq('customer_id', customerId).order('visit_date', { ascending: false }),
         supabase.from('customer_reminders').select('*').eq('customer_id', customerId).order('reminder_date', { ascending: true }),
         supabase.from('customer_action_logs').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
         supabase.from('customer_contracts').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
+        supabase.from('quotes').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
       ]);
 
       if (customerRes.data) setCustomer(customerRes.data);
@@ -71,6 +77,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
       setReminders(remindersRes.data || []);
       setActionLogs(logsRes.data || []);
       setContracts(contractsRes.data || []);
+      setQuotes(quotesRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -156,19 +163,157 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   const addContract = async () => {
     if (!customerId || !newContract.title) return;
     try {
-      await supabase.from('customer_contracts').insert({
+      const { data } = await supabase.from('customer_contracts').insert({
         customer_id: customerId,
         title: newContract.title,
         contract_type: newContract.contract_type || null,
         value: newContract.value ? parseFloat(newContract.value) : 0,
         start_date: newContract.start_date || null,
         notes: newContract.notes || null,
-      });
+      }).select().single();
+      
       setNewContract({ title: '', contract_type: '', value: '', start_date: '', notes: '' });
       fetchAllData();
       toast.success('Contratto aggiunto');
+      
+      // Auto-select for file upload
+      if (data) setSelectedContractId(data.id);
     } catch (error) {
       toast.error('Errore');
+    }
+  };
+
+  // File upload functions
+  const handleFileUpload = async (contractId: string, file: File) => {
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${contractId}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('contracts')
+        .upload(fileName, file);
+      
+      if (uploadError) throw uploadError;
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('contracts')
+        .getPublicUrl(fileName);
+      
+      await supabase.from('customer_contracts')
+        .update({ document_url: fileName })
+        .eq('id', contractId);
+      
+      fetchAllData();
+      toast.success('File caricato');
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Errore nel caricamento');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const downloadFile = async (documentUrl: string, title: string) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('contracts')
+        .download(documentUrl);
+      
+      if (error) throw error;
+      
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title}.${documentUrl.split('.').pop()}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toast.error('Errore nel download');
+    }
+  };
+
+  const previewFile = async (documentUrl: string) => {
+    try {
+      const { data } = supabase.storage
+        .from('contracts')
+        .getPublicUrl(documentUrl);
+      
+      window.open(data.publicUrl, '_blank');
+    } catch (error) {
+      toast.error('Errore nella preview');
+    }
+  };
+
+  const sendFileByEmail = async (contract: any) => {
+    if (!customer?.email) {
+      toast.error('Cliente senza email');
+      return;
+    }
+    
+    // For now, open mailto with attachment mention
+    const subject = encodeURIComponent(`Documento: ${contract.title}`);
+    const body = encodeURIComponent(`Gentile ${customer.company_name || customer.first_name},\n\nIn allegato trova il documento "${contract.title}".\n\nCordiali saluti`);
+    window.open(`mailto:${customer.email}?subject=${subject}&body=${body}`, '_blank');
+    toast.success('Email aperta - allega il file manualmente');
+  };
+
+  const deleteContract = async (id: string, documentUrl?: string) => {
+    try {
+      if (documentUrl) {
+        await supabase.storage.from('contracts').remove([documentUrl]);
+      }
+      await supabase.from('customer_contracts').delete().eq('id', id);
+      fetchAllData();
+      toast.success('Contratto eliminato');
+    } catch (error) {
+      toast.error('Errore eliminazione');
+    }
+  };
+
+  // Convert quote to sale
+  const convertQuoteToSale = async (quote: any) => {
+    if (!customerId) return;
+    try {
+      const items = quote.items || [];
+      const totalAmount = quote.total_amount || 0;
+      
+      // Create sale from quote
+      const { data: saleData, error: saleError } = await supabase.from('sales').insert({
+        customer_id: customerId,
+        customer_name: customer?.company_name || `${customer?.first_name} ${customer?.last_name}`,
+        product_type: items[0]?.product_type || 'MgO',
+        color: items[0]?.color || null,
+        quantity_sqm: items.reduce((sum: number, i: any) => sum + (i.quantity_sqm || 0), 0),
+        sale_price: totalAmount,
+        vat_included: quote.vat_included || false,
+        vat_amount: quote.vat_amount || 0,
+        notes: `Convertito da preventivo ${quote.quote_number || quote.id}`,
+      }).select().single();
+
+      if (saleError) throw saleError;
+
+      // Update quote status
+      await supabase.from('quotes').update({
+        status: 'converted',
+        converted_sale_id: saleData.id,
+        accepted_date: new Date().toISOString(),
+      }).eq('id', quote.id);
+
+      // Update customer status to signed
+      await supabase.from('customers').update({
+        status: 'signed' as const,
+        total_value: (customer?.total_value || 0) + totalAmount,
+      }).eq('id', customerId);
+
+      fetchAllData();
+      onUpdate();
+      toast.success('Preventivo convertito in vendita');
+    } catch (error) {
+      console.error('Error converting quote:', error);
+      toast.error('Errore nella conversione');
     }
   };
 
@@ -187,7 +332,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         <SheetHeader className="pb-4 border-b">
           <div className="flex items-center justify-between">
             <SheetTitle className="text-xl">{getCustomerName()}</SheetTitle>
-            <Select value={customer.status || 'lead'} onValueChange={updateCustomerStatus}>
+            <Select value={customer.status || 'opportunity'} onValueChange={updateCustomerStatus}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>
@@ -248,8 +393,9 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
             </Card>
 
             <Tabs defaultValue="sales" className="w-full">
-              <TabsList className="grid grid-cols-5 w-full">
+              <TabsList className="grid grid-cols-6 w-full">
                 <TabsTrigger value="sales" className="text-xs">Vendite</TabsTrigger>
+                <TabsTrigger value="quotes" className="text-xs">Preventivi</TabsTrigger>
                 <TabsTrigger value="visits" className="text-xs">Visite</TabsTrigger>
                 <TabsTrigger value="reminders" className="text-xs">Reminder</TabsTrigger>
                 <TabsTrigger value="actions" className="text-xs">Log</TabsTrigger>
@@ -258,6 +404,9 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
 
               {/* Sales Tab */}
               <TabsContent value="sales" className="space-y-2">
+                <Button size="sm" variant="outline" className="w-full" onClick={() => window.location.href = '/admin/vendite'}>
+                  <Plus className="w-3 h-3 mr-1" />Aggiungi Vendita
+                </Button>
                 {sales.length === 0 ? (
                   <p className="text-sm text-muted-foreground text-center py-4">Nessuna vendita</p>
                 ) : (
@@ -271,6 +420,40 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
                         <div className="flex justify-between text-muted-foreground text-xs mt-1">
                           <span>{sale.quantity_sqm} mq</span>
                           <span>{format(new Date(sale.sale_date), 'dd/MM/yyyy')}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </TabsContent>
+
+              {/* Quotes Tab */}
+              <TabsContent value="quotes" className="space-y-2">
+                <Button size="sm" variant="outline" className="w-full" onClick={() => window.location.href = '/admin/preventivi'}>
+                  <Plus className="w-3 h-3 mr-1" />Crea Preventivo
+                </Button>
+                {quotes.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">Nessun preventivo</p>
+                ) : (
+                  quotes.map(quote => (
+                    <Card key={quote.id}>
+                      <CardContent className="p-3 text-sm">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="font-medium">{quote.quote_number || `#${quote.id.slice(0,6)}`}</span>
+                            <Badge variant="outline" className="ml-2 text-xs">{quote.status}</Badge>
+                          </div>
+                          <span className="font-bold">€{(quote.total_amount || 0).toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center mt-2">
+                          <span className="text-xs text-muted-foreground">
+                            {format(new Date(quote.created_at), 'dd/MM/yyyy')}
+                          </span>
+                          {quote.status === 'sent' && (
+                            <Button size="sm" variant="default" onClick={() => convertQuoteToSale(quote)}>
+                              <CheckCircle2 className="w-3 h-3 mr-1" />Converti in Vendita
+                            </Button>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
@@ -375,7 +558,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
                 </div>
               </TabsContent>
 
-              {/* Contracts Tab */}
+              {/* Contracts Tab with File Upload */}
               <TabsContent value="contracts" className="space-y-3">
                 <Input 
                   placeholder="Titolo contratto"
@@ -386,9 +569,9 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
                   <Select value={newContract.contract_type} onValueChange={v => setNewContract({...newContract, contract_type: v})}>
                     <SelectTrigger><SelectValue placeholder="Tipo" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="preventivo">Preventivo</SelectItem>
+                      <SelectItem value="preventivo">Preventivo firmato</SelectItem>
                       <SelectItem value="contratto">Contratto</SelectItem>
-                      <SelectItem value="documento">Documento</SelectItem>
+                      <SelectItem value="documento">Documento lavori</SelectItem>
                     </SelectContent>
                   </Select>
                   <Input 
@@ -403,7 +586,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
                 <div className="space-y-2 mt-4">
                   {contracts.map(contract => (
                     <Card key={contract.id}>
-                      <CardContent className="p-3 text-sm">
+                      <CardContent className="p-3 text-sm space-y-2">
                         <div className="flex justify-between items-start">
                           <div>
                             <span className="font-medium">{contract.title}</span>
@@ -411,7 +594,51 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
                           </div>
                           {contract.value > 0 && <span className="font-bold">€{contract.value.toLocaleString()}</span>}
                         </div>
-                        {contract.contract_type && <p className="text-xs text-muted-foreground mt-1">{contract.contract_type}</p>}
+                        {contract.contract_type && <p className="text-xs text-muted-foreground">{contract.contract_type}</p>}
+                        
+                        {/* File actions */}
+                        <div className="flex flex-wrap gap-2 pt-2 border-t">
+                          {contract.document_url ? (
+                            <>
+                              <Button size="sm" variant="outline" onClick={() => previewFile(contract.document_url)}>
+                                <Eye className="w-3 h-3 mr-1" />Preview
+                              </Button>
+                              <Button size="sm" variant="outline" onClick={() => downloadFile(contract.document_url, contract.title)}>
+                                <Download className="w-3 h-3 mr-1" />Scarica
+                              </Button>
+                              <Button size="sm" variant="outline" onClick={() => sendFileByEmail(contract)}>
+                                <Send className="w-3 h-3 mr-1" />Email
+                              </Button>
+                            </>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="file"
+                                className="hidden"
+                                ref={fileInputRef}
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handleFileUpload(contract.id, file);
+                                }}
+                              />
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                onClick={() => {
+                                  setSelectedContractId(contract.id);
+                                  fileInputRef.current?.click();
+                                }}
+                                disabled={uploading}
+                              >
+                                <Upload className="w-3 h-3 mr-1" />
+                                {uploading ? 'Caricamento...' : 'Carica file'}
+                              </Button>
+                            </div>
+                          )}
+                          <Button size="sm" variant="ghost" className="text-destructive" onClick={() => deleteContract(contract.id, contract.document_url)}>
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   ))}
