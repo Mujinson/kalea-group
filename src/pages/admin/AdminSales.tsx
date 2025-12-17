@@ -463,7 +463,7 @@ const AdminSales = () => {
         await supabase.from('customers').update({
           total_value: (Number(custData?.total_value) || 0) + itemsTotal,
           total_margin: (Number(custData?.total_margin) || 0) + marginAmount,
-          status: 'signed' as const,
+          status: 'working' as const,
         }).eq('id', customerId);
       }
 
