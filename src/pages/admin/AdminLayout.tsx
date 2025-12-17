@@ -36,13 +36,13 @@ const AdminLayout = () => {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-muted/30">
         <AdminSidebar />
-        <main className="flex-1 flex flex-col">
-          <header className="h-14 border-b bg-background flex items-center px-4 gap-4">
+        <main className="flex-1 flex flex-col min-w-0">
+          <header className="h-14 border-b bg-background flex items-center px-3 md:px-4 gap-2 md:gap-4">
             <SidebarTrigger />
-            <h1 className="font-semibold text-lg flex-1">Kalēa Dashboard</h1>
+            <h1 className="font-semibold text-base md:text-lg flex-1 truncate">Kalēa Dashboard</h1>
             <NotificationCenter />
           </header>
-          <div className="flex-1 p-6 overflow-auto">
+          <div className="flex-1 p-3 md:p-6 overflow-auto">
             <Outlet />
           </div>
         </main>
