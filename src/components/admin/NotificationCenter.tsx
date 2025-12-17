@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Bell, AlertTriangle, Clock, Package, DollarSign, Check } from 'lucide-react';
 import { format, differenceInDays, isPast, addDays } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 interface Notification {
   id: string;
@@ -51,6 +52,15 @@ const NotificationCenter = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+
+  const handleDataChange = useCallback(() => {
+    fetchNotifications();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['payment_schedules', 'inventory', 'sales'],
+    onDataChange: handleDataChange,
+  });
 
   useEffect(() => {
     fetchNotifications();

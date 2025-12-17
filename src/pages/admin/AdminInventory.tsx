@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { Plus, Trash2, ArrowUpCircle, ArrowDownCircle, AlertTriangle, Package } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC n.1', 'CWC n.2', 'CWC n.3', 'CWC n.4', 'CWC n.5', 'CWC n.6', 'CWC n.7'];
@@ -57,6 +58,15 @@ const AdminInventory = () => {
     movement_type: 'IN',
     notes: '',
     movement_date: format(new Date(), 'yyyy-MM-dd'),
+  });
+
+  const handleDataChange = useCallback(() => {
+    fetchInventory();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['inventory', 'sales'],
+    onDataChange: handleDataChange,
   });
 
   useEffect(() => {

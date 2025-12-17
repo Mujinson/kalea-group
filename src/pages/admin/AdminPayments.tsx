@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { Plus, Trash2, Calendar, AlertTriangle } from 'lucide-react';
 import { format, differenceInDays } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 interface Payment {
   id: string;
@@ -50,6 +51,15 @@ const AdminPayments = () => {
     start_date: format(new Date(), 'yyyy-MM-dd'),
     end_date: '',
     notes: '',
+  });
+
+  const handleDataChange = useCallback(() => {
+    fetchData();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['payment_schedules', 'sales'],
+    onDataChange: handleDataChange,
   });
 
   useEffect(() => {

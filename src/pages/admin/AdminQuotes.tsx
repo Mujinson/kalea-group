@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,7 @@ import { Plus, Send, FileText, CheckCircle2, X, Trash2, Eye, Edit } from 'lucide
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC-01', 'CWC-02', 'CWC-03', 'CWC-04', 'CWC-05', 'CWC-06', 'CWC-07'];
@@ -68,6 +69,15 @@ const AdminQuotes = () => {
   const [newItemColor, setNewItemColor] = useState('');
   const [newItemQty, setNewItemQty] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('');
+
+  const handleDataChange = useCallback(() => {
+    fetchData();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['quotes', 'customers', 'sales'],
+    onDataChange: handleDataChange,
+  });
 
   useEffect(() => {
     fetchData();
