@@ -335,6 +335,19 @@ const AdminQuotes = () => {
     await updateQuoteStatus(quote.id, 'sent');
   };
 
+  const handleDeleteQuote = async (quoteId: string) => {
+    if (!confirm('Sei sicuro di voler eliminare questo preventivo?')) return;
+    try {
+      const { error } = await supabase.from('quotes').delete().eq('id', quoteId);
+      if (error) throw error;
+      toast.success('Preventivo eliminato');
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting quote:', error);
+      toast.error("Errore nell'eliminazione");
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
       draft: 'bg-gray-100 text-gray-800',
@@ -572,12 +585,10 @@ const AdminQuotes = () => {
                   
                   {/* Actions */}
                   <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t">
-                    {/* View/Edit button for all non-converted quotes */}
-                    {quote.status !== 'converted' && (
-                      <Button size="sm" variant="ghost" onClick={() => openQuoteForEdit(quote)}>
-                        <Eye className="w-3 h-3 mr-1" />Apri
-                      </Button>
-                    )}
+                    {/* View/Edit button */}
+                    <Button size="sm" variant="ghost" onClick={() => openQuoteForEdit(quote)}>
+                      <Eye className="w-3 h-3 mr-1" />{quote.status === 'converted' ? 'Visualizza' : 'Apri'}
+                    </Button>
                     {quote.status === 'draft' && (
                       <Button size="sm" variant="outline" onClick={() => sendQuoteByEmail(quote)}>
                         <Send className="w-3 h-3 mr-1" />Invia
@@ -594,14 +605,15 @@ const AdminQuotes = () => {
                       </>
                     )}
                     {quote.status === 'converted' && (
-                      <>
-                        <Button size="sm" variant="ghost" onClick={() => openQuoteForEdit(quote)}>
-                          <Eye className="w-3 h-3 mr-1" />Visualizza
-                        </Button>
-                        <Badge variant="outline" className="bg-green-50">
-                          <CheckCircle2 className="w-3 h-3 mr-1" />Convertito
-                        </Badge>
-                      </>
+                      <Badge variant="outline" className="bg-green-50">
+                        <CheckCircle2 className="w-3 h-3 mr-1" />Convertito
+                      </Badge>
+                    )}
+                    {/* Delete button - available for non-converted quotes */}
+                    {quote.status !== 'converted' && (
+                      <Button size="sm" variant="ghost" onClick={() => handleDeleteQuote(quote.id)}>
+                        <Trash2 className="w-3 h-3 text-destructive" />
+                      </Button>
                     )}
                   </div>
                 </div>
