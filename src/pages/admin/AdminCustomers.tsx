@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import CustomerDetailSheet from '@/components/admin/CustomerDetailSheet';
 import { ITALIAN_REGIONS, getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 const CUSTOMER_TYPES = [
   { value: 'cliente_privato', label: 'Cliente privato' },
@@ -84,6 +85,15 @@ const AdminCustomers = () => {
     pec: '',
     sdi_code: '',
     notes: '',
+  });
+
+  const handleDataChange = useCallback(() => {
+    fetchCustomers();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['customers', 'sales'],
+    onDataChange: handleDataChange,
   });
 
   useEffect(() => {

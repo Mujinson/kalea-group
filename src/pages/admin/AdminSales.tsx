@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X, Eye, Pencil } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 // Constants
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
@@ -187,6 +188,15 @@ const AdminSales = () => {
     deposit_date: '',
     balance_due_date: '',
     is_paid: false,
+  });
+
+  const handleDataChange = useCallback(() => {
+    fetchAll();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['sales', 'customers', 'inventory', 'payment_schedules'],
+    onDataChange: handleDataChange,
   });
 
   useEffect(() => {

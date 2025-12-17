@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -151,6 +152,15 @@ const AdminCosts = () => {
     vat_percentage: '22',
     import_logistics_cost: '0.49',
     internal_transport_cost: '',
+  });
+
+  const handleDataChange = useCallback(() => {
+    fetchAllData();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['fixed_costs', 'variable_costs'],
+    onDataChange: handleDataChange,
   });
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 interface DashboardData {
   // Customers by status
@@ -74,6 +75,15 @@ const AdminOverview = () => {
   });
   const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const handleDataChange = useCallback(() => {
+    fetchDashboardData();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['customers', 'sales', 'quotes', 'inventory', 'payment_schedules'],
+    onDataChange: handleDataChange,
+  });
 
   useEffect(() => {
     fetchDashboardData();

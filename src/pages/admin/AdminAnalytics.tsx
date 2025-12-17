@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -8,6 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { TrendingUp, TrendingDown, DollarSign, Users, Package, Calendar } from 'lucide-react';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4'];
 
@@ -59,6 +60,15 @@ const AdminAnalytics = () => {
   const [costs, setCosts] = useState<StaticCost[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('all');
+
+  const handleDataChange = useCallback(() => {
+    fetchData();
+  }, []);
+
+  useRealtimeSubscription({
+    tables: ['sales', 'customers'],
+    onDataChange: handleDataChange,
+  });
 
   useEffect(() => {
     fetchData();
