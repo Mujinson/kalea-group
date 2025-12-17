@@ -106,8 +106,8 @@ const AdminOverview = () => {
       const signedCustomers = customers?.filter(c => c.status === 'signed').length || 0;
       const workingCustomers = customers?.filter(c => c.status === 'working').length || 0;
 
-      // Sales stats - CORRECT: use total_amount for fatturato (includes VAT)
-      const totalRevenue = sales?.reduce((sum, s) => sum + Number(s.total_amount || 0), 0) || 0;
+      // Sales stats - Calculate fatturato same as AdminSales: quantity_sqm * sale_price (senza IVA)
+      const totalRevenue = sales?.reduce((sum, s) => sum + (Number(s.quantity_sqm || 0) * Number(s.sale_price || 0)), 0) || 0;
       const totalMargin = sales?.reduce((sum, s) => sum + Number(s.margin_amount || 0), 0) || 0;
       const totalSalesMq = sales?.reduce((sum, s) => sum + Number(s.quantity_sqm || 0), 0) || 0;
       const salesWithMargin = sales?.filter(s => Number(s.margin_percentage) > 0) || [];
@@ -315,7 +315,7 @@ const AdminOverview = () => {
           <KPICard
             title="Fatturato"
             value={formatCurrency(data.totalRevenue)}
-            subtitle="Totale con IVA"
+            subtitle="Imponibile"
             icon={TrendingUp}
             iconColor="text-green-500"
             onClick={() => navigate('/admin/vendite')}
