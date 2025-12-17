@@ -40,6 +40,7 @@ interface Quote {
   notes: string | null;
   items: QuoteItem[];
   created_at: string;
+  converted_sale_id: string | null;
   customer?: { company_name: string | null; first_name: string | null; last_name: string | null };
 }
 
@@ -335,10 +336,19 @@ const AdminQuotes = () => {
     await updateQuoteStatus(quote.id, 'sent');
   };
 
-  const handleDeleteQuote = async (quoteId: string) => {
+  const handleDeleteQuote = async (quote: Quote) => {
+    // Check if converted sale still exists
+    if (quote.converted_sale_id) {
+      const { data: sale } = await supabase.from('sales').select('id').eq('id', quote.converted_sale_id).maybeSingle();
+      if (sale) {
+        toast.error('Non puoi eliminare un preventivo con vendita attiva');
+        return;
+      }
+    }
+    
     if (!confirm('Sei sicuro di voler eliminare questo preventivo?')) return;
     try {
-      const { error } = await supabase.from('quotes').delete().eq('id', quoteId);
+      const { error } = await supabase.from('quotes').delete().eq('id', quote.id);
       if (error) throw error;
       toast.success('Preventivo eliminato');
       fetchData();
@@ -609,12 +619,10 @@ const AdminQuotes = () => {
                         <CheckCircle2 className="w-3 h-3 mr-1" />Convertito
                       </Badge>
                     )}
-                    {/* Delete button - available for non-converted quotes */}
-                    {quote.status !== 'converted' && (
-                      <Button size="sm" variant="ghost" onClick={() => handleDeleteQuote(quote.id)}>
-                        <Trash2 className="w-3 h-3 text-destructive" />
-                      </Button>
-                    )}
+                    {/* Delete button - always available */}
+                    <Button size="sm" variant="ghost" onClick={() => handleDeleteQuote(quote)}>
+                      <Trash2 className="w-3 h-3 text-destructive" />
+                    </Button>
                   </div>
                 </div>
               ))}
