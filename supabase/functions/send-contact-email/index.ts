@@ -17,6 +17,25 @@ interface ContactEmailRequest {
   message: string;
 }
 
+// HTML escape function to prevent XSS in email templates
+function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Sanitize and validate input
+function sanitizeInput(input: string | undefined, maxLength: number = 1000): string {
+  if (!input) return "";
+  // Trim and limit length
+  const trimmed = input.trim().slice(0, maxLength);
+  // Escape HTML
+  return escapeHtml(trimmed);
+}
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
@@ -38,12 +57,23 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const resend = new Resend(resendApiKey);
-    const { name, surname, email, phone, userType, interests, message }: ContactEmailRequest = await req.json();
+    const rawData: ContactEmailRequest = await req.json();
 
-    console.log("Received contact form submission:", { name, surname, email, userType });
+    // Sanitize all user inputs
+    const name = sanitizeInput(rawData.name, 100);
+    const surname = sanitizeInput(rawData.surname, 100);
+    const email = sanitizeInput(rawData.email, 255);
+    const phone = sanitizeInput(rawData.phone, 50);
+    const userType = sanitizeInput(rawData.userType, 100);
+    const message = sanitizeInput(rawData.message, 5000);
+    
+    // Sanitize interests array
+    const interests = rawData.interests?.map(i => sanitizeInput(i, 100)) || [];
+
+    console.log("Received contact form submission:", { name, surname, email: rawData.email, userType });
 
     // Format interests list
-    const interestsList = interests && interests.length > 0 
+    const interestsList = interests.length > 0 
       ? interests.join(", ") 
       : "Nessuno specificato";
 
@@ -69,7 +99,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation email to user
     const emailToUser = await resend.emails.send({
       from: "Kalea <noreply@kalea.space>",
-      to: [email],
+      to: [rawData.email], // Use original email for delivery
       subject: "Abbiamo ricevuto la tua richiesta - Kalea",
       html: `
         <h2>Grazie per averci contattato, ${name}!</h2>
