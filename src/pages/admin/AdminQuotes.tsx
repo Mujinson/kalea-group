@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Plus, Send, FileText, CheckCircle2, X, Trash2 } from 'lucide-react';
+import { Plus, Send, FileText, CheckCircle2, X, Trash2, Eye, Edit } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -50,8 +50,10 @@ const AdminQuotes = () => {
   
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
+  const [staticCosts, setStaticCosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
 
   // Form state
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
@@ -80,18 +82,42 @@ const AdminQuotes = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [quotesRes, customersRes] = await Promise.all([
+      const [quotesRes, customersRes, costsRes] = await Promise.all([
         supabase.from('quotes').select('*, customer:customers(company_name, first_name, last_name)').order('created_at', { ascending: false }),
         supabase.from('customers').select('id, company_name, first_name, last_name').order('company_name'),
+        supabase.from('static_costs').select('*'),
       ]);
 
       setQuotes((quotesRes.data || []) as any);
       setCustomers(customersRes.data || []);
+      setStaticCosts(costsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Calculate COGS per sqm from static_costs
+  const calculateCOGS = (productType: string) => {
+    const costs = staticCosts.find(c => c.product_type === productType);
+    if (!costs) return 0;
+    const fob = Number(costs.fob_cost) || 0;
+    const duty = Number(costs.duty_percentage) || 0;
+    const importLogistics = Number(costs.import_logistics_cost) || 0;
+    const internalTransport = Number(costs.internal_transport_cost) || 0;
+    return fob * (1 + duty / 100) + importLogistics + internalTransport;
+  };
+
+  // Open quote for editing
+  const openQuoteForEdit = (quote: Quote) => {
+    setEditingQuote(quote);
+    setSelectedCustomerId(quote.customer_id || '');
+    setValidUntil(quote.valid_until || '');
+    setNotes(quote.notes || '');
+    setVatIncluded(quote.vat_included || false);
+    setItems(Array.isArray(quote.items) ? quote.items : []);
+    setDialogOpen(true);
   };
 
   const addItem = () => {
@@ -140,34 +166,52 @@ const AdminQuotes = () => {
 
     try {
       const { subtotal, vat, total } = calculateTotals();
-      const quoteNumber = `PRV-${Date.now().toString().slice(-6)}`;
+      
+      if (editingQuote) {
+        // Update existing quote
+        const { error } = await supabase.from('quotes').update({
+          customer_id: selectedCustomerId,
+          total_amount: total,
+          vat_amount: vat,
+          vat_included: vatIncluded,
+          valid_until: validUntil || null,
+          notes: notes || null,
+          items: items as any,
+        }).eq('id', editingQuote.id);
 
-      const { error } = await supabase.from('quotes').insert({
-        customer_id: selectedCustomerId,
-        quote_number: quoteNumber,
-        status: 'draft',
-        total_amount: total,
-        vat_amount: vat,
-        vat_included: vatIncluded,
-        valid_until: validUntil || null,
-        notes: notes || null,
-        items: items as any,
-        created_by: user?.email || null,
-      });
+        if (error) throw error;
+        toast.success('Preventivo aggiornato');
+      } else {
+        // Create new quote
+        const quoteNumber = `PRV-${Date.now().toString().slice(-6)}`;
+        const { error } = await supabase.from('quotes').insert({
+          customer_id: selectedCustomerId,
+          quote_number: quoteNumber,
+          status: 'draft',
+          total_amount: total,
+          vat_amount: vat,
+          vat_included: vatIncluded,
+          valid_until: validUntil || null,
+          notes: notes || null,
+          items: items as any,
+          created_by: user?.email || null,
+        });
 
-      if (error) throw error;
-
-      toast.success('Preventivo creato');
+        if (error) throw error;
+        toast.success('Preventivo creato');
+      }
+      
       setDialogOpen(false);
       resetForm();
       fetchData();
     } catch (error) {
-      console.error('Error creating quote:', error);
+      console.error('Error saving quote:', error);
       toast.error('Errore nel salvataggio');
     }
   };
 
   const resetForm = () => {
+    setEditingQuote(null);
     setSelectedCustomerId('');
     setValidUntil('');
     setNotes('');
@@ -208,19 +252,32 @@ const AdminQuotes = () => {
       const vatAmount = Number(quote.vat_amount) || 0;
       const totalQty = quoteItems.reduce((sum, i) => sum + (Number(i.quantity_sqm) || 0), 0);
 
-      // Calculate unit price (sale_price is €/mq, not total)
+      // Calculate subtotal and unit price
       const subtotal = totalAmount - vatAmount;
       const unitPrice = totalQty > 0 ? subtotal / totalQty : 0;
+      const vatRate = quote.vat_included ? 0 : 0.22;
 
-      // Create sale - sale_price is €/mq!
+      // Calculate COGS and margin
+      const productType = firstItem?.product_type || 'MgO';
+      const cogsPerSqm = calculateCOGS(productType);
+      const totalCogs = cogsPerSqm * totalQty;
+      const marginAmount = subtotal - totalCogs;
+      const marginPercentage = subtotal > 0 ? (marginAmount / subtotal) * 100 : 0;
+
+      // Create sale with all financial data
       const { data: saleData, error: saleError } = await supabase.from('sales').insert({
         customer_id: quote.customer_id,
-        product_type: firstItem?.product_type || 'MgO',
+        product_type: productType,
         color: firstItem?.color || null,
         quantity_sqm: totalQty,
-        sale_price: unitPrice, // €/mq, not total!
+        sale_price: unitPrice,
         vat_included: quote.vat_included,
         vat_amount: vatAmount,
+        vat_rate: vatRate,
+        subtotal_amount: subtotal,
+        total_amount: totalAmount,
+        margin_amount: marginAmount,
+        margin_percentage: marginPercentage,
         notes: `Convertito da preventivo ${quote.quote_number}`,
       }).select().single();
 
@@ -233,19 +290,19 @@ const AdminQuotes = () => {
         accepted_date: new Date().toISOString(),
       }).eq('id', quote.id);
 
-      // Update customer - set to "working" status since they now have a sale
+      // Update customer totals and margin
       const { data: custData } = await supabase.from('customers')
-        .select('total_value')
+        .select('total_value, total_margin')
         .eq('id', quote.customer_id)
         .single();
 
-      // Calculate actual sale total (qty * unit_price)
-      const saleTotal = totalQty * unitPrice;
-      const newTotalValue = (Number(custData?.total_value) || 0) + saleTotal;
+      const newTotalValue = (Number(custData?.total_value) || 0) + subtotal;
+      const newTotalMargin = (Number(custData?.total_margin) || 0) + marginAmount;
       
       await supabase.from('customers').update({
         status: 'working' as const,
         total_value: newTotalValue,
+        total_margin: newTotalMargin,
       }).eq('id', quote.customer_id);
 
       toast.success('Preventivo convertito in vendita');
@@ -304,13 +361,16 @@ const AdminQuotes = () => {
           <h2 className="text-xl md:text-2xl font-bold">Preventivi</h2>
           <p className="text-sm text-muted-foreground">Gestione preventivi e conversione in vendite</p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Dialog open={dialogOpen} onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) resetForm();
+        }}>
           <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Nuovo Preventivo</Button>
+            <Button onClick={() => { resetForm(); }}><Plus className="w-4 h-4 mr-2" />Nuovo Preventivo</Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Nuovo Preventivo</DialogTitle>
+              <DialogTitle>{editingQuote ? 'Modifica Preventivo' : 'Nuovo Preventivo'}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               {/* Customer Selection */}
@@ -443,7 +503,9 @@ const AdminQuotes = () => {
                 />
               </div>
 
-              <Button onClick={handleSubmit} className="w-full">Crea Preventivo</Button>
+              <Button onClick={handleSubmit} className="w-full">
+                {editingQuote ? 'Aggiorna Preventivo' : 'Crea Preventivo'}
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
@@ -510,6 +572,12 @@ const AdminQuotes = () => {
                   
                   {/* Actions */}
                   <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t">
+                    {/* View/Edit button for all non-converted quotes */}
+                    {quote.status !== 'converted' && (
+                      <Button size="sm" variant="ghost" onClick={() => openQuoteForEdit(quote)}>
+                        <Eye className="w-3 h-3 mr-1" />Apri
+                      </Button>
+                    )}
                     {quote.status === 'draft' && (
                       <Button size="sm" variant="outline" onClick={() => sendQuoteByEmail(quote)}>
                         <Send className="w-3 h-3 mr-1" />Invia
@@ -526,9 +594,14 @@ const AdminQuotes = () => {
                       </>
                     )}
                     {quote.status === 'converted' && (
-                      <Badge variant="outline" className="bg-green-50">
-                        <CheckCircle2 className="w-3 h-3 mr-1" />Convertito in vendita
-                      </Badge>
+                      <>
+                        <Button size="sm" variant="ghost" onClick={() => openQuoteForEdit(quote)}>
+                          <Eye className="w-3 h-3 mr-1" />Visualizza
+                        </Button>
+                        <Badge variant="outline" className="bg-green-50">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />Convertito
+                        </Badge>
+                      </>
                     )}
                   </div>
                 </div>

@@ -39,6 +39,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   const [actionLogs, setActionLogs] = useState<any[]>([]);
   const [contracts, setContracts] = useState<any[]>([]);
   const [quotes, setQuotes] = useState<any[]>([]);
+  const [staticCosts, setStaticCosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +62,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     setLoading(true);
     
     try {
-      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes, quotesRes] = await Promise.all([
+      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes, quotesRes, costsRes] = await Promise.all([
         supabase.from('customers').select('*').eq('id', customerId).single(),
         supabase.from('sales').select('*').eq('customer_id', customerId).order('sale_date', { ascending: false }),
         supabase.from('customer_visits').select('*').eq('customer_id', customerId).order('visit_date', { ascending: false }),
@@ -69,6 +70,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         supabase.from('customer_action_logs').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
         supabase.from('customer_contracts').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
         supabase.from('quotes').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
+        supabase.from('static_costs').select('*'),
       ]);
 
       if (customerRes.data) setCustomer(customerRes.data);
@@ -78,6 +80,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
       setActionLogs(logsRes.data || []);
       setContracts(contractsRes.data || []);
       setQuotes(quotesRes.data || []);
+      setStaticCosts(costsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -294,6 +297,17 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     }
   };
 
+  // Calculate COGS per sqm from static_costs
+  const calculateCOGS = (productType: string) => {
+    const costs = staticCosts.find(c => c.product_type === productType);
+    if (!costs) return 0;
+    const fob = Number(costs.fob_cost) || 0;
+    const duty = Number(costs.duty_percentage) || 0;
+    const importLogistics = Number(costs.import_logistics_cost) || 0;
+    const internalTransport = Number(costs.internal_transport_cost) || 0;
+    return fob * (1 + duty / 100) + importLogistics + internalTransport;
+  };
+
   // Convert quote to sale
   const convertQuoteToSale = async (quote: any) => {
     if (!customerId) return;
@@ -304,20 +318,33 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
       const vatAmount = Number(quote.vat_amount) || 0;
       const totalQty = items.reduce((sum: number, i: any) => sum + (Number(i.quantity_sqm) || 0), 0);
       
-      // Calculate unit price (sale_price is €/mq, not total)
+      // Calculate subtotal and unit price
       const subtotal = totalAmount - vatAmount;
       const unitPrice = totalQty > 0 ? subtotal / totalQty : 0;
+      const vatRate = quote.vat_included ? 0 : 0.22;
+
+      // Calculate COGS and margin
+      const productType = items[0]?.product_type || 'MgO';
+      const cogsPerSqm = calculateCOGS(productType);
+      const totalCogs = cogsPerSqm * totalQty;
+      const marginAmount = subtotal - totalCogs;
+      const marginPercentage = subtotal > 0 ? (marginAmount / subtotal) * 100 : 0;
       
-      // Create sale from quote
+      // Create sale from quote with all financial data
       const { data: saleData, error: saleError } = await supabase.from('sales').insert({
         customer_id: customerId,
         customer_name: customer?.company_name || `${customer?.first_name} ${customer?.last_name}`,
-        product_type: items[0]?.product_type || 'MgO',
+        product_type: productType,
         color: items[0]?.color || null,
         quantity_sqm: totalQty,
-        sale_price: unitPrice, // This is €/mq, not total!
+        sale_price: unitPrice,
         vat_included: quote.vat_included || false,
         vat_amount: vatAmount,
+        vat_rate: vatRate,
+        subtotal_amount: subtotal,
+        total_amount: totalAmount,
+        margin_amount: marginAmount,
+        margin_percentage: marginPercentage,
         notes: `Convertito da preventivo ${quote.quote_number || quote.id}`,
       }).select().single();
 
@@ -329,15 +356,14 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         converted_sale_id: saleData.id,
         accepted_date: new Date().toISOString(),
       }).eq('id', quote.id);
-
-      // Calculate actual sale total (qty * unit_price)
-      const saleTotal = totalQty * unitPrice;
       
-      // Update customer status to working (has sales) and total value
-      const newTotalValue = Number(customer?.total_value || 0) + saleTotal;
+      // Update customer totals and margin
+      const newTotalValue = Number(customer?.total_value || 0) + subtotal;
+      const newTotalMargin = Number(customer?.total_margin || 0) + marginAmount;
       await supabase.from('customers').update({
         status: 'working' as const,
         total_value: newTotalValue,
+        total_margin: newTotalMargin,
       }).eq('id', customerId);
 
       fetchAllData();

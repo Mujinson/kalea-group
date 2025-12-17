@@ -809,8 +809,11 @@ export type Database = {
           quantity_sqm: number
           sale_date: string
           sale_price: number
+          subtotal_amount: number
+          total_amount: number
           vat_amount: number | null
           vat_included: boolean
+          vat_rate: number
         }
         Insert: {
           balance_amount?: number | null
@@ -835,8 +838,11 @@ export type Database = {
           quantity_sqm: number
           sale_date?: string
           sale_price: number
+          subtotal_amount?: number
+          total_amount?: number
           vat_amount?: number | null
           vat_included?: boolean
+          vat_rate?: number
         }
         Update: {
           balance_amount?: number | null
@@ -861,8 +867,11 @@ export type Database = {
           quantity_sqm?: number
           sale_date?: string
           sale_price?: number
+          subtotal_amount?: number
+          total_amount?: number
           vat_amount?: number | null
           vat_included?: boolean
+          vat_rate?: number
         }
         Relationships: [
           {
