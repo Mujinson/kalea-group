@@ -304,6 +304,10 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
       const vatAmount = Number(quote.vat_amount) || 0;
       const totalQty = items.reduce((sum: number, i: any) => sum + (Number(i.quantity_sqm) || 0), 0);
       
+      // Calculate unit price (sale_price is €/mq, not total)
+      const subtotal = totalAmount - vatAmount;
+      const unitPrice = totalQty > 0 ? subtotal / totalQty : 0;
+      
       // Create sale from quote
       const { data: saleData, error: saleError } = await supabase.from('sales').insert({
         customer_id: customerId,
@@ -311,7 +315,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         product_type: items[0]?.product_type || 'MgO',
         color: items[0]?.color || null,
         quantity_sqm: totalQty,
-        sale_price: totalAmount,
+        sale_price: unitPrice, // This is €/mq, not total!
         vat_included: quote.vat_included || false,
         vat_amount: vatAmount,
         notes: `Convertito da preventivo ${quote.quote_number || quote.id}`,
@@ -326,8 +330,11 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         accepted_date: new Date().toISOString(),
       }).eq('id', quote.id);
 
+      // Calculate actual sale total (qty * unit_price)
+      const saleTotal = totalQty * unitPrice;
+      
       // Update customer status to working (has sales) and total value
-      const newTotalValue = Number(customer?.total_value || 0) + totalAmount;
+      const newTotalValue = Number(customer?.total_value || 0) + saleTotal;
       await supabase.from('customers').update({
         status: 'working' as const,
         total_value: newTotalValue,
