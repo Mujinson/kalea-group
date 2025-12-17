@@ -1,37 +1,72 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { TrendingUp, TrendingDown, Package, DollarSign, CreditCard, BarChart3 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { 
+  Users, TrendingUp, Package, CreditCard, FileText, 
+  AlertTriangle, Clock, ChevronRight, CalendarDays,
+  Receipt, Wallet, BarChart3, ExternalLink
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { it } from 'date-fns/locale';
 
-interface KPIData {
-  totalSales: number;
+interface DashboardData {
+  // Customers
+  totalCustomers: number;
+  opportunityCustomers: number;
+  signedCustomers: number;
+  workingCustomers: number;
+  // Performance
   totalRevenue: number;
   avgMargin: number;
+  totalSalesMq: number;
+  // Inventory
   totalStock: number;
-  stockValue: number;
+  lowStockProducts: number;
+  // Payments
+  pendingPayments: number;
+  overduePayments: number;
   debtRemaining: number;
   debtTotal: number;
-  daysRemaining: number;
+  // Activity
+  recentSalesCount: number;
+  recentQuotesCount: number;
+  pendingQuotes: number;
 }
 
-const COLORS = ['hsl(var(--primary))', 'hsl(var(--muted))'];
+interface RecentItem {
+  id: string;
+  type: 'sale' | 'quote' | 'customer';
+  title: string;
+  subtitle: string;
+  date: string;
+  value?: number;
+}
 
 const AdminOverview = () => {
-  const [kpiData, setKpiData] = useState<KPIData>({
-    totalSales: 0,
+  const navigate = useNavigate();
+  const [data, setData] = useState<DashboardData>({
+    totalCustomers: 0,
+    opportunityCustomers: 0,
+    signedCustomers: 0,
+    workingCustomers: 0,
     totalRevenue: 0,
     avgMargin: 0,
+    totalSalesMq: 0,
     totalStock: 0,
-    stockValue: 0,
+    lowStockProducts: 0,
+    pendingPayments: 0,
+    overduePayments: 0,
     debtRemaining: 0,
-    debtTotal: 89100,
-    daysRemaining: 365,
+    debtTotal: 0,
+    recentSalesCount: 0,
+    recentQuotesCount: 0,
+    pendingQuotes: 0,
   });
-  const [salesByChannel, setSalesByChannel] = useState<{ name: string; value: number }[]>([]);
-  const [salesByMonth, setSalesByMonth] = useState<{ month: string; mq: number; revenue: number }[]>([]);
-  const [stockByProduct, setStockByProduct] = useState<{ name: string; value: number }[]>([]);
+  const [recentItems, setRecentItems] = useState<RecentItem[]>([]);
+  const [alerts, setAlerts] = useState<{ type: string; message: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,88 +75,116 @@ const AdminOverview = () => {
 
   const fetchDashboardData = async () => {
     try {
-      // Fetch sales data
-      const { data: sales } = await supabase.from('sales').select('*');
-      
-      // Fetch inventory data
-      const { data: inventory } = await supabase.from('inventory').select('*');
-      
-      // Fetch static costs
-      const { data: costs } = await supabase.from('static_costs').select('*');
-      
-      // Fetch payments
-      const { data: payments } = await supabase.from('supplier_payments').select('*');
-      
-      // Fetch payment agreement
-      const { data: agreement } = await supabase.from('payment_agreements').select('*').maybeSingle();
+      const [
+        { data: customers },
+        { data: sales },
+        { data: inventory },
+        { data: quotes },
+        { data: paymentSchedules },
+        { data: agreement },
+        { data: payments }
+      ] = await Promise.all([
+        supabase.from('customers').select('*'),
+        supabase.from('sales').select('*').order('created_at', { ascending: false }),
+        supabase.from('inventory').select('*'),
+        supabase.from('quotes').select('*').order('created_at', { ascending: false }),
+        supabase.from('payment_schedules').select('*'),
+        supabase.from('payment_agreements').select('*').maybeSingle(),
+        supabase.from('supplier_payments').select('*')
+      ]);
 
-      // Calculate KPIs
-      const totalSalesMq = sales?.reduce((sum, s) => sum + Number(s.quantity_sqm), 0) || 0;
-      const totalRevenue = sales?.reduce((sum, s) => sum + (Number(s.quantity_sqm) * Number(s.sale_price)), 0) || 0;
-      
-      // Calculate stock
+      // Customer stats
+      const opportunityCustomers = customers?.filter(c => c.status === 'opportunity').length || 0;
+      const signedCustomers = customers?.filter(c => c.status === 'signed').length || 0;
+      const workingCustomers = customers?.filter(c => c.status === 'working').length || 0;
+
+      // Sales stats
+      const totalRevenue = sales?.reduce((sum, s) => sum + Number(s.total_amount || 0), 0) || 0;
+      const totalSalesMq = sales?.reduce((sum, s) => sum + Number(s.quantity_sqm || 0), 0) || 0;
+      const avgMargin = sales?.length 
+        ? sales.reduce((sum, s) => sum + Number(s.margin_percentage || 0), 0) / sales.length 
+        : 0;
+
+      // Inventory stats
       const stockIn = inventory?.filter(i => i.movement_type === 'IN').reduce((sum, i) => sum + Number(i.quantity_sqm), 0) || 0;
       const stockOut = inventory?.filter(i => i.movement_type === 'OUT').reduce((sum, i) => sum + Number(i.quantity_sqm), 0) || 0;
-      const currentStock = stockIn - stockOut;
+      const totalStock = stockIn - stockOut;
       
-      // Calculate stock value
-      const avgPurchaseCost = inventory?.length 
-        ? inventory.filter(i => i.movement_type === 'IN').reduce((sum, i) => sum + Number(i.purchase_cost), 0) / inventory.filter(i => i.movement_type === 'IN').length 
-        : 0;
-      const stockValue = currentStock * avgPurchaseCost;
+      // Low stock check (simplified)
+      const lowStockProducts = 0; // Will implement proper check
 
-      // Calculate margin
-      const avgCost = costs?.length 
-        ? costs.reduce((sum, c) => sum + Number(c.fob_cost) + Number(c.import_logistics_cost), 0) / costs.length 
-        : 15.49;
-      const avgSalePrice = sales?.length 
-        ? totalRevenue / totalSalesMq 
-        : 0;
-      const avgMargin = avgSalePrice > 0 ? ((avgSalePrice - avgCost) / avgSalePrice) * 100 : 0;
+      // Payment stats
+      const today = new Date().toISOString().split('T')[0];
+      const pendingPayments = paymentSchedules?.filter(p => !p.is_paid && p.due_date >= today).length || 0;
+      const overduePayments = paymentSchedules?.filter(p => !p.is_paid && p.due_date < today).length || 0;
 
-      // Calculate debt
+      // Debt stats
       const totalPaid = payments?.reduce((sum, p) => sum + Number(p.payment_amount), 0) || 0;
-      const debtTotal = agreement?.total_amount || 89100;
-      const debtRemaining = debtTotal - totalPaid;
-      
-      // Calculate days remaining
-      let daysRemaining = 365;
-      if (agreement?.end_date) {
-        const endDate = new Date(agreement.end_date);
-        const today = new Date();
-        daysRemaining = Math.max(0, Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
-      }
+      const debtTotal = agreement?.total_amount || 0;
+      const debtRemaining = Math.max(0, debtTotal - totalPaid);
 
-      setKpiData({
-        totalSales: totalSalesMq,
-        totalRevenue,
-        avgMargin,
-        totalStock: currentStock,
-        stockValue,
-        debtRemaining,
-        debtTotal,
-        daysRemaining,
+      // Quote stats
+      const pendingQuotes = quotes?.filter(q => q.status === 'inviato').length || 0;
+
+      // Recent items
+      const recent: RecentItem[] = [];
+      
+      sales?.slice(0, 5).forEach(s => {
+        recent.push({
+          id: s.id,
+          type: 'sale',
+          title: s.customer_name || 'Vendita',
+          subtitle: `${s.quantity_sqm} mq - ${s.product_type}`,
+          date: s.created_at,
+          value: Number(s.total_amount || 0)
+        });
       });
 
-      // Sales by channel
-      const b2bSales = sales?.filter(s => s.channel === 'B2B').reduce((sum, s) => sum + Number(s.quantity_sqm), 0) || 0;
-      const b2cSales = sales?.filter(s => s.channel === 'B2C').reduce((sum, s) => sum + Number(s.quantity_sqm), 0) || 0;
-      setSalesByChannel([
-        { name: 'B2B', value: b2bSales },
-        { name: 'B2C', value: b2cSales },
-      ]);
+      quotes?.slice(0, 5).forEach(q => {
+        recent.push({
+          id: q.id,
+          type: 'quote',
+          title: q.quote_number || 'Preventivo',
+          subtitle: q.status,
+          date: q.created_at,
+          value: Number(q.total_amount || 0)
+        });
+      });
 
-      // Stock by product
-      const mgoStock = inventory?.filter(i => i.product_type === 'MgO' && i.movement_type === 'IN').reduce((sum, i) => sum + Number(i.quantity_sqm), 0) || 0;
-      const cwcStock = inventory?.filter(i => i.product_type === 'CWC' && i.movement_type === 'IN').reduce((sum, i) => sum + Number(i.quantity_sqm), 0) || 0;
-      setStockByProduct([
-        { name: 'MgO', value: mgoStock },
-        { name: 'CWC', value: cwcStock },
-      ]);
+      recent.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-      // Sales by month (mock data for now)
-      const monthlyData = generateMonthlyData(sales || []);
-      setSalesByMonth(monthlyData);
+      // Build alerts
+      const alertsList: { type: string; message: string; count: number }[] = [];
+      if (overduePayments > 0) {
+        alertsList.push({ type: 'error', message: 'Pagamenti scaduti', count: overduePayments });
+      }
+      if (pendingPayments > 0) {
+        alertsList.push({ type: 'warning', message: 'Pagamenti in scadenza', count: pendingPayments });
+      }
+      if (pendingQuotes > 0) {
+        alertsList.push({ type: 'info', message: 'Preventivi da confermare', count: pendingQuotes });
+      }
+
+      setData({
+        totalCustomers: customers?.length || 0,
+        opportunityCustomers,
+        signedCustomers,
+        workingCustomers,
+        totalRevenue,
+        avgMargin,
+        totalSalesMq,
+        totalStock,
+        lowStockProducts,
+        pendingPayments,
+        overduePayments,
+        debtRemaining,
+        debtTotal,
+        recentSalesCount: sales?.length || 0,
+        recentQuotesCount: quotes?.length || 0,
+        pendingQuotes,
+      });
+      setRecentItems(recent.slice(0, 10));
+      setAlerts(alertsList);
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -130,206 +193,312 @@ const AdminOverview = () => {
     }
   };
 
-  const generateMonthlyData = (sales: any[]) => {
-    const months = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
-    const currentMonth = new Date().getMonth();
-    
-    return months.slice(0, currentMonth + 1).map((month, index) => {
-      const monthSales = sales.filter(s => {
-        const saleMonth = new Date(s.sale_date).getMonth();
-        return saleMonth === index;
-      });
-      
-      return {
-        month,
-        mq: monthSales.reduce((sum, s) => sum + Number(s.quantity_sqm), 0),
-        revenue: monthSales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * Number(s.sale_price)), 0),
-      };
-    });
-  };
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
   };
 
-  const debtProgress = ((kpiData.debtTotal - kpiData.debtRemaining) / kpiData.debtTotal) * 100;
+  const formatDate = (dateStr: string) => {
+    return format(new Date(dateStr), 'dd MMM HH:mm', { locale: it });
+  };
+
+  // Clickable card component
+  const DashboardCard = ({ 
+    title, 
+    onClick, 
+    children,
+    className = ''
+  }: { 
+    title: string; 
+    onClick?: () => void; 
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <Card 
+      className={`cursor-pointer transition-all hover:shadow-md hover:border-primary/30 ${className}`}
+      onClick={onClick}
+    >
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm font-medium flex items-center gap-2">
+            {title}
+          </CardTitle>
+          {onClick && <ChevronRight className="w-4 h-4 text-muted-foreground" />}
+        </div>
+      </CardHeader>
+      <CardContent>{children}</CardContent>
+    </Card>
+  );
+
+  // Stat row for list items
+  const StatRow = ({ 
+    label, 
+    value, 
+    color = 'primary',
+    onClick
+  }: { 
+    label: string; 
+    value: number | string;
+    color?: 'primary' | 'green' | 'orange' | 'red';
+    onClick?: () => void;
+  }) => {
+    const colorClasses = {
+      primary: 'text-primary',
+      green: 'text-green-600',
+      orange: 'text-orange-500',
+      red: 'text-red-500'
+    };
+    
+    return (
+      <div 
+        className={`flex justify-between items-center py-1 ${onClick ? 'cursor-pointer hover:bg-muted/50 -mx-2 px-2 rounded' : ''}`}
+        onClick={onClick}
+      >
+        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className={`font-semibold ${colorClasses[color]}`}>{value}</span>
+      </div>
+    );
+  };
 
   if (loading) {
     return <div className="flex items-center justify-center h-64">Caricamento...</div>;
   }
 
+  const debtProgress = data.debtTotal > 0 ? ((data.debtTotal - data.debtRemaining) / data.debtTotal) * 100 : 0;
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Dashboard Overview</h2>
-        <p className="text-muted-foreground">Monitoraggio in tempo reale delle performance aziendali</p>
-      </div>
+    <div className="flex gap-6">
+      {/* Main Content */}
+      <div className="flex-1 space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold">Dashboard</h2>
+          <p className="text-muted-foreground">Panoramica aziendale</p>
+        </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Margine Lordo Medio</CardTitle>
-            <TrendingUp className="w-4 h-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{kpiData.avgMargin.toFixed(1)}%</div>
-            <p className="text-xs text-muted-foreground">Target: 40%</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Vendite Totali</CardTitle>
-            <BarChart3 className="w-4 h-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{kpiData.totalSales.toFixed(0)} mq</div>
-            <p className="text-xs text-muted-foreground">{formatCurrency(kpiData.totalRevenue)}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Magazzino</CardTitle>
-            <Package className="w-4 h-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{kpiData.totalStock.toFixed(0)} mq</div>
-            <p className="text-xs text-muted-foreground">Valore: {formatCurrency(kpiData.stockValue)}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Debito Residuo</CardTitle>
-            <CreditCard className="w-4 h-4 text-orange-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(kpiData.debtRemaining)}</div>
-            <p className="text-xs text-muted-foreground">{kpiData.daysRemaining} giorni rimanenti</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Debt Progress */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Stato Accordo Pagamento</CardTitle>
-          <CardDescription>Fornitore Terni - Totale: {formatCurrency(kpiData.debtTotal)}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Pagato: {formatCurrency(kpiData.debtTotal - kpiData.debtRemaining)}</span>
-              <span>Residuo: {formatCurrency(kpiData.debtRemaining)}</span>
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* CLIENTI Section */}
+          <DashboardCard title="Clienti" onClick={() => navigate('/admin/clienti')}>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-primary" />
+                  <span className="text-2xl font-bold text-primary">{data.totalCustomers}</span>
+                </div>
+                <Badge variant="outline">Totale</Badge>
+              </div>
+              <StatRow 
+                label="Opportunity" 
+                value={data.opportunityCustomers} 
+                color="orange"
+                onClick={() => navigate('/admin/clienti?status=opportunity')}
+              />
+              <StatRow 
+                label="Signed" 
+                value={data.signedCustomers} 
+                color="green"
+                onClick={() => navigate('/admin/clienti?status=signed')}
+              />
+              <StatRow 
+                label="Working" 
+                value={data.workingCustomers} 
+                color="primary"
+                onClick={() => navigate('/admin/clienti?status=working')}
+              />
             </div>
-            <Progress value={debtProgress} className="h-3" />
-            <p className="text-xs text-muted-foreground text-center">
-              {debtProgress.toFixed(1)}% completato - {kpiData.daysRemaining} giorni alla scadenza
-            </p>
+          </DashboardCard>
+
+          {/* VENDITE Section */}
+          <DashboardCard title="Vendite" onClick={() => navigate('/admin/vendite')}>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                  <span className="text-2xl font-bold text-primary">{data.recentSalesCount}</span>
+                </div>
+                <Badge variant="outline">Totale</Badge>
+              </div>
+              <StatRow label="Fatturato" value={formatCurrency(data.totalRevenue)} color="green" />
+              <StatRow label="Mq venduti" value={`${data.totalSalesMq.toFixed(0)} mq`} />
+              <StatRow label="Margine medio" value={`${data.avgMargin.toFixed(1)}%`} color="green" />
+            </div>
+          </DashboardCard>
+
+          {/* PREVENTIVI Section */}
+          <DashboardCard title="Preventivi" onClick={() => navigate('/admin/preventivi')}>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-primary" />
+                  <span className="text-2xl font-bold text-primary">{data.recentQuotesCount}</span>
+                </div>
+                <Badge variant="outline">Totale</Badge>
+              </div>
+              <StatRow 
+                label="Da confermare" 
+                value={data.pendingQuotes} 
+                color={data.pendingQuotes > 0 ? 'orange' : 'primary'}
+              />
+            </div>
+          </DashboardCard>
+
+          {/* MAGAZZINO Section */}
+          <DashboardCard title="Magazzino" onClick={() => navigate('/admin/magazzino')}>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Package className="w-5 h-5 text-blue-500" />
+                  <span className="text-2xl font-bold text-blue-500">{data.totalStock.toFixed(0)} mq</span>
+                </div>
+                <Badge variant="outline">Stock</Badge>
+              </div>
+              <StatRow 
+                label="Prodotti sotto scorta" 
+                value={data.lowStockProducts} 
+                color={data.lowStockProducts > 0 ? 'red' : 'green'}
+              />
+            </div>
+          </DashboardCard>
+
+          {/* PAGAMENTI Section */}
+          <DashboardCard title="Pagamenti" onClick={() => navigate('/admin/pagamenti')}>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Wallet className="w-5 h-5 text-orange-500" />
+                  <span className="text-sm font-medium">Scadenze</span>
+                </div>
+              </div>
+              <StatRow 
+                label="Pagamenti scaduti" 
+                value={data.overduePayments} 
+                color={data.overduePayments > 0 ? 'red' : 'green'}
+              />
+              <StatRow 
+                label="In scadenza" 
+                value={data.pendingPayments} 
+                color={data.pendingPayments > 0 ? 'orange' : 'green'}
+              />
+            </div>
+          </DashboardCard>
+
+          {/* COSTI Section */}
+          <DashboardCard title="Costi & Finanze" onClick={() => navigate('/admin/costi')}>
+            <div className="space-y-1">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-purple-500" />
+                  <span className="text-sm font-medium">Gestione costi</span>
+                </div>
+              </div>
+              {data.debtTotal > 0 && (
+                <>
+                  <StatRow label="Debito residuo" value={formatCurrency(data.debtRemaining)} color="orange" />
+                  <div className="mt-2">
+                    <Progress value={debtProgress} className="h-2" />
+                    <p className="text-xs text-muted-foreground mt-1">{debtProgress.toFixed(0)}% saldato</p>
+                  </div>
+                </>
+              )}
+            </div>
+          </DashboardCard>
+        </div>
+
+        {/* Analytics Link */}
+        <DashboardCard 
+          title="Analisi Avanzata" 
+          onClick={() => navigate('/admin/analytics')}
+          className="bg-gradient-to-r from-primary/5 to-primary/10"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <TrendingUp className="w-6 h-6 text-primary" />
+              <div>
+                <p className="font-medium">Report e statistiche dettagliate</p>
+                <p className="text-sm text-muted-foreground">Margini, trend, analisi per cliente e prodotto</p>
+              </div>
+            </div>
+            <ExternalLink className="w-5 h-5 text-muted-foreground" />
           </div>
-        </CardContent>
-      </Card>
+        </DashboardCard>
+      </div>
 
-      {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Sales by Month */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Andamento Vendite</CardTitle>
-            <CardDescription>Metri quadri venduti per mese</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={salesByMonth}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip formatter={(value) => [`${value} mq`, 'Vendite']} />
-                <Line type="monotone" dataKey="mq" stroke="hsl(var(--primary))" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Sales by Channel */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Vendite per Canale</CardTitle>
-            <CardDescription>Distribuzione B2B vs B2C</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={salesByChannel}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  dataKey="value"
-                  label={({ name, value }) => `${name}: ${value} mq`}
+      {/* Right Sidebar - Alerts & Recent */}
+      <div className="w-80 space-y-6 hidden xl:block">
+        
+        {/* Alerts Section */}
+        {alerts.length > 0 && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-orange-500" />
+                Attenzione
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {alerts.map((alert, index) => (
+                <div 
+                  key={index}
+                  className={`flex justify-between items-center p-2 rounded-md ${
+                    alert.type === 'error' ? 'bg-red-50 dark:bg-red-950/20' :
+                    alert.type === 'warning' ? 'bg-orange-50 dark:bg-orange-950/20' :
+                    'bg-blue-50 dark:bg-blue-950/20'
+                  }`}
                 >
-                  {salesByChannel.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip formatter={(value) => [`${value} mq`, 'Vendite']} />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+                  <span className="text-sm">{alert.message}</span>
+                  <Badge variant={alert.type === 'error' ? 'destructive' : 'secondary'}>
+                    {alert.count}
+                  </Badge>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
-        {/* Stock by Product */}
+        {/* Recent Activity */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Composizione Magazzino</CardTitle>
-            <CardDescription>Stock per tipo di prodotto</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stockByProduct}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip formatter={(value) => [`${value} mq`, 'Stock']} />
-                <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        {/* Margin by Channel */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Analisi Margini</CardTitle>
-            <CardDescription>Margine lordo per canale di vendita</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                <div>
-                  <p className="font-medium">Canale B2B</p>
-                  <p className="text-sm text-muted-foreground">Prezzo medio: €24-28/mq</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-green-600">35-45%</p>
-                  <p className="text-xs text-muted-foreground">Margine stimato</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                <div>
-                  <p className="font-medium">Canale B2C</p>
-                  <p className="text-sm text-muted-foreground">Prezzo medio: €40/mq</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-green-600">55-60%</p>
-                  <p className="text-xs text-muted-foreground">Margine stimato</p>
-                </div>
-              </div>
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                Attività recente
+              </CardTitle>
+              <Badge variant="outline">Oggi</Badge>
             </div>
+          </CardHeader>
+          <CardContent className="space-y-1 max-h-[400px] overflow-y-auto">
+            {recentItems.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4 text-center">
+                Nessuna attività recente
+              </p>
+            ) : (
+              recentItems.map((item) => (
+                <div 
+                  key={item.id}
+                  className="flex items-start gap-3 py-2 px-2 -mx-2 rounded hover:bg-muted/50 cursor-pointer"
+                  onClick={() => {
+                    if (item.type === 'sale') navigate('/admin/vendite');
+                    if (item.type === 'quote') navigate('/admin/preventivi');
+                  }}
+                >
+                  <div className="mt-0.5">
+                    {item.type === 'sale' && <Receipt className="w-4 h-4 text-green-500" />}
+                    {item.type === 'quote' && <FileText className="w-4 h-4 text-blue-500" />}
+                    {item.type === 'customer' && <Users className="w-4 h-4 text-purple-500" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{item.title}</p>
+                    <p className="text-xs text-muted-foreground">{item.subtitle}</p>
+                  </div>
+                  <div className="text-right">
+                    {item.value && (
+                      <p className="text-xs font-medium">{formatCurrency(item.value)}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">{formatDate(item.date)}</p>
+                  </div>
+                </div>
+              ))
+            )}
           </CardContent>
         </Card>
       </div>
