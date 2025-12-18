@@ -248,7 +248,7 @@ const MgoBook = () => {
   if (isMobile) {
     return (
       <section 
-        className="h-screen min-h-[550px] max-h-screen flex flex-col items-center justify-center overflow-hidden relative"
+        className="h-full w-full flex flex-col items-center justify-center overflow-hidden relative"
         style={{
           backgroundImage: `url(${bgMgoSection})`,
           backgroundSize: '100% 100%',
@@ -336,7 +336,7 @@ const MgoBook = () => {
 
   return (
     <section 
-      className="h-screen min-h-[600px] max-h-screen flex flex-col items-center justify-center overflow-hidden relative"
+      className="h-full w-full flex flex-col items-center justify-center overflow-hidden relative"
       style={{
         backgroundImage: `url(${bgMgoSection})`,
         backgroundSize: '100% 100%',

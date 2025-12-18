@@ -93,7 +93,7 @@ const ProductGallerySection = () => {
   const extendedProducts = [...products, ...products, ...products];
 
   return (
-    <section className="relative h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-background overflow-hidden">
+    <section className="h-full w-full flex flex-col justify-center bg-background overflow-hidden">
       {/* Header */}
       <div className="container-custom text-center mb-8 md:mb-10">
         <motion.div
