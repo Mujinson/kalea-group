@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
+import HitobaSection from "@/components/HitobaSection";
 import FeatureCard from "@/components/FeatureCard";
 import FinishCard from "@/components/FinishCard";
 import LayerDiagram from "@/components/LayerDiagram";
@@ -27,36 +28,12 @@ const StoneCore10 = () => {
   const { t, language } = useTranslation();
   
   const advantages = [
-    {
-      icon: Droplets,
-      title: t('stonecore.advantages.waterproof.title'),
-      description: t('stonecore.advantages.waterproof.description'),
-    },
-    {
-      icon: Flame,
-      title: t('stonecore.advantages.fireproof.title'),
-      description: t('stonecore.advantages.fireproof.description'),
-    },
-    {
-      icon: ShieldOff,
-      title: t('stonecore.advantages.antimold.title'),
-      description: t('stonecore.advantages.antimold.description'),
-    },
-    {
-      icon: AudioWaveform,
-      title: t('stonecore.advantages.acoustic.title'),
-      description: t('stonecore.advantages.acoustic.description'),
-    },
-    {
-      icon: FloatingFloorIcon,
-      title: t('stonecore.advantages.floating.title'),
-      description: t('stonecore.advantages.floating.description'),
-    },
-    {
-      icon: Layers,
-      title: t('stonecore.advantages.stability.title'),
-      description: t('stonecore.advantages.stability.description'),
-    },
+    { icon: Droplets, title: t('stonecore.advantages.waterproof.title'), description: t('stonecore.advantages.waterproof.description') },
+    { icon: Flame, title: t('stonecore.advantages.fireproof.title'), description: t('stonecore.advantages.fireproof.description') },
+    { icon: ShieldOff, title: t('stonecore.advantages.antimold.title'), description: t('stonecore.advantages.antimold.description') },
+    { icon: AudioWaveform, title: t('stonecore.advantages.acoustic.title'), description: t('stonecore.advantages.acoustic.description') },
+    { icon: FloatingFloorIcon, title: t('stonecore.advantages.floating.title'), description: t('stonecore.advantages.floating.description') },
+    { icon: Layers, title: t('stonecore.advantages.stability.title'), description: t('stonecore.advantages.stability.description') },
   ];
 
   const finishes = [
@@ -71,401 +48,85 @@ const StoneCore10 = () => {
   ];
 
   return (
-    <div>
-      {/* Hero */}
-      <HeroSection
-        title={t('hero.stonecore.title')}
-        subtitle={t('hero.stonecore.subtitle')}
-        ctaPrimary={{ text: t('hero.stonecore.ctaPrimary'), link: `/${language}/contatti` }}
-        ctaSecondary={{ text: t('hero.stonecore.ctaSecondary'), link: `/${language}/area-tecnica` }}
-        backgroundImage={heroImage}
-      />
+    <div className="bg-[#0a0a0a]">
+      <HeroSection title={t('hero.stonecore.title')} subtitle={t('hero.stonecore.subtitle')} ctaPrimary={{ text: t('hero.stonecore.ctaPrimary'), link: `/${language}/contatti` }} ctaSecondary={{ text: t('hero.stonecore.ctaSecondary'), link: `/${language}/area-tecnica` }} backgroundImage={heroImage} />
 
       {/* Vantaggi */}
-      <section 
-        className="section-spacing relative"
-        style={{
-          zIndex: 1,
-          backgroundImage: `url(${bgStoneCore})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay scuro */}
-        <div className="absolute inset-0 bg-black/30" />
-        
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              {t('stonecore.advantagesTitle')}
-            </h2>
-            <p className="text-lg text-white/90 max-w-2xl mx-auto">
-              {t('stonecore.advantagesSubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {advantages.map((advantage, index) => (
-              <FeatureCard key={advantage.title} {...advantage} index={index} />
-            ))}
+      <HitobaSection backgroundImage={bgStoneCore} overlayClassName="bg-black/35" zIndex={1} minHeight="min-h-screen">
+        <div className="h-full flex items-center py-16">
+          <div className="container-custom">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">{t('stonecore.advantagesTitle')}</h2>
+              <p className="text-lg text-white/90 max-w-2xl mx-auto">{t('stonecore.advantagesSubtitle')}</p>
+            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {advantages.map((adv, i) => <motion.div key={adv.title} whileHover={{ y: -6, scale: 1.02 }}><FeatureCard {...adv} index={i} /></motion.div>)}
+            </div>
           </div>
         </div>
-      </section>
+      </HitobaSection>
 
       {/* Finiture */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 2 }}>
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('stonecore.finishesTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('stonecore.finishesSubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {finishes.map((finish, index) => (
-              <FinishCard
-                key={finish.name}
-                name={finish.name}
-                image={finish.image}
-                index={index}
-                variant="image"
-                slug={finish.slug}
-              />
-            ))}
+      <HitobaSection zIndex={2} minHeight="min-h-screen" bgColor="bg-background">
+        <div className="h-full flex items-center py-16">
+          <div className="container-custom">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('stonecore.finishesTitle')}</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t('stonecore.finishesSubtitle')}</p>
+            </motion.div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {finishes.map((f, i) => <motion.div key={f.name} whileHover={{ y: -6, scale: 1.02 }}><FinishCard name={f.name} image={f.image} index={i} variant="image" slug={f.slug} /></motion.div>)}
+            </div>
           </div>
         </div>
-      </section>
+      </HitobaSection>
 
       {/* Schema multistrato */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 3 }}>
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('stonecore.structureTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              {t('stonecore.structureSubtitle')}
-            </p>
-          </motion.div>
-
-          {/* Top row: Image left, Prestazioni del materiale right */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
-            {/* Left: Photo - preserves full aspect ratio */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <img 
-                src={stonecoreLayers} 
-                alt="Struttura multistrato StoneCore 10" 
-                className="w-full h-auto rounded-[18px]"
-                style={{ 
-                  boxShadow: '0 4px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
-                }}
-              />
+      <HitobaSection zIndex={3} minHeight="min-h-screen" bgColor="bg-background">
+        <div className="h-full flex items-center py-16">
+          <div className="container-custom">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('stonecore.structureTitle')}</h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">{t('stonecore.structureSubtitle')}</p>
             </motion.div>
-
-            {/* Right: Prestazioni del materiale - top aligned */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="h-full"
-            >
-              <MaterialPerformanceCard />
-            </motion.div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
+              <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}><img src={stonecoreLayers} alt="Struttura multistrato StoneCore 10" className="w-full h-auto rounded-[18px]" style={{ boxShadow: '0 4px 40px rgba(0,0,0,0.08)' }} /></motion.div>
+              <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="h-full"><MaterialPerformanceCard /></motion.div>
+            </div>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-12 max-w-2xl mx-auto"><LayerDiagram /></motion.div>
           </div>
-
-          {/* Bottom row: Composizione strati centered */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-12 max-w-2xl mx-auto"
-          >
-            <LayerDiagram />
-          </motion.div>
         </div>
-      </section>
+      </HitobaSection>
 
       {/* Tabs tecnici */}
-      <section className="section-spacing section-overlap bg-card" style={{ zIndex: 4 }}>
-        <div className="container-custom max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
+      <HitobaSection zIndex={4} minHeight="min-h-[600px]" bgColor="bg-card">
+        <div className="h-full flex items-center py-16">
+          <div className="container-custom max-w-4xl">
             <Tabs defaultValue="caratteristiche" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="caratteristiche">{t('stonecore.techTitle')}</TabsTrigger>
-                <TabsTrigger value="posa">{t('stonecore.techPosa')}</TabsTrigger>
-                <TabsTrigger value="manutenzione">{t('stonecore.techMaintenance')}</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="caratteristiche" className="mt-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-                >
-                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Specifiche tecniche</h3>
-                  <ul className="space-y-3 text-background/85">
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Dimensioni plancia: 1220 x 180 mm</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Classe di reazione al fuoco: A2-s1, d0</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Resistenza all'acqua: IP68</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Resistenza all'abrasione: AC5</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Riduzione acustica: 19 dB</span>
-                    </li>
-                  </ul>
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="posa" className="mt-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-                >
-                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Istruzioni di posa</h3>
-                  <ul className="space-y-3 text-background/85">
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Sistema flottante senza colla</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Preparazione sottofondo: livellato e pulito</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Acclimatazione: 24-48 ore in ambiente</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Giunto perimetrale: 8-10 mm</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Totale assenza di fughe</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Calpestabile immediatamente dopo la posa</span>
-                    </li>
-                  </ul>
-                </motion.div>
-              </TabsContent>
-
-              <TabsContent value="manutenzione" className="mt-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-                >
-                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Cura e manutenzione</h3>
-                  <ul className="space-y-3 text-background/85">
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Pulizia quotidiana: panno umido o aspirapolvere</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Detergenti neutri per macchie ostinate</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Evitare prodotti abrasivi o solventi aggressivi</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Protezioni in feltro sotto mobili pesanti</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Nessuna ceratura o trattamento periodico necessario</span>
-                    </li>
-                  </ul>
-                </motion.div>
-              </TabsContent>
+              <TabsList className="grid w-full grid-cols-3"><TabsTrigger value="caratteristiche">{t('stonecore.techTitle')}</TabsTrigger><TabsTrigger value="posa">{t('stonecore.techPosa')}</TabsTrigger><TabsTrigger value="manutenzione">{t('stonecore.techMaintenance')}</TabsTrigger></TabsList>
+              <TabsContent value="caratteristiche" className="mt-8"><div className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}><h3 className="text-xl font-heading font-semibold text-background mb-6">Specifiche tecniche</h3><ul className="space-y-3 text-background/85"><li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" /><span>Spessore totale: 10 mm</span></li><li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" /><span>Dimensioni plancia: 1220 x 180 mm</span></li><li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" /><span>Classe di reazione al fuoco: A2-s1, d0</span></li></ul></div></TabsContent>
+              <TabsContent value="posa" className="mt-8"><div className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"><h3 className="text-xl font-heading font-semibold text-background mb-6">Istruzioni di posa</h3><ul className="space-y-3 text-background/85"><li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" /><span>Sistema flottante senza colla</span></li></ul></div></TabsContent>
+              <TabsContent value="manutenzione" className="mt-8"><div className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"><h3 className="text-xl font-heading font-semibold text-background mb-6">Cura e manutenzione</h3><ul className="space-y-3 text-background/85"><li className="flex items-start gap-2"><span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" /><span>Pulizia quotidiana: panno umido</span></li></ul></div></TabsContent>
             </Tabs>
-          </motion.div>
+          </div>
         </div>
-      </section>
+      </HitobaSection>
 
-      {/* Certificazioni & Normative */}
-      <CertificationsSection variant="compact" />
+      {/* Certificazioni */}
+      <HitobaSection zIndex={5} minHeight="min-h-[400px]" bgColor="bg-background"><div className="h-full"><CertificationsSection variant="compact" /></div></HitobaSection>
 
-      {/* Riscaldamento a pavimento */}
-      <section className="section-spacing section-overlap bg-background" style={{ zIndex: 5 }}>
-        <div className="container-custom max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-              <ThermometerSun className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Perfetto per impianti di riscaldamento a pavimento
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              StoneCore 10 è particolarmente indicato per l'utilizzo con impianti di riscaldamento a pavimento grazie alla sua elevata conducibilità e stabilità termica.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="prose prose-lg max-w-none text-center mb-12"
-          >
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              L'ossido di magnesio permette una trasmissione uniforme del calore, trattenendolo più a lungo rispetto a molti pavimenti tradizionali. Questo si traduce in un comfort superiore e in un risparmio energetico reale nel tempo, poiché l'impianto lavora in modo più efficiente.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-            style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-          >
-            <h3 className="text-xl font-heading font-semibold text-background mb-6">
-              Perché è migliore
-            </h3>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Distribuzione del calore più omogenea</span>
-              </li>
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Minore dispersione termica</span>
-              </li>
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Superficie sempre confortevole</span>
-              </li>
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Riduzione dei consumi energetici nel lungo periodo</span>
-              </li>
-            </ul>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 p-6 rounded-2xl bg-card border border-border text-center"
-          >
-            <p className="text-lg text-foreground italic">
-              Un pavimento che lavora insieme all'impianto, non contro di esso.
-            </p>
-          </motion.div>
+      {/* CTA finale */}
+      <HitobaSection backgroundImage={bgCtaCollabora} overlayClassName="bg-gradient-to-b from-black/25 to-black/45" zIndex={6} minHeight="min-h-[500px]">
+        <div className="h-full flex items-center justify-center py-16">
+          <div className="container-custom text-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white" style={{ textShadow: '0px 4px 16px rgba(0,0,0,0.55)' }}>Scopri StoneCore 10</h2>
+              <p className="text-lg mb-8 max-w-2xl mx-auto text-white/90" style={{ textShadow: '0px 4px 16px rgba(0,0,0,0.55)' }}>Richiedi informazioni o campioni per il tuo progetto</p>
+              <Button asChild size="lg" variant="secondary"><Link to={`/${language}/contatti`}>Contattaci</Link></Button>
+            </motion.div>
+          </div>
         </div>
-      </section>
-
-      {/* CTA Download */}
-      <section className="section-spacing section-overlap relative overflow-hidden" style={{ zIndex: 5 }}>
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
-        />
-        {/* Gradient Overlay */}
-        <div 
-          className="absolute inset-0"
-          style={{ 
-            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
-          }}
-        />
-        
-        <div className="container-custom relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h2 
-              className="text-3xl md:text-4xl font-heading font-bold mb-4 text-white"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-            >
-              {t('stonecore.ctaTitle')}
-            </h2>
-            <p 
-              className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-            >
-              {t('stonecore.ctaSubtitle')}
-            </p>
-            <Button asChild size="lg" variant="secondary">
-              <Link to={`/${language}/area-tecnica`}>{t('stonecore.ctaButton')}</Link>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
+      </HitobaSection>
     </div>
   );
 };
