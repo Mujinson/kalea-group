@@ -138,7 +138,7 @@ const AreaTecnica = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className={`kalea-card group bg-card border rounded-xl p-6 ${doc.isDownloadable ? 'border-primary/30 hover:border-primary/50 hover:shadow-lg' : 'border-border'}`}
+                className={`kalea-card group bg-card border rounded-xl p-6 flex flex-col h-full ${doc.isDownloadable ? 'border-primary/30 hover:border-primary/50 hover:shadow-lg' : 'border-border'}`}
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors ${doc.isDownloadable ? 'bg-primary/15' : 'bg-primary/10'}`}>
@@ -148,7 +148,7 @@ const AreaTecnica = () => {
                     <h3 className="text-base font-heading font-semibold text-foreground mb-1 line-clamp-2">
                       {doc.name}
                     </h3>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <p className="text-xs text-muted-foreground">{doc.category}</p>
                       {doc.standard && (
                         <span className="text-xs font-medium text-primary/80 bg-primary/10 px-1.5 py-0.5 rounded">
@@ -159,9 +159,9 @@ const AreaTecnica = () => {
                   </div>
                 </div>
                 
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{doc.description}</p>
+                <p className="text-sm text-muted-foreground mb-4 flex-grow">{doc.description}</p>
                 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
                   <span className="text-xs text-muted-foreground">{doc.size}</span>
                   {doc.isDownloadable && doc.downloadUrl ? (
                     <Button 
