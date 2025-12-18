@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FileText, Download, Layers, ShieldCheck, Leaf, Home, Building2, Wrench, BookOpen, Video, HelpCircle, FileCode, Award, Flame, FileCheck, BadgeCheck } from "lucide-react";
+import { FileText, Download, Layers, ShieldCheck, Leaf, Home, Building2, Wrench, BookOpen, Video, HelpCircle, FileCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeatureCard from "@/components/FeatureCard";
 import { useState } from "react";
@@ -11,18 +11,13 @@ const AreaTecnica = () => {
   const { t, language } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-  const documents = [
+  // Static documents without downloadable files
+  const staticDocuments = [
     {
       name: "Scheda tecnica StoneCore 10",
       category: "StoneCore 10",
       description: "Specifiche complete del pavimento in MgO",
       size: "2.4 MB",
-    },
-    {
-      name: "Certificazione Fireproof StoneCore 10",
-      category: "StoneCore 10",
-      description: "Certificato classe A2-s1, d0",
-      size: "1.8 MB",
     },
     {
       name: "Guida di posa StoneCore 10",
@@ -60,19 +55,34 @@ const AreaTecnica = () => {
       description: "Istruzioni installazione pareti e soffitti",
       size: "3.8 MB",
     },
-    {
-      name: "Certificazioni ambientali",
-      category: "Certificazioni",
-      description: "Certificati sostenibilità e eco-compatibilità",
-      size: "2.7 MB",
-    },
+  ];
+
+  // Combine downloadable certifications with static documents
+  const allDocuments = [
+    // Add downloadable certifications first (StoneCore 10)
+    ...downloadableCertifications.map(cert => ({
+      name: cert.name[language as keyof typeof cert.name] || cert.name.en,
+      category: cert.category,
+      description: cert.description[language as keyof typeof cert.description] || cert.description.en,
+      size: cert.fileSize,
+      downloadUrl: cert.downloadUrl,
+      standard: cert.standard,
+      isDownloadable: true,
+    })),
+    // Add static documents
+    ...staticDocuments.map(doc => ({
+      ...doc,
+      downloadUrl: undefined,
+      standard: undefined,
+      isDownloadable: false,
+    })),
   ];
 
   const categories = ["all", "StoneCore 10", "EdgeLine", "OneWall", "Certificazioni"];
 
   const filteredDocuments = selectedCategory === "all" 
-    ? documents 
-    : documents.filter(doc => doc.category === selectedCategory);
+    ? allDocuments 
+    : allDocuments.filter(doc => doc.category === selectedCategory);
 
   return (
     <div className="min-h-screen pt-20">
@@ -128,17 +138,24 @@ const AreaTecnica = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="kalea-card group bg-card border border-border rounded-xl p-6"
+                className={`kalea-card group bg-card border rounded-xl p-6 ${doc.isDownloadable ? 'border-primary/30 hover:border-primary/50 hover:shadow-lg' : 'border-border'}`}
               >
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors ${doc.isDownloadable ? 'bg-primary/15' : 'bg-primary/10'}`}>
                     <FileText className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-base font-heading font-semibold text-foreground mb-1 line-clamp-2">
                       {doc.name}
                     </h3>
-                    <p className="text-xs text-muted-foreground mb-2">{doc.category}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs text-muted-foreground">{doc.category}</p>
+                      {doc.standard && (
+                        <span className="text-xs font-medium text-primary/80 bg-primary/10 px-1.5 py-0.5 rounded">
+                          {doc.standard}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 
@@ -146,10 +163,24 @@ const AreaTecnica = () => {
                 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-muted-foreground">{doc.size}</span>
-                  <Button size="sm" variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors">
-                    <Download className="w-4 h-4 mr-2" />
-                    {t('technicalArea.download')}
-                  </Button>
+                  {doc.isDownloadable && doc.downloadUrl ? (
+                    <Button 
+                      asChild
+                      size="sm" 
+                      variant="outline" 
+                      className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors"
+                    >
+                      <a href={doc.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                        <Download className="w-4 h-4 mr-2" />
+                        {t('technicalArea.download')}
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button size="sm" variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" disabled>
+                      <Download className="w-4 h-4 mr-2" />
+                      {t('technicalArea.download')}
+                    </Button>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -176,95 +207,6 @@ const AreaTecnica = () => {
               <a href="mailto:tecnico@kalea.it">{t('technicalArea.ctaButton')}</a>
             </Button>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Certificazioni Scaricabili StoneCore 10 */}
-      <section className="section-spacing">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mb-4">
-              {language === 'it' ? 'Certificazioni StoneCore 10' : 
-               language === 'en' ? 'StoneCore 10 Certifications' :
-               language === 'de' ? 'StoneCore 10 Zertifizierungen' :
-               'Certifications StoneCore 10'}
-            </h2>
-            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto">
-              {language === 'it' ? 'Scarica i certificati ufficiali e i report di test per il pavimento StoneCore 10' : 
-               language === 'en' ? 'Download official certificates and test reports for StoneCore 10 flooring' :
-               language === 'de' ? 'Laden Sie offizielle Zertifikate und Testberichte für StoneCore 10 Bodenbeläge herunter' :
-               'Téléchargez les certificats officiels et les rapports de test pour le revêtement StoneCore 10'}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {downloadableCertifications.map((cert, index) => {
-              // Choose icon based on certification type
-              const CertIcon = cert.id.includes('fireproof') ? Flame :
-                               cert.id.includes('ce') ? BadgeCheck :
-                               cert.id.includes('iso') ? Award :
-                               FileCheck;
-              
-              return (
-                <motion.div
-                  key={cert.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.08 }}
-                  className="group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                      <CertIcon className="w-7 h-7 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-heading font-semibold text-foreground mb-1 line-clamp-2">
-                        {cert.name[language as keyof typeof cert.name] || cert.name.en}
-                      </h3>
-                      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                        {cert.product}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                    {cert.description[language as keyof typeof cert.description] || cert.description.en}
-                  </p>
-                  
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-xs font-medium text-foreground/70 bg-muted px-2 py-1 rounded">
-                      {cert.standard}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <span className="text-xs text-muted-foreground">{cert.fileSize}</span>
-                    <Button 
-                      asChild
-                      size="sm" 
-                      variant="outline" 
-                      className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors"
-                    >
-                      <a href={cert.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                        <Download className="w-4 h-4 mr-2" />
-                        {language === 'it' ? 'Scarica PDF' : 
-                         language === 'en' ? 'Download PDF' :
-                         language === 'de' ? 'PDF herunterladen' :
-                         'Télécharger PDF'}
-                      </a>
-                    </Button>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
         </div>
       </section>
 
