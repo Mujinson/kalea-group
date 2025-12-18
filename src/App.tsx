@@ -39,6 +39,7 @@ import AdminImport from "./pages/admin/AdminImport";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
+import AdminLeads from "./pages/admin/AdminLeads";
 
 const queryClient = new QueryClient();
 
@@ -95,6 +96,7 @@ const App = () => (
             <Route path="clienti" element={<AdminCustomers />} />
             <Route path="magazzino" element={<AdminInventory />} />
             <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="leads" element={<AdminLeads />} />
             <Route path="costi" element={<AdminCosts />} />
             <Route path="pagamenti" element={<AdminPayments />} />
             <Route path="import" element={<AdminImport />} />
