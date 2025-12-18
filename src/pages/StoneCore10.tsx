@@ -4,6 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import FinishCard from "@/components/FinishCard";
 import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
+import CertificationsSection from "@/components/CertificationsSection";
 import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check } from "lucide-react";
 import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -342,6 +343,9 @@ const StoneCore10 = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Certificazioni & Normative */}
+      <CertificationsSection variant="compact" />
 
       {/* Riscaldamento a pavimento */}
       <section className="section-spacing section-overlap bg-background" style={{ zIndex: 5 }}>

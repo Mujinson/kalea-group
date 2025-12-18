@@ -81,6 +81,14 @@ const Footer = () => {
                   {t("nav.aboutUs")}
                 </Link>
               </li>
+              <li>
+                <Link
+                  to={`/${language}/normative`}
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("footer.certifications")}
+                </Link>
+              </li>
             </ul>
           </div>
 

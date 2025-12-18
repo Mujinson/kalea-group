@@ -529,6 +529,7 @@ export const translations: Record<Language, Translations> = {
       copyright: "Tutti i diritti riservati.",
       privacy: "Privacy Policy",
       terms: "Termini e Condizioni",
+      certifications: "Normative e Certificazioni",
     },
     privacy: {
       title: "Privacy Policy",
@@ -1317,6 +1318,7 @@ export const translations: Record<Language, Translations> = {
       copyright: "All rights reserved.",
       privacy: "Privacy Policy",
       terms: "Terms and Conditions",
+      certifications: "Standards & Certifications",
     },
     privacy: {
       title: "Privacy Policy",
@@ -2105,6 +2107,7 @@ export const translations: Record<Language, Translations> = {
       copyright: "Alle Rechte vorbehalten.",
       privacy: "Datenschutzerklärung",
       terms: "Allgemeine Geschäftsbedingungen",
+      certifications: "Normen & Zertifizierungen",
     },
     privacy: {
       title: "Datenschutzerklärung",
@@ -2899,6 +2902,7 @@ export const translations: Record<Language, Translations> = {
       copyright: "Tous droits réservés.",
       privacy: "Politique de confidentialité",
       terms: "Termes et conditions",
+      certifications: "Normes & Certifications",
     },
     privacy: {
       title: "Politique de confidentialité",
