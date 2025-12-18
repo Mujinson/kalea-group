@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
-import { FileText, Download, Layers, ShieldCheck, Leaf, Home, Building2, Wrench, BookOpen, Video, HelpCircle, FileCode } from "lucide-react";
+import { FileText, Download, Layers, ShieldCheck, Leaf, Home, Building2, Wrench, BookOpen, Video, HelpCircle, FileCode, Award, Flame, FileCheck, BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeatureCard from "@/components/FeatureCard";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
+import { downloadableCertifications } from "@/data/downloadableCertifications";
 
 const AreaTecnica = () => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const documents = [
@@ -175,6 +176,95 @@ const AreaTecnica = () => {
               <a href="mailto:tecnico@kalea.it">{t('technicalArea.ctaButton')}</a>
             </Button>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Certificazioni Scaricabili StoneCore 10 */}
+      <section className="section-spacing">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-semibold text-foreground mb-4">
+              {language === 'it' ? 'Certificazioni StoneCore 10' : 
+               language === 'en' ? 'StoneCore 10 Certifications' :
+               language === 'de' ? 'StoneCore 10 Zertifizierungen' :
+               'Certifications StoneCore 10'}
+            </h2>
+            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto">
+              {language === 'it' ? 'Scarica i certificati ufficiali e i report di test per il pavimento StoneCore 10' : 
+               language === 'en' ? 'Download official certificates and test reports for StoneCore 10 flooring' :
+               language === 'de' ? 'Laden Sie offizielle Zertifikate und Testberichte für StoneCore 10 Bodenbeläge herunter' :
+               'Téléchargez les certificats officiels et les rapports de test pour le revêtement StoneCore 10'}
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {downloadableCertifications.map((cert, index) => {
+              // Choose icon based on certification type
+              const CertIcon = cert.id.includes('fireproof') ? Flame :
+                               cert.id.includes('ce') ? BadgeCheck :
+                               cert.id.includes('iso') ? Award :
+                               FileCheck;
+              
+              return (
+                <motion.div
+                  key={cert.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                      <CertIcon className="w-7 h-7 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-heading font-semibold text-foreground mb-1 line-clamp-2">
+                        {cert.name[language as keyof typeof cert.name] || cert.name.en}
+                      </h3>
+                      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                        {cert.product}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                    {cert.description[language as keyof typeof cert.description] || cert.description.en}
+                  </p>
+                  
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-xs font-medium text-foreground/70 bg-muted px-2 py-1 rounded">
+                      {cert.standard}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-4 border-t border-border">
+                    <span className="text-xs text-muted-foreground">{cert.fileSize}</span>
+                    <Button 
+                      asChild
+                      size="sm" 
+                      variant="outline" 
+                      className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors"
+                    >
+                      <a href={cert.downloadUrl} download target="_blank" rel="noopener noreferrer">
+                        <Download className="w-4 h-4 mr-2" />
+                        {language === 'it' ? 'Scarica PDF' : 
+                         language === 'en' ? 'Download PDF' :
+                         language === 'de' ? 'PDF herunterladen' :
+                         'Télécharger PDF'}
+                      </a>
+                    </Button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
