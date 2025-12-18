@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import ApplicationCard from "@/components/ApplicationCard";
 import MgoBook from "@/components/MgoBook";
 import ProductGallerySection from "@/components/ProductGallerySection";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-kalea.webp";
 import logo from "@/assets/logo-new.png";
@@ -20,11 +20,49 @@ import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
 import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
-import { useCardTilt } from "@/hooks/useCardTilt";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Home = () => {
   const { t, language } = useTranslation();
+  const isMobile = useIsMobile();
   
+  // Refs for scroll tracking
+  const heroRef = useRef<HTMLDivElement>(null);
+  const productsRef = useRef<HTMLDivElement>(null);
+  const manifestoRef = useRef<HTMLDivElement>(null);
+
+  // Hero scroll effects
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  
+  const heroScale = useTransform(heroProgress, [0, 1], isMobile ? [1, 0.96] : [1, 0.88]);
+  const heroBorderRadius = useTransform(heroProgress, [0, 0.5], ["0px", isMobile ? "16px" : "28px"]);
+  const heroContentOpacity = useTransform(heroProgress, [0, 0.3], [1, 0]);
+  const heroContentY = useTransform(heroProgress, [0, 0.4], [0, isMobile ? -40 : -80]);
+  const heroImageY = useTransform(heroProgress, [0, 1], ["0%", isMobile ? "8%" : "15%"]);
+
+  // Products section scroll effects
+  const { scrollYProgress: productsProgress } = useScroll({
+    target: productsRef,
+    offset: ["start end", "end start"],
+  });
+  
+  const productsScale = useTransform(productsProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
+  const productsBorderRadius = useTransform(productsProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
+  const productsOpacity = useTransform(productsProgress, [0, 0.15, 0.85, 1], [0.7, 1, 1, 0.7]);
+
+  // Manifesto section scroll effects
+  const { scrollYProgress: manifestoProgress } = useScroll({
+    target: manifestoRef,
+    offset: ["start end", "end start"],
+  });
+  
+  const manifestoScale = useTransform(manifestoProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
+  const manifestoBorderRadius = useTransform(manifestoProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
+  const manifestoOpacity = useTransform(manifestoProgress, [0, 0.15, 0.85, 1], [0.7, 1, 1, 0.7]);
+
   const productLines = [
     {
       icon: Layers,
@@ -66,87 +104,115 @@ const Home = () => {
   ];
 
   return (
-    <div>
-      {/* Sticky Stacking Container */}
-      <div className="relative">
-        {/* Hero Section */}
-        <section className="relative h-screen min-h-[600px] max-h-screen flex items-center justify-center overflow-hidden">
-          {/* Background */}
+    <div className="bg-[#0a0a0a]">
+      {/* Hero Section with Hitoba-style scroll effect */}
+      <div ref={heroRef} className="relative h-screen min-h-[600px] max-h-screen">
+        <motion.div 
+          className="fixed inset-0 z-0 overflow-hidden origin-center will-change-transform"
+          style={{ 
+            scale: heroScale,
+            borderRadius: heroBorderRadius,
+          }}
+        >
+          <motion.img 
+            src={heroImage} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover will-change-transform"
+            style={{ 
+              y: heroImageY,
+              scale: 1.1,
+            }}
+            initial={{ filter: "blur(10px)", scale: 1.15 }}
+            animate={{ filter: "blur(0px)", scale: 1.1 }}
+            transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          />
+        </motion.div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 h-full flex items-center justify-center">
           <motion.div 
-            className="absolute inset-0 z-0"
-            initial={{ scale: 1.05 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.4, ease: "easeOut" }}
+            style={{ opacity: heroContentOpacity, y: heroContentY }} 
+            className="container-custom text-center pt-[55vh] md:pt-[58vh] will-change-transform"
           >
-            <img 
-              src={heroImage} 
-              alt="" 
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            
+            <div className="max-w-5xl mx-auto">
+              <motion.h1
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-white/90 font-light mb-4 tracking-wide"
+              >
+                SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-10 tracking-wide"
+              >
+                {t('hero.home.newStandard')}
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.6 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              >
+                <Link 
+                  to={`/${language}/diventa-partner`}
+                  className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                >
+                  {t('hero.home.ctaInfo')}
+                </Link>
+                <Link 
+                  to={`/${language}/stonecore-10`}
+                  className="inline-flex items-center justify-center gap-2 border border-white/30 text-white text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-white/10 transition-all duration-150"
+                >
+                  {t('hero.home.ctaProducts')}
+                </Link>
+              </motion.div>
+            </div>
           </motion.div>
 
-        {/* Content - positioned in the bottom half to avoid covering the Kalea logo in bg */}
-        <div className="container-custom relative z-10 text-center pt-[55vh] md:pt-[58vh]">
-          <div className="max-w-5xl mx-auto">
-            {/* Main Title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-white/90 font-light mb-4 tracking-wide"
-            >
-              SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-10 tracking-wide"
-            >
-              {t('hero.home.newStandard')}
-            </motion.p>
-
-            {/* CTAs */}
+          {/* Scroll indicator */}
+          <motion.div 
+            className="absolute bottom-8 left-1/2 -translate-x-1/2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            style={{ opacity: heroContentOpacity }}
+          >
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Link 
-                to={`/${language}/diventa-partner`}
-                className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
-              >
-                {t('hero.home.ctaInfo')}
-              </Link>
-              <Link 
-                to={`/${language}/stonecore-10`}
-                className="inline-flex items-center justify-center gap-2 border border-white/30 text-white text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-white/10 transition-all duration-150"
-              >
-                {t('hero.home.ctaProducts')}
-              </Link>
+              <ChevronDown className="w-6 h-6 text-white/60" />
             </motion.div>
-          </div>
+          </motion.div>
         </div>
-        </section>
+      </div>
 
-        {/* System Overview Section - 3 Product Cards */}
-        <section className="relative h-screen min-h-[500px] max-h-screen flex items-center justify-center overflow-hidden">
-          {/* Background */}
-          <div className="absolute inset-0 z-0">
-            <img 
-              src={bgProducts} 
-              alt="" 
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
-          </div>
+      {/* Products Section with scroll effect */}
+      <div ref={productsRef} className="relative h-screen min-h-[500px] max-h-screen sticky top-0 z-[1]">
+        <motion.div 
+          className="absolute inset-0 overflow-hidden will-change-transform"
+          style={{ 
+            scale: productsScale,
+            borderRadius: productsBorderRadius,
+            opacity: productsOpacity,
+          }}
+        >
+          <img 
+            src={bgProducts} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
+        </motion.div>
 
-          <div className="container-custom relative z-10 text-center">
-            {/* System Description */}
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="container-custom text-center">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -157,7 +223,6 @@ const Home = () => {
               {t('hero.home.systemDescription')}
             </motion.p>
 
-            {/* Product Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
               {productLines.map((product, index) => (
                 product.comingSoon ? (
@@ -205,88 +270,95 @@ const Home = () => {
               ))}
             </div>
           </div>
-        </section>
+        </div>
+      </div>
 
-      {/* Manifesto Section - full text */}
-      <section className="relative h-screen min-h-[700px] max-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
+      {/* Manifesto Section with scroll effect */}
+      <div ref={manifestoRef} className="relative h-screen min-h-[700px] max-h-screen sticky top-0 z-[2]">
+        <motion.div 
+          className="absolute inset-0 overflow-hidden will-change-transform"
+          style={{ 
+            scale: manifestoScale,
+            borderRadius: manifestoBorderRadius,
+            opacity: manifestoOpacity,
+          }}
+        >
           <img 
             src={bgManifesto} 
             alt="" 
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/60" />
+        </motion.div>
+
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="w-full px-6 md:px-12 lg:px-16">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9 }}
+              className="max-w-3xl mx-auto text-center space-y-3 md:space-y-4"
+            >
+              <div className="space-y-1.5 md:space-y-2">
+                <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                  {t('hero.manifesto.line1')}
+                </p>
+                <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                  {t('hero.manifesto.line2')}
+                </p>
+                <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                  {t('hero.manifesto.line3')}
+                </p>
+                <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                  {t('hero.manifesto.line4')}
+                </p>
+                <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
+                  {t('hero.manifesto.line5')}
+                </p>
+              </div>
+
+              <div className="h-px w-16 mx-auto bg-white/40 my-3" />
+
+              <div className="space-y-1.5 text-xs md:text-sm text-white/85 font-light leading-relaxed">
+                <p>{t('hero.manifesto.problem1')}<br />{t('hero.manifesto.problem2')}</p>
+                <p className="mt-2">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
+                <p className="mt-2">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
+                <p className="mt-2">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
+                <p className="mt-2">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
+              </div>
+
+              <div className="pt-4 md:pt-6 space-y-1.5">
+                <p className="text-xs md:text-sm lg:text-base tracking-[0.25em] text-white/90 font-medium uppercase">
+                  KALĒA — SURFACE SYSTEM®
+                </p>
+                <p className="text-xs md:text-sm text-white/85 font-light">
+                  {t('hero.manifesto.brandStatement')}
+                </p>
+                <p className="text-xs md:text-sm text-white/85 font-light">
+                  {t('hero.manifesto.brandStatement2')}
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
-
-        {/* Content */}
-        <div className="w-full relative z-10 px-6 md:px-12 lg:px-16 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9 }}
-            className="max-w-3xl mx-auto text-center space-y-3 md:space-y-4"
-          >
-            {/* Opening lines */}
-            <div className="space-y-1.5 md:space-y-2">
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
-                {t('hero.manifesto.line1')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
-                {t('hero.manifesto.line2')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
-                {t('hero.manifesto.line3')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
-                {t('hero.manifesto.line4')}
-              </p>
-              <p className="text-base md:text-lg lg:text-xl text-white/90 font-light tracking-wide leading-relaxed italic">
-                {t('hero.manifesto.line5')}
-              </p>
-            </div>
-
-            {/* Divider */}
-            <div className="h-px w-16 mx-auto bg-white/40 my-3" />
-
-            {/* Core manifesto text */}
-            <div className="space-y-1.5 text-xs md:text-sm text-white/85 font-light leading-relaxed">
-              <p>{t('hero.manifesto.problem1')}<br />{t('hero.manifesto.problem2')}</p>
-              <p className="mt-2">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
-              <p className="mt-2">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
-              <p className="mt-2">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
-              <p className="mt-2">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
-            </div>
-
-            <div className="pt-4 md:pt-6 space-y-1.5">
-              <p className="text-xs md:text-sm lg:text-base tracking-[0.25em] text-white/90 font-medium uppercase">
-                KALĒA — SURFACE SYSTEM®
-              </p>
-              <p className="text-xs md:text-sm text-white/85 font-light">
-                {t('hero.manifesto.brandStatement')}
-              </p>
-              <p className="text-xs md:text-sm text-white/85 font-light">
-                {t('hero.manifesto.brandStatement2')}
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      </div>
 
       {/* Product Gallery Section */}
-      <ProductGallerySection />
+      <div className="relative z-[3] bg-background">
+        <ProductGallerySection />
       </div>
-      {/* End Sticky Stacking Container */}
 
       {/* Section Separator */}
-      <div className="w-full h-px bg-foreground/10" />
+      <div className="relative z-[3] w-full h-px bg-foreground/10" />
 
       {/* Perché MgO - 3D Book */}
-      <MgoBook />
+      <div className="relative z-[3]">
+        <MgoBook />
+      </div>
 
       {/* Applicazioni */}
-      <section className="h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-card overflow-hidden">
+      <section className="relative z-[3] h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-card overflow-hidden">
         <div className="w-full px-6 md:px-12 lg:px-16 py-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -320,7 +392,7 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="section-spacing">
+      <section className="relative z-[3] section-spacing bg-background">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -354,13 +426,11 @@ const Home = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="h-screen min-h-[500px] max-h-screen relative flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
+      <section className="relative z-[3] h-screen min-h-[500px] max-h-screen flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
         />
-        {/* Gradient Overlay */}
         <div 
           className="absolute inset-0"
           style={{ 

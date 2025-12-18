@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useRef } from "react";
+import { useHitobaScroll } from "@/hooks/useHitobaScroll";
 
 interface HeroSectionProps {
   title: string;
@@ -26,24 +27,28 @@ const HeroSection = ({
 }: HeroSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
+  const { 
+    scale, 
+    borderRadius, 
+    imageY, 
+    contentOpacity, 
+    contentY,
+    overlayOpacity,
+    isMobile 
+  } = useHitobaScroll(containerRef as React.RefObject<HTMLElement>, {
+    scaleRange: [1, 0.88],
+    borderRadiusRange: [0, 28],
+    parallaxRange: ["0%", "18%"],
+    contentOpacityRange: [1, 0],
+    contentYRange: [0, -100],
+    simplifiedOnMobile: true,
   });
-
-  // Hitoba-style effects
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
-  const borderRadius = useTransform(scrollYProgress, [0, 0.5], ["0px", "24px"]);
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 0.4], [0, -80]);
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.6]);
 
   return (
     <div ref={containerRef} className={`relative ${minHeight}`}>
       {/* Fixed background that scales and rounds on scroll */}
       <motion.div 
-        className="fixed inset-0 z-0 overflow-hidden"
+        className="fixed inset-0 z-0 overflow-hidden origin-center"
         style={{ 
           scale,
           borderRadius,
@@ -54,7 +59,7 @@ const HeroSection = ({
             <motion.img 
               src={backgroundImage} 
               alt="" 
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover will-change-transform"
               style={{ 
                 objectPosition: backgroundPosition,
                 y: imageY,
@@ -78,7 +83,7 @@ const HeroSection = ({
       <div className={`relative z-10 ${minHeight} flex items-center justify-center`}>
         <motion.div 
           style={{ opacity: contentOpacity, y: contentY }} 
-          className="container-custom"
+          className="container-custom will-change-transform"
         >
           <div className="max-w-4xl mx-auto text-center">
             {/* Title with letter-by-letter animation */}
