@@ -13,7 +13,7 @@ export interface DownloadableCertification {
     fr: string;
   };
   standard: string;
-  product: string;
+  category: string;
   downloadUrl: string;
   fileSize: string;
 }
@@ -34,8 +34,8 @@ export const downloadableCertifications: DownloadableCertification[] = [
       fr: 'Test SGS ASTM E84-23 - Classe A (FSI 0, SDI 0)',
     },
     standard: 'ASTM E84-23',
-    product: 'StoneCore 10',
-    downloadUrl: '/certificates/stonecore10-fireproof-sgs.pdf',
+    category: 'StoneCore 10',
+    downloadUrl: '/certificates/Zolway-for-Kalea-StoneCore10-Fireproof-SGS.pdf',
     fileSize: '1.2 MB',
   },
   {
@@ -53,8 +53,8 @@ export const downloadableCertifications: DownloadableCertification[] = [
       fr: 'Test SGS GB 18580-2017 - Classe E₁ (ND < 0.124 mg/m³)',
     },
     standard: 'GB 18580-2017 / EN 717-1',
-    product: 'StoneCore 10',
-    downloadUrl: '/certificates/stonecore10-formaldehyde-sgs.pdf',
+    category: 'StoneCore 10',
+    downloadUrl: '/certificates/Zolway-for-Kalea-StoneCore10-Formaldehyde-SGS.pdf',
     fileSize: '0.8 MB',
   },
   {
@@ -72,8 +72,8 @@ export const downloadableCertifications: DownloadableCertification[] = [
       fr: 'Conformité EN 14041:2018 / EN 14342:2013 - Règlement UE 305/2011',
     },
     standard: 'EN 14041:2018',
-    product: 'StoneCore 10',
-    downloadUrl: '/certificates/stonecore10-ce-certificate.pdf',
+    category: 'StoneCore 10',
+    downloadUrl: '/certificates/Zolway-for-Kalea-StoneCore10-CE-Certificate.pdf',
     fileSize: '0.5 MB',
   },
   {
@@ -91,8 +91,8 @@ export const downloadableCertifications: DownloadableCertification[] = [
       fr: 'Système de Management de la Qualité GB/T19001-2016 / ISO 9001:2015',
     },
     standard: 'ISO 9001:2015',
-    product: 'StoneCore 10',
-    downloadUrl: '/certificates/stonecore10-iso9001.pdf',
+    category: 'StoneCore 10',
+    downloadUrl: '/certificates/Zolway-for-Kalea-StoneCore10-ISO9001.pdf',
     fileSize: '0.4 MB',
   },
   {
@@ -110,8 +110,8 @@ export const downloadableCertifications: DownloadableCertification[] = [
       fr: 'Tests de performance EN 14041 - Résistance, stabilité, usure',
     },
     standard: 'EN 14041',
-    product: 'StoneCore 10',
-    downloadUrl: '/certificates/stonecore10-sgs-testing.pdf',
+    category: 'StoneCore 10',
+    downloadUrl: '/certificates/Zolway-for-Kalea-StoneCore10-SGS-Testing.pdf',
     fileSize: '2.8 MB',
   },
 ];
