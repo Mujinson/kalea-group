@@ -2,6 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* New Order Font Family */
+@font-face {
+  font-family: 'New Order';
+  src: url('/fonts/NewOrder-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'New Order';
+  src: url('/fonts/NewOrder-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'New Order';
+  src: url('/fonts/NewOrder-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'New Order';
+  src: url('/fonts/NewOrder-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'New Order';
+  src: url('/fonts/NewOrder-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
@@ -121,12 +162,12 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'New Order', sans-serif;
     font-weight: 300;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'New Order', sans-serif;
   }
   
   h1 {
