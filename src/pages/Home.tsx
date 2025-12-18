@@ -473,41 +473,57 @@ const Home = () => {
             borderRadius: sustainabilityBorderRadius,
           }}
         >
-          <div className="h-full flex flex-col">
+          <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
             {/* Header */}
-            <div className="container-custom pt-12 md:pt-14">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center"
-              >
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-                  {t('home.sustainabilityTitle')}
-                </h2>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  {t('home.sustainabilitySubtitle')}
-                </p>
-              </motion.div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-8 md:mb-10"
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+                {t('home.sustainabilityTitle')}
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('home.sustainabilitySubtitle')}
+              </p>
+            </motion.div>
 
-            {/* Cards */}
-            <div className="container-custom flex-1 flex items-center pb-12 md:pb-14">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 w-full max-w-6xl mx-auto">
-                {sustainability.map((item, index) => (
-                  <Link key={item.title} to={item.link} className="block">
-                    <ApplicationCard
-                      icon={item.icon}
-                      title={item.title}
-                      description={item.description}
-                      backgroundImage={item.bg}
-                      index={index}
-                      variant="tall"
+            {/* Cards - fill remaining height */}
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 max-w-7xl mx-auto w-full">
+              {sustainability.map((item, index) => (
+                <Link key={item.title} to={item.link} className="block h-full">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{
+                      y: -6,
+                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
+                    }}
+                    className="relative h-full rounded-3xl overflow-hidden group"
+                  >
+                    <img
+                      src={item.bg}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
                     />
-                  </Link>
-                ))}
-              </div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                      <item.icon className="w-12 h-12 md:w-14 md:h-14 text-background mb-4" strokeWidth={1.5} />
+                      <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-semibold text-background mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm md:text-base text-background/85 max-w-xs">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
             </div>
           </div>
         </motion.div>
