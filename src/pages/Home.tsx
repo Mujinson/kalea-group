@@ -104,16 +104,14 @@ const Home = () => {
   ];
 
   return (
-    <div className="relative">
-      {/* Hero Section - Fixed background with scroll shrink effect */}
-      <section ref={heroRef} className="relative h-screen">
-        {/* Fixed background container */}
+    <div className="relative bg-[#0a0a0a]">
+      {/* Hero Section - Sticky with scroll shrink effect */}
+      <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 
-          className="fixed inset-0 overflow-hidden origin-center will-change-transform"
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
             scale: heroScale,
             borderRadius: heroBorderRadius,
-            zIndex: 0,
           }}
         >
           <motion.img 
@@ -130,11 +128,11 @@ const Home = () => {
           />
         </motion.div>
 
-        {/* Hero Content - scrolls with page */}
-        <div className="relative z-10 h-full flex items-center justify-center">
+        {/* Hero Content - positioned at bottom to not overlap logo in image */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-24 md:pb-28">
           <motion.div 
             style={{ opacity: heroContentOpacity, y: heroContentY }} 
-            className="container-custom text-center pt-[55vh] md:pt-[58vh] will-change-transform"
+            className="container-custom text-center will-change-transform"
           >
             <div className="max-w-5xl mx-auto">
               <motion.h1
@@ -150,7 +148,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.4 }}
-                className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-10 tracking-wide"
+                className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-8 tracking-wide"
               >
                 {t('hero.home.newStandard')}
               </motion.p>
@@ -159,7 +157,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
               >
                 <Link 
                   to={`/${language}/diventa-partner`}
@@ -174,23 +172,23 @@ const Home = () => {
                   {t('hero.home.ctaProducts')}
                 </Link>
               </motion.div>
-            </div>
-          </motion.div>
 
-          {/* Scroll indicator */}
-          <motion.div 
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            style={{ opacity: heroContentOpacity }}
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <ChevronDown className="w-6 h-6 text-white/60" />
-            </motion.div>
+              {/* Scroll indicator */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+                style={{ opacity: heroContentOpacity }}
+              >
+                <motion.div
+                  animate={{ y: [0, 8, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="flex justify-center"
+                >
+                  <ChevronDown className="w-6 h-6 text-white/60" />
+                </motion.div>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -487,6 +485,9 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Spacer to push footer below sticky sections */}
+      <div className="relative z-[50] h-0" />
     </div>
   );
 };
