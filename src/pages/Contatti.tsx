@@ -112,6 +112,7 @@ const Contatti = () => {
         subtitle={t('contacts.subtitle')}
         backgroundImage={heroContatti}
         backgroundPosition="center 28%"
+        overlayClassName="bg-gradient-to-b from-black/40 via-black/20 to-black/40"
         minHeight="min-h-[50vh]"
       />
       <section className="section-spacing">
