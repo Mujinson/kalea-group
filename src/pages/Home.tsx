@@ -104,14 +104,16 @@ const Home = () => {
   ];
 
   return (
-    <div className="bg-[#0a0a0a]">
-      {/* Hero Section with Hitoba-style scroll effect */}
-      <div ref={heroRef} className="relative h-screen min-h-[600px] max-h-screen">
+    <div className="relative">
+      {/* Hero Section - Fixed background with scroll shrink effect */}
+      <section ref={heroRef} className="relative h-screen">
+        {/* Fixed background container */}
         <motion.div 
-          className="fixed inset-0 z-0 overflow-hidden origin-center will-change-transform"
+          className="fixed inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
             scale: heroScale,
             borderRadius: heroBorderRadius,
+            zIndex: 0,
           }}
         >
           <motion.img 
@@ -128,7 +130,7 @@ const Home = () => {
           />
         </motion.div>
 
-        {/* Hero Content */}
+        {/* Hero Content - scrolls with page */}
         <div className="relative z-10 h-full flex items-center justify-center">
           <motion.div 
             style={{ opacity: heroContentOpacity, y: heroContentY }} 
@@ -191,12 +193,12 @@ const Home = () => {
             </motion.div>
           </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* Products Section with scroll effect */}
-      <div ref={productsRef} className="relative h-screen min-h-[500px] max-h-screen sticky top-0 z-[1]">
+      {/* Products Section - Stacks on top of hero */}
+      <section ref={productsRef} className="relative h-screen sticky top-0 z-[1]">
         <motion.div 
-          className="absolute inset-0 overflow-hidden will-change-transform"
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
             scale: productsScale,
             borderRadius: productsBorderRadius,
@@ -271,12 +273,12 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Manifesto Section with scroll effect */}
-      <div ref={manifestoRef} className="relative h-screen min-h-[700px] max-h-screen sticky top-0 z-[2]">
+      {/* Manifesto Section - Stacks on top of products */}
+      <section ref={manifestoRef} className="relative h-screen sticky top-0 z-[2]">
         <motion.div 
-          className="absolute inset-0 overflow-hidden will-change-transform"
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
             scale: manifestoScale,
             borderRadius: manifestoBorderRadius,
@@ -342,7 +344,7 @@ const Home = () => {
             </motion.div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Product Gallery Section */}
       <div className="relative z-[3] bg-background">
