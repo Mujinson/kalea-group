@@ -47,6 +47,33 @@ const AdminSettings = () => {
     }
   };
 
+  // Strong password validation
+  const validatePassword = (password: string): { valid: boolean; message: string } => {
+    if (password.length < 12) {
+      return { valid: false, message: 'La password deve essere di almeno 12 caratteri' };
+    }
+    
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
+    if (!hasUppercase) {
+      return { valid: false, message: 'La password deve contenere almeno una lettera maiuscola' };
+    }
+    if (!hasLowercase) {
+      return { valid: false, message: 'La password deve contenere almeno una lettera minuscola' };
+    }
+    if (!hasNumber) {
+      return { valid: false, message: 'La password deve contenere almeno un numero' };
+    }
+    if (!hasSpecial) {
+      return { valid: false, message: 'La password deve contenere almeno un carattere speciale (!@#$%^&*...)' };
+    }
+    
+    return { valid: true, message: '' };
+  };
+
   const handleCreateAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -55,8 +82,9 @@ const AdminSettings = () => {
       return;
     }
 
-    if (newUserPassword.length < 6) {
-      toast.error('La password deve essere di almeno 6 caratteri');
+    const passwordValidation = validatePassword(newUserPassword);
+    if (!passwordValidation.valid) {
+      toast.error(passwordValidation.message);
       return;
     }
 
