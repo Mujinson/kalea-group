@@ -153,20 +153,117 @@ const Navbar = () => {
               />
             </Link>
 
-            {/* Desktop Menu + Language - Center wrapper with flex-nowrap */}
-            <div className="hidden xl:flex items-center gap-6 2xl:gap-8 flex-nowrap shrink-0">
-              {/* Menu Links */}
-              <div className="flex items-center gap-5 2xl:gap-8 flex-nowrap">
+            {/* Desktop Menu - Center */}
+            <div className="hidden xl:flex items-center gap-5 2xl:gap-8 flex-nowrap shrink-0">
+              <Link
+                to={`/${language}`}
+                className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
+                  location.pathname === `/${language}` || location.pathname === `/${language}/` 
+                    ? textColorActive 
+                    : `${textColorMuted} hover:${textColor}`
+                }`}
+              >
+                {t('nav.home')}
+                {(location.pathname === `/${language}` || location.pathname === `/${language}/`) && (
+                  <motion.div
+                    layoutId="navbar-underline"
+                    className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </Link>
+
+              {/* Dropdown Linee */}
+              <div
+                className="relative"
+                onMouseEnter={() => setIsDropdownOpen(true)}
+                onMouseLeave={() => setIsDropdownOpen(false)}
+              >
+                <button
+                  className={`text-nav transition-all duration-200 flex items-center gap-1 whitespace-nowrap ${
+                    isLineePage ? textColorActive : `${textColorMuted} hover:${textColor}`
+                  }`}
+                >
+                  {t('nav.lines')}
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+                  />
+                  {isLineePage && (
+                    <motion.div
+                      layoutId="navbar-underline"
+                      className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </button>
+
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
+                        useDarkStyle 
+                          ? "bg-white border border-[#EBE2D8]" 
+                          : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
+                      }`}
+                    >
+                      {lineeItems.map((item, index) => (
+                        item.comingSoon ? (
+                          <Tooltip key={item.path}>
+                            <TooltipTrigger asChild>
+                              <div
+                                className={`block px-6 py-3 text-nav cursor-not-allowed opacity-50 ${
+                                  useDarkStyle
+                                    ? "text-[#3F3B33]/60"
+                                    : "text-white/60"
+                                } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
+                              >
+                                {item.label}
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="right" className="bg-foreground text-background text-xs px-3 py-1.5 rounded-lg">
+                              Coming soon
+                            </TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`block px-6 py-3 text-nav transition-all duration-200 ${
+                              useDarkStyle
+                                ? location.pathname === item.path
+                                  ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+                                  : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+                                : location.pathname === item.path
+                                  ? "text-white bg-white/10"
+                                  : "text-white/90 hover:text-white hover:bg-white/5"
+                            } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
+                          >
+                            {item.label}
+                          </Link>
+                        )
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {menuItems.map((item) => (
                 <Link
-                  to={`/${language}`}
+                  key={item.path}
+                  to={item.path}
                   className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
-                    location.pathname === `/${language}` || location.pathname === `/${language}/` 
+                    location.pathname === item.path 
                       ? textColorActive 
                       : `${textColorMuted} hover:${textColor}`
                   }`}
                 >
-                  {t('nav.home')}
-                  {(location.pathname === `/${language}` || location.pathname === `/${language}/`) && (
+                  {item.label}
+                  {location.pathname === item.path && (
                     <motion.div
                       layoutId="navbar-underline"
                       className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
@@ -174,110 +271,13 @@ const Navbar = () => {
                     />
                   )}
                 </Link>
+              ))}
+            </div>
 
-                {/* Dropdown Linee */}
-                <div
-                  className="relative"
-                  onMouseEnter={() => setIsDropdownOpen(true)}
-                  onMouseLeave={() => setIsDropdownOpen(false)}
-                >
-                  <button
-                    className={`text-nav transition-all duration-200 flex items-center gap-1 whitespace-nowrap ${
-                      isLineePage ? textColorActive : `${textColorMuted} hover:${textColor}`
-                    }`}
-                  >
-                    {t('nav.lines')}
-                    <ChevronDown
-                      size={16}
-                      className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
-                    />
-                    {isLineePage && (
-                      <motion.div
-                        layoutId="navbar-underline"
-                        className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                      />
-                    )}
-                  </button>
-
-                  <AnimatePresence>
-                    {isDropdownOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
-                        className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
-                          useDarkStyle 
-                            ? "bg-white border border-[#EBE2D8]" 
-                            : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
-                        }`}
-                      >
-                        {lineeItems.map((item, index) => (
-                          item.comingSoon ? (
-                            <Tooltip key={item.path}>
-                              <TooltipTrigger asChild>
-                                <div
-                                  className={`block px-6 py-3 text-nav cursor-not-allowed opacity-50 ${
-                                    useDarkStyle
-                                      ? "text-[#3F3B33]/60"
-                                      : "text-white/60"
-                                  } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
-                                >
-                                  {item.label}
-                                </div>
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="bg-foreground text-background text-xs px-3 py-1.5 rounded-lg">
-                                Coming soon
-                              </TooltipContent>
-                            </Tooltip>
-                          ) : (
-                            <Link
-                              key={item.path}
-                              to={item.path}
-                              className={`block px-6 py-3 text-nav transition-all duration-200 ${
-                                useDarkStyle
-                                  ? location.pathname === item.path
-                                    ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-                                    : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
-                                  : location.pathname === item.path
-                                    ? "text-white bg-white/10"
-                                    : "text-white/90 hover:text-white hover:bg-white/5"
-                              } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
-                            >
-                              {item.label}
-                            </Link>
-                          )
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`text-nav transition-all duration-200 relative whitespace-nowrap ${
-                      location.pathname === item.path 
-                        ? textColorActive 
-                        : `${textColorMuted} hover:${textColor}`
-                    }`}
-                  >
-                    {item.label}
-                    {location.pathname === item.path && (
-                      <motion.div
-                        layoutId="navbar-underline"
-                        className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                      />
-                    )}
-                  </Link>
-                ))}
-              </div>
-              
-              {/* Language Selector - shrink-0 to prevent shrinking */}
-              <div className="flex items-center gap-1.5 text-nav whitespace-nowrap shrink-0">
+            {/* Language Selector + CTA Button - Right */}
+            <div className="hidden xl:flex items-center gap-4 shrink-0">
+              {/* Language Selector */}
+              <div className="flex items-center gap-1.5 text-nav whitespace-nowrap">
                 {languages.map((lang, index) => (
                   <React.Fragment key={lang}>
                     <button
@@ -296,10 +296,8 @@ const Navbar = () => {
                   </React.Fragment>
                 ))}
               </div>
-            </div>
 
-            {/* CTA Button - Right - shrink-0 */}
-            <div className="hidden xl:block shrink-0">
+              {/* CTA Button */}
               <Link
                 to={`/${language}/diventa-partner`}
                 className={`inline-flex items-center justify-center px-5 py-2.5 rounded-xl text-button transition-all duration-150 whitespace-nowrap ${
