@@ -14,6 +14,12 @@ const AreaTecnica = () => {
   // Static documents without downloadable files
   const staticDocuments = [
     {
+      name: "Catalogo StoneCore 10",
+      category: "StoneCore 10",
+      description: "Gamma completa finiture e colori disponibili",
+      size: "4.8 MB",
+    },
+    {
       name: "Scheda tecnica StoneCore 10",
       category: "StoneCore 10",
       description: "Specifiche complete del pavimento in MgO",
@@ -36,6 +42,12 @@ const AreaTecnica = () => {
       category: "EdgeLine",
       description: "Specifiche tecniche profili in alluminio",
       size: "1.9 MB",
+    },
+    {
+      name: "Guida di posa EdgeLine",
+      category: "EdgeLine",
+      description: "Istruzioni installazione profili e giunti",
+      size: "2.3 MB",
     },
     {
       name: "Catalogo OneWall",
