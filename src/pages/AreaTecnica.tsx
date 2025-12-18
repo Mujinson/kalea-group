@@ -6,10 +6,29 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { downloadableCertifications } from "@/data/downloadableCertifications";
+import LeadCaptureDialog, { checkLeadCaptured, setLeadCaptured } from "@/components/LeadCaptureDialog";
 
 const AreaTecnica = () => {
   const { t, language } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [showLeadDialog, setShowLeadDialog] = useState(false);
+  const [pendingDownloadUrl, setPendingDownloadUrl] = useState<string | undefined>();
+  const [leadCaptured, setLeadCapturedState] = useState(checkLeadCaptured());
+
+  const handleDownloadClick = (downloadUrl: string) => {
+    if (leadCaptured) {
+      // Already captured, allow direct download
+      window.open(downloadUrl, "_blank");
+    } else {
+      // Show lead capture dialog
+      setPendingDownloadUrl(downloadUrl);
+      setShowLeadDialog(true);
+    }
+  };
+
+  const handleLeadSuccess = () => {
+    setLeadCapturedState(true);
+  };
 
   // Static documents without downloadable files
   const staticDocuments = [
@@ -177,15 +196,13 @@ const AreaTecnica = () => {
                   <span className="text-xs text-muted-foreground">{doc.size}</span>
                   {doc.isDownloadable && doc.downloadUrl ? (
                     <Button 
-                      asChild
                       size="sm" 
                       variant="outline" 
                       className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors"
+                      onClick={() => handleDownloadClick(doc.downloadUrl!)}
                     >
-                      <a href={doc.downloadUrl} download target="_blank" rel="noopener noreferrer">
-                        <Download className="w-4 h-4 mr-2" />
-                        {t('technicalArea.download')}
-                      </a>
+                      <Download className="w-4 h-4 mr-2" />
+                      {t('technicalArea.download')}
                     </Button>
                   ) : (
                     <Button size="sm" variant="outline" className="group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors" disabled>
@@ -587,6 +604,13 @@ const AreaTecnica = () => {
           </motion.div>
         </div>
       </section>
+      {/* Lead Capture Dialog */}
+      <LeadCaptureDialog
+        open={showLeadDialog}
+        onOpenChange={setShowLeadDialog}
+        onSuccess={handleLeadSuccess}
+        pendingDownloadUrl={pendingDownloadUrl}
+      />
     </div>
   );
 };

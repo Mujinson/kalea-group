@@ -25,6 +25,7 @@ import {
   Users,
   BarChart3,
   FileText,
+  UserPlus,
 } from 'lucide-react';
 
 const menuItems = [
@@ -34,6 +35,7 @@ const menuItems = [
   { title: 'Clienti', url: '/admin/clienti', icon: Users },
   { title: 'Magazzino', url: '/admin/magazzino', icon: Package },
   { title: 'Analytics', url: '/admin/analytics', icon: BarChart3 },
+  { title: 'Leads', url: '/admin/leads', icon: UserPlus },
   { title: 'Costi', url: '/admin/costi', icon: DollarSign },
   { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard },
   { title: 'Import Dati', url: '/admin/import', icon: Upload },

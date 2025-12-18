@@ -506,6 +506,42 @@ export type Database = {
           },
         ]
       }
+      leads: {
+        Row: {
+          company_name: string | null
+          created_at: string
+          email: string
+          id: string
+          ip_address: string | null
+          name: string
+          phone: string
+          source: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          ip_address?: string | null
+          name: string
+          phone: string
+          source?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          ip_address?: string | null
+          name?: string
+          phone?: string
+          source?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_agreements: {
         Row: {
           created_at: string
