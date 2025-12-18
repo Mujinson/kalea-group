@@ -30,6 +30,11 @@ const Home = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   const manifestoRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const mgoRef = useRef<HTMLDivElement>(null);
+  const applicationsRef = useRef<HTMLDivElement>(null);
+  const sustainabilityRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   // Hero scroll effects
   const { scrollYProgress: heroProgress } = useScroll({
@@ -62,6 +67,51 @@ const Home = () => {
   const manifestoScale = useTransform(manifestoProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
   const manifestoBorderRadius = useTransform(manifestoProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
   const manifestoOpacity = useTransform(manifestoProgress, [0, 0.15, 0.85, 1], [0.7, 1, 1, 0.7]);
+
+  // Gallery section scroll effects
+  const { scrollYProgress: galleryProgress } = useScroll({
+    target: galleryRef,
+    offset: ["start end", "end start"],
+  });
+  
+  const galleryScale = useTransform(galleryProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
+  const galleryBorderRadius = useTransform(galleryProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
+
+  // MgO section scroll effects
+  const { scrollYProgress: mgoProgress } = useScroll({
+    target: mgoRef,
+    offset: ["start end", "end start"],
+  });
+  
+  const mgoScale = useTransform(mgoProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
+  const mgoBorderRadius = useTransform(mgoProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
+
+  // Applications section scroll effects
+  const { scrollYProgress: applicationsProgress } = useScroll({
+    target: applicationsRef,
+    offset: ["start end", "end start"],
+  });
+  
+  const applicationsScale = useTransform(applicationsProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
+  const applicationsBorderRadius = useTransform(applicationsProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
+
+  // Sustainability section scroll effects
+  const { scrollYProgress: sustainabilityProgress } = useScroll({
+    target: sustainabilityRef,
+    offset: ["start end", "end start"],
+  });
+  
+  const sustainabilityScale = useTransform(sustainabilityProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
+  const sustainabilityBorderRadius = useTransform(sustainabilityProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
+
+  // CTA section scroll effects
+  const { scrollYProgress: ctaProgress } = useScroll({
+    target: ctaRef,
+    offset: ["start end", "end start"],
+  });
+  
+  const ctaScale = useTransform(ctaProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
+  const ctaBorderRadius = useTransform(ctaProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
 
   const productLines = [
     {
@@ -344,150 +394,193 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Product Gallery Section */}
-      <div className="relative z-[3] bg-background">
-        <ProductGallerySection />
-      </div>
-
-      {/* Section Separator */}
-      <div className="relative z-[3] w-full h-px bg-foreground/10" />
-
-      {/* Perché MgO - 3D Book */}
-      <div className="relative z-[3]">
-        <MgoBook />
-      </div>
-
-      {/* Applicazioni */}
-      <section className="relative z-[3] h-screen min-h-[600px] max-h-screen flex flex-col justify-center bg-card overflow-hidden">
-        <div className="w-full px-6 md:px-12 lg:px-16 py-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-6 md:mb-8"
-          >
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-2">
-              {t('home.applicationsTitle')}
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-              {t('home.applicationsSubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 max-w-6xl mx-auto">
-            {applications.map((app, index) => (
-              <ApplicationCard
-                key={app.title}
-                icon={app.icon}
-                title={app.title}
-                description={app.description}
-                backgroundImage={app.bg}
-                index={index}
-                compact
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Sostenibilità */}
-      <section className="relative z-[3] section-spacing bg-background">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              {t('home.sustainabilityTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('home.sustainabilitySubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {sustainability.map((item, index) => (
-              <Link key={item.title} to={item.link}>
-                <ApplicationCard
-                  icon={item.icon}
-                  title={item.title}
-                  description={item.description}
-                  backgroundImage={item.bg}
-                  index={index}
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Finale */}
-      <section className="relative z-[3] h-screen min-h-[500px] max-h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${bgCtaCollabora})` }}
-        />
-        <div 
-          className="absolute inset-0"
+      {/* Product Gallery Section - Sticky z-[3] */}
+      <section ref={galleryRef} className="relative h-screen sticky top-0 z-[3]">
+        <motion.div 
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
           style={{ 
-            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+            scale: galleryScale,
+            borderRadius: galleryBorderRadius,
           }}
-        />
-        
-        <div className="container-custom text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 
-              className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-            >
-              <span>{t('home.ctaTitleBefore')}</span>
-              <img 
-                src={logo} 
-                alt="Kalēa" 
-                className="inline-block h-[1.2em] w-auto"
-                style={{ 
-                  filter: 'brightness(0) invert(1)',
-                  verticalAlign: 'middle',
-                  transform: 'translateY(0.02em)'
-                }}
-              />
-              <span>{t('home.ctaTitleAfter')}</span>
-            </h2>
-            <p 
-              className="text-base mb-10 max-w-2xl mx-auto text-white/90"
-              style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-            >
-              {t('home.ctaSubtitle')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                to={`/${language}/contatti`}
-                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+        >
+          <ProductGallerySection />
+        </motion.div>
+      </section>
+
+      {/* Perché MgO - 3D Book - Sticky z-[4] */}
+      <section ref={mgoRef} className="relative h-screen sticky top-0 z-[4]">
+        <motion.div 
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
+          style={{ 
+            scale: mgoScale,
+            borderRadius: mgoBorderRadius,
+          }}
+        >
+          <MgoBook />
+        </motion.div>
+      </section>
+
+      {/* Applicazioni - Sticky z-[5] */}
+      <section ref={applicationsRef} className="relative h-screen sticky top-0 z-[5]">
+        <motion.div 
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-card"
+          style={{ 
+            scale: applicationsScale,
+            borderRadius: applicationsBorderRadius,
+          }}
+        >
+          <div className="h-full flex flex-col justify-center">
+            <div className="w-full px-6 md:px-12 lg:px-16 py-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-6 md:mb-8"
               >
-                {t('home.ctaButton1')}
-              </Link>
-              <Link 
-                to={`/${language}/diventa-partner`}
-                className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
-              >
-                {t('home.ctaButton2')}
-              </Link>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-2">
+                  {t('home.applicationsTitle')}
+                </h2>
+                <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+                  {t('home.applicationsSubtitle')}
+                </p>
+              </motion.div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 max-w-6xl mx-auto">
+                {applications.map((app, index) => (
+                  <ApplicationCard
+                    key={app.title}
+                    icon={app.icon}
+                    title={app.title}
+                    description={app.description}
+                    backgroundImage={app.bg}
+                    index={index}
+                    compact
+                  />
+                ))}
+              </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Sostenibilità - Sticky z-[6] */}
+      <section ref={sustainabilityRef} className="relative h-screen sticky top-0 z-[6]">
+        <motion.div 
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
+          style={{ 
+            scale: sustainabilityScale,
+            borderRadius: sustainabilityBorderRadius,
+          }}
+        >
+          <div className="h-full flex items-center">
+            <div className="container-custom">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-12 md:mb-16"
+              >
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+                  {t('home.sustainabilityTitle')}
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  {t('home.sustainabilitySubtitle')}
+                </p>
+              </motion.div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                {sustainability.map((item, index) => (
+                  <Link key={item.title} to={item.link}>
+                    <ApplicationCard
+                      icon={item.icon}
+                      title={item.title}
+                      description={item.description}
+                      backgroundImage={item.bg}
+                      index={index}
+                    />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* CTA Finale - Sticky z-[7] */}
+      <section ref={ctaRef} className="relative h-screen sticky top-0 z-[7]">
+        <motion.div 
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
+          style={{ 
+            scale: ctaScale,
+            borderRadius: ctaBorderRadius,
+          }}
+        >
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${bgCtaCollabora})` }}
+          />
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
+            }}
+          />
+          
+          <div className="relative z-10 h-full flex items-center justify-center">
+            <div className="container-custom text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 
+                  className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
+                  style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+                >
+                  <span>{t('home.ctaTitleBefore')}</span>
+                  <img 
+                    src={logo} 
+                    alt="Kalēa" 
+                    className="inline-block h-[1.2em] w-auto"
+                    style={{ 
+                      filter: 'brightness(0) invert(1)',
+                      verticalAlign: 'middle',
+                      transform: 'translateY(0.02em)'
+                    }}
+                  />
+                  <span>{t('home.ctaTitleAfter')}</span>
+                </h2>
+                <p 
+                  className="text-base mb-10 max-w-2xl mx-auto text-white/90"
+                  style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
+                >
+                  {t('home.ctaSubtitle')}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link 
+                    to={`/${language}/contatti`}
+                    className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                  >
+                    {t('home.ctaButton1')}
+                  </Link>
+                  <Link 
+                    to={`/${language}/diventa-partner`}
+                    className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+                  >
+                    {t('home.ctaButton2')}
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* Spacer to push footer below sticky sections */}
-      <div className="relative z-[50] h-0" />
+      <div className="relative z-[50] h-screen" />
     </div>
   );
 };
