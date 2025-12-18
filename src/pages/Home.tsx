@@ -467,38 +467,43 @@ const Home = () => {
       {/* Sostenibilità - Sticky z-[6] */}
       <section ref={sustainabilityRef} className="relative h-screen sticky top-0 z-[6]">
         <motion.div 
-          className="absolute inset-0 origin-center will-change-transform bg-background"
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
           style={{ 
             scale: sustainabilityScale,
             borderRadius: sustainabilityBorderRadius,
           }}
         >
-          <div className="h-full flex items-center py-12 md:py-16">
-            <div className="container-custom">
+          <div className="h-full flex flex-col">
+            {/* Header */}
+            <div className="container-custom pt-12 md:pt-14">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="text-center mb-8 md:mb-10"
+                className="text-center"
               >
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-3">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
                   {t('home.sustainabilityTitle')}
                 </h2>
-                <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                   {t('home.sustainabilitySubtitle')}
                 </p>
               </motion.div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {/* Cards */}
+            <div className="container-custom flex-1 flex items-center pb-12 md:pb-14">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 w-full max-w-6xl mx-auto">
                 {sustainability.map((item, index) => (
-                  <Link key={item.title} to={item.link}>
+                  <Link key={item.title} to={item.link} className="block">
                     <ApplicationCard
                       icon={item.icon}
                       title={item.title}
                       description={item.description}
                       backgroundImage={item.bg}
                       index={index}
+                      variant="tall"
                     />
                   </Link>
                 ))}
