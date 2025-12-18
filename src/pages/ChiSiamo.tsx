@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
-import KaleaIntroSection from "@/components/KaleaIntroSection";
 import HeroSection from "@/components/HeroSection";
 import { Target, Lightbulb, Users, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -67,9 +66,6 @@ const ChiSiamo = () => {
         overlayClassName="bg-gradient-to-b from-black/30 via-black/10 to-black/30"
         minHeight="min-h-[50vh]"
       />
-
-      {/* Chi è Kalēa */}
-      <KaleaIntroSection variant="about" />
 
       {/* Storia */}
       <section className="section-spacing">
