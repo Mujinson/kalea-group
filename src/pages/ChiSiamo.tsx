@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
 import KaleaIntroSection from "@/components/KaleaIntroSection";
+import HeroSection from "@/components/HeroSection";
 import { Target, Lightbulb, Users, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import fondatore1 from "@/assets/fondatore-1.png";
 import fondatore2 from "@/assets/fondatore-2.png";
-import aziendaTeam from "@/assets/azienda-team.png";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import heroChiSiamo from "@/assets/hero-chi-siamo.webp";
 
 const ChiSiamo = () => {
   const { t, language } = useTranslation();
@@ -56,44 +57,16 @@ const ChiSiamo = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen">
       {/* Hero */}
-      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-muted/30 to-background">
-        <div className="w-full px-6 md:px-12 lg:px-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-                {t('aboutUs.title')}
-              </h1>
-              <p className="text-base md:text-lg text-muted-foreground mb-4 leading-relaxed">
-                {t('aboutUs.intro1')}
-              </p>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                {t('aboutUs.intro2')}
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
-              <div className="aspect-[16/10] rounded-2xl overflow-hidden shadow-xl">
-                <img 
-                  src={aziendaTeam} 
-                  alt="Stabilimento produttivo Kalēa" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        title={t('aboutUs.title')}
+        subtitle=""
+        backgroundImage={heroChiSiamo}
+        backgroundPosition="center 40%"
+        overlayClassName="bg-gradient-to-b from-black/30 via-black/10 to-black/30"
+        minHeight="min-h-[50vh]"
+      />
 
       {/* Chi è Kalēa */}
       <KaleaIntroSection variant="about" />
