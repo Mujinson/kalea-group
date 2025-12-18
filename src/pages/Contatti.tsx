@@ -10,6 +10,8 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/i18n/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
+import HeroSection from "@/components/HeroSection";
+import heroContatti from "@/assets/hero-contatti.png";
 
 const Contatti = () => {
   const { t } = useTranslation();
@@ -103,26 +105,14 @@ const Contatti = () => {
   };
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen">
       {/* Hero */}
-      <section className="section-spacing bg-gradient-to-b from-muted/30 to-background">
-        <div className="container-custom text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6">
-              {t('contacts.title')}
-            </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              {t('contacts.subtitle')}
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Contenuto */}
+      <HeroSection
+        title={t('contacts.title')}
+        subtitle={t('contacts.subtitle')}
+        backgroundImage={heroContatti}
+        minHeight="min-h-[50vh]"
+      />
       <section className="section-spacing">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">

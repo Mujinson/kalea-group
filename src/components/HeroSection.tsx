@@ -44,8 +44,7 @@ const HeroSection = ({
   return (
     <section 
       ref={ref} 
-      className="relative min-h-screen h-screen flex items-center justify-center overflow-hidden"
-      style={{ minHeight: '100vh', height: '100vh' }}
+      className={`relative ${minHeight} flex items-center justify-center overflow-hidden`}
     >
       {/* Background with blur+zoom animation */}
       {backgroundImage && (
