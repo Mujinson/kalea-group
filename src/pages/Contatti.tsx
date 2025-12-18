@@ -111,6 +111,7 @@ const Contatti = () => {
         title={t('contacts.title')}
         subtitle={t('contacts.subtitle')}
         backgroundImage={heroContatti}
+        backgroundPosition="center 35%"
         minHeight="min-h-[50vh]"
       />
       <section className="section-spacing">
