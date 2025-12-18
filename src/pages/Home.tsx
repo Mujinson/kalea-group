@@ -429,36 +429,56 @@ const Home = () => {
             borderRadius: applicationsBorderRadius,
           }}
         >
-          <div className="h-full flex flex-col justify-center">
-            <div className="w-full px-6 md:px-12 lg:px-16 py-6">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center mb-6 md:mb-8"
-              >
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mb-2">
-                  {t('home.applicationsTitle')}
-                </h2>
-                <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-                  {t('home.applicationsSubtitle')}
-                </p>
-              </motion.div>
+          <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-6 md:mb-8"
+            >
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+                {t('home.applicationsTitle')}
+              </h2>
+              <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+                {t('home.applicationsSubtitle')}
+              </p>
+            </motion.div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-3 max-w-6xl mx-auto">
-                {applications.map((app, index) => (
-                  <ApplicationCard
-                    key={app.title}
-                    icon={app.icon}
-                    title={app.title}
-                    description={app.description}
-                    backgroundImage={app.bg}
-                    index={index}
-                    compact
+            {/* Cards - 3 per row on desktop, 2 rows */}
+            <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6 max-w-6xl mx-auto w-full">
+              {applications.map((app, index) => (
+                <motion.div
+                  key={app.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  whileHover={{
+                    y: -6,
+                    boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)",
+                  }}
+                  className="relative rounded-2xl overflow-hidden group"
+                >
+                  <img
+                    src={app.bg}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
                   />
-                ))}
-              </div>
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/75" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                    <app.icon className="w-10 h-10 md:w-12 md:h-12 text-background mb-3" strokeWidth={1.5} />
+                    <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-background mb-1">
+                      {app.title}
+                    </h3>
+                    <p className="text-xs md:text-sm text-background/80 hidden sm:block">
+                      {app.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </motion.div>
