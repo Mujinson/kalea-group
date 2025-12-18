@@ -10,6 +10,7 @@ interface HeroSectionProps {
   ctaPrimary?: { text: string; link: string };
   ctaSecondary?: { text: string; link: string };
   backgroundImage?: string;
+  backgroundPosition?: string;
   minHeight?: string;
 }
 
@@ -19,6 +20,7 @@ const HeroSection = ({
   ctaPrimary,
   ctaSecondary,
   backgroundImage,
+  backgroundPosition = "center",
   minHeight = "min-h-screen",
 }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
@@ -53,6 +55,7 @@ const HeroSection = ({
             src={backgroundImage} 
             alt="" 
             className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: backgroundPosition }}
             initial={{ filter: "blur(6px)", scale: 1.05 }}
             animate={{ filter: "blur(0px)", scale: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
