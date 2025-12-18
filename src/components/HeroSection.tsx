@@ -11,6 +11,7 @@ interface HeroSectionProps {
   ctaSecondary?: { text: string; link: string };
   backgroundImage?: string;
   backgroundPosition?: string;
+  overlayClassName?: string;
   minHeight?: string;
 }
 
@@ -21,6 +22,7 @@ const HeroSection = ({
   ctaSecondary,
   backgroundImage,
   backgroundPosition = "center",
+  overlayClassName = "bg-gradient-to-b from-black/70 via-black/60 to-black/80",
   minHeight = "min-h-screen",
 }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
@@ -60,7 +62,7 @@ const HeroSection = ({
             animate={{ filter: "blur(0px)", scale: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80" />
+          <div className={`absolute inset-0 ${overlayClassName}`} />
         </motion.div>
       )}
       {!backgroundImage && (
