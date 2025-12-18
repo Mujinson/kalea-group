@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useRef } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useHitobaScroll } from "@/hooks/useHitobaScroll";
 
 interface HeroSectionProps {
   title: string;
@@ -26,56 +26,32 @@ const HeroSection = ({
   minHeight = "min-h-screen",
 }: HeroSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
   
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
+  const { 
+    scale, 
+    borderRadius, 
+    imageY, 
+    contentOpacity, 
+    contentY,
+    overlayOpacity,
+    isMobile 
+  } = useHitobaScroll(containerRef as React.RefObject<HTMLElement>, {
+    scaleRange: [1, 0.88],
+    borderRadiusRange: [0, 28],
+    parallaxRange: ["0%", "18%"],
+    contentOpacityRange: [1, 0],
+    contentYRange: [0, -100],
+    simplifiedOnMobile: true,
   });
 
-  // Scale effect - shrinks as you scroll
-  const scale = useTransform(
-    scrollYProgress, 
-    [0, 1], 
-    isMobile ? [1, 0.94] : [1, 0.86]
-  );
-  
-  // Border radius - rounds as you scroll
-  const borderRadius = useTransform(
-    scrollYProgress, 
-    [0, 0.5], 
-    isMobile ? ["0px", "20px"] : ["0px", "32px"]
-  );
-  
-  // Content fades out
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
-  
-  // Content moves up
-  const contentY = useTransform(
-    scrollYProgress, 
-    [0, 0.4], 
-    isMobile ? [0, -50] : [0, -100]
-  );
-  
-  // Parallax for image
-  const imageY = useTransform(
-    scrollYProgress, 
-    [0, 1], 
-    isMobile ? ["0%", "10%"] : ["0%", "20%"]
-  );
-  
-  // Overlay fades
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.5]);
-
   return (
-    <div ref={containerRef} className={`relative ${minHeight}`} style={{ zIndex: 0 }}>
+    <div ref={containerRef} className={`relative ${minHeight}`}>
       {/* Fixed background that scales and rounds on scroll */}
       <motion.div 
-        className="fixed inset-0 overflow-hidden origin-center will-change-transform"
+        className="fixed inset-0 z-0 overflow-hidden origin-center"
         style={{ 
           scale,
           borderRadius,
-          zIndex: 0,
         }}
       >
         {backgroundImage ? (
@@ -87,10 +63,10 @@ const HeroSection = ({
               style={{ 
                 objectPosition: backgroundPosition,
                 y: imageY,
-                scale: 1.15,
+                scale: 1.1, // Slightly larger to avoid edge gaps during parallax
               }}
-              initial={{ filter: "blur(12px)", scale: 1.25 }}
-              animate={{ filter: "blur(0px)", scale: 1.15 }}
+              initial={{ filter: "blur(12px)", scale: 1.2 }}
+              animate={{ filter: "blur(0px)", scale: 1.1 }}
               transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             />
             <motion.div 
