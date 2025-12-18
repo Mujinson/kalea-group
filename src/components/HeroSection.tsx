@@ -1,5 +1,4 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
@@ -31,36 +30,61 @@ const HeroSection = ({
     offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0.3]);
+  // Hitoba-style effects: scale down, add border radius, fade content
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  const borderRadius = useTransform(scrollYProgress, [0, 0.5], [0, 32]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
 
 
   return (
     <section 
       ref={ref} 
-      className={`relative ${minHeight} flex items-center justify-center overflow-hidden`}
+      className={`relative ${minHeight} flex items-center justify-center`}
+      style={{ perspective: "1000px" }}
     >
-      {/* Background with blur+zoom animation */}
+      {/* Background container with scale and border-radius transforms */}
       {backgroundImage && (
-        <motion.div style={{ y }} className="absolute inset-0 z-0">
+        <motion.div 
+          style={{ 
+            scale,
+            borderRadius,
+          }} 
+          className="absolute inset-0 z-0 overflow-hidden origin-center"
+        >
           <motion.img 
             src={backgroundImage} 
             alt="" 
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: backgroundPosition }}
-            initial={{ filter: "blur(6px)", scale: 1.05 }}
+            style={{ 
+              objectPosition: backgroundPosition,
+              y: imageY,
+            }}
+            initial={{ filter: "blur(8px)", scale: 1.1 }}
             animate={{ filter: "blur(0px)", scale: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
-          <div className={`absolute inset-0 ${overlayClassName}`} />
+          <motion.div 
+            className={`absolute inset-0 ${overlayClassName}`}
+            initial={{ opacity: 0.3 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          />
         </motion.div>
       )}
       {!backgroundImage && (
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-background via-secondary/30 to-background" />
+        <motion.div 
+          style={{ scale, borderRadius }} 
+          className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-br from-background via-secondary/30 to-background" 
+        />
       )}
 
-      {/* Content */}
-      <motion.div style={{ opacity }} className="container-custom relative z-10">
+      {/* Content with fade and rise effect */}
+      <motion.div 
+        style={{ opacity: contentOpacity, y: contentY }} 
+        className="container-custom relative z-10"
+      >
         <div className="max-w-4xl mx-auto text-center">
           {/* Title with letter-by-letter animation */}
           <h1 className="text-hero-md lg:text-hero-lg xl:text-hero-xl font-bold text-white mb-8 text-balance">
