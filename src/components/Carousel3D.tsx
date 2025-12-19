@@ -179,7 +179,7 @@ const Carousel3D = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex justify-center flex-shrink-0 mt-auto pb-4"
+          className={`flex justify-center flex-shrink-0 mt-auto ${screenSize === 'mobile' ? 'pb-4' : 'pb-8 md:pb-12'}`}
         >
           <Button asChild>
             <Link to={`/${language}/stonecore-10`}>
