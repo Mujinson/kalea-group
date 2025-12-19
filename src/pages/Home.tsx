@@ -1,11 +1,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import ApplicationCard from "@/components/ApplicationCard";
 import MgoBook from "@/components/MgoBook";
 import ProductGallerySection from "@/components/ProductGallerySection";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench, ChevronDown } from "lucide-react";
+import WindowHero from "@/components/WindowHero";
+import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-kalea.webp";
 import logo from "@/assets/logo-new.png";
 import bgProducts from "@/assets/bg-products.jpg";
 import bgManifesto from "@/assets/bg-manifesto.jpg";
@@ -27,7 +26,6 @@ const Home = () => {
   const isMobile = useIsMobile();
   
   // Refs for scroll tracking
-  const heroRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   const manifestoRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -35,18 +33,6 @@ const Home = () => {
   const applicationsRef = useRef<HTMLDivElement>(null);
   const sustainabilityRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-
-  // Hero scroll effects
-  const { scrollYProgress: heroProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  
-  const heroScale = useTransform(heroProgress, [0, 1], isMobile ? [1, 0.96] : [1, 0.88]);
-  const heroBorderRadius = useTransform(heroProgress, [0, 0.5], ["0px", isMobile ? "16px" : "28px"]);
-  const heroContentOpacity = useTransform(heroProgress, [0, 0.3], [1, 0]);
-  const heroContentY = useTransform(heroProgress, [0, 0.4], [0, isMobile ? -40 : -80]);
-  const heroImageY = useTransform(heroProgress, [0, 1], ["0%", isMobile ? "8%" : "15%"]);
 
   // Products section scroll effects
   const { scrollYProgress: productsProgress } = useScroll({
@@ -155,96 +141,11 @@ const Home = () => {
 
   return (
     <div className="relative bg-[#0a0a0a]">
-      {/* Hero Section - Sticky with scroll shrink effect */}
-      <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
-        <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
-          style={{ 
-            scale: heroScale,
-            borderRadius: heroBorderRadius,
-          }}
-        >
-          <motion.img 
-            src={heroImage} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover will-change-transform"
-            style={{ 
-              y: heroImageY,
-              scale: 1.1,
-            }}
-            initial={{ filter: "blur(10px)", scale: 1.15 }}
-            animate={{ filter: "blur(0px)", scale: 1.1 }}
-            transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-          />
-        </motion.div>
+      {/* Window Hero Section */}
+      <WindowHero />
 
-        {/* Hero Content - positioned at bottom to not overlap logo in image */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-24 md:pb-28">
-          <motion.div 
-            style={{ opacity: heroContentOpacity, y: heroContentY }} 
-            className="container-custom text-center will-change-transform"
-          >
-            <div className="max-w-5xl mx-auto">
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-white/90 font-light mb-4 tracking-wide"
-              >
-                SURFACE SYSTEM<sup className="text-[0.5em] align-super">®</sup>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-                className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light mb-8 tracking-wide"
-              >
-                {t('hero.home.newStandard')}
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.6 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
-              >
-                <Link 
-                  to={`/${language}/diventa-partner`}
-                  className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
-                >
-                  {t('hero.home.ctaInfo')}
-                </Link>
-                <Link 
-                  to={`/${language}/stonecore-10`}
-                  className="inline-flex items-center justify-center gap-2 border border-white/30 text-white text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-white/10 transition-all duration-150"
-                >
-                  {t('hero.home.ctaProducts')}
-                </Link>
-              </motion.div>
-
-              {/* Scroll indicator */}
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
-                style={{ opacity: heroContentOpacity }}
-              >
-                <motion.div
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="flex justify-center"
-                >
-                  <ChevronDown className="w-6 h-6 text-white/60" />
-                </motion.div>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Products Section - Stacks on top of hero */}
-      <section ref={productsRef} className="relative h-screen sticky top-0 z-[1]">
+      {/* Products Section - Stacks after window hero */}
+      <section ref={productsRef} className="relative h-screen sticky top-0 z-[40]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
@@ -324,7 +225,7 @@ const Home = () => {
       </section>
 
       {/* Manifesto Section - Stacks on top of products */}
-      <section ref={manifestoRef} className="relative h-screen sticky top-0 z-[2]">
+      <section ref={manifestoRef} className="relative h-screen sticky top-0 z-[41]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
@@ -394,8 +295,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Product Gallery Section - Sticky z-[3] */}
-      <section ref={galleryRef} className="relative h-screen sticky top-0 z-[3]">
+      {/* Product Gallery Section - Sticky z-[42] */}
+      <section ref={galleryRef} className="relative h-screen sticky top-0 z-[42]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
           style={{ 
@@ -407,8 +308,8 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* Perché MgO - 3D Book - Sticky z-[4] */}
-      <section ref={mgoRef} className="relative h-screen sticky top-0 z-[4]">
+      {/* Perché MgO - 3D Book - Sticky z-[43] */}
+      <section ref={mgoRef} className="relative h-screen sticky top-0 z-[43]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
@@ -420,8 +321,8 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* Applicazioni - Sticky z-[5] */}
-      <section ref={applicationsRef} className="relative h-screen sticky top-0 z-[5]">
+      {/* Applicazioni - Sticky z-[44] */}
+      <section ref={applicationsRef} className="relative h-screen sticky top-0 z-[44]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-card"
           style={{ 
@@ -484,8 +385,8 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* Sostenibilità - Sticky z-[6] */}
-      <section ref={sustainabilityRef} className="relative h-screen sticky top-0 z-[6]">
+      {/* Sostenibilità - Sticky z-[45] */}
+      <section ref={sustainabilityRef} className="relative h-screen sticky top-0 z-[45]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
           style={{ 
@@ -549,8 +450,8 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* CTA Finale - Sticky z-[7] */}
-      <section ref={ctaRef} className="relative h-screen sticky top-0 z-[7]">
+      {/* CTA Finale - Sticky z-[46] */}
+      <section ref={ctaRef} className="relative h-screen sticky top-0 z-[46]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
@@ -621,7 +522,7 @@ const Home = () => {
       </section>
 
       {/* Spacer to push footer below sticky sections */}
-      <div className="relative z-[50] h-16" />
+      <div className="relative z-[60] h-16" />
     </div>
   );
 };
