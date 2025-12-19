@@ -47,7 +47,7 @@ const Carousel3D = () => {
   
   // Responsive dimensions for perfect circle on all devices
   const dimensions = {
-    mobile: { radius: 110, plankWidth: 45, plankHeight: 200 },
+    mobile: { radius: 110, plankWidth: 45, plankHeight: 240 },
     tablet: { radius: 220, plankWidth: 85, plankHeight: 300 },
     desktop: { radius: 320, plankWidth: 110, plankHeight: 380 }
   };
