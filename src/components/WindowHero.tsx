@@ -13,56 +13,58 @@ const WindowHero = () => {
     offset: ["start start", "end start"],
   });
 
-  // Window frame animations - starts at center, expands smoothly to fill viewport
-  const windowScale = useTransform(scrollYProgress, [0, 0.3, 0.6], [1, 1.8, 6]);
-  const windowOpacity = useTransform(scrollYProgress, [0.45, 0.65], [1, 0]);
+  // Phase 1: Key insertion (0 - 0.15)
+  const keyY = useTransform(scrollYProgress, [0, 0.08], [100, 0]);
+  const keyOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
+  const keyRotation = useTransform(scrollYProgress, [0.08, 0.18], [0, 90]);
+  const keyScale = useTransform(scrollYProgress, [0.15, 0.25], [1, 0]);
   
-  // Dark overlay behind window - fades out as we enter
-  const darkOverlayOpacity = useTransform(scrollYProgress, [0.4, 0.7], [1, 0]);
+  // Phase 2: Doors opening (0.18 - 0.45)
+  const leftDoorRotation = useTransform(scrollYProgress, [0.2, 0.45], [0, -110]);
+  const rightDoorRotation = useTransform(scrollYProgress, [0.2, 0.45], [0, 110]);
+  const doorsOpacity = useTransform(scrollYProgress, [0.45, 0.55], [1, 0]);
   
-  // Background reveal - the interior scene
-  const bgOpacity = useTransform(scrollYProgress, [0.35, 0.55], [0, 1]);
-  const bgScale = useTransform(scrollYProgress, [0.3, 0.7], [1.15, 1]);
+  // Phase 3: Window frame scales up and fades (0.4 - 0.7)
+  const windowScale = useTransform(scrollYProgress, [0.4, 0.7], [1, 4]);
+  const windowOpacity = useTransform(scrollYProgress, [0.55, 0.7], [1, 0]);
   
-  // Text animations - fade out before window expands
-  const textOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  const textY = useTransform(scrollYProgress, [0, 0.2], [0, -60]);
+  // Dark overlay
+  const darkOverlayOpacity = useTransform(scrollYProgress, [0.5, 0.75], [1, 0]);
   
-  // Scroll indicator - fades out quickly
-  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
+  // Background reveal
+  const bgOpacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1]);
+  const bgScale = useTransform(scrollYProgress, [0.4, 0.8], [1.2, 1]);
   
-  // Glow animation
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.25], [0.7, 0]);
-  const glowScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.5]);
-
-  // CTA buttons appear after transition complete
-  const ctaOpacity = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
+  // Text animations
+  const textOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 0.15], [0, -50]);
+  
+  // Scroll indicator
+  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
+  
+  // Glow
+  const glowOpacity = useTransform(scrollYProgress, [0, 0.3], [0.6, 0]);
+  
+  // CTA
+  const ctaOpacity = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
 
   return (
     <section 
       ref={containerRef}
-      className="relative h-[300vh]"
+      className="relative h-[400vh]"
     >
-      {/* Fixed container for the effect */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#080706]">
         
-        {/* Background image that reveals through the window */}
+        {/* Background image */}
         <motion.div 
           className="absolute inset-0 z-0"
-          style={{ 
-            opacity: bgOpacity,
-            scale: bgScale,
-          }}
+          style={{ opacity: bgOpacity, scale: bgScale }}
         >
-          <img 
-            src={heroImage} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+          <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
         </motion.div>
 
-        {/* CTA Buttons - appear after window transition */}
+        {/* CTA Buttons */}
         <motion.div 
           className="absolute inset-0 z-20 flex items-end justify-center pb-16 md:pb-24"
           style={{ opacity: ctaOpacity }}
@@ -83,92 +85,227 @@ const WindowHero = () => {
           </div>
         </motion.div>
 
-        {/* Dark overlay background */}
+        {/* Dark overlay */}
         <motion.div 
           className="absolute inset-0 z-10 bg-[#080706]"
           style={{ opacity: darkOverlayOpacity }}
         />
 
-        {/* Window frame container */}
+        {/* Window with doors */}
         <motion.div 
           className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
-          style={{ 
-            scale: windowScale,
-            opacity: windowOpacity,
-          }}
+          style={{ scale: windowScale, opacity: windowOpacity }}
         >
-          {/* Arched window frame */}
-          <div className="relative w-[240px] md:w-[320px] lg:w-[400px] aspect-[3/4]">
-            {/* Outer ambient glow */}
+          <div className="relative w-[280px] md:w-[380px] lg:w-[460px] aspect-[3/4]">
+            
+            {/* Outer glow */}
             <motion.div 
-              className="absolute -inset-8 rounded-t-[120px] md:rounded-t-[160px] lg:rounded-t-[200px] rounded-b-[24px]"
+              className="absolute -inset-10 rounded-t-[140px] md:rounded-t-[190px] lg:rounded-t-[230px] rounded-b-[24px]"
               style={{
                 opacity: glowOpacity,
-                scale: glowScale,
-                background: "radial-gradient(ellipse at center, rgba(200, 140, 60, 0.25) 0%, rgba(160, 100, 40, 0.1) 40%, transparent 70%)",
-                filter: "blur(40px)",
+                background: "radial-gradient(ellipse at center, rgba(200, 140, 60, 0.3) 0%, rgba(160, 100, 40, 0.15) 40%, transparent 70%)",
+                filter: "blur(50px)",
               }}
             />
             
-            {/* Window outer border - warm amber/gold */}
+            {/* Window frame - outer */}
             <div 
-              className="absolute inset-0 rounded-t-[120px] md:rounded-t-[160px] lg:rounded-t-[200px] rounded-b-[16px]"
+              className="absolute inset-0 rounded-t-[140px] md:rounded-t-[190px] lg:rounded-t-[230px] rounded-b-[18px]"
               style={{
-                background: "linear-gradient(180deg, rgba(200, 150, 80, 0.5) 0%, rgba(170, 120, 50, 0.4) 30%, rgba(140, 90, 40, 0.35) 70%, rgba(120, 80, 40, 0.3) 100%)",
-                boxShadow: "inset 0 0 30px rgba(180, 130, 60, 0.15), 0 0 80px rgba(180, 130, 60, 0.2), 0 0 120px rgba(180, 130, 60, 0.1)",
+                background: "linear-gradient(180deg, rgba(200, 150, 80, 0.6) 0%, rgba(170, 120, 50, 0.5) 30%, rgba(140, 90, 40, 0.4) 70%, rgba(120, 80, 40, 0.35) 100%)",
+                boxShadow: "inset 0 0 40px rgba(180, 130, 60, 0.2), 0 0 100px rgba(180, 130, 60, 0.25)",
               }}
             />
             
-            {/* Window inner frame - darker */}
+            {/* Window frame - inner */}
             <div 
-              className="absolute inset-[5px] md:inset-[7px] rounded-t-[115px] md:rounded-t-[153px] lg:rounded-t-[193px] rounded-b-[13px]"
+              className="absolute inset-[6px] md:inset-[8px] rounded-t-[134px] md:rounded-t-[182px] lg:rounded-t-[222px] rounded-b-[14px]"
               style={{
-                background: "linear-gradient(180deg, rgba(35, 30, 25, 0.97) 0%, rgba(25, 22, 18, 0.98) 100%)",
-                boxShadow: "inset 0 0 30px rgba(0, 0, 0, 0.6)",
+                background: "linear-gradient(180deg, rgba(45, 38, 30, 0.98) 0%, rgba(35, 28, 22, 0.99) 100%)",
+                boxShadow: "inset 0 0 40px rgba(0, 0, 0, 0.7)",
               }}
             />
-            
-            {/* Window glass area - dark interior */}
+
+            {/* Doors container */}
             <div 
-              className="absolute inset-[10px] md:inset-[14px] rounded-t-[110px] md:rounded-t-[146px] lg:rounded-t-[186px] rounded-b-[10px] overflow-hidden"
-              style={{
-                background: "linear-gradient(180deg, rgba(25, 22, 18, 0.95) 0%, rgba(18, 16, 14, 0.98) 100%)",
-              }}
+              className="absolute inset-[12px] md:inset-[16px] rounded-t-[128px] md:rounded-t-[174px] lg:rounded-t-[214px] rounded-b-[10px] overflow-hidden"
+              style={{ perspective: "1200px" }}
             >
-              {/* Subtle ambient light from window */}
-              <div 
-                className="absolute inset-0"
-                style={{
-                  background: "radial-gradient(ellipse at 50% 30%, rgba(180, 140, 80, 0.08) 0%, transparent 60%)",
+              {/* Left door */}
+              <motion.div 
+                className="absolute left-0 top-0 w-1/2 h-full origin-left"
+                style={{ 
+                  rotateY: leftDoorRotation,
+                  opacity: doorsOpacity,
+                  transformStyle: "preserve-3d",
                 }}
-              />
-              
-              {/* Glass reflection effect */}
-              <div 
-                className="absolute inset-0"
-                style={{
-                  background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.01) 100%)",
+              >
+                {/* Door panel */}
+                <div 
+                  className="absolute inset-0 rounded-tl-[128px] md:rounded-tl-[174px] lg:rounded-tl-[214px] rounded-bl-[10px]"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(70, 55, 40, 0.95) 0%, rgba(50, 40, 30, 0.98) 50%, rgba(40, 32, 25, 0.99) 100%)",
+                    boxShadow: "inset -2px 0 8px rgba(0,0,0,0.4), inset 0 2px 8px rgba(200, 150, 80, 0.1)",
+                  }}
+                />
+                {/* Door decorative panel */}
+                <div 
+                  className="absolute top-[15%] bottom-[10%] left-[15%] right-[8%] rounded-tl-[60px] md:rounded-tl-[80px] border border-[rgba(180,140,70,0.25)]"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(60, 48, 35, 0.9) 0%, rgba(45, 36, 28, 0.95) 100%)",
+                    boxShadow: "inset 0 0 20px rgba(0,0,0,0.3)",
+                  }}
+                />
+                {/* Door inner decorative line */}
+                <div 
+                  className="absolute top-[20%] bottom-[15%] left-[20%] right-[15%] rounded-tl-[45px] md:rounded-tl-[60px] border border-[rgba(200,160,90,0.15)]"
+                />
+              </motion.div>
+
+              {/* Right door */}
+              <motion.div 
+                className="absolute right-0 top-0 w-1/2 h-full origin-right"
+                style={{ 
+                  rotateY: rightDoorRotation,
+                  opacity: doorsOpacity,
+                  transformStyle: "preserve-3d",
                 }}
-              />
+              >
+                {/* Door panel */}
+                <div 
+                  className="absolute inset-0 rounded-tr-[128px] md:rounded-tr-[174px] lg:rounded-tr-[214px] rounded-br-[10px]"
+                  style={{
+                    background: "linear-gradient(225deg, rgba(70, 55, 40, 0.95) 0%, rgba(50, 40, 30, 0.98) 50%, rgba(40, 32, 25, 0.99) 100%)",
+                    boxShadow: "inset 2px 0 8px rgba(0,0,0,0.4), inset 0 2px 8px rgba(200, 150, 80, 0.1)",
+                  }}
+                />
+                {/* Door decorative panel */}
+                <div 
+                  className="absolute top-[15%] bottom-[10%] right-[15%] left-[8%] rounded-tr-[60px] md:rounded-tr-[80px] border border-[rgba(180,140,70,0.25)]"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(60, 48, 35, 0.9) 0%, rgba(45, 36, 28, 0.95) 100%)",
+                    boxShadow: "inset 0 0 20px rgba(0,0,0,0.3)",
+                  }}
+                />
+                {/* Door inner decorative line */}
+                <div 
+                  className="absolute top-[20%] bottom-[15%] right-[20%] left-[15%] rounded-tr-[45px] md:rounded-tr-[60px] border border-[rgba(200,160,90,0.15)]"
+                />
+              </motion.div>
+
+              {/* Center lock plate */}
+              <motion.div 
+                className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-10 h-16 md:w-12 md:h-20 z-20"
+                style={{ opacity: doorsOpacity }}
+              >
+                {/* Lock plate background */}
+                <div 
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(180, 140, 70, 0.9) 0%, rgba(140, 100, 50, 0.95) 50%, rgba(100, 70, 35, 0.9) 100%)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,220,150,0.3)",
+                  }}
+                />
+                {/* Keyhole */}
+                <div className="absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2">
+                  <div 
+                    className="w-3 h-3 md:w-4 md:h-4 rounded-full"
+                    style={{ background: "radial-gradient(circle, rgba(20,15,10,1) 0%, rgba(40,30,20,1) 100%)" }}
+                  />
+                  <div 
+                    className="w-1.5 h-4 md:w-2 md:h-5 mx-auto -mt-0.5"
+                    style={{ 
+                      background: "linear-gradient(180deg, rgba(20,15,10,1) 0%, rgba(30,25,18,1) 100%)",
+                      borderRadius: "0 0 3px 3px",
+                    }}
+                  />
+                </div>
+              </motion.div>
+
+              {/* Key */}
+              <motion.div 
+                className="absolute left-1/2 top-[55%] -translate-x-1/2 z-30"
+                style={{ 
+                  y: keyY,
+                  opacity: keyOpacity,
+                  rotate: keyRotation,
+                  scale: keyScale,
+                }}
+              >
+                <svg 
+                  width="40" 
+                  height="100" 
+                  viewBox="0 0 40 100" 
+                  className="md:w-12 md:h-[120px]"
+                >
+                  {/* Key bow (top circular part) */}
+                  <circle 
+                    cx="20" 
+                    cy="15" 
+                    r="12" 
+                    fill="none" 
+                    stroke="url(#keyGradient)" 
+                    strokeWidth="4"
+                  />
+                  <circle 
+                    cx="20" 
+                    cy="15" 
+                    r="5" 
+                    fill="none" 
+                    stroke="url(#keyGradient)" 
+                    strokeWidth="2"
+                  />
+                  
+                  {/* Key shaft */}
+                  <rect 
+                    x="17" 
+                    y="27" 
+                    width="6" 
+                    height="55" 
+                    rx="2"
+                    fill="url(#keyGradient)"
+                  />
+                  
+                  {/* Key teeth */}
+                  <path 
+                    d="M17 65 L10 65 L10 72 L17 72 M17 75 L12 75 L12 82 L17 82"
+                    fill="url(#keyGradient)"
+                    stroke="url(#keyGradient)"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                  />
+                  
+                  {/* Key tip */}
+                  <path 
+                    d="M17 82 L17 92 L20 97 L23 92 L23 82"
+                    fill="url(#keyGradient)"
+                  />
+                  
+                  <defs>
+                    <linearGradient id="keyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="rgb(220, 180, 100)" />
+                      <stop offset="50%" stopColor="rgb(180, 140, 70)" />
+                      <stop offset="100%" stopColor="rgb(140, 100, 50)" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </motion.div>
             </div>
-            
+
             {/* Inner frame highlight */}
             <div 
-              className="absolute inset-[9px] md:inset-[13px] rounded-t-[111px] md:rounded-t-[147px] lg:rounded-t-[187px] rounded-b-[11px] pointer-events-none"
+              className="absolute inset-[10px] md:inset-[14px] rounded-t-[130px] md:rounded-t-[176px] lg:rounded-t-[216px] rounded-b-[12px] pointer-events-none"
               style={{
-                boxShadow: "inset 0 1px 0 rgba(220, 170, 90, 0.15), inset 0 -1px 0 rgba(160, 110, 50, 0.1)",
+                boxShadow: "inset 0 1px 0 rgba(220, 170, 90, 0.2), inset 0 -1px 0 rgba(160, 110, 50, 0.15)",
               }}
             />
           </div>
         </motion.div>
 
-        {/* Text content - centered in window area */}
+        {/* Text content */}
         <motion.div 
           className="absolute inset-0 z-15 flex flex-col items-center justify-center pointer-events-none"
-          style={{ 
-            opacity: textOpacity,
-            y: textY,
-          }}
+          style={{ opacity: textOpacity, y: textY }}
         >
           <div className="text-center px-4">
             <motion.p
