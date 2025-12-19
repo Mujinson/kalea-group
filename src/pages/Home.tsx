@@ -3,6 +3,7 @@ import { useRef } from "react";
 import MgoBook from "@/components/MgoBook";
 import ProductGallerySection from "@/components/ProductGallerySection";
 import WindowHero from "@/components/WindowHero";
+import Carousel3D from "@/components/Carousel3D";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-new.png";
@@ -144,7 +145,12 @@ const Home = () => {
       {/* Window Hero Section */}
       <WindowHero />
 
-      {/* Products Section - Stacks after window hero */}
+      {/* 3D Carousel Collection - After hero */}
+      <section className="relative h-screen sticky top-0 z-[39]">
+        <Carousel3D />
+      </section>
+
+      {/* Products Section - Stacks after carousel */}
       <section ref={productsRef} className="relative h-screen sticky top-0 z-[40]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"

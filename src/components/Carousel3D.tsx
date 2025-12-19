@@ -1,0 +1,153 @@
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useTranslation } from "@/i18n/useTranslation";
+
+// Import finish images
+import finishAurora from "@/assets/finish-aurora.jpg";
+import finishCorteccia from "@/assets/finish-corteccia.jpg";
+import finishPerla from "@/assets/finish-perla.jpg";
+import finishSabbia from "@/assets/finish-sabbia.jpg";
+import finishSilven from "@/assets/finish-silven.jpg";
+import finishTerram from "@/assets/finish-terram.jpg";
+import finishVelora from "@/assets/finish-velora.jpg";
+
+const planks = [
+  { id: 1, name: "Aurora", slug: "aurora", image: finishAurora },
+  { id: 2, name: "Corteccia", slug: "corteccia", image: finishCorteccia },
+  { id: 3, name: "Perla", slug: "perla", image: finishPerla },
+  { id: 4, name: "Sabbia", slug: "sabbia", image: finishSabbia },
+  { id: 5, name: "Silven", slug: "silven", image: finishSilven },
+  { id: 6, name: "Terram", slug: "terram", image: finishTerram },
+  { id: 7, name: "Velora", slug: "velora", image: finishVelora },
+  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia }, // Using corteccia as fallback
+];
+
+const Carousel3D = () => {
+  const { language } = useTranslation();
+  const radius = 320;
+
+  return (
+    <div className="relative w-full h-full bg-kalea-dark overflow-hidden">
+      {/* Ambient light effect */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 60% 40% at 50% 60%, rgba(198, 177, 149, 0.08) 0%, transparent 70%)'
+        }}
+      />
+
+      <div className="relative z-10 h-full flex flex-col items-center justify-center py-16">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-8 md:mb-12"
+        >
+          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white/95 tracking-wide mb-4">
+            La Nostra Collezione
+          </h2>
+          <p className="text-white/60 text-base md:text-lg font-light italic">
+            Esplora le nostre finiture esclusive in una vista immersiva
+          </p>
+        </motion.div>
+
+        {/* 3D Carousel */}
+        <div 
+          className="relative flex items-center justify-center"
+          style={{ 
+            perspective: "1200px",
+            height: "400px",
+            width: "100%",
+            maxWidth: "900px"
+          }}
+        >
+          <motion.div
+            className="relative w-full h-full"
+            style={{ transformStyle: "preserve-3d" }}
+            animate={{ rotateY: 360 }}
+            transition={{
+              duration: 40,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            {planks.map((plank, index) => {
+              const angle = (360 / planks.length) * index;
+              return (
+                <Link
+                  key={plank.id}
+                  to={`/${language}/colori/${plank.slug}`}
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                  style={{
+                    transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
+                    transformStyle: "preserve-3d"
+                  }}
+                >
+                  {/* Plank container */}
+                  <motion.div
+                    whileHover={{ scale: 1.08, z: 50 }}
+                    transition={{ duration: 0.3 }}
+                    className="relative"
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    {/* Main face */}
+                    <div
+                      className="relative overflow-hidden rounded-lg shadow-2xl transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(198,177,149,0.3)]"
+                      style={{
+                        width: "80px",
+                        height: "280px",
+                        backfaceVisibility: "hidden"
+                      }}
+                    >
+                      <img
+                        src={plank.image}
+                        alt={plank.name}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-60 group-hover:opacity-40 transition-opacity" />
+                    </div>
+
+                    {/* Side edge (3D effect) */}
+                    <div
+                      className="absolute top-0 bg-kalea-tan/30"
+                      style={{
+                        width: "12px",
+                        height: "280px",
+                        transform: "rotateY(90deg) translateZ(40px)",
+                        transformOrigin: "left center",
+                        backfaceVisibility: "hidden"
+                      }}
+                    />
+
+                    {/* Name label */}
+                    <div 
+                      className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                      style={{ transform: "rotateY(0deg)" }}
+                    >
+                      <span className="text-white/70 text-xs font-medium tracking-wider uppercase group-hover:text-white/90 transition-colors">
+                        {plank.name}
+                      </span>
+                    </div>
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </motion.div>
+        </div>
+
+        {/* Floor reflection */}
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to top, rgba(74, 42, 19, 0.8) 0%, transparent 100%)'
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Carousel3D;
