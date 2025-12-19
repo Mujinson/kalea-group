@@ -81,7 +81,7 @@ const Carousel3D = () => {
                 <Link
                   key={plank.id}
                   to={`/${language}/colori/${plank.slug}`}
-                  className="absolute left-1/2 top-20 md:top-24 -translate-x-1/2 cursor-pointer group"
+                  className="absolute left-1/2 top-28 md:top-32 -translate-x-1/2 cursor-pointer group"
                   style={{
                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
                     transformStyle: "preserve-3d"
@@ -98,8 +98,8 @@ const Carousel3D = () => {
                     <div
                       className="relative overflow-hidden rounded-lg shadow-2xl transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(198,177,149,0.3)]"
                       style={{
-                        width: isMobile ? "60px" : "90px",
-                        height: isMobile ? "220px" : "320px",
+                        width: isMobile ? "60px" : "104px",
+                        height: isMobile ? "220px" : "360px",
                         backfaceVisibility: "hidden"
                       }}
                     >
@@ -117,8 +117,8 @@ const Carousel3D = () => {
                       className="absolute top-0 bg-kalea-tan/30"
                       style={{
                         width: isMobile ? "8px" : "12px",
-                        height: isMobile ? "220px" : "320px",
-                        transform: `rotateY(90deg) translateZ(${isMobile ? 30 : 45}px)`,
+                        height: isMobile ? "220px" : "360px",
+                        transform: `rotateY(90deg) translateZ(${isMobile ? 30 : 52}px)`,
                         transformOrigin: "left center",
                         backfaceVisibility: "hidden"
                       }}
@@ -128,7 +128,7 @@ const Carousel3D = () => {
                     <div 
                       className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-4"
                       style={{ 
-                        top: isMobile ? "230px" : "330px",
+                        top: isMobile ? "230px" : "370px",
                         transform: "translateX(-50%) rotateY(0deg)"
                       }}
                     >
