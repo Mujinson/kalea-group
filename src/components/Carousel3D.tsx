@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 
 // Import finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -26,12 +26,33 @@ const planks = [
 
 const Carousel3D = () => {
   const { language } = useTranslation();
-  const isMobile = useIsMobile();
+  const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   
-  // Responsive dimensions to fit in viewport - smaller radius on mobile for perfect circle
-  const radius = isMobile ? 100 : 240;
-  const plankWidth = isMobile ? 40 : 80;
-  const plankHeight = isMobile ? 140 : 280;
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setScreenSize('mobile');
+      } else if (width < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+  
+  // Responsive dimensions for perfect circle on all devices
+  const dimensions = {
+    mobile: { radius: 100, plankWidth: 40, plankHeight: 140 },
+    tablet: { radius: 160, plankWidth: 55, plankHeight: 200 },
+    desktop: { radius: 220, plankWidth: 75, plankHeight: 260 }
+  };
+  
+  const { radius, plankWidth, plankHeight } = dimensions[screenSize];
 
   return (
     <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
@@ -66,8 +87,8 @@ const Carousel3D = () => {
           style={{ 
             perspective: "1000px",
             maxWidth: "800px",
-            minHeight: isMobile ? "200px" : "350px",
-            maxHeight: isMobile ? "280px" : "400px"
+            minHeight: screenSize === 'mobile' ? "200px" : screenSize === 'tablet' ? "280px" : "350px",
+            maxHeight: screenSize === 'mobile' ? "280px" : screenSize === 'tablet' ? "350px" : "400px"
           }}
         >
           <motion.div
@@ -125,7 +146,7 @@ const Carousel3D = () => {
                     <div
                       className="absolute top-0 bg-kalea-tan/30"
                       style={{
-                        width: isMobile ? "5px" : "10px",
+                        width: screenSize === 'mobile' ? "5px" : "10px",
                         height: `${plankHeight}px`,
                         transform: `rotateY(90deg) translateZ(${plankWidth / 2}px)`,
                         transformOrigin: "left center",
