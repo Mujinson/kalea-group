@@ -104,8 +104,11 @@ const Navbar = () => {
   // Pages that should always have dark navbar (no dark hero)
   const forceDarkNavbar = location.pathname.includes('/area-tecnica') || location.pathname.includes('/chi-siamo');
   
-  // Use scrolled style if actually scrolled OR if on pages without dark hero
-  const useDarkStyle = isScrolled || forceDarkNavbar;
+  // Homepage has dark backgrounds throughout, so keep light navbar style (white text on transparent)
+  const isHomePage = location.pathname === `/${language}` || location.pathname === `/${language}/`;
+  
+  // Use scrolled style (light bg) if actually scrolled AND not on homepage OR if on pages without dark hero
+  const useDarkStyle = (isScrolled && !isHomePage) || forceDarkNavbar;
 
   // Dynamic color classes based on scroll state
   const textColor = useDarkStyle ? "text-[#3F3B33]" : "text-white";
