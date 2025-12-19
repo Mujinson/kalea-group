@@ -80,7 +80,7 @@ const HeroSection = ({
       </motion.div>
 
       {/* Content overlay - positioned higher on mobile to be fully visible */}
-      <div className={`relative z-10 ${minHeight} flex flex-col items-center justify-center pt-20 pb-16 md:justify-end md:pt-0 md:pb-32`}>
+      <div className={`relative z-10 ${minHeight} flex flex-col items-center justify-start pt-32 pb-16 md:justify-end md:pt-0 md:pb-32`}>
         <motion.div 
           style={{ opacity: contentOpacity, y: contentY }} 
           className="container-custom will-change-transform"
