@@ -6,7 +6,7 @@ import Carousel3D from "@/components/Carousel3D";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-new.png";
-import bgProducts from "@/assets/bg-products.jpg";
+
 import bgManifesto from "@/assets/bg-manifesto.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
@@ -74,13 +74,8 @@ const Home = () => {
       </section>
 
       {/* Products Section */}
-      <section className="relative h-screen">
-        <img 
-          src={bgProducts} 
-          alt="" 
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70" />
+      <section className="relative h-screen bg-kalea-dark">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" />
 
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="container-custom text-center">
