@@ -43,8 +43,8 @@ const WindowHero = () => {
       ref={containerRef}
       className="relative h-[300vh]"
     >
-      {/* Fixed container for the effect */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#080706]">
+      {/* Fixed container for the effect - using brand dark brown #4A2A13 */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-kalea-dark">
         
         {/* Background image that reveals through the window */}
         <motion.div 
@@ -83,9 +83,9 @@ const WindowHero = () => {
           </div>
         </motion.div>
 
-        {/* Dark overlay background */}
+        {/* Dark overlay background - brand dark brown */}
         <motion.div 
-          className="absolute inset-0 z-10 bg-[#080706]"
+          className="absolute inset-0 z-10 bg-kalea-dark"
           style={{ opacity: darkOverlayOpacity }}
         />
 
@@ -128,18 +128,18 @@ const WindowHero = () => {
               }}
             />
             
-            {/* Window glass area - dark interior */}
+            {/* Window glass area - brand dark brown interior #4A2A13 */}
             <div 
               className="absolute inset-[10px] md:inset-[14px] rounded-t-[110px] md:rounded-t-[146px] lg:rounded-t-[186px] rounded-b-[10px] overflow-hidden"
               style={{
-                background: "linear-gradient(180deg, rgba(25, 22, 18, 0.95) 0%, rgba(18, 16, 14, 0.98) 100%)",
+                background: "linear-gradient(180deg, hsl(25 59% 18% / 0.95) 0%, hsl(25 59% 14% / 0.98) 100%)",
               }}
             >
               {/* Subtle ambient light from window */}
               <div 
                 className="absolute inset-0"
                 style={{
-                  background: "radial-gradient(ellipse at 50% 30%, rgba(180, 140, 80, 0.08) 0%, transparent 60%)",
+                  background: "radial-gradient(ellipse at 50% 30%, rgba(198, 177, 149, 0.12) 0%, transparent 60%)",
                 }}
               />
               
@@ -147,7 +147,7 @@ const WindowHero = () => {
               <div 
                 className="absolute inset-0"
                 style={{
-                  background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.01) 100%)",
+                  background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.02) 100%)",
                 }}
               />
             </div>
