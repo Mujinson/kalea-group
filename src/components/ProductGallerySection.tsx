@@ -64,7 +64,7 @@ interface ProductType {
 
 const ProductCard = ({ product, language }: { product: ProductType; language: string }) => {
   return (
-    <Link to={`/${language}/colore/${product.slug}`}>
+    <Link to={`/${language}/stonecore-10`}>
       <motion.div
         className="relative flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[360px] group cursor-pointer"
         whileHover={{ 
