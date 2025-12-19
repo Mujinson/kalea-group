@@ -27,40 +27,39 @@ const Carousel3D = () => {
   const radius = 320;
 
   return (
-    <div className="relative w-full min-h-screen bg-kalea-dark overflow-visible">
+    <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(198, 177, 149, 0.08) 0%, transparent 70%)'
+          background: 'radial-gradient(ellipse 60% 40% at 50% 45%, rgba(198, 177, 149, 0.08) 0%, transparent 70%)'
         }}
       />
 
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center py-20 md:py-24">
+      <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-8"
         >
-          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white/95 tracking-wide mb-4">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white/95 tracking-wide mb-3">
             La Nostra Collezione
           </h2>
-          <p className="text-white/60 text-base md:text-lg font-light italic">
+          <p className="text-white/60 text-sm md:text-base font-light italic">
             Esplora le nostre finiture esclusive in una vista immersiva
           </p>
         </motion.div>
 
-        {/* 3D Carousel */}
+        {/* 3D Carousel Container */}
         <div 
-          className="relative flex items-center justify-center"
+          className="relative flex items-center justify-center flex-1 max-h-[500px]"
           style={{ 
             perspective: "1200px",
-            height: "480px",
             width: "100%",
-            maxWidth: "1000px"
+            maxWidth: "900px"
           }}
         >
           <motion.div
