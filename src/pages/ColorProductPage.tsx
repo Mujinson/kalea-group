@@ -5,6 +5,8 @@ import { getColorBySlug, getRelatedColors, colorProducts } from "@/data/colorPro
 import { ArrowRight, Check, Download, FileText, Home, Building2, Briefcase, Store, Heart, Hotel } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 // Import all finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -31,6 +33,26 @@ const ColorProductPage = () => {
   const { t, language } = useTranslation();
   
   const color = colorSlug ? getColorBySlug(colorSlug) : undefined;
+
+  // Fetch gallery images from database
+  const { data: galleryImages } = useQuery({
+    queryKey: ["product-gallery-images", colorSlug],
+    queryFn: async () => {
+      if (!colorSlug) return [];
+      const { data, error } = await supabase
+        .from("product_images")
+        .select("*")
+        .eq("product_slug", colorSlug)
+        .order("display_order", { ascending: true });
+      
+      if (error) {
+        console.error("Error fetching gallery images:", error);
+        return [];
+      }
+      return data || [];
+    },
+    enabled: !!colorSlug,
+  });
   
   if (!color) {
     return <Navigate to={`/${language}`} replace />;
@@ -100,22 +122,41 @@ const ColorProductPage = () => {
           </motion.h2>
           
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="aspect-square rounded-2xl overflow-hidden group cursor-pointer"
-              >
-                <img
-                  src={colorImage}
-                  alt={`${color.name} - ${i}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </motion.div>
-            ))}
+            {galleryImages && galleryImages.length > 0 ? (
+              galleryImages.map((image, i) => (
+                <motion.div
+                  key={image.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="aspect-square rounded-2xl overflow-hidden group cursor-pointer"
+                >
+                  <img
+                    src={image.image_url}
+                    alt={image.alt_text || `${color.name} - ${i + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </motion.div>
+              ))
+            ) : (
+              [1, 2, 3, 4, 5, 6].map((i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="aspect-square rounded-2xl overflow-hidden group cursor-pointer"
+                >
+                  <img
+                    src={colorImage}
+                    alt={`${color.name} - ${i}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </motion.div>
+              ))
+            )}
           </div>
         </div>
       </section>
