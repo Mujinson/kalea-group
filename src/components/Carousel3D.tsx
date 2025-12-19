@@ -36,16 +36,16 @@ const Carousel3D = () => {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
+      <div className="relative z-10 h-full flex flex-col items-center pt-16 md:pt-20 px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-8"
+          className="text-center mb-4"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white/95 tracking-wide mb-3">
+          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white/95 tracking-wide mb-2">
             La Nostra Collezione
           </h2>
           <p className="text-white/60 text-sm md:text-base font-light italic">
@@ -53,12 +53,11 @@ const Carousel3D = () => {
           </p>
         </motion.div>
 
-        {/* 3D Carousel Container */}
+        {/* 3D Carousel Container - takes remaining space */}
         <div 
-          className="relative flex items-center justify-center flex-1 max-h-[500px]"
+          className="relative flex items-start justify-center flex-1 w-full pt-8"
           style={{ 
             perspective: "1200px",
-            width: "100%",
             maxWidth: "900px"
           }}
         >
