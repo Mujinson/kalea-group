@@ -7,7 +7,37 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Upload, Trash2, GripVertical, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Upload, Trash2, GripVertical, Image as ImageIcon, Loader2, RefreshCw } from "lucide-react";
+
+// Import static images for legacy support
+import finishAurora from "@/assets/finish-aurora.jpg";
+import finishCorteccia from "@/assets/finish-corteccia.jpg";
+import finishSabbia from "@/assets/finish-sabbia.jpg";
+import finishSilven from "@/assets/finish-silven.jpg";
+import finishTerma from "@/assets/finish-terram.jpg";
+import finishPerla from "@/assets/finish-perla.jpg";
+import finishVelora from "@/assets/finish-velora.jpg";
+
+// Map legacy paths to imported images
+const LEGACY_IMAGE_MAP: Record<string, string> = {
+  "/src/assets/finish-aurora.jpg": finishAurora,
+  "/src/assets/finish-corteccia.jpg": finishCorteccia,
+  "/src/assets/finish-sabbia.jpg": finishSabbia,
+  "/src/assets/finish-silven.jpg": finishSilven,
+  "/src/assets/finish-terram.jpg": finishTerma,
+  "/src/assets/finish-perla.jpg": finishPerla,
+  "/src/assets/finish-velora.jpg": finishVelora,
+};
+
+// Helper to resolve image URL (handles both legacy paths and storage URLs)
+const resolveImageUrl = (url: string): string => {
+  return LEGACY_IMAGE_MAP[url] || url;
+};
+
+// Check if URL is a legacy static asset
+const isLegacyImage = (url: string): boolean => {
+  return url.startsWith("/src/assets/");
+};
 
 interface ProductImage {
   id: string;
@@ -168,6 +198,57 @@ const AdminProductImages = () => {
     e.target.value = "";
   };
 
+  // Replace image handler
+  const handleReplaceImage = async (e: React.ChangeEvent<HTMLInputElement>, oldImage: ProductImage) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    setIsUploading(true);
+    
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${selectedProduct}/${Date.now()}.${fileExt}`;
+      
+      // Upload new image to storage
+      const { error: uploadError } = await supabase.storage
+        .from("product-images")
+        .upload(fileName, file);
+      
+      if (uploadError) throw uploadError;
+      
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from("product-images")
+        .getPublicUrl(fileName);
+      
+      // Update database record with new URL
+      const { error: dbError } = await supabase
+        .from("product_images")
+        .update({ image_url: publicUrl })
+        .eq("id", oldImage.id);
+      
+      if (dbError) throw dbError;
+      
+      // Delete old image from storage only if it's not a legacy image
+      if (!isLegacyImage(oldImage.image_url)) {
+        const urlParts = oldImage.image_url.split("/product-images/");
+        const filePath = urlParts[1];
+        if (filePath) {
+          await supabase.storage.from("product-images").remove([filePath]);
+        }
+      }
+      
+      queryClient.invalidateQueries({ queryKey: ["product-images", selectedProduct] });
+      toast.success("Immagine sostituita con successo");
+    } catch (error) {
+      console.error(error);
+      toast.error("Errore nella sostituzione dell'immagine");
+    } finally {
+      setIsUploading(false);
+      e.target.value = "";
+    }
+  };
+
   // Drag and drop handlers
   const handleDragStart = (e: React.DragEvent, image: ProductImage) => {
     setDraggedItem(image);
@@ -288,27 +369,48 @@ const AdminProductImages = () => {
                   >
                     <div className="aspect-[4/3]">
                       <img
-                        src={image.image_url}
+                        src={resolveImageUrl(image.image_url)}
                         alt={image.alt_text || `Immagine ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     
+                    {/* Legacy badge */}
+                    {isLegacyImage(image.image_url) && (
+                      <div className="absolute top-2 right-2 bg-amber-500 text-white rounded-md px-2 py-1 text-xs font-medium">
+                        Originale
+                      </div>
+                    )}
+                    
                     {/* Overlay with controls */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
                       <div className="absolute top-2 left-2 bg-white/90 rounded-md px-2 py-1 text-xs font-medium text-foreground">
                         #{index + 1}
                       </div>
                       <GripVertical className="text-white h-6 w-6" />
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => deleteMutation.mutate(image)}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Label htmlFor={`replace-${image.id}`} className="cursor-pointer">
+                          <div className="inline-flex items-center justify-center h-8 w-8 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition-colors">
+                            <RefreshCw className="h-4 w-4" />
+                          </div>
+                          <Input
+                            id={`replace-${image.id}`}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleReplaceImage(e, image)}
+                          />
+                        </Label>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => deleteMutation.mutate(image)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
