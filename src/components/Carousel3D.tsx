@@ -27,23 +27,23 @@ const Carousel3D = () => {
   const radius = 320;
 
   return (
-    <div className="relative w-full h-full bg-kalea-dark overflow-hidden">
+    <div className="relative w-full min-h-screen bg-kalea-dark overflow-visible">
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 60% 40% at 50% 60%, rgba(198, 177, 149, 0.08) 0%, transparent 70%)'
+          background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(198, 177, 149, 0.08) 0%, transparent 70%)'
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-center py-16">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center py-20 md:py-24">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-8 md:mb-12"
+          className="text-center mb-12 md:mb-16"
         >
           <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-white/95 tracking-wide mb-4">
             La Nostra Collezione
@@ -58,9 +58,9 @@ const Carousel3D = () => {
           className="relative flex items-center justify-center"
           style={{ 
             perspective: "1200px",
-            height: "400px",
+            height: "480px",
             width: "100%",
-            maxWidth: "900px"
+            maxWidth: "1000px"
           }}
         >
           <motion.div
@@ -96,8 +96,8 @@ const Carousel3D = () => {
                     <div
                       className="relative overflow-hidden rounded-lg shadow-2xl transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(198,177,149,0.3)]"
                       style={{
-                        width: "80px",
-                        height: "280px",
+                        width: "90px",
+                        height: "320px",
                         backfaceVisibility: "hidden"
                       }}
                     >
@@ -115,19 +115,22 @@ const Carousel3D = () => {
                       className="absolute top-0 bg-kalea-tan/30"
                       style={{
                         width: "12px",
-                        height: "280px",
-                        transform: "rotateY(90deg) translateZ(40px)",
+                        height: "320px",
+                        transform: "rotateY(90deg) translateZ(45px)",
                         transformOrigin: "left center",
                         backfaceVisibility: "hidden"
                       }}
                     />
 
-                    {/* Name label */}
+                    {/* Name label - positioned below the plank */}
                     <div 
-                      className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
-                      style={{ transform: "rotateY(0deg)" }}
+                      className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-4"
+                      style={{ 
+                        top: "330px",
+                        transform: "translateX(-50%) rotateY(0deg)"
+                      }}
                     >
-                      <span className="text-white/70 text-xs font-medium tracking-wider uppercase group-hover:text-white/90 transition-colors">
+                      <span className="text-white/80 text-sm font-medium tracking-wider uppercase group-hover:text-white transition-colors">
                         {plank.name}
                       </span>
                     </div>
@@ -138,11 +141,11 @@ const Carousel3D = () => {
           </motion.div>
         </div>
 
-        {/* Floor reflection */}
+        {/* Subtle floor glow */}
         <div 
-          className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none opacity-50"
           style={{
-            background: 'linear-gradient(to top, rgba(74, 42, 19, 0.8) 0%, transparent 100%)'
+            background: 'linear-gradient(to top, hsl(var(--kalea-dark)) 0%, transparent 100%)'
           }}
         />
       </div>
