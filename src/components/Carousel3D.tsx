@@ -62,7 +62,7 @@ const Carousel3D = () => {
 
         {/* 3D Carousel Container - Centered and raised */}
         <div 
-          className="relative flex items-center justify-center flex-1 w-full -mt-16 md:-mt-24"
+          className="relative flex items-center justify-center flex-1 w-full -mt-32 md:-mt-48"
           style={{ 
             perspective: "1000px",
             maxWidth: "800px",
