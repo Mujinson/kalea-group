@@ -175,7 +175,7 @@ const WindowHero = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-white/40 text-[10px] md:text-xs tracking-[0.5em] mb-5 uppercase"
+              className="text-white/60 text-xs md:text-xs tracking-[0.5em] mb-5 uppercase font-medium"
             >
               KALEA
             </motion.p>
@@ -184,7 +184,7 @@ const WindowHero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-white text-2xl md:text-4xl lg:text-5xl font-light mb-3 tracking-wide"
+              className="text-white text-3xl md:text-4xl lg:text-5xl font-light mb-3 tracking-wide"
               style={{ fontFamily: "'NewOrder', serif" }}
             >
               Surface System
@@ -194,7 +194,7 @@ const WindowHero = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.7 }}
-              className="text-white/35 text-xs md:text-base tracking-[0.25em] italic"
+              className="text-white/55 text-sm md:text-base tracking-[0.25em] italic"
             >
               worldwide
             </motion.p>
@@ -203,11 +203,11 @@ const WindowHero = () => {
 
         {/* Scroll indicator */}
         <motion.div 
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
+          className="absolute bottom-16 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
           style={{ opacity: scrollIndicatorOpacity }}
         >
           <motion.span 
-            className="text-white/35 text-[9px] tracking-[0.35em] uppercase"
+            className="text-white/60 text-[10px] md:text-[9px] tracking-[0.35em] uppercase font-medium"
             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -215,7 +215,7 @@ const WindowHero = () => {
             SCROLL DOWN
           </motion.span>
           
-          <p className="text-white/25 text-[9px] tracking-[0.15em] uppercase mt-6">
+          <p className="text-white/50 text-[10px] md:text-[9px] tracking-[0.15em] uppercase mt-6 font-medium">
             To start the journey
           </p>
         </motion.div>
