@@ -81,9 +81,9 @@ const Carousel3D = () => {
           </p>
         </motion.div>
 
-        {/* 3D Carousel Container - Centered and raised */}
+        {/* 3D Carousel Container - Centered with equal spacing */}
         <div 
-          className="relative flex items-center justify-center flex-1 w-full -mt-32 md:-mt-48"
+          className="relative flex items-center justify-center flex-1 w-full"
           style={{ 
             perspective: "1000px",
             maxWidth: "800px",
