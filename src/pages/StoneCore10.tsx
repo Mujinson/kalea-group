@@ -337,7 +337,7 @@ const StoneCore10 = () => {
               <img 
                 src={stonecoreLayers} 
                 alt="Struttura multistrato StoneCore 10" 
-                className="w-full h-auto rounded-[18px]"
+                className="w-1/4 h-auto rounded-[18px] mx-auto"
                 style={{ 
                   boxShadow: '0 4px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
                 }}
