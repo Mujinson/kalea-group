@@ -32,9 +32,6 @@ const Carousel3D = () => {
 
   return (
     <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
-      {/* Solid background to prevent content bleeding */}
-      <div className="absolute inset-0 bg-kalea-dark" />
-      
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
@@ -43,7 +40,7 @@ const Carousel3D = () => {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-start pt-8 md:pt-10 px-4">
+      <div className="relative z-10 h-full flex flex-col items-center justify-start pt-12 md:pt-10 px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -52,11 +49,11 @@ const Carousel3D = () => {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl text-white/95 tracking-wide mb-0">
+          <h2 className="font-heading text-2xl md:text-4xl lg:text-5xl text-white/95 tracking-wide mb-0">
             La Nostra Collezione
           </h2>
-          <p className="text-white/60 text-sm md:text-base font-light italic">
-            Esplora le nostre finiture esclusive in una vista immersiva
+          <p className="text-white/60 text-xs md:text-base font-light italic">
+            Esplora le nostre finiture esclusive
           </p>
         </motion.div>
 
@@ -101,8 +98,8 @@ const Carousel3D = () => {
                     <div
                       className="relative overflow-hidden rounded-lg shadow-2xl transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(198,177,149,0.3)]"
                       style={{
-                        width: isMobile ? "60px" : "104px",
-                        height: isMobile ? "220px" : "360px",
+                        width: isMobile ? "50px" : "104px",
+                        height: isMobile ? "180px" : "360px",
                         backfaceVisibility: "hidden"
                       }}
                     >
@@ -119,9 +116,9 @@ const Carousel3D = () => {
                     <div
                       className="absolute top-0 bg-kalea-tan/30"
                       style={{
-                        width: isMobile ? "8px" : "12px",
-                        height: isMobile ? "220px" : "360px",
-                        transform: `rotateY(90deg) translateZ(${isMobile ? 30 : 52}px)`,
+                        width: isMobile ? "6px" : "12px",
+                        height: isMobile ? "180px" : "360px",
+                        transform: `rotateY(90deg) translateZ(${isMobile ? 25 : 52}px)`,
                         transformOrigin: "left center",
                         backfaceVisibility: "hidden"
                       }}
@@ -129,13 +126,13 @@ const Carousel3D = () => {
 
                     {/* Name label - positioned below the plank */}
                     <div 
-                      className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-4"
+                      className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-2 md:pt-4"
                       style={{ 
-                        top: isMobile ? "230px" : "370px",
+                        top: isMobile ? "185px" : "370px",
                         transform: "translateX(-50%) rotateY(0deg)"
                       }}
                     >
-                      <span className="text-white/80 text-sm font-medium tracking-wider uppercase group-hover:text-white transition-colors">
+                      <span className="text-white/80 text-xs md:text-sm font-medium tracking-wider uppercase group-hover:text-white transition-colors">
                         {plank.name}
                       </span>
                     </div>
