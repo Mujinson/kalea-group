@@ -26,15 +26,32 @@ const fallbackImages: Record<string, string> = {
   cenere: finishCorteccia,
 };
 
+// Map legacy paths to imported images
+const legacyImageMap: Record<string, string> = {
+  "/src/assets/finish-aurora.jpg": finishAurora,
+  "/src/assets/finish-corteccia.jpg": finishCorteccia,
+  "/src/assets/finish-sabbia.jpg": finishSabbia,
+  "/src/assets/finish-silven.jpg": finishSilven,
+  "/src/assets/finish-terram.jpg": finishTerram,
+  "/src/assets/finish-perla.jpg": finishPerla,
+  "/src/assets/finish-velora.jpg": finishVelora,
+};
+
+// Resolve image URL (handles legacy paths and storage URLs)
+const resolveImageUrl = (url: string | undefined, fallback: string): string => {
+  if (!url) return fallback;
+  return legacyImageMap[url] || url;
+};
+
 const getProducts = (t: (key: string) => string, dbImages: Record<string, string>) => [
-  { id: 1, name: "Aurora", slug: "aurora", image: dbImages.aurora || fallbackImages.aurora, tagline: t('colors.aurora.tagline') },
-  { id: 2, name: "Corteccia", slug: "corteccia", image: dbImages.corteccia || fallbackImages.corteccia, tagline: t('colors.corteccia.tagline') },
-  { id: 3, name: "Sabbia", slug: "sabbia", image: dbImages.sabbia || fallbackImages.sabbia, tagline: t('colors.sabbia.tagline') },
-  { id: 4, name: "Terram", slug: "terram", image: dbImages.terram || fallbackImages.terram, tagline: t('colors.terram.tagline') },
-  { id: 5, name: "Velora", slug: "velora", image: dbImages.velora || fallbackImages.velora, tagline: t('colors.velora.tagline') },
-  { id: 6, name: "Perla", slug: "perla", image: dbImages.perla || fallbackImages.perla, tagline: t('colors.perla.tagline') },
-  { id: 7, name: "Silven", slug: "silven", image: dbImages.silven || fallbackImages.silven, tagline: t('colors.silven.tagline') },
-  { id: 8, name: "Cenere", slug: "cenere", image: dbImages.cenere || fallbackImages.cenere, tagline: t('colors.cenere.tagline') },
+  { id: 1, name: "Aurora", slug: "aurora", image: resolveImageUrl(dbImages.aurora, fallbackImages.aurora), tagline: t('colors.aurora.tagline') },
+  { id: 2, name: "Corteccia", slug: "corteccia", image: resolveImageUrl(dbImages.corteccia, fallbackImages.corteccia), tagline: t('colors.corteccia.tagline') },
+  { id: 3, name: "Sabbia", slug: "sabbia", image: resolveImageUrl(dbImages.sabbia, fallbackImages.sabbia), tagline: t('colors.sabbia.tagline') },
+  { id: 4, name: "Terram", slug: "terram", image: resolveImageUrl(dbImages.terram, fallbackImages.terram), tagline: t('colors.terram.tagline') },
+  { id: 5, name: "Velora", slug: "velora", image: resolveImageUrl(dbImages.velora, fallbackImages.velora), tagline: t('colors.velora.tagline') },
+  { id: 6, name: "Perla", slug: "perla", image: resolveImageUrl(dbImages.perla, fallbackImages.perla), tagline: t('colors.perla.tagline') },
+  { id: 7, name: "Silven", slug: "silven", image: resolveImageUrl(dbImages.silven, fallbackImages.silven), tagline: t('colors.silven.tagline') },
+  { id: 8, name: "Cenere", slug: "cenere", image: resolveImageUrl(dbImages.cenere, fallbackImages.cenere), tagline: t('colors.cenere.tagline') },
 ];
 
 interface ProductType {
