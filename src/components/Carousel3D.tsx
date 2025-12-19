@@ -47,9 +47,9 @@ const Carousel3D = () => {
   
   // Responsive dimensions for perfect circle on all devices
   const dimensions = {
-    mobile: { radius: 100, plankWidth: 40, plankHeight: 140 },
-    tablet: { radius: 160, plankWidth: 55, plankHeight: 200 },
-    desktop: { radius: 220, plankWidth: 75, plankHeight: 260 }
+    mobile: { radius: 110, plankWidth: 45, plankHeight: 200 },
+    tablet: { radius: 220, plankWidth: 85, plankHeight: 300 },
+    desktop: { radius: 320, plankWidth: 110, plankHeight: 380 }
   };
   
   const { radius, plankWidth, plankHeight } = dimensions[screenSize];
@@ -83,12 +83,12 @@ const Carousel3D = () => {
 
         {/* 3D Carousel Container - Centered with equal spacing */}
         <div 
-          className="relative flex items-center justify-center flex-1 w-full -mt-16 md:-mt-24"
+          className={`relative flex items-center justify-center flex-1 w-full ${screenSize === 'mobile' ? 'mt-8' : '-mt-16 md:-mt-24'}`}
           style={{ 
             perspective: "1000px",
-            maxWidth: "800px",
-            minHeight: screenSize === 'mobile' ? "200px" : screenSize === 'tablet' ? "280px" : "350px",
-            maxHeight: screenSize === 'mobile' ? "280px" : screenSize === 'tablet' ? "350px" : "400px"
+            maxWidth: screenSize === 'desktop' ? "1200px" : "900px",
+            minHeight: screenSize === 'mobile' ? "280px" : screenSize === 'tablet' ? "400px" : "500px",
+            maxHeight: screenSize === 'mobile' ? "350px" : screenSize === 'tablet' ? "500px" : "550px"
           }}
         >
           <motion.div
