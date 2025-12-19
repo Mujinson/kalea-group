@@ -143,6 +143,22 @@ const Carousel3D = () => {
           </motion.div>
         </div>
 
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="absolute bottom-12 md:bottom-16 left-1/2 -translate-x-1/2 z-20"
+        >
+          <Link
+            to={`/${language}/stonecore-10`}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-kalea-tan/90 hover:bg-kalea-tan text-kalea-dark font-medium text-sm md:text-base rounded-full transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,177,149,0.4)] hover:scale-105"
+          >
+            Scopri tutta la collezione
+          </Link>
+        </motion.div>
+
         {/* Subtle floor glow */}
         <div 
           className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none opacity-50"
