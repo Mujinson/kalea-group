@@ -35,7 +35,7 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
   return (
     <Link to={`/${language}/colore/${product.slug}`}>
       <motion.div
-        className="relative flex-shrink-0 w-[280px] md:w-[320px] lg:w-[360px] group cursor-pointer"
+        className="relative flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[360px] group cursor-pointer"
         whileHover={{ 
           rotateY: 5, 
           rotateX: -3,
@@ -57,15 +57,15 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
             <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             
             {/* Badge */}
-            <div className="absolute top-4 left-4">
-              <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-background/90 backdrop-blur-sm text-foreground/80 shadow-sm">
+            <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
+              <span className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-medium bg-background/90 backdrop-blur-sm text-foreground/80 shadow-sm">
                 MgO 8,5 mm
               </span>
             </div>
 
             {/* Hover action */}
-            <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-              <span className="inline-flex items-center gap-2 text-white text-sm font-medium">
+            <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+              <span className="inline-flex items-center gap-2 text-white text-xs sm:text-sm font-medium">
                 {language === 'it' ? 'Vedi dettagli' : language === 'en' ? 'View details' : language === 'de' ? 'Details ansehen' : 'Voir détails'}
                 <ArrowRight className="w-4 h-4" />
               </span>
@@ -73,11 +73,11 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
           </div>
 
           {/* Content */}
-          <div className="p-5 bg-card">
-            <h3 className="text-lg font-semibold text-foreground tracking-wide">
+          <div className="p-4 sm:p-5 bg-card">
+            <h3 className="text-base sm:text-lg font-semibold text-foreground tracking-wide">
               {product.name}
             </h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
               {product.tagline}
             </p>
           </div>
@@ -95,17 +95,17 @@ const ProductGallerySection = () => {
   return (
     <section className="h-full w-full flex flex-col justify-center bg-background overflow-hidden">
       {/* Header */}
-      <div className="container-custom text-center mb-8 md:mb-10">
+      <div className="container-custom text-center mb-5 md:mb-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-2 md:mb-4">
             {t('gallery.title')}
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             {t('gallery.subtitle')}
           </p>
         </motion.div>
@@ -114,11 +114,11 @@ const ProductGallerySection = () => {
       {/* Carousel Container */}
       <div className="relative">
         {/* Gradient overlays for fade effect */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
         {/* Scrolling carousel */}
-        <div className="flex gap-6 md:gap-8 animate-scroll hover:[animation-play-state:paused]">
+        <div className="flex gap-4 sm:gap-6 md:gap-8 animate-scroll hover:[animation-play-state:paused]">
           {extendedProducts.map((product, index) => (
             <ProductCard key={`${product.id}-${index}`} product={product} language={language} />
           ))}
@@ -126,7 +126,7 @@ const ProductGallerySection = () => {
       </div>
 
       {/* Description */}
-      <div className="container-custom text-center mt-8 md:mt-12">
+      <div className="container-custom text-center mt-5 md:mt-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -134,7 +134,7 @@ const ProductGallerySection = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-3xl mx-auto"
         >
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+          <p className="text-sm md:text-lg text-muted-foreground leading-relaxed mb-4 md:mb-8">
             {t('gallery.description')}
           </p>
           <Link
@@ -142,7 +142,7 @@ const ProductGallerySection = () => {
             className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all duration-300 group"
           >
             {t('gallery.cta')}
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
       </div>

@@ -182,12 +182,12 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-12"
+              className="text-white/85 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6 md:mb-12"
             >
               {t('hero.home.systemDescription')}
             </motion.p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 max-w-5xl mx-auto">
               {productLines.map((product, index) => (
                 product.comingSoon ? (
                   <motion.div
@@ -196,15 +196,15 @@ const Home = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8 cursor-default relative h-full min-h-[180px] flex flex-col justify-center"
+                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 sm:p-5 md:p-8 cursor-default relative h-full min-h-[140px] sm:min-h-[160px] md:min-h-[180px] flex flex-col justify-center"
                   >
                     <div className="absolute top-3 right-3 bg-white/20 text-white text-[10px] font-medium px-2 py-1 rounded-full">
                       {product.comingSoonLabel || "Novità in arrivo"}
                     </div>
-                    <h3 className="text-white/60 font-semibold text-sm md:text-base tracking-wider mb-3">
+                    <h3 className="text-white/60 font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
                       {product.title.toUpperCase()}
                     </h3>
-                    <p className="text-white/40 text-sm md:text-base leading-relaxed">
+                    <p className="text-white/40 text-xs sm:text-sm md:text-base leading-relaxed">
                       {product.description}
                     </p>
                   </motion.div>
@@ -220,12 +220,12 @@ const Home = () => {
                         boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
                       }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-6 md:p-8 hover:bg-white/15 transition-colors cursor-pointer h-full min-h-[180px] flex flex-col justify-center"
+                      className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 md:p-8 hover:bg-white/15 transition-colors cursor-pointer h-full min-h-[140px] sm:min-h-[160px] md:min-h-[180px] flex flex-col justify-center"
                     >
-                      <h3 className="text-white font-semibold text-sm md:text-base tracking-wider mb-3">
+                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
                         {product.title.toUpperCase()}
                       </h3>
-                      <p className="text-white/70 text-sm md:text-base leading-relaxed">
+                      <p className="text-white/70 text-xs sm:text-sm md:text-base leading-relaxed">
                         {product.description}
                       </p>
                     </motion.div>
