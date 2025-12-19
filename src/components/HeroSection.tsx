@@ -79,8 +79,8 @@ const HeroSection = ({
         )}
       </motion.div>
 
-      {/* Content overlay - positioned at bottom to avoid logo overlap */}
-      <div className={`relative z-10 ${minHeight} flex flex-col items-center justify-end pb-24 md:pb-32`}>
+      {/* Content overlay - positioned higher on mobile to be fully visible */}
+      <div className={`relative z-10 ${minHeight} flex flex-col items-center justify-center pt-20 pb-16 md:justify-end md:pt-0 md:pb-32`}>
         <motion.div 
           style={{ opacity: contentOpacity, y: contentY }} 
           className="container-custom will-change-transform"
