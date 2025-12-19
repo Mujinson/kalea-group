@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/ui/button";
 
 // Import finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -20,15 +21,17 @@ const planks = [
   { id: 5, name: "Silven", slug: "silven", image: finishSilven },
   { id: 6, name: "Terram", slug: "terram", image: finishTerram },
   { id: 7, name: "Velora", slug: "velora", image: finishVelora },
-  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia }, // Using corteccia as fallback
+  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia },
 ];
 
 const Carousel3D = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
   
-  // Responsive radius: smaller on mobile to show more planks
-  const radius = isMobile ? 160 : 320;
+  // Responsive dimensions to fit in viewport
+  const radius = isMobile ? 140 : 240;
+  const plankWidth = isMobile ? 45 : 80;
+  const plankHeight = isMobile ? 160 : 280;
 
   return (
     <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
@@ -40,7 +43,7 @@ const Carousel3D = () => {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-start pt-12 md:pt-10 px-4">
+      <div className="relative z-10 h-full flex flex-col items-center justify-between py-8 md:py-12 px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -57,12 +60,12 @@ const Carousel3D = () => {
           </p>
         </motion.div>
 
-        {/* 3D Carousel Container - positioned very close to header */}
+        {/* 3D Carousel Container */}
         <div 
-          className="relative flex items-start justify-center flex-1 w-full -mt-4"
+          className="relative flex items-center justify-center flex-1 w-full"
           style={{ 
-            perspective: "1200px",
-            maxWidth: "900px"
+            perspective: "1000px",
+            maxWidth: "800px"
           }}
         >
           <motion.div
@@ -81,7 +84,7 @@ const Carousel3D = () => {
                 <Link
                   key={plank.id}
                   to={`/${language}/colore/${plank.slug}`}
-                  className="absolute left-1/2 top-28 md:top-32 -translate-x-1/2 cursor-pointer group"
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
                   style={{
                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
                     transformStyle: "preserve-3d"
@@ -98,8 +101,8 @@ const Carousel3D = () => {
                     <div
                       className="relative overflow-hidden rounded-lg shadow-2xl transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(198,177,149,0.3)]"
                       style={{
-                        width: isMobile ? "50px" : "104px",
-                        height: isMobile ? "180px" : "360px",
+                        width: `${plankWidth}px`,
+                        height: `${plankHeight}px`,
                         backfaceVisibility: "hidden"
                       }}
                     >
@@ -116,9 +119,9 @@ const Carousel3D = () => {
                     <div
                       className="absolute top-0 bg-kalea-tan/30"
                       style={{
-                        width: isMobile ? "6px" : "12px",
-                        height: isMobile ? "180px" : "360px",
-                        transform: `rotateY(90deg) translateZ(${isMobile ? 25 : 52}px)`,
+                        width: isMobile ? "5px" : "10px",
+                        height: `${plankHeight}px`,
+                        transform: `rotateY(90deg) translateZ(${plankWidth / 2}px)`,
                         transformOrigin: "left center",
                         backfaceVisibility: "hidden"
                       }}
@@ -126,13 +129,13 @@ const Carousel3D = () => {
 
                     {/* Name label - positioned below the plank */}
                     <div 
-                      className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-2 md:pt-4"
+                      className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-2 md:pt-3"
                       style={{ 
-                        top: isMobile ? "185px" : "370px",
+                        top: `${plankHeight + 5}px`,
                         transform: "translateX(-50%) rotateY(0deg)"
                       }}
                     >
-                      <span className="text-white/80 text-xs md:text-sm font-medium tracking-wider uppercase group-hover:text-white transition-colors">
+                      <span className="text-white/80 text-[10px] md:text-xs font-medium tracking-wider uppercase group-hover:text-white transition-colors">
                         {plank.name}
                       </span>
                     </div>
@@ -149,19 +152,18 @@ const Carousel3D = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="absolute bottom-12 md:bottom-16 left-1/2 -translate-x-1/2 z-20"
+          className="flex justify-center"
         >
-          <Link
-            to={`/${language}/stonecore-10`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-kalea-tan/90 hover:bg-kalea-tan text-kalea-dark font-medium text-sm md:text-base rounded-full transition-all duration-300 hover:shadow-[0_0_30px_rgba(198,177,149,0.4)] hover:scale-105"
-          >
-            Scopri tutta la collezione
-          </Link>
+          <Button asChild>
+            <Link to={`/${language}/stonecore-10`}>
+              Scopri tutta la collezione
+            </Link>
+          </Button>
         </motion.div>
 
         {/* Subtle floor glow */}
         <div 
-          className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none opacity-50"
+          className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none opacity-50"
           style={{
             background: 'linear-gradient(to top, hsl(var(--kalea-dark)) 0%, transparent 100%)'
           }}
