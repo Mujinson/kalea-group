@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Flame, Droplets, ShieldOff, Layers, AudioWav
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import bgMgoSection from "@/assets/bg-mgo-section.webp";
+
 const MgoBook = () => {
   const { t, language } = useTranslation();
   const [currentSpread, setCurrentSpread] = useState(0);
@@ -249,12 +249,6 @@ const MgoBook = () => {
     return (
       <section 
         className="h-full w-full flex flex-col items-center justify-center overflow-hidden relative"
-        style={{
-          backgroundImage: `url(${bgMgoSection})`,
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
       >
         <div className="container-custom relative z-10">
           {/* Section Title */}
@@ -337,12 +331,6 @@ const MgoBook = () => {
   return (
     <section 
       className="h-full w-full flex flex-col items-center justify-center overflow-hidden relative"
-      style={{
-        backgroundImage: `url(${bgMgoSection})`,
-        backgroundSize: '100% 100%',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
     >
       <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
         {/* Section Title */}
