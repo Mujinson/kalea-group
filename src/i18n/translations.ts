@@ -32,6 +32,8 @@ export const translations: Record<Language, Translations> = {
         onewallHero: "Pannelli verticali di design in MgO per pareti e boiserie contemporanee.",
         ctaInfo: "Richiedi informazioni",
         ctaProducts: "Scopri i prodotti",
+        scrollDown: "SCORRI GIÙ",
+        toStartJourney: "Per iniziare il viaggio",
       },
       manifesto: {
         line1: "La superficie non è solo decorazione.",
@@ -821,6 +823,8 @@ export const translations: Record<Language, Translations> = {
         onewallHero: "Vertical design MgO panels for contemporary walls and boiserie.",
         ctaInfo: "Request information",
         ctaProducts: "Discover products",
+        scrollDown: "SCROLL DOWN",
+        toStartJourney: "To start the journey",
       },
       manifesto: {
         line1: "The surface is not just decoration.",
@@ -1610,6 +1614,8 @@ export const translations: Record<Language, Translations> = {
         onewallHero: "Vertikale Design-MgO-Paneele für zeitgenössische Wände und Boiserie.",
         ctaInfo: "Informationen anfordern",
         ctaProducts: "Produkte entdecken",
+        scrollDown: "NACH UNTEN",
+        toStartJourney: "Um die Reise zu beginnen",
       },
       manifesto: {
         line1: "Die Oberfläche ist nicht nur Dekoration.",
@@ -2399,6 +2405,8 @@ export const translations: Record<Language, Translations> = {
         onewallHero: "Panneaux verticaux design en MgO pour murs et boiseries contemporains.",
         ctaInfo: "Demander des informations",
         ctaProducts: "Découvrir les produits",
+        scrollDown: "DÉFILER VERS LE BAS",
+        toStartJourney: "Pour commencer le voyage",
       },
       manifesto: {
         line1: "La surface n'est pas seulement une décoration.",

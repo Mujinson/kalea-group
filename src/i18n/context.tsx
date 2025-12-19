@@ -10,18 +10,38 @@ interface I18nContextType {
 export const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 const LANGUAGE_STORAGE_KEY = 'kalea_language';
+const IP_LANGUAGE_DETECTED_KEY = 'kalea_ip_language_detected';
 
-// Detect browser language
-const detectBrowserLanguage = (): Language => {
-  const browserLang = navigator.language.toLowerCase();
-  
-  if (browserLang.startsWith('it')) return 'it';
-  if (browserLang.startsWith('de')) return 'de';
-  if (browserLang.startsWith('fr')) return 'fr';
-  if (browserLang.startsWith('en')) return 'en';
-  
-  // Default to English for rest of the world
-  return 'en';
+// Map country codes to languages
+const countryToLanguage: Record<string, Language> = {
+  IT: 'it', // Italy
+  DE: 'de', // Germany
+  AT: 'de', // Austria
+  CH: 'de', // Switzerland (German speaking majority)
+  FR: 'fr', // France
+  BE: 'fr', // Belgium (French speaking)
+  MC: 'fr', // Monaco
+  LU: 'fr', // Luxembourg
+};
+
+// Detect language from IP using free geolocation API
+const detectLanguageFromIP = async (): Promise<Language> => {
+  try {
+    const response = await fetch('https://ipapi.co/json/', { 
+      signal: AbortSignal.timeout(3000) 
+    });
+    if (!response.ok) throw new Error('Failed to fetch');
+    const data = await response.json();
+    const countryCode = data.country_code;
+    return countryToLanguage[countryCode] || 'en';
+  } catch {
+    // Fallback to browser language if IP detection fails
+    const browserLang = navigator.language.toLowerCase();
+    if (browserLang.startsWith('it')) return 'it';
+    if (browserLang.startsWith('de')) return 'de';
+    if (browserLang.startsWith('fr')) return 'fr';
+    return 'en';
+  }
 };
 
 interface I18nProviderProps {
@@ -35,10 +55,35 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
     if (saved && ['it', 'en', 'de', 'fr'].includes(saved)) {
       return saved as Language;
     }
-    
-    // Auto-detect on first visit
-    return detectBrowserLanguage();
+    // Temporary default while we detect from IP
+    return 'en';
   });
+
+  const [initialized, setInitialized] = useState(false);
+
+  // Detect language from IP on first visit
+  useEffect(() => {
+    const detectAndSetLanguage = async () => {
+      const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      const alreadyDetected = localStorage.getItem(IP_LANGUAGE_DETECTED_KEY);
+      
+      // Only auto-detect if never saved and never detected from IP before
+      if (!saved && !alreadyDetected) {
+        const detectedLang = await detectLanguageFromIP();
+        setLanguageState(detectedLang);
+        localStorage.setItem(IP_LANGUAGE_DETECTED_KEY, 'true');
+        
+        // Update URL with detected language
+        const currentPath = window.location.pathname;
+        const pathWithoutLang = currentPath.replace(/^\/(it|en|de|fr)/, '');
+        const newPath = `/${detectedLang}${pathWithoutLang || '/'}`;
+        window.history.replaceState({}, '', newPath);
+      }
+      setInitialized(true);
+    };
+    
+    detectAndSetLanguage();
+  }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
@@ -65,12 +110,14 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
 
   // Set initial URL with language prefix on mount
   useEffect(() => {
+    if (!initialized) return;
+    
     const currentPath = window.location.pathname;
     if (!currentPath.match(/^\/(it|en|de|fr)/)) {
       const newPath = `/${language}${currentPath}`;
       window.history.replaceState({}, '', newPath);
     }
-  }, []);
+  }, [initialized, language]);
 
   return (
     <I18nContext.Provider value={{ language, setLanguage, t }}>
