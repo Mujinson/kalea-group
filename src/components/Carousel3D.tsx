@@ -28,10 +28,10 @@ const Carousel3D = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
   
-  // Responsive dimensions to fit in viewport
-  const radius = isMobile ? 140 : 240;
-  const plankWidth = isMobile ? 45 : 80;
-  const plankHeight = isMobile ? 160 : 280;
+  // Responsive dimensions to fit in viewport - smaller radius on mobile for perfect circle
+  const radius = isMobile ? 100 : 240;
+  const plankWidth = isMobile ? 40 : 80;
+  const plankHeight = isMobile ? 140 : 280;
 
   return (
     <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
