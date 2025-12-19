@@ -40,6 +40,7 @@ import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminLeads from "./pages/admin/AdminLeads";
+import AdminProductImages from "./pages/admin/AdminProductImages";
 
 const queryClient = new QueryClient();
 
@@ -101,6 +102,7 @@ const App = () => (
               <Route path="costi" element={<AdminCosts />} />
               <Route path="pagamenti" element={<AdminPayments />} />
               <Route path="import" element={<AdminImport />} />
+              <Route path="immagini-prodotti" element={<AdminProductImages />} />
               <Route path="impostazioni" element={<AdminSettings />} />
 
               {/* English aliases (keep compatibility) */}
