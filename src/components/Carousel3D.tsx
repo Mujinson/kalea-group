@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Import finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -24,7 +25,10 @@ const planks = [
 
 const Carousel3D = () => {
   const { language } = useTranslation();
-  const radius = 320;
+  const isMobile = useIsMobile();
+  
+  // Responsive radius: smaller on mobile to show more planks
+  const radius = isMobile ? 160 : 320;
 
   return (
     <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
@@ -94,8 +98,8 @@ const Carousel3D = () => {
                     <div
                       className="relative overflow-hidden rounded-lg shadow-2xl transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(198,177,149,0.3)]"
                       style={{
-                        width: "90px",
-                        height: "320px",
+                        width: isMobile ? "60px" : "90px",
+                        height: isMobile ? "220px" : "320px",
                         backfaceVisibility: "hidden"
                       }}
                     >
@@ -112,9 +116,9 @@ const Carousel3D = () => {
                     <div
                       className="absolute top-0 bg-kalea-tan/30"
                       style={{
-                        width: "12px",
-                        height: "320px",
-                        transform: "rotateY(90deg) translateZ(45px)",
+                        width: isMobile ? "8px" : "12px",
+                        height: isMobile ? "220px" : "320px",
+                        transform: `rotateY(90deg) translateZ(${isMobile ? 30 : 45}px)`,
                         transformOrigin: "left center",
                         backfaceVisibility: "hidden"
                       }}
@@ -124,7 +128,7 @@ const Carousel3D = () => {
                     <div 
                       className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-4"
                       style={{ 
-                        top: "330px",
+                        top: isMobile ? "230px" : "330px",
                         transform: "translateX(-50%) rotateY(0deg)"
                       }}
                     >
