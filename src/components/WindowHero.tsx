@@ -164,7 +164,7 @@ const WindowHero = () => {
 
         {/* Text content - centered in window area */}
         <motion.div 
-          className="absolute inset-0 z-15 flex flex-col items-center justify-center pointer-events-none"
+          className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none"
           style={{ 
             opacity: textOpacity,
             y: textY,
@@ -202,12 +202,35 @@ const WindowHero = () => {
         </motion.div>
 
         {/* Scroll indicator */}
+        {/* Mobile: "scroll down" inside the window + helper text right below */}
+        <motion.div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[72px] z-30 flex flex-col items-center md:hidden"
+          style={{ opacity: scrollIndicatorOpacity }}
+        >
+          <motion.span
+            className="text-white/60 text-[10px] tracking-[0.35em] uppercase font-medium"
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t('hero.home.scrollDown')}
+          </motion.span>
+        </motion.div>
+
+        <motion.p
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[205px] z-30 text-white/50 text-[10px] tracking-[0.15em] uppercase font-medium md:hidden"
+          style={{ opacity: scrollIndicatorOpacity }}
+        >
+          {t('hero.home.toStartJourney')}
+        </motion.p>
+
+        {/* Desktop/tablet: keep indicator at bottom */}
         <motion.div 
-          className="absolute bottom-16 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
+          className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex-col items-center gap-2"
           style={{ opacity: scrollIndicatorOpacity }}
         >
           <motion.span 
-            className="text-white/60 text-[10px] md:text-[9px] tracking-[0.35em] uppercase font-medium"
+            className="text-white/60 text-[9px] tracking-[0.35em] uppercase font-medium"
             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -215,7 +238,7 @@ const WindowHero = () => {
             {t('hero.home.scrollDown')}
           </motion.span>
           
-          <p className="text-white/50 text-[10px] md:text-[9px] tracking-[0.15em] uppercase mt-6 font-medium">
+          <p className="text-white/50 text-[9px] tracking-[0.15em] uppercase mt-6 font-medium">
             {t('hero.home.toStartJourney')}
           </p>
         </motion.div>
