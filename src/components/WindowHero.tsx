@@ -128,26 +128,26 @@ const WindowHero = () => {
               }}
             />
             
-            {/* Window glass area - interior view hint */}
+            {/* Window glass area - dark interior */}
             <div 
               className="absolute inset-[10px] md:inset-[14px] rounded-t-[110px] md:rounded-t-[146px] lg:rounded-t-[186px] rounded-b-[10px] overflow-hidden"
               style={{
-                background: "linear-gradient(180deg, rgba(45, 40, 35, 0.5) 0%, rgba(30, 28, 24, 0.7) 100%)",
+                background: "linear-gradient(180deg, rgba(25, 22, 18, 0.95) 0%, rgba(18, 16, 14, 0.98) 100%)",
               }}
             >
-              {/* Very subtle interior preview */}
-              <img 
-                src={heroImage} 
-                alt="" 
-                className="absolute inset-0 w-full h-full object-cover opacity-30"
-                style={{ transform: "scale(1.1)" }}
+              {/* Subtle ambient light from window */}
+              <div 
+                className="absolute inset-0"
+                style={{
+                  background: "radial-gradient(ellipse at 50% 30%, rgba(180, 140, 80, 0.08) 0%, transparent 60%)",
+                }}
               />
               
               {/* Glass reflection effect */}
               <div 
                 className="absolute inset-0"
                 style={{
-                  background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.02) 100%)",
+                  background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.01) 100%)",
                 }}
               />
             </div>
