@@ -338,7 +338,10 @@ const StoneCore10 = () => {
               <img 
                 src={stonecoreLayers} 
                 alt="Struttura multistrato StoneCore 10" 
-                className="w-auto max-w-[35%] h-auto max-h-[500px] object-contain mix-blend-multiply"
+                className="w-auto max-w-full h-auto max-h-[500px] object-contain rounded-xl"
+                style={{
+                  filter: 'sepia(15%) saturate(90%) brightness(1.02) hue-rotate(-5deg)',
+                }}
               />
             </motion.div>
 
