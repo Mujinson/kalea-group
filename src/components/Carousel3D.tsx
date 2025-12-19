@@ -83,7 +83,7 @@ const Carousel3D = () => {
 
         {/* 3D Carousel Container - Centered with equal spacing */}
         <div 
-          className={`relative flex items-center justify-center flex-1 w-full ${screenSize === 'mobile' ? '-mt-8' : '-mt-40 md:-mt-48'}`}
+          className={`relative flex items-center justify-center flex-1 w-full ${screenSize === 'mobile' ? '-mt-8' : '-mt-48 md:-mt-56'}`}
           style={{ 
             perspective: "1000px",
             maxWidth: screenSize === 'desktop' ? "1200px" : "900px",
