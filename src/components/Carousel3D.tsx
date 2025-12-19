@@ -43,14 +43,14 @@ const Carousel3D = () => {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-between py-8 md:py-12 px-4">
-        {/* Header */}
+      <div className="relative z-10 h-full flex flex-col items-center py-8 md:py-12 px-4">
+        {/* Header - Fixed at top */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center"
+          className="text-center flex-shrink-0"
         >
           <h2 className="font-heading text-2xl md:text-4xl lg:text-5xl text-white/95 tracking-wide mb-0">
             La Nostra Collezione
@@ -60,17 +60,23 @@ const Carousel3D = () => {
           </p>
         </motion.div>
 
-        {/* 3D Carousel Container */}
+        {/* 3D Carousel Container - Centered */}
         <div 
-          className="relative flex items-center justify-center flex-1 w-full"
+          className="relative flex items-center justify-center flex-1 w-full my-4 md:my-8"
           style={{ 
             perspective: "1000px",
-            maxWidth: "800px"
+            maxWidth: "800px",
+            minHeight: isMobile ? "200px" : "350px",
+            maxHeight: isMobile ? "280px" : "400px"
           }}
         >
           <motion.div
-            className="relative w-full h-full"
-            style={{ transformStyle: "preserve-3d" }}
+            className="relative"
+            style={{ 
+              transformStyle: "preserve-3d",
+              width: "100%",
+              height: "100%"
+            }}
             animate={{ rotateY: 360 }}
             transition={{
               duration: 40,
@@ -146,13 +152,13 @@ const Carousel3D = () => {
           </motion.div>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button - Fixed at bottom */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex justify-center"
+          className="flex justify-center flex-shrink-0 mt-auto pb-4"
         >
           <Button asChild>
             <Link to={`/${language}/stonecore-10`}>
