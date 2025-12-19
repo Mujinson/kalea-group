@@ -80,7 +80,7 @@ const Carousel3D = () => {
               return (
                 <Link
                   key={plank.id}
-                  to={`/${language}/colori/${plank.slug}`}
+                  to={`/${language}/colore/${plank.slug}`}
                   className="absolute left-1/2 top-28 md:top-32 -translate-x-1/2 cursor-pointer group"
                   style={{
                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
