@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { useTranslation } from "@/i18n/useTranslation";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-// Import finish images
+// Import finish images as fallbacks
 import finishAurora from "@/assets/finish-aurora.jpg";
 import finishCorteccia from "@/assets/finish-corteccia.jpg";
 import finishPerla from "@/assets/finish-perla.jpg";
@@ -12,15 +14,27 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
-const getProducts = (t: (key: string) => string) => [
-  { id: 1, name: "Aurora", slug: "aurora", image: finishAurora, tagline: t('colors.aurora.tagline') },
-  { id: 2, name: "Corteccia", slug: "corteccia", image: finishCorteccia, tagline: t('colors.corteccia.tagline') },
-  { id: 3, name: "Sabbia", slug: "sabbia", image: finishSabbia, tagline: t('colors.sabbia.tagline') },
-  { id: 4, name: "Terram", slug: "terram", image: finishTerram, tagline: t('colors.terram.tagline') },
-  { id: 5, name: "Velora", slug: "velora", image: finishVelora, tagline: t('colors.velora.tagline') },
-  { id: 6, name: "Perla", slug: "perla", image: finishPerla, tagline: t('colors.perla.tagline') },
-  { id: 7, name: "Silven", slug: "silven", image: finishSilven, tagline: t('colors.silven.tagline') },
-  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia, tagline: t('colors.cenere.tagline') },
+// Fallback images map
+const fallbackImages: Record<string, string> = {
+  aurora: finishAurora,
+  corteccia: finishCorteccia,
+  sabbia: finishSabbia,
+  terram: finishTerram,
+  velora: finishVelora,
+  perla: finishPerla,
+  silven: finishSilven,
+  cenere: finishCorteccia,
+};
+
+const getProducts = (t: (key: string) => string, dbImages: Record<string, string>) => [
+  { id: 1, name: "Aurora", slug: "aurora", image: dbImages.aurora || fallbackImages.aurora, tagline: t('colors.aurora.tagline') },
+  { id: 2, name: "Corteccia", slug: "corteccia", image: dbImages.corteccia || fallbackImages.corteccia, tagline: t('colors.corteccia.tagline') },
+  { id: 3, name: "Sabbia", slug: "sabbia", image: dbImages.sabbia || fallbackImages.sabbia, tagline: t('colors.sabbia.tagline') },
+  { id: 4, name: "Terram", slug: "terram", image: dbImages.terram || fallbackImages.terram, tagline: t('colors.terram.tagline') },
+  { id: 5, name: "Velora", slug: "velora", image: dbImages.velora || fallbackImages.velora, tagline: t('colors.velora.tagline') },
+  { id: 6, name: "Perla", slug: "perla", image: dbImages.perla || fallbackImages.perla, tagline: t('colors.perla.tagline') },
+  { id: 7, name: "Silven", slug: "silven", image: dbImages.silven || fallbackImages.silven, tagline: t('colors.silven.tagline') },
+  { id: 8, name: "Cenere", slug: "cenere", image: dbImages.cenere || fallbackImages.cenere, tagline: t('colors.cenere.tagline') },
 ];
 
 interface ProductType {
@@ -89,7 +103,33 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
 
 const ProductGallerySection = () => {
   const { t, language } = useTranslation();
-  const products = getProducts(t);
+
+  // Fetch first image for each product from database
+  const { data: productImages } = useQuery({
+    queryKey: ["gallery-product-images"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("product_images")
+        .select("product_slug, image_url, display_order")
+        .order("display_order", { ascending: true });
+      
+      if (error) throw error;
+      
+      // Group by product_slug and get first image for each
+      const imageMap: Record<string, string> = {};
+      data?.forEach((img) => {
+        if (!imageMap[img.product_slug]) {
+          imageMap[img.product_slug] = img.image_url;
+        }
+      });
+      
+      return imageMap;
+    },
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
+
+  const dbImages = productImages || {};
+  const products = getProducts(t, dbImages);
   const extendedProducts = [...products, ...products, ...products];
 
   return (
