@@ -239,25 +239,18 @@ const StoneCore10 = () => {
         </div>
       </section>
 
-      {/* Vantaggi Section - Stacks on top of hero */}
-      <section ref={advantagesRef} className="relative h-screen sticky top-0 z-[1]">
-        <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
-          style={{ 
-            scale: advantagesScale,
-            borderRadius: advantagesBorderRadius,
-            opacity: advantagesOpacity,
-          }}
-        >
+      {/* Vantaggi Section - Normal scroll with background */}
+      <section ref={advantagesRef} className="relative z-[1]">
+        <div className="absolute inset-0">
           <img 
             src={bgStoneCore} 
             alt="" 
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40" />
-        </motion.div>
+        </div>
 
-        <div className="relative z-10 h-full flex items-center py-16 overflow-y-auto">
+        <div className="relative z-10 py-20">
           <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -283,354 +276,308 @@ const StoneCore10 = () => {
         </div>
       </section>
 
-      {/* Finiture Section - Stacks on top */}
-      <section ref={finishesRef} className="relative h-screen sticky top-0 z-[2]">
-        <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
-          style={{ 
-            scale: finishesScale,
-            borderRadius: finishesBorderRadius,
-          }}
-        />
+      {/* Finiture Section - Normal scroll */}
+      <section ref={finishesRef} className="relative z-[2] bg-background py-20">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              {t('stonecore.finishesTitle')}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {t('stonecore.finishesSubtitle')}
+            </p>
+          </motion.div>
 
-        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-background">
-          <div className="container-custom">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-                {t('stonecore.finishesTitle')}
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                {t('stonecore.finishesSubtitle')}
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {finishes.map((finish, index) => (
-                <FinishCard
-                  key={finish.name}
-                  name={finish.name}
-                  image={finish.image}
-                  index={index}
-                  variant="image"
-                  slug={finish.slug}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {finishes.map((finish, index) => (
+              <FinishCard
+                key={finish.name}
+                name={finish.name}
+                image={finish.image}
+                index={index}
+                variant="image"
+                slug={finish.slug}
+              />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Schema multistrato Section */}
-      <section ref={structureRef} className="relative h-screen sticky top-0 z-[3]">
-        <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
-          style={{ 
-            scale: structureScale,
-            borderRadius: structureBorderRadius,
-          }}
-        />
+      {/* Schema multistrato Section - Normal scroll */}
+      <section ref={structureRef} className="relative z-[3] bg-background py-20">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              {t('stonecore.structureTitle')}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              {t('stonecore.structureSubtitle')}
+            </p>
+          </motion.div>
 
-        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-background">
-          <div className="container-custom">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-                {t('stonecore.structureTitle')}
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                {t('stonecore.structureSubtitle')}
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <img 
-                  src={stonecoreLayers} 
-                  alt="Struttura multistrato StoneCore 10" 
-                  className="w-full h-auto rounded-[18px]"
-                  style={{ 
-                    boxShadow: '0 4px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
-                  }}
-                />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="h-full"
-              >
-                <MaterialPerformanceCard />
-              </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-12 max-w-2xl mx-auto"
-            >
-              <LayerDiagram />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tabs tecnici Section */}
-      <section ref={techRef} className="relative h-screen sticky top-0 z-[4]">
-        <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-card"
-          style={{ 
-            scale: techScale,
-            borderRadius: techBorderRadius,
-          }}
-        />
-
-        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-card">
-          <div className="container-custom max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <Tabs defaultValue="caratteristiche" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="caratteristiche">{t('stonecore.techTitle')}</TabsTrigger>
-                  <TabsTrigger value="posa">{t('stonecore.techPosa')}</TabsTrigger>
-                  <TabsTrigger value="manutenzione">{t('stonecore.techMaintenance')}</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="caratteristiche" className="mt-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-                    style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-                  >
-                    <h3 className="text-xl font-heading font-semibold text-background mb-6">Specifiche tecniche</h3>
-                    <ul className="space-y-3 text-background/85">
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Dimensioni plancia: 1220 x 180 mm</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Classe di reazione al fuoco: A2-s1, d0</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Resistenza all'acqua: IP68</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Resistenza all'abrasione: AC5</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Riduzione acustica: 19 dB</span>
-                      </li>
-                    </ul>
-                  </motion.div>
-                </TabsContent>
-
-                <TabsContent value="posa" className="mt-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-                    style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-                  >
-                    <h3 className="text-xl font-heading font-semibold text-background mb-6">Istruzioni di posa</h3>
-                    <ul className="space-y-3 text-background/85">
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Sistema flottante senza colla</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Preparazione sottofondo: livellato e pulito</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Acclimatazione: 24-48 ore in ambiente</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Giunto perimetrale: 8-10 mm</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Totale assenza di fughe</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Calpestabile immediatamente dopo la posa</span>
-                      </li>
-                    </ul>
-                  </motion.div>
-                </TabsContent>
-
-                <TabsContent value="manutenzione" className="mt-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-                    style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-                  >
-                    <h3 className="text-xl font-heading font-semibold text-background mb-6">Cura e manutenzione</h3>
-                    <ul className="space-y-3 text-background/85">
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Pulizia quotidiana: panno umido o aspirapolvere</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Detergenti neutri per macchie ostinate</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Evitare prodotti abrasivi o solventi aggressivi</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Protezioni in feltro sotto mobili pesanti</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                        <span>Nessuna ceratura o trattamento periodico necessario</span>
-                      </li>
-                    </ul>
-                  </motion.div>
-                </TabsContent>
-              </Tabs>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Riscaldamento a pavimento Section */}
-      <section ref={heatingRef} className="relative h-screen sticky top-0 z-[5]">
-        <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
-          style={{ 
-            scale: heatingScale,
-            borderRadius: heatingBorderRadius,
-          }}
-        />
-
-        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-background">
-          <div className="container-custom max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-                <ThermometerSun className="w-8 h-8 text-primary" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-                Perfetto per impianti di riscaldamento a pavimento
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                StoneCore 10 è particolarmente indicato per l'utilizzo con impianti di riscaldamento a pavimento grazie alla sua elevata conducibilità e stabilità termica.
-              </p>
+              <img 
+                src={stonecoreLayers} 
+                alt="Struttura multistrato StoneCore 10" 
+                className="w-full h-auto rounded-[18px]"
+                style={{ 
+                  boxShadow: '0 4px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)'
+                }}
+              />
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="prose prose-lg max-w-none text-center mb-12"
+              className="h-full"
             >
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                L'ossido di magnesio permette una trasmissione uniforme del calore, trattenendolo più a lungo rispetto a molti pavimenti tradizionali. Questo si traduce in un comfort superiore e in un risparmio energetico reale nel tempo, poiché l'impianto lavora in modo più efficiente.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
-              style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-            >
-              <h3 className="text-xl font-heading font-semibold text-background mb-6">
-                Perché è migliore
-              </h3>
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3 text-background/90">
-                  <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                  <span>Distribuzione del calore più omogenea</span>
-                </li>
-                <li className="flex items-start gap-3 text-background/90">
-                  <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                  <span>Minore dispersione termica</span>
-                </li>
-                <li className="flex items-start gap-3 text-background/90">
-                  <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                  <span>Superficie sempre confortevole</span>
-                </li>
-                <li className="flex items-start gap-3 text-background/90">
-                  <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                  <span>Riduzione dei consumi energetici nel lungo periodo</span>
-                </li>
-              </ul>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 p-6 rounded-2xl bg-card border border-border text-center"
-            >
-              <p className="text-lg text-foreground italic">
-                Un pavimento che lavora insieme all'impianto, non contro di esso.
-              </p>
+              <MaterialPerformanceCard />
             </motion.div>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-12 max-w-2xl mx-auto"
+          >
+            <LayerDiagram />
+          </motion.div>
         </div>
       </section>
 
-      {/* CTA Download Section */}
-      <section ref={ctaRef} className="relative h-screen sticky top-0 z-[6]">
-        <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
-          style={{ 
-            scale: ctaScale,
-            borderRadius: ctaBorderRadius,
-          }}
-        >
+      {/* Tabs tecnici Section - Normal scroll */}
+      <section ref={techRef} className="relative z-[4] bg-card py-20">
+        <div className="container-custom max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <Tabs defaultValue="caratteristiche" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="caratteristiche">{t('stonecore.techTitle')}</TabsTrigger>
+                <TabsTrigger value="posa">{t('stonecore.techPosa')}</TabsTrigger>
+                <TabsTrigger value="manutenzione">{t('stonecore.techMaintenance')}</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="caratteristiche" className="mt-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+                >
+                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Specifiche tecniche</h3>
+                  <ul className="space-y-3 text-background/85">
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Dimensioni plancia: 1220 x 180 mm</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Classe di reazione al fuoco: A2-s1, d0</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Resistenza all'acqua: IP68</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Resistenza all'abrasione: AC5</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Riduzione acustica: 19 dB</span>
+                    </li>
+                  </ul>
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="posa" className="mt-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+                >
+                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Istruzioni di posa</h3>
+                  <ul className="space-y-3 text-background/85">
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Sistema flottante senza colla</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Preparazione sottofondo: livellato e pulito</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Acclimatazione: 24-48 ore in ambiente</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Giunto perimetrale: 8-10 mm</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Totale assenza di fughe</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Calpestabile immediatamente dopo la posa</span>
+                    </li>
+                  </ul>
+                </motion.div>
+              </TabsContent>
+
+              <TabsContent value="manutenzione" className="mt-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+                >
+                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Cura e manutenzione</h3>
+                  <ul className="space-y-3 text-background/85">
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Pulizia quotidiana: panno umido o aspirapolvere</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Detergenti neutri per macchie ostinate</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Evitare prodotti abrasivi o solventi aggressivi</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Protezioni in feltro sotto mobili pesanti</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                      <span>Nessuna ceratura o trattamento periodico necessario</span>
+                    </li>
+                  </ul>
+                </motion.div>
+              </TabsContent>
+            </Tabs>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Riscaldamento a pavimento Section - Normal scroll */}
+      <section ref={heatingRef} className="relative z-[5] bg-background py-20">
+        <div className="container-custom max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
+              <ThermometerSun className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              Perfetto per impianti di riscaldamento a pavimento
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              StoneCore 10 è particolarmente indicato per l'utilizzo con impianti di riscaldamento a pavimento grazie alla sua elevata conducibilità e stabilità termica.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="prose prose-lg max-w-none text-center mb-12"
+          >
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              L'ossido di magnesio permette una trasmissione uniforme del calore, trattenendolo più a lungo rispetto a molti pavimenti tradizionali. Questo si traduce in un comfort superiore e in un risparmio energetico reale nel tempo, poiché l'impianto lavora in modo più efficiente.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+            style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
+          >
+            <h3 className="text-xl font-heading font-semibold text-background mb-6">
+              Perché è migliore
+            </h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Distribuzione del calore più omogenea</span>
+              </li>
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Minore dispersione termica</span>
+              </li>
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Superficie sempre confortevole</span>
+              </li>
+              <li className="flex items-start gap-3 text-background/90">
+                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <span>Riduzione dei consumi energetici nel lungo periodo</span>
+              </li>
+            </ul>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-8 p-6 rounded-2xl bg-card border border-border text-center"
+          >
+            <p className="text-lg text-foreground italic">
+              Un pavimento che lavora insieme all'impianto, non contro di esso.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Download Section - Normal scroll */}
+      <section ref={ctaRef} className="relative z-[6]">
+        <div className="absolute inset-0">
           <img 
             src={bgCtaCollabora} 
             alt="" 
@@ -642,9 +589,9 @@ const StoneCore10 = () => {
               background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
             }}
           />
-        </motion.div>
+        </div>
 
-        <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="relative z-10 py-32 md:py-40">
           <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -673,7 +620,7 @@ const StoneCore10 = () => {
         </div>
       </section>
 
-      {/* Certificazioni as final section after sticky stack */}
+      {/* Certificazioni */}
       <div className="relative z-[7]">
         <CertificationsSection variant="compact" />
       </div>
