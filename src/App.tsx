@@ -15,7 +15,7 @@ import DiventaPartner from "./pages/DiventaPartner";
 import Privacy from "./pages/Privacy";
 import Termini from "./pages/Termini";
 import NotFound from "./pages/NotFound";
-import ColorProductPage from "./pages/ColorProductPage";
+
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
 import SustainabilityMaintenance from "./pages/SustainabilityMaintenance";
@@ -40,7 +40,7 @@ import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminLeads from "./pages/admin/AdminLeads";
-import AdminProductImages from "./pages/admin/AdminProductImages";
+
 
 const queryClient = new QueryClient();
 
@@ -102,7 +102,7 @@ const App = () => (
               <Route path="costi" element={<AdminCosts />} />
               <Route path="pagamenti" element={<AdminPayments />} />
               <Route path="import" element={<AdminImport />} />
-              <Route path="immagini-prodotti" element={<AdminProductImages />} />
+              
               <Route path="impostazioni" element={<AdminSettings />} />
 
               {/* English aliases (keep compatibility) */}
@@ -129,7 +129,7 @@ const App = () => (
             <Route path="/it/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
             <Route path="/it/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
             <Route path="/it/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            <Route path="/it/colore/:colorSlug" element={<><SEOHandler /><Layout><ColorProductPage /></Layout></>} />
+            
             <Route path="/it/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
             <Route path="/it/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
             <Route path="/it/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
@@ -146,7 +146,7 @@ const App = () => (
             <Route path="/en/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
             <Route path="/en/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
             <Route path="/en/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            <Route path="/en/colore/:colorSlug" element={<><SEOHandler /><Layout><ColorProductPage /></Layout></>} />
+            
             <Route path="/en/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
             <Route path="/en/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
             <Route path="/en/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
@@ -163,7 +163,7 @@ const App = () => (
             <Route path="/de/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
             <Route path="/de/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
             <Route path="/de/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            <Route path="/de/colore/:colorSlug" element={<><SEOHandler /><Layout><ColorProductPage /></Layout></>} />
+            
             <Route path="/de/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
             <Route path="/de/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
             <Route path="/de/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
@@ -180,7 +180,7 @@ const App = () => (
             <Route path="/fr/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
             <Route path="/fr/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
             <Route path="/fr/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            <Route path="/fr/colore/:colorSlug" element={<><SEOHandler /><Layout><ColorProductPage /></Layout></>} />
+            
             <Route path="/fr/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
             <Route path="/fr/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
             <Route path="/fr/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />

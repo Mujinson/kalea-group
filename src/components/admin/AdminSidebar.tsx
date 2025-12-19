@@ -26,7 +26,7 @@ import {
   BarChart3,
   FileText,
   UserPlus,
-  ImageIcon,
+  
 } from 'lucide-react';
 
 const menuItems = [
@@ -39,7 +39,7 @@ const menuItems = [
   { title: 'Leads', url: '/admin/leads', icon: UserPlus },
   { title: 'Costi', url: '/admin/costi', icon: DollarSign },
   { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard },
-  { title: 'Immagini Prodotti', url: '/admin/immagini-prodotti', icon: ImageIcon },
+  
   { title: 'Import Dati', url: '/admin/import', icon: Upload },
   { title: 'Impostazioni', url: '/admin/impostazioni', icon: Settings },
 ];
