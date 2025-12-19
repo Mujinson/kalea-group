@@ -32,6 +32,9 @@ const Carousel3D = () => {
 
   return (
     <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
+      {/* Solid background to prevent content bleeding */}
+      <div className="absolute inset-0 bg-kalea-dark" />
+      
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
