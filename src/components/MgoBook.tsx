@@ -253,7 +253,7 @@ const MgoBook = () => {
         <div className="container-custom relative z-10">
           {/* Section Title */}
           <div className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold text-kalea-logo mb-2">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-kalea-tan mb-2">
               {t('home.mgoTitle')}
             </h2>
             <p className="text-sm md:text-base text-kalea-cream/80 max-w-md mx-auto">
@@ -308,7 +308,7 @@ const MgoBook = () => {
                     onClick={() => setMobilePageIndex(idx)}
                     className={`w-2.5 h-2.5 rounded-full transition-colors ${
                       idx === mobilePageIndex
-                        ? "bg-kalea-logo"
+                        ? "bg-kalea-tan"
                         : "bg-kalea-cream/25 hover:bg-kalea-cream/45"
                     }`}
                   />
@@ -337,7 +337,7 @@ const MgoBook = () => {
       <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
         {/* Section Title */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-logo mb-3">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-3">
             {t('home.mgoTitle')}
           </h2>
           <p className="text-base md:text-lg text-kalea-cream/80 max-w-2xl mx-auto">
@@ -481,7 +481,7 @@ const MgoBook = () => {
                   }}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
                     idx === currentSpread
-                      ? "bg-kalea-logo scale-110"
+                      ? "bg-kalea-tan scale-110"
                       : "bg-kalea-cream/25 hover:bg-kalea-cream/45"
                   }`}
                 />
