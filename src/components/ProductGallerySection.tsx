@@ -102,10 +102,10 @@ const ProductGallerySection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-2 md:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-2 md:mb-4">
             {t('gallery.title')}
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-white/70 max-w-2xl mx-auto">
             {t('gallery.subtitle')}
           </p>
         </motion.div>
@@ -134,12 +134,12 @@ const ProductGallerySection = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-3xl mx-auto"
         >
-          <p className="text-sm md:text-lg text-muted-foreground leading-relaxed mb-4 md:mb-8">
+          <p className="text-sm md:text-lg text-white/70 leading-relaxed mb-4 md:mb-8">
             {t('gallery.description')}
           </p>
           <Link
             to={`/${language}/stonecore-10`}
-            className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 text-white font-medium hover:gap-3 transition-all duration-300 group"
           >
             {t('gallery.cta')}
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
