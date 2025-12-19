@@ -212,11 +212,11 @@ const WindowHero = () => {
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           >
-            SCROLL DOWN
+            {t('hero.home.scrollDown')}
           </motion.span>
           
           <p className="text-white/50 text-[10px] md:text-[9px] tracking-[0.15em] uppercase mt-6 font-medium">
-            To start the journey
+            {t('hero.home.toStartJourney')}
           </p>
         </motion.div>
 
