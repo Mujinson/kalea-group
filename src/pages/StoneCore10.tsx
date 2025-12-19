@@ -240,7 +240,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Vantaggi Section - Stacks on top of hero */}
-      <section ref={advantagesRef} className="relative min-h-screen sticky top-0 z-[1]">
+      <section ref={advantagesRef} className="relative h-screen sticky top-0 z-[1]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
@@ -257,7 +257,7 @@ const StoneCore10 = () => {
           <div className="absolute inset-0 bg-black/40" />
         </motion.div>
 
-        <div className="relative z-10 min-h-screen flex items-center py-20">
+        <div className="relative z-10 h-full flex items-center py-16 overflow-y-auto">
           <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -284,7 +284,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Finiture Section - Stacks on top */}
-      <section ref={finishesRef} className="relative min-h-screen sticky top-0 z-[2]">
+      <section ref={finishesRef} className="relative h-screen sticky top-0 z-[2]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
           style={{ 
@@ -293,7 +293,7 @@ const StoneCore10 = () => {
           }}
         />
 
-        <div className="relative z-10 min-h-screen flex items-center py-20 bg-background">
+        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-background">
           <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -327,7 +327,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Schema multistrato Section */}
-      <section ref={structureRef} className="relative min-h-screen sticky top-0 z-[3]">
+      <section ref={structureRef} className="relative h-screen sticky top-0 z-[3]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
           style={{ 
@@ -336,7 +336,7 @@ const StoneCore10 = () => {
           }}
         />
 
-        <div className="relative z-10 min-h-screen flex items-center py-20 bg-background">
+        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-background">
           <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -395,7 +395,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Tabs tecnici Section */}
-      <section ref={techRef} className="relative min-h-screen sticky top-0 z-[4]">
+      <section ref={techRef} className="relative h-screen sticky top-0 z-[4]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-card"
           style={{ 
@@ -404,7 +404,7 @@ const StoneCore10 = () => {
           }}
         />
 
-        <div className="relative z-10 min-h-screen flex items-center py-20 bg-card">
+        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-card">
           <div className="container-custom max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -535,7 +535,7 @@ const StoneCore10 = () => {
       </section>
 
       {/* Riscaldamento a pavimento Section */}
-      <section ref={heatingRef} className="relative min-h-screen sticky top-0 z-[5]">
+      <section ref={heatingRef} className="relative h-screen sticky top-0 z-[5]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-background"
           style={{ 
@@ -544,7 +544,7 @@ const StoneCore10 = () => {
           }}
         />
 
-        <div className="relative z-10 min-h-screen flex items-center py-20 bg-background">
+        <div className="relative z-10 h-full flex items-center py-20 overflow-y-auto bg-background">
           <div className="container-custom max-w-4xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
