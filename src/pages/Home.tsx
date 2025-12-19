@@ -212,7 +212,7 @@ const Home = () => {
       </section>
 
       {/* Applicazioni */}
-      <section className="relative h-screen bg-card">
+      <section className="relative h-screen bg-kalea-dark">
         <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
           {/* Header */}
           <motion.div
@@ -222,10 +222,10 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-6 md:mb-8"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">
               {t('home.applicationsTitle')}
             </h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto">
               {t('home.applicationsSubtitle')}
             </p>
           </motion.div>
@@ -268,7 +268,7 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="relative h-screen bg-background">
+      <section className="relative h-screen bg-kalea-dark">
         <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
           {/* Header */}
           <motion.div
@@ -278,10 +278,10 @@ const Home = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-8 md:mb-10"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">
               {t('home.sustainabilityTitle')}
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
               {t('home.sustainabilitySubtitle')}
             </p>
           </motion.div>
