@@ -49,48 +49,59 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 30 15% 96%;
-    --foreground: 30 10% 15%;
+    /* Brand colors from Kalea Brand Manual 2025 */
+    /* Primary cream background: #F7F1E7 (RGB 247, 241, 231) */
+    --background: 39 47% 94%;
+    --foreground: 22 59% 18%;
 
     --card: 0 0% 100%;
-    --card-foreground: 30 10% 15%;
+    --card-foreground: 22 59% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 30 10% 15%;
+    --popover-foreground: 22 59% 18%;
 
-    --primary: 30 10% 15%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 22 59% 18%;
+    --primary-foreground: 39 47% 94%;
 
-    --secondary: 30 15% 92%;
-    --secondary-foreground: 30 10% 15%;
+    --secondary: 30 25% 68%;
+    --secondary-foreground: 22 59% 18%;
 
-    --muted: 30 10% 88%;
-    --muted-foreground: 30 8% 40%;
+    --muted: 39 30% 88%;
+    --muted-foreground: 22 20% 44%;
 
-    --accent: 30 15% 92%;
-    --accent-foreground: 30 10% 15%;
+    --accent: 30 25% 68%;
+    --accent-foreground: 22 59% 18%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 30 10% 85%;
-    --input: 30 10% 85%;
-    --ring: 30 10% 15%;
+    --border: 30 15% 82%;
+    --input: 30 15% 82%;
+    --ring: 22 59% 18%;
 
     --radius: 1rem;
     
-    /* Custom Kalēa tokens - Luzen light style */
-    --bg-primary: 30 15% 96%;
+    /* Custom Kalēa tokens from Brand Manual 2025 */
+    /* Dark brown: #4A2A13 (RGB 74, 42, 19) */
+    --kalea-dark: 25 59% 18%;
+    /* Medium tan: #C6B195 (RGB 198, 177, 149) */
+    --kalea-tan: 34 33% 68%;
+    /* Light cream: #F7F1E7 (RGB 247, 241, 231) */
+    --kalea-cream: 39 47% 94%;
+    /* Grey: #706F6F (RGB 111, 111, 111) */
+    --kalea-grey: 0 0% 44%;
+    
+    --bg-primary: 39 47% 94%;
     --bg-secondary: 0 0% 100%;
-    --bg-dark: 24 12% 18%;
-    --accent-warm: 25 35% 55%;
-    --accent-gold: 30 30% 65%;
-    --text-main: 30 10% 15%;
-    --text-muted: 30 8% 40%;
-    --border-soft: 30 10% 85%;
+    --bg-dark: 25 59% 18%;
+    --accent-warm: 34 33% 68%;
+    --accent-gold: 34 33% 68%;
+    --text-main: 22 59% 18%;
+    --text-muted: 0 0% 44%;
+    --border-soft: 30 15% 82%;
     
     /* Kalēa Logo Color */
-    --kalea-logo: 20 30% 60%;
+    --kalea-logo: 34 33% 68%;
     
     /* Comparison Table Status Colors */
     --status-excellent: 145 45% 50%;
@@ -106,14 +117,14 @@ All colors MUST be HSL.
     --shadow-medium: 0 12px 48px -12px hsla(0, 0%, 0%, 0.4);
     --shadow-large: 0 20px 64px -16px hsla(0, 0%, 0%, 0.5);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 39 47% 94%;
+    --sidebar-foreground: 22 59% 18%;
+    --sidebar-primary: 22 59% 18%;
+    --sidebar-primary-foreground: 39 47% 94%;
+    --sidebar-accent: 34 33% 68%;
+    --sidebar-accent-foreground: 22 59% 18%;
+    --sidebar-border: 30 15% 82%;
+    --sidebar-ring: 34 33% 68%;
   }
 
   .dark {
