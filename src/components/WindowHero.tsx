@@ -177,7 +177,7 @@ const WindowHero = () => {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="text-white/60 text-xs md:text-xs tracking-[0.5em] mb-5 uppercase font-medium"
             >
-              KALEA
+              KALĒA
             </motion.p>
             
             <motion.h1
