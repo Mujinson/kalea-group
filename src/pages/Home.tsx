@@ -201,14 +201,14 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Product Gallery Section */}
-      <section className="relative h-screen bg-background">
-        <ProductGallerySection />
+      {/* Perché MgO - 3D Book */}
+      <section className="relative h-screen bg-kalea-dark">
+        <MgoBook />
       </section>
 
-      {/* Perché MgO - 3D Book */}
-      <section className="relative h-screen">
-        <MgoBook />
+      {/* Product Gallery Section */}
+      <section className="relative h-screen bg-kalea-dark">
+        <ProductGallerySection />
       </section>
 
       {/* Applicazioni */}
