@@ -77,7 +77,7 @@ const Carousel3D = () => {
                 <Link
                   key={plank.id}
                   to={`/${language}/colori/${plank.slug}`}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                  className="absolute left-1/2 top-0 -translate-x-1/2 cursor-pointer group"
                   style={{
                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
                     transformStyle: "preserve-3d"
