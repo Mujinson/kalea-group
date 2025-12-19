@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { UserPlus, Trash2, Shield, Users } from 'lucide-react';
+import { UserPlus, Trash2, Shield, Users, AlertTriangle, Key } from 'lucide-react';
+import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
 
 interface AdminUser {
   id: string;
@@ -23,9 +24,17 @@ const AdminSettings = () => {
   const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newUserPassword, setNewUserPassword] = useState('');
   const [creating, setCreating] = useState(false);
+  const [checkingPassword, setCheckingPassword] = useState(false);
+  
+  // Change password state
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [changingPassword, setChangingPassword] = useState(false);
 
   useEffect(() => {
     fetchAdmins();
@@ -47,33 +56,6 @@ const AdminSettings = () => {
     }
   };
 
-  // Strong password validation
-  const validatePassword = (password: string): { valid: boolean; message: string } => {
-    if (password.length < 12) {
-      return { valid: false, message: 'La password deve essere di almeno 12 caratteri' };
-    }
-    
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasLowercase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    
-    if (!hasUppercase) {
-      return { valid: false, message: 'La password deve contenere almeno una lettera maiuscola' };
-    }
-    if (!hasLowercase) {
-      return { valid: false, message: 'La password deve contenere almeno una lettera minuscola' };
-    }
-    if (!hasNumber) {
-      return { valid: false, message: 'La password deve contenere almeno un numero' };
-    }
-    if (!hasSpecial) {
-      return { valid: false, message: 'La password deve contenere almeno un carattere speciale (!@#$%^&*...)' };
-    }
-    
-    return { valid: true, message: '' };
-  };
-
   const handleCreateAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -82,16 +64,31 @@ const AdminSettings = () => {
       return;
     }
 
+    // Validate password strength
     const passwordValidation = validatePassword(newUserPassword);
     if (!passwordValidation.valid) {
       toast.error(passwordValidation.message);
       return;
     }
 
+    setCheckingPassword(true);
+    
+    // Check if password is compromised (HIBP)
+    const { compromised, count } = await checkPasswordCompromised(newUserPassword);
+    setCheckingPassword(false);
+    
+    if (compromised) {
+      toast.error(`Questa password è stata trovata in ${count.toLocaleString()} data breach. Scegli una password più sicura.`, {
+        duration: 6000,
+        icon: <AlertTriangle className="w-5 h-5 text-destructive" />
+      });
+      return;
+    }
+
     setCreating(true);
 
     try {
-      // First, create the user account
+      // Create the user account
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: newUserEmail,
         password: newUserPassword,
@@ -106,7 +103,7 @@ const AdminSettings = () => {
         throw new Error('Errore nella creazione utente');
       }
 
-      // Then add admin role
+      // Add admin role
       const { error: roleError } = await supabase.from('user_roles').insert({
         user_id: authData.user.id,
         role: 'admin',
@@ -114,7 +111,7 @@ const AdminSettings = () => {
 
       if (roleError) throw roleError;
 
-      toast.success('Admin creato con successo');
+      toast.success('Admin creato con successo! L\'utente riceverà una email di conferma.');
       setDialogOpen(false);
       setNewUserEmail('');
       setNewUserPassword('');
@@ -128,6 +125,62 @@ const AdminSettings = () => {
       }
     } finally {
       setCreating(false);
+    }
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newPassword || !confirmNewPassword) {
+      toast.error('Compila tutti i campi');
+      return;
+    }
+    
+    if (newPassword !== confirmNewPassword) {
+      toast.error('Le nuove password non coincidono');
+      return;
+    }
+
+    // Validate password strength
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.valid) {
+      toast.error(passwordValidation.message);
+      return;
+    }
+
+    setCheckingPassword(true);
+    
+    // Check if password is compromised (HIBP)
+    const { compromised, count } = await checkPasswordCompromised(newPassword);
+    setCheckingPassword(false);
+    
+    if (compromised) {
+      toast.error(`Questa password è stata trovata in ${count.toLocaleString()} data breach. Scegli una password più sicura.`, {
+        duration: 6000,
+        icon: <AlertTriangle className="w-5 h-5 text-destructive" />
+      });
+      return;
+    }
+
+    setChangingPassword(true);
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) throw error;
+
+      toast.success('Password aggiornata con successo');
+      setChangePasswordOpen(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (error: any) {
+      console.error('Error changing password:', error);
+      toast.error('Errore nel cambio password: ' + error.message);
+    } finally {
+      setChangingPassword(false);
     }
   };
 
@@ -265,8 +318,47 @@ const AdminSettings = () => {
 
       {/* Current User Info */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Account Corrente</CardTitle>
+          <Dialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Key className="w-4 h-4 mr-2" />
+                Cambia Password
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Cambia Password</DialogTitle>
+                <DialogDescription>
+                  Inserisci una nuova password sicura (minimo 12 caratteri, maiuscole, minuscole, numeri e caratteri speciali)
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleChangePassword} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Nuova Password *</Label>
+                  <Input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Nuova password sicura"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Conferma Nuova Password *</Label>
+                  <Input
+                    type="password"
+                    value={confirmNewPassword}
+                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    placeholder="Conferma la nuova password"
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={changingPassword || checkingPassword}>
+                  {checkingPassword ? 'Verifica sicurezza...' : changingPassword ? 'Aggiornamento...' : 'Aggiorna Password'}
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
