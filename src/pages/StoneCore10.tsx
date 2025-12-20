@@ -222,39 +222,28 @@ const StoneCore10 = () => {
         </div>
       </section>
 
-      {/* Vantaggi Section - Normal scroll with background */}
-      <section ref={advantagesRef} className="relative z-[1]">
-        <div className="absolute inset-0">
-          <img 
-            src={bgStoneCore} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
+      {/* Vantaggi Section - Normal scroll */}
+      <section ref={advantagesRef} className="relative z-[1] bg-card py-20">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              {t('stonecore.advantagesTitle')}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {t('stonecore.advantagesSubtitle')}
+            </p>
+          </motion.div>
 
-        <div className="relative z-10 py-20">
-          <div className="container-custom">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-                {t('stonecore.advantagesTitle')}
-              </h2>
-              <p className="text-lg text-white/90 max-w-2xl mx-auto">
-                {t('stonecore.advantagesSubtitle')}
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {advantages.map((advantage, index) => (
-                <FeatureCard key={advantage.title} {...advantage} index={index} />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {advantages.map((advantage, index) => (
+              <FeatureCard key={advantage.title} {...advantage} index={index} />
+            ))}
           </div>
         </div>
       </section>

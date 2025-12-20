@@ -306,38 +306,27 @@ const CWC = () => {
       </section>
 
       {/* Vantaggi Section */}
-      <section ref={advantagesRef} className="relative z-[3]">
-        <div className="absolute inset-0">
-          <img 
-            src={bgStoneCore} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
+      <section ref={advantagesRef} className="relative z-[3] bg-card py-20">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              Vantaggi principali
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Un pavimento naturale progettato per il benessere e la sostenibilità
+            </p>
+          </motion.div>
 
-        <div className="relative z-10 py-20">
-          <div className="container-custom">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-                Vantaggi principali
-              </h2>
-              <p className="text-lg text-white/90 max-w-2xl mx-auto">
-                Un pavimento naturale progettato per il benessere e la sostenibilità
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-              {advantages.map((advantage, index) => (
-                <FeatureCard key={advantage.title} {...advantage} index={index} />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {advantages.map((advantage, index) => (
+              <FeatureCard key={advantage.title} {...advantage} index={index} />
+            ))}
           </div>
         </div>
       </section>
