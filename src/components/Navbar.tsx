@@ -60,12 +60,23 @@ const Navbar = () => {
   ];
 
   const lineeItems = [
-    { label: t('nav.menuStonecore'), path: `/${language}/stonecore-10`, comingSoon: false },
+    { 
+      label: t('nav.menuStonecore'), 
+      path: null, 
+      comingSoon: false,
+      submenu: [
+        { label: "StoneCore 10 (MgO)", path: `/${language}/stonecore-10` },
+        { label: "CWC – Carbon Wood", path: `/${language}/cwc` },
+      ]
+    },
     { label: t('nav.menuEdgeline'), path: `/${language}/edgeline`, comingSoon: false },
     { label: t('nav.menuOnewall'), path: `/${language}/onewall`, comingSoon: true },
   ];
 
-  const isLineePage = lineeItems.some((item) => location.pathname === item.path);
+  const isLineePage = lineeItems.some((item) => 
+    item.path === location.pathname || 
+    item.submenu?.some((sub) => sub.path === location.pathname)
+  );
 
   // Adaptive font size for DE/FR languages
   useEffect(() => {
@@ -208,7 +219,7 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-48 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
                         useDarkStyle 
                           ? "bg-white border border-[#EBE2D8]" 
                           : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
@@ -216,7 +227,7 @@ const Navbar = () => {
                     >
                       {lineeItems.map((item, index) => (
                         item.comingSoon ? (
-                          <Tooltip key={item.path}>
+                          <Tooltip key={item.label}>
                             <TooltipTrigger asChild>
                               <div
                                 className={`block px-6 py-3 text-nav cursor-not-allowed opacity-50 ${
@@ -232,10 +243,41 @@ const Navbar = () => {
                               Coming soon
                             </TooltipContent>
                           </Tooltip>
+                        ) : item.submenu ? (
+                          <div key={item.label} className={`${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}>
+                            <div
+                              className={`block px-6 py-3 text-nav font-medium ${
+                                useDarkStyle
+                                  ? "text-[#3F3B33]"
+                                  : "text-white"
+                              }`}
+                            >
+                              {item.label}
+                            </div>
+                            <div className="pb-2">
+                              {item.submenu.map((subItem) => (
+                                <Link
+                                  key={subItem.path}
+                                  to={subItem.path}
+                                  className={`block px-6 py-2 text-nav text-sm transition-all duration-200 ${
+                                    useDarkStyle
+                                      ? location.pathname === subItem.path
+                                        ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+                                        : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+                                      : location.pathname === subItem.path
+                                        ? "text-white bg-white/10"
+                                        : "text-white/80 hover:text-white hover:bg-white/5"
+                                  }`}
+                                >
+                                  {subItem.label}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
                         ) : (
                           <Link
                             key={item.path}
-                            to={item.path}
+                            to={item.path!}
                             className={`block px-6 py-3 text-nav transition-all duration-200 ${
                               useDarkStyle
                                 ? location.pathname === item.path
@@ -389,7 +431,7 @@ const Navbar = () => {
                       {lineeItems.map((item) => (
                         item.comingSoon ? (
                           <div
-                            key={item.path}
+                            key={item.label}
                             className={`block text-sm font-medium py-2 cursor-not-allowed opacity-50 ${
                               useDarkStyle
                                 ? "text-[#3F3B33]/60"
@@ -398,10 +440,45 @@ const Navbar = () => {
                           >
                             {item.label} – <span className="italic">Coming soon</span>
                           </div>
+                        ) : item.submenu ? (
+                          <div key={item.label}>
+                            <div
+                              className={`block text-sm font-medium py-2 ${
+                                useDarkStyle
+                                  ? "text-[#3F3B33]"
+                                  : "text-white"
+                              }`}
+                            >
+                              {item.label}
+                            </div>
+                            <div className="pl-3 space-y-1">
+                              {item.submenu.map((subItem) => (
+                                <Link
+                                  key={subItem.path}
+                                  to={subItem.path}
+                                  className={`block text-sm transition-colors py-1.5 ${
+                                    useDarkStyle
+                                      ? location.pathname === subItem.path 
+                                        ? "text-[#3F3B33]" 
+                                        : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
+                                      : location.pathname === subItem.path 
+                                        ? "text-white" 
+                                        : "text-white/60 hover:text-white"
+                                  }`}
+                                  onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    setIsLineeExpanded(false);
+                                  }}
+                                >
+                                  {subItem.label}
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
                         ) : (
                           <Link
                             key={item.path}
-                            to={item.path}
+                            to={item.path!}
                             className={`block text-sm font-medium transition-colors py-2 ${
                               useDarkStyle
                                 ? location.pathname === item.path 
