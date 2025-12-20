@@ -13,17 +13,18 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
-// 6 panels - 3 on each side, equal spacing, not touching window
-const PANEL_SIZE = 85;
+// 6 panels - 3 on each side, shaped like floor planks (longer than wide)
+const PANEL_WIDTH = 55;
+const PANEL_HEIGHT = 120;
 const floatingPanels = [
   // Left side (3 panels - evenly spaced vertically)
-  { id: 1, x: -320, y: -140, rotate: -12, floatDelay: 0, image: finishAurora },
-  { id: 2, x: -320, y: 0, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
-  { id: 3, x: -320, y: 140, rotate: -15, floatDelay: 1.2, image: finishPerla },
+  { id: 1, x: -300, y: -150, rotate: -12, floatDelay: 0, image: finishAurora },
+  { id: 2, x: -300, y: 10, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
+  { id: 3, x: -300, y: 170, rotate: -15, floatDelay: 1.2, image: finishPerla },
   // Right side (3 panels - evenly spaced vertically)
-  { id: 4, x: 320, y: -140, rotate: 14, floatDelay: 0.3, image: finishSabbia },
-  { id: 5, x: 320, y: 0, rotate: 10, floatDelay: 0.8, image: finishSilven },
-  { id: 6, x: 320, y: 140, rotate: 18, floatDelay: 1.5, image: finishTerram },
+  { id: 4, x: 300, y: -150, rotate: 14, floatDelay: 0.3, image: finishSabbia },
+  { id: 5, x: 300, y: 10, rotate: 10, floatDelay: 0.8, image: finishSilven },
+  { id: 6, x: 300, y: 170, rotate: 18, floatDelay: 1.5, image: finishTerram },
 ];
 
 const WindowHero = () => {
@@ -130,8 +131,8 @@ const WindowHero = () => {
               style={{
                 x: panel.x,
                 y: panel.y,
-                width: PANEL_SIZE,
-                height: PANEL_SIZE,
+                width: PANEL_WIDTH,
+                height: PANEL_HEIGHT,
               }}
               initial={{ opacity: 0, scale: 0.8, rotate: panel.rotate }}
               animate={{ 
