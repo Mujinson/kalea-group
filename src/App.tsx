@@ -124,7 +124,7 @@ const App = () => (
             <Route path="/it/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
             <Route path="/it/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
             <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/it/biowall" element={<Navigate to="/it" replace />} />
             <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/it/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/it/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -142,7 +142,7 @@ const App = () => (
             <Route path="/en/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
             <Route path="/en/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
             <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/en/biowall" element={<Navigate to="/en" replace />} />
             <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/en/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/en/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -160,7 +160,7 @@ const App = () => (
             <Route path="/de/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
             <Route path="/de/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
             <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/de/biowall" element={<Navigate to="/de" replace />} />
             <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/de/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/de/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -178,7 +178,7 @@ const App = () => (
             <Route path="/fr/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
             <Route path="/fr/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
             <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/fr/biowall" element={<Navigate to="/fr" replace />} />
             <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/fr/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/fr/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
