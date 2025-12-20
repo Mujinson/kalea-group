@@ -70,7 +70,7 @@ const Navbar = () => {
       ]
     },
     { label: t('nav.menuEdgeline'), path: `/${language}/edgeline`, comingSoon: false },
-    { label: t('nav.menuOnewall'), path: `/${language}/onewall`, comingSoon: true },
+    { label: "BIOWALL®", path: `/${language}/biowall`, comingSoon: false },
   ];
 
   const isLineePage = lineeItems.some((item) => 

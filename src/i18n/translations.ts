@@ -15,7 +15,7 @@ export const translations: Record<Language, Translations> = {
       requestQuote: "Diventa Partner",
       menuStonecore: "Pavimenti",
       menuEdgeline: "Profili e battiscopa",
-      menuOnewall: "Pannelli",
+      menuOnewall: "BIOWALL®",
     },
     hero: {
       home: {
@@ -72,8 +72,8 @@ export const translations: Record<Language, Translations> = {
         ctaSecondary: "Scopri BIOCORE®",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        subtitle: "Pannelli verticali. Superfici continue per pareti e soffitti.",
+        title: "Kalēa BIOWALL®",
+        subtitle: "BIOWALL® (pannelli verticali in ossido di magnesio). Superfici continue per pareti e soffitti.",
         ctaPrimary: "Richiedi campioni",
         ctaSecondary: "Scarica catalogo",
       },
@@ -90,8 +90,8 @@ export const translations: Record<Language, Translations> = {
         description: "Profili e battiscopa architettonici in alluminio. Design essenziale, finitura impeccabile.",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        description: "Il verticale oltre il cartongesso. Zero stuccatura. Zero polvere. Zero pittura. La superficie è già design.",
+        title: "Kalēa BIOWALL®",
+        description: "BIOWALL® (pannelli verticali in ossido di magnesio). Il verticale oltre il cartongesso. Zero stuccatura. Zero polvere. Zero pittura.",
         comingSoonLabel: "Novità in arrivo",
       },
       mgoTitle: "Perché BIOCORE®",
@@ -381,7 +381,7 @@ export const translations: Record<Language, Translations> = {
         },
         resistance: {
           title: "Resistenza superiore",
-          description: "Core BIOCORE® per stabilità e resistenza agli urti.",
+          description: "Core in ossido di magnesio per stabilità e resistenza agli urti.",
         },
         waterproof: {
           title: "Waterproof",
@@ -400,9 +400,9 @@ export const translations: Record<Language, Translations> = {
           description: "Nessun ritocco o trattamento periodico richiesto.",
         },
       },
-      applicationsTitle: "Dove usare OneWall",
+      applicationsTitle: "Dove usare BIOWALL®",
       applicationsSubtitle: "Superfici continue per ogni esigenza architettonica",
-      ctaTitle: "Scopri le possibilità di OneWall",
+      ctaTitle: "Scopri le possibilità di BIOWALL®",
       ctaSubtitle: "Contattaci per una consulenza sul tuo progetto",
       ctaButton: "Richiedi consulenza",
     },
@@ -419,7 +419,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "La risposta è arrivata dall'ossido di magnesio e dai compositi naturali.\nMateriali conosciuti nel settore tecnico, ma mai sfruttati al loro massimo potenziale.\nAndrea e Gabriel hanno visto ciò che altri non avevano visto: un modo per riscrivere le regole del settore.",
       historyJourney: "Il percorso non è stato immediato.\nAnni di test, confronti, campioni, errori.\nMa ogni limite trovato diventava una nuova variabile da analizzare, da correggere, da migliorare.",
       historyResult: "Il risultato di questa visione è un ecosistema unico:",
-      historyProducts: "BIOCORE® – superfici orizzontali ad alte prestazioni\n\nBIOWOOD® – pavimenti naturali evoluti\n\nEdgeLine – profili architettonici continui e coordinati\n\nOneWall – rivestimenti verticali che completano un sistema",
+      historyProducts: "BIOCORE® – superfici orizzontali ad alte prestazioni\n\nBIOWOOD® – pavimenti naturali evoluti\n\nEdgeLine – profili architettonici continui e coordinati\n\nBIOWALL® – rivestimenti verticali che completano un sistema",
       historySystem: "Non un prodotto, ma un linguaggio tecnico integrato, dove ogni componente nasce per dialogare con l'altro.",
       historyToday: "Oggi Kalēa è diventata una realtà che unisce:",
       historyValues: "• rigore analitico\n• competenza tecnica\n• un'estetica naturale e contemporanea\n• una filosofia orientata alla performance reale, misurabile, tangibile",
@@ -491,7 +491,7 @@ export const translations: Record<Language, Translations> = {
       interestsList: {
         stonecore: "BIOCORE®",
         edgeline: "EdgeLine",
-        onewall: "OneWall",
+        onewall: "BIOWALL®",
         partnership: "Partnership",
       },
       message: "Messaggio",
@@ -806,7 +806,7 @@ export const translations: Record<Language, Translations> = {
       requestQuote: "Become Partner",
       menuStonecore: "Floors",
       menuEdgeline: "Profiles & Baseboards",
-      menuOnewall: "Panels",
+      menuOnewall: "BIOWALL®",
     },
     hero: {
       home: {
@@ -863,8 +863,8 @@ export const translations: Record<Language, Translations> = {
         ctaSecondary: "Discover BIOCORE®",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        subtitle: "Vertical panels. Continuous surfaces for walls and ceilings.",
+        title: "Kalēa BIOWALL®",
+        subtitle: "BIOWALL® (vertical panels in magnesium oxide). Continuous surfaces for walls and ceilings.",
         ctaPrimary: "Request samples",
         ctaSecondary: "Download catalog",
       },
@@ -881,8 +881,8 @@ export const translations: Record<Language, Translations> = {
         description: "Architectural aluminum profiles and baseboards. Essential design, impeccable finish.",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        description: "The vertical beyond drywall. Zero plastering. Zero dust. Zero painting. The surface is already design.",
+        title: "Kalēa BIOWALL®",
+        description: "BIOWALL® (vertical panels in magnesium oxide). The vertical beyond drywall. Zero plastering. Zero dust. Zero painting.",
         comingSoonLabel: "Coming soon",
       },
       mgoTitle: "Why BIOCORE®",
@@ -1172,7 +1172,7 @@ export const translations: Record<Language, Translations> = {
         },
         resistance: {
           title: "Superior resistance",
-          description: "MgO core for stability and impact resistance.",
+          description: "Magnesium oxide core for stability and impact resistance.",
         },
         waterproof: {
           title: "Waterproof",
@@ -1191,9 +1191,9 @@ export const translations: Record<Language, Translations> = {
           description: "No touch-ups or periodic treatments required.",
         },
       },
-      applicationsTitle: "Where to use OneWall",
+      applicationsTitle: "Where to use BIOWALL®",
       applicationsSubtitle: "Continuous surfaces for every architectural need",
-      ctaTitle: "Discover OneWall possibilities",
+      ctaTitle: "Discover BIOWALL® possibilities",
       ctaSubtitle: "Contact us for consultation on your project",
       ctaButton: "Request consultation",
     },
@@ -1210,7 +1210,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "The answer came from magnesium oxide.\nA material known in the technical sector, but never exploited to its full potential.\nAndrea and Gabriel saw what others had not seen: a way to rewrite the rules of the sector.",
       historyJourney: "The journey was not immediate.\nYears of tests, comparisons, samples, errors.\nBut every limit found became a new variable to analyze, to correct, to improve.",
       historyResult: "The result of this vision is a unique ecosystem:",
-      historyProducts: "StoneCore 10 – high-performance horizontal surfaces\n\nEdgeLine – continuous and coordinated architectural profiles\n\nOneWall – vertical claddings that complete a system",
+      historyProducts: "BIOCORE® – high-performance horizontal surfaces\n\nBIOWOOD® – evolved natural flooring\n\nEdgeLine – continuous and coordinated architectural profiles\n\nBIOWALL® – vertical claddings that complete a system",
       historySystem: "Not a product, but an integrated technical language, where every component is born to dialogue with the other.",
       historyToday: "Today Kalēa has become a reality that combines:",
       historyValues: "• analytical rigor\n• technical expertise\n• a natural and contemporary aesthetic\n• a philosophy oriented towards real, measurable, tangible performance",
@@ -1282,7 +1282,7 @@ export const translations: Record<Language, Translations> = {
       interestsList: {
         stonecore: "StoneCore 10",
         edgeline: "EdgeLine",
-        onewall: "OneWall",
+        onewall: "BIOWALL®",
         partnership: "Partnership",
       },
       message: "Message",
@@ -1597,7 +1597,7 @@ export const translations: Record<Language, Translations> = {
       requestQuote: "Partner werden",
       menuStonecore: "Böden",
       menuEdgeline: "Profile & Sockelleisten",
-      menuOnewall: "Paneele",
+      menuOnewall: "BIOWALL®",
     },
     hero: {
       home: {
@@ -1654,8 +1654,8 @@ export const translations: Record<Language, Translations> = {
         ctaSecondary: "StoneCore 10 entdecken",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        subtitle: "Vertikale MgO-Paneele. Durchgehende Oberflächen für Wände und Decken.",
+        title: "Kalēa BIOWALL®",
+        subtitle: "BIOWALL® (vertikale Paneele aus Magnesiumoxid). Durchgehende Oberflächen für Wände und Decken.",
         ctaPrimary: "Muster anfordern",
         ctaSecondary: "Katalog herunterladen",
       },
@@ -1672,8 +1672,8 @@ export const translations: Record<Language, Translations> = {
         description: "Architektonische Aluminiumprofile und Sockelleisten. Essentielles Design, makellose Verarbeitung.",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        description: "Das Vertikale jenseits von Trockenbau. Keine Verspachtelung. Kein Staub. Keine Farbe. Die Oberfläche ist bereits Design.",
+        title: "Kalēa BIOWALL®",
+        description: "BIOWALL® (vertikale Paneele aus Magnesiumoxid). Das Vertikale jenseits von Trockenbau. Keine Verspachtelung. Kein Staub. Keine Farbe.",
         comingSoonLabel: "Bald verfügbar",
       },
       mgoTitle: "Warum MgO",
@@ -1963,7 +1963,7 @@ export const translations: Record<Language, Translations> = {
         },
         resistance: {
           title: "Überlegene Beständigkeit",
-          description: "MgO-Kern für Stabilität und Stoßfestigkeit.",
+          description: "Magnesiumoxid-Kern für Stabilität und Stoßfestigkeit.",
         },
         waterproof: {
           title: "Wasserdicht",
@@ -1982,9 +1982,9 @@ export const translations: Record<Language, Translations> = {
           description: "Keine Nachbesserungen oder regelmäßige Behandlungen erforderlich.",
         },
       },
-      applicationsTitle: "Wo OneWall verwenden",
+      applicationsTitle: "Wo BIOWALL® verwenden",
       applicationsSubtitle: "Durchgehende Oberflächen für jeden architektonischen Bedarf",
-      ctaTitle: "Entdecken Sie die Möglichkeiten von OneWall",
+      ctaTitle: "Entdecken Sie die Möglichkeiten von BIOWALL®",
       ctaSubtitle: "Kontaktieren Sie uns für eine Beratung zu Ihrem Projekt",
       ctaButton: "Beratung anfordern",
     },
@@ -2001,7 +2001,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "Die Antwort kam vom Magnesiumoxid.\nEin Material, das im technischen Bereich bekannt war, aber nie sein volles Potenzial ausgeschöpft hatte.\nAndrea und Gabriel sahen, was andere nicht gesehen hatten: einen Weg, die Regeln der Branche neu zu schreiben.",
       historyJourney: "Der Weg war nicht sofort.\nJahre von Tests, Vergleichen, Mustern, Fehlern.\nAber jede gefundene Grenze wurde zu einer neuen Variable zum Analysieren, Korrigieren, Verbessern.",
       historyResult: "Das Ergebnis dieser Vision ist ein einzigartiges Ökosystem:",
-      historyProducts: "StoneCore 10 – horizontale Hochleistungsoberflächen\n\nEdgeLine – durchgehende und koordinierte architektonische Profile\n\nOneWall – vertikale Verkleidungen, die ein System vervollständigen",
+      historyProducts: "BIOCORE® – horizontale Hochleistungsoberflächen\n\nBIOWOOD® – Weiterentwickelte Naturböden\n\nEdgeLine – durchgehende und koordinierte architektonische Profile\n\nBIOWALL® – vertikale Verkleidungen, die ein System vervollständigen",
       historySystem: "Kein Produkt, sondern eine integrierte technische Sprache, bei der jede Komponente für den Dialog mit der anderen geboren wird.",
       historyToday: "Heute ist Kalēa zu einer Realität geworden, die vereint:",
       historyValues: "• analytische Strenge\n• technische Kompetenz\n• eine natürliche und zeitgenössische Ästhetik\n• eine Philosophie, die auf echte, messbare, greifbare Leistung ausgerichtet ist",
@@ -2073,7 +2073,7 @@ export const translations: Record<Language, Translations> = {
       interestsList: {
         stonecore: "StoneCore 10",
         edgeline: "EdgeLine",
-        onewall: "OneWall",
+        onewall: "BIOWALL®",
         partnership: "Partnerschaft",
       },
       message: "Nachricht",
@@ -2388,7 +2388,7 @@ export const translations: Record<Language, Translations> = {
       requestQuote: "Devenir Partenaire",
       menuStonecore: "Sols",
       menuEdgeline: "Profilés & Plinthes",
-      menuOnewall: "Panneaux",
+      menuOnewall: "BIOWALL®",
     },
     hero: {
       home: {
@@ -2445,8 +2445,8 @@ export const translations: Record<Language, Translations> = {
         ctaSecondary: "Découvrir StoneCore 10",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        subtitle: "Panneaux verticaux MgO. Surfaces continues pour murs et plafonds.",
+        title: "Kalēa BIOWALL®",
+        subtitle: "BIOWALL® (panneaux verticaux en oxyde de magnésium). Surfaces continues pour murs et plafonds.",
         ctaPrimary: "Demander des échantillons",
         ctaSecondary: "Télécharger le catalogue",
       },
@@ -2463,8 +2463,8 @@ export const translations: Record<Language, Translations> = {
         description: "Profilés et plinthes architecturaux en aluminium. Design essentiel, finition impeccable.",
       },
       onewall: {
-        title: "Kalēa OneWall",
-        description: "Le vertical au-delà du placo. Zéro enduit. Zéro poussière. Zéro peinture. La surface est déjà design.",
+        title: "Kalēa BIOWALL®",
+        description: "BIOWALL® (panneaux verticaux en oxyde de magnésium). Le vertical au-delà du placo. Zéro enduit. Zéro poussière. Zéro peinture.",
         comingSoonLabel: "Bientôt disponible",
       },
       mgoTitle: "Pourquoi MgO",
@@ -2760,7 +2760,7 @@ export const translations: Record<Language, Translations> = {
         },
         resistance: {
           title: "Résistance supérieure",
-          description: "Noyau MgO pour stabilité et résistance aux chocs.",
+          description: "Noyau en oxyde de magnésium pour stabilité et résistance aux chocs.",
         },
         waterproof: {
           title: "Étanche",
@@ -2779,9 +2779,9 @@ export const translations: Record<Language, Translations> = {
           description: "Aucune retouche ou traitement périodique requis.",
         },
       },
-      applicationsTitle: "Où utiliser OneWall",
+      applicationsTitle: "Où utiliser BIOWALL®",
       applicationsSubtitle: "Surfaces continues pour chaque besoin architectural",
-      ctaTitle: "Découvrez les possibilités de OneWall",
+      ctaTitle: "Découvrez les possibilités de BIOWALL®",
       ctaSubtitle: "Contactez-nous pour une consultation sur votre projet",
       ctaButton: "Demander une consultation",
     },
@@ -2798,7 +2798,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "La réponse est venue de l'oxyde de magnésium.\nUn matériau connu dans le secteur technique, mais jamais exploité à son plein potentiel.\nAndrea et Gabriel ont vu ce que les autres n'avaient pas vu : un moyen de réécrire les règles du secteur.",
       historyJourney: "Le parcours n'a pas été immédiat.\nDes années de tests, comparaisons, échantillons, erreurs.\nMais chaque limite trouvée devenait une nouvelle variable à analyser, à corriger, à améliorer.",
       historyResult: "Le résultat de cette vision est un écosystème unique :",
-      historyProducts: "StoneCore 10 – surfaces horizontales haute performance\n\nEdgeLine – profilés architecturaux continus et coordonnés\n\nOneWall – revêtements verticaux qui complètent un système",
+      historyProducts: "BIOCORE® – surfaces horizontales haute performance\n\nBIOWOOD® – sols naturels évolués\n\nEdgeLine – profilés architecturaux continus et coordonnés\n\nBIOWALL® – revêtements verticaux qui complètent un système",
       historySystem: "Pas un produit, mais un langage technique intégré, où chaque composant naît pour dialoguer avec l'autre.",
       historyToday: "Aujourd'hui, Kalēa est devenue une réalité qui unit :",
       historyValues: "• rigueur analytique\n• compétence technique\n• une esthétique naturelle et contemporaine\n• une philosophie orientée vers la performance réelle, mesurable, tangible",
@@ -2870,7 +2870,7 @@ export const translations: Record<Language, Translations> = {
       interestsList: {
         stonecore: "StoneCore 10",
         edgeline: "EdgeLine",
-        onewall: "OneWall",
+        onewall: "BIOWALL®",
         partnership: "Partenariat",
       },
       message: "Message",
