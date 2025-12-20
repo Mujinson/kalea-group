@@ -3,19 +3,30 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import heroImage from "@/assets/hero-kalea.webp";
-import floatingPanelsImage from "@/assets/floating-panels.png";
 
-// Individual panel positions and rotations around the window
+// Import floor finish images
+import finishAurora from "@/assets/finish-aurora.jpg";
+import finishCorteccia from "@/assets/finish-corteccia.jpg";
+import finishPerla from "@/assets/finish-perla.jpg";
+import finishSabbia from "@/assets/finish-sabbia.jpg";
+import finishSilven from "@/assets/finish-silven.jpg";
+import finishTerram from "@/assets/finish-terram.jpg";
+import finishVelora from "@/assets/finish-velora.jpg";
+import bgMgo from "@/assets/bg-mgo-section.jpg";
+
+// 8 panels - only above and on sides, no bottom panels
 const floatingPanels = [
-  { id: 1, x: -220, y: -180, rotate: -15, size: 80 },
-  { id: 2, x: -180, y: 20, rotate: -8, size: 75 },
-  { id: 3, x: -200, y: 180, rotate: -12, size: 70 },
-  { id: 4, x: 200, y: -160, rotate: 12, size: 75 },
-  { id: 5, x: 180, y: 40, rotate: 18, size: 80 },
-  { id: 6, x: 210, y: 200, rotate: 8, size: 70 },
-  { id: 7, x: -80, y: -260, rotate: -5, size: 65 },
-  { id: 8, x: 90, y: -240, rotate: 10, size: 70 },
-  { id: 9, x: 0, y: 280, rotate: 3, size: 75 },
+  // Left side (3 panels)
+  { id: 1, x: -280, y: -120, rotate: -12, size: 90, floatDelay: 0, image: finishAurora },
+  { id: 2, x: -240, y: 80, rotate: -8, size: 85, floatDelay: 0.5, image: finishCorteccia },
+  { id: 3, x: -300, y: -20, rotate: -15, size: 75, floatDelay: 1.2, image: finishPerla },
+  // Right side (3 panels)
+  { id: 4, x: 280, y: -100, rotate: 14, size: 85, floatDelay: 0.3, image: finishSabbia },
+  { id: 5, x: 250, y: 90, rotate: 10, size: 80, floatDelay: 0.8, image: finishSilven },
+  { id: 6, x: 310, y: 0, rotate: 18, size: 75, floatDelay: 1.5, image: finishTerram },
+  // Top (2 panels)
+  { id: 7, x: -100, y: -220, rotate: -6, size: 80, floatDelay: 0.6, image: finishVelora },
+  { id: 8, x: 110, y: -200, rotate: 8, size: 85, floatDelay: 1.0, image: bgMgo },
 ];
 
 const WindowHero = () => {
@@ -122,27 +133,37 @@ const WindowHero = () => {
               style={{
                 x: panel.x,
                 y: panel.y,
-                rotate: panel.rotate,
                 width: panel.size,
                 height: panel.size,
               }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.8, rotate: panel.rotate }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                rotate: [panel.rotate - 2, panel.rotate + 2, panel.rotate - 2],
+                y: [panel.y - 8, panel.y + 8, panel.y - 8],
+                x: [panel.x - 4, panel.x + 4, panel.x - 4],
+              }}
               transition={{ 
-                duration: 0.8, 
-                delay: 0.2 + panel.id * 0.08,
-                ease: "easeOut" 
+                opacity: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
+                scale: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
+                rotate: { duration: 6 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
+                y: { duration: 4 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
+                x: { duration: 5 + panel.floatDelay * 0.5, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
               }}
             >
               <div 
-                className="w-full h-full rounded-sm shadow-2xl"
+                className="w-full h-full rounded-sm overflow-hidden"
                 style={{
-                  backgroundImage: `url(${floatingPanelsImage})`,
-                  backgroundSize: '300%',
-                  backgroundPosition: `${((panel.id - 1) % 3) * 50}% ${Math.floor((panel.id - 1) / 3) * 33}%`,
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.4), 0 8px 16px rgba(0,0,0,0.3)',
+                  boxShadow: '0 25px 50px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.4)',
                 }}
-              />
+              >
+                <img 
+                  src={panel.image} 
+                  alt="" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </motion.div>
           ))}
         </motion.div>
