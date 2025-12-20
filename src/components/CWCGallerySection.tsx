@@ -57,7 +57,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
           {/* Badge positioned at top-right of circle */}
           <div className="absolute -top-1 -right-1 sm:top-0 sm:right-0">
             <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-medium bg-kalea-cream/90 backdrop-blur-sm text-kalea-dark shadow-sm">
-              CWC
+              BIOWOOD®
             </span>
           </div>
         </div>
@@ -68,7 +68,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
             {product.name}
           </h3>
           <p className="text-xs sm:text-sm text-kalea-cream/70 mt-1">
-            Carbon Wood Composite
+            Pavimento naturale evoluto
           </p>
         </div>
       </motion.div>
@@ -100,16 +100,16 @@ const CWCGallerySection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-2 md:mb-4">
-            {language === 'it' ? 'Esplora la Collezione CWC' : 
-             language === 'en' ? 'Explore the CWC Collection' :
-             language === 'de' ? 'Entdecken Sie die CWC-Kollektion' :
-             'Découvrez la Collection CWC'}
+            {language === 'it' ? 'Esplora la Collezione BIOWOOD®' : 
+             language === 'en' ? 'Explore the BIOWOOD® Collection' :
+             language === 'de' ? 'Entdecken Sie die BIOWOOD®-Kollektion' :
+             'Découvrez la Collection BIOWOOD®'}
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-kalea-cream/80 max-w-2xl mx-auto">
-            {language === 'it' ? 'Texture, colori e dettagli del nostro pavimento in Carbon Wood Composite.' : 
-             language === 'en' ? 'Texture, colors and details of our Carbon Wood Composite flooring.' :
-             language === 'de' ? 'Texturen, Farben und Details unseres Carbon Wood Composite Bodens.' :
-             'Textures, couleurs et détails de notre revêtement Carbon Wood Composite.'}
+            {language === 'it' ? 'BIOWOOD® (pavimento naturale evoluto in Carbon Wood Composite – CWC). Texture, colori e dettagli.' : 
+             language === 'en' ? 'BIOWOOD® (evolved natural flooring in Carbon Wood Composite – CWC). Textures, colors and details.' :
+             language === 'de' ? 'BIOWOOD® (entwickelter Naturboden aus Carbon Wood Composite – CWC). Texturen, Farben und Details.' :
+             'BIOWOOD® (sol naturel évolué en Carbon Wood Composite – CWC). Textures, couleurs et détails.'}
           </p>
         </motion.div>
       </div>
@@ -138,19 +138,19 @@ const CWCGallerySection = () => {
           className="max-w-3xl mx-auto"
         >
           <p className="text-sm md:text-lg text-kalea-cream/80 leading-relaxed mb-4 md:mb-8">
-            {language === 'it' ? 'Il pavimento CWC combina tecnologia in fibra di carbonio, resistenza superiore e un design naturale ispirato al legno autentico.' : 
-             language === 'en' ? 'CWC flooring combines carbon fiber technology, superior resistance and a natural design inspired by authentic wood.' :
-             language === 'de' ? 'CWC-Böden kombinieren Kohlefasertechnologie, überlegene Widerstandsfähigkeit und ein natürliches, von echtem Holz inspiriertes Design.' :
-             'Le revêtement CWC combine la technologie en fibre de carbone, une résistance supérieure et un design naturel inspiré du bois authentique.'}
+            {language === 'it' ? 'BIOWOOD® è il pavimento naturale evoluto KALEA, realizzato con fibre di legno, componenti a base di carbonio e leganti naturali, privo di plastica e sostanze tossiche.' : 
+             language === 'en' ? 'BIOWOOD® is the evolved natural KALEA flooring, made with wood fibers, carbon-based components and natural binders, free from plastic and toxic substances.' :
+             language === 'de' ? 'BIOWOOD® ist der weiterentwickelte natürliche KALEA-Boden, hergestellt aus Holzfasern, kohlenstoffbasierten Komponenten und natürlichen Bindemitteln, frei von Plastik und Giftstoffen.' :
+             'BIOWOOD® est le sol naturel évolué KALEA, fabriqué avec des fibres de bois, des composants à base de carbone et des liants naturels, sans plastique ni substances toxiques.'}
           </p>
           <Link
             to={`/${language}/cwc`}
             className="inline-flex items-center gap-2 text-kalea-tan font-medium hover:gap-3 transition-all duration-300 group"
           >
-            {language === 'it' ? 'Scopri tutta la collezione CWC' : 
-             language === 'en' ? 'Discover the full CWC collection' :
-             language === 'de' ? 'Entdecken Sie die komplette CWC-Kollektion' :
-             'Découvrez toute la collection CWC'}
+            {language === 'it' ? 'Scopri tutta la collezione BIOWOOD®' : 
+             language === 'en' ? 'Discover the full BIOWOOD® collection' :
+             language === 'de' ? 'Entdecken Sie die komplette BIOWOOD®-Kollektion' :
+             'Découvrez toute la collection BIOWOOD®'}
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
