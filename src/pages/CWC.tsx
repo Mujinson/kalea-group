@@ -294,6 +294,17 @@ const CWC = () => {
         </div>
       </section>
 
+      {/* Collezione Section */}
+      <section className="relative z-[3] bg-card py-20">
+        <div className="container-custom">
+          <ColorCircleGallery 
+            title="La Collezione CWC"
+            subtitle="Sette tonalità naturali ispirate alle essenze del legno, per ogni stile abitativo"
+            colors={cwcColors}
+          />
+        </div>
+      </section>
+
       {/* Vantaggi Section */}
       <section ref={advantagesRef} className="relative z-[3]">
         <div className="absolute inset-0">
@@ -534,17 +545,6 @@ const CWC = () => {
               </li>
             </ul>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Collezione Section */}
-      <section className="relative z-[7] bg-card py-20">
-        <div className="container-custom">
-          <ColorCircleGallery 
-            title="La Collezione CWC"
-            subtitle="Sette tonalità naturali ispirate alle essenze del legno, per ogni stile abitativo"
-            colors={cwcColors}
-          />
         </div>
       </section>
 
