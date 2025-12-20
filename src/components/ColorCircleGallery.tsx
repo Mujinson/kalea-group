@@ -12,11 +12,21 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
+// Helper function to darken a hex color
+const adjustColor = (hex: string, amount: number): string => {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const r = Math.max(0, Math.min(255, (num >> 16) + amount));
+  const g = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amount));
+  const b = Math.max(0, Math.min(255, (num & 0x0000FF) + amount));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+};
+
 interface ColorItem {
   name: string;
   circleImage: string;
   plankImage: string;
   slug: string;
+  colorHex?: string; // For colors without images
 }
 
 interface ColorCircleGalleryProps {
@@ -65,16 +75,27 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
           >
             {/* Circle container */}
             <div className="relative group">
-              {/* Circle image */}
+              {/* Circle image or color */}
               <div className="w-32 h-32 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-full overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-105">
-                <img
-                  src={color.circleImage}
-                  alt={color.name}
-                  className="w-full h-full object-cover"
-                />
+                {color.circleImage ? (
+                  <img
+                    src={color.circleImage}
+                    alt={color.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div 
+                    className="w-full h-full"
+                    style={{ 
+                      background: color.colorHex 
+                        ? `linear-gradient(135deg, ${color.colorHex} 0%, ${adjustColor(color.colorHex, -20)} 100%)`
+                        : '#888'
+                    }}
+                  />
+                )}
               </div>
 
-              {/* Search icon button */}
+              {/* Search icon button - only show if we have plank image or colorHex */}
               <button
                 onClick={() => setSelectedColor(color)}
                 className="absolute -top-1 -right-1 md:top-0 md:right-0 w-8 h-8 md:w-10 md:h-10 bg-foreground/60 hover:bg-foreground/80 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm shadow-md"
@@ -113,16 +134,32 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
                   <X className="w-5 h-5 text-background" />
                 </button>
 
-                {/* Plank image */}
+                {/* Plank image or color display */}
                 <div className="bg-card/95 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
-                  <img
-                    src={selectedColor.plankImage}
-                    alt={`${selectedColor.name} - Lastra`}
-                    className="w-auto max-w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-lg"
-                  />
+                  {selectedColor.plankImage ? (
+                    <img
+                      src={selectedColor.plankImage}
+                      alt={`${selectedColor.name} - Lastra`}
+                      className="w-auto max-w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-lg"
+                    />
+                  ) : (
+                    <div 
+                      className="w-64 h-96 rounded-lg shadow-lg"
+                      style={{ 
+                        background: selectedColor.colorHex 
+                          ? `linear-gradient(180deg, ${selectedColor.colorHex} 0%, ${adjustColor(selectedColor.colorHex, -30)} 100%)`
+                          : '#888'
+                      }}
+                    />
+                  )}
                   <p className="text-center mt-4 text-lg font-semibold text-foreground uppercase tracking-wider">
                     {selectedColor.name}
                   </p>
+                  {!selectedColor.plankImage && (
+                    <p className="text-center mt-2 text-sm text-muted-foreground">
+                      Immagine prodotto in arrivo
+                    </p>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -145,4 +182,16 @@ export const stonecoreColors: ColorItem[] = [
   { name: "Velora", slug: "velora", circleImage: finishVelora, plankImage: finishVelora },
 ];
 
+// CWC colors - using color circles for now (images can be added later)
+export const cwcColors: ColorItem[] = [
+  { name: "Nexa", slug: "nexa", circleImage: "", plankImage: "", colorHex: "#d4cfc9" },
+  { name: "Orama", slug: "orama", circleImage: "", plankImage: "", colorHex: "#8b8278" },
+  { name: "Nuvia", slug: "nuvia", circleImage: "", plankImage: "", colorHex: "#c9a96c" },
+  { name: "Mielea", slug: "mielea", circleImage: "", plankImage: "", colorHex: "#d4b896" },
+  { name: "Argilla", slug: "argilla", circleImage: "", plankImage: "", colorHex: "#a89078" },
+  { name: "Radice", slug: "radice", circleImage: "", plankImage: "", colorHex: "#7a5d48" },
+  { name: "Vetra", slug: "vetra", circleImage: "", plankImage: "", colorHex: "#c8c0b8" },
+];
+
+export type { ColorItem };
 export default ColorCircleGallery;

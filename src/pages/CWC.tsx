@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import FeatureCard from "@/components/FeatureCard";
 import CertificationsSection from "@/components/CertificationsSection";
+import ColorCircleGallery, { cwcColors } from "@/components/ColorCircleGallery";
 import { Leaf, Recycle, Heart, AudioWaveform, Layers, Shield, Check, ChevronDown, Droplets, ThermometerSun } from "lucide-react";
 import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -533,6 +534,17 @@ const CWC = () => {
               </li>
             </ul>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Collezione Section */}
+      <section className="relative z-[7] bg-card py-20">
+        <div className="container-custom">
+          <ColorCircleGallery 
+            title="La Collezione CWC"
+            subtitle="Sette tonalità naturali ispirate alle essenze del legno, per ogni stile abitativo"
+            colors={cwcColors}
+          />
         </div>
       </section>
 
