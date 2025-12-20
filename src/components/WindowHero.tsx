@@ -16,17 +16,19 @@ import finishVelora from "@/assets/finish-velora.jpg";
 // 6 panels - 3 on each side, shaped like floor planks (longer than wide)
 // Responsive sizes: mobile closer to window, tablet as-is, desktop 3x bigger
 const getPanelConfig = () => {
-  // Desktop (lg+): 3x bigger panels, positioned further out
+  // Desktop (lg+): 3x bigger panels, spread out to avoid overlapping
   const desktop = {
     width: 165,
     height: 360,
     panels: [
-      { id: 1, x: -380, y: -200, rotate: -12, floatDelay: 0, image: finishAurora },
-      { id: 2, x: -380, y: 30, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
-      { id: 3, x: -380, y: 260, rotate: -15, floatDelay: 1.2, image: finishPerla },
-      { id: 4, x: 380, y: -200, rotate: 14, floatDelay: 0.3, image: finishSabbia },
-      { id: 5, x: 380, y: 30, rotate: 10, floatDelay: 0.8, image: finishSilven },
-      { id: 6, x: 380, y: 260, rotate: 18, floatDelay: 1.5, image: finishTerram },
+      // Left side - staggered positions using more horizontal space
+      { id: 1, x: -520, y: -180, rotate: -12, floatDelay: 0, image: finishAurora },
+      { id: 2, x: -340, y: 80, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
+      { id: 3, x: -500, y: 280, rotate: -15, floatDelay: 1.2, image: finishPerla },
+      // Right side - staggered positions using more horizontal space
+      { id: 4, x: 520, y: -180, rotate: 14, floatDelay: 0.3, image: finishSabbia },
+      { id: 5, x: 340, y: 80, rotate: 10, floatDelay: 0.8, image: finishSilven },
+      { id: 6, x: 500, y: 280, rotate: 18, floatDelay: 1.5, image: finishTerram },
     ]
   };
   
@@ -44,17 +46,17 @@ const getPanelConfig = () => {
     ]
   };
   
-  // Mobile: smaller panels, much closer to window
+  // Mobile: smaller panels, slightly further from window
   const mobile = {
     width: 40,
     height: 90,
     panels: [
-      { id: 1, x: -130, y: -110, rotate: -12, floatDelay: 0, image: finishAurora },
-      { id: 2, x: -130, y: 10, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
-      { id: 3, x: -130, y: 130, rotate: -15, floatDelay: 1.2, image: finishPerla },
-      { id: 4, x: 130, y: -110, rotate: 14, floatDelay: 0.3, image: finishSabbia },
-      { id: 5, x: 130, y: 10, rotate: 10, floatDelay: 0.8, image: finishSilven },
-      { id: 6, x: 130, y: 130, rotate: 18, floatDelay: 1.5, image: finishTerram },
+      { id: 1, x: -145, y: -110, rotate: -12, floatDelay: 0, image: finishAurora },
+      { id: 2, x: -145, y: 10, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
+      { id: 3, x: -145, y: 130, rotate: -15, floatDelay: 1.2, image: finishPerla },
+      { id: 4, x: 145, y: -110, rotate: 14, floatDelay: 0.3, image: finishSabbia },
+      { id: 5, x: 145, y: 10, rotate: 10, floatDelay: 0.8, image: finishSilven },
+      { id: 6, x: 145, y: 130, rotate: 18, floatDelay: 1.5, image: finishTerram },
     ]
   };
   
