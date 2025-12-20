@@ -66,52 +66,41 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
   return (
     <Link to={`/${language}/stonecore-10`}>
       <motion.div
-        className="relative flex-shrink-0 w-[220px] sm:w-[260px] md:w-[320px] lg:w-[360px] group cursor-pointer"
+        className="relative flex-shrink-0 flex flex-col items-center group cursor-pointer"
         whileHover={{ 
-          rotateY: 5, 
-          rotateX: -3,
-          z: 50,
+          scale: 1.08,
           transition: { duration: 0.3, ease: "easeOut" }
         }}
-        style={{ perspective: 1000 }}
       >
-        <div className="relative overflow-hidden rounded-2xl bg-card shadow-lg group-hover:shadow-2xl transition-shadow duration-500">
-          {/* Image Container */}
-          <div className="relative aspect-[4/3] overflow-hidden">
+        {/* Circle Image Container */}
+        <div className="relative">
+          <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden shadow-lg group-hover:shadow-2xl group-hover:shadow-kalea-tan/30 transition-all duration-500">
             <img
               src={product.image}
               alt={`Kalēa ${product.name}`}
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter contrast-[1.02] brightness-[1.02]"
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 filter contrast-[1.02] brightness-[1.02]"
               loading="lazy"
             />
             {/* Overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            {/* Badge */}
-            <div className="absolute top-3 left-3 sm:top-4 sm:left-4">
-              <span className="inline-flex items-center px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-medium bg-background/90 backdrop-blur-sm text-foreground/80 shadow-sm">
-                MgO 8,5 mm
-              </span>
-            </div>
-
-            {/* Hover action */}
-            <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-              <span className="inline-flex items-center gap-2 text-white text-xs sm:text-sm font-medium">
-                {language === 'it' ? 'Vedi dettagli' : language === 'en' ? 'View details' : language === 'de' ? 'Details ansehen' : 'Voir détails'}
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
           </div>
-
-          {/* Content */}
-          <div className="p-4 sm:p-5 bg-card">
-            <h3 className="text-base sm:text-lg font-semibold text-foreground tracking-wide">
-              {product.name}
-            </h3>
-            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              {product.tagline}
-            </p>
+          
+          {/* Badge positioned at top-right of circle */}
+          <div className="absolute -top-1 -right-1 sm:top-0 sm:right-0">
+            <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-medium bg-kalea-cream/90 backdrop-blur-sm text-kalea-dark shadow-sm">
+              MgO 8,5 mm
+            </span>
           </div>
+        </div>
+
+        {/* Content below circle */}
+        <div className="text-center mt-4 sm:mt-5">
+          <h3 className="text-sm sm:text-base md:text-lg font-semibold text-kalea-tan tracking-wide">
+            {product.name}
+          </h3>
+          <p className="text-xs sm:text-sm text-kalea-cream/70 mt-1 max-w-[180px]">
+            {product.tagline}
+          </p>
         </div>
       </motion.div>
     </Link>
