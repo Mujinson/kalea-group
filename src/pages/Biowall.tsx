@@ -11,7 +11,7 @@ import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 
-const OneWall = () => {
+const Biowall = () => {
   const { t, language } = useTranslation();
   
   const advantages = [
@@ -315,4 +315,4 @@ const OneWall = () => {
   );
 };
 
-export default OneWall;
+export default Biowall;

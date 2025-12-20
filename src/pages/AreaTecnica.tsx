@@ -69,20 +69,20 @@ const AreaTecnica = () => {
       size: "2.3 MB",
     },
     {
-      name: "Catalogo OneWall",
-      category: "OneWall",
-      description: "Finiture e applicazioni pannelli MgO",
+      name: "Catalogo BIOWALL®",
+      category: "BIOWALL®",
+      description: "Finiture e applicazioni pannelli in ossido di magnesio",
       size: "7.2 MB",
     },
     {
-      name: "Scheda tecnica OneWall",
-      category: "OneWall",
+      name: "Scheda tecnica BIOWALL®",
+      category: "BIOWALL®",
       description: "Specifiche tecniche pannelli per pareti",
       size: "2.1 MB",
     },
     {
-      name: "Guida di posa OneWall",
-      category: "OneWall",
+      name: "Guida di posa BIOWALL®",
+      category: "BIOWALL®",
       description: "Istruzioni installazione pareti e soffitti",
       size: "3.8 MB",
     },
@@ -109,7 +109,7 @@ const AreaTecnica = () => {
     })),
   ];
 
-  const categories = ["all", "StoneCore 10", "EdgeLine", "OneWall", "Certificazioni"];
+  const categories = ["all", "StoneCore 10", "EdgeLine", "BIOWALL®", "Certificazioni"];
 
   const filteredDocuments = selectedCategory === "all" 
     ? allDocuments 
