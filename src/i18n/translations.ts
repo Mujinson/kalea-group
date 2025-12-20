@@ -19,17 +19,17 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       home: {
-        title: "Sistema di superfici in MgO",
+        title: "Sistema di superfici BIOCORE® e BIOWOOD®",
         subtitle: "Pavimenti, profili e pannelli. Architettura degli interni, progettata in Italia.",
         ctaPrimary: "Scopri il sistema",
         ctaSecondary: "Diventa Partner",
         surfaceSystem: "SURFACE SYSTEM®",
         newStandard: "The New Standard in Surface Systems.",
         tagline: "Italian Surface Design — Designed in Italy.",
-        systemDescription: "KALĒA è un sistema integrato di superfici architettoniche in MgO, progettato per offrire soluzioni complete e coordinate a professionisti del design e dell'architettura.",
-        stonecoreHero: "Superfici tecniche in MgO con texture wood per pavimenti e rivestimenti.",
+        systemDescription: "KALĒA è un sistema integrato di superfici architettoniche, progettato per offrire soluzioni complete e coordinate a professionisti del design e dell'architettura.",
+        stonecoreHero: "Pavimenti BIOCORE® con texture wood per ambienti residenziali e commerciali.",
         edgelineHero: "Profili e battiscopa architettonici in alluminio per finiture di pregio.",
-        onewallHero: "Pannelli verticali di design in MgO per pareti e boiserie contemporanee.",
+        onewallHero: "Pannelli verticali di design per pareti e boiserie contemporanee.",
         ctaInfo: "Richiedi informazioni",
         ctaProducts: "Scopri i prodotti",
         scrollDown: "SCORRI GIÙ",
@@ -60,8 +60,8 @@ export const translations: Record<Language, Translations> = {
         brandTagline: "Design italiano delle superfici.",
       },
       stonecore: {
-        title: "Kalēa StoneCore 10",
-        subtitle: "Pavimenti in MgO di nuova generazione. Prestazioni professionali, estetica naturale, posa veloce.",
+        title: "Pavimenti BIOCORE®",
+        subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio – MgO). Prestazioni professionali, estetica naturale, posa veloce.",
         ctaPrimary: "Richiedi campioni",
         ctaSecondary: "Scarica scheda tecnica",
       },
@@ -73,7 +73,7 @@ export const translations: Record<Language, Translations> = {
       },
       onewall: {
         title: "Kalēa OneWall",
-        subtitle: "Pannelli verticali in MgO. Superfici continue per pareti e soffitti.",
+        subtitle: "Pannelli verticali. Superfici continue per pareti e soffitti.",
         ctaPrimary: "Richiedi campioni",
         ctaSecondary: "Scarica catalogo",
       },
@@ -82,8 +82,8 @@ export const translations: Record<Language, Translations> = {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Tre linee integrate per la continuità visiva degli spazi",
       stonecore: {
-        title: "Kalēa StoneCore 10",
-        description: "Superfici tecniche in MgO con texture wood. Posa flottante, continuità visiva, prestazioni certificate.",
+        title: "Pavimenti BIOCORE®",
+        description: "Superfici tecniche BIOCORE® con texture wood. Posa flottante, continuità visiva, prestazioni certificate.",
       },
       edgeline: {
         title: "Kalēa EdgeLine",
@@ -94,8 +94,8 @@ export const translations: Record<Language, Translations> = {
         description: "Il verticale oltre il cartongesso. Zero stuccatura. Zero polvere. Zero pittura. La superficie è già design.",
         comingSoonLabel: "Novità in arrivo",
       },
-      mgoTitle: "Perché MgO",
-      mgoDescription: "Un materiale che ridefinisce le prestazioni delle superfici tecniche.",
+      mgoTitle: "Perché BIOCORE®",
+      mgoDescription: "BIOCORE® è il pavimento minerale KALEA con core strutturale in ossido di magnesio (MgO), progettato per offrire stabilità, salubrità e prestazioni superiori.",
       mgoAdvantages: {
         fireproof: "Ignifugo",
         waterproof: "Impermeabile",
@@ -184,14 +184,14 @@ export const translations: Record<Language, Translations> = {
       kaleaIntro: {
         description: "Un sistema integrato per la progettazione degli interni contemporanei.",
         descriptionLine2: "Superficie orizzontale. Superficie verticale. Dettaglio.",
-        stonecoreDesc: "Pavimenti tecnici in MgO con texture wood",
+        stonecoreDesc: "Pavimenti tecnici BIOCORE® con texture wood",
         edgelineDesc: "Profili e battiscopa architettonici",
-        onewallDesc: "Pannelli in MgO, evoluzione del cartongesso tradizionale",
+        onewallDesc: "Pannelli evoluzione del cartongesso tradizionale",
         closing: "Continuità visiva. Calma estetica.",
         closingLine2: "Materiali contemporanei e precisione architettonica.",
         visionTitle: "La nostra visione",
         vision: {
-          materials: "Materiali avanzati in MgO",
+          materials: "Materiali BIOCORE® e BIOWOOD®",
           materialsDesc: "Nuova generazione di superfici",
           energy: "Fino a 1/10 dell'energia produttiva",
           energyDesc: "Minori emissioni, minori rifiuti, maggiore sostenibilità",
@@ -207,9 +207,9 @@ export const translations: Record<Language, Translations> = {
       },
     },
     gallery: {
-      title: "Esplora la Collezione StoneCore 10",
-      subtitle: "Texture, colori e dettagli del nostro pavimento in ossido di magnesio texture wood.",
-      description: "Il pavimento Kalēa combina tecnologia in MgO, resistenza superiore e un design naturale ispirato al legno autentico. Scopri tutte le finiture disponibili per showroom, rivenditori e professionisti.",
+      title: "Esplora la Collezione BIOCORE®",
+      subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio – MgO). Texture, colori e dettagli del nostro pavimento minerale.",
+      description: "Il pavimento BIOCORE® combina tecnologia avanzata, resistenza superiore e un design naturale ispirato al legno autentico. Scopri tutte le finiture disponibili per showroom, rivenditori e professionisti.",
       cta: "Scopri tutte le finiture",
     },
     colors: {
@@ -224,11 +224,11 @@ export const translations: Record<Language, Translations> = {
     },
     stonecore: {
       structureTitle: "Struttura multistrato ad alte prestazioni",
-      structureSubtitle: "Ogni tavola Kalēa è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in MgO da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Alla base, il tappetino integrato da 1,5 mm migliora l'isolamento acustico, aumenta il comfort al calpestio e semplifica l'installazione. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
+      structureSubtitle: "Ogni tavola BIOCORE® è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in ossido di magnesio da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Alla base, il tappetino integrato da 1,5 mm migliora l'isolamento acustico, aumenta il comfort al calpestio e semplifica l'installazione. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
       layers: {
         decorative: "Strato decorativo",
         wear: "Strato di usura",
-        core: "Core MgO",
+        core: "Core BIOCORE®",
         mat: "Tappetino",
       },
       advantagesTitle: "Vantaggi esclusivi",
@@ -260,7 +260,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Finiture disponibili",
-      finishesSubtitle: "Otto texture wood in MgO per ogni visione progettuale",
+      finishesSubtitle: "Otto texture wood BIOCORE® per ogni visione progettuale",
       finishes: {
         corteccia: "Corteccia",
         cenere: "Cenere",
@@ -312,7 +312,7 @@ export const translations: Record<Language, Translations> = {
         },
         baseboard: {
           title: "Battiscopa",
-          description: "Coordinato con le superfici StoneCore 10",
+          description: "Coordinato con le superfici BIOCORE®",
         },
         step: {
           title: "Profilo scalino",
@@ -320,7 +320,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Finiture disponibili",
-      finishesSubtitle: "Coordinati con le superfici Kalēa StoneCore 10",
+      finishesSubtitle: "Coordinati con le superfici BIOCORE®",
       finishes: {
         natural: "Alluminio naturale",
         bronze: "Bronzo satinato",
@@ -381,7 +381,7 @@ export const translations: Record<Language, Translations> = {
         },
         resistance: {
           title: "Resistenza superiore",
-          description: "Core in MgO per stabilità e resistenza agli urti.",
+          description: "Core BIOCORE® per stabilità e resistenza agli urti.",
         },
         waterproof: {
           title: "Waterproof",
@@ -408,7 +408,7 @@ export const translations: Record<Language, Translations> = {
     },
     aboutUs: {
       title: "Chi Siamo",
-      intro1: "Kalēa nasce dalla ricerca sui materiali e dalla visione di un'architettura degli interni più evoluta. Sviluppiamo superfici tecniche in MgO che ridefiniscono prestazioni, estetica e durata.",
+      intro1: "Kalēa nasce dalla ricerca sui materiali e dalla visione di un'architettura degli interni più evoluta. Sviluppiamo superfici tecniche BIOCORE® e BIOWOOD® che ridefiniscono prestazioni, estetica e durata.",
       intro2: "Ogni prodotto è progettato in Italia per semplificare la posa, garantire continuità visiva e offrire soluzioni all'avanguardia per architetti, progettisti e imprese.",
       historyTitle: "La nostra storia",
       historyIntro: "Kalēa non nasce in un laboratorio, né in un ufficio tecnico.\nNasce da uno sguardo diverso sulle cose.",
@@ -416,10 +416,10 @@ export const translations: Record<Language, Translations> = {
       historyGabriel: "Gabriel Vladu, invece, arrivava da tutt'altro mondo: quello dell'analisi finanziaria.\nAbituato a leggere i numeri, a individuarne le debolezze e a prevedere scenari futuri, ha portato una domanda semplice ma spiazzante:",
       historyQuestions: "\"Perché il mercato accetta ancora materiali che non performano?\"\n\"E perché nessuno sta guardando alla tecnologia giusta?\"",
       historyIntuition: "Da questo incrocio di competenze — tecnica e analitica — è nata l'intuizione che ha dato vita a Kalēa:\ncreare superfici con una logica completamente nuova, dove prestazioni reali, stabilità e durabilità non fossero valori aggiunti, ma il punto di partenza.",
-      historyMgo: "La risposta è arrivata dall'ossido di magnesio.\nUn materiale conosciuto nel settore tecnico, ma mai sfruttato al suo massimo potenziale.\nAndrea e Gabriel hanno visto ciò che altri non avevano visto: un modo per riscrivere le regole del settore.",
+      historyMgo: "La risposta è arrivata dall'ossido di magnesio e dai compositi naturali.\nMateriali conosciuti nel settore tecnico, ma mai sfruttati al loro massimo potenziale.\nAndrea e Gabriel hanno visto ciò che altri non avevano visto: un modo per riscrivere le regole del settore.",
       historyJourney: "Il percorso non è stato immediato.\nAnni di test, confronti, campioni, errori.\nMa ogni limite trovato diventava una nuova variabile da analizzare, da correggere, da migliorare.",
       historyResult: "Il risultato di questa visione è un ecosistema unico:",
-      historyProducts: "StoneCore 10 – superfici orizzontali ad alte prestazioni\n\nEdgeLine – profili architettonici continui e coordinati\n\nOneWall – rivestimenti verticali che completano un sistema",
+      historyProducts: "BIOCORE® – superfici orizzontali ad alte prestazioni\n\nBIOWOOD® – pavimenti naturali evoluti\n\nEdgeLine – profili architettonici continui e coordinati\n\nOneWall – rivestimenti verticali che completano un sistema",
       historySystem: "Non un prodotto, ma un linguaggio tecnico integrato, dove ogni componente nasce per dialogare con l'altro.",
       historyToday: "Oggi Kalēa è diventata una realtà che unisce:",
       historyValues: "• rigore analitico\n• competenza tecnica\n• un'estetica naturale e contemporanea\n• una filosofia orientata alla performance reale, misurabile, tangibile",
@@ -489,7 +489,7 @@ export const translations: Record<Language, Translations> = {
       },
       interests: "Interessi",
       interestsList: {
-        stonecore: "StoneCore 10",
+        stonecore: "BIOCORE®",
         edgeline: "EdgeLine",
         onewall: "OneWall",
         partnership: "Partnership",
@@ -525,7 +525,7 @@ export const translations: Record<Language, Translations> = {
       ctaButton: "Contatta il supporto tecnico",
     },
     footer: {
-      tagline: "Sistema di superfici in MgO. Pavimenti, profili e pannelli progettati in Italia per l'architettura degli interni.",
+      tagline: "Sistema di superfici BIOCORE® e BIOWOOD®. Pavimenti, profili e pannelli progettati in Italia per l'architettura degli interni.",
       quickLinks: "Link Rapidi",
       contactsTitle: "Contatti",
       copyright: "Tutti i diritti riservati.",
@@ -612,7 +612,7 @@ export const translations: Record<Language, Translations> = {
       section2: {
         title: "2. Descrizione dei Servizi",
         content1: "Kalēa offre attraverso il proprio sito web:",
-        list1: "Informazioni su superfici tecniche in MgO per pavimenti, pareti e soffitti",
+        list1: "Informazioni su superfici tecniche BIOCORE® e BIOWOOD® per pavimenti, pareti e soffitti",
         list2: "Richiesta di campioni e documentazione tecnica",
         list3: "Assistenza commerciale e tecnica per professionisti",
       },
@@ -708,7 +708,7 @@ export const translations: Record<Language, Translations> = {
         title: "Perché collaborare con Kalēa",
         tech: {
           title: "Tecnologia esclusiva",
-          description: "Superfici in MgO con sistema KalēaLock®, superiore a SPC e laminati.",
+          description: "Superfici BIOCORE® con sistema KalēaLock®, superiore a SPC e laminati.",
         },
         margins: {
           title: "Condizioni riservate",
@@ -810,17 +810,17 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       home: {
-        title: "MgO Surface System",
+        title: "BIOCORE® and BIOWOOD® Surface System",
         subtitle: "Floors, profiles and panels. Interior architecture, designed in Italy.",
         ctaPrimary: "Discover the system",
         ctaSecondary: "Become Partner",
         surfaceSystem: "SURFACE SYSTEM®",
         newStandard: "The New Standard in Surface Systems.",
         tagline: "Italian Surface Design — Designed in Italy.",
-        systemDescription: "KALĒA is an integrated system of architectural MgO surfaces, designed to offer complete and coordinated solutions to design and architecture professionals.",
-        stonecoreHero: "Technical MgO surfaces with wood texture for flooring and cladding.",
+        systemDescription: "KALĒA is an integrated system of architectural surfaces, designed to offer complete and coordinated solutions to design and architecture professionals.",
+        stonecoreHero: "BIOCORE® floors with wood texture for residential and commercial environments.",
         edgelineHero: "Architectural aluminum profiles and baseboards for premium finishes.",
-        onewallHero: "Vertical design MgO panels for contemporary walls and boiserie.",
+        onewallHero: "Vertical design panels for contemporary walls and boiserie.",
         ctaInfo: "Request information",
         ctaProducts: "Discover products",
         scrollDown: "SCROLL DOWN",
@@ -851,8 +851,8 @@ export const translations: Record<Language, Translations> = {
         brandTagline: "Italian Surface Design.",
       },
       stonecore: {
-        title: "Kalēa StoneCore 10",
-        subtitle: "New generation MgO flooring. Professional performance, natural aesthetics, fast installation.",
+        title: "BIOCORE® Floors",
+        subtitle: "BIOCORE® (mineral flooring with magnesium oxide core – MgO). Professional performance, natural aesthetics, fast installation.",
         ctaPrimary: "Request samples",
         ctaSecondary: "Download datasheet",
       },
@@ -860,11 +860,11 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa EdgeLine",
         subtitle: "Architectural aluminum profiles. The finish that completes every surface.",
         ctaPrimary: "Request catalog",
-        ctaSecondary: "Discover StoneCore 10",
+        ctaSecondary: "Discover BIOCORE®",
       },
       onewall: {
         title: "Kalēa OneWall",
-        subtitle: "Vertical MgO panels. Continuous surfaces for walls and ceilings.",
+        subtitle: "Vertical panels. Continuous surfaces for walls and ceilings.",
         ctaPrimary: "Request samples",
         ctaSecondary: "Download catalog",
       },
@@ -873,8 +873,8 @@ export const translations: Record<Language, Translations> = {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Three integrated lines for visual continuity across spaces",
       stonecore: {
-        title: "Kalēa StoneCore 10",
-        description: "Technical surfaces in MgO with wood texture. Floating installation, visual continuity, certified performance.",
+        title: "BIOCORE® Floors",
+        description: "Technical BIOCORE® surfaces with wood texture. Floating installation, visual continuity, certified performance.",
       },
       edgeline: {
         title: "Kalēa EdgeLine",
@@ -885,8 +885,8 @@ export const translations: Record<Language, Translations> = {
         description: "The vertical beyond drywall. Zero plastering. Zero dust. Zero painting. The surface is already design.",
         comingSoonLabel: "Coming soon",
       },
-      mgoTitle: "Why MgO",
-      mgoDescription: "A material that redefines the performance of technical surfaces.",
+      mgoTitle: "Why BIOCORE®",
+      mgoDescription: "BIOCORE® is the KALEA mineral flooring with structural magnesium oxide (MgO) core, designed to offer stability, healthiness and superior performance.",
       mgoAdvantages: {
         fireproof: "Fireproof",
         waterproof: "Waterproof",
@@ -975,14 +975,14 @@ export const translations: Record<Language, Translations> = {
       kaleaIntro: {
         description: "An integrated system for contemporary interior design.",
         descriptionLine2: "Horizontal surface. Vertical surface. Detail.",
-        stonecoreDesc: "Technical MgO flooring with wood texture",
+        stonecoreDesc: "Technical BIOCORE® flooring with wood texture",
         edgelineDesc: "Architectural profiles and baseboards",
-        onewallDesc: "MgO panels, evolution of traditional drywall",
+        onewallDesc: "Panels, evolution of traditional drywall",
         closing: "Visual continuity. Aesthetic calm.",
         closingLine2: "Contemporary materials and architectural precision.",
         visionTitle: "Our vision",
         vision: {
-          materials: "Advanced MgO materials",
+          materials: "BIOCORE® and BIOWOOD® materials",
           materialsDesc: "New generation of surfaces",
           energy: "Up to 1/10 of production energy",
           energyDesc: "Lower emissions, less waste, greater sustainability",
@@ -998,9 +998,9 @@ export const translations: Record<Language, Translations> = {
       },
     },
     gallery: {
-      title: "Explore the StoneCore 10 Collection",
-      subtitle: "Textures, colors and details of our magnesium oxide wood texture flooring.",
-      description: "Kalēa flooring combines MgO technology, superior resistance and a natural design inspired by authentic wood. Discover all finishes available for showrooms, retailers and professionals.",
+      title: "Explore the BIOCORE® Collection",
+      subtitle: "BIOCORE® (mineral flooring with magnesium oxide core – MgO). Textures, colors and details of our mineral flooring.",
+      description: "BIOCORE® flooring combines advanced technology, superior resistance and a natural design inspired by authentic wood. Discover all finishes available for showrooms, retailers and professionals.",
       cta: "Discover all finishes",
     },
     colors: {
@@ -1015,11 +1015,11 @@ export const translations: Record<Language, Translations> = {
     },
     stonecore: {
       structureTitle: "High-performance multilayer structure",
-      structureSubtitle: "Each Kalēa plank is designed to offer dimensional stability, resistance and impeccable installation. The 8.5 mm MgO core ensures superior rigidity and perfect performance on large surfaces, while the decorative layer is completed by a protective layer designed to resist scratches, impacts and abrasions, preserving the beauty of the surface over time. At the base, the integrated 1.5 mm mat improves acoustic insulation, increases walking comfort and simplifies installation. A solution created for installers, architects and professionals seeking reliable, durable and high-end materials.",
+      structureSubtitle: "Each BIOCORE® plank is designed to offer dimensional stability, resistance and impeccable installation. The 8.5 mm magnesium oxide core ensures superior rigidity and perfect performance on large surfaces, while the decorative layer is completed by a protective layer designed to resist scratches, impacts and abrasions, preserving the beauty of the surface over time. At the base, the integrated 1.5 mm mat improves acoustic insulation, increases walking comfort and simplifies installation. A solution created for installers, architects and professionals seeking reliable, durable and high-end materials.",
       layers: {
         decorative: "Decorative layer",
         wear: "Wear layer",
-        core: "MgO Core",
+        core: "BIOCORE® Core",
         mat: "Mat",
       },
       advantagesTitle: "Exclusive advantages",
@@ -1051,7 +1051,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Available finishes",
-      finishesSubtitle: "Eight wood textures in MgO for every design vision",
+      finishesSubtitle: "Eight BIOCORE® wood textures for every design vision",
       finishes: {
         corteccia: "Corteccia",
         cenere: "Cenere",
