@@ -1,11 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import FeatureCard from "@/components/FeatureCard";
-import ColorCircleGallery, { stonecoreColors } from "@/components/ColorCircleGallery";
-import LayerDiagram from "@/components/LayerDiagram";
-import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import CertificationsSection from "@/components/CertificationsSection";
-import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check, ChevronDown } from "lucide-react";
+import ColorCircleGallery, { cwcColors } from "@/components/ColorCircleGallery";
+import { Leaf, Recycle, Heart, AudioWaveform, Layers, Shield, Check, ChevronDown, Droplets, ThermometerSun } from "lucide-react";
 import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -13,21 +11,20 @@ import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-stonecore.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
-import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const StoneCore10 = () => {
-  const { t, language } = useTranslation();
+const Biowood = () => {
+  const { language } = useTranslation();
   const isMobile = useIsMobile();
   
   // Refs for scroll tracking
   const heroRef = useRef<HTMLDivElement>(null);
   const advantagesRef = useRef<HTMLDivElement>(null);
-  const finishesRef = useRef<HTMLDivElement>(null);
   const structureRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLDivElement>(null);
-  const heatingRef = useRef<HTMLDivElement>(null);
+  const applicationsRef = useRef<HTMLDivElement>(null);
+  const whyKaleaRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
   // Hero scroll effects
@@ -47,89 +44,96 @@ const StoneCore10 = () => {
     target: advantagesRef,
     offset: ["start end", "end start"],
   });
-  
-  const advantagesScale = useTransform(advantagesProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
-  const advantagesBorderRadius = useTransform(advantagesProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
-  const advantagesOpacity = useTransform(advantagesProgress, [0, 0.15, 0.85, 1], [0.7, 1, 1, 0.7]);
 
-  // Finishes section scroll effects
-  const { scrollYProgress: finishesProgress } = useScroll({
-    target: finishesRef,
-    offset: ["start end", "end start"],
-  });
-  
-  const finishesScale = useTransform(finishesProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
-  const finishesBorderRadius = useTransform(finishesProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
-
-  // Structure section scroll effects
+  // Structure section scroll effects  
   const { scrollYProgress: structureProgress } = useScroll({
     target: structureRef,
     offset: ["start end", "end start"],
   });
-  
-  const structureScale = useTransform(structureProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
-  const structureBorderRadius = useTransform(structureProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
 
   // Tech section scroll effects
   const { scrollYProgress: techProgress } = useScroll({
     target: techRef,
     offset: ["start end", "end start"],
   });
-  
-  const techScale = useTransform(techProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
-  const techBorderRadius = useTransform(techProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
 
-  // Heating section scroll effects
-  const { scrollYProgress: heatingProgress } = useScroll({
-    target: heatingRef,
+  // Applications section scroll effects
+  const { scrollYProgress: applicationsProgress } = useScroll({
+    target: applicationsRef,
     offset: ["start end", "end start"],
   });
-  
-  const heatingScale = useTransform(heatingProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
-  const heatingBorderRadius = useTransform(heatingProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
+
+  // Why Kalea section scroll effects
+  const { scrollYProgress: whyKaleaProgress } = useScroll({
+    target: whyKaleaRef,
+    offset: ["start end", "end start"],
+  });
 
   // CTA section scroll effects
   const { scrollYProgress: ctaProgress } = useScroll({
     target: ctaRef,
     offset: ["start end", "end start"],
   });
-  
-  const ctaScale = useTransform(ctaProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
-  const ctaBorderRadius = useTransform(ctaProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
 
   const advantages = [
     {
-      icon: Droplets,
-      title: t('stonecore.advantages.waterproof.title'),
-      description: t('stonecore.advantages.waterproof.description'),
+      icon: Leaf,
+      title: "Completamente atossico",
+      description: "Privo di sostanze nocive per la salute. Ideale per ambienti abitativi e professionali attenti al benessere.",
     },
     {
-      icon: Flame,
-      title: t('stonecore.advantages.fireproof.title'),
-      description: t('stonecore.advantages.fireproof.description'),
+      icon: Shield,
+      title: "Privo di plastica e PVC",
+      description: "Materiale naturale senza componenti plastici o sintetici tossici.",
     },
     {
-      icon: ShieldOff,
-      title: t('stonecore.advantages.antimold.title'),
-      description: t('stonecore.advantages.antimold.description'),
+      icon: Recycle,
+      title: "Materiale biodegradabile",
+      description: "Composizione eco-sostenibile con fibre naturali e leganti di origine vegetale.",
+    },
+    {
+      icon: Heart,
+      title: "Elevato comfort di calpestio",
+      description: "Sensazione naturale e piacevole ad ogni passo. Superficie calda e accogliente.",
     },
     {
       icon: AudioWaveform,
-      title: t('stonecore.advantages.acoustic.title'),
-      description: t('stonecore.advantages.acoustic.description'),
-    },
-    {
-      icon: FloatingFloorIcon,
-      title: t('stonecore.advantages.floating.title'),
-      description: t('stonecore.advantages.floating.description'),
+      title: "Ottime prestazioni acustiche",
+      description: "Riduzione efficace della trasmissione del rumore per ambienti più silenziosi.",
     },
     {
       icon: Layers,
-      title: t('stonecore.advantages.stability.title'),
-      description: t('stonecore.advantages.stability.description'),
+      title: "Stabilità dimensionale avanzata",
+      description: "Non si espande né si contrae. Perfetto per grandi superfici continue.",
     },
   ];
 
+  const layers = [
+    {
+      name: "Strato protettivo naturale anti-usura",
+      description: "Protezione superficiale resistente, priva di sostanze nocive.",
+    },
+    {
+      name: "Strato decorativo ad alta definizione",
+      description: "Effetto legno realistico con resa naturale e profonda.",
+    },
+    {
+      name: "Core in fibre di legno e carbonio",
+      description: "Composito naturale di fibre di legno, carbonio e leganti naturali per stabilità e comfort.",
+    },
+    {
+      name: "Strato di bilanciamento inferiore",
+      description: "Garantisce planarità, durata e posa flottante stabile.",
+    },
+  ];
+
+  const applications = [
+    { title: "Abitazioni private", description: "Ambienti domestici attenti alla salubrità" },
+    { title: "Spazi commerciali", description: "Showroom e negozi eco-consapevoli" },
+    { title: "Uffici", description: "Ambienti di lavoro sostenibili" },
+    { title: "Boutique", description: "Spazi retail di alta gamma" },
+    { title: "Hospitality", description: "Hotel e strutture ricettive green" },
+  ];
 
   return (
     <div className="relative bg-[#0a0a0a]">
@@ -144,7 +148,7 @@ const StoneCore10 = () => {
         >
           <motion.img 
             src={heroImage} 
-            alt="" 
+            alt="Pavimenti BIOWOOD® naturale evoluto"
             className="absolute inset-0 w-full h-full object-cover will-change-transform"
             style={{ 
               y: heroImageY,
@@ -170,7 +174,7 @@ const StoneCore10 = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
               >
-                {t('hero.stonecore.title')}
+                Pavimenti BIOWOOD®
               </motion.h1>
 
               <motion.p
@@ -179,7 +183,7 @@ const StoneCore10 = () => {
                 transition={{ duration: 0.7, delay: 0.4 }}
                 className="text-lg md:text-xl lg:text-2xl text-white/90 font-light mb-8 max-w-2xl mx-auto"
               >
-                {t('hero.stonecore.subtitle')}
+                BIOWOOD® (pavimento naturale evoluto con fibre di legno e carbonio). Pavimenti di nuova generazione progettati per unire prestazioni tecniche, comfort ed ecosostenibilità.
               </motion.p>
 
               <motion.div
@@ -192,13 +196,13 @@ const StoneCore10 = () => {
                   to={`/${language}/contatti`}
                   className="group inline-flex items-center justify-center gap-2 bg-white text-[#111] text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
                 >
-                  {t('hero.stonecore.ctaPrimary')}
+                  Richiedi campioni
                 </Link>
                 <Link 
                   to={`/${language}/area-tecnica`}
                   className="inline-flex items-center justify-center gap-2 border border-white/30 text-white text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-white/10 transition-all duration-150"
                 >
-                  {t('hero.stonecore.ctaSecondary')}
+                  Scarica scheda tecnica
                 </Link>
               </motion.div>
 
@@ -222,8 +226,33 @@ const StoneCore10 = () => {
         </div>
       </section>
 
-      {/* Vantaggi Section - Normal scroll */}
-      <section ref={advantagesRef} className="relative z-[1] bg-card py-20">
+      {/* Descrizione del materiale Section */}
+      <section className="relative z-[1] bg-background py-20">
+        <div className="container-custom max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
+              Il materiale del futuro
+            </h2>
+            <div className="prose prose-lg max-w-none text-muted-foreground">
+              <p className="text-lg leading-relaxed mb-6">
+                I pavimenti KALĒA BIOWOOD® sono realizzati con fibre di legno selezionate, componenti a base di carbonio e leganti naturali, senza plastica, senza PVC e senza sostanze tossiche.
+              </p>
+              <p className="text-lg leading-relaxed">
+                Il core strutturale utilizza resine di origine naturale come legante, rendendo il pavimento atossico, eco-sostenibile e biodegradabile, ideale per ambienti abitativi e professionali attenti alla salute e all'impatto ambientale.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Struttura multistrato Section */}
+      <section ref={structureRef} className="relative z-[2] bg-card py-20">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -233,10 +262,64 @@ const StoneCore10 = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('stonecore.advantagesTitle')}
+              Struttura multistrato
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Ogni tavola BIOWOOD® è progettata per offrire stabilità, comfort e prestazioni durature nel tempo.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {layers.map((layer, index) => (
+              <motion.div
+                key={layer.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="p-6 rounded-2xl bg-background border border-border"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-bold text-primary">{index + 1}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-semibold text-foreground mb-2">{layer.name}</h3>
+                    <p className="text-sm text-muted-foreground">{layer.description}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Collezione Section */}
+      <section className="relative z-[3] bg-card py-20">
+        <div className="container-custom">
+          <ColorCircleGallery 
+            title="La Collezione BIOWOOD®"
+            subtitle="Sette tonalità naturali ispirate alle essenze del legno, per ogni stile abitativo"
+            colors={cwcColors}
+          />
+        </div>
+      </section>
+
+      {/* Vantaggi Section */}
+      <section ref={advantagesRef} className="relative z-[3] bg-card py-20">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              Vantaggi principali
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('stonecore.advantagesSubtitle')}
+              Un pavimento naturale progettato per il benessere e la sostenibilità
             </p>
           </motion.div>
 
@@ -248,75 +331,8 @@ const StoneCore10 = () => {
         </div>
       </section>
 
-      {/* Finiture Section - Normal scroll */}
-      <section ref={finishesRef} className="relative z-[2] bg-background py-20">
-        <div className="container-custom">
-          <ColorCircleGallery 
-            title={t('stonecore.finishesTitle')}
-            subtitle={t('stonecore.finishesSubtitle')}
-            colors={stonecoreColors}
-          />
-        </div>
-      </section>
-
-      {/* Schema multistrato Section - Normal scroll */}
-      <section ref={structureRef} className="relative z-[3] bg-background py-20">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('stonecore.structureTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              {t('stonecore.structureSubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex items-center justify-center"
-            >
-              <img 
-                src={stonecoreLayers} 
-                alt="Struttura multistrato StoneCore 10" 
-                className="w-auto max-w-full h-auto max-h-[325px] object-contain"
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="h-full"
-            >
-              <MaterialPerformanceCard />
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-12 max-w-2xl mx-auto"
-          >
-            <LayerDiagram />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Tabs tecnici Section - Normal scroll */}
-      <section ref={techRef} className="relative z-[4] bg-card py-20">
+      {/* Prestazioni tecniche Section */}
+      <section ref={techRef} className="relative z-[4] bg-background py-20">
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -326,9 +342,9 @@ const StoneCore10 = () => {
           >
             <Tabs defaultValue="caratteristiche" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="caratteristiche">{t('stonecore.techTitle')}</TabsTrigger>
-                <TabsTrigger value="posa">{t('stonecore.techPosa')}</TabsTrigger>
-                <TabsTrigger value="manutenzione">{t('stonecore.techMaintenance')}</TabsTrigger>
+                <TabsTrigger value="caratteristiche">Prestazioni</TabsTrigger>
+                <TabsTrigger value="posa">Posa</TabsTrigger>
+                <TabsTrigger value="manutenzione">Manutenzione</TabsTrigger>
               </TabsList>
 
               <TabsContent value="caratteristiche" className="mt-8">
@@ -339,31 +355,27 @@ const StoneCore10 = () => {
                   className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
                   style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
                 >
-                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Specifiche tecniche</h3>
+                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Prestazioni tecniche</h3>
                   <ul className="space-y-3 text-background/85">
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
+                      <span>Stabilità dimensionale nel tempo</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Dimensioni plancia: 1220 x 180 mm</span>
+                      <span>Comfort termico e acustico superiore</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Classe di reazione al fuoco: A2-s1, d0</span>
+                      <span>Resistenza all'umidità</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Resistenza all'acqua: IP68</span>
+                      <span>Posa flottante a incastro</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Resistenza all'abrasione: AC5</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Riduzione acustica: 19 dB</span>
+                      <span>Utilizzo in ambienti residenziali e commerciali</span>
                     </li>
                   </ul>
                 </motion.div>
@@ -394,10 +406,6 @@ const StoneCore10 = () => {
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
                       <span>Giunto perimetrale: 8-10 mm</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
-                      <span>Totale assenza di fughe</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
@@ -445,8 +453,44 @@ const StoneCore10 = () => {
         </div>
       </section>
 
-      {/* Riscaldamento a pavimento Section - Normal scroll */}
-      <section ref={heatingRef} className="relative z-[5] bg-background py-20">
+      {/* Ambiti di utilizzo Section */}
+      <section ref={applicationsRef} className="relative z-[5] bg-card py-20">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+              Ambiti di utilizzo
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Ideale per spazi in cui salubrità e sostenibilità sono prioritarie
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {applications.map((app, index) => (
+              <motion.div
+                key={app.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="p-6 rounded-2xl bg-background border border-border text-center"
+              >
+                <h3 className="font-heading font-semibold text-foreground mb-2">{app.title}</h3>
+                <p className="text-sm text-muted-foreground">{app.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Perché KALEA Section */}
+      <section ref={whyKaleaRef} className="relative z-[6] bg-background py-20">
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -455,14 +499,11 @@ const StoneCore10 = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-6">
-              <ThermometerSun className="w-8 h-8 text-primary" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Perfetto per impianti di riscaldamento a pavimento
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
+              Perché scegliere KALĒA
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              StoneCore 10 è particolarmente indicato per l'utilizzo con impianti di riscaldamento a pavimento grazie alla sua elevata conducibilità e stabilità termica.
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              KALĒA seleziona materiali innovativi e naturali, combinando design europeo, ricerca tecnica e attenzione all'ambiente per offrire pavimenti di nuova generazione.
             </p>
           </motion.div>
 
@@ -471,60 +512,33 @@ const StoneCore10 = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="prose prose-lg max-w-none text-center mb-12"
-          >
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              L'ossido di magnesio permette una trasmissione uniforme del calore, trattenendolo più a lungo rispetto a molti pavimenti tradizionali. Questo si traduce in un comfort superiore e in un risparmio energetico reale nel tempo, poiché l'impianto lavora in modo più efficiente.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
             className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
-            <h3 className="text-xl font-heading font-semibold text-background mb-6">
-              Perché è migliore
-            </h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-background/90">
                 <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Distribuzione del calore più omogenea</span>
+                <span>Design italiano contemporaneo</span>
               </li>
               <li className="flex items-start gap-3 text-background/90">
                 <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Minore dispersione termica</span>
+                <span>Ricerca continua sui materiali naturali</span>
               </li>
               <li className="flex items-start gap-3 text-background/90">
                 <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Superficie sempre confortevole</span>
+                <span>Attenzione all'impatto ambientale</span>
               </li>
               <li className="flex items-start gap-3 text-background/90">
                 <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
-                <span>Riduzione dei consumi energetici nel lungo periodo</span>
+                <span>Soluzioni per professionisti esigenti</span>
               </li>
             </ul>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 p-6 rounded-2xl bg-card border border-border text-center"
-          >
-            <p className="text-lg text-foreground italic">
-              Un pavimento che lavora insieme all'impianto, non contro di esso.
-            </p>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA Download Section - Normal scroll */}
-      <section ref={ctaRef} className="relative z-[6]">
+      {/* CTA Final Section */}
+      <section ref={ctaRef} className="relative z-[7]">
         <div className="absolute inset-0">
           <img 
             src={bgCtaCollabora} 
@@ -552,16 +566,16 @@ const StoneCore10 = () => {
                 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-white"
                 style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
               >
-                {t('stonecore.ctaTitle')}
+                Scopri la collezione BIOWOOD® KALĒA
               </h2>
               <p 
                 className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
                 style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
               >
-                {t('stonecore.ctaSubtitle')}
+                Porta nei tuoi spazi un pavimento naturale, evoluto e sostenibile.
               </p>
               <Button asChild size="lg" variant="secondary">
-                <Link to={`/${language}/area-tecnica`}>{t('stonecore.ctaButton')}</Link>
+                <Link to={`/${language}/contatti`}>Richiedi informazioni</Link>
               </Button>
             </motion.div>
           </div>
@@ -569,11 +583,11 @@ const StoneCore10 = () => {
       </section>
 
       {/* Certificazioni */}
-      <div className="relative z-[7]">
+      <div className="relative z-[8]">
         <CertificationsSection variant="compact" />
       </div>
     </div>
   );
 };
 
-export default StoneCore10;
+export default Biowood;

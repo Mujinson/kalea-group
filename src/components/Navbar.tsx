@@ -65,8 +65,8 @@ const Navbar = () => {
       path: null, 
       comingSoon: false,
       submenu: [
-        { label: "StoneCore 10 (MgO)", path: `/${language}/stonecore-10` },
-        { label: "CWC – Carbon Wood", path: `/${language}/cwc` },
+        { label: "BIOCORE®", path: `/${language}/biocore` },
+        { label: "BIOWOOD®", path: `/${language}/biowood` },
       ]
     },
     { label: t('nav.menuEdgeline'), path: `/${language}/edgeline`, comingSoon: false },
