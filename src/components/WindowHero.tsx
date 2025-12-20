@@ -127,7 +127,7 @@ const WindowHero = () => {
           {floatingPanels.map((panel) => (
             <motion.div
               key={panel.id}
-              className="absolute"
+              className="absolute cursor-pointer pointer-events-auto"
               style={{
                 x: panel.x,
                 y: panel.y,
@@ -142,6 +142,12 @@ const WindowHero = () => {
                 y: [panel.y - 8, panel.y + 8, panel.y - 8],
                 x: [panel.x - 4, panel.x + 4, panel.x - 4],
               }}
+              whileHover={{ 
+                scale: 1.4,
+                rotate: 0,
+                zIndex: 50,
+                transition: { duration: 0.3, ease: "easeOut" }
+              }}
               transition={{ 
                 opacity: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
                 scale: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
@@ -150,10 +156,13 @@ const WindowHero = () => {
                 x: { duration: 5 + panel.floatDelay * 0.5, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
               }}
             >
-              <div 
+              <motion.div 
                 className="w-full h-full rounded-sm overflow-hidden"
                 style={{
                   boxShadow: '0 25px 50px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.4)',
+                }}
+                whileHover={{
+                  boxShadow: '0 35px 70px rgba(0,0,0,0.6), 0 15px 30px rgba(0,0,0,0.5), 0 0 40px rgba(200,150,80,0.3)',
                 }}
               >
                 <img 
@@ -161,7 +170,7 @@ const WindowHero = () => {
                   alt="" 
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </motion.div>
