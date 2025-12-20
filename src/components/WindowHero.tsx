@@ -13,7 +13,7 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
-// 7 panels - same size, equal spacing, only above and sides, not touching window
+// 6 panels - 3 on each side, equal spacing, not touching window
 const PANEL_SIZE = 85;
 const floatingPanels = [
   // Left side (3 panels - evenly spaced vertically)
@@ -24,8 +24,6 @@ const floatingPanels = [
   { id: 4, x: 320, y: -140, rotate: 14, floatDelay: 0.3, image: finishSabbia },
   { id: 5, x: 320, y: 0, rotate: 10, floatDelay: 0.8, image: finishSilven },
   { id: 6, x: 320, y: 140, rotate: 18, floatDelay: 1.5, image: finishTerram },
-  // Top (1 panel - centered)
-  { id: 7, x: 0, y: -260, rotate: 5, floatDelay: 0.6, image: finishVelora },
 ];
 
 const WindowHero = () => {
