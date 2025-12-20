@@ -97,9 +97,9 @@ const SustainabilityImpact = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-12 text-center"
           >
-            <Link to={`/${language}/stonecore-10`}>
+            <Link to={`/${language}/biocore`}>
               <Button size="lg" className="gap-2">
-                Scopri StoneCore 10
+                Scopri BIOCORE®
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>

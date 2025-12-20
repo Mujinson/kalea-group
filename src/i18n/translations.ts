@@ -61,7 +61,7 @@ export const translations: Record<Language, Translations> = {
       },
       stonecore: {
         title: "Pavimenti BIOCORE®",
-        subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio – MgO). Prestazioni professionali, estetica naturale, posa veloce.",
+        subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio). Prestazioni professionali, estetica naturale, posa veloce.",
         ctaPrimary: "Richiedi campioni",
         ctaSecondary: "Scarica scheda tecnica",
       },
@@ -69,7 +69,7 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa EdgeLine",
         subtitle: "Profili architettonici in alluminio. La finitura che completa ogni superficie.",
         ctaPrimary: "Richiedi catalogo",
-        ctaSecondary: "Scopri StoneCore 10",
+        ctaSecondary: "Scopri BIOCORE®",
       },
       onewall: {
         title: "Kalēa OneWall",
@@ -208,7 +208,7 @@ export const translations: Record<Language, Translations> = {
     },
     gallery: {
       title: "Esplora la Collezione BIOCORE®",
-      subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio – MgO). Texture, colori e dettagli del nostro pavimento minerale.",
+      subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio). Texture, colori e dettagli del nostro pavimento minerale.",
       description: "Il pavimento BIOCORE® combina tecnologia avanzata, resistenza superiore e un design naturale ispirato al legno autentico. Scopri tutte le finiture disponibili per showroom, rivenditori e professionisti.",
       cta: "Scopri tutte le finiture",
     },
@@ -852,7 +852,7 @@ export const translations: Record<Language, Translations> = {
       },
       stonecore: {
         title: "BIOCORE® Floors",
-        subtitle: "BIOCORE® (mineral flooring with magnesium oxide core – MgO). Professional performance, natural aesthetics, fast installation.",
+        subtitle: "BIOCORE® (mineral flooring with magnesium oxide core). Professional performance, natural aesthetics, fast installation.",
         ctaPrimary: "Request samples",
         ctaSecondary: "Download datasheet",
       },
@@ -999,7 +999,7 @@ export const translations: Record<Language, Translations> = {
     },
     gallery: {
       title: "Explore the BIOCORE® Collection",
-      subtitle: "BIOCORE® (mineral flooring with magnesium oxide core – MgO). Textures, colors and details of our mineral flooring.",
+      subtitle: "BIOCORE® (mineral flooring with magnesium oxide core). Textures, colors and details of our mineral flooring.",
       description: "BIOCORE® flooring combines advanced technology, superior resistance and a natural design inspired by authentic wood. Discover all finishes available for showrooms, retailers and professionals.",
       cta: "Discover all finishes",
     },
@@ -1103,7 +1103,7 @@ export const translations: Record<Language, Translations> = {
         },
         baseboard: {
           title: "Baseboard",
-          description: "Coordinated with StoneCore 10 surfaces",
+          description: "Coordinated with BIOCORE® surfaces",
         },
         step: {
           title: "Step profile",
@@ -1111,7 +1111,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Available finishes",
-      finishesSubtitle: "Coordinated with Kalēa StoneCore 10 surfaces",
+      finishesSubtitle: "Coordinated with Kalēa BIOCORE® surfaces",
       finishes: {
         natural: "Natural aluminum",
         bronze: "Satin bronze",

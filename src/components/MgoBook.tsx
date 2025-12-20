@@ -47,7 +47,7 @@ const MgoBook = () => {
   ];
 
   const comparativeData = [
-    { material: 'MgO', fire: '✓', water: '✓', mold: '✓', stability: '✓', acoustic: '✓' },
+    { material: 'BIOCORE®', fire: '✓', water: '✓', mold: '✓', stability: '✓', acoustic: '✓' },
     { material: 'SPC', fire: '○', water: '✓', mold: '○', stability: '✓', acoustic: '○' },
     { material: 'MFC', fire: '✗', water: '✗', mold: '✗', stability: '○', acoustic: '○' },
     { material: 'HPL', fire: '○', water: '○', mold: '○', stability: '✓', acoustic: '✗' },
@@ -161,10 +161,10 @@ const MgoBook = () => {
           <div
             key={row.material}
             className={`grid grid-cols-6 gap-2 py-2 rounded-lg text-sm ${
-              row.material === 'MgO' ? 'bg-foreground/8' : ''
+              row.material === 'BIOCORE®' ? 'bg-foreground/8' : ''
             }`}
           >
-            <div className={`font-bold ${row.material === 'MgO' ? 'text-foreground' : 'text-foreground/70'}`}>
+            <div className={`font-bold text-xs ${row.material === 'BIOCORE®' ? 'text-foreground' : 'text-foreground/70'}`}>
               {row.material}
             </div>
             <div className="flex justify-center">{renderStatusIcon(row.fire)}</div>

@@ -43,10 +43,10 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to={`/${language}/stonecore-10`}
+                  to={`/${language}/biocore`}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  StoneCore 10
+                  BIOCORE®
                 </Link>
               </li>
               <li>

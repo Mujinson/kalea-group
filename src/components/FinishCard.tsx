@@ -58,7 +58,7 @@ const FinishCard = ({ name, image, index, variant = "simple", slug }: FinishCard
   if (variant === "image" && image) {
     if (slug) {
       return (
-        <Link to={`/${language}/stonecore-10`}>
+        <Link to={`/${language}/biocore`}>
           {cardContent}
         </Link>
       );
@@ -86,7 +86,7 @@ const FinishCard = ({ name, image, index, variant = "simple", slug }: FinishCard
 
   if (slug) {
     return (
-      <Link to={`/${language}/stonecore-10`}>
+      <Link to={`/${language}/biocore`}>
         {simpleCardContent}
       </Link>
     );

@@ -64,7 +64,7 @@ interface ProductType {
 
 const ProductCard = ({ product, language }: { product: ProductType; language: string }) => {
   return (
-    <Link to={`/${language}/stonecore-10`}>
+    <Link to={`/${language}/biocore`}>
       <motion.div
         className="relative flex-shrink-0 flex flex-col items-center group cursor-pointer"
         whileHover={{ 
@@ -184,7 +184,7 @@ const ProductGallerySection = () => {
             {t('gallery.description')}
           </p>
           <Link
-            to={`/${language}/stonecore-10`}
+            to={`/${language}/biocore`}
             className="inline-flex items-center gap-2 text-kalea-tan font-medium hover:gap-3 transition-all duration-300 group"
           >
             {t('gallery.cta')}

@@ -29,7 +29,7 @@ const Home = () => {
       icon: Layers,
       title: t('home.stonecore.title'),
       description: t('home.stonecore.description'),
-      link: `/${language}/stonecore-10`,
+      link: `/${language}/biocore`,
       comingSoon: false,
     },
     {
