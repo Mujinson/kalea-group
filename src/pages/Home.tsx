@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import MgoBook from "@/components/MgoBook";
 import ProductGallerySection from "@/components/ProductGallerySection";
+import CWCGallerySection from "@/components/CWCGallerySection";
 import WindowHero from "@/components/WindowHero";
 import Carousel3D from "@/components/Carousel3D";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
@@ -206,9 +207,14 @@ const Home = () => {
         <MgoBook />
       </section>
 
-      {/* Product Gallery Section */}
+      {/* Product Gallery Section - StoneCore 10 */}
       <section className="relative h-screen bg-kalea-dark">
         <ProductGallerySection />
+      </section>
+
+      {/* Product Gallery Section - CWC */}
+      <section className="relative h-screen bg-kalea-dark">
+        <CWCGallerySection />
       </section>
 
       {/* Applicazioni */}
