@@ -329,9 +329,22 @@ All colors MUST be HSL.
         transform: translateX(calc(-280px * 7 - 24px * 7));
       }
     }
+    
+    @keyframes scroll-reverse {
+      0% {
+        transform: translateX(calc(-280px * 7 - 24px * 7));
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
   }
   
   .animate-scroll {
     animation: scroll 40s linear infinite;
+  }
+  
+  .animate-scroll-reverse {
+    animation: scroll-reverse 40s linear infinite;
   }
 }
