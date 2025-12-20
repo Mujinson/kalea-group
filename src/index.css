@@ -309,6 +309,15 @@ All colors MUST be HSL.
     }
   }
   
+  @keyframes scroll-reverse {
+    0% {
+      transform: translateX(calc(-280px * 7 - 48px * 7));
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
   @media (max-width: 1024px) {
     @keyframes scroll {
       0% {
@@ -316,6 +325,15 @@ All colors MUST be HSL.
       }
       100% {
         transform: translateX(calc(-320px * 7 - 32px * 7));
+      }
+    }
+    
+    @keyframes scroll-reverse {
+      0% {
+        transform: translateX(calc(-240px * 7 - 40px * 7));
+      }
+      100% {
+        transform: translateX(0);
       }
     }
   }
@@ -332,7 +350,7 @@ All colors MUST be HSL.
     
     @keyframes scroll-reverse {
       0% {
-        transform: translateX(calc(-280px * 7 - 24px * 7));
+        transform: translateX(calc(-160px * 7 - 32px * 7));
       }
       100% {
         transform: translateX(0);
