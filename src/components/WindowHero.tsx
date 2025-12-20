@@ -3,6 +3,20 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import heroImage from "@/assets/hero-kalea.webp";
+import floatingPanelsImage from "@/assets/floating-panels.png";
+
+// Individual panel positions and rotations around the window
+const floatingPanels = [
+  { id: 1, x: -220, y: -180, rotate: -15, size: 80 },
+  { id: 2, x: -180, y: 20, rotate: -8, size: 75 },
+  { id: 3, x: -200, y: 180, rotate: -12, size: 70 },
+  { id: 4, x: 200, y: -160, rotate: 12, size: 75 },
+  { id: 5, x: 180, y: 40, rotate: 18, size: 80 },
+  { id: 6, x: 210, y: 200, rotate: 8, size: 70 },
+  { id: 7, x: -80, y: -260, rotate: -5, size: 65 },
+  { id: 8, x: 90, y: -240, rotate: 10, size: 70 },
+  { id: 9, x: 0, y: 280, rotate: 3, size: 75 },
+];
 
 const WindowHero = () => {
   const { t, language } = useTranslation();
@@ -37,6 +51,10 @@ const WindowHero = () => {
 
   // CTA buttons appear after transition complete
   const ctaOpacity = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
+
+  // Floating panels - same scale as window, fade with window
+  const panelScale = useTransform(scrollYProgress, [0, 0.3, 0.6], [1, 1.8, 4]);
+  const panelOpacity = useTransform(scrollYProgress, [0.35, 0.55], [1, 0]);
 
   return (
     <section 
@@ -88,6 +106,46 @@ const WindowHero = () => {
           className="absolute inset-0 z-10 bg-kalea-dark"
           style={{ opacity: darkOverlayOpacity }}
         />
+
+        {/* Floating floor panels around the window */}
+        <motion.div 
+          className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
+          style={{ 
+            scale: panelScale,
+            opacity: panelOpacity,
+          }}
+        >
+          {floatingPanels.map((panel) => (
+            <motion.div
+              key={panel.id}
+              className="absolute"
+              style={{
+                x: panel.x,
+                y: panel.y,
+                rotate: panel.rotate,
+                width: panel.size,
+                height: panel.size,
+              }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 0.2 + panel.id * 0.08,
+                ease: "easeOut" 
+              }}
+            >
+              <div 
+                className="w-full h-full rounded-sm shadow-2xl"
+                style={{
+                  backgroundImage: `url(${floatingPanelsImage})`,
+                  backgroundSize: '300%',
+                  backgroundPosition: `${((panel.id - 1) % 3) * 50}% ${Math.floor((panel.id - 1) / 3) * 33}%`,
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.4), 0 8px 16px rgba(0,0,0,0.3)',
+                }}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Window frame container */}
         <motion.div 
