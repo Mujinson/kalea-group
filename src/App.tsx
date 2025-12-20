@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import StoneCore10 from "./pages/StoneCore10";
+import CWC from "./pages/CWC";
 import EdgeLine from "./pages/EdgeLine";
 // OneWall page is Coming Soon - routes redirect to home
 import AreaTecnica from "./pages/AreaTecnica";
@@ -121,6 +122,7 @@ const App = () => (
             {/* Italian routes */}
             <Route path="/it" element={<><SEOHandler /><Layout><Home /></Layout></>} />
             <Route path="/it/stonecore-10" element={<><SEOHandler /><Layout><StoneCore10 /></Layout></>} />
+            <Route path="/it/cwc" element={<><SEOHandler /><Layout><CWC /></Layout></>} />
             <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/it/onewall" element={<Navigate to="/it" replace />} />
             <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -138,6 +140,7 @@ const App = () => (
             {/* English routes */}
             <Route path="/en" element={<><SEOHandler /><Layout><Home /></Layout></>} />
             <Route path="/en/stonecore-10" element={<><SEOHandler /><Layout><StoneCore10 /></Layout></>} />
+            <Route path="/en/cwc" element={<><SEOHandler /><Layout><CWC /></Layout></>} />
             <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/en/onewall" element={<Navigate to="/en" replace />} />
             <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -155,6 +158,7 @@ const App = () => (
             {/* German routes */}
             <Route path="/de" element={<><SEOHandler /><Layout><Home /></Layout></>} />
             <Route path="/de/stonecore-10" element={<><SEOHandler /><Layout><StoneCore10 /></Layout></>} />
+            <Route path="/de/cwc" element={<><SEOHandler /><Layout><CWC /></Layout></>} />
             <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/de/onewall" element={<Navigate to="/de" replace />} />
             <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -172,6 +176,7 @@ const App = () => (
             {/* French routes */}
             <Route path="/fr" element={<><SEOHandler /><Layout><Home /></Layout></>} />
             <Route path="/fr/stonecore-10" element={<><SEOHandler /><Layout><StoneCore10 /></Layout></>} />
+            <Route path="/fr/cwc" element={<><SEOHandler /><Layout><CWC /></Layout></>} />
             <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/fr/onewall" element={<Navigate to="/fr" replace />} />
             <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
