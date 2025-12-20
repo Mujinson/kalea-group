@@ -12,21 +12,20 @@ import finishSabbia from "@/assets/finish-sabbia.jpg";
 import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
-import bgMgo from "@/assets/bg-mgo-section.jpg";
 
-// 8 panels - only above and on sides, no bottom panels
+// 7 panels - same size, equal spacing, only above and sides, not touching window
+const PANEL_SIZE = 85;
 const floatingPanels = [
-  // Left side (3 panels)
-  { id: 1, x: -280, y: -120, rotate: -12, size: 90, floatDelay: 0, image: finishAurora },
-  { id: 2, x: -240, y: 80, rotate: -8, size: 85, floatDelay: 0.5, image: finishCorteccia },
-  { id: 3, x: -300, y: -20, rotate: -15, size: 75, floatDelay: 1.2, image: finishPerla },
-  // Right side (3 panels)
-  { id: 4, x: 280, y: -100, rotate: 14, size: 85, floatDelay: 0.3, image: finishSabbia },
-  { id: 5, x: 250, y: 90, rotate: 10, size: 80, floatDelay: 0.8, image: finishSilven },
-  { id: 6, x: 310, y: 0, rotate: 18, size: 75, floatDelay: 1.5, image: finishTerram },
-  // Top (2 panels)
-  { id: 7, x: -100, y: -220, rotate: -6, size: 80, floatDelay: 0.6, image: finishVelora },
-  { id: 8, x: 110, y: -200, rotate: 8, size: 85, floatDelay: 1.0, image: bgMgo },
+  // Left side (3 panels - evenly spaced vertically)
+  { id: 1, x: -320, y: -140, rotate: -12, floatDelay: 0, image: finishAurora },
+  { id: 2, x: -320, y: 0, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
+  { id: 3, x: -320, y: 140, rotate: -15, floatDelay: 1.2, image: finishPerla },
+  // Right side (3 panels - evenly spaced vertically)
+  { id: 4, x: 320, y: -140, rotate: 14, floatDelay: 0.3, image: finishSabbia },
+  { id: 5, x: 320, y: 0, rotate: 10, floatDelay: 0.8, image: finishSilven },
+  { id: 6, x: 320, y: 140, rotate: 18, floatDelay: 1.5, image: finishTerram },
+  // Top (1 panel - centered)
+  { id: 7, x: 0, y: -260, rotate: 5, floatDelay: 0.6, image: finishVelora },
 ];
 
 const WindowHero = () => {
@@ -133,8 +132,8 @@ const WindowHero = () => {
               style={{
                 x: panel.x,
                 y: panel.y,
-                width: panel.size,
-                height: panel.size,
+                width: PANEL_SIZE,
+                height: PANEL_SIZE,
               }}
               initial={{ opacity: 0, scale: 0.8, rotate: panel.rotate }}
               animate={{ 
