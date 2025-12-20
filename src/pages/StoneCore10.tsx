@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import FeatureCard from "@/components/FeatureCard";
-import FinishCard from "@/components/FinishCard";
+import ColorCircleGallery, { stonecoreColors } from "@/components/ColorCircleGallery";
 import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import CertificationsSection from "@/components/CertificationsSection";
@@ -12,13 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-stonecore.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
-import finishCorteccia from "@/assets/finish-corteccia.jpg";
-import finishSabbia from "@/assets/finish-sabbia.jpg";
-import finishSilven from "@/assets/finish-silven.jpg";
-import finishTerram from "@/assets/finish-terram.jpg";
-import finishPerla from "@/assets/finish-perla.jpg";
-import finishVelora from "@/assets/finish-velora.jpg";
-import finishAurora from "@/assets/finish-aurora.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -137,16 +130,6 @@ const StoneCore10 = () => {
     },
   ];
 
-  const finishes = [
-    { name: t('stonecore.finishes.corteccia'), image: finishCorteccia, slug: 'corteccia' },
-    { name: t('stonecore.finishes.cenere'), image: finishCorteccia, slug: 'cenere' },
-    { name: t('stonecore.finishes.sabbia'), image: finishSabbia, slug: 'sabbia' },
-    { name: t('stonecore.finishes.silven'), image: finishSilven, slug: 'silven' },
-    { name: t('stonecore.finishes.terram'), image: finishTerram, slug: 'terram' },
-    { name: t('stonecore.finishes.perla'), image: finishPerla, slug: 'perla' },
-    { name: t('stonecore.finishes.velora'), image: finishVelora, slug: 'velora' },
-    { name: t('stonecore.finishes.aurora'), image: finishAurora, slug: 'aurora' },
-  ];
 
   return (
     <div className="relative bg-[#0a0a0a]">
@@ -279,33 +262,11 @@ const StoneCore10 = () => {
       {/* Finiture Section - Normal scroll */}
       <section ref={finishesRef} className="relative z-[2] bg-background py-20">
         <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t('stonecore.finishesTitle')}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('stonecore.finishesSubtitle')}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {finishes.map((finish, index) => (
-              <FinishCard
-                key={finish.name}
-                name={finish.name}
-                image={finish.image}
-                index={index}
-                variant="image"
-                slug={finish.slug}
-              />
-            ))}
-          </div>
+          <ColorCircleGallery 
+            title={t('stonecore.finishesTitle')}
+            subtitle={t('stonecore.finishesSubtitle')}
+            colors={stonecoreColors}
+          />
         </div>
       </section>
 
