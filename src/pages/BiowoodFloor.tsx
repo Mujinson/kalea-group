@@ -14,7 +14,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const Biowood = () => {
+const BiowoodFloor = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
   
@@ -590,4 +590,4 @@ const Biowood = () => {
   );
 };
 
-export default Biowood;
+export default BiowoodFloor;

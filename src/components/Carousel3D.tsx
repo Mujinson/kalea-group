@@ -110,7 +110,7 @@ const Carousel3D = () => {
               return (
                 <Link
                   key={plank.id}
-                  to={`/${language}/biocore`}
+                  to={`/${language}/biomag-floor`}
                   className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
                   style={{
                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
@@ -182,7 +182,7 @@ const Carousel3D = () => {
           className={`flex justify-center flex-shrink-0 ${screenSize === 'mobile' ? 'mt-auto pb-4' : 'mt-auto pb-4 pt-16 md:pt-20'}`}
         >
           <Button asChild>
-            <Link to={`/${language}/biocore`}>
+            <Link to={`/${language}/biomag-floor`}>
               Scopri tutta la collezione
             </Link>
           </Button>

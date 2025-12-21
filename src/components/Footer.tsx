@@ -43,10 +43,10 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to={`/${language}/biocore`}
+                  to={`/${language}/biomag-floor`}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  BIOCORE®
+                  BIOMAG FLOOR®
                 </Link>
               </li>
               <li>

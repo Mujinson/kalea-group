@@ -24,12 +24,19 @@ import { useTranslation } from "@/i18n/useTranslation";
 const Home = () => {
   const { t, language } = useTranslation();
 
-  const productLines = [
+const productLines = [
     {
       icon: Layers,
       title: t('home.stonecore.title'),
       description: t('home.stonecore.description'),
-      link: `/${language}/biocore`,
+      link: `/${language}/biomag-floor`,
+      comingSoon: false,
+    },
+    {
+      icon: Layers,
+      title: t('home.biowood.title'),
+      description: t('home.biowood.description'),
+      link: `/${language}/biowood-floor`,
       comingSoon: false,
     },
     {
@@ -43,7 +50,7 @@ const Home = () => {
       icon: Sparkles,
       title: t('home.onewall.title'),
       description: t('home.onewall.description'),
-      link: `/${language}/onewall`,
+      link: `/${language}/biowall`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
     },

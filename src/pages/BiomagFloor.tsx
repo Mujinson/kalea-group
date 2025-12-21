@@ -17,7 +17,7 @@ import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const Biocore = () => {
+const BiomagFloor = () => {
   const { t, language } = useTranslation();
   const isMobile = useIsMobile();
   
@@ -576,4 +576,4 @@ const Biocore = () => {
   );
 };
 
-export default Biocore;
+export default BiomagFloor;
