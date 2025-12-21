@@ -59,14 +59,14 @@ const Navbar = () => {
     { label: t('nav.contacts'), path: `/${language}/contatti` },
   ];
 
-  const lineeItems = [
+const lineeItems = [
     { 
       label: t('nav.menuStonecore'), 
       path: null, 
       comingSoon: false,
       submenu: [
-        { label: "BIOCORE®", path: `/${language}/biocore` },
-        { label: "BIOWOOD®", path: `/${language}/biowood` },
+        { label: "BIOMAG FLOOR®", path: `/${language}/biomag-floor` },
+        { label: "BIOWOOD FLOOR®", path: `/${language}/biowood-floor` },
       ]
     },
     { label: t('nav.menuEdgeline'), path: `/${language}/edgeline`, comingSoon: false },

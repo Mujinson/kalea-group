@@ -21,7 +21,7 @@ interface CWCProductType {
 
 const CWCProductCard = ({ product, language }: { product: CWCProductType; language: string }) => {
   return (
-    <Link to={`/${language}/biowood`}>
+    <Link to={`/${language}/biowood-floor`}>
       <motion.div
         className="relative flex-shrink-0 flex flex-col items-center group cursor-pointer"
         whileHover={{ 
@@ -57,7 +57,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
           {/* Badge positioned at top-right of circle */}
           <div className="absolute -top-1 -right-1 sm:top-0 sm:right-0">
             <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-medium bg-kalea-cream/90 backdrop-blur-sm text-kalea-dark shadow-sm">
-              BIOWOOD®
+              BIOWOOD FLOOR®
             </span>
           </div>
         </div>
@@ -99,17 +99,17 @@ const CWCGallerySection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-2 md:mb-4">
-            {language === 'it' ? 'Esplora la Collezione BIOWOOD®' : 
-             language === 'en' ? 'Explore the BIOWOOD® Collection' :
-             language === 'de' ? 'Entdecken Sie die BIOWOOD®-Kollektion' :
-             'Découvrez la Collection BIOWOOD®'}
+<h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-2 md:mb-4">
+            {language === 'it' ? 'Esplora la Collezione BIOWOOD FLOOR®' : 
+             language === 'en' ? 'Explore the BIOWOOD FLOOR® Collection' :
+             language === 'de' ? 'Entdecken Sie die BIOWOOD FLOOR®-Kollektion' :
+             'Découvrez la Collection BIOWOOD FLOOR®'}
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-kalea-cream/80 max-w-2xl mx-auto">
-            {language === 'it' ? 'BIOWOOD® (pavimento naturale evoluto con fibre di legno e carbonio). Texture, colori e dettagli.' : 
-             language === 'en' ? 'BIOWOOD® (evolved natural flooring with wood fibers and carbon). Textures, colors and details.' :
-             language === 'de' ? 'BIOWOOD® (entwickelter Naturboden mit Holzfasern und Kohlenstoff). Texturen, Farben und Details.' :
-             'BIOWOOD® (sol naturel évolué avec fibres de bois et carbone). Textures, couleurs et détails.'}
+            {language === 'it' ? 'BIOWOOD FLOOR® (pavimento naturale evoluto con fibre di legno e carbonio). Texture, colori e dettagli.' : 
+             language === 'en' ? 'BIOWOOD FLOOR® (evolved natural flooring with wood fibers and carbon). Textures, colors and details.' :
+             language === 'de' ? 'BIOWOOD FLOOR® (entwickelter Naturboden mit Holzfasern und Kohlenstoff). Texturen, Farben und Details.' :
+             'BIOWOOD FLOOR® (sol naturel évolué avec fibres de bois et carbone). Textures, couleurs et détails.'}
           </p>
         </motion.div>
       </div>
@@ -137,20 +137,20 @@ const CWCGallerySection = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-3xl mx-auto"
         >
-          <p className="text-sm md:text-lg text-kalea-cream/80 leading-relaxed mb-4 md:mb-8">
-            {language === 'it' ? 'BIOWOOD® è il pavimento naturale evoluto KALEA, realizzato con fibre di legno e carbonio e leganti naturali, privo di plastica e sostanze tossiche.' : 
-             language === 'en' ? 'BIOWOOD® is the evolved natural KALEA flooring, made with wood fibers and carbon and natural binders, free from plastic and toxic substances.' :
-             language === 'de' ? 'BIOWOOD® ist der weiterentwickelte natürliche KALEA-Boden, hergestellt aus Holzfasern und Kohlenstoff und natürlichen Bindemitteln, frei von Plastik und Giftstoffen.' :
-             'BIOWOOD® est le sol naturel évolué KALEA, fabriqué avec des fibres de bois et carbone et des liants naturels, sans plastique ni substances toxiques.'}
+<p className="text-sm md:text-lg text-kalea-cream/80 leading-relaxed mb-4 md:mb-8">
+            {language === 'it' ? 'BIOWOOD FLOOR® è il pavimento naturale evoluto KALEA, realizzato con fibre di legno e carbonio e leganti naturali, privo di plastica e sostanze tossiche.' : 
+             language === 'en' ? 'BIOWOOD FLOOR® is the evolved natural KALEA flooring, made with wood fibers and carbon and natural binders, free from plastic and toxic substances.' :
+             language === 'de' ? 'BIOWOOD FLOOR® ist der weiterentwickelte natürliche KALEA-Boden, hergestellt aus Holzfasern und Kohlenstoff und natürlichen Bindemitteln, frei von Plastik und Giftstoffen.' :
+             'BIOWOOD FLOOR® est le sol naturel évolué KALEA, fabriqué avec des fibres de bois et carbone et des liants naturels, sans plastique ni substances toxiques.'}
           </p>
           <Link
-            to={`/${language}/biowood`}
+            to={`/${language}/biowood-floor`}
             className="inline-flex items-center gap-2 text-kalea-tan font-medium hover:gap-3 transition-all duration-300 group"
           >
-            {language === 'it' ? 'Scopri tutta la collezione BIOWOOD®' : 
-             language === 'en' ? 'Discover the full BIOWOOD® collection' :
-             language === 'de' ? 'Entdecken Sie die komplette BIOWOOD®-Kollektion' :
-             'Découvrez toute la collection BIOWOOD®'}
+            {language === 'it' ? 'Scopri tutta la collezione BIOWOOD FLOOR®' : 
+             language === 'en' ? 'Discover the full BIOWOOD FLOOR® collection' :
+             language === 'de' ? 'Entdecken Sie die komplette BIOWOOD FLOOR®-Kollektion' :
+             'Découvrez toute la collection BIOWOOD FLOOR®'}
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>

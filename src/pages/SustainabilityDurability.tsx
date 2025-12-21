@@ -97,9 +97,9 @@ const SustainabilityDurability = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-12 text-center"
           >
-            <Link to={`/${language}/biocore`}>
+            <Link to={`/${language}/biomag-floor`}>
               <Button size="lg" className="gap-2">
-                Scopri BIOCORE®
+                Scopri BIOMAG FLOOR®
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>

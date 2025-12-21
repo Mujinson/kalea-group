@@ -5,8 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import Biocore from "./pages/Biocore";
-import Biowood from "./pages/Biowood";
+import BiomagFloor from "./pages/BiomagFloor";
+import BiowoodFloor from "./pages/BiowoodFloor";
 import EdgeLine from "./pages/EdgeLine";
 import Biowall from "./pages/Biowall";
 import AreaTecnica from "./pages/AreaTecnica";
@@ -119,10 +119,10 @@ const App = () => (
             {/* Redirect root to /it */}
             <Route path="/" element={<Navigate to="/it" replace />} />
             
-            {/* Italian routes */}
+{/* Italian routes */}
             <Route path="/it" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/it/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
-            <Route path="/it/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
+            <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+            <Route path="/it/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/it/biowall" element={<Navigate to="/it" replace />} />
             <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -137,10 +137,10 @@ const App = () => (
             <Route path="/it/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
             <Route path="/it/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
             
-            {/* English routes */}
+{/* English routes */}
             <Route path="/en" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/en/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
-            <Route path="/en/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
+            <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+            <Route path="/en/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/en/biowall" element={<Navigate to="/en" replace />} />
             <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -155,10 +155,10 @@ const App = () => (
             <Route path="/en/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
             <Route path="/en/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
             
-            {/* German routes */}
+{/* German routes */}
             <Route path="/de" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/de/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
-            <Route path="/de/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
+            <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+            <Route path="/de/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/de/biowall" element={<Navigate to="/de" replace />} />
             <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -173,10 +173,10 @@ const App = () => (
             <Route path="/de/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
             <Route path="/de/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
             
-            {/* French routes */}
+{/* French routes */}
             <Route path="/fr" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/fr/biocore" element={<><SEOHandler /><Layout><Biocore /></Layout></>} />
-            <Route path="/fr/biowood" element={<><SEOHandler /><Layout><Biowood /></Layout></>} />
+            <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+            <Route path="/fr/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
             <Route path="/fr/biowall" element={<Navigate to="/fr" replace />} />
             <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />

@@ -19,7 +19,7 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       home: {
-        title: "Sistema di superfici BIOCORE® e BIOWOOD®",
+        title: "Sistema di superfici BIOMAG FLOOR® e BIOWOOD FLOOR®",
         subtitle: "Pavimenti, profili e pannelli. Architettura degli interni, progettata in Italia.",
         ctaPrimary: "Scopri il sistema",
         ctaSecondary: "Diventa Partner",
@@ -27,7 +27,7 @@ export const translations: Record<Language, Translations> = {
         newStandard: "The New Standard in Surface Systems.",
         tagline: "Italian Surface Design — Designed in Italy.",
         systemDescription: "KALĒA è un sistema integrato di superfici architettoniche, progettato per offrire soluzioni complete e coordinate a professionisti del design e dell'architettura.",
-        stonecoreHero: "Pavimenti BIOCORE® con texture wood per ambienti residenziali e commerciali.",
+        stonecoreHero: "Pavimenti BIOMAG FLOOR® con texture wood per ambienti residenziali e commerciali.",
         edgelineHero: "Profili e battiscopa architettonici in alluminio per finiture di pregio.",
         onewallHero: "Pannelli verticali di design per pareti e boiserie contemporanee.",
         ctaInfo: "Richiedi informazioni",
@@ -60,8 +60,8 @@ export const translations: Record<Language, Translations> = {
         brandTagline: "Design italiano delle superfici.",
       },
       stonecore: {
-        title: "Pavimenti BIOCORE®",
-        subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio). Prestazioni professionali, estetica naturale, posa veloce.",
+        title: "Pavimenti BIOMAG FLOOR®",
+        subtitle: "BIOMAG FLOOR® (pavimento minerale con core in ossido di magnesio). Prestazioni professionali, estetica naturale, posa veloce.",
         ctaPrimary: "Richiedi campioni",
         ctaSecondary: "Scarica scheda tecnica",
       },
@@ -80,22 +80,26 @@ export const translations: Record<Language, Translations> = {
     },
     home: {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
-      linesSubtitle: "Tre linee integrate per la continuità visiva degli spazi",
+      linesSubtitle: "Quattro linee integrate per la continuità visiva degli spazi",
       stonecore: {
-        title: "Pavimenti BIOCORE®",
-        description: "Superfici tecniche BIOCORE® con texture wood. Posa flottante, continuità visiva, prestazioni certificate.",
+        title: "BIOMAG FLOOR®",
+        description: "Superfici tecniche BIOMAG FLOOR® con texture wood. Posa flottante, continuità visiva, prestazioni certificate.",
+      },
+      biowood: {
+        title: "BIOWOOD FLOOR®",
+        description: "Pavimento naturale evoluto con fibre di legno e carbonio. Eco-sostenibile, atossico, biodegradabile.",
       },
       edgeline: {
-        title: "Kalēa EdgeLine",
+        title: "EDGELINE",
         description: "Profili e battiscopa architettonici in alluminio. Design essenziale, finitura impeccabile.",
       },
       onewall: {
-        title: "Kalēa BIOWALL®",
+        title: "BIOWALL®",
         description: "BIOWALL® (pannelli verticali in ossido di magnesio). Il verticale oltre il cartongesso. Zero stuccatura. Zero polvere. Zero pittura.",
         comingSoonLabel: "Novità in arrivo",
       },
-      mgoTitle: "Perché BIOCORE®",
-      mgoDescription: "BIOCORE® è il pavimento minerale KALEA con core strutturale in ossido di magnesio (MgO), progettato per offrire stabilità, salubrità e prestazioni superiori.",
+      mgoTitle: "Perché BIOMAG FLOOR®",
+      mgoDescription: "BIOMAG FLOOR® è il pavimento minerale KALEA con core strutturale in ossido di magnesio, progettato per offrire stabilità, salubrità e prestazioni superiori.",
       mgoAdvantages: {
         fireproof: "Ignifugo",
         waterproof: "Impermeabile",
@@ -191,7 +195,7 @@ export const translations: Record<Language, Translations> = {
         closingLine2: "Materiali contemporanei e precisione architettonica.",
         visionTitle: "La nostra visione",
         vision: {
-          materials: "Materiali BIOCORE® e BIOWOOD®",
+          materials: "Materiali BIOMAG FLOOR® e BIOWOOD FLOOR®",
           materialsDesc: "Nuova generazione di superfici",
           energy: "Fino a 1/10 dell'energia produttiva",
           energyDesc: "Minori emissioni, minori rifiuti, maggiore sostenibilità",
@@ -207,9 +211,9 @@ export const translations: Record<Language, Translations> = {
       },
     },
     gallery: {
-      title: "Esplora la Collezione BIOCORE®",
-      subtitle: "BIOCORE® (pavimento minerale con core in ossido di magnesio). Texture, colori e dettagli del nostro pavimento minerale.",
-      description: "Il pavimento BIOCORE® combina tecnologia avanzata, resistenza superiore e un design naturale ispirato al legno autentico. Scopri tutte le finiture disponibili per showroom, rivenditori e professionisti.",
+      title: "Esplora la Collezione BIOMAG FLOOR®",
+      subtitle: "BIOMAG FLOOR® (pavimento minerale con core in ossido di magnesio). Texture, colori e dettagli del nostro pavimento minerale.",
+      description: "Il pavimento BIOMAG FLOOR® combina tecnologia avanzata, resistenza superiore e un design naturale ispirato al legno autentico. Scopri tutte le finiture disponibili per showroom, rivenditori e professionisti.",
       cta: "Scopri tutte le finiture",
     },
     colors: {
@@ -224,11 +228,11 @@ export const translations: Record<Language, Translations> = {
     },
     stonecore: {
       structureTitle: "Struttura multistrato ad alte prestazioni",
-      structureSubtitle: "Ogni tavola BIOCORE® è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in ossido di magnesio da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Alla base, il tappetino integrato da 1,5 mm migliora l'isolamento acustico, aumenta il comfort al calpestio e semplifica l'installazione. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
+      structureSubtitle: "Ogni tavola BIOMAG FLOOR® è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in ossido di magnesio da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Alla base, il tappetino integrato da 1,5 mm migliora l'isolamento acustico, aumenta il comfort al calpestio e semplifica l'installazione. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
       layers: {
         decorative: "Strato decorativo",
         wear: "Strato di usura",
-        core: "Core BIOCORE®",
+        core: "Core BIOMAG FLOOR®",
         mat: "Tappetino",
       },
       advantagesTitle: "Vantaggi esclusivi",
@@ -260,7 +264,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Finiture disponibili",
-      finishesSubtitle: "Otto texture wood BIOCORE® per ogni visione progettuale",
+      finishesSubtitle: "Otto texture wood BIOMAG FLOOR® per ogni visione progettuale",
       finishes: {
         corteccia: "Corteccia",
         cenere: "Cenere",

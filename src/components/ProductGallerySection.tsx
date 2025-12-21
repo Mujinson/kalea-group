@@ -64,7 +64,7 @@ interface ProductType {
 
 const ProductCard = ({ product, language }: { product: ProductType; language: string }) => {
   return (
-    <Link to={`/${language}/biocore`}>
+    <Link to={`/${language}/biomag-floor`}>
       <motion.div
         className="relative flex-shrink-0 flex flex-col items-center group cursor-pointer"
         whileHover={{ 
@@ -88,7 +88,7 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
           {/* Badge positioned at top-right of circle */}
           <div className="absolute -top-1 -right-1 sm:top-0 sm:right-0">
             <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-medium bg-kalea-cream/90 backdrop-blur-sm text-kalea-dark shadow-sm">
-              BIOCORE®
+              BIOMAG FLOOR®
             </span>
           </div>
         </div>
@@ -183,8 +183,8 @@ const ProductGallerySection = () => {
           <p className="text-sm md:text-lg text-kalea-cream/80 leading-relaxed mb-4 md:mb-8">
             {t('gallery.description')}
           </p>
-          <Link
-            to={`/${language}/biocore`}
+<Link
+            to={`/${language}/biomag-floor`}
             className="inline-flex items-center gap-2 text-kalea-tan font-medium hover:gap-3 transition-all duration-300 group"
           >
             {t('gallery.cta')}
