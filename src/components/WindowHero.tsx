@@ -85,19 +85,29 @@ const WindowHero = () => {
   const bgOpacity = useTransform(scrollYProgress, [0.35, 0.55], [0, 1]);
   const bgScale = useTransform(scrollYProgress, [0.3, 0.7], [1.15, 1]);
   
-  // Text animations - fade out before window expands
-  const textOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  const textY = useTransform(scrollYProgress, [0, 0.2], [0, -60]);
+  // Text animations - fade out before window expands (complete at 0.12)
+  const textOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 0.15], [0, -40]);
+  // Hide completely when faded out
+  const textVisibility = useTransform(scrollYProgress, (progress) => 
+    progress > 0.12 ? "hidden" : "visible"
+  );
   
   // Scroll indicator - fades out quickly
-  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
+  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
+  const scrollIndicatorVisibility = useTransform(scrollYProgress, (progress) => 
+    progress > 0.06 ? "hidden" : "visible"
+  );
   
   // Glow animation
   const glowOpacity = useTransform(scrollYProgress, [0, 0.25], [0.7, 0]);
   const glowScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.5]);
 
-  // CTA buttons appear after transition complete
-  const ctaOpacity = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
+  // CTA buttons appear AFTER first text is completely hidden (starts at 0.65, well after 0.12)
+  const ctaOpacity = useTransform(scrollYProgress, [0.65, 0.78], [0, 1]);
+  const ctaVisibility = useTransform(scrollYProgress, (progress) => 
+    progress < 0.65 ? "hidden" : "visible"
+  );
 
   // Floating panels - same scale as window, fade with window
   const panelScale = useTransform(scrollYProgress, [0, 0.3, 0.6], [1, 1.8, 4]);
@@ -127,10 +137,14 @@ const WindowHero = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
         </motion.div>
 
-        {/* CTA Buttons - appear after window transition */}
+        {/* CTA Buttons - appear after window transition, only when first text is completely hidden */}
         <motion.div 
           className="absolute inset-0 z-20 flex items-end justify-center pb-16 md:pb-24"
-          style={{ opacity: ctaOpacity }}
+          style={{ 
+            opacity: ctaOpacity,
+            visibility: ctaVisibility,
+            pointerEvents: useTransform(scrollYProgress, (progress) => progress < 0.65 ? "none" : "auto"),
+          }}
         >
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link 
@@ -408,12 +422,14 @@ const WindowHero = () => {
           </div>
         </motion.div>
 
-        {/* Text content - centered in window area */}
+        {/* Text content - centered in window area, hidden when faded */}
         <motion.div 
-          className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none"
+          className="absolute inset-0 z-30 flex flex-col items-center justify-center"
           style={{ 
             opacity: textOpacity,
             y: textY,
+            visibility: textVisibility,
+            pointerEvents: "none",
           }}
         >
           <div className="text-center px-4 mt-32 md:mt-40 lg:mt-48">
@@ -442,7 +458,10 @@ const WindowHero = () => {
         {/* Mobile: "scroll down" inside the window + helper text right below */}
         <motion.div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[72px] z-30 flex flex-col items-center md:hidden"
-          style={{ opacity: scrollIndicatorOpacity }}
+          style={{ 
+            opacity: scrollIndicatorOpacity,
+            visibility: scrollIndicatorVisibility,
+          }}
         >
           <motion.span
             className="text-white/60 text-[10px] tracking-[0.35em] uppercase font-medium"
@@ -456,7 +475,10 @@ const WindowHero = () => {
 
         <motion.p
           className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[205px] z-30 text-white/50 text-[10px] tracking-[0.15em] uppercase font-medium md:hidden"
-          style={{ opacity: scrollIndicatorOpacity }}
+          style={{ 
+            opacity: scrollIndicatorOpacity,
+            visibility: scrollIndicatorVisibility,
+          }}
         >
           {t('hero.home.toStartJourney')}
         </motion.p>
@@ -464,7 +486,10 @@ const WindowHero = () => {
         {/* Desktop/tablet: keep indicator at bottom */}
         <motion.div 
           className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex-col items-center gap-2"
-          style={{ opacity: scrollIndicatorOpacity }}
+          style={{ 
+            opacity: scrollIndicatorOpacity,
+            visibility: scrollIndicatorVisibility,
+          }}
         >
           <motion.span 
             className="text-white/60 text-[9px] tracking-[0.35em] uppercase font-medium"
