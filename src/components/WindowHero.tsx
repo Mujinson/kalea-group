@@ -370,18 +370,22 @@ const WindowHero = () => {
               }}
             />
             
-            {/* Window glass area - brand dark brown interior #4A2A13 */}
+            {/* Window glass area with interior photo showing floor */}
             <div 
               className="absolute inset-[10px] md:inset-[14px] rounded-t-[110px] md:rounded-t-[146px] lg:rounded-t-[186px] rounded-b-[10px] overflow-hidden"
-              style={{
-                background: "linear-gradient(180deg, hsl(25 59% 18% / 0.95) 0%, hsl(25 59% 14% / 0.98) 100%)",
-              }}
             >
-              {/* Subtle ambient light from window */}
+              {/* Interior image showing flooring */}
+              <img 
+                src={heroImage} 
+                alt="Interior with Kalēa flooring" 
+                className="absolute inset-0 w-full h-full object-cover object-bottom"
+              />
+              
+              {/* Subtle vignette overlay for depth */}
               <div 
                 className="absolute inset-0"
                 style={{
-                  background: "radial-gradient(ellipse at 50% 30%, rgba(198, 177, 149, 0.12) 0%, transparent 60%)",
+                  background: "radial-gradient(ellipse at 50% 100%, transparent 40%, rgba(0,0,0,0.2) 100%)",
                 }}
               />
               
@@ -389,7 +393,7 @@ const WindowHero = () => {
               <div 
                 className="absolute inset-0"
                 style={{
-                  background: "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.02) 100%)",
+                  background: "linear-gradient(145deg, rgba(255,255,255,0.06) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.03) 100%)",
                 }}
               />
             </div>
