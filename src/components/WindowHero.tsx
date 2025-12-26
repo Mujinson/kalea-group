@@ -416,21 +416,12 @@ const WindowHero = () => {
             y: textY,
           }}
         >
-          <div className="text-center px-4">
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-white/60 text-xs md:text-xs tracking-[0.5em] mb-5 uppercase font-medium"
-            >
-              KALĒA
-            </motion.p>
-            
+          <div className="text-center px-4 mt-32 md:mt-40 lg:mt-48">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-light mb-3 tracking-wide"
+              className="text-white text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 tracking-wide"
               style={{ fontFamily: "'NewOrder', serif" }}
             >
               Surface System
@@ -440,7 +431,7 @@ const WindowHero = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.7 }}
-              className="text-white/55 text-sm md:text-base tracking-[0.25em] italic"
+              className="text-white/70 text-sm md:text-base tracking-[0.25em] font-medium"
             >
               worldwide
             </motion.p>
