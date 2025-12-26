@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import heroImage from "@/assets/hero-kalea.webp";
+import heroImage from "@/assets/bg-application-residential.jpg";
 
 // Import floor finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
