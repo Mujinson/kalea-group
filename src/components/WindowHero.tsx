@@ -433,11 +433,22 @@ const WindowHero = () => {
           }}
         >
           <div className="text-center px-4 mt-32 md:mt-40 lg:mt-48">
+            {/* KALĒA logo text */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-wide"
+              style={{ fontFamily: "'NewOrder', serif" }}
+            >
+              Kalēa
+            </motion.p>
+            
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-white text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 tracking-wide"
+              className="text-white text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 tracking-wide"
               style={{ fontFamily: "'NewOrder', serif" }}
             >
               Surface System
