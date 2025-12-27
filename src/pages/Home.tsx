@@ -4,6 +4,7 @@ import ProductGallerySection from "@/components/ProductGallerySection";
 import CWCGallerySection from "@/components/CWCGallerySection";
 import WindowHero from "@/components/WindowHero";
 import Carousel3D from "@/components/Carousel3D";
+import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-new.png";
@@ -75,6 +76,9 @@ const productLines = [
     <div className="relative bg-background">
       {/* Window Hero Section */}
       <WindowHero />
+
+      {/* Indoor/Outdoor Section */}
+      <IndoorOutdoorSection />
 
       {/* 3D Carousel Collection */}
       <section className="relative h-screen">
