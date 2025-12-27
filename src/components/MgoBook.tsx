@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Flame, Droplets, ShieldOff, Layers, AudioWaveform, Leaf, Heart, Home as HomeIcon, Building2, ShowerHead, CheckCircle2, Circle, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Flame, Droplets, ShieldOff, Layers, AudioWaveform, Leaf, Heart, Home as HomeIcon, Building2, ShowerHead, ThermometerSun, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -46,11 +46,13 @@ const MgoBook = () => {
     { icon: AudioWaveform, text: t('home.mgoAdvantages.acoustic') },
   ];
 
-  const comparativeData = [
-    { material: 'BIOCORE®', fire: '✓', water: '✓', mold: '✓', stability: '✓', acoustic: '✓' },
-    { material: 'SPC', fire: '○', water: '✓', mold: '○', stability: '✓', acoustic: '○' },
-    { material: 'MFC', fire: '✗', water: '✗', mold: '✗', stability: '○', acoustic: '○' },
-    { material: 'HPL', fire: '○', water: '○', mold: '○', stability: '✓', acoustic: '✗' },
+  const additionalBenefits = [
+    { icon: ThermometerSun, title: "Riscaldamento a pavimento", description: "Conduttività termica ottimale per sistemi radianti" },
+    { icon: Baby, title: "Sicuro per bambini", description: "Superficie antibatterica e antistatica naturale" },
+    { icon: PawPrint, title: "Pet-friendly", description: "Resistente a graffi e facile da pulire" },
+    { icon: Recycle, title: "Zero formaldeide", description: "Emissioni VOC assenti, aria più sana" },
+    { icon: Shield, title: "Antibatterico naturale", description: "Proprietà igieniche certificate" },
+    { icon: Timer, title: "Durabilità estrema", description: "Resistenza all'usura classe AC5" },
   ];
 
   const sustainabilityBullets = [
@@ -67,16 +69,6 @@ const MgoBook = () => {
     { icon: ShowerHead, label: t('home.mgoBook.applications.humid') },
   ];
 
-  // Helper function to render status icons with colors
-  const renderStatusIcon = (status: string) => {
-    if (status === '✓') {
-      return <CheckCircle2 className="w-4 h-4 text-[hsl(var(--status-excellent))]" strokeWidth={2} />;
-    } else if (status === '○') {
-      return <Circle className="w-4 h-4 text-[hsl(var(--status-good))]" strokeWidth={2} />;
-    } else {
-      return <X className="w-4 h-4 text-[hsl(var(--status-poor))]" strokeWidth={2} />;
-    }
-  };
 
   const handleNext = () => {
     if (currentSpread < 1 && !isFlipping) {
@@ -125,70 +117,24 @@ const MgoBook = () => {
     </div>
   );
 
-  // Page 2 - Comparison
+  // Page 2 - Additional Benefits
   const Page2 = () => (
     <div className="h-full flex flex-col p-6 lg:p-8">
       <h3 className="text-xl lg:text-2xl font-heading font-semibold text-foreground mb-4">
-        {t('home.mgoComparison.title')}
+        Vantaggi esclusivi
       </h3>
-      <div className="flex-1 space-y-2">
-        {/* Header */}
-        <div className="grid grid-cols-6 gap-2 pb-2 border-b border-foreground/15 text-[10px] lg:text-xs">
-          <div></div>
-          <div className="flex flex-col items-center gap-0.5">
-            <Flame className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
-            <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.fire')}</span>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <Droplets className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
-            <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.water')}</span>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <ShieldOff className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
-            <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.mold')}</span>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <Layers className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
-            <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.stability')}</span>
-          </div>
-          <div className="flex flex-col items-center gap-0.5">
-            <AudioWaveform className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
-            <span className="text-foreground/60 text-center leading-tight">{t('home.mgoComparison.acoustic')}</span>
-          </div>
-        </div>
-        {/* Rows */}
-        {comparativeData.map((row) => (
-          <div
-            key={row.material}
-            className={`grid grid-cols-6 gap-2 py-2 rounded-lg text-sm ${
-              row.material === 'BIOCORE®' ? 'bg-foreground/8' : ''
-            }`}
-          >
-            <div className={`font-bold text-xs ${row.material === 'BIOCORE®' ? 'text-foreground' : 'text-foreground/70'}`}>
-              {row.material}
+      <div className="flex-1 space-y-3">
+        {additionalBenefits.map((benefit) => (
+          <div key={benefit.title} className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-[hsl(var(--kalea-logo))]/10 shrink-0">
+              <benefit.icon className="w-4 h-4 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
             </div>
-            <div className="flex justify-center">{renderStatusIcon(row.fire)}</div>
-            <div className="flex justify-center">{renderStatusIcon(row.water)}</div>
-            <div className="flex justify-center">{renderStatusIcon(row.mold)}</div>
-            <div className="flex justify-center">{renderStatusIcon(row.stability)}</div>
-            <div className="flex justify-center">{renderStatusIcon(row.acoustic)}</div>
+            <div>
+              <span className="text-sm text-foreground font-medium block">{benefit.title}</span>
+              <span className="text-xs text-foreground/60">{benefit.description}</span>
+            </div>
           </div>
         ))}
-      </div>
-      {/* Legend */}
-      <div className="mt-4 pt-3 border-t border-foreground/15 flex flex-wrap gap-4 text-xs text-foreground/50">
-        <div className="flex items-center gap-1.5">
-          <CheckCircle2 className="w-3.5 h-3.5 text-[hsl(var(--status-excellent))]" strokeWidth={2} />
-          <span>{t('home.mgoComparison.excellent')}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Circle className="w-3.5 h-3.5 text-[hsl(var(--status-good))]" strokeWidth={2} />
-          <span>{t('home.mgoComparison.good')}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <X className="w-3.5 h-3.5 text-[hsl(var(--status-poor))]" strokeWidth={2} />
-          <span>{t('home.mgoComparison.poor')}</span>
-        </div>
       </div>
     </div>
   );
