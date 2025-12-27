@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import FeatureCard from "@/components/FeatureCard";
+import AnimatedTitle from "@/components/AnimatedTitle";
 import CertificationsSection from "@/components/CertificationsSection";
 import ColorCircleGallery, { cwcColors } from "@/components/ColorCircleGallery";
 import { Leaf, Recycle, Heart, AudioWaveform, Layers, Shield, Check, ChevronDown, Droplets, ThermometerSun } from "lucide-react";
@@ -168,14 +169,10 @@ const BiowoodFloor = () => {
             className="container-custom text-center will-change-transform"
           >
             <div className="max-w-4xl mx-auto">
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+              <AnimatedTitle
+                text="Pavimenti BIOWOOD®"
                 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
-              >
-                Pavimenti BIOWOOD®
-              </motion.h1>
+              />
 
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
