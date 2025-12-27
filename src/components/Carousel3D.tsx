@@ -144,7 +144,7 @@ const Carousel3D = () => {
   const { radius, plankWidth, plankHeight } = dimensions[screenSize];
 
   return (
-    <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
+    <div className="relative w-full h-screen bg-background overflow-hidden">
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
@@ -162,10 +162,10 @@ const Carousel3D = () => {
           transition={{ duration: 0.8 }}
           className="text-center flex-shrink-0"
         >
-          <h2 className="font-heading text-2xl md:text-4xl lg:text-5xl text-white/95 tracking-wide mb-0">
+          <h2 className="font-heading text-2xl md:text-4xl lg:text-5xl text-foreground/95 tracking-wide mb-0">
             La Nostra Collezione
           </h2>
-          <p className="text-white/60 text-xs md:text-base font-light italic">
+          <p className="text-foreground/60 text-xs md:text-base font-light italic">
             Esplora le nostre finiture esclusive
           </p>
         </motion.div>
@@ -257,7 +257,7 @@ const Carousel3D = () => {
                         transform: "translateX(-50%) rotateY(0deg)"
                       }}
                     >
-                      <span className="text-white/80 text-[10px] md:text-xs font-medium tracking-wider uppercase group-hover:text-white transition-colors">
+                      <span className="text-foreground/80 text-[10px] md:text-xs font-medium tracking-wider uppercase group-hover:text-foreground transition-colors">
                         {plank.name}
                       </span>
                     </div>

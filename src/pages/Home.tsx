@@ -72,7 +72,7 @@ const productLines = [
   ];
 
   return (
-    <div className="relative bg-kalea-dark">
+    <div className="relative bg-background">
       {/* Window Hero Section */}
       <WindowHero />
 
@@ -82,9 +82,7 @@ const productLines = [
       </section>
 
       {/* Products Section */}
-      <section className="relative h-screen bg-kalea-dark">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" />
-
+      <section className="relative h-screen bg-background">
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="container-custom text-center">
             <motion.p
@@ -92,7 +90,7 @@ const productLines = [
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="text-white/85 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6 md:mb-12"
+              className="text-foreground/85 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6 md:mb-12"
             >
               {t('hero.home.systemDescription')}
             </motion.p>
@@ -106,15 +104,15 @@ const productLines = [
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-3 sm:p-5 md:p-6 cursor-default relative h-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] flex flex-col justify-center aspect-[3/4] md:aspect-auto"
+                    className="bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-2xl p-3 sm:p-5 md:p-6 cursor-default relative h-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] flex flex-col justify-center aspect-[3/4] md:aspect-auto"
                   >
-                    <div className="absolute top-3 right-3 bg-white/20 text-white text-[10px] font-medium px-2 py-1 rounded-full">
+                    <div className="absolute top-3 right-3 bg-foreground/20 text-foreground text-[10px] font-medium px-2 py-1 rounded-full">
                       {product.comingSoonLabel || "Novità in arrivo"}
                     </div>
-                    <h3 className="text-white/60 font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
+                    <h3 className="text-foreground/60 font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
                       {product.title.toUpperCase()}
                     </h3>
-                    <p className="text-white/40 text-xs sm:text-sm md:text-base leading-relaxed">
+                    <p className="text-foreground/40 text-xs sm:text-sm md:text-base leading-relaxed">
                       {product.description}
                     </p>
                   </motion.div>
@@ -127,15 +125,15 @@ const productLines = [
                       whileHover={{
                         y: -6,
                         scale: 1.02,
-                        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
+                        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.15)",
                       }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-3 sm:p-5 md:p-6 hover:bg-white/15 transition-colors cursor-pointer h-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] flex flex-col justify-center aspect-[3/4] md:aspect-auto"
+                      className="bg-foreground/10 backdrop-blur-sm border border-foreground/15 rounded-2xl p-3 sm:p-5 md:p-6 hover:bg-foreground/15 transition-colors cursor-pointer h-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] flex flex-col justify-center aspect-[3/4] md:aspect-auto"
                     >
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
+                      <h3 className="text-foreground font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
                         {product.title.toUpperCase()}
                       </h3>
-                      <p className="text-white/70 text-xs sm:text-sm md:text-base leading-relaxed">
+                      <p className="text-foreground/70 text-xs sm:text-sm md:text-base leading-relaxed">
                         {product.description}
                       </p>
                     </motion.div>
@@ -210,22 +208,22 @@ const productLines = [
       </section>
 
       {/* Perché MgO - 3D Book */}
-      <section className="relative h-screen bg-kalea-dark">
+      <section className="relative h-screen bg-background">
         <MgoBook />
       </section>
 
       {/* Product Gallery Section - StoneCore 10 */}
-      <section className="relative h-screen bg-kalea-dark">
+      <section className="relative h-screen bg-background">
         <ProductGallerySection />
       </section>
 
       {/* Product Gallery Section - CWC */}
-      <section className="relative h-screen bg-kalea-dark">
+      <section className="relative h-screen bg-background">
         <CWCGallerySection />
       </section>
 
       {/* Applicazioni */}
-      <section className="relative h-screen bg-kalea-dark">
+      <section className="relative h-screen bg-background">
         <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
           {/* Header */}
           <motion.div
@@ -235,10 +233,10 @@ const productLines = [
             transition={{ duration: 0.6 }}
             className="text-center mb-6 md:mb-8"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-3">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
               {t('home.applicationsTitle')}
             </h2>
-            <p className="text-base md:text-lg text-kalea-cream/80 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
               {t('home.applicationsSubtitle')}
             </p>
           </motion.div>
@@ -281,7 +279,7 @@ const productLines = [
       </section>
 
       {/* Sostenibilità */}
-      <section className="relative h-screen bg-kalea-dark">
+      <section className="relative h-screen bg-background">
         <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
           {/* Header */}
           <motion.div
@@ -291,10 +289,10 @@ const productLines = [
             transition={{ duration: 0.6 }}
             className="text-center mb-8 md:mb-10"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-3">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
               {t('home.sustainabilityTitle')}
             </h2>
-            <p className="text-base md:text-lg text-kalea-cream/80 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
               {t('home.sustainabilitySubtitle')}
             </p>
           </motion.div>
