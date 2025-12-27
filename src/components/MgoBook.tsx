@@ -199,10 +199,10 @@ const MgoBook = () => {
         <div className="container-custom relative z-10">
           {/* Section Title */}
           <div className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold text-kalea-tan mb-2">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">
               {t('home.mgoTitle')}
             </h2>
-            <p className="text-sm md:text-base text-kalea-cream/80 max-w-md mx-auto">
+            <p className="text-sm md:text-base text-foreground/70 max-w-md mx-auto">
               {t('home.mgoDescription')}
             </p>
           </div>
@@ -243,9 +243,9 @@ const MgoBook = () => {
               <button
                 onClick={() => setMobilePageIndex(Math.max(0, mobilePageIndex - 1))}
                 disabled={mobilePageIndex === 0}
-                className="p-2 rounded-full bg-kalea-cream/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-kalea-cream/15 transition-colors"
+                className="p-2 rounded-full bg-foreground/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/15 transition-colors"
               >
-                <ChevronLeft className="w-5 h-5 text-kalea-cream" />
+                <ChevronLeft className="w-5 h-5 text-foreground" />
               </button>
               <div className="flex gap-2">
                 {mobilePages.map((_, idx) => (
@@ -254,8 +254,8 @@ const MgoBook = () => {
                     onClick={() => setMobilePageIndex(idx)}
                     className={`w-2.5 h-2.5 rounded-full transition-colors ${
                       idx === mobilePageIndex
-                        ? "bg-kalea-tan"
-                        : "bg-kalea-cream/25 hover:bg-kalea-cream/45"
+                        ? "bg-foreground"
+                        : "bg-foreground/25 hover:bg-foreground/45"
                     }`}
                   />
                 ))}
@@ -265,9 +265,9 @@ const MgoBook = () => {
                   setMobilePageIndex(Math.min(mobilePages.length - 1, mobilePageIndex + 1))
                 }
                 disabled={mobilePageIndex === mobilePages.length - 1}
-                className="p-2 rounded-full bg-kalea-cream/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-kalea-cream/15 transition-colors"
+                className="p-2 rounded-full bg-foreground/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/15 transition-colors"
               >
-                <ChevronRight className="w-5 h-5 text-kalea-cream" />
+                <ChevronRight className="w-5 h-5 text-foreground" />
               </button>
             </div>
           </motion.div>
@@ -283,10 +283,10 @@ const MgoBook = () => {
       <div className="w-full px-6 md:px-12 lg:px-20 relative z-10">
         {/* Section Title */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-3">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
             {t('home.mgoTitle')}
           </h2>
-          <p className="text-base md:text-lg text-kalea-cream/80 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
             {t('home.mgoDescription')}
           </p>
         </div>
@@ -406,9 +406,9 @@ const MgoBook = () => {
             <button
               onClick={handlePrev}
               disabled={currentSpread === 0 || isFlipping}
-              className="p-3 rounded-full bg-kalea-cream/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-kalea-cream/15 transition-all duration-200 hover:scale-105"
+              className="p-3 rounded-full bg-foreground/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/15 transition-all duration-200 hover:scale-105"
             >
-              <ChevronLeft className="w-5 h-5 text-kalea-cream" />
+              <ChevronLeft className="w-5 h-5 text-foreground" />
             </button>
 
             <div className="flex gap-3">
@@ -427,8 +427,8 @@ const MgoBook = () => {
                   }}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
                     idx === currentSpread
-                      ? "bg-kalea-tan scale-110"
-                      : "bg-kalea-cream/25 hover:bg-kalea-cream/45"
+                      ? "bg-foreground scale-110"
+                      : "bg-foreground/25 hover:bg-foreground/45"
                   }`}
                 />
               ))}
@@ -437,9 +437,9 @@ const MgoBook = () => {
             <button
               onClick={handleNext}
               disabled={currentSpread === 1 || isFlipping}
-              className="p-3 rounded-full bg-kalea-cream/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-kalea-cream/15 transition-all duration-200 hover:scale-105"
+              className="p-3 rounded-full bg-foreground/10 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/15 transition-all duration-200 hover:scale-105"
             >
-              <ChevronRight className="w-5 h-5 text-kalea-cream" />
+              <ChevronRight className="w-5 h-5 text-foreground" />
             </button>
           </div>
         </motion.div>

@@ -136,7 +136,7 @@ const BiowoodFloor = () => {
   ];
 
   return (
-    <div className="relative bg-[#0a0a0a]">
+    <div className="relative bg-background">
       {/* Hero Section - Sticky with scroll shrink effect */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 
@@ -252,7 +252,7 @@ const BiowoodFloor = () => {
       </section>
 
       {/* Struttura multistrato Section */}
-      <section ref={structureRef} className="relative z-[2] bg-card py-20">
+      <section ref={structureRef} className="relative z-[2] bg-background py-20">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -295,7 +295,7 @@ const BiowoodFloor = () => {
       </section>
 
       {/* Collezione Section */}
-      <section className="relative z-[3] bg-card py-20">
+      <section className="relative z-[3] bg-background py-20">
         <div className="container-custom">
           <ColorCircleGallery 
             title="La Collezione BIOWOOD®"
@@ -306,7 +306,7 @@ const BiowoodFloor = () => {
       </section>
 
       {/* Vantaggi Section */}
-      <section ref={advantagesRef} className="relative z-[3] bg-card py-20">
+      <section ref={advantagesRef} className="relative z-[3] bg-background py-20">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -454,7 +454,7 @@ const BiowoodFloor = () => {
       </section>
 
       {/* Ambiti di utilizzo Section */}
-      <section ref={applicationsRef} className="relative z-[5] bg-card py-20">
+      <section ref={applicationsRef} className="relative z-[5] bg-background py-20">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

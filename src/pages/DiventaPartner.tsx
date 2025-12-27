@@ -207,7 +207,7 @@ const DiventaPartner = () => {
       </section>
 
       {/* WHY PARTNER SECTION */}
-      <section className="py-24 md:py-32 bg-[#F8F6F3]">
+      <section className="py-24 md:py-32 bg-background">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
@@ -289,7 +289,7 @@ const DiventaPartner = () => {
       </section>
 
       {/* BENEFITS SECTION */}
-      <section className="py-24 md:py-32 bg-[#F8F6F3]">
+      <section className="py-24 md:py-32 bg-background">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
@@ -367,7 +367,7 @@ const DiventaPartner = () => {
       </section>
 
       {/* FORM SECTION */}
-      <section id="partner-form" className="py-24 md:py-32 bg-[#F8F6F3]">
+      <section id="partner-form" className="py-24 md:py-32 bg-background">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}

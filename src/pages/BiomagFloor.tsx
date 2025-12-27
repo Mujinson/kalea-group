@@ -132,7 +132,7 @@ const BiomagFloor = () => {
 
 
   return (
-    <div className="relative bg-[#0a0a0a]">
+    <div className="relative bg-background">
       {/* Hero Section - Sticky with scroll shrink effect */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 
@@ -223,7 +223,7 @@ const BiomagFloor = () => {
       </section>
 
       {/* Vantaggi Section - Normal scroll */}
-      <section ref={advantagesRef} className="relative z-[1] bg-card py-20">
+      <section ref={advantagesRef} className="relative z-[1] bg-background py-20">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -316,7 +316,7 @@ const BiomagFloor = () => {
       </section>
 
       {/* Tabs tecnici Section - Normal scroll */}
-      <section ref={techRef} className="relative z-[4] bg-card py-20">
+      <section ref={techRef} className="relative z-[4] bg-background py-20">
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
