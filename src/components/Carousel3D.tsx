@@ -173,13 +173,13 @@ const Carousel3D = () => {
           </motion.div>
         </div>
 
-        {/* CTA Button - Positioned halfway between carousel and bottom */}
+        {/* CTA Button - Positioned at bottom, halfway to next section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className={`flex justify-center flex-shrink-0 ${screenSize === 'mobile' ? '-mt-4' : '-mt-16 md:-mt-24'}`}
+          className={`flex justify-center flex-shrink-0 ${screenSize === 'mobile' ? 'mt-auto pb-8' : 'mt-auto pb-16 md:pb-24'}`}
         >
           <Button asChild>
             <Link to={`/${language}/biomag-floor`}>
