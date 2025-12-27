@@ -17,6 +17,32 @@ interface Product {
   link: string;
 }
 
+// Letter by letter animation component
+const AnimatedTitle = ({ text, className }: { text: string; className?: string }) => {
+  const letters = text.split("");
+  
+  return (
+    <motion.h1 className={className}>
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.5,
+            delay: 0.1 + index * 0.03,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
+          className="inline-block"
+          style={{ whiteSpace: letter === " " ? "pre" : "normal" }}
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.h1>
+  );
+};
+
 const Outdoor = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
@@ -94,19 +120,15 @@ const Outdoor = () => {
             className="container-custom text-center will-change-transform"
           >
             <div className="max-w-4xl mx-auto">
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+              <AnimatedTitle
+                text="Outdoor Solutions"
                 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
-              >
-                Outdoor Solutions
-              </motion.h1>
+              />
 
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
+                transition={{ duration: 0.7, delay: 0.8 }}
                 className="text-lg md:text-xl lg:text-2xl text-white/90 font-light mb-8 max-w-2xl mx-auto"
               >
                 Materiali progettati per resistere all'esterno, senza compromessi.
@@ -174,14 +196,16 @@ const Outdoor = () => {
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10 transition-all duration-500 group-hover:from-black/90 group-hover:via-black/50" />
                   
-                  {/* Content */}
+                  {/* Content - fixed height layout for alignment */}
                   <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                    <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2 tracking-tight">
-                      {product.name}
-                    </h3>
-                    <p className="text-white/80 text-base md:text-lg mb-4 max-w-md">
-                      {product.description}
-                    </p>
+                    <div className="min-h-[120px] flex flex-col justify-start">
+                      <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2 tracking-tight">
+                        {product.name}
+                      </h3>
+                      <p className="text-white/80 text-base md:text-lg mb-4">
+                        {product.description}
+                      </p>
+                    </div>
                     <div className="flex items-center gap-2 text-white font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                       <span>Scopri di più</span>
                       <ArrowRight className="w-4 h-4" />
