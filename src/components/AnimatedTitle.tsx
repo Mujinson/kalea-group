@@ -11,21 +11,21 @@ interface AnimatedTitleProps {
   suffix?: ReactNode;
 }
 
-// Slightly slower so the effect is clearly visible
-const LETTER_STAGGER = 0.045;
+// Typing-like effect: letters appear one-by-one (very visible)
+const LETTER_STAGGER = 0.065;
 const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
 
 const AnimatedTitle = ({
   text,
   className,
-  delay = 0.1,
+  delay = 0.25,
   as: Tag = "h1",
   suffix,
 }: AnimatedTitleProps) => {
   const location = useLocation();
   const letters = useMemo(() => text.split(""), [text]);
 
-  // Key forces a remount on navigation so the animation reliably replays.
+  // Remount on navigation to reliably replay the animation.
   const animationKey = `${location.key}:${location.pathname}:${text}`;
 
   return (
@@ -36,7 +36,7 @@ const AnimatedTitle = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            duration: 0.28,
+            duration: 0.001,
             delay: delay + index * LETTER_STAGGER,
             ease: EASE,
           }}
@@ -51,7 +51,7 @@ const AnimatedTitle = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{
-            duration: 0.28,
+            duration: 0.001,
             delay: delay + letters.length * LETTER_STAGGER,
             ease: EASE,
           }}
