@@ -1,63 +1,75 @@
 import { motion } from "framer-motion";
-import { Clock } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import HeroSection from "@/components/HeroSection";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface ProductCardProps {
   name: string;
   description: string;
+  link: string;
   index: number;
 }
 
-const ComingSoonProductCard = ({ name, description, index }: ProductCardProps) => (
+const PremiumProductCard = ({ name, description, link, index }: ProductCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-    className="relative bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-2xl p-6 md:p-8 cursor-default"
   >
-    {/* Coming Soon Badge */}
-    <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-foreground/15 text-foreground/80 text-xs font-medium px-3 py-1.5 rounded-full">
-      <Clock size={12} />
-      COMING SOON
-    </div>
-
-    <h3 className="text-lg md:text-xl font-heading font-semibold text-foreground/70 mb-3 mt-2">
-      {name}
-    </h3>
-    <p className="text-sm md:text-base text-foreground/50 leading-relaxed">
-      {description}
-    </p>
+    <Link 
+      to={link}
+      className="group relative block bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-2xl p-6 md:p-8 overflow-hidden transition-all duration-300 hover:border-foreground/20 hover:bg-foreground/8 hover:shadow-lg"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
+      <div className="relative z-10">
+        <h3 className="text-lg md:text-xl font-heading font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+          {name}
+        </h3>
+        <p className="text-sm md:text-base text-foreground/60 leading-relaxed mb-4">
+          {description}
+        </p>
+        <div className="flex items-center gap-2 text-primary text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-[-8px] group-hover:translate-x-0">
+          <span>Scopri di più</span>
+          <ArrowRight size={16} />
+        </div>
+      </div>
+    </Link>
   </motion.div>
 );
 
 const Outdoor = () => {
+  const { language } = useTranslation();
+  
   const products = [
     {
       name: "KALEABASE OUT®",
       description: "Sistema di supporto per pavimentazioni outdoor.",
+      link: `/${language}/kaleabase-out`,
     },
     {
       name: "KALEADECK®",
       description: "Pavimentazione outdoor per portici, terrazze e piscine.",
+      link: `/${language}/kaleadeck`,
     },
     {
       name: "KALEACEILING®",
       description: "Rivestimenti per soffitti esterni.",
+      link: `/${language}/kaleaceiling`,
     },
   ];
 
   return (
     <div className="relative bg-background">
-      {/* SEO Meta */}
       <title>Outdoor Solutions | Kalēa Surface System</title>
       <meta
         name="description"
         content="Materiali progettati per resistere all'esterno, senza compromessi. Design, durata e funzionalità per ogni ambiente outdoor."
       />
 
-      {/* Hero Section */}
       <HeroSection
         title="Outdoor Solutions"
         subtitle="Materiali progettati per resistere all'esterno, senza compromessi."
@@ -65,10 +77,8 @@ const Outdoor = () => {
         overlayClassName="bg-gradient-to-b from-black/50 via-black/40 to-black/60"
       />
 
-      {/* Products Grid Section */}
       <section className="relative py-20 md:py-32 bg-background">
         <div className="container-custom">
-          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -85,13 +95,13 @@ const Outdoor = () => {
             </p>
           </motion.div>
 
-          {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {products.map((product, index) => (
-              <ComingSoonProductCard
+              <PremiumProductCard
                 key={product.name}
                 name={product.name}
                 description={product.description}
+                link={product.link}
                 index={index}
               />
             ))}

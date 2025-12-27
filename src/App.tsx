@@ -11,6 +11,11 @@ import BiomagFloor from "./pages/BiomagFloor";
 import BiowoodFloor from "./pages/BiowoodFloor";
 import EdgeLine from "./pages/EdgeLine";
 import Biowall from "./pages/Biowall";
+import Kaleabase from "./pages/Kaleabase";
+import KaleabaseSilence from "./pages/KaleabaseSilence";
+import KaleabaseOut from "./pages/KaleabaseOut";
+import Kaleadeck from "./pages/Kaleadeck";
+import Kaleaceiling from "./pages/Kaleaceiling";
 import AreaTecnica from "./pages/AreaTecnica";
 import ChiSiamo from "./pages/ChiSiamo";
 import Contatti from "./pages/Contatti";
@@ -128,7 +133,12 @@ const App = () => (
             <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/it/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/it/biowall" element={<Navigate to="/it" replace />} />
+            <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+            <Route path="/it/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+            <Route path="/it/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
+            <Route path="/it/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+            <Route path="/it/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
             <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/it/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/it/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -148,7 +158,12 @@ const App = () => (
             <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/en/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/en/biowall" element={<Navigate to="/en" replace />} />
+            <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+            <Route path="/en/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+            <Route path="/en/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
+            <Route path="/en/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+            <Route path="/en/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
             <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/en/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/en/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -168,7 +183,12 @@ const App = () => (
             <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/de/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/de/biowall" element={<Navigate to="/de" replace />} />
+            <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+            <Route path="/de/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+            <Route path="/de/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
+            <Route path="/de/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+            <Route path="/de/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
             <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/de/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/de/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -188,7 +208,12 @@ const App = () => (
             <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/fr/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/fr/biowall" element={<Navigate to="/fr" replace />} />
+            <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+            <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+            <Route path="/fr/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+            <Route path="/fr/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
+            <Route path="/fr/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+            <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
             <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
             <Route path="/fr/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
             <Route path="/fr/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
