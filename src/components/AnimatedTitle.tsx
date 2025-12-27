@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -11,9 +11,9 @@ interface AnimatedTitleProps {
   suffix?: ReactNode;
 }
 
-// Typing-like effect: letters appear one-by-one (very visible)
+// “Falling letters” effect: letters drop in one-by-one.
 const LETTER_STAGGER = 0.065;
-const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
+const DROP_DISTANCE = 28;
 
 const AnimatedTitle = ({
   text,
@@ -23,6 +23,7 @@ const AnimatedTitle = ({
   suffix,
 }: AnimatedTitleProps) => {
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
   const letters = useMemo(() => text.split(""), [text]);
 
   // Remount on navigation to reliably replay the animation.
@@ -32,30 +33,59 @@ const AnimatedTitle = ({
     <Tag key={animationKey} className={className} aria-label={text}>
       {letters.map((letter, index) => (
         <motion.span
-          key={index}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.001,
-            delay: delay + index * LETTER_STAGGER,
-            ease: EASE,
-          }}
-          className="inline-block"
+          key={`${animationKey}:${index}`}
+          initial={
+            reduceMotion
+              ? false
+              : {
+                  opacity: 0,
+                  y: -DROP_DISTANCE,
+                  rotate: -2,
+                }
+          }
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : {
+                  type: "spring",
+                  stiffness: 520,
+                  damping: 32,
+                  bounce: 0.25,
+                  delay: delay + index * LETTER_STAGGER,
+                }
+          }
+          className="inline-block will-change-transform"
           style={{ whiteSpace: letter === " " ? "pre" : "normal" }}
         >
           {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
+
       {suffix && (
         <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.001,
-            delay: delay + letters.length * LETTER_STAGGER,
-            ease: EASE,
-          }}
-          className="inline-block"
+          initial={
+            reduceMotion
+              ? false
+              : {
+                  opacity: 0,
+                  y: -DROP_DISTANCE,
+                  rotate: -2,
+                }
+          }
+          animate={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : {
+                  type: "spring",
+                  stiffness: 520,
+                  damping: 32,
+                  bounce: 0.25,
+                  delay: delay + letters.length * LETTER_STAGGER,
+                }
+          }
+          className="inline-block will-change-transform"
         >
           {suffix}
         </motion.span>
@@ -65,4 +95,5 @@ const AnimatedTitle = ({
 };
 
 export default AnimatedTitle;
+
 
