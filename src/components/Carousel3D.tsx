@@ -27,6 +27,10 @@ const planks = [
 const Carousel3D = () => {
   const { language } = useTranslation();
   const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+  const [rotation, setRotation] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [autoRotate, setAutoRotate] = useState(true);
   
   useEffect(() => {
     const checkScreenSize = () => {
@@ -44,6 +48,44 @@ const Carousel3D = () => {
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  // Auto-rotation
+  useEffect(() => {
+    if (!autoRotate || isDragging) return;
+    
+    const interval = setInterval(() => {
+      setRotation(prev => prev + 0.5);
+    }, 50);
+    
+    return () => clearInterval(interval);
+  }, [autoRotate, isDragging]);
+
+  // Resume auto-rotation after inactivity
+  useEffect(() => {
+    if (!isDragging) {
+      const timeout = setTimeout(() => {
+        setAutoRotate(true);
+      }, 3000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isDragging]);
+
+  const handleDragStart = (clientX: number) => {
+    setIsDragging(true);
+    setAutoRotate(false);
+    setStartX(clientX);
+  };
+
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging) return;
+    const delta = clientX - startX;
+    setRotation(prev => prev + delta * 0.3);
+    setStartX(clientX);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
   
   // Responsive dimensions for perfect circle on all devices
   const dimensions = {
@@ -83,26 +125,28 @@ const Carousel3D = () => {
 
         {/* 3D Carousel Container - Centered with equal spacing */}
         <div 
-          className={`relative flex items-center justify-center flex-1 w-full ${screenSize === 'mobile' ? '-mt-8' : '-mt-52 md:-mt-60'}`}
+          className={`relative flex items-center justify-center flex-1 w-full ${screenSize === 'mobile' ? '-mt-8' : '-mt-52 md:-mt-60'} cursor-grab active:cursor-grabbing select-none`}
           style={{ 
             perspective: "1000px",
             maxWidth: screenSize === 'desktop' ? "1200px" : "900px",
             minHeight: screenSize === 'mobile' ? "280px" : screenSize === 'tablet' ? "400px" : "500px",
             maxHeight: screenSize === 'mobile' ? "350px" : screenSize === 'tablet' ? "500px" : "550px"
           }}
+          onMouseDown={(e) => handleDragStart(e.clientX)}
+          onMouseMove={(e) => handleDragMove(e.clientX)}
+          onMouseUp={handleDragEnd}
+          onMouseLeave={handleDragEnd}
+          onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+          onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
+          onTouchEnd={handleDragEnd}
         >
           <motion.div
             className="relative"
             style={{ 
               transformStyle: "preserve-3d",
               width: "100%",
-              height: "100%"
-            }}
-            animate={{ rotateY: 360 }}
-            transition={{
-              duration: 40,
-              repeat: Infinity,
-              ease: "linear"
+              height: "100%",
+              transform: `rotateY(${rotation}deg)`
             }}
           >
             {planks.map((plank, index) => {
@@ -115,6 +159,9 @@ const Carousel3D = () => {
                   style={{
                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
                     transformStyle: "preserve-3d"
+                  }}
+                  onClick={(e) => {
+                    if (isDragging) e.preventDefault();
                   }}
                 >
                   {/* Plank container */}
@@ -137,6 +184,7 @@ const Carousel3D = () => {
                         src={plank.image}
                         alt={plank.name}
                         className="w-full h-full object-cover"
+                        draggable={false}
                       />
                       {/* Gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-60 group-hover:opacity-40 transition-opacity" />
@@ -173,13 +221,13 @@ const Carousel3D = () => {
           </motion.div>
         </div>
 
-        {/* CTA Button - Positioned low (near bottom) */}
+        {/* CTA Button - Centered at bottom */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className={`absolute left-1/2 -translate-x-1/2 z-20 flex justify-center ${screenSize === 'mobile' ? 'bottom-8' : 'bottom-12 md:bottom-16'}`}
+          className="flex-shrink-0 pb-8 md:pb-12"
         >
           <Button asChild>
             <Link to={`/${language}/biomag-floor`}>
