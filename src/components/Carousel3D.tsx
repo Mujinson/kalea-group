@@ -55,7 +55,7 @@ const Carousel3D = () => {
   const { radius, plankWidth, plankHeight } = dimensions[screenSize];
 
   return (
-    <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
+    <div className="relative w-full h-[85vh] bg-kalea-dark overflow-hidden">
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
