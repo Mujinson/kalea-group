@@ -227,7 +227,7 @@ const Carousel3D = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="absolute left-1/2 -translate-x-1/2 bottom-2 md:bottom-4 z-20"
+          className="absolute bottom-4 md:bottom-6 left-0 right-0 z-20 flex justify-center"
         >
           <Button asChild>
             <Link to={`/${language}/biomag-floor`}>
