@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 // Import finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -29,8 +29,14 @@ const Carousel3D = () => {
   const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
   const [autoRotate, setAutoRotate] = useState(true);
+  
+  // Refs for smooth dragging with inertia
+  const velocityRef = useRef(0);
+  const lastXRef = useRef(0);
+  const lastTimeRef = useRef(0);
+  const animationFrameRef = useRef<number>();
+  const dragStartedRef = useRef(false);
   
   useEffect(() => {
     const checkScreenSize = () => {
@@ -49,43 +55,84 @@ const Carousel3D = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
+  // Inertia animation loop
+  const animateInertia = useCallback(() => {
+    if (Math.abs(velocityRef.current) > 0.1) {
+      setRotation(prev => prev + velocityRef.current);
+      velocityRef.current *= 0.95; // Friction - higher = more slide
+      animationFrameRef.current = requestAnimationFrame(animateInertia);
+    } else {
+      velocityRef.current = 0;
+      // Resume auto-rotation after inertia stops
+      setTimeout(() => setAutoRotate(true), 2000);
+    }
+  }, []);
+
   // Auto-rotation
   useEffect(() => {
-    if (!autoRotate || isDragging) return;
+    if (!autoRotate || isDragging || Math.abs(velocityRef.current) > 0.1) return;
     
     const interval = setInterval(() => {
-      setRotation(prev => prev + 0.5);
-    }, 50);
+      setRotation(prev => prev + 0.3);
+    }, 16); // ~60fps
     
     return () => clearInterval(interval);
   }, [autoRotate, isDragging]);
 
-  // Resume auto-rotation after inactivity
+  // Cleanup animation frame on unmount
   useEffect(() => {
-    if (!isDragging) {
-      const timeout = setTimeout(() => {
-        setAutoRotate(true);
-      }, 3000);
-      return () => clearTimeout(timeout);
-    }
-  }, [isDragging]);
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
 
-  const handleDragStart = (clientX: number) => {
+  const handleDragStart = useCallback((clientX: number) => {
     setIsDragging(true);
     setAutoRotate(false);
-    setStartX(clientX);
-  };
+    dragStartedRef.current = false;
+    lastXRef.current = clientX;
+    lastTimeRef.current = performance.now();
+    velocityRef.current = 0;
+    
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
+  }, []);
 
-  const handleDragMove = (clientX: number) => {
+  const handleDragMove = useCallback((clientX: number) => {
     if (!isDragging) return;
-    const delta = clientX - startX;
-    setRotation(prev => prev + delta * 0.3);
-    setStartX(clientX);
-  };
+    
+    const now = performance.now();
+    const deltaX = clientX - lastXRef.current;
+    const deltaTime = now - lastTimeRef.current;
+    
+    if (Math.abs(deltaX) > 2) {
+      dragStartedRef.current = true;
+    }
+    
+    if (deltaTime > 0) {
+      // Calculate velocity with smoothing
+      const instantVelocity = (deltaX * 0.4) / Math.max(deltaTime / 16, 1);
+      velocityRef.current = velocityRef.current * 0.5 + instantVelocity * 0.5;
+    }
+    
+    setRotation(prev => prev + deltaX * 0.4);
+    lastXRef.current = clientX;
+    lastTimeRef.current = now;
+  }, [isDragging]);
 
-  const handleDragEnd = () => {
+  const handleDragEnd = useCallback(() => {
     setIsDragging(false);
-  };
+    
+    // Start inertia animation if there's velocity
+    if (Math.abs(velocityRef.current) > 0.5) {
+      animationFrameRef.current = requestAnimationFrame(animateInertia);
+    } else {
+      setTimeout(() => setAutoRotate(true), 2000);
+    }
+  }, [animateInertia]);
   
   // Responsive dimensions for perfect circle on all devices
   const dimensions = {
@@ -161,7 +208,7 @@ const Carousel3D = () => {
                     transformStyle: "preserve-3d"
                   }}
                   onClick={(e) => {
-                    if (isDragging) e.preventDefault();
+                    if (dragStartedRef.current) e.preventDefault();
                   }}
                 >
                   {/* Plank container */}
