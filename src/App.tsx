@@ -213,7 +213,7 @@ const App = () => (
               <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
               <Route path="/fr/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
-              <Route path="/fr/kaleabase-out" element={<><SEOHandler /><Layout><KaleaabaseOut /></Layout></>} />
+              <Route path="/fr/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
               <Route path="/fr/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
               <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
