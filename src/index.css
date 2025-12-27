@@ -50,14 +50,14 @@ All colors MUST be HSL.
 @layer base {
   :root {
     /* Brand colors from Kalea Brand Manual 2025 */
-    /* Primary tan background: #C6B195 (RGB 198, 177, 149) */
-    --background: 34 33% 68%;
+    /* Light cream background: #F7F1E7 (RGB 247, 241, 231) */
+    --background: 39 47% 94%;
     --foreground: 22 59% 18%;
 
-    --card: 34 28% 75%;
+    --card: 34 33% 85%;
     --card-foreground: 22 59% 18%;
 
-    --popover: 34 28% 75%;
+    --popover: 39 47% 94%;
     --popover-foreground: 22 59% 18%;
 
     --primary: 22 59% 18%;
