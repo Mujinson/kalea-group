@@ -219,15 +219,13 @@ const Navbar = () => {
   const underlineColor = useDarkStyle ? "bg-[#3F3B33]" : "bg-white";
   const dividerColor = useDarkStyle ? "text-[#3F3B33]/30" : "text-white/30";
 
-  const renderProductItem = (product: ProductItem, useDarkStyle: boolean) => {
+  const renderProductItem = (product: ProductItem, isDropdownItem: boolean) => {
     if (product.comingSoon) {
       return (
         <Tooltip key={product.label}>
           <TooltipTrigger asChild>
             <div
-              className={`flex items-center gap-2 px-4 py-2 text-sm cursor-not-allowed opacity-60 ${
-                useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"
-              }`}
+              className="flex items-center gap-2 px-4 py-2 text-sm cursor-not-allowed text-[#1a1a1a]/50"
             >
               <Clock size={12} />
               {product.label}
@@ -245,13 +243,9 @@ const Navbar = () => {
         key={product.path}
         to={product.path!}
         className={`block px-4 py-2 text-sm transition-all duration-200 ${
-          useDarkStyle
-            ? location.pathname === product.path
-              ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-              : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
-            : location.pathname === product.path
-              ? "text-white bg-white/10"
-              : "text-white/80 hover:text-white hover:bg-white/5"
+          location.pathname === product.path
+            ? "text-[#1a1a1a] bg-[#EBE2D8]/50 font-medium"
+            : "text-[#1a1a1a]/80 hover:text-[#1a1a1a] hover:bg-[#EBE2D8]/30"
         }`}
       >
         {product.label}
@@ -373,8 +367,8 @@ const Navbar = () => {
                               }}
                               className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-all duration-200 ${
                                 (index === 0 ? isIndoorExpanded : isOutdoorExpanded)
-                                  ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-                                  : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+                                  ? "text-[#1a1a1a] bg-[#EBE2D8]/50"
+                                  : "text-[#1a1a1a]/80 hover:text-[#1a1a1a] hover:bg-[#EBE2D8]/30"
                               }`}
                             >
                               {env.label}
@@ -396,7 +390,7 @@ const Navbar = () => {
                               >
                                 {productStructure[isIndoorExpanded ? 0 : 1].categories.map((category, catIndex) => (
                                   <div key={category.label} className={`${catIndex > 0 ? 'mt-3 pt-3 border-t border-[#EBE2D8]' : ''}`}>
-                                    <div className="px-4 py-1 text-xs font-semibold uppercase tracking-wider text-[#3F3B33]/50">
+                                    <div className="px-4 py-1 text-xs font-semibold uppercase tracking-wider text-[#1a1a1a]/60">
                                       {category.label}
                                     </div>
                                     {category.products.map(product => renderProductItem(product, true))}
@@ -405,7 +399,7 @@ const Navbar = () => {
                               </motion.div>
                             )}
                             {!isIndoorExpanded && !isOutdoorExpanded && (
-                              <div className="px-4 py-8 text-center text-sm text-[#3F3B33]/60">
+                              <div className="px-4 py-8 text-center text-sm text-[#1a1a1a]/60">
                                 {t('nav.hoverToExplore')}
                               </div>
                             )}
