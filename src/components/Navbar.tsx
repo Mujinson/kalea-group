@@ -32,9 +32,10 @@ const Navbar = () => {
   const [isMobileProductsExpanded, setIsMobileProductsExpanded] = useState(false);
   const [mobileIndoorExpanded, setMobileIndoorExpanded] = useState(false);
   const [mobileOutdoorExpanded, setMobileOutdoorExpanded] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
   const location = useLocation();
   const mobileMenuRef = React.useRef<HTMLDivElement>(null);
   const mobileMenuButtonRef = React.useRef<HTMLButtonElement>(null);
@@ -45,6 +46,9 @@ const Navbar = () => {
     setLanguage(lang);
   };
 
+  // Check if on homepage for hero visibility logic
+  const isOnHomePage = location.pathname === '/' || /^\/[a-z]{2}$/.test(location.pathname);
+
   // Auto-hide navbar on scroll + detect scroll position for style change
   useEffect(() => {
     const handleScroll = () => {
@@ -53,12 +57,25 @@ const Navbar = () => {
       // Update scrolled state for style change
       setIsScrolled(currentScrollY > 80);
       
+      // On homepage, navbar only appears after scrolling past WindowHero (300vh * 0.65 ≈ 1.95x viewport height)
+      // This is when the hero image fully appears and CTA buttons show
+      const heroThreshold = isOnHomePage ? window.innerHeight * 1.95 : 0;
+      const pastHero = currentScrollY > heroThreshold;
+      setIsPastHero(pastHero);
+      
+      // If on homepage and not past hero, always hide navbar
+      if (isOnHomePage && !pastHero) {
+        setIsVisible(false);
+        setLastScrollY(currentScrollY);
+        return;
+      }
+      
       // Don't hide navbar if mobile menu is open
       if (isMobileMenuOpen) {
         return;
       }
 
-      // Determine scroll direction
+      // Determine scroll direction (only after passing hero on homepage)
       if (currentScrollY > lastScrollY && currentScrollY > 80) {
         // Scrolling down & past navbar height
         setIsVisible(false);
@@ -70,9 +87,12 @@ const Navbar = () => {
       setLastScrollY(currentScrollY);
     };
 
+    // Initial check
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY, isMobileMenuOpen]);
+  }, [lastScrollY, isMobileMenuOpen, isOnHomePage]);
 
   const menuItems = [
     { label: t('nav.technicalArea'), path: `/${language}/area-tecnica` },
