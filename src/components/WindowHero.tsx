@@ -455,9 +455,9 @@ const WindowHero = () => {
         </motion.div>
 
         {/* Scroll indicator */}
-        {/* Mobile: "scroll down" inside the window + helper text right below */}
+        {/* Mobile: positioned at bottom of screen, on background */}
         <motion.div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[72px] z-30 flex flex-col items-center md:hidden"
+          className="absolute left-1/2 bottom-16 -translate-x-1/2 z-30 flex flex-col items-center gap-3 md:hidden"
           style={{ 
             opacity: scrollIndicatorOpacity,
             visibility: scrollIndicatorVisibility,
@@ -471,18 +471,11 @@ const WindowHero = () => {
           >
             {t('hero.home.scrollDown')}
           </motion.span>
+          
+          <p className="text-[10px] tracking-[0.15em] uppercase font-medium mt-4" style={{ color: '#4A2A13', opacity: 0.6 }}>
+            {t('hero.home.toStartJourney')}
+          </p>
         </motion.div>
-
-        <motion.p
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[205px] z-30 text-[10px] tracking-[0.15em] uppercase font-medium md:hidden"
-          style={{ 
-            opacity: scrollIndicatorOpacity,
-            visibility: scrollIndicatorVisibility,
-            color: '#4A2A13',
-          }}
-        >
-          {t('hero.home.toStartJourney')}
-        </motion.p>
 
         {/* Desktop/tablet: keep indicator at bottom */}
         <motion.div 
