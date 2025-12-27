@@ -198,11 +198,11 @@ const Outdoor = () => {
                   
                   {/* Content - fixed height layout for alignment */}
                   <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                    <div className="min-h-[120px] flex flex-col justify-start">
-                      <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2 tracking-tight">
+                    <div className="flex flex-col">
+                      <h3 className="text-xl md:text-2xl font-heading font-bold text-white mb-2 tracking-tight h-[56px] md:h-[64px] flex items-end">
                         {product.name}
                       </h3>
-                      <p className="text-white/80 text-base md:text-lg mb-4">
+                      <p className="text-white/80 text-sm md:text-base mb-4 h-[48px] md:h-[52px]">
                         {product.description}
                       </p>
                     </div>
