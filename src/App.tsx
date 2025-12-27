@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { MotionConfig } from "framer-motion";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Indoor from "./pages/Indoor";
@@ -84,155 +85,157 @@ const SEOHandler = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <I18nProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            {/* Redirect /it/admin/* to /admin/* */}
-            <Route path="/:lang/admin/*" element={<AdminLangRedirect />} />
+  <MotionConfig reducedMotion="never">
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <I18nProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              {/* Redirect /it/admin/* to /admin/* */}
+              <Route path="/:lang/admin/*" element={<AdminLangRedirect />} />
 
-            {/* Admin routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminOverview />} />
+              {/* Admin routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminOverview />} />
 
-              {/* Italian slugs (used in sidebar) */}
-              <Route path="vendite" element={<AdminSales />} />
-              <Route path="preventivi" element={<AdminQuotes />} />
-              <Route path="clienti" element={<AdminCustomers />} />
-              <Route path="magazzino" element={<AdminInventory />} />
-              <Route path="analytics" element={<AdminAnalytics />} />
-              <Route path="leads" element={<AdminLeads />} />
-              <Route path="costi" element={<AdminCosts />} />
-              <Route path="pagamenti" element={<AdminPayments />} />
-              <Route path="import" element={<AdminImport />} />
-              
-              <Route path="impostazioni" element={<AdminSettings />} />
+                {/* Italian slugs (used in sidebar) */}
+                <Route path="vendite" element={<AdminSales />} />
+                <Route path="preventivi" element={<AdminQuotes />} />
+                <Route path="clienti" element={<AdminCustomers />} />
+                <Route path="magazzino" element={<AdminInventory />} />
+                <Route path="analytics" element={<AdminAnalytics />} />
+                <Route path="leads" element={<AdminLeads />} />
+                <Route path="costi" element={<AdminCosts />} />
+                <Route path="pagamenti" element={<AdminPayments />} />
+                <Route path="import" element={<AdminImport />} />
 
-              {/* English aliases (keep compatibility) */}
-              <Route path="sales" element={<AdminSales />} />
-              <Route path="customers" element={<AdminCustomers />} />
-              <Route path="inventory" element={<AdminInventory />} />
-              <Route path="costs" element={<AdminCosts />} />
-              <Route path="payments" element={<AdminPayments />} />
-              <Route path="settings" element={<AdminSettings />} />
-            </Route>
-            
-            {/* Main site routes */}
-            {/* Redirect root to /it */}
-            <Route path="/" element={<Navigate to="/it" replace />} />
-            
-{/* Italian routes */}
-            <Route path="/it" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/it/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
-            <Route path="/it/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
-            <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-            <Route path="/it/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
-            <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-            <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-            <Route path="/it/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
-            <Route path="/it/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
-            <Route path="/it/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
-            <Route path="/it/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
-            <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
-            <Route path="/it/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
-            <Route path="/it/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
-            <Route path="/it/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
-            <Route path="/it/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
-            <Route path="/it/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            
-            <Route path="/it/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
-            <Route path="/it/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
-            <Route path="/it/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
-            <Route path="/it/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
-            
-{/* English routes */}
-            <Route path="/en" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/en/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
-            <Route path="/en/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
-            <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-            <Route path="/en/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
-            <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-            <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-            <Route path="/en/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
-            <Route path="/en/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
-            <Route path="/en/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
-            <Route path="/en/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
-            <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
-            <Route path="/en/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
-            <Route path="/en/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
-            <Route path="/en/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
-            <Route path="/en/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
-            <Route path="/en/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            
-            <Route path="/en/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
-            <Route path="/en/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
-            <Route path="/en/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
-            <Route path="/en/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
-            
-{/* German routes */}
-            <Route path="/de" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/de/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
-            <Route path="/de/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
-            <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-            <Route path="/de/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
-            <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-            <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-            <Route path="/de/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
-            <Route path="/de/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
-            <Route path="/de/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
-            <Route path="/de/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
-            <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
-            <Route path="/de/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
-            <Route path="/de/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
-            <Route path="/de/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
-            <Route path="/de/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
-            <Route path="/de/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            
-            <Route path="/de/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
-            <Route path="/de/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
-            <Route path="/de/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
-            <Route path="/de/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
-            
-{/* French routes */}
-            <Route path="/fr" element={<><SEOHandler /><Layout><Home /></Layout></>} />
-            <Route path="/fr/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
-            <Route path="/fr/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
-            <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-            <Route path="/fr/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
-            <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-            <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-            <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-            <Route path="/fr/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
-            <Route path="/fr/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
-            <Route path="/fr/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
-            <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
-            <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
-            <Route path="/fr/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
-            <Route path="/fr/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
-            <Route path="/fr/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
-            <Route path="/fr/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
-            <Route path="/fr/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
-            
-            <Route path="/fr/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
-            <Route path="/fr/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
-            <Route path="/fr/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
-            <Route path="/fr/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
-            
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </I18nProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+                <Route path="impostazioni" element={<AdminSettings />} />
+
+                {/* English aliases (keep compatibility) */}
+                <Route path="sales" element={<AdminSales />} />
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="inventory" element={<AdminInventory />} />
+                <Route path="costs" element={<AdminCosts />} />
+                <Route path="payments" element={<AdminPayments />} />
+                <Route path="settings" element={<AdminSettings />} />
+              </Route>
+
+              {/* Main site routes */}
+              {/* Redirect root to /it */}
+              <Route path="/" element={<Navigate to="/it" replace />} />
+
+              {/* Italian routes */}
+              <Route path="/it" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+              <Route path="/it/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+              <Route path="/it/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
+              <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+              <Route path="/it/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
+              <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+              <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/it/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+              <Route path="/it/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
+              <Route path="/it/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/it/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
+              <Route path="/it/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
+              <Route path="/it/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/it/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
+              <Route path="/it/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
+              <Route path="/it/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
+
+              <Route path="/it/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
+              <Route path="/it/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
+              <Route path="/it/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
+              <Route path="/it/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+
+              {/* English routes */}
+              <Route path="/en" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+              <Route path="/en/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+              <Route path="/en/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
+              <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+              <Route path="/en/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
+              <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+              <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/en/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+              <Route path="/en/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
+              <Route path="/en/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/en/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
+              <Route path="/en/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
+              <Route path="/en/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/en/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
+              <Route path="/en/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
+              <Route path="/en/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
+
+              <Route path="/en/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
+              <Route path="/en/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
+              <Route path="/en/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
+              <Route path="/en/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+
+              {/* German routes */}
+              <Route path="/de" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+              <Route path="/de/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+              <Route path="/de/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
+              <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+              <Route path="/de/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
+              <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+              <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/de/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+              <Route path="/de/kaleabase-out" element={<><SEOHandler /><Layout><KaleabaseOut /></Layout></>} />
+              <Route path="/de/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/de/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
+              <Route path="/de/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
+              <Route path="/de/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/de/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
+              <Route path="/de/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
+              <Route path="/de/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
+
+              <Route path="/de/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
+              <Route path="/de/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
+              <Route path="/de/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
+              <Route path="/de/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+
+              {/* French routes */}
+              <Route path="/fr" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+              <Route path="/fr/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+              <Route path="/fr/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
+              <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
+              <Route path="/fr/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
+              <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
+              <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/fr/kaleabase-silence" element={<><SEOHandler /><Layout><KaleabaseSilence /></Layout></>} />
+              <Route path="/fr/kaleabase-out" element={<><SEOHandler /><Layout><KaleaabaseOut /></Layout></>} />
+              <Route path="/fr/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
+              <Route path="/fr/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
+              <Route path="/fr/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/fr/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
+              <Route path="/fr/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
+              <Route path="/fr/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
+
+              <Route path="/fr/sostenibilita/impatto-ambientale" element={<><SEOHandler /><Layout><SustainabilityImpact /></Layout></>} />
+              <Route path="/fr/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
+              <Route path="/fr/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
+              <Route path="/fr/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+
+              {/* 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </I18nProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </MotionConfig>
 );
 
 export default App;

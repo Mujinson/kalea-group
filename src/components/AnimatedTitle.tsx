@@ -11,7 +11,8 @@ interface AnimatedTitleProps {
   suffix?: ReactNode;
 }
 
-const LETTER_STAGGER = 0.03;
+// Slightly slower so the effect is clearly visible
+const LETTER_STAGGER = 0.045;
 const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
 
 const AnimatedTitle = ({
@@ -32,10 +33,10 @@ const AnimatedTitle = ({
       {letters.map((letter, index) => (
         <motion.span
           key={index}
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{
-            duration: 0.45,
+            duration: 0.28,
             delay: delay + index * LETTER_STAGGER,
             ease: EASE,
           }}
@@ -47,10 +48,10 @@ const AnimatedTitle = ({
       ))}
       {suffix && (
         <motion.span
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{
-            duration: 0.45,
+            duration: 0.28,
             delay: delay + letters.length * LETTER_STAGGER,
             ease: EASE,
           }}
