@@ -1,17 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, Clock } from "lucide-react";
+import { Menu, X, ChevronDown, ChevronRight, Clock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo-new.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Language } from "@/i18n/translations";
 
+interface ProductItem {
+  label: string;
+  path: string | null;
+  comingSoon: boolean;
+}
+
+interface CategoryItem {
+  label: string;
+  products: ProductItem[];
+}
+
+interface EnvironmentItem {
+  label: string;
+  categories: CategoryItem[];
+}
+
 const Navbar = () => {
   const { language, setLanguage, t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isLineeExpanded, setIsLineeExpanded] = useState(false);
+  const [isIndoorExpanded, setIsIndoorExpanded] = useState(false);
+  const [isOutdoorExpanded, setIsOutdoorExpanded] = useState(false);
+  const [isMobileProductsExpanded, setIsMobileProductsExpanded] = useState(false);
+  const [mobileIndoorExpanded, setMobileIndoorExpanded] = useState(false);
+  const [mobileOutdoorExpanded, setMobileOutdoorExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -59,23 +79,72 @@ const Navbar = () => {
     { label: t('nav.contacts'), path: `/${language}/contatti` },
   ];
 
-const lineeItems = [
-    { 
-      label: t('nav.menuStonecore'), 
-      path: null, 
-      comingSoon: false,
-      submenu: [
-        { label: "BIOMAG FLOOR®", path: `/${language}/biomag-floor` },
-        { label: "BIOWOOD FLOOR®", path: `/${language}/biowood-floor` },
+  // New hierarchical product structure
+  const productStructure: EnvironmentItem[] = [
+    {
+      label: t('nav.indoor'),
+      categories: [
+        {
+          label: t('nav.floors'),
+          products: [
+            { label: "BIOMAG FLOOR®", path: `/${language}/biomag-floor`, comingSoon: false },
+            { label: "BIOWOOD FLOOR®", path: `/${language}/biowood-floor`, comingSoon: false },
+          ]
+        },
+        {
+          label: t('nav.accessories'),
+          products: [
+            { label: "KALEABASE®", path: null, comingSoon: true },
+            { label: "KALEABASE SILENCE®", path: null, comingSoon: true },
+            { label: "KALEABASE AQUA®", path: null, comingSoon: true },
+            { label: "KALEABASE PRO®", path: null, comingSoon: true },
+          ]
+        },
+        {
+          label: t('nav.wallCladding'),
+          products: [
+            { label: "BIOWALL®", path: null, comingSoon: true },
+          ]
+        },
       ]
     },
-    { label: t('nav.menuEdgeline'), path: `/${language}/edgeline`, comingSoon: false },
-    { label: "BIOWALL®", path: `/${language}/biowall`, comingSoon: true },
+    {
+      label: t('nav.outdoor'),
+      categories: [
+        {
+          label: t('nav.floors'),
+          products: [
+            { label: "KALEASTONE DECK®", path: null, comingSoon: true },
+          ]
+        },
+        {
+          label: t('nav.accessories'),
+          products: [
+            { label: "KALEABASE OUT®", path: null, comingSoon: true },
+            { label: "KALEABASE DRAIN®", path: null, comingSoon: true },
+          ]
+        },
+        {
+          label: t('nav.wallCladding'),
+          products: [
+            { label: "KALEACLAD OUT®", path: null, comingSoon: true },
+          ]
+        },
+        {
+          label: t('nav.ceilingSystems'),
+          products: [
+            { label: "KALEACEILING OUT®", path: null, comingSoon: true },
+          ]
+        },
+      ]
+    },
   ];
 
-  const isLineePage = lineeItems.some((item) => 
-    item.path === location.pathname || 
-    item.submenu?.some((sub) => sub.path === location.pathname)
+  // Check if current page is a product page
+  const isProductPage = productStructure.some(env => 
+    env.categories.some(cat => 
+      cat.products.some(prod => prod.path === location.pathname)
+    )
   );
 
   // Adaptive font size for DE/FR languages
@@ -102,7 +171,9 @@ const lineeItems = [
         !mobileMenuButtonRef.current.contains(event.target as Node)
       ) {
         setIsMobileMenuOpen(false);
-        setIsLineeExpanded(false);
+        setMobileIndoorExpanded(false);
+        setMobileOutdoorExpanded(false);
+        setIsMobileProductsExpanded(false);
       }
     };
 
@@ -127,6 +198,46 @@ const lineeItems = [
   const textColorActive = useDarkStyle ? "text-[#3F3B33]" : "text-white";
   const underlineColor = useDarkStyle ? "bg-[#3F3B33]" : "bg-white";
   const dividerColor = useDarkStyle ? "text-[#3F3B33]/30" : "text-white/30";
+
+  const renderProductItem = (product: ProductItem, useDarkStyle: boolean) => {
+    if (product.comingSoon) {
+      return (
+        <Tooltip key={product.label}>
+          <TooltipTrigger asChild>
+            <div
+              className={`flex items-center gap-2 px-4 py-2 text-sm cursor-not-allowed opacity-60 ${
+                useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"
+              }`}
+            >
+              <Clock size={12} />
+              {product.label}
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="bg-foreground text-background text-xs px-3 py-1.5 rounded-lg">
+            Coming soon
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+    
+    return (
+      <Link
+        key={product.path}
+        to={product.path!}
+        className={`block px-4 py-2 text-sm transition-all duration-200 ${
+          useDarkStyle
+            ? location.pathname === product.path
+              ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+              : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+            : location.pathname === product.path
+              ? "text-white bg-white/10"
+              : "text-white/80 hover:text-white hover:bg-white/5"
+        }`}
+      >
+        {product.label}
+      </Link>
+    );
+  };
 
   return (
     <motion.nav
@@ -187,15 +298,19 @@ const lineeItems = [
                 )}
               </Link>
 
-              {/* Dropdown Linee */}
+              {/* Products Mega Dropdown */}
               <div
                 className="relative"
                 onMouseEnter={() => setIsDropdownOpen(true)}
-                onMouseLeave={() => setIsDropdownOpen(false)}
+                onMouseLeave={() => {
+                  setIsDropdownOpen(false);
+                  setIsIndoorExpanded(false);
+                  setIsOutdoorExpanded(false);
+                }}
               >
                 <button
                   className={`text-nav transition-all duration-200 flex items-center gap-1 whitespace-nowrap ${
-                    isLineePage ? textColorActive : `${textColorMuted} hover:${textColor}`
+                    isProductPage ? textColorActive : `${textColorMuted} hover:${textColor}`
                   }`}
                 >
                   {t('nav.lines')}
@@ -203,7 +318,7 @@ const lineeItems = [
                     size={16}
                     className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
                   />
-                  {isLineePage && (
+                  {isProductPage && (
                     <motion.div
                       layoutId="navbar-underline"
                       className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
@@ -219,79 +334,74 @@ const lineeItems = [
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-56 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
                         useDarkStyle 
                           ? "bg-white border border-[#EBE2D8]" 
-                          : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
+                          : "bg-[rgba(30,30,30,0.95)] backdrop-blur-[18px] border border-white/[0.08]"
                       }`}
                     >
-                      {lineeItems.map((item, index) => (
-                        item.comingSoon ? (
-                          <Tooltip key={item.label}>
-                            <TooltipTrigger asChild>
-                              <div
-                                className={`block px-6 py-3 text-nav cursor-not-allowed opacity-50 ${
-                                  useDarkStyle
-                                    ? "text-[#3F3B33]/60"
-                                    : "text-white/60"
-                                } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
-                              >
-                                {item.label}
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent side="right" className="bg-foreground text-background text-xs px-3 py-1.5 rounded-lg">
-                              Coming soon
-                            </TooltipContent>
-                          </Tooltip>
-                        ) : item.submenu ? (
-                          <div key={item.label} className={`${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}>
-                            <div
-                              className={`block px-6 py-3 text-nav font-medium ${
+                      <div className="flex min-w-[480px]">
+                        {/* Left column - Indoor/Outdoor tabs */}
+                        <div className={`w-40 py-3 ${useDarkStyle ? "border-r border-[#EBE2D8]" : "border-r border-white/10"}`}>
+                          {productStructure.map((env, index) => (
+                            <button
+                              key={env.label}
+                              onMouseEnter={() => {
+                                if (index === 0) {
+                                  setIsIndoorExpanded(true);
+                                  setIsOutdoorExpanded(false);
+                                } else {
+                                  setIsOutdoorExpanded(true);
+                                  setIsIndoorExpanded(false);
+                                }
+                              }}
+                              className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-all duration-200 ${
                                 useDarkStyle
-                                  ? "text-[#3F3B33]"
-                                  : "text-white"
+                                  ? (index === 0 ? isIndoorExpanded : isOutdoorExpanded)
+                                    ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+                                    : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
+                                  : (index === 0 ? isIndoorExpanded : isOutdoorExpanded)
+                                    ? "text-white bg-white/10"
+                                    : "text-white/80 hover:text-white hover:bg-white/5"
                               }`}
                             >
-                              {item.label}
-                            </div>
-                            <div className="pb-2">
-                              {item.submenu.map((subItem) => (
-                                <Link
-                                  key={subItem.path}
-                                  to={subItem.path}
-                                  className={`block px-6 py-2 text-nav text-sm transition-all duration-200 ${
-                                    useDarkStyle
-                                      ? location.pathname === subItem.path
-                                        ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-                                        : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
-                                      : location.pathname === subItem.path
-                                        ? "text-white bg-white/10"
-                                        : "text-white/80 hover:text-white hover:bg-white/5"
-                                  }`}
-                                >
-                                  {subItem.label}
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        ) : (
-                          <Link
-                            key={item.path}
-                            to={item.path!}
-                            className={`block px-6 py-3 text-nav transition-all duration-200 ${
-                              useDarkStyle
-                                ? location.pathname === item.path
-                                  ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-                                  : "text-[#3F3B33]/80 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
-                                : location.pathname === item.path
-                                  ? "text-white bg-white/10"
-                                  : "text-white/90 hover:text-white hover:bg-white/5"
-                            } ${index !== lineeItems.length - 1 ? `border-b ${useDarkStyle ? "border-[#EBE2D8]" : "border-white/5"}` : ""}`}
-                          >
-                            {item.label}
-                          </Link>
-                        )
-                      ))}
+                              {env.label}
+                              <ChevronRight size={14} />
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* Right column - Categories and products */}
+                        <div className="w-[340px] py-3">
+                          <AnimatePresence mode="wait">
+                            {(isIndoorExpanded || isOutdoorExpanded) && (
+                              <motion.div
+                                key={isIndoorExpanded ? 'indoor' : 'outdoor'}
+                                initial={{ opacity: 0, x: 10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                transition={{ duration: 0.15 }}
+                              >
+                                {productStructure[isIndoorExpanded ? 0 : 1].categories.map((category, catIndex) => (
+                                  <div key={category.label} className={`${catIndex > 0 ? 'mt-3 pt-3 border-t ' + (useDarkStyle ? 'border-[#EBE2D8]' : 'border-white/10') : ''}`}>
+                                    <div className={`px-4 py-1 text-xs font-semibold uppercase tracking-wider ${
+                                      useDarkStyle ? "text-[#3F3B33]/50" : "text-white/50"
+                                    }`}>
+                                      {category.label}
+                                    </div>
+                                    {category.products.map(product => renderProductItem(product, useDarkStyle))}
+                                  </div>
+                                ))}
+                              </motion.div>
+                            )}
+                            {!isIndoorExpanded && !isOutdoorExpanded && (
+                              <div className={`px-4 py-8 text-center text-sm ${useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"}`}>
+                                {t('nav.hoverToExplore')}
+                              </div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -379,10 +489,10 @@ const lineeItems = [
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className={`xl:hidden mt-4 mx-4 md:mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] ${
+            className={`xl:hidden mt-4 mx-4 md:mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] max-h-[70vh] overflow-y-auto ${
               useDarkStyle 
                 ? "bg-white border border-[#EBE2D8]" 
-                : "bg-[rgba(255,255,255,0.08)] backdrop-blur-[18px] border border-white/[0.08]"
+                : "bg-[rgba(30,30,30,0.95)] backdrop-blur-[18px] border border-white/[0.08]"
             }`}
           >
             <div className="px-6 py-6 space-y-2">
@@ -402,101 +512,152 @@ const lineeItems = [
                 {t('nav.home')}
               </Link>
 
-              {/* Mobile Linee Expandable */}
+              {/* Mobile Products Expandable */}
               <div>
                 <button
-                  onClick={() => setIsLineeExpanded(!isLineeExpanded)}
+                  onClick={() => setIsMobileProductsExpanded(!isMobileProductsExpanded)}
                   className={`flex items-center justify-between w-full text-base font-medium transition-colors py-2 ${
                     useDarkStyle
-                      ? isLineePage ? "text-[#3F3B33]" : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
-                      : isLineePage ? "text-white" : "text-white/70 hover:text-white"
+                      ? isProductPage ? "text-[#3F3B33]" : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
+                      : isProductPage ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                 >
                   {t('nav.lines')}
                   <ChevronDown
                     size={16}
-                    className={`transition-transform duration-200 ${isLineeExpanded ? "rotate-180" : ""}`}
+                    className={`transition-transform duration-200 ${isMobileProductsExpanded ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 <AnimatePresence>
-                  {isLineeExpanded && (
+                  {isMobileProductsExpanded && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.2 }}
-                      className="pl-4 space-y-2 mt-2"
+                      className="pl-3 space-y-1 mt-2"
                     >
-                      {lineeItems.map((item) => (
-                        item.comingSoon ? (
-                          <div
-                            key={item.label}
-                            className={`block text-sm font-medium py-2 cursor-not-allowed opacity-50 ${
-                              useDarkStyle
-                                ? "text-[#3F3B33]/60"
-                                : "text-white/60"
-                            }`}
-                          >
-                            {item.label} – <span className="italic">Coming soon</span>
-                          </div>
-                        ) : item.submenu ? (
-                          <div key={item.label}>
-                            <div
-                              className={`block text-sm font-medium py-2 ${
-                                useDarkStyle
-                                  ? "text-[#3F3B33]"
-                                  : "text-white"
-                              }`}
+                      {/* Indoor Section */}
+                      <div>
+                        <button
+                          onClick={() => setMobileIndoorExpanded(!mobileIndoorExpanded)}
+                          className={`flex items-center justify-between w-full text-sm font-medium py-2 ${
+                            useDarkStyle ? "text-[#3F3B33]" : "text-white"
+                          }`}
+                        >
+                          {t('nav.indoor')}
+                          <ChevronDown
+                            size={14}
+                            className={`transition-transform duration-200 ${mobileIndoorExpanded ? "rotate-180" : ""}`}
+                          />
+                        </button>
+                        
+                        <AnimatePresence>
+                          {mobileIndoorExpanded && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.15 }}
+                              className="pl-3 space-y-2"
                             >
-                              {item.label}
-                            </div>
-                            <div className="pl-3 space-y-1">
-                              {item.submenu.map((subItem) => (
-                                <Link
-                                  key={subItem.path}
-                                  to={subItem.path}
-                                  className={`block text-sm transition-colors py-1.5 ${
-                                    useDarkStyle
-                                      ? location.pathname === subItem.path 
-                                        ? "text-[#3F3B33]" 
-                                        : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
-                                      : location.pathname === subItem.path 
-                                        ? "text-white" 
-                                        : "text-white/60 hover:text-white"
-                                  }`}
-                                  onClick={() => {
-                                    setIsMobileMenuOpen(false);
-                                    setIsLineeExpanded(false);
-                                  }}
-                                >
-                                  {subItem.label}
-                                </Link>
+                              {productStructure[0].categories.map((category) => (
+                                <div key={category.label}>
+                                  <div className={`text-xs font-semibold uppercase tracking-wider py-1 ${
+                                    useDarkStyle ? "text-[#3F3B33]/50" : "text-white/50"
+                                  }`}>
+                                    {category.label}
+                                  </div>
+                                  {category.products.map((product) => (
+                                    product.comingSoon ? (
+                                      <div
+                                        key={product.label}
+                                        className={`flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 ${
+                                          useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"
+                                        }`}
+                                      >
+                                        <Clock size={10} />
+                                        {product.label}
+                                      </div>
+                                    ) : (
+                                      <Link
+                                        key={product.path}
+                                        to={product.path!}
+                                        className={`block py-1.5 text-sm transition-colors ${
+                                          useDarkStyle
+                                            ? location.pathname === product.path 
+                                              ? "text-[#3F3B33]" 
+                                              : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
+                                            : location.pathname === product.path 
+                                              ? "text-white" 
+                                              : "text-white/60 hover:text-white"
+                                        }`}
+                                        onClick={() => {
+                                          setIsMobileMenuOpen(false);
+                                          setIsMobileProductsExpanded(false);
+                                          setMobileIndoorExpanded(false);
+                                        }}
+                                      >
+                                        {product.label}
+                                      </Link>
+                                    )
+                                  ))}
+                                </div>
                               ))}
-                            </div>
-                          </div>
-                        ) : (
-                          <Link
-                            key={item.path}
-                            to={item.path!}
-                            className={`block text-sm font-medium transition-colors py-2 ${
-                              useDarkStyle
-                                ? location.pathname === item.path 
-                                  ? "text-[#3F3B33]" 
-                                  : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
-                                : location.pathname === item.path 
-                                  ? "text-white" 
-                                  : "text-white/60 hover:text-white"
-                            }`}
-                            onClick={() => {
-                              setIsMobileMenuOpen(false);
-                              setIsLineeExpanded(false);
-                            }}
-                          >
-                            {item.label}
-                          </Link>
-                        )
-                      ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Outdoor Section */}
+                      <div>
+                        <button
+                          onClick={() => setMobileOutdoorExpanded(!mobileOutdoorExpanded)}
+                          className={`flex items-center justify-between w-full text-sm font-medium py-2 ${
+                            useDarkStyle ? "text-[#3F3B33]" : "text-white"
+                          }`}
+                        >
+                          {t('nav.outdoor')}
+                          <ChevronDown
+                            size={14}
+                            className={`transition-transform duration-200 ${mobileOutdoorExpanded ? "rotate-180" : ""}`}
+                          />
+                        </button>
+                        
+                        <AnimatePresence>
+                          {mobileOutdoorExpanded && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.15 }}
+                              className="pl-3 space-y-2"
+                            >
+                              {productStructure[1].categories.map((category) => (
+                                <div key={category.label}>
+                                  <div className={`text-xs font-semibold uppercase tracking-wider py-1 ${
+                                    useDarkStyle ? "text-[#3F3B33]/50" : "text-white/50"
+                                  }`}>
+                                    {category.label}
+                                  </div>
+                                  {category.products.map((product) => (
+                                    <div
+                                      key={product.label}
+                                      className={`flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 ${
+                                        useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"
+                                      }`}
+                                    >
+                                      <Clock size={10} />
+                                      {product.label}
+                                    </div>
+                                  ))}
+                                </div>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>

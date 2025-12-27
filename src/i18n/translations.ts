@@ -16,6 +16,13 @@ export const translations: Record<Language, Translations> = {
       menuStonecore: "Pavimenti",
       menuEdgeline: "Profili e battiscopa",
       menuOnewall: "BIOWALL®",
+      indoor: "Indoor",
+      outdoor: "Outdoor",
+      floors: "Pavimenti",
+      accessories: "Accessori",
+      wallCladding: "Rivestimenti",
+      ceilingSystems: "Controsoffitti",
+      hoverToExplore: "Passa sopra per esplorare",
     },
     hero: {
       home: {
@@ -811,6 +818,13 @@ export const translations: Record<Language, Translations> = {
       menuStonecore: "Floors",
       menuEdgeline: "Profiles & Baseboards",
       menuOnewall: "BIOWALL®",
+      indoor: "Indoor",
+      outdoor: "Outdoor",
+      floors: "Floors",
+      accessories: "Accessories",
+      wallCladding: "Wall Cladding",
+      ceilingSystems: "Ceiling Systems",
+      hoverToExplore: "Hover to explore",
     },
     hero: {
       home: {
@@ -1602,6 +1616,13 @@ export const translations: Record<Language, Translations> = {
       menuStonecore: "Böden",
       menuEdgeline: "Profile & Sockelleisten",
       menuOnewall: "BIOWALL®",
+      indoor: "Innenbereich",
+      outdoor: "Außenbereich",
+      floors: "Böden",
+      accessories: "Zubehör",
+      wallCladding: "Wandverkleidung",
+      ceilingSystems: "Deckensysteme",
+      hoverToExplore: "Zum Erkunden drüberfahren",
     },
     hero: {
       home: {
@@ -2393,6 +2414,13 @@ export const translations: Record<Language, Translations> = {
       menuStonecore: "Sols",
       menuEdgeline: "Profilés & Plinthes",
       menuOnewall: "BIOWALL®",
+      indoor: "Intérieur",
+      outdoor: "Extérieur",
+      floors: "Sols",
+      accessories: "Accessoires",
+      wallCladding: "Revêtements muraux",
+      ceilingSystems: "Plafonds",
+      hoverToExplore: "Survolez pour explorer",
     },
     hero: {
       home: {
