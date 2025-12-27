@@ -142,7 +142,7 @@ const Biowall = () => {
       </section>
 
       {/* Finiture */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing bg-background">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

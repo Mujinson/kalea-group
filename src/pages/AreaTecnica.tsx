@@ -218,7 +218,7 @@ const AreaTecnica = () => {
       </section>
 
       {/* CTA */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing bg-background">
         <div className="container-custom text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

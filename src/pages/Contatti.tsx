@@ -294,7 +294,7 @@ const Contatti = () => {
                 </div>
               </div>
 
-              <div className="bg-card border border-border rounded-2xl p-8">
+              <div className="bg-background border border-foreground/10 rounded-2xl p-8">
                 <h3 className="text-xl font-heading font-semibold text-foreground mb-4">{t('contacts.hoursTitle')}</h3>
                 <div className="space-y-2 text-muted-foreground">
                   <div className="flex justify-between">

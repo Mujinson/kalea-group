@@ -136,7 +136,7 @@ const ChiSiamo = () => {
       </section>
 
       {/* Cosa ci guida */}
-      <section className="section-spacing bg-card">
+      <section className="section-spacing bg-background">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
