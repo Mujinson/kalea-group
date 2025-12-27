@@ -334,15 +334,11 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] overflow-hidden z-50 ${
-                        useDarkStyle 
-                          ? "bg-white border border-[#EBE2D8]" 
-                          : "bg-[rgba(30,30,30,0.95)] backdrop-blur-[18px] border border-white/[0.08]"
-                      }`}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-4 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-hidden z-50 bg-white border border-[#EBE2D8]"
                     >
                       <div className="flex min-w-[480px]">
                         {/* Left column - Indoor/Outdoor tabs */}
-                        <div className={`w-40 py-3 ${useDarkStyle ? "border-r border-[#EBE2D8]" : "border-r border-white/10"}`}>
+                        <div className="w-40 py-3 border-r border-[#EBE2D8]">
                           {productStructure.map((env, index) => (
                             <button
                               key={env.label}
@@ -356,13 +352,9 @@ const Navbar = () => {
                                 }
                               }}
                               className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-all duration-200 ${
-                                useDarkStyle
-                                  ? (index === 0 ? isIndoorExpanded : isOutdoorExpanded)
-                                    ? "text-[#3F3B33] bg-[#EBE2D8]/50"
-                                    : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
-                                  : (index === 0 ? isIndoorExpanded : isOutdoorExpanded)
-                                    ? "text-white bg-white/10"
-                                    : "text-white/80 hover:text-white hover:bg-white/5"
+                                (index === 0 ? isIndoorExpanded : isOutdoorExpanded)
+                                  ? "text-[#3F3B33] bg-[#EBE2D8]/50"
+                                  : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]/30"
                               }`}
                             >
                               {env.label}
@@ -383,19 +375,17 @@ const Navbar = () => {
                                 transition={{ duration: 0.15 }}
                               >
                                 {productStructure[isIndoorExpanded ? 0 : 1].categories.map((category, catIndex) => (
-                                  <div key={category.label} className={`${catIndex > 0 ? 'mt-3 pt-3 border-t ' + (useDarkStyle ? 'border-[#EBE2D8]' : 'border-white/10') : ''}`}>
-                                    <div className={`px-4 py-1 text-xs font-semibold uppercase tracking-wider ${
-                                      useDarkStyle ? "text-[#3F3B33]/50" : "text-white/50"
-                                    }`}>
+                                  <div key={category.label} className={`${catIndex > 0 ? 'mt-3 pt-3 border-t border-[#EBE2D8]' : ''}`}>
+                                    <div className="px-4 py-1 text-xs font-semibold uppercase tracking-wider text-[#3F3B33]/50">
                                       {category.label}
                                     </div>
-                                    {category.products.map(product => renderProductItem(product, useDarkStyle))}
+                                    {category.products.map(product => renderProductItem(product, true))}
                                   </div>
                                 ))}
                               </motion.div>
                             )}
                             {!isIndoorExpanded && !isOutdoorExpanded && (
-                              <div className={`px-4 py-8 text-center text-sm ${useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"}`}>
+                              <div className="px-4 py-8 text-center text-sm text-[#3F3B33]/60">
                                 {t('nav.hoverToExplore')}
                               </div>
                             )}
@@ -489,23 +479,15 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className={`xl:hidden mt-4 mx-4 md:mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.24)] max-h-[70vh] overflow-y-auto ${
-              useDarkStyle 
-                ? "bg-white border border-[#EBE2D8]" 
-                : "bg-[rgba(30,30,30,0.95)] backdrop-blur-[18px] border border-white/[0.08]"
-            }`}
+            className="xl:hidden mt-4 mx-4 md:mx-6 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] max-h-[70vh] overflow-y-auto bg-white border border-[#EBE2D8]"
           >
             <div className="px-6 py-6 space-y-2">
               <Link
                 to={`/${language}`}
                 className={`block text-base font-medium transition-colors py-2 ${
-                  useDarkStyle
-                    ? location.pathname === `/${language}` || location.pathname === `/${language}/` 
-                      ? "text-[#3F3B33]" 
-                      : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
-                    : location.pathname === `/${language}` || location.pathname === `/${language}/` 
-                      ? "text-white" 
-                      : "text-white/70 hover:text-white"
+                  location.pathname === `/${language}` || location.pathname === `/${language}/` 
+                    ? "text-[#3F3B33]" 
+                    : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -517,9 +499,7 @@ const Navbar = () => {
                 <button
                   onClick={() => setIsMobileProductsExpanded(!isMobileProductsExpanded)}
                   className={`flex items-center justify-between w-full text-base font-medium transition-colors py-2 ${
-                    useDarkStyle
-                      ? isProductPage ? "text-[#3F3B33]" : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
-                      : isProductPage ? "text-white" : "text-white/70 hover:text-white"
+                    isProductPage ? "text-[#3F3B33]" : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
                   }`}
                 >
                   {t('nav.lines')}
@@ -542,9 +522,7 @@ const Navbar = () => {
                       <div>
                         <button
                           onClick={() => setMobileIndoorExpanded(!mobileIndoorExpanded)}
-                          className={`flex items-center justify-between w-full text-sm font-medium py-2 ${
-                            useDarkStyle ? "text-[#3F3B33]" : "text-white"
-                          }`}
+                          className="flex items-center justify-between w-full text-sm font-medium py-2 text-[#3F3B33]"
                         >
                           {t('nav.indoor')}
                           <ChevronDown
@@ -564,18 +542,14 @@ const Navbar = () => {
                             >
                               {productStructure[0].categories.map((category) => (
                                 <div key={category.label}>
-                                  <div className={`text-xs font-semibold uppercase tracking-wider py-1 ${
-                                    useDarkStyle ? "text-[#3F3B33]/50" : "text-white/50"
-                                  }`}>
+                                  <div className="text-xs font-semibold uppercase tracking-wider py-1 text-[#3F3B33]/50">
                                     {category.label}
                                   </div>
                                   {category.products.map((product) => (
                                     product.comingSoon ? (
                                       <div
                                         key={product.label}
-                                        className={`flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 ${
-                                          useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"
-                                        }`}
+                                        className="flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
                                       >
                                         <Clock size={10} />
                                         {product.label}
@@ -585,13 +559,9 @@ const Navbar = () => {
                                         key={product.path}
                                         to={product.path!}
                                         className={`block py-1.5 text-sm transition-colors ${
-                                          useDarkStyle
-                                            ? location.pathname === product.path 
-                                              ? "text-[#3F3B33]" 
-                                              : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
-                                            : location.pathname === product.path 
-                                              ? "text-white" 
-                                              : "text-white/60 hover:text-white"
+                                          location.pathname === product.path 
+                                            ? "text-[#3F3B33]" 
+                                            : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
                                         }`}
                                         onClick={() => {
                                           setIsMobileMenuOpen(false);
@@ -614,9 +584,7 @@ const Navbar = () => {
                       <div>
                         <button
                           onClick={() => setMobileOutdoorExpanded(!mobileOutdoorExpanded)}
-                          className={`flex items-center justify-between w-full text-sm font-medium py-2 ${
-                            useDarkStyle ? "text-[#3F3B33]" : "text-white"
-                          }`}
+                          className="flex items-center justify-between w-full text-sm font-medium py-2 text-[#3F3B33]"
                         >
                           {t('nav.outdoor')}
                           <ChevronDown
@@ -636,17 +604,13 @@ const Navbar = () => {
                             >
                               {productStructure[1].categories.map((category) => (
                                 <div key={category.label}>
-                                  <div className={`text-xs font-semibold uppercase tracking-wider py-1 ${
-                                    useDarkStyle ? "text-[#3F3B33]/50" : "text-white/50"
-                                  }`}>
+                                  <div className="text-xs font-semibold uppercase tracking-wider py-1 text-[#3F3B33]/50">
                                     {category.label}
                                   </div>
                                   {category.products.map((product) => (
                                     <div
                                       key={product.label}
-                                      className={`flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 ${
-                                        useDarkStyle ? "text-[#3F3B33]/60" : "text-white/60"
-                                      }`}
+                                      className="flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
                                     >
                                       <Clock size={10} />
                                       {product.label}
@@ -668,13 +632,9 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   className={`block text-base font-medium transition-colors py-2 ${
-                    useDarkStyle
-                      ? location.pathname === item.path 
-                        ? "text-[#3F3B33]" 
-                        : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
-                      : location.pathname === item.path 
-                        ? "text-white" 
-                        : "text-white/70 hover:text-white"
+                    location.pathname === item.path 
+                      ? "text-[#3F3B33]" 
+                      : "text-[#3F3B33]/70 hover:text-[#3F3B33]"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -683,9 +643,7 @@ const Navbar = () => {
               ))}
               
               {/* Mobile Language Selector */}
-              <div className={`flex items-center justify-center gap-2 py-4 border-t mt-4 ${
-                useDarkStyle ? "border-[#EBE2D8]" : "border-white/10"
-              }`}>
+              <div className="flex items-center justify-center gap-2 py-4 border-t mt-4 border-[#EBE2D8]">
                 {languages.map((lang) => (
                   <button
                     key={lang}
@@ -694,13 +652,9 @@ const Navbar = () => {
                       setIsMobileMenuOpen(false);
                     }}
                     className={`px-3 py-1 rounded-lg transition-all text-xs ${
-                      useDarkStyle
-                        ? language === lang 
-                          ? "bg-[#3F3B33] text-white font-semibold" 
-                          : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]"
-                        : language === lang 
-                          ? "bg-white text-[#111] font-semibold" 
-                          : "text-white/70 hover:text-white hover:bg-white/10"
+                      language === lang 
+                        ? "bg-[#3F3B33] text-white font-semibold" 
+                        : "text-[#3F3B33]/70 hover:text-[#3F3B33] hover:bg-[#EBE2D8]"
                     }`}
                   >
                     {lang.toUpperCase()}
@@ -711,11 +665,7 @@ const Navbar = () => {
               <Link
                 to={`/${language}/diventa-partner`}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block w-full text-center px-6 py-2 rounded-xl text-sm transition-all duration-150 ${
-                  useDarkStyle 
-                    ? "bg-[#3F3B33] text-white hover:bg-[#3F3B33]/90" 
-                    : "bg-white text-[#111] hover:bg-[#F3F3F3]"
-                }`}
+                className="block w-full text-center px-6 py-2 rounded-xl text-sm transition-all duration-150 bg-[#3F3B33] text-white hover:bg-[#3F3B33]/90"
               >
                 {t('nav.requestQuote')}
               </Link>
