@@ -106,7 +106,7 @@ const Carousel3D = () => {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col items-center py-8 md:py-12 px-4">
+      <div className="relative z-10 h-full flex flex-col items-center pt-8 md:pt-12 px-4">
         {/* Header - Fixed at top */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -221,13 +221,13 @@ const Carousel3D = () => {
           </motion.div>
         </div>
 
-        {/* CTA Button - Centered at bottom */}
+        {/* CTA Button - Bottom centered */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex-shrink-0 pb-8 md:pb-12"
+          className="absolute left-1/2 -translate-x-1/2 bottom-2 md:bottom-4 z-20"
         >
           <Button asChild>
             <Link to={`/${language}/biomag-floor`}>
