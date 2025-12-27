@@ -464,8 +464,8 @@ const WindowHero = () => {
           }}
         >
           <motion.span
-            className="text-white/60 text-[10px] tracking-[0.35em] uppercase font-medium"
-            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+            className="text-[10px] tracking-[0.35em] uppercase font-medium"
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', color: '#4A2A13', opacity: 0.7 }}
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -474,10 +474,11 @@ const WindowHero = () => {
         </motion.div>
 
         <motion.p
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[205px] z-30 text-white/50 text-[10px] tracking-[0.15em] uppercase font-medium md:hidden"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-[205px] z-30 text-[10px] tracking-[0.15em] uppercase font-medium md:hidden"
           style={{ 
             opacity: scrollIndicatorOpacity,
             visibility: scrollIndicatorVisibility,
+            color: '#4A2A13',
           }}
         >
           {t('hero.home.toStartJourney')}
@@ -492,15 +493,15 @@ const WindowHero = () => {
           }}
         >
           <motion.span 
-            className="text-white/60 text-[9px] tracking-[0.35em] uppercase font-medium"
-            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+            className="text-[9px] tracking-[0.35em] uppercase font-medium"
+            style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', color: '#4A2A13', opacity: 0.7 }}
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           >
             {t('hero.home.scrollDown')}
           </motion.span>
           
-          <p className="text-white/50 text-[9px] tracking-[0.15em] uppercase mt-6 font-medium">
+          <p className="text-[9px] tracking-[0.15em] uppercase mt-6 font-medium" style={{ color: '#4A2A13', opacity: 0.6 }}>
             {t('hero.home.toStartJourney')}
           </p>
         </motion.div>
