@@ -55,7 +55,7 @@ const Carousel3D = () => {
   const { radius, plankWidth, plankHeight } = dimensions[screenSize];
 
   return (
-    <div className="relative w-full h-[85vh] bg-kalea-dark overflow-hidden">
+    <div className="relative w-full h-screen bg-kalea-dark overflow-hidden">
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
@@ -173,13 +173,13 @@ const Carousel3D = () => {
           </motion.div>
         </div>
 
-        {/* CTA Button - Centered, pushed down with margin-top */}
+        {/* CTA Button - Positioned low (near bottom) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className={`flex justify-center flex-shrink-0 ${screenSize === 'mobile' ? 'mt-32 pb-4' : 'mt-48 md:mt-64 pb-4'}`}
+          className={`absolute left-1/2 -translate-x-1/2 z-20 flex justify-center ${screenSize === 'mobile' ? 'bottom-8' : 'bottom-12 md:bottom-16'}`}
         >
           <Button asChild>
             <Link to={`/${language}/biomag-floor`}>
