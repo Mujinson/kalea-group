@@ -119,7 +119,7 @@ const WindowHero = () => {
       className="relative h-[300vh]"
     >
       {/* Fixed container for the effect - using brand dark brown #4A2A13 */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-kalea-dark">
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-background">
         
         {/* Background image that reveals through the window */}
         <motion.div 
@@ -164,7 +164,7 @@ const WindowHero = () => {
 
         {/* Dark overlay background - brand dark brown */}
         <motion.div 
-          className="absolute inset-0 z-10 bg-kalea-dark"
+          className="absolute inset-0 z-10 bg-background"
           style={{ opacity: darkOverlayOpacity }}
         />
 
