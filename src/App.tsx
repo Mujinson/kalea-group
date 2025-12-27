@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import Indoor from "./pages/Indoor";
+import Outdoor from "./pages/Outdoor";
 import BiomagFloor from "./pages/BiomagFloor";
 import BiowoodFloor from "./pages/BiowoodFloor";
 import EdgeLine from "./pages/EdgeLine";
@@ -121,6 +123,8 @@ const App = () => (
             
 {/* Italian routes */}
             <Route path="/it" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+            <Route path="/it/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+            <Route path="/it/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
             <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/it/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
@@ -139,6 +143,8 @@ const App = () => (
             
 {/* English routes */}
             <Route path="/en" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+            <Route path="/en/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+            <Route path="/en/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
             <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/en/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
@@ -157,6 +163,8 @@ const App = () => (
             
 {/* German routes */}
             <Route path="/de" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+            <Route path="/de/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+            <Route path="/de/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
             <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/de/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
@@ -175,6 +183,8 @@ const App = () => (
             
 {/* French routes */}
             <Route path="/fr" element={<><SEOHandler /><Layout><Home /></Layout></>} />
+            <Route path="/fr/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
+            <Route path="/fr/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
             <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
             <Route path="/fr/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
             <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
