@@ -144,7 +144,16 @@ const Carousel3D = () => {
   const { radius, plankWidth, plankHeight } = dimensions[screenSize];
 
   return (
-    <div className="relative w-full h-screen bg-background overflow-hidden">
+    <div 
+      className="relative w-full h-screen bg-background overflow-hidden cursor-grab active:cursor-grabbing select-none"
+      onMouseDown={(e) => handleDragStart(e.clientX)}
+      onMouseMove={(e) => handleDragMove(e.clientX)}
+      onMouseUp={handleDragEnd}
+      onMouseLeave={handleDragEnd}
+      onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+      onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
+      onTouchEnd={handleDragEnd}
+    >
       {/* Ambient light effect */}
       <div 
         className="absolute inset-0 pointer-events-none"
@@ -153,7 +162,7 @@ const Carousel3D = () => {
         }}
       />
 
-      <div className="relative z-10 h-full flex flex-col items-center pt-8 md:pt-12 px-4">
+      <div className="relative z-10 h-full flex flex-col items-center pt-8 md:pt-12 px-4 pointer-events-none">
         {/* Header - Fixed at top */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -172,20 +181,13 @@ const Carousel3D = () => {
 
         {/* 3D Carousel Container - Centered with equal spacing */}
         <div 
-          className={`relative flex items-center justify-center flex-1 w-full ${screenSize === 'mobile' ? '-mt-8' : '-mt-52 md:-mt-60'} cursor-grab active:cursor-grabbing select-none`}
+          className={`relative flex items-center justify-center flex-1 w-full ${screenSize === 'mobile' ? '-mt-8' : '-mt-52 md:-mt-60'}`}
           style={{ 
             perspective: "1000px",
             maxWidth: screenSize === 'desktop' ? "1200px" : "900px",
             minHeight: screenSize === 'mobile' ? "280px" : screenSize === 'tablet' ? "400px" : "500px",
             maxHeight: screenSize === 'mobile' ? "350px" : screenSize === 'tablet' ? "500px" : "550px"
           }}
-          onMouseDown={(e) => handleDragStart(e.clientX)}
-          onMouseMove={(e) => handleDragMove(e.clientX)}
-          onMouseUp={handleDragEnd}
-          onMouseLeave={handleDragEnd}
-          onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
-          onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
-          onTouchEnd={handleDragEnd}
         >
           <motion.div
             className="relative"
@@ -202,7 +204,7 @@ const Carousel3D = () => {
                 <Link
                   key={plank.id}
                   to={`/${language}/biomag-floor`}
-                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group pointer-events-auto"
                   style={{
                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
                     transformStyle: "preserve-3d"
@@ -276,7 +278,7 @@ const Carousel3D = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="absolute bottom-4 md:bottom-6 left-0 right-0 z-20 flex justify-center"
         >
-          <Button asChild>
+          <Button asChild className="pointer-events-auto">
             <Link to={`/${language}/biomag-floor`}>
               Scopri tutta la collezione
             </Link>
