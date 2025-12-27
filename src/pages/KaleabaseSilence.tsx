@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
+import AnimatedTitle from "@/components/AnimatedTitle";
 import { AudioWaveform, Shield, Layers, ThermometerSun, CheckCircle, Settings, Clock, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -101,14 +102,11 @@ const KaleabaseSilence = () => {
             className="container-custom text-center will-change-transform"
           >
             <div className="max-w-4xl mx-auto">
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+              <AnimatedTitle
+                text="KALEABASE SILENCE"
+                suffix={<sup className="text-2xl md:text-3xl">®</sup>}
                 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
-              >
-                KALEABASE SILENCE<sup className="text-2xl md:text-3xl">®</sup>
-              </motion.h1>
+              />
 
               <motion.p
                 initial={{ opacity: 0, y: 16 }}

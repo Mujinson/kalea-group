@@ -5,6 +5,7 @@ import { ChevronDown, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import AnimatedTitle from "@/components/AnimatedTitle";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import productBiomagFloor from "@/assets/product-biomag-floor.jpg";
 import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
@@ -18,32 +19,6 @@ interface Product {
   image: string;
   link: string;
 }
-
-// Letter by letter animation component
-const AnimatedTitle = ({ text, className }: { text: string; className?: string }) => {
-  const letters = text.split("");
-  
-  return (
-    <motion.h1 className={className}>
-      {letters.map((letter, index) => (
-        <motion.span
-          key={index}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.5,
-            delay: 0.1 + index * 0.03,
-            ease: [0.25, 0.46, 0.45, 0.94],
-          }}
-          className="inline-block"
-          style={{ whiteSpace: letter === " " ? "pre" : "normal" }}
-        >
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
-      ))}
-    </motion.h1>
-  );
-};
 
 const Indoor = () => {
   const { language } = useTranslation();
