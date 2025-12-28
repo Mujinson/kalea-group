@@ -62,6 +62,7 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+          surface: "hsl(var(--card-surface))",
         },
         'bg-dark': "hsl(var(--bg-dark))",
         'kalea-logo': "hsl(var(--kalea-logo))",

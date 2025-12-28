@@ -191,13 +191,12 @@ const ChiSiamo = () => {
                 transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
                 className="kalea-card relative overflow-hidden rounded-2xl"
               >
-                {/* Background gradient */}
-                <div className="absolute inset-0 bg-foreground/85" />
-                <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 to-foreground/80" />
+                {/* Background beige */}
+                <div className="absolute inset-0 bg-card-surface" />
                 
                 <div className="relative z-10 p-8 md:p-10">
-                  <h3 className="text-xl md:text-2xl font-heading font-semibold text-background mb-3">{customer.title}</h3>
-                  <p className="text-background/80">{customer.description}</p>
+                  <h3 className="text-xl md:text-2xl font-heading font-semibold text-foreground mb-3">{customer.title}</h3>
+                  <p className="text-foreground/70">{customer.description}</p>
                 </div>
               </motion.div>
             ))}
