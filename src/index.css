@@ -91,8 +91,8 @@ All colors MUST be HSL.
     /* Grey: #706F6F (RGB 111, 111, 111) */
     --kalea-grey: 0 0% 44%;
     
-    /* Card surface color - the beige/tan for feature cards */
-    --card-surface: 34 32% 68%;
+    /* Card surface color - warm beige for feature cards */
+    --card-surface: 36 24% 58%;
     
     --bg-primary: 39 47% 94%;
     --bg-secondary: 0 0% 100%;

@@ -60,7 +60,7 @@ const SustainabilityImpact = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-12 rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+            className="mt-12 rounded-2xl p-8 bg-card-surface"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
             <h3 className="text-xl font-heading font-semibold text-background mb-6">
