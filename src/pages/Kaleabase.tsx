@@ -182,7 +182,7 @@ const Kaleabase = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="max-w-3xl mx-auto rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
+            className="max-w-3xl mx-auto rounded-2xl p-8 bg-card-surface"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
             <ul className="space-y-4 text-white font-medium">
