@@ -535,7 +535,7 @@ const BiowoodFloor = () => {
       </section>
 
       {/* CTA Final Section */}
-      <section ref={ctaRef} className="relative z-[7]">
+      <section ref={ctaRef} className="relative z-[7] bg-background">
         <div className="absolute inset-0">
           <img 
             src={bgCtaCollabora} 
@@ -580,7 +580,7 @@ const BiowoodFloor = () => {
       </section>
 
       {/* Certificazioni */}
-      <div className="relative z-[8]">
+      <div className="relative z-[8] bg-background">
         <CertificationsSection variant="compact" />
       </div>
     </div>
