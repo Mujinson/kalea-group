@@ -247,7 +247,7 @@ const Kaleaceiling = () => {
       </section>
 
       {/* Coming Soon CTA */}
-      <section className="relative z-[4] py-20 md:py-32 overflow-hidden">
+      <section className="relative z-[4] py-20 md:py-32 overflow-hidden bg-background">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
