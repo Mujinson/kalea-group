@@ -185,25 +185,25 @@ const Kaleaceiling = () => {
             className="max-w-3xl mx-auto rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
-            <ul className="space-y-4 text-background/85">
+            <ul className="space-y-4 text-white font-medium">
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Spessore pannello: 8-12 mm</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Classe di reazione al fuoco: B-s1, d0</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Resistenza all'umidità: IP65</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Assorbimento acustico: αw 0.25</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Sistema di fissaggio: clip a scomparsa</span>
               </li>
             </ul>

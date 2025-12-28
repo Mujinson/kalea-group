@@ -336,8 +336,8 @@ const BiomagFloor = () => {
                   className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
                   style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
                 >
-                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Specifiche tecniche</h3>
-                  <ul className="space-y-3 text-background/85">
+                  <h3 className="text-xl font-heading font-semibold text-white mb-6">Specifiche tecniche</h3>
+                  <ul className="space-y-3 text-white font-medium">
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
                       <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
@@ -374,8 +374,8 @@ const BiomagFloor = () => {
                   className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
                   style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
                 >
-                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Istruzioni di posa</h3>
-                  <ul className="space-y-3 text-background/85">
+                  <h3 className="text-xl font-heading font-semibold text-white mb-6">Istruzioni di posa</h3>
+                  <ul className="space-y-3 text-white font-medium">
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
                       <span>Sistema flottante senza colla</span>
@@ -412,8 +412,8 @@ const BiomagFloor = () => {
                   className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
                   style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
                 >
-                  <h3 className="text-xl font-heading font-semibold text-background mb-6">Cura e manutenzione</h3>
-                  <ul className="space-y-3 text-background/85">
+                  <h3 className="text-xl font-heading font-semibold text-white mb-6">Cura e manutenzione</h3>
+                  <ul className="space-y-3 text-white font-medium">
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-background/60 mt-2 flex-shrink-0" />
                       <span>Pulizia quotidiana: panno umido o aspirapolvere</span>
@@ -483,24 +483,24 @@ const BiomagFloor = () => {
             className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
-            <h3 className="text-xl font-heading font-semibold text-background mb-6">
+            <h3 className="text-xl font-heading font-semibold text-white mb-6">
               Perché è migliore
             </h3>
             <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Distribuzione del calore più omogenea</span>
               </li>
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Minore dispersione termica</span>
               </li>
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Superficie sempre confortevole</span>
               </li>
-              <li className="flex items-start gap-3 text-background/90">
-                <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Riduzione dei consumi energetici nel lungo periodo</span>
               </li>
             </ul>

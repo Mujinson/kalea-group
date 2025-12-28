@@ -65,12 +65,12 @@ const SustainabilityMaintenance = () => {
               className="rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
               style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
             >
-              <h3 className="text-xl font-heading font-semibold text-background mb-6">
+              <h3 className="text-xl font-heading font-semibold text-white mb-6">
                 Cosa si può usare
               </h3>
               <ul className="space-y-4">
                 {canUse.map((item, index) => (
-                  <li key={index} className="flex items-start gap-3 text-background/90">
+                  <li key={index} className="flex items-start gap-3 text-white font-medium">
                     <Check className="w-5 h-5 text-green-300 mt-0.5 flex-shrink-0" />
                     <span>{item}</span>
                   </li>

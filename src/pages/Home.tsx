@@ -268,11 +268,11 @@ const productLines = [
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/75" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                  <app.icon className="w-10 h-10 md:w-12 md:h-12 text-background mb-3" strokeWidth={1.5} />
-                  <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-background mb-1">
+                  <app.icon className="w-10 h-10 md:w-12 md:h-12 text-white mb-3" strokeWidth={1.5} />
+                  <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1">
                     {app.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-background/80 hidden sm:block">
+                  <p className="text-xs md:text-sm text-white font-medium hidden sm:block">
                     {app.description}
                   </p>
                 </div>
@@ -324,11 +324,11 @@ const productLines = [
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                    <item.icon className="w-12 h-12 md:w-14 md:h-14 text-background mb-4" strokeWidth={1.5} />
-                    <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-semibold text-background mb-2">
+                    <item.icon className="w-12 h-12 md:w-14 md:h-14 text-white mb-4" strokeWidth={1.5} />
+                    <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-semibold text-white mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm md:text-base text-background/85 max-w-xs">
+                    <p className="text-sm md:text-base text-white font-medium max-w-xs">
                       {item.description}
                     </p>
                   </div>

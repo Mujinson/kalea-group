@@ -185,25 +185,25 @@ const Kaleadeck = () => {
             className="max-w-3xl mx-auto rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
-            <ul className="space-y-4 text-background/85">
+            <ul className="space-y-4 text-white font-medium">
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Spessore: 20-25 mm</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Classe antiscivolo: R11 / R12</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Resistenza UV: classe 5 (massima)</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Resistenza al gelo: cicli illimitati</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Carico di rottura: &gt; 2000 N</span>
               </li>
             </ul>
