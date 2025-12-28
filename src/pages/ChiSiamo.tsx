@@ -196,7 +196,7 @@ const ChiSiamo = () => {
                 
                 <div className="relative z-10 p-8 md:p-10">
                   <h3 className="text-xl md:text-2xl font-heading font-semibold text-white mb-3">{customer.title}</h3>
-                  <p className="text-white/85">{customer.description}</p>
+                  <p className="text-white font-medium">{customer.description}</p>
                 </div>
               </motion.div>
             ))}

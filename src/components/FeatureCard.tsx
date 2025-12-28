@@ -57,7 +57,7 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0, backgroundImag
         </h3>
         
         {/* Description */}
-        <p className={`text-white/85 flex-grow ${compact ? 'text-xs md:text-base leading-snug' : 'text-body'}`}>
+        <p className={`text-white font-medium flex-grow ${compact ? 'text-xs md:text-base leading-snug' : 'text-body'}`}>
           {description}
         </p>
       </div>
