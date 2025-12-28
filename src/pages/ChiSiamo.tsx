@@ -195,8 +195,8 @@ const ChiSiamo = () => {
                 <div className="absolute inset-0 bg-card-surface" />
                 
                 <div className="relative z-10 p-8 md:p-10">
-                  <h3 className="text-xl md:text-2xl font-heading font-semibold text-foreground mb-3">{customer.title}</h3>
-                  <p className="text-foreground/70">{customer.description}</p>
+                  <h3 className="text-xl md:text-2xl font-heading font-semibold text-white mb-3">{customer.title}</h3>
+                  <p className="text-white/85">{customer.description}</p>
                 </div>
               </motion.div>
             ))}
