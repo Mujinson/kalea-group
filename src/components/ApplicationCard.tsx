@@ -60,9 +60,9 @@ const ApplicationCard = ({
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/20 to-foreground/80" />
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 md:p-6">
-        <Icon className={`text-background mb-3 ${iconClass}`} />
-        <h3 className={`font-heading font-semibold text-background mb-2 ${titleClass}`}>{title}</h3>
-        <p className={`text-background/80 leading-snug ${descClass}`}>{description}</p>
+        <Icon className={`text-white mb-3 ${iconClass}`} />
+        <h3 className={`font-heading font-semibold text-white mb-2 ${titleClass}`}>{title}</h3>
+        <p className={`text-white font-medium leading-snug ${descClass}`}>{description}</p>
       </div>
     </motion.div>
   );

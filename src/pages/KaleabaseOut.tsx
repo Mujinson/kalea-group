@@ -185,25 +185,25 @@ const KaleabaseOut = () => {
             className="max-w-3xl mx-auto rounded-2xl p-8 bg-gradient-to-b from-foreground/50 to-foreground/80"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
-            <ul className="space-y-4 text-background/85">
+            <ul className="space-y-4 text-white font-medium">
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Materiale: Polipropilene rinforzato UV stabilizzato</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Capacità di carico: fino a 1000 kg per supporto</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Regolazione altezza: 20-200 mm</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Resistenza temperatura: -40°C / +80°C</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-background/60 mt-2 flex-shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
                 <span>Pendenza compensabile: fino al 5%</span>
               </li>
             </ul>
