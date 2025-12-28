@@ -115,7 +115,7 @@ const Contatti = () => {
         overlayClassName="bg-gradient-to-b from-black/40 via-black/20 to-black/40"
         minHeight="min-h-[50vh]"
       />
-      <section className="section-spacing">
+      <section className="section-spacing bg-background">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Form */}

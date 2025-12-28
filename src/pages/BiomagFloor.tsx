@@ -521,7 +521,7 @@ const BiomagFloor = () => {
       </section>
 
       {/* CTA Download Section - Normal scroll */}
-      <section ref={ctaRef} className="relative z-[6]">
+      <section ref={ctaRef} className="relative z-[6] bg-background">
         <div className="absolute inset-0">
           <img 
             src={bgCtaCollabora} 
@@ -566,7 +566,7 @@ const BiomagFloor = () => {
       </section>
 
       {/* Certificazioni */}
-      <div className="relative z-[7]">
+      <div className="relative z-[7] bg-background">
         <CertificationsSection variant="compact" />
       </div>
     </div>

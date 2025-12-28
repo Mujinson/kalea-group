@@ -100,7 +100,7 @@ const Biowall = () => {
       />
 
       {/* Come funziona */}
-      <section className="section-spacing">
+      <section className="section-spacing bg-background">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -272,7 +272,7 @@ const Biowall = () => {
       </section>
 
       {/* CTA finale */}
-      <section className="section-spacing relative overflow-hidden">
+      <section className="section-spacing relative overflow-hidden bg-background">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"

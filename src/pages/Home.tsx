@@ -81,7 +81,7 @@ const productLines = [
       <IndoorOutdoorSection />
 
       {/* 3D Carousel Collection */}
-      <section className="relative h-screen">
+      <section className="relative h-screen bg-background">
         <Carousel3D />
       </section>
 
@@ -150,7 +150,7 @@ const productLines = [
       </section>
 
       {/* Manifesto Section */}
-      <section className="relative h-screen">
+      <section className="relative h-screen bg-background">
         <img 
           src={bgManifesto} 
           alt="" 
@@ -340,7 +340,7 @@ const productLines = [
       </section>
 
       {/* CTA Finale */}
-      <section className="relative h-screen">
+      <section className="relative h-screen bg-background">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
