@@ -48,16 +48,16 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0, backgroundImag
       <div className={`relative z-10 flex flex-col h-full ${compact ? 'p-4 md:p-8 lg:p-10' : 'p-8 md:p-10'}`}>
         {/* Icon */}
         <div className={compact ? 'mb-2 md:mb-6' : 'mb-6'}>
-          <Icon className={`${compact ? 'w-6 h-6 md:w-10 md:h-10' : 'w-10 h-10'} text-foreground`} strokeWidth={1.5} />
+          <Icon className={`${compact ? 'w-6 h-6 md:w-10 md:h-10' : 'w-10 h-10'} text-white`} strokeWidth={1.5} />
         </div>
         
         {/* Title */}
-        <h3 className={`font-heading font-semibold text-foreground tracking-tight ${compact ? 'text-base md:text-2xl mb-1 md:mb-3' : 'text-xl md:text-2xl mb-3'}`} style={{ lineHeight: '1.15' }}>
+        <h3 className={`font-heading font-semibold text-white tracking-tight ${compact ? 'text-base md:text-2xl mb-1 md:mb-3' : 'text-xl md:text-2xl mb-3'}`} style={{ lineHeight: '1.15' }}>
           {title}
         </h3>
         
         {/* Description */}
-        <p className={`text-foreground/70 flex-grow ${compact ? 'text-xs md:text-base leading-snug' : 'text-body'}`}>
+        <p className={`text-white/85 flex-grow ${compact ? 'text-xs md:text-base leading-snug' : 'text-body'}`}>
           {description}
         </p>
       </div>
