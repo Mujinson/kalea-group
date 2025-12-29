@@ -219,8 +219,19 @@ const BiomagFloor = () => {
         </div>
       </section>
 
+      {/* Finiture Section - Normal scroll */}
+      <section ref={finishesRef} className="relative z-[1] bg-background py-20">
+        <div className="container-custom">
+          <ColorCircleGallery 
+            title={t('stonecore.finishesTitle')}
+            subtitle={t('stonecore.finishesSubtitle')}
+            colors={stonecoreColors}
+          />
+        </div>
+      </section>
+
       {/* Vantaggi Section - Normal scroll */}
-      <section ref={advantagesRef} className="relative z-[1] bg-background py-20">
+      <section ref={advantagesRef} className="relative z-[2] bg-background py-20">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -242,17 +253,6 @@ const BiomagFloor = () => {
               <FeatureCard key={advantage.title} {...advantage} index={index} />
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Finiture Section - Normal scroll */}
-      <section ref={finishesRef} className="relative z-[2] bg-background py-20">
-        <div className="container-custom">
-          <ColorCircleGallery 
-            title={t('stonecore.finishesTitle')}
-            subtitle={t('stonecore.finishesSubtitle')}
-            colors={stonecoreColors}
-          />
         </div>
       </section>
 
