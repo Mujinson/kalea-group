@@ -18,8 +18,7 @@ interface HeroSectionProps {
 
 // The title delay is inside AnimatedTitle itself (START_AFTER_MS).
 // These are relative delays for subtitle/CTA AFTER the title begins.
-const LETTER_STAGGER = 0.03;
-const TITLE_VISUAL_DURATION = 1.2; // approximate time for the title animation to finish after it starts
+const TITLE_VISUAL_DURATION = 0.8; // reduced for faster button appearance
 
 const HeroSection = ({
   title,
@@ -42,14 +41,15 @@ const HeroSection = ({
       contentOpacityRange: [1, 0],
       contentYRange: [0, -100],
       simplifiedOnMobile: true,
+      scrollDeadZone: 0.05, // Hero stays frozen for first 5% of scroll
     }
   );
 
-  // These delays are relative offsets; AnimatedTitle has its own START_AFTER_MS (~900ms).
+  // Reduced delays for faster button appearance
   const titleDelay = 0.05;
-  const subtitleDelay = TITLE_VISUAL_DURATION + 0.15;
-  const ctaDelay = TITLE_VISUAL_DURATION + 0.35;
-  const scrollDelay = TITLE_VISUAL_DURATION + 0.9;
+  const subtitleDelay = TITLE_VISUAL_DURATION + 0.1;
+  const ctaDelay = TITLE_VISUAL_DURATION + 0.2;
+  const scrollDelay = TITLE_VISUAL_DURATION + 0.5;
 
 
   return (
