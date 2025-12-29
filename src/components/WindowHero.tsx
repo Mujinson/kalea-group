@@ -449,16 +449,16 @@ const WindowHero = () => {
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ 
-                opacity: [0.4, 1, 0.4],
+                color: ["#FFFFFF", "#000000", "#FFFFFF"],
                 scale: [1, 1.05, 1],
                 y: 0,
               }}
               transition={{ 
-                opacity: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-                scale: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+                color: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
                 y: { duration: 0.7, delay: 0.7 }
               }}
-              className="text-white text-sm md:text-base tracking-[0.25em] font-semibold mt-16 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+              className="text-sm md:text-base tracking-[0.25em] font-bold mt-16 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
             >
               worldwide
             </motion.p>
