@@ -21,7 +21,7 @@ import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
 import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import productBiomagFloor from "@/assets/realizzazione-cucina-floor-focus.jpg";
-import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
+import productBiowoodFloor from "@/assets/product-biowood-floor-interior.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall-interior.jpg";
 import productKaleabaseOut from "@/assets/product-kaleabase-out.jpg";
