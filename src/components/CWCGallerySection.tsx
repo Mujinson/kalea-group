@@ -3,6 +3,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { cwcColors } from "@/data/cwcColors";
+import { useDragScroll } from "@/hooks/useDragScroll";
 
 // Helper function to darken a hex color for gradient
 const adjustColor = (hex: string, amount: number): string => {
@@ -78,6 +79,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
 
 const CWCGallerySection = () => {
   const { t, language } = useTranslation();
+  const { containerRef, isDragging, handlers } = useDragScroll();
 
   // Map cwcColors to the format we need
   const products: CWCProductType[] = cwcColors.map(color => ({
@@ -86,8 +88,8 @@ const CWCGallerySection = () => {
     colorHex: color.colorHex,
   }));
 
-  // Triple the products for infinite scroll effect
-  const extendedProducts = [...products, ...products, ...products];
+  // Double products for better scroll experience
+  const extendedProducts = [...products, ...products];
 
   return (
     <section className="h-full w-full flex flex-col justify-center bg-background overflow-hidden">
@@ -120,8 +122,16 @@ const CWCGallerySection = () => {
         <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        {/* Scrolling carousel - reverse direction */}
-        <div className="flex gap-8 sm:gap-10 md:gap-12 animate-scroll-reverse hover:[animation-play-state:paused]">
+        {/* Draggable carousel */}
+        <div 
+          ref={containerRef}
+          {...handlers}
+          className={`flex gap-8 sm:gap-10 md:gap-12 overflow-x-auto scrollbar-hide px-8 md:px-16 py-4 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+          style={{ 
+            scrollBehavior: isDragging ? 'auto' : 'smooth',
+            WebkitOverflowScrolling: 'touch'
+          }}
+        >
           {extendedProducts.map((product, index) => (
             <CWCProductCard key={`${product.id}-${index}`} product={product} language={language} />
           ))}

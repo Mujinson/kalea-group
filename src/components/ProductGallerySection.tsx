@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useDragScroll } from "@/hooks/useDragScroll";
 
 // Import finish images as fallbacks
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -109,6 +110,7 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
 
 const ProductGallerySection = () => {
   const { t, language } = useTranslation();
+  const { containerRef, isDragging, handlers } = useDragScroll();
 
   // Fetch first image for each product from database
   const { data: productImages } = useQuery({
@@ -136,7 +138,8 @@ const ProductGallerySection = () => {
 
   const dbImages = productImages || {};
   const products = getProducts(t, dbImages);
-  const extendedProducts = [...products, ...products, ...products];
+  // Double products for better scroll experience
+  const extendedProducts = [...products, ...products];
 
   return (
     <section className="h-full w-full flex flex-col justify-center bg-background overflow-hidden">
@@ -163,8 +166,16 @@ const ProductGallerySection = () => {
         <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        {/* Scrolling carousel */}
-        <div className="flex gap-4 sm:gap-6 md:gap-8 animate-scroll hover:[animation-play-state:paused]">
+        {/* Draggable carousel */}
+        <div 
+          ref={containerRef}
+          {...handlers}
+          className={`flex gap-4 sm:gap-6 md:gap-8 overflow-x-auto scrollbar-hide px-8 md:px-16 py-4 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+          style={{ 
+            scrollBehavior: isDragging ? 'auto' : 'smooth',
+            WebkitOverflowScrolling: 'touch'
+          }}
+        >
           {extendedProducts.map((product, index) => (
             <ProductCard key={`${product.id}-${index}`} product={product} language={language} />
           ))}
