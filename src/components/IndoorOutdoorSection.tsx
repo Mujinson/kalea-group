@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
-import cardIndoor from "@/assets/card-indoor.jpg";
+import cardIndoor from "@/assets/card-indoor-new.jpg";
 import cardOutdoor from "@/assets/card-outdoor.jpg";
 
 const IndoorOutdoorSection = () => {
