@@ -368,4 +368,14 @@ All colors MUST be HSL.
   .animate-scroll-reverse {
     animation: scroll-reverse 40s linear infinite;
   }
+  
+  /* Hide scrollbar for drag scroll carousels */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
 }
