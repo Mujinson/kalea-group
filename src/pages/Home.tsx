@@ -150,8 +150,9 @@ const Home = () => {
             >
               Indoor
             </motion.h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 max-w-5xl mx-auto mb-10 md:mb-14">
-              {indoorProducts.map((product, index) => (
+            {/* First row: 3 cards */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 max-w-5xl mx-auto mb-3 md:mb-5">
+              {indoorProducts.slice(0, 3).map((product, index) => (
                 product.comingSoon ? (
                   <motion.div
                     key={product.title}
@@ -212,6 +213,70 @@ const Home = () => {
                 )
               ))}
             </div>
+            
+            {/* Second row: 2 cards centered */}
+            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto mb-10 md:mb-14">
+              {indoorProducts.slice(3).map((product, index) => (
+                product.comingSoon ? (
+                  <motion.div
+                    key={product.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: (index + 3) * 0.1 }}
+                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group w-[calc(50%-6px)] md:w-[calc(33.333%-14px)]"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
+                      <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full">
+                        {product.comingSoonLabel || "Novità in arrivo"}
+                      </div>
+                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">
+                        {product.title.toUpperCase()}
+                      </h3>
+                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">
+                        {product.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <Link key={product.title} to={product.link} className="w-[calc(50%-6px)] md:w-[calc(33.333%-14px)]">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      whileHover={{
+                        y: -6,
+                        scale: 1.02,
+                        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)",
+                      }}
+                      transition={{ duration: 0.5, delay: (index + 3) * 0.1 }}
+                      className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group"
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                      <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
+                        <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">
+                          {product.title.toUpperCase()}
+                        </h3>
+                        <p className="text-white/90 text-[10px] sm:text-xs leading-relaxed line-clamp-2">
+                          {product.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  </Link>
+                )
+              ))}
+            </div>
 
             {/* Outdoor Products */}
             <motion.h3
@@ -222,7 +287,7 @@ const Home = () => {
             >
               Outdoor
             </motion.h3>
-            <div className="grid grid-cols-3 gap-3 md:gap-5 max-w-4xl mx-auto">
+            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto">
               {outdoorProducts.map((product, index) => (
                 <motion.div
                   key={product.title}
@@ -230,7 +295,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative rounded-2xl overflow-hidden cursor-default h-full min-h-[180px] sm:min-h-[200px] md:min-h-[220px] group"
+                  className="relative rounded-2xl overflow-hidden cursor-default min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group w-[calc(33.333%-8px)] md:w-[calc(33.333%-14px)]"
                 >
                   <img
                     src={product.image}
