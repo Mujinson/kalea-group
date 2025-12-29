@@ -322,10 +322,8 @@ const Navbar = () => {
               >
                 {t('nav.home')}
                 {(location.pathname === `/${language}` || location.pathname === `/${language}/`) && (
-                  <motion.div
-                    layoutId="navbar-underline"
+                  <div
                     className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
               </Link>
@@ -351,10 +349,8 @@ const Navbar = () => {
                     className={`transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
                   />
                   {isProductPage && (
-                    <motion.div
-                      layoutId="navbar-underline"
+                    <div
                       className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
                 </button>
@@ -441,10 +437,8 @@ const Navbar = () => {
                 >
                   {item.label}
                   {location.pathname === item.path && (
-                    <motion.div
-                      layoutId="navbar-underline"
+                    <div
                       className={`absolute -bottom-1 left-0 right-0 h-[1px] ${underlineColor} transition-colors duration-300`}
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
                 </Link>
