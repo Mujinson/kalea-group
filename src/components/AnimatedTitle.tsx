@@ -34,7 +34,21 @@ const AnimatedTitle = ({
 }: AnimatedTitleProps) => {
   const location = useLocation();
   const reduceMotion = useReducedMotion();
-  const letters = useMemo(() => text.split(""), [text]);
+  
+  // Split text into characters, but keep ® attached to the previous word
+  const letters = useMemo(() => {
+    const chars = text.split("");
+    const result: string[] = [];
+    for (let i = 0; i < chars.length; i++) {
+      // If current char is ® and previous char is not a space, merge with previous
+      if (chars[i] === "®" && result.length > 0 && result[result.length - 1] !== " ") {
+        result[result.length - 1] += "®";
+      } else {
+        result.push(chars[i]);
+      }
+    }
+    return result;
+  }, [text]);
 
   // Remount on navigation to reliably replay the animation.
   const animationKey = `${location.key}:${location.pathname}:${text}`;
@@ -68,14 +82,17 @@ const AnimatedTitle = ({
 
   return (
     <Tag key={animationKey} className={className} aria-label={text}>
-      {letters.map((letter, index) =>
-        reduceMotion ? (
+      {letters.map((letter, index) => {
+        const isSpace = letter === " ";
+        const hasRegistered = letter.includes("®");
+        
+        return reduceMotion ? (
           <span
             key={`${animationKey}:${index}`}
-            className="inline-block"
-            style={{ whiteSpace: letter === " " ? "pre" : "normal" }}
+            className={`inline-block ${hasRegistered ? 'whitespace-nowrap' : ''}`}
+            style={{ whiteSpace: isSpace ? "pre" : undefined }}
           >
-            {letter === " " ? "\u00A0" : letter}
+            {isSpace ? "\u00A0" : letter}
           </span>
         ) : (
           <motion.span
@@ -84,13 +101,13 @@ const AnimatedTitle = ({
             variants={letterVariants}
             initial="hidden"
             animate={armed ? "show" : "hidden"}
-            className="inline-block will-change-transform"
-            style={{ whiteSpace: letter === " " ? "pre" : "normal" }}
+            className={`inline-block will-change-transform ${hasRegistered ? 'whitespace-nowrap' : ''}`}
+            style={{ whiteSpace: isSpace ? "pre" : undefined }}
           >
-            {letter === " " ? "\u00A0" : letter}
+            {isSpace ? "\u00A0" : letter}
           </motion.span>
-        )
-      )}
+        );
+      })}
 
       {suffix &&
         (reduceMotion ? (
