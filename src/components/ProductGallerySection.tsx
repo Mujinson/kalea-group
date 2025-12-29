@@ -110,7 +110,7 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
 
 const ProductGallerySection = () => {
   const { t, language } = useTranslation();
-  const { containerRef, isDragging, isInteracting, handlers } = useDragScroll();
+  const { containerRef, isDragging, handlers } = useDragScroll({ autoScrollSpeed: 1, direction: 'left' });
 
   // Fetch first image for each product from database
   const { data: productImages } = useQuery({
@@ -170,13 +170,8 @@ const ProductGallerySection = () => {
         <div 
           ref={containerRef}
           {...handlers}
-          className={`flex gap-4 sm:gap-6 md:gap-8 py-4 ${
-            isInteracting 
-              ? `overflow-x-auto scrollbar-hide px-8 md:px-16 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}` 
-              : 'animate-scroll'
-          }`}
+          className={`flex gap-4 sm:gap-6 md:gap-8 py-4 overflow-x-auto scrollbar-hide ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           style={{ 
-            scrollBehavior: isDragging ? 'auto' : 'smooth',
             WebkitOverflowScrolling: 'touch'
           }}
         >
