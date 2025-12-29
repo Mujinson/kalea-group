@@ -139,7 +139,7 @@ const Navbar = () => {
         {
           label: t('nav.accessories'),
           products: [
-            { label: "KALEABASE DRAIN®", path: null, comingSoon: true },
+            { label: "KALEA ELEMENTS", path: null, comingSoon: true },
           ]
         },
         {
