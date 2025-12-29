@@ -296,19 +296,16 @@ const Kaleabase = () => {
                 icon: Droplets,
                 title: "Umidità",
                 description: "Ogni massetto ha un livello di umidità diverso. Il sistema modulare permette di scegliere la barriera vapore corretta.",
-                color: "#3498DB",
               },
               {
                 icon: Volume2,
                 title: "Rumore",
                 description: "Appartamento al piano alto? Ufficio open space? Ogni contesto richiede un diverso livello di isolamento acustico.",
-                color: "#27AE60",
               },
               {
                 icon: Flame,
                 title: "Calore",
                 description: "Con riscaldamento a pavimento serve massima conduttività. Senza, puoi puntare su altri fattori.",
-                color: "#E74C3C",
               },
             ].map((item, index) => (
               <motion.div
@@ -317,16 +314,15 @@ const Kaleabase = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-card-surface rounded-2xl p-6 md:p-8 text-center"
+                className="bg-[#C6B195] rounded-2xl p-6 md:p-8 text-center"
               >
                 <div 
-                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
-                  style={{ backgroundColor: `${item.color}20` }}
+                  className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-white/20"
                 >
-                  <item.icon className="w-8 h-8" style={{ color: item.color }} />
+                  <item.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
-                <p className="text-white/70 text-sm leading-relaxed">{item.description}</p>
+                <p className="text-white/90 text-sm leading-relaxed font-medium">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -361,28 +357,27 @@ const Kaleabase = () => {
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 whileHover={{ y: -6, scale: 1.02 }}
                 onClick={() => setSelectedProduct(selectedProduct === product.id ? null : product.id)}
-                className={`relative rounded-2xl p-6 cursor-pointer transition-all duration-300 border-2 ${
+                className={`relative bg-[#C6B195] rounded-2xl p-6 cursor-pointer transition-all duration-300 border-2 ${
                   selectedProduct === product.id 
-                    ? 'bg-card-surface border-[#27AE60]' 
-                    : 'bg-card-surface border-transparent hover:border-white/20'
-                } ${product.premium ? 'ring-2 ring-[#9B59B6]/30' : ''}`}
+                    ? 'border-white ring-2 ring-white/30' 
+                    : 'border-transparent hover:border-white/30'
+                } ${product.premium ? 'ring-2 ring-white/20' : ''}`}
               >
                 {product.premium && (
-                  <div className="absolute top-3 right-3 bg-[#9B59B6] text-white text-[10px] font-bold px-2 py-1 rounded-full">
+                  <div className="absolute top-3 right-3 bg-white text-[#C6B195] text-[10px] font-bold px-2 py-1 rounded-full">
                     PREMIUM
                   </div>
                 )}
                 
                 <div 
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-4"
-                  style={{ backgroundColor: `${product.color}20` }}
+                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-white/20"
                 >
-                  <product.icon className="w-7 h-7" style={{ color: product.color }} />
+                  <product.icon className="w-7 h-7 text-white" />
                 </div>
                 
                 <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
-                <p className="text-sm text-white/60 mb-2">{product.material}</p>
-                <p className="text-sm text-white/80 mb-4">{product.shortDesc}</p>
+                <p className="text-sm text-white/80 mb-2 font-medium">{product.material}</p>
+                <p className="text-sm text-white/90 mb-4 font-medium">{product.shortDesc}</p>
                 
                 {/* Expanded content */}
                 <motion.div
@@ -393,13 +388,13 @@ const Kaleabase = () => {
                   }}
                   className="overflow-hidden"
                 >
-                  <div className="pt-4 border-t border-white/10">
-                    <p className="text-sm text-white/70 mb-4">{product.description}</p>
+                  <div className="pt-4 border-t border-white/20">
+                    <p className="text-sm text-white/90 mb-4 font-medium">{product.description}</p>
                     
                     <div className="space-y-2 mb-4">
                       {product.specs.map((spec, i) => (
-                        <div key={i} className="flex items-start gap-2 text-sm text-white/80">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#27AE60] mt-1.5 flex-shrink-0" />
+                        <div key={i} className="flex items-start gap-2 text-sm text-white/90 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 flex-shrink-0" />
                           <span>{spec}</span>
                         </div>
                       ))}
@@ -409,27 +404,26 @@ const Kaleabase = () => {
                       {product.benefits.map((benefit, i) => (
                         <span 
                           key={i}
-                          className="text-xs px-2 py-1 rounded-full"
-                          style={{ backgroundColor: `${product.color}20`, color: product.color }}
+                          className="text-xs px-2 py-1 rounded-full bg-white/20 text-white font-medium"
                         >
                           {benefit}
                         </span>
                       ))}
                     </div>
                     
-                    <p className="text-xs text-white/50">
+                    <p className="text-xs text-white/80 font-medium">
                       <strong>Ideale per:</strong> {product.bestFor}
                     </p>
                     
                     {product.note && (
-                      <p className="text-xs text-amber-400/80 mt-2 italic">
+                      <p className="text-xs text-white mt-2 italic font-medium">
                         ⚠️ {product.note}
                       </p>
                     )}
                   </div>
                 </motion.div>
                 
-                <div className="flex items-center justify-between mt-4 text-xs text-white/40">
+                <div className="flex items-center justify-between mt-4 text-xs text-white/70 font-medium">
                   <span>Clicca per dettagli</span>
                   <ArrowRight className={`w-4 h-4 transition-transform ${selectedProduct === product.id ? 'rotate-90' : ''}`} />
                 </div>
@@ -440,7 +434,7 @@ const Kaleabase = () => {
       </section>
 
       {/* Configurator Section */}
-      <section className="relative z-[3] bg-[#2C3E50] py-20 md:py-32">
+      <section className="relative z-[3] bg-[#3F3B33] py-20 md:py-32">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -449,10 +443,10 @@ const Kaleabase = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12 md:mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-kalea-tan mb-4">
               Trova la tua Base
             </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
+            <p className="text-lg text-kalea-cream/80 max-w-2xl mx-auto">
               Rispondi a poche domande e ti consiglieremo il sistema perfetto per il tuo progetto.
             </p>
           </motion.div>
@@ -466,9 +460,9 @@ const Kaleabase = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: qIndex * 0.1 }}
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6"
+                  className="bg-kalea-cream/10 backdrop-blur-sm rounded-2xl p-6"
                 >
-                  <p className="text-white font-medium mb-4">{qIndex + 1}. {q.question}</p>
+                  <p className="text-kalea-cream font-medium mb-4">{qIndex + 1}. {q.question}</p>
                   <div className="flex flex-wrap gap-3">
                     {q.options.map((option) => (
                       <button
@@ -476,8 +470,8 @@ const Kaleabase = () => {
                         onClick={() => handleConfiguratorAnswer(q.id, option.value)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                           configuratorAnswers[q.id] === option.value
-                            ? 'bg-[#27AE60] text-white'
-                            : 'bg-white/10 text-white/80 hover:bg-white/20'
+                            ? 'bg-kalea-tan text-white'
+                            : 'bg-kalea-cream/20 text-kalea-cream hover:bg-kalea-cream/30'
                         }`}
                       >
                         {option.label}
@@ -491,26 +485,25 @@ const Kaleabase = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="max-w-xl mx-auto bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center"
+              className="max-w-xl mx-auto bg-kalea-cream/10 backdrop-blur-sm rounded-3xl p-8 text-center"
             >
               <div 
-                className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-                style={{ backgroundColor: `${recommendedProduct?.color}30` }}
+                className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 bg-kalea-tan/30"
               >
-                {recommendedProduct && <recommendedProduct.icon className="w-10 h-10" style={{ color: recommendedProduct.color }} />}
+                {recommendedProduct && <recommendedProduct.icon className="w-10 h-10 text-kalea-tan" />}
               </div>
               
-              <h3 className="text-2xl font-bold text-white mb-2">Il nostro consiglio</h3>
-              <p className="text-3xl font-heading font-bold text-[#27AE60] mb-4">
+              <h3 className="text-2xl font-bold text-kalea-cream mb-2">Il nostro consiglio</h3>
+              <p className="text-3xl font-heading font-bold text-kalea-tan mb-4">
                 {recommendedProduct?.name}
               </p>
-              <p className="text-white/70 mb-6">{recommendedProduct?.description}</p>
+              <p className="text-kalea-cream/80 mb-6">{recommendedProduct?.description}</p>
               
               <div className="flex flex-wrap gap-2 justify-center mb-8">
                 {recommendedProduct?.benefits.map((benefit, i) => (
                   <span 
                     key={i}
-                    className="flex items-center gap-1 text-sm px-3 py-1 rounded-full bg-[#27AE60]/20 text-[#27AE60]"
+                    className="flex items-center gap-1 text-sm px-3 py-1 rounded-full bg-kalea-tan/20 text-kalea-tan"
                   >
                     <CheckCircle className="w-3 h-3" />
                     {benefit}
@@ -519,13 +512,13 @@ const Kaleabase = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button asChild variant="default" className="bg-[#27AE60] hover:bg-[#27AE60]/90">
+                <Button asChild variant="default" className="bg-kalea-tan hover:bg-kalea-tan/90 text-white">
                   <Link to={`/${language}/contatti`}>
                     <Phone className="w-4 h-4 mr-2" />
                     Contatta l'ufficio tecnico
                   </Link>
                 </Button>
-                <Button variant="outline" onClick={resetConfigurator} className="border-white/30 text-white hover:bg-white/10">
+                <Button variant="outline" onClick={resetConfigurator} className="border-kalea-cream/30 text-kalea-cream hover:bg-kalea-cream/10">
                   <X className="w-4 h-4 mr-2" />
                   Ricomincia
                 </Button>
@@ -568,12 +561,12 @@ const Kaleabase = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="flex items-center gap-6 mb-4"
               >
-                <div className="w-12 h-12 rounded-full bg-[#27AE60] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-[#C6B195] flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                   {item.layer}
                 </div>
-                <div className="flex-1 bg-card-surface rounded-xl p-4">
+                <div className="flex-1 bg-[#C6B195] rounded-xl p-4">
                   <h4 className="text-white font-semibold">{item.name}</h4>
-                  <p className="text-white/60 text-sm">{item.desc}</p>
+                  <p className="text-white/90 text-sm font-medium">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
