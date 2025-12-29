@@ -460,7 +460,7 @@ const WindowHero = () => {
                 scale: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.2 },
                 y: { duration: 0.7, delay: 0.7 }
               }}
-              className="text-sm md:text-base tracking-[0.25em] font-bold mt-16 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+              className="text-sm md:text-base tracking-[0.25em] font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
             >
               worldwide
             </motion.p>
