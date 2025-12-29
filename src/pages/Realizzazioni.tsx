@@ -280,7 +280,7 @@ const Realizzazioni = () => {
                     <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium">
                       {project.category}
                     </span>
-                    <span className="px-3 py-1 bg-card-beige/80 backdrop-blur-sm rounded-full text-xs text-foreground font-medium">
+                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium">
                       {project.color}
                     </span>
                   </div>
