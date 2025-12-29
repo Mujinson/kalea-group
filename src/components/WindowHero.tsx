@@ -74,44 +74,47 @@ const WindowHero = () => {
     offset: ["start start", "end start"],
   });
 
+  // Dead zone - hero stays frozen for first 5% of scroll
+  const DZ = 0.05;
+
   // Window frame animations - starts at center, expands smoothly to fill viewport
-  const windowScale = useTransform(scrollYProgress, [0, 0.3, 0.6], [1, 1.8, 6]);
-  const windowOpacity = useTransform(scrollYProgress, [0.45, 0.65], [1, 0]);
+  const windowScale = useTransform(scrollYProgress, [0, DZ, DZ + 0.25, DZ + 0.55], [1, 1, 1.8, 6]);
+  const windowOpacity = useTransform(scrollYProgress, [DZ + 0.40, DZ + 0.60], [1, 0]);
   
   // Dark overlay behind window - fades out as we enter
-  const darkOverlayOpacity = useTransform(scrollYProgress, [0.4, 0.7], [1, 0]);
+  const darkOverlayOpacity = useTransform(scrollYProgress, [DZ + 0.35, DZ + 0.65], [1, 0]);
   
   // Background reveal - the interior scene
-  const bgOpacity = useTransform(scrollYProgress, [0.35, 0.55], [0, 1]);
-  const bgScale = useTransform(scrollYProgress, [0.3, 0.7], [1.15, 1]);
+  const bgOpacity = useTransform(scrollYProgress, [DZ + 0.30, DZ + 0.50], [0, 1]);
+  const bgScale = useTransform(scrollYProgress, [DZ + 0.25, DZ + 0.65], [1.15, 1]);
   
   // Text animations - fade out before window expands (complete at 0.12)
-  const textOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
-  const textY = useTransform(scrollYProgress, [0, 0.15], [0, -40]);
+  const textOpacity = useTransform(scrollYProgress, [0, DZ, DZ + 0.07], [1, 1, 0]);
+  const textY = useTransform(scrollYProgress, [0, DZ, DZ + 0.10], [0, 0, -40]);
   // Hide completely when faded out
   const textVisibility = useTransform(scrollYProgress, (progress) => 
-    progress > 0.12 ? "hidden" : "visible"
+    progress > (DZ + 0.12) ? "hidden" : "visible"
   );
   
   // Scroll indicator - fades out quickly
-  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
+  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, DZ, DZ + 0.04], [1, 1, 0]);
   const scrollIndicatorVisibility = useTransform(scrollYProgress, (progress) => 
-    progress > 0.06 ? "hidden" : "visible"
+    progress > (DZ + 0.06) ? "hidden" : "visible"
   );
   
   // Glow animation
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.25], [0.7, 0]);
-  const glowScale = useTransform(scrollYProgress, [0, 0.4], [1, 1.5]);
+  const glowOpacity = useTransform(scrollYProgress, [0, DZ + 0.20], [0.7, 0]);
+  const glowScale = useTransform(scrollYProgress, [0, DZ + 0.35], [1, 1.5]);
 
-  // CTA buttons appear AFTER first text is completely hidden (starts at 0.65, well after 0.12)
-  const ctaOpacity = useTransform(scrollYProgress, [0.65, 0.78], [0, 1]);
+  // CTA buttons appear much earlier - at 15% scroll (after dead zone and initial text fadeout)
+  const ctaOpacity = useTransform(scrollYProgress, [DZ + 0.10, DZ + 0.18], [0, 1]);
   const ctaVisibility = useTransform(scrollYProgress, (progress) => 
-    progress < 0.65 ? "hidden" : "visible"
+    progress < (DZ + 0.10) ? "hidden" : "visible"
   );
 
   // Floating panels - same scale as window, fade with window
-  const panelScale = useTransform(scrollYProgress, [0, 0.3, 0.6], [1, 1.8, 4]);
-  const panelOpacity = useTransform(scrollYProgress, [0.35, 0.55], [1, 0]);
+  const panelScale = useTransform(scrollYProgress, [0, DZ, DZ + 0.25, DZ + 0.55], [1, 1, 1.8, 4]);
+  const panelOpacity = useTransform(scrollYProgress, [DZ + 0.30, DZ + 0.50], [1, 0]);
 
   return (
     <section 
@@ -143,7 +146,7 @@ const WindowHero = () => {
           style={{ 
             opacity: ctaOpacity,
             visibility: ctaVisibility,
-            pointerEvents: useTransform(scrollYProgress, (progress) => progress < 0.65 ? "none" : "auto"),
+            pointerEvents: useTransform(scrollYProgress, (progress) => progress < (0.05 + 0.10) ? "none" : "auto"),
           }}
         >
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
