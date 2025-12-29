@@ -26,7 +26,7 @@ import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
 import productKaleabaseOut from "@/assets/product-kaleabase-out.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
-import productKaleaceiling from "@/assets/product-kaleaceiling.jpg";
+import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
