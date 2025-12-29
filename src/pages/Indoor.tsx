@@ -10,7 +10,7 @@ import heroIndoor from "@/assets/hero-indoor.jpg";
 import productBiomagFloor from "@/assets/product-biomag-floor.jpg";
 import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
 import productKaleabase from "@/assets/product-kaleabase.jpg";
-import productKaleabaseSilence from "@/assets/product-kaleabase-silence.jpg";
+import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
 
 interface Product {
@@ -52,15 +52,15 @@ const Indoor = () => {
     },
     {
       name: "KALEABASE®",
-      description: "Sistemi di posa e supporto per pavimenti indoor.",
+      description: "Sistemi modulari di sottopavimento per ogni esigenza.",
       image: productKaleabase,
       link: `/${language}/kaleabase`,
     },
     {
-      name: "KALEABASE SILENCE®",
-      description: "Soluzioni per comfort acustico e isolamento.",
-      image: productKaleabaseSilence,
-      link: `/${language}/kaleabase-silence`,
+      name: "EDGELINE®",
+      description: "Profili e battiscopa per finiture architettoniche.",
+      image: heroEdgeline,
+      link: `/${language}/edgeline`,
     },
     {
       name: "BIOWALL®",
