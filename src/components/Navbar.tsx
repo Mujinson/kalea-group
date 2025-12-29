@@ -272,17 +272,10 @@ const Navbar = () => {
   };
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ 
-        opacity: isVisible ? 1 : 0, 
-        y: isVisible ? 0 : -100,
-      }}
-      transition={{ 
-        opacity: { duration: 0.25, ease: "easeOut" },
-        y: { duration: 0.25, ease: "easeOut" }
-      }}
-      className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 lg:px-16 xl:px-32"
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-8 lg:px-16 xl:px-32 transition-all duration-300 ${
+        isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+      }`}
     >
       <div 
         className={`max-w-[1280px] mx-auto rounded-b-[32px] transition-all duration-300 ${
@@ -703,7 +696,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </nav>
   );
 };
 
