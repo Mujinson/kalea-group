@@ -449,13 +449,15 @@ const WindowHero = () => {
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ 
+                opacity: 1,
                 color: ["#FFFFFF", "#000000", "#FFFFFF"],
                 scale: [1, 1.05, 1],
                 y: 0,
               }}
               transition={{ 
-                color: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                opacity: { duration: 0.5, delay: 0.7 },
+                color: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.2 },
+                scale: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.2 },
                 y: { duration: 0.7, delay: 0.7 }
               }}
               className="text-sm md:text-base tracking-[0.25em] font-bold mt-16 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
