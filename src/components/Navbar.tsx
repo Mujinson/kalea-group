@@ -96,6 +96,7 @@ const Navbar = () => {
 
   const menuItems = [
     { label: t('nav.technicalArea'), path: `/${language}/area-tecnica` },
+    { label: t('nav.projects'), path: `/${language}/realizzazioni` },
     { label: t('nav.contacts'), path: `/${language}/contatti` },
   ];
 
