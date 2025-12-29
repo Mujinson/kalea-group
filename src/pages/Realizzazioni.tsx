@@ -19,6 +19,7 @@ import soggiornoTerram from "@/assets/realizzazione-soggiorno-terram.jpg";
 import villaNordica from "@/assets/realizzazione-villa-nordica-kalea.png";
 import negozioVelora from "@/assets/realizzazione-negozio-velora.jpg";
 import retailSabbia from "@/assets/realizzazione-retail-sabbia-v2.jpg";
+import soggiornoKalea from "@/assets/realizzazione-soggiorno-kalea.webp";
 import cameraPerla from "@/assets/realizzazione-camera-perla.jpg";
 import cameraAurora from "@/assets/realizzazione-camera-aurora.jpg";
 import ristoranteCorteccia from "@/assets/realizzazione-ristorante-corteccia-v2.jpg";
@@ -51,6 +52,14 @@ const projects: Project[] = [
     color: "Terram",
     title: "Living Room Hygge",
     location: "Stoccolma, Svezia"
+  },
+  {
+    id: "18",
+    image: soggiornoKalea,
+    category: "Soggiorno",
+    color: "Perla",
+    title: "Residenza Serena",
+    location: "Helsinki, Finlandia"
   },
   
   // Bagni
