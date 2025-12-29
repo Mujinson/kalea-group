@@ -20,6 +20,10 @@ import bgApplicationOffices from "@/assets/bg-application-offices.jpg";
 import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
 import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import productBiomagFloor from "@/assets/product-biomag-floor.jpg";
+import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
+import heroEdgeline from "@/assets/hero-edgeline.jpg";
+import productBiowall from "@/assets/product-biowall.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
@@ -32,6 +36,7 @@ const productLines = [
       description: t('home.stonecore.description'),
       link: `/${language}/biomag-floor`,
       comingSoon: false,
+      image: productBiomagFloor,
     },
     {
       icon: Layers,
@@ -39,6 +44,7 @@ const productLines = [
       description: t('home.biowood.description'),
       link: `/${language}/biowood-floor`,
       comingSoon: false,
+      image: productBiowoodFloor,
     },
     {
       icon: Shield,
@@ -46,6 +52,7 @@ const productLines = [
       description: t('home.edgeline.description'),
       link: `/${language}/edgeline`,
       comingSoon: false,
+      image: heroEdgeline,
     },
     {
       icon: Sparkles,
@@ -54,6 +61,7 @@ const productLines = [
       link: `/${language}/biowall`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
+      image: productBiowall,
     },
   ];
 
@@ -108,17 +116,29 @@ const productLines = [
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-foreground/5 backdrop-blur-sm border border-foreground/10 rounded-2xl p-3 sm:p-5 md:p-6 cursor-default relative h-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] flex flex-col justify-center aspect-[3/4] md:aspect-auto"
+                    className="relative rounded-2xl overflow-hidden cursor-default h-full min-h-[200px] sm:min-h-[240px] md:min-h-[280px] aspect-[3/4] md:aspect-auto group"
                   >
-                    <div className="absolute top-3 right-3 bg-foreground/20 text-foreground text-[10px] font-medium px-2 py-1 rounded-full">
-                      {product.comingSoonLabel || "Novità in arrivo"}
+                    {/* Background Image */}
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
+                    />
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+                    
+                    {/* Content */}
+                    <div className="relative z-10 h-full flex flex-col justify-end p-4 sm:p-5 md:p-6">
+                      <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-white text-[10px] font-medium px-2 py-1 rounded-full">
+                        {product.comingSoonLabel || "Novità in arrivo"}
+                      </div>
+                      <h3 className="text-white font-semibold text-sm sm:text-base md:text-lg tracking-wider mb-2">
+                        {product.title.toUpperCase()}
+                      </h3>
+                      <p className="text-white/80 text-xs sm:text-sm leading-relaxed">
+                        {product.description}
+                      </p>
                     </div>
-                    <h3 className="text-foreground/60 font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
-                      {product.title.toUpperCase()}
-                    </h3>
-                    <p className="text-foreground/40 text-xs sm:text-sm md:text-base leading-relaxed">
-                      {product.description}
-                    </p>
                   </motion.div>
                 ) : (
                   <Link key={product.title} to={product.link} className="h-full">
@@ -129,17 +149,29 @@ const productLines = [
                       whileHover={{
                         y: -6,
                         scale: 1.02,
-                        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.15)",
+                        boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)",
                       }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="bg-foreground/10 backdrop-blur-sm border border-foreground/15 rounded-2xl p-3 sm:p-5 md:p-6 hover:bg-foreground/15 transition-colors cursor-pointer h-full min-h-[160px] sm:min-h-[180px] md:min-h-[200px] flex flex-col justify-center aspect-[3/4] md:aspect-auto"
+                      className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[200px] sm:min-h-[240px] md:min-h-[280px] aspect-[3/4] md:aspect-auto group"
                     >
-                      <h3 className="text-foreground font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-2 md:mb-3">
-                        {product.title.toUpperCase()}
-                      </h3>
-                      <p className="text-foreground/70 text-xs sm:text-sm md:text-base leading-relaxed">
-                        {product.description}
-                      </p>
+                      {/* Background Image */}
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                      
+                      {/* Content */}
+                      <div className="relative z-10 h-full flex flex-col justify-end p-4 sm:p-5 md:p-6">
+                        <h3 className="text-white font-semibold text-sm sm:text-base md:text-lg tracking-wider mb-2">
+                          {product.title.toUpperCase()}
+                        </h3>
+                        <p className="text-white/90 text-xs sm:text-sm leading-relaxed">
+                          {product.description}
+                        </p>
+                      </div>
                     </motion.div>
                   </Link>
                 )
