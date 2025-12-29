@@ -74,9 +74,9 @@ const Home = () => {
 
   const outdoorProducts = [
     {
-      title: "KALEABASE OUT®",
-      description: "Sistema di supporto per pavimentazioni outdoor.",
-      link: `/${language}/kaleabase-out`,
+      title: "KALEA ELEMENTS",
+      description: "Tutti gli accessori per completare l'installazione del pavimento Kalea Outdoor.",
+      link: `/${language}/kalea-elements`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
       image: productKaleabaseOut,
