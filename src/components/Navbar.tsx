@@ -217,16 +217,36 @@ const Navbar = () => {
   const underlineColor = useDarkStyle ? "bg-[#3F3B33]" : "bg-white";
   const dividerColor = useDarkStyle ? "text-[#3F3B33]/30" : "text-white/30";
 
-  const renderProductItem = (product: ProductItem, isDropdownItem: boolean) => {
+  const renderProductItem = (product: ProductItem, isDropdownItem: boolean, isMobileMenu: boolean = false) => {
     if (product.comingSoon) {
+      if (isMobileMenu) {
+        // Mobile/Tablet: Always show "Coming soon" text
+        return (
+          <div
+            key={product.label}
+            className="flex items-center justify-between px-4 py-2 text-sm cursor-not-allowed text-[#1a1a1a]/50"
+          >
+            <div className="flex items-center gap-2">
+              <Clock size={12} />
+              {product.label}
+            </div>
+            <span className="text-xs text-[#1a1a1a]/40 italic">Coming soon</span>
+          </div>
+        );
+      }
+      
+      // Desktop: Show tooltip on hover
       return (
         <Tooltip key={product.label}>
           <TooltipTrigger asChild>
             <div
-              className="flex items-center gap-2 px-4 py-2 text-sm cursor-not-allowed text-[#1a1a1a]/50"
+              className="flex items-center gap-2 px-4 py-2 text-sm cursor-not-allowed text-[#1a1a1a]/50 group/item"
             >
               <Clock size={12} />
               {product.label}
+              <span className="text-xs text-[#1a1a1a]/40 italic opacity-0 group-hover/item:opacity-100 transition-opacity ml-auto">
+                Coming soon
+              </span>
             </div>
           </TooltipTrigger>
           <TooltipContent side="right" className="bg-foreground text-background text-xs px-3 py-1.5 rounded-lg">
@@ -561,10 +581,13 @@ const Navbar = () => {
                                     product.comingSoon ? (
                                       <div
                                         key={product.label}
-                                        className="flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
+                                        className="flex items-center justify-between py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
                                       >
-                                        <Clock size={10} />
-                                        {product.label}
+                                        <div className="flex items-center gap-2">
+                                          <Clock size={10} />
+                                          {product.label}
+                                        </div>
+                                        <span className="text-xs italic">Coming soon</span>
                                       </div>
                                     ) : (
                                       <Link
@@ -622,10 +645,13 @@ const Navbar = () => {
                                   {category.products.map((product) => (
                                     <div
                                       key={product.label}
-                                      className="flex items-center gap-2 py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
+                                      className="flex items-center justify-between py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
                                     >
-                                      <Clock size={10} />
-                                      {product.label}
+                                      <div className="flex items-center gap-2">
+                                        <Clock size={10} />
+                                        {product.label}
+                                      </div>
+                                      <span className="text-xs italic">Coming soon</span>
                                     </div>
                                   ))}
                                 </div>
