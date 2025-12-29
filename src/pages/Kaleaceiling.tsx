@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
-import heroOutdoor from "@/assets/hero-outdoor.jpg";
+import heroKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 
 const Kaleaceiling = () => {
@@ -82,7 +82,7 @@ const Kaleaceiling = () => {
           }}
         >
           <motion.img 
-            src={heroOutdoor} 
+            src={heroKaleaceiling} 
             alt="KALEACEILING" 
             className="absolute inset-0 w-full h-full object-cover will-change-transform"
             style={{ 
