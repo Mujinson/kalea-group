@@ -79,7 +79,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
 
 const CWCGallerySection = () => {
   const { t, language } = useTranslation();
-  const { containerRef, isDragging, handlers } = useDragScroll();
+  const { containerRef, isDragging, isInteracting, handlers } = useDragScroll();
 
   // Map cwcColors to the format we need
   const products: CWCProductType[] = cwcColors.map(color => ({
@@ -88,8 +88,8 @@ const CWCGallerySection = () => {
     colorHex: color.colorHex,
   }));
 
-  // Double products for better scroll experience
-  const extendedProducts = [...products, ...products];
+  // Triple products for infinite scroll
+  const extendedProducts = [...products, ...products, ...products];
 
   return (
     <section className="h-full w-full flex flex-col justify-center bg-background overflow-hidden">
@@ -122,11 +122,15 @@ const CWCGallerySection = () => {
         <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        {/* Draggable carousel */}
+        {/* Draggable carousel with auto-scroll */}
         <div 
           ref={containerRef}
           {...handlers}
-          className={`flex gap-8 sm:gap-10 md:gap-12 overflow-x-auto scrollbar-hide px-8 md:px-16 py-4 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+          className={`flex gap-8 sm:gap-10 md:gap-12 py-4 ${
+            isInteracting 
+              ? `overflow-x-auto scrollbar-hide px-8 md:px-16 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}` 
+              : 'animate-scroll-reverse'
+          }`}
           style={{ 
             scrollBehavior: isDragging ? 'auto' : 'smooth',
             WebkitOverflowScrolling: 'touch'
