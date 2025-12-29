@@ -79,7 +79,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
 
 const CWCGallerySection = () => {
   const { t, language } = useTranslation();
-  const { containerRef, isDragging, isInteracting, handlers } = useDragScroll();
+  const { containerRef, isDragging, handlers } = useDragScroll({ autoScrollSpeed: 1, direction: 'right' });
 
   // Map cwcColors to the format we need
   const products: CWCProductType[] = cwcColors.map(color => ({
@@ -126,13 +126,8 @@ const CWCGallerySection = () => {
         <div 
           ref={containerRef}
           {...handlers}
-          className={`flex gap-8 sm:gap-10 md:gap-12 py-4 ${
-            isInteracting 
-              ? `overflow-x-auto scrollbar-hide px-8 md:px-16 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}` 
-              : 'animate-scroll-reverse'
-          }`}
+          className={`flex gap-8 sm:gap-10 md:gap-12 py-4 overflow-x-auto scrollbar-hide ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           style={{ 
-            scrollBehavior: isDragging ? 'auto' : 'smooth',
             WebkitOverflowScrolling: 'touch'
           }}
         >
