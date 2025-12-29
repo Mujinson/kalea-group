@@ -24,14 +24,16 @@ import productBiomagFloor from "@/assets/product-biomag-floor.jpg";
 import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
+import productKaleabaseOut from "@/assets/product-kaleabase-out.jpg";
+import productKaleadeck from "@/assets/product-kaleadeck.jpg";
+import productKaleaceiling from "@/assets/product-kaleaceiling.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
   const { t, language } = useTranslation();
 
-const productLines = [
+  const indoorProducts = [
     {
-      icon: Layers,
       title: t('home.stonecore.title'),
       description: t('home.stonecore.description'),
       link: `/${language}/biomag-floor`,
@@ -39,7 +41,6 @@ const productLines = [
       image: productBiomagFloor,
     },
     {
-      icon: Layers,
       title: t('home.biowood.title'),
       description: t('home.biowood.description'),
       link: `/${language}/biowood-floor`,
@@ -47,7 +48,6 @@ const productLines = [
       image: productBiowoodFloor,
     },
     {
-      icon: Shield,
       title: t('home.edgeline.title'),
       description: t('home.edgeline.description'),
       link: `/${language}/edgeline`,
@@ -55,13 +55,39 @@ const productLines = [
       image: heroEdgeline,
     },
     {
-      icon: Sparkles,
       title: t('home.onewall.title'),
       description: t('home.onewall.description'),
       link: `/${language}/biowall`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
       image: productBiowall,
+    },
+  ];
+
+  const outdoorProducts = [
+    {
+      title: "KALEABASE OUT®",
+      description: "Sistema di supporto per pavimentazioni outdoor.",
+      link: `/${language}/kaleabase-out`,
+      comingSoon: true,
+      comingSoonLabel: t('home.onewall.comingSoonLabel'),
+      image: productKaleabaseOut,
+    },
+    {
+      title: "KALEADECK®",
+      description: "Pavimentazione outdoor per portici, terrazze e piscine.",
+      link: `/${language}/kaleadeck`,
+      comingSoon: true,
+      comingSoonLabel: t('home.onewall.comingSoonLabel'),
+      image: productKaleadeck,
+    },
+    {
+      title: "KALEACEILING®",
+      description: "Rivestimenti per soffitti esterni.",
+      link: `/${language}/kaleaceiling`,
+      comingSoon: true,
+      comingSoonLabel: t('home.onewall.comingSoonLabel'),
+      image: productKaleaceiling,
     },
   ];
 
@@ -94,21 +120,30 @@ const productLines = [
       </section>
 
       {/* Products Section */}
-      <section className="relative h-screen bg-background">
-        <div className="relative z-10 h-full flex items-center justify-center">
+      <section className="relative min-h-screen bg-background py-10 md:py-16">
+        <div className="relative z-10 h-full flex flex-col justify-center">
           <div className="container-custom text-center">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="text-foreground/85 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-6 md:mb-12"
+              className="text-foreground/85 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-8 md:mb-12"
             >
               {t('hero.home.systemDescription')}
             </motion.p>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 max-w-5xl mx-auto">
-              {productLines.map((product, index) => (
+            {/* Indoor Products */}
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-lg md:text-xl font-heading font-semibold text-foreground mb-4 md:mb-6"
+            >
+              Indoor
+            </motion.h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5 max-w-5xl mx-auto mb-10 md:mb-14">
+              {indoorProducts.map((product, index) => (
                 product.comingSoon ? (
                   <motion.div
                     key={product.title}
@@ -116,26 +151,22 @@ const productLines = [
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-default h-full min-h-[200px] sm:min-h-[240px] md:min-h-[280px] aspect-[3/4] md:aspect-auto group"
+                    className="relative rounded-2xl overflow-hidden cursor-default h-full min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group"
                   >
-                    {/* Background Image */}
                     <img
                       src={product.image}
                       alt={product.title}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
                     />
-                    {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                    
-                    {/* Content */}
-                    <div className="relative z-10 h-full flex flex-col justify-end p-4 sm:p-5 md:p-6">
-                      <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-white text-[10px] font-medium px-2 py-1 rounded-full">
+                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
+                      <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full">
                         {product.comingSoonLabel || "Novità in arrivo"}
                       </div>
-                      <h3 className="text-white font-semibold text-sm sm:text-base md:text-lg tracking-wider mb-2">
+                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">
                         {product.title.toUpperCase()}
                       </h3>
-                      <p className="text-white/80 text-xs sm:text-sm leading-relaxed">
+                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">
                         {product.description}
                       </p>
                     </div>
@@ -152,29 +183,65 @@ const productLines = [
                         boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)",
                       }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[200px] sm:min-h-[240px] md:min-h-[280px] aspect-[3/4] md:aspect-auto group"
+                      className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group"
                     >
-                      {/* Background Image */}
                       <img
                         src={product.image}
                         alt={product.title}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      {/* Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                      
-                      {/* Content */}
-                      <div className="relative z-10 h-full flex flex-col justify-end p-4 sm:p-5 md:p-6">
-                        <h3 className="text-white font-semibold text-sm sm:text-base md:text-lg tracking-wider mb-2">
+                      <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
+                        <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">
                           {product.title.toUpperCase()}
                         </h3>
-                        <p className="text-white/90 text-xs sm:text-sm leading-relaxed">
+                        <p className="text-white/90 text-[10px] sm:text-xs leading-relaxed line-clamp-2">
                           {product.description}
                         </p>
                       </div>
                     </motion.div>
                   </Link>
                 )
+              ))}
+            </div>
+
+            {/* Outdoor Products */}
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-lg md:text-xl font-heading font-semibold text-foreground mb-4 md:mb-6"
+            >
+              Outdoor
+            </motion.h3>
+            <div className="grid grid-cols-3 gap-3 md:gap-5 max-w-4xl mx-auto">
+              {outdoorProducts.map((product, index) => (
+                <motion.div
+                  key={product.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="relative rounded-2xl overflow-hidden cursor-default h-full min-h-[180px] sm:min-h-[200px] md:min-h-[220px] group"
+                >
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+                  <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
+                    <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full">
+                      {product.comingSoonLabel || "Novità in arrivo"}
+                    </div>
+                    <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">
+                      {product.title}
+                    </h3>
+                    <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">
+                      {product.description}
+                    </p>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
