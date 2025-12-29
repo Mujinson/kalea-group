@@ -16,7 +16,7 @@ import cucinaPerla from "@/assets/realizzazione-cucina-perla.jpg";
 import ufficioSilven from "@/assets/realizzazione-ufficio-silven.jpg";
 import ufficioPerla from "@/assets/realizzazione-ufficio-perla-v2.jpg";
 import soggiornoTerram from "@/assets/realizzazione-soggiorno-terram.jpg";
-import soggiornoAurora from "@/assets/realizzazione-soggiorno-aurora.jpg";
+import villaNordica from "@/assets/realizzazione-villa-nordica-kalea.png";
 import negozioVelora from "@/assets/realizzazione-negozio-velora.jpg";
 import retailSabbia from "@/assets/realizzazione-retail-sabbia-v2.jpg";
 import cameraPerla from "@/assets/realizzazione-camera-perla.jpg";
@@ -38,7 +38,7 @@ const projects: Project[] = [
   // Soggiorni
   {
     id: "1",
-    image: soggiornoAurora,
+    image: villaNordica,
     category: "Soggiorno",
     color: "Aurora",
     title: "Villa Nordica",
