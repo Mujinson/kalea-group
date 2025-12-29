@@ -37,10 +37,10 @@ const Outdoor = () => {
 
   const products: Product[] = [
     {
-      name: "KALEABASE OUT®",
-      description: "Sistema di supporto per pavimentazioni outdoor.",
+      name: "KALEA ELEMENTS",
+      description: "Tutti gli accessori per completare l'installazione del pavimento Kalea Outdoor.",
       image: productKaleabaseOut,
-      link: `/${language}/kaleabase-out`,
+      link: `/${language}/kalea-elements`,
     },
     {
       name: "KALEADECK®",
