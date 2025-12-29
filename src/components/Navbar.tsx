@@ -115,10 +115,7 @@ const Navbar = () => {
         {
           label: t('nav.accessories'),
           products: [
-            { label: "KALEABASE®", path: null, comingSoon: true },
-            { label: "KALEABASE SILENCE®", path: null, comingSoon: true },
-            { label: "KALEABASE AQUA®", path: null, comingSoon: true },
-            { label: "KALEABASE PRO®", path: null, comingSoon: true },
+            { label: "KALEABASE®", path: `/${language}/kaleabase`, comingSoon: false },
           ]
         },
         {
@@ -141,7 +138,6 @@ const Navbar = () => {
         {
           label: t('nav.accessories'),
           products: [
-            { label: "KALEABASE OUT®", path: null, comingSoon: true },
             { label: "KALEABASE DRAIN®", path: null, comingSoon: true },
           ]
         },
