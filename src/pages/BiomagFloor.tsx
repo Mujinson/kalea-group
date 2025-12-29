@@ -11,7 +11,7 @@ import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-stonecore.jpg";
+import heroImage from "@/assets/hero-biomag-floor.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import stonecoreLayers from "@/assets/stonecore-layers.png";
