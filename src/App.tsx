@@ -29,6 +29,7 @@ import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
 import SustainabilityMaintenance from "./pages/SustainabilityMaintenance";
 import Normative from "./pages/Normative";
+import Realizzazioni from "./pages/Realizzazioni";
 import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
@@ -152,6 +153,7 @@ const App = () => (
               <Route path="/it/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
               <Route path="/it/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/it/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+              <Route path="/it/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
 
               {/* English routes */}
               <Route path="/en" element={<><SEOHandler /><Layout><Home /></Layout></>} />
@@ -177,6 +179,7 @@ const App = () => (
               <Route path="/en/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
               <Route path="/en/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/en/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+              <Route path="/en/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
 
               {/* German routes */}
               <Route path="/de" element={<><SEOHandler /><Layout><Home /></Layout></>} />
@@ -202,6 +205,7 @@ const App = () => (
               <Route path="/de/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
               <Route path="/de/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/de/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+              <Route path="/de/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
 
               {/* French routes */}
               <Route path="/fr" element={<><SEOHandler /><Layout><Home /></Layout></>} />
@@ -227,6 +231,7 @@ const App = () => (
               <Route path="/fr/sostenibilita/lunga-durata" element={<><SEOHandler /><Layout><SustainabilityDurability /></Layout></>} />
               <Route path="/fr/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/fr/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
+              <Route path="/fr/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
