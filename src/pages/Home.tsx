@@ -25,7 +25,7 @@ import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
 import productKaleabaseOut from "@/assets/product-kaleabase-out.jpg";
-import productKaleabase from "@/assets/product-kaleabase.jpg";
+import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
