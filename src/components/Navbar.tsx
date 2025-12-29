@@ -275,14 +275,12 @@ const Navbar = () => {
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
       animate={{ 
-        opacity: 1, 
-        y: 0,
-        transform: isVisible ? "translateY(0)" : "translateY(-100%)"
+        opacity: isVisible ? 1 : 0, 
+        y: isVisible ? 0 : -100,
       }}
       transition={{ 
-        opacity: { duration: 0.6, ease: "easeOut" },
-        y: { duration: 0.6, ease: "easeOut" },
-        transform: { duration: 0.25, ease: "easeOut" }
+        opacity: { duration: 0.25, ease: "easeOut" },
+        y: { duration: 0.25, ease: "easeOut" }
       }}
       className="fixed top-0 left-0 right-0 z-50 px-4 md:px-8 lg:px-16 xl:px-32"
     >
