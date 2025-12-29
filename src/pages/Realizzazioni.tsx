@@ -115,7 +115,7 @@ const Realizzazioni = () => {
     : projects.filter(p => p.category === activeCategory);
 
   return (
-    <main className="min-h-screen bg-kalea-cream">
+    <main className="relative z-10 min-h-screen">
       {/* Hero Section */}
       <HeroSection
         title="REALIZZAZIONI"
@@ -124,8 +124,8 @@ const Realizzazioni = () => {
         overlayClassName="bg-gradient-to-b from-black/30 via-black/20 to-black/40"
       />
 
-      {/* Projects Grid */}
-      <section className="bg-kalea-cream py-20 md:py-32">
+      {/* Projects Grid - solid background to cover fixed hero */}
+      <section className="relative z-20 py-20 md:py-32" style={{ backgroundColor: '#F7F1E7' }}>
         <div className="container mx-auto px-4 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -214,7 +214,7 @@ const Realizzazioni = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-card-beige py-20 md:py-32">
+      <section className="relative z-20 py-20 md:py-32" style={{ backgroundColor: '#C6B195' }}>
         <div className="container mx-auto px-4 md:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
