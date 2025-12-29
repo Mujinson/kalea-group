@@ -115,7 +115,7 @@ const Realizzazioni = () => {
     : projects.filter(p => p.category === activeCategory);
 
   return (
-    <main className="bg-background">
+    <main className="min-h-screen bg-kalea-cream">
       {/* Hero Section */}
       <HeroSection
         title="REALIZZAZIONI"
@@ -125,7 +125,7 @@ const Realizzazioni = () => {
       />
 
       {/* Projects Grid */}
-      <section className="bg-background py-20 md:py-32">
+      <section className="bg-kalea-cream py-20 md:py-32">
         <div className="container mx-auto px-4 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
