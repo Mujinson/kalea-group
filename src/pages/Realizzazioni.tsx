@@ -8,22 +8,22 @@ import heroImage from "@/assets/hero-biomag-floor.jpg";
 
 // Realizzazioni images
 import bagnoAurora from "@/assets/realizzazione-bagno-aurora.jpg";
-import bagnoSilven from "@/assets/realizzazione-bagno-silven.jpg";
+import bagnoSilven from "@/assets/realizzazione-bagno-silven-v2.jpg";
 import hotelCorteccia from "@/assets/realizzazione-hotel-corteccia.jpg";
 import hotelTerram from "@/assets/realizzazione-hotel-terram.jpg";
 import cucinaSabbia from "@/assets/realizzazione-cucina-sabbia.jpg";
 import cucinaPerla from "@/assets/realizzazione-cucina-perla.jpg";
 import ufficioSilven from "@/assets/realizzazione-ufficio-silven.jpg";
-import ufficioPerla from "@/assets/realizzazione-ufficio-perla.jpg";
+import ufficioPerla from "@/assets/realizzazione-ufficio-perla-v2.jpg";
 import soggiornoTerram from "@/assets/realizzazione-soggiorno-terram.jpg";
 import soggiornoAurora from "@/assets/realizzazione-soggiorno-aurora.jpg";
 import negozioVelora from "@/assets/realizzazione-negozio-velora.jpg";
-import retailSabbia from "@/assets/realizzazione-retail-sabbia.jpg";
+import retailSabbia from "@/assets/realizzazione-retail-sabbia-v2.jpg";
 import cameraPerla from "@/assets/realizzazione-camera-perla.jpg";
 import cameraAurora from "@/assets/realizzazione-camera-aurora.jpg";
-import ristoranteCorteccia from "@/assets/realizzazione-ristorante-corteccia.jpg";
+import ristoranteCorteccia from "@/assets/realizzazione-ristorante-corteccia-v2.jpg";
 import clinicaSilven from "@/assets/realizzazione-clinica-silven.jpg";
-import wineBarTerram from "@/assets/realizzazione-wine-bar-terram.jpg";
+import wineBarTerram from "@/assets/realizzazione-wine-bar-terram-v2.jpg";
 
 interface Project {
   id: string;
