@@ -19,6 +19,8 @@ interface HitobaScrollOptions {
   disableOnMobile?: boolean;
   /** Use simplified effects on mobile */
   simplifiedOnMobile?: boolean;
+  /** Dead zone at start of scroll (0-1) where no animation occurs */
+  scrollDeadZone?: number;
 }
 
 interface HitobaScrollResult {
@@ -48,6 +50,7 @@ export function useHitobaScroll(
     contentYRange = [0, -80],
     disableOnMobile = false,
     simplifiedOnMobile = true,
+    scrollDeadZone = 0,
   } = options;
 
   const { scrollYProgress } = useScroll({
@@ -73,44 +76,47 @@ export function useHitobaScroll(
     : contentYRange;
 
   const shouldAnimate = !(isMobile && disableOnMobile);
+  
+  // Dead zone offset - animations start after this scroll percentage
+  const dz = scrollDeadZone;
 
-  // Transform values
+  // Transform values with dead zone support
   const scale = useTransform(
     scrollYProgress, 
-    [0, 1], 
-    shouldAnimate ? effectiveScaleRange : [1, 1]
+    [0, dz, 1], 
+    shouldAnimate ? [effectiveScaleRange[0], effectiveScaleRange[0], effectiveScaleRange[1]] : [1, 1, 1]
   );
   
   const borderRadius = useTransform(
     scrollYProgress, 
-    [0, 0.5], 
+    [0, dz, 0.5], 
     shouldAnimate 
-      ? [`${effectiveBorderRadiusRange[0]}px`, `${effectiveBorderRadiusRange[1]}px`]
-      : ["0px", "0px"]
+      ? [`${effectiveBorderRadiusRange[0]}px`, `${effectiveBorderRadiusRange[0]}px`, `${effectiveBorderRadiusRange[1]}px`]
+      : ["0px", "0px", "0px"]
   );
   
   const imageY = useTransform(
     scrollYProgress, 
-    [0, 1], 
-    shouldAnimate ? effectiveParallaxRange : ["0%", "0%"]
+    [0, dz, 1], 
+    shouldAnimate ? [effectiveParallaxRange[0], effectiveParallaxRange[0], effectiveParallaxRange[1]] : ["0%", "0%", "0%"]
   );
   
   const contentOpacity = useTransform(
     scrollYProgress, 
-    [0, 0.3], 
-    shouldAnimate ? contentOpacityRange : [1, 1]
+    [0, dz, dz + 0.3], 
+    shouldAnimate ? [contentOpacityRange[0], contentOpacityRange[0], contentOpacityRange[1]] : [1, 1, 1]
   );
   
   const contentY = useTransform(
     scrollYProgress, 
-    [0, 0.4], 
-    shouldAnimate ? effectiveContentYRange : [0, 0]
+    [0, dz, dz + 0.4], 
+    shouldAnimate ? [effectiveContentYRange[0], effectiveContentYRange[0], effectiveContentYRange[1]] : [0, 0, 0]
   );
 
   const overlayOpacity = useTransform(
     scrollYProgress, 
-    [0, 0.5], 
-    [1, 0.6]
+    [0, dz, 0.5], 
+    [1, 1, 0.6]
   );
 
   return {
