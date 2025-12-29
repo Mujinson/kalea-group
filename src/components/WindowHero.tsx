@@ -106,10 +106,10 @@ const WindowHero = () => {
   const glowOpacity = useTransform(scrollYProgress, [0, DZ + 0.20], [0.7, 0]);
   const glowScale = useTransform(scrollYProgress, [0, DZ + 0.35], [1, 1.5]);
 
-  // CTA buttons appear much earlier - at 15% scroll (after dead zone and initial text fadeout)
-  const ctaOpacity = useTransform(scrollYProgress, [DZ + 0.10, DZ + 0.18], [0, 1]);
+  // CTA buttons appear after background is visible (around 45-55% scroll)
+  const ctaOpacity = useTransform(scrollYProgress, [DZ + 0.42, DZ + 0.52], [0, 1]);
   const ctaVisibility = useTransform(scrollYProgress, (progress) => 
-    progress < (DZ + 0.10) ? "hidden" : "visible"
+    progress < (DZ + 0.42) ? "hidden" : "visible"
   );
 
   // Floating panels - same scale as window, fade with window
@@ -146,7 +146,7 @@ const WindowHero = () => {
           style={{ 
             opacity: ctaOpacity,
             visibility: ctaVisibility,
-            pointerEvents: useTransform(scrollYProgress, (progress) => progress < (0.05 + 0.10) ? "none" : "auto"),
+            pointerEvents: useTransform(scrollYProgress, (progress) => progress < (0.05 + 0.42) ? "none" : "auto"),
           }}
         >
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
