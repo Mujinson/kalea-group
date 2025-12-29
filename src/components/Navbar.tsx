@@ -116,6 +116,7 @@ const Navbar = () => {
           label: t('nav.accessories'),
           products: [
             { label: "KALEABASE®", path: `/${language}/kaleabase`, comingSoon: false },
+            { label: "EDGELINE®", path: `/${language}/edgeline`, comingSoon: false },
           ]
         },
         {
