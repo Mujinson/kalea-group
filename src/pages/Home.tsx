@@ -25,6 +25,7 @@ import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
 import productKaleabaseOut from "@/assets/product-kaleabase-out.jpg";
+import productKaleabase from "@/assets/product-kaleabase.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -53,6 +54,13 @@ const Home = () => {
       link: `/${language}/edgeline`,
       comingSoon: false,
       image: heroEdgeline,
+    },
+    {
+      title: "KALEABASE®",
+      description: "Sistemi modulari di sottopavimento per ogni esigenza.",
+      link: `/${language}/kaleabase`,
+      comingSoon: false,
+      image: productKaleabase,
     },
     {
       title: t('home.onewall.title'),
