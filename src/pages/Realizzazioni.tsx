@@ -6,7 +6,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 // Hero image
 import heroImage from "@/assets/hero-biomag-floor.jpg";
 
-// Realizzazioni images - Set 1
+// Realizzazioni images - Available images
 import bagnoAurora from "@/assets/realizzazione-bagno-aurora.jpg";
 import hotelCorteccia from "@/assets/realizzazione-hotel-corteccia.jpg";
 import cucinaSabbia from "@/assets/realizzazione-cucina-sabbia.jpg";
@@ -14,31 +14,6 @@ import ufficioSilven from "@/assets/realizzazione-ufficio-silven.jpg";
 import soggiornoTerram from "@/assets/realizzazione-soggiorno-terram.jpg";
 import negozioVelora from "@/assets/realizzazione-negozio-velora.jpg";
 import cameraPerla from "@/assets/realizzazione-camera-perla.jpg";
-
-// Realizzazioni images - Set 2
-import bagnoSabbia from "@/assets/realizzazione-bagno-sabbia.jpg";
-import hotelTerram from "@/assets/realizzazione-hotel-terram.jpg";
-import cucinaPerla from "@/assets/realizzazione-cucina-perla.jpg";
-import ufficioVelora from "@/assets/realizzazione-ufficio-velora.jpg";
-import soggiornoCorteccia from "@/assets/realizzazione-soggiorno-corteccia.jpg";
-import negozioSilven from "@/assets/realizzazione-negozio-silven.jpg";
-import cameraAurora from "@/assets/realizzazione-camera-aurora.jpg";
-
-// Realizzazioni images - Set 3
-import bagnoVelora from "@/assets/realizzazione-bagno-velora.jpg";
-import hotelSilven from "@/assets/realizzazione-hotel-silven.jpg";
-import cucinaAurora from "@/assets/realizzazione-cucina-aurora.jpg";
-import ufficioTerram from "@/assets/realizzazione-ufficio-terram.jpg";
-import soggiornoSilven from "@/assets/realizzazione-soggiorno-silven.jpg";
-import negozioPerla from "@/assets/realizzazione-negozio-perla.jpg";
-import cameraSabbia from "@/assets/realizzazione-camera-sabbia.jpg";
-
-// Realizzazioni images - Set 4
-import bagnoTerram from "@/assets/realizzazione-bagno-terram.jpg";
-import cucinaVelora from "@/assets/realizzazione-cucina-velora.jpg";
-import ufficioSabbia from "@/assets/realizzazione-ufficio-sabbia.jpg";
-import soggiornoAurora from "@/assets/realizzazione-soggiorno-aurora.jpg";
-import negozioCorteccia from "@/assets/realizzazione-negozio-corteccia.jpg";
 
 interface Project {
   id: string;
@@ -67,217 +42,65 @@ const projects: Project[] = [
     title: "Living Room Hygge",
     location: "Stoccolma, Svezia"
   },
-  {
-    id: "3",
-    image: soggiornoCorteccia,
-    category: "Soggiorno",
-    color: "Corteccia",
-    title: "Attico Panoramico",
-    location: "Barcellona, Spagna"
-  },
-  {
-    id: "4",
-    image: soggiornoSilven,
-    category: "Soggiorno",
-    color: "Silven",
-    title: "Loft Industriale",
-    location: "Berlino, Germania"
-  },
-  {
-    id: "5",
-    image: soggiornoAurora,
-    category: "Soggiorno",
-    color: "Aurora",
-    title: "Casa sul Lago",
-    location: "Como, Italia"
-  },
   
   // Bagni
   {
-    id: "6",
+    id: "3",
     image: bagnoAurora,
     category: "Bagno",
     color: "Aurora",
     title: "Suite Spa Privata",
     location: "Milano, Italia"
   },
-  {
-    id: "7",
-    image: bagnoSabbia,
-    category: "Bagno",
-    color: "Sabbia",
-    title: "Bagno Minimalista",
-    location: "Amsterdam, Olanda"
-  },
-  {
-    id: "8",
-    image: bagnoVelora,
-    category: "Bagno",
-    color: "Velora",
-    title: "Wellness Suite",
-    location: "Ginevra, Svizzera"
-  },
-  {
-    id: "9",
-    image: bagnoTerram,
-    category: "Bagno",
-    color: "Terram",
-    title: "Bagno Rustico Moderno",
-    location: "Toscana, Italia"
-  },
   
   // Cucine
   {
-    id: "10",
+    id: "4",
     image: cucinaSabbia,
     category: "Cucina",
     color: "Sabbia",
     title: "Cucina Contemporanea",
     location: "Zurigo, Svizzera"
   },
-  {
-    id: "11",
-    image: cucinaPerla,
-    category: "Cucina",
-    color: "Perla",
-    title: "Cucina Open Space",
-    location: "Lisbona, Portogallo"
-  },
-  {
-    id: "12",
-    image: cucinaAurora,
-    category: "Cucina",
-    color: "Aurora",
-    title: "Cucina Chef's Table",
-    location: "Lione, Francia"
-  },
-  {
-    id: "13",
-    image: cucinaVelora,
-    category: "Cucina",
-    color: "Velora",
-    title: "Cucina Professionale",
-    location: "Monaco, Germania"
-  },
   
   // Camere
   {
-    id: "14",
+    id: "5",
     image: cameraPerla,
     category: "Camera",
     color: "Perla",
     title: "Master Bedroom Suite",
     location: "Vienna, Austria"
   },
-  {
-    id: "15",
-    image: cameraAurora,
-    category: "Camera",
-    color: "Aurora",
-    title: "Camera Boutique",
-    location: "Praga, Repubblica Ceca"
-  },
-  {
-    id: "16",
-    image: cameraSabbia,
-    category: "Camera",
-    color: "Sabbia",
-    title: "Suite Romantica",
-    location: "Venezia, Italia"
-  },
   
   // Hotel
   {
-    id: "17",
+    id: "6",
     image: hotelCorteccia,
     category: "Hotel",
     color: "Corteccia",
     title: "Boutique Hotel Suite",
     location: "Firenze, Italia"
   },
-  {
-    id: "18",
-    image: hotelTerram,
-    category: "Hotel",
-    color: "Terram",
-    title: "Grand Hotel Lobby",
-    location: "Roma, Italia"
-  },
-  {
-    id: "19",
-    image: hotelSilven,
-    category: "Hotel",
-    color: "Silven",
-    title: "Design Hotel Reception",
-    location: "Oslo, Norvegia"
-  },
   
   // Uffici
   {
-    id: "20",
+    id: "7",
     image: ufficioSilven,
     category: "Ufficio",
     color: "Silven",
     title: "Headquarters Corporate",
     location: "Monaco, Germania"
   },
-  {
-    id: "21",
-    image: ufficioVelora,
-    category: "Ufficio",
-    color: "Velora",
-    title: "Co-Working Space",
-    location: "Madrid, Spagna"
-  },
-  {
-    id: "22",
-    image: ufficioTerram,
-    category: "Ufficio",
-    color: "Terram",
-    title: "Studio Legale",
-    location: "Londra, Regno Unito"
-  },
-  {
-    id: "23",
-    image: ufficioSabbia,
-    category: "Ufficio",
-    color: "Sabbia",
-    title: "Startup Hub",
-    location: "Dublino, Irlanda"
-  },
   
   // Retail
   {
-    id: "24",
+    id: "8",
     image: negozioVelora,
     category: "Retail",
     color: "Velora",
     title: "Fashion Boutique",
     location: "Parigi, Francia"
-  },
-  {
-    id: "25",
-    image: negozioSilven,
-    category: "Retail",
-    color: "Silven",
-    title: "Luxury Showroom",
-    location: "Milano, Italia"
-  },
-  {
-    id: "26",
-    image: negozioPerla,
-    category: "Retail",
-    color: "Perla",
-    title: "Concept Store",
-    location: "Copenhagen, Danimarca"
-  },
-  {
-    id: "27",
-    image: negozioCorteccia,
-    category: "Retail",
-    color: "Corteccia",
-    title: "Gioielleria Premium",
-    location: "Bruxelles, Belgio"
   }
 ];
 
