@@ -6,14 +6,24 @@ import { useTranslation } from "@/i18n/useTranslation";
 // Hero image
 import heroImage from "@/assets/hero-biomag-floor.jpg";
 
-// Realizzazioni images - Available images
+// Realizzazioni images
 import bagnoAurora from "@/assets/realizzazione-bagno-aurora.jpg";
+import bagnoSilven from "@/assets/realizzazione-bagno-silven.jpg";
 import hotelCorteccia from "@/assets/realizzazione-hotel-corteccia.jpg";
+import hotelTerram from "@/assets/realizzazione-hotel-terram.jpg";
 import cucinaSabbia from "@/assets/realizzazione-cucina-sabbia.jpg";
+import cucinaPerla from "@/assets/realizzazione-cucina-perla.jpg";
 import ufficioSilven from "@/assets/realizzazione-ufficio-silven.jpg";
+import ufficioPerla from "@/assets/realizzazione-ufficio-perla.jpg";
 import soggiornoTerram from "@/assets/realizzazione-soggiorno-terram.jpg";
+import soggiornoAurora from "@/assets/realizzazione-soggiorno-aurora.jpg";
 import negozioVelora from "@/assets/realizzazione-negozio-velora.jpg";
+import retailSabbia from "@/assets/realizzazione-retail-sabbia.jpg";
 import cameraPerla from "@/assets/realizzazione-camera-perla.jpg";
+import cameraAurora from "@/assets/realizzazione-camera-aurora.jpg";
+import ristoranteCorteccia from "@/assets/realizzazione-ristorante-corteccia.jpg";
+import clinicaSilven from "@/assets/realizzazione-clinica-silven.jpg";
+import wineBarTerram from "@/assets/realizzazione-wine-bar-terram.jpg";
 
 interface Project {
   id: string;
@@ -28,7 +38,7 @@ const projects: Project[] = [
   // Soggiorni
   {
     id: "1",
-    image: heroImage,
+    image: soggiornoAurora,
     category: "Soggiorno",
     color: "Aurora",
     title: "Villa Nordica",
@@ -52,55 +62,129 @@ const projects: Project[] = [
     title: "Suite Spa Privata",
     location: "Milano, Italia"
   },
+  {
+    id: "4",
+    image: bagnoSilven,
+    category: "Bagno",
+    color: "Silven",
+    title: "Bagno Contemporaneo",
+    location: "Londra, UK"
+  },
   
   // Cucine
   {
-    id: "4",
+    id: "5",
     image: cucinaSabbia,
     category: "Cucina",
     color: "Sabbia",
-    title: "Cucina Contemporanea",
+    title: "Cucina Mediterranea",
     location: "Zurigo, Svizzera"
+  },
+  {
+    id: "6",
+    image: cucinaPerla,
+    category: "Cucina",
+    color: "Perla",
+    title: "Cucina Luminosa",
+    location: "Amsterdam, Paesi Bassi"
   },
   
   // Camere
   {
-    id: "5",
+    id: "7",
     image: cameraPerla,
     category: "Camera",
     color: "Perla",
     title: "Master Bedroom Suite",
     location: "Vienna, Austria"
   },
+  {
+    id: "8",
+    image: cameraAurora,
+    category: "Camera",
+    color: "Aurora",
+    title: "Camera Scandinava",
+    location: "Oslo, Norvegia"
+  },
   
   // Hotel
   {
-    id: "6",
+    id: "9",
     image: hotelCorteccia,
     category: "Hotel",
     color: "Corteccia",
     title: "Boutique Hotel Suite",
     location: "Firenze, Italia"
   },
+  {
+    id: "10",
+    image: hotelTerram,
+    category: "Hotel",
+    color: "Terram",
+    title: "Grand Hotel Lobby",
+    location: "Roma, Italia"
+  },
   
   // Uffici
   {
-    id: "7",
+    id: "11",
     image: ufficioSilven,
     category: "Ufficio",
     color: "Silven",
     title: "Headquarters Corporate",
     location: "Monaco, Germania"
   },
+  {
+    id: "12",
+    image: ufficioPerla,
+    category: "Ufficio",
+    color: "Perla",
+    title: "Tech Startup Office",
+    location: "Berlino, Germania"
+  },
   
   // Retail
   {
-    id: "8",
+    id: "13",
     image: negozioVelora,
     category: "Retail",
     color: "Velora",
     title: "Fashion Boutique",
     location: "Parigi, Francia"
+  },
+  {
+    id: "14",
+    image: retailSabbia,
+    category: "Retail",
+    color: "Sabbia",
+    title: "Luxury Department Store",
+    location: "Madrid, Spagna"
+  },
+  
+  // Hospitality
+  {
+    id: "15",
+    image: ristoranteCorteccia,
+    category: "Hotel",
+    color: "Corteccia",
+    title: "Ristorante Gourmet",
+    location: "Barcellona, Spagna"
+  },
+  {
+    id: "16",
+    image: wineBarTerram,
+    category: "Hotel",
+    color: "Terram",
+    title: "Wine Bar d'Autore",
+    location: "Bordeaux, Francia"
+  },
+  {
+    id: "17",
+    image: clinicaSilven,
+    category: "Ufficio",
+    color: "Silven",
+    title: "Clinica Dentale Premium",
+    location: "Ginevra, Svizzera"
   }
 ];
 
