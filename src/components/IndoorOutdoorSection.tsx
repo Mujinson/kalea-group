@@ -26,16 +26,16 @@ const IndoorOutdoorSection = () => {
   ];
 
   return (
-    <section className="relative min-h-screen bg-background">
-      <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
+    <section className="relative min-h-screen bg-background py-10 md:py-16 px-4 md:px-8 lg:px-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 h-[calc(100vh-5rem)] md:h-[calc(100vh-8rem)]">
         {sections.map((section, index) => (
           <motion.div
             key={section.title}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: index * 0.2 }}
-            className="relative group overflow-hidden min-h-[50vh] md:min-h-screen"
+            className="relative group overflow-hidden rounded-2xl md:rounded-3xl"
           >
             {/* Background Image */}
             <div className="absolute inset-0">
@@ -49,13 +49,13 @@ const IndoorOutdoorSection = () => {
             </div>
 
             {/* Content */}
-            <div className="relative z-10 h-full flex flex-col justify-end p-8 md:p-12 lg:p-16">
+            <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-12">
               <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 + index * 0.2 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-4"
+                className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3"
               >
                 {section.title}
               </motion.h2>
@@ -65,7 +65,7 @@ const IndoorOutdoorSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 + index * 0.2 }}
-                className="text-base md:text-lg text-white/90 mb-6 max-w-md leading-relaxed"
+                className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed"
               >
                 {section.description}
               </motion.p>
@@ -78,11 +78,11 @@ const IndoorOutdoorSection = () => {
               >
                 <Link
                   to={section.link}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white font-medium transition-all duration-300 hover:bg-white hover:text-[#3F3B33] hover:border-white group/btn"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 hover:bg-white hover:text-[#3F3B33] hover:border-white group/btn"
                 >
                   {section.buttonText}
                   <ArrowRight 
-                    size={18} 
+                    size={16} 
                     className="transition-transform duration-300 group-hover/btn:translate-x-1" 
                   />
                 </Link>
