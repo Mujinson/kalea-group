@@ -101,7 +101,7 @@ const CWCGallerySection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-<h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-2 md:mb-4">
+<h2 className="text-[clamp(1.25rem,5vw,3rem)] font-heading font-bold text-foreground mb-2 md:mb-4 whitespace-nowrap">
             {language === 'it' ? 'Esplora la Collezione BIOWOOD FLOOR®' : 
              language === 'en' ? 'Explore the BIOWOOD FLOOR® Collection' :
              language === 'de' ? 'Entdecken Sie die BIOWOOD FLOOR®-Kollektion' :
