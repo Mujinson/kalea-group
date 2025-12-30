@@ -26,8 +26,8 @@ const IndoorOutdoorSection = () => {
   ];
 
   return (
-    <section className="relative min-h-screen bg-background py-10 md:py-16 px-4 md:px-8 lg:px-12 overflow-x-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full max-w-full">
+    <section className="relative min-h-screen bg-background py-10 md:py-16 px-4 md:px-8 lg:px-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 h-[calc(100vh-5rem)] md:h-[calc(100vh-8rem)]">
         {sections.map((section, index) => (
           <motion.div
             key={section.title}
@@ -35,7 +35,7 @@ const IndoorOutdoorSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: index * 0.2 }}
-            className="relative group overflow-hidden rounded-2xl md:rounded-3xl aspect-[4/3] md:aspect-[16/10]"
+            className="relative group overflow-hidden rounded-2xl md:rounded-3xl"
           >
             {/* Background Image */}
             <div className="absolute inset-0">
