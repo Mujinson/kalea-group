@@ -99,22 +99,26 @@ const FloatingPanel = ({ panel, width, height, shadowSize }: FloatingPanelProps)
           className="w-full h-full object-cover"
         />
         
-        {/* Keyword overlay */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center bg-black/60"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
+      </motion.div>
+      
+      {/* Keyword that expands OUT of the panel */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ 
+          opacity: isHovered ? 1 : 0,
+          scale: isHovered ? 2.5 : 0.5,
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        <span 
+          className={`text-white font-bold tracking-wider text-center whitespace-nowrap ${fontSizeMap[shadowSize]}`}
+          style={{
+            textShadow: '0 2px 20px rgba(0,0,0,0.9), 0 4px 40px rgba(0,0,0,0.7)',
+          }}
         >
-          <span 
-            className={`text-white font-bold tracking-wider text-center px-2 leading-tight ${fontSizeMap[shadowSize]}`}
-            style={{
-              textShadow: '0 2px 10px rgba(0,0,0,0.8)',
-            }}
-          >
-            {panel.keyword}
-          </span>
-        </motion.div>
+          {panel.keyword}
+        </span>
       </motion.div>
     </motion.div>
   );
