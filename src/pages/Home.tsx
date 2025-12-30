@@ -115,7 +115,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="relative bg-background">
+    <div className="relative bg-background overflow-x-hidden">
       {/* Window Hero Section */}
       <WindowHero />
 
@@ -214,8 +214,8 @@ const Home = () => {
               ))}
             </div>
             
-            {/* Second row: 2 cards centered */}
-            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto mb-10 md:mb-14">
+            {/* Second row: 2 cards */}
+            <div className="grid grid-cols-2 gap-3 max-w-5xl mx-auto mb-10 md:mb-14 md:flex md:justify-center md:gap-5">
               {indoorProducts.slice(3).map((product, index) => (
                 product.comingSoon ? (
                   <motion.div
@@ -224,7 +224,7 @@ const Home = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: (index + 3) * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group w-[calc(50%-6px)] md:w-[calc(33.333%-14px)]"
+                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group min-w-0 md:w-[calc(33.333%-14px)]"
                   >
                     <img
                       src={product.image}
@@ -245,7 +245,7 @@ const Home = () => {
                     </div>
                   </motion.div>
                 ) : (
-                  <Link key={product.title} to={product.link} className="w-[calc(50%-6px)] md:w-[calc(33.333%-14px)]">
+                  <Link key={product.title} to={product.link} className="min-w-0 md:w-[calc(33.333%-14px)]">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -256,7 +256,7 @@ const Home = () => {
                         boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)",
                       }}
                       transition={{ duration: 0.5, delay: (index + 3) * 0.1 }}
-                      className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group"
+                      className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group min-w-0"
                     >
                       <img
                         src={product.image}
@@ -287,7 +287,7 @@ const Home = () => {
             >
               Outdoor
             </motion.h3>
-            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto">
+            <div className="grid grid-cols-2 gap-3 max-w-5xl mx-auto md:flex md:justify-center md:gap-5">
               {outdoorProducts.map((product, index) => (
                 <motion.div
                   key={product.title}
@@ -295,7 +295,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative rounded-2xl overflow-hidden cursor-default min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group w-[calc(33.333%-8px)] md:w-[calc(33.333%-14px)]"
+                  className="relative rounded-2xl overflow-hidden cursor-default min-h-[180px] sm:min-h-[200px] md:min-h-[220px] aspect-[3/4] md:aspect-auto group min-w-0 md:w-[calc(33.333%-14px)]"
                 >
                   <img
                     src={product.image}
