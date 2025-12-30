@@ -20,8 +20,8 @@ const panelKeywords = [
   "IGNIFUGO", 
   "IMPERMEABILE",
   "NATURALE",
-  "WOOW",
-  "ZERO VOC",
+  "ANTIMUFFA",
+  "ANTIBATTERICO",
 ];
 
 // 6 panels - 3 on each side, shaped like floor planks (longer than wide)
