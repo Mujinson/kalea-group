@@ -107,11 +107,9 @@ const FloatingPanel = ({ panel, width, height, shadowSize }: FloatingPanelProps)
           transition={{ duration: 0.2 }}
         >
           <span 
-            className={`text-white font-bold tracking-wider text-center px-1 leading-tight ${fontSizeMap[shadowSize]}`}
+            className={`text-white font-bold tracking-wider text-center px-2 leading-tight ${fontSizeMap[shadowSize]}`}
             style={{
               textShadow: '0 2px 10px rgba(0,0,0,0.8)',
-              writingMode: 'vertical-rl',
-              textOrientation: 'mixed',
             }}
           >
             {panel.keyword}
