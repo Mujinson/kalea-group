@@ -477,7 +477,7 @@ const WindowHero = () => {
           }}
         >
           <motion.span
-            className="text-[10px] tracking-[0.35em] uppercase font-medium"
+            className="text-[10px] tracking-[0.35em] uppercase font-bold"
             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', color: '#4A2A13', opacity: 0.7 }}
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -485,7 +485,7 @@ const WindowHero = () => {
             {t('hero.home.scrollDown')}
           </motion.span>
           
-          <p className="text-[10px] tracking-[0.15em] uppercase font-medium mt-4" style={{ color: '#4A2A13', opacity: 0.6 }}>
+          <p className="text-[10px] tracking-[0.15em] uppercase font-bold mt-4" style={{ color: '#4A2A13', opacity: 0.6 }}>
             {t('hero.home.toStartJourney')}
           </p>
         </motion.div>
@@ -499,7 +499,7 @@ const WindowHero = () => {
           }}
         >
           <motion.span 
-            className="text-[9px] tracking-[0.35em] uppercase font-medium"
+            className="text-[9px] tracking-[0.35em] uppercase font-bold"
             style={{ writingMode: 'vertical-rl', textOrientation: 'mixed', color: '#4A2A13', opacity: 0.7 }}
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -507,7 +507,7 @@ const WindowHero = () => {
             {t('hero.home.scrollDown')}
           </motion.span>
           
-          <p className="text-[9px] tracking-[0.15em] uppercase mt-6 font-medium" style={{ color: '#4A2A13', opacity: 0.6 }}>
+          <p className="text-[9px] tracking-[0.15em] uppercase mt-6 font-bold" style={{ color: '#4A2A13', opacity: 0.6 }}>
             {t('hero.home.toStartJourney')}
           </p>
         </motion.div>
