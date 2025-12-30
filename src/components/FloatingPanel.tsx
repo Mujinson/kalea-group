@@ -112,7 +112,7 @@ const FloatingPanel = ({ panel, width, height, shadowSize }: FloatingPanelProps)
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <span 
-          className={`text-white font-bold tracking-wider text-center whitespace-pre-line ${fontSizeMap[shadowSize]}`}
+          className={`font-heading text-white font-bold tracking-wider text-center whitespace-pre-line ${fontSizeMap[shadowSize]}`}
           style={{
             textShadow: '0 2px 20px rgba(0,0,0,0.9), 0 4px 40px rgba(0,0,0,0.7)',
           }}
