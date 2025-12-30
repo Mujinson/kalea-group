@@ -107,7 +107,7 @@ const FloatingPanel = ({ panel, width, height, shadowSize }: FloatingPanelProps)
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ 
           opacity: isHovered ? 1 : 0,
-          scale: isHovered ? 2.5 : 0.5,
+          scale: isHovered ? 1.8 : 0.5,
         }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
