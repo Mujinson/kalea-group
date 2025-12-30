@@ -173,7 +173,7 @@ const WindowHero = () => {
 
         {/* Floating floor panels around the window - Mobile */}
         <motion.div 
-          className="absolute inset-0 z-10 flex items-start justify-center pt-[15vh] pointer-events-none md:hidden"
+          className="absolute inset-0 z-10 flex items-center justify-center -translate-y-[5vh] md:translate-y-0 pointer-events-none md:hidden"
           style={{ 
             scale: panelScale,
             opacity: panelOpacity,
@@ -350,7 +350,7 @@ const WindowHero = () => {
 
         {/* Window frame container */}
         <motion.div 
-          className="absolute inset-0 z-10 flex items-start md:items-center justify-center pt-[15vh] md:pt-0 pointer-events-none"
+          className="absolute inset-0 z-10 flex items-center justify-center -translate-y-[5vh] md:translate-y-0 pointer-events-none"
           style={{ 
             scale: windowScale,
             opacity: windowOpacity,
@@ -427,7 +427,7 @@ const WindowHero = () => {
 
         {/* Text content - centered in window area, hidden when faded */}
         <motion.div 
-          className="absolute inset-0 z-30 flex flex-col items-center justify-center"
+          className="absolute inset-0 z-30 flex flex-col items-center justify-center -translate-y-[5vh] md:translate-y-0"
           style={{ 
             opacity: textOpacity,
             y: textY,
@@ -470,7 +470,7 @@ const WindowHero = () => {
         {/* Scroll indicator */}
         {/* Mobile: positioned at bottom of screen, on background */}
         <motion.div
-          className="absolute left-1/2 bottom-16 -translate-x-1/2 z-30 flex flex-col items-center gap-3 md:hidden"
+          className="absolute left-1/2 bottom-[12vh] -translate-x-1/2 z-30 flex flex-col items-center gap-3 md:hidden"
           style={{ 
             opacity: scrollIndicatorOpacity,
             visibility: scrollIndicatorVisibility,
