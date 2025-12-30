@@ -115,7 +115,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="relative bg-background">
+    <div className="relative bg-background overflow-x-hidden">
       {/* Window Hero Section */}
       <WindowHero />
 
@@ -128,7 +128,7 @@ const Home = () => {
       </section>
 
       {/* Products Section */}
-      <section className="relative min-h-screen bg-background py-10 md:py-16">
+      <section className="relative min-h-screen bg-background py-10 md:py-16 overflow-hidden">
         <div className="relative z-10 h-full flex flex-col justify-center">
           <div className="container-custom text-center">
             <motion.p
@@ -151,7 +151,7 @@ const Home = () => {
               Indoor
             </motion.h3>
             {/* First row: 3 cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 max-w-5xl mx-auto mb-3 md:mb-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 max-w-5xl mx-auto mb-3 md:mb-5 px-4 md:px-0">
               {indoorProducts.slice(0, 3).map((product, index) => (
                 product.comingSoon ? (
                   <motion.div
@@ -215,7 +215,7 @@ const Home = () => {
             </div>
             
             {/* Second row: 2 cards centered */}
-            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto mb-10 md:mb-14">
+            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto mb-10 md:mb-14 px-4 md:px-0">
               {indoorProducts.slice(3).map((product, index) => (
                 product.comingSoon ? (
                   <motion.div
@@ -287,7 +287,7 @@ const Home = () => {
             >
               Outdoor
             </motion.h3>
-            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto">
+            <div className="flex justify-center gap-3 md:gap-5 max-w-5xl mx-auto px-4 md:px-0">
               {outdoorProducts.map((product, index) => (
                 <motion.div
                   key={product.title}
