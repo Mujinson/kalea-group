@@ -444,40 +444,42 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* Cards - fill remaining height */}
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 max-w-7xl mx-auto w-full">
-            {sustainability.map((item, index) => (
-              <Link key={item.title} to={item.link} className="block h-full">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{
-                    y: -6,
-                    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
-                  }}
-                  className="relative h-full rounded-3xl overflow-hidden group"
-                >
-                  <img
-                    src={item.bg}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                    <item.icon className="w-12 h-12 md:w-14 md:h-14 text-white mb-4" strokeWidth={1.5} />
-                    <h3 className="text-xl md:text-2xl lg:text-3xl font-heading font-semibold text-white mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm md:text-base text-white font-medium max-w-xs">
-                      {item.description}
-                    </p>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
+          {/* Cards - centered with consistent aspect ratio */}
+          <div className="flex-1 flex items-center justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto w-full">
+              {sustainability.map((item, index) => (
+                <Link key={item.title} to={item.link} className="block">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{
+                      y: -6,
+                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
+                    }}
+                    className="relative aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden group"
+                  >
+                    <img
+                      src={item.bg}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
+                      <item.icon className="w-10 h-10 md:w-12 md:h-12 text-white mb-3" strokeWidth={1.5} />
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-heading font-semibold text-white mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs md:text-sm text-white font-medium max-w-xs">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
