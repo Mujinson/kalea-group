@@ -303,42 +303,42 @@ const Home = () => {
               transition={{ duration: 0.9 }}
               className="max-w-3xl mx-auto text-center space-y-3 md:space-y-4"
             >
-              <div className="space-y-1.5 md:space-y-2">
-                <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
+              <div className="space-y-2 md:space-y-3">
+                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
                   {t('hero.manifesto.line1')}
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
+                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
                   {t('hero.manifesto.line2')}
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
+                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
                   {t('hero.manifesto.line3')}
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
+                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
                   {t('hero.manifesto.line4')}
                 </p>
-                <p className="text-base md:text-lg lg:text-xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
+                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
                   {t('hero.manifesto.line5')}
                 </p>
               </div>
 
-              <div className="h-px w-16 mx-auto bg-foreground/30 my-3" />
+              <div className="h-px w-16 mx-auto bg-foreground/30 my-4" />
 
-              <div className="space-y-1.5 text-xs md:text-sm text-foreground/75 font-light leading-relaxed">
+              <div className="space-y-2 text-sm md:text-base text-foreground/75 font-light leading-relaxed">
                 <p>{t('hero.manifesto.problem1')}<br />{t('hero.manifesto.problem2')}</p>
-                <p className="mt-2">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
-                <p className="mt-2">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
-                <p className="mt-2">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
-                <p className="mt-2">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
+                <p className="mt-3">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
+                <p className="mt-3">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
+                <p className="mt-3">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
+                <p className="mt-3">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
               </div>
 
-              <div className="pt-4 md:pt-6 space-y-1.5">
-                <p className="text-xs md:text-sm lg:text-base tracking-[0.25em] text-foreground font-medium uppercase">
+              <div className="pt-5 md:pt-8 space-y-2">
+                <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-foreground font-medium uppercase">
                   KALĒA — SURFACE SYSTEM®
                 </p>
-                <p className="text-xs md:text-sm text-foreground/75 font-light">
+                <p className="text-sm md:text-base text-foreground/75 font-light">
                   {t('hero.manifesto.brandStatement')}
                 </p>
-                <p className="text-xs md:text-sm text-foreground/75 font-light">
+                <p className="text-sm md:text-base text-foreground/75 font-light">
                   {t('hero.manifesto.brandStatement2')}
                 </p>
               </div>
