@@ -21,6 +21,10 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import underlaySilence from "@/assets/underlay-silence-cork.jpg";
+import underlayHydro from "@/assets/underlay-hydro-vapor.jpg";
+import underlayPro from "@/assets/underlay-pro-rubber.jpg";
+import underlayTherm from "@/assets/underlay-therm-xpo.jpg";
 
 // Product data for Kalea Base underlay systems
 const underlayProducts = [
@@ -30,6 +34,7 @@ const underlayProducts = [
     material: "Sughero naturale",
     icon: Volume2,
     color: "#27AE60",
+    image: underlaySilence,
     shortDesc: "Comfort acustico premium",
     description: "Granulato di sughero naturale pressato per massima riduzione del rumore da calpestio.",
     specs: [
@@ -46,6 +51,7 @@ const underlayProducts = [
     material: "Film PE 200μm",
     icon: Droplets,
     color: "#3498DB",
+    image: underlayHydro,
     shortDesc: "Barriera vapore professionale",
     description: "Film in polietilene LDPE ad alta densità con resistenza al vapore certificata.",
     specs: [
@@ -63,6 +69,7 @@ const underlayProducts = [
     material: "Gomma HD tecnica",
     icon: Shield,
     color: "#2C3E50",
+    image: underlayPro,
     shortDesc: "Stabilità estrema",
     description: "Gomma poliuretanica ad altissima densità per superfici ad alto traffico.",
     specs: [
@@ -79,6 +86,7 @@ const underlayProducts = [
     material: "XPO a celle chiuse",
     icon: Flame,
     color: "#E74C3C",
+    image: underlayTherm,
     shortDesc: "Riscaldamento a pavimento",
     description: "Schiuma poliolefinica con resistenza termica minima per massima conduttività.",
     specs: [
@@ -95,6 +103,7 @@ const underlayProducts = [
     material: "Sistema accoppiato",
     icon: Layers,
     color: "#9B59B6",
+    image: productKaleabase,
     shortDesc: "Premium All-in-One",
     description: "Sistema multifunzione: gomma HD + film PE argentato + banda adesiva integrata.",
     specs: [
@@ -357,75 +366,88 @@ const Kaleabase = () => {
                 transition={{ duration: 0.5, delay: index * 0.08 }}
                 whileHover={{ y: -6, scale: 1.02 }}
                 onClick={() => setSelectedProduct(selectedProduct === product.id ? null : product.id)}
-                className={`relative bg-[#C6B195] rounded-2xl p-6 cursor-pointer transition-all duration-300 border-2 ${
+                className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 border-2 ${
                   selectedProduct === product.id 
                     ? 'border-white ring-2 ring-white/30' 
                     : 'border-transparent hover:border-white/30'
                 } ${product.premium ? 'ring-2 ring-white/20' : ''}`}
               >
-                {product.premium && (
-                  <div className="absolute top-3 right-3 bg-white text-[#C6B195] text-[10px] font-bold px-2 py-1 rounded-full">
-                    PREMIUM
-                  </div>
-                )}
-                
-                <div 
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-white/20"
-                >
-                  <product.icon className="w-7 h-7 text-white" />
+                {/* Background image */}
+                <div className="absolute inset-0">
+                  <img 
+                    src={product.image} 
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
                 </div>
                 
-                <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
-                <p className="text-sm text-white/80 mb-2 font-medium">{product.material}</p>
-                <p className="text-sm text-white/90 mb-4 font-medium">{product.shortDesc}</p>
-                
-                {/* Expanded content */}
-                <motion.div
-                  initial={false}
-                  animate={{ 
-                    height: selectedProduct === product.id ? "auto" : 0,
-                    opacity: selectedProduct === product.id ? 1 : 0 
-                  }}
-                  className="overflow-hidden"
-                >
-                  <div className="pt-4 border-t border-white/20">
-                    <p className="text-sm text-white/90 mb-4 font-medium">{product.description}</p>
-                    
-                    <div className="space-y-2 mb-4">
-                      {product.specs.map((spec, i) => (
-                        <div key={i} className="flex items-start gap-2 text-sm text-white/90 font-medium">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 flex-shrink-0" />
-                          <span>{spec}</span>
-                        </div>
-                      ))}
+                {/* Content */}
+                <div className="relative z-10 p-6">
+                  {product.premium && (
+                    <div className="absolute top-3 right-3 bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full">
+                      PREMIUM
                     </div>
-                    
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {product.benefits.map((benefit, i) => (
-                        <span 
-                          key={i}
-                          className="text-xs px-2 py-1 rounded-full bg-white/20 text-white font-medium"
-                        >
-                          {benefit}
-                        </span>
-                      ))}
-                    </div>
-                    
-                    <p className="text-xs text-white/80 font-medium">
-                      <strong>Ideale per:</strong> {product.bestFor}
-                    </p>
-                    
-                    {product.note && (
-                      <p className="text-xs text-white mt-2 italic font-medium">
-                        ⚠️ {product.note}
-                      </p>
-                    )}
+                  )}
+                  
+                  <div 
+                    className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-white/20 backdrop-blur-sm"
+                  >
+                    <product.icon className="w-7 h-7 text-white" />
                   </div>
-                </motion.div>
                 
-                <div className="flex items-center justify-between mt-4 text-xs text-white/70 font-medium">
-                  <span>Clicca per dettagli</span>
-                  <ArrowRight className={`w-4 h-4 transition-transform ${selectedProduct === product.id ? 'rotate-90' : ''}`} />
+                  <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
+                  <p className="text-sm text-white/80 mb-2 font-medium">{product.material}</p>
+                  <p className="text-sm text-white/90 mb-4 font-medium">{product.shortDesc}</p>
+                  
+                  {/* Expanded content */}
+                  <motion.div
+                    initial={false}
+                    animate={{ 
+                      height: selectedProduct === product.id ? "auto" : 0,
+                      opacity: selectedProduct === product.id ? 1 : 0 
+                    }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-4 border-t border-white/20">
+                      <p className="text-sm text-white/90 mb-4 font-medium">{product.description}</p>
+                      
+                      <div className="space-y-2 mb-4">
+                        {product.specs.map((spec, i) => (
+                          <div key={i} className="flex items-start gap-2 text-sm text-white/90 font-medium">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 flex-shrink-0" />
+                            <span>{spec}</span>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {product.benefits.map((benefit, i) => (
+                          <span 
+                            key={i}
+                            className="text-xs px-2 py-1 rounded-full bg-white/20 text-white font-medium"
+                          >
+                            {benefit}
+                          </span>
+                        ))}
+                      </div>
+                      
+                      <p className="text-xs text-white/80 font-medium">
+                        <strong>Ideale per:</strong> {product.bestFor}
+                      </p>
+                      
+                      {product.note && (
+                        <p className="text-xs text-white mt-2 italic font-medium">
+                          ⚠️ {product.note}
+                        </p>
+                      )}
+                    </div>
+                  </motion.div>
+                  
+                  <div className="flex items-center justify-between mt-4 text-xs text-white/70 font-medium">
+                    <span>Clicca per dettagli</span>
+                    <ArrowRight className={`w-4 h-4 transition-transform ${selectedProduct === product.id ? 'rotate-90' : ''}`} />
+                  </div>
                 </div>
               </motion.div>
             ))}
