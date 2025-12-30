@@ -19,7 +19,7 @@ const panelKeywords = [
   "ECOLOGICO",
   "IGNIFUGO", 
   "IMPERMEABILE",
-  "NATURALE",
+  "ZERO\nFORMALDEIDE",
   "ANTIMUFFA",
   "ANTIBATTERICO",
 ];
