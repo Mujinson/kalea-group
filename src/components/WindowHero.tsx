@@ -173,7 +173,7 @@ const WindowHero = () => {
 
         {/* Floating floor panels around the window - Mobile */}
         <motion.div 
-          className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none md:hidden"
+          className="absolute inset-0 z-10 flex items-start justify-center pt-[15vh] pointer-events-none md:hidden"
           style={{ 
             scale: panelScale,
             opacity: panelOpacity,
@@ -350,7 +350,7 @@ const WindowHero = () => {
 
         {/* Window frame container */}
         <motion.div 
-          className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
+          className="absolute inset-0 z-10 flex items-start md:items-center justify-center pt-[15vh] md:pt-0 pointer-events-none"
           style={{ 
             scale: windowScale,
             opacity: windowOpacity,
