@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
-import heroIndoor from "@/assets/hero-indoor.jpg";
+import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 
 // Product data for Kalea Base underlay systems
@@ -209,8 +209,8 @@ const Kaleabase = () => {
           }}
         >
           <motion.img 
-            src={heroIndoor} 
-            alt="KALEA BASE" 
+            src={productKaleabase} 
+            alt="KALEA BASE"
             className="absolute inset-0 w-full h-full object-cover will-change-transform"
             style={{ 
               y: heroImageY,
