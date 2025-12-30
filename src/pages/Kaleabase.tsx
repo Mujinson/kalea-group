@@ -20,7 +20,6 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
-import productKaleabaseUltimate from "@/assets/product-kaleabase-underlays-no-white.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import underlaySilence from "@/assets/underlay-silence-cork.jpg";
 import underlayHydro from "@/assets/underlay-hydro-vapor.jpg";
@@ -104,7 +103,7 @@ const underlayProducts = [
     material: "Sistema accoppiato",
     icon: Layers,
     color: "#9B59B6",
-    image: productKaleabaseUltimate,
+    image: productKaleabase,
     shortDesc: "Premium All-in-One",
     description: "Sistema multifunzione: gomma HD + film PE argentato + banda adesiva integrata.",
     specs: [
