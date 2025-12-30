@@ -128,9 +128,9 @@ const Home = () => {
       </section>
 
       {/* Products Section */}
-      <section className="relative min-h-screen bg-background py-10 md:py-16">
-        <div className="relative z-10 h-full flex flex-col justify-center">
-          <div className="container-custom text-center">
+      <section className="relative min-h-screen bg-background py-10 md:py-16 overflow-hidden">
+        <div className="relative z-10 h-full flex flex-col justify-center px-4 md:px-8 lg:px-12">
+          <div className="text-center">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
