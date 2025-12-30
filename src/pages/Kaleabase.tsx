@@ -202,7 +202,7 @@ const Kaleabase = () => {
       {/* Hero Section */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 
-          className="absolute inset-0 overflow-hidden origin-center will-change-transform bg-[#e8e4df]"
+          className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
             scale: heroScale,
             borderRadius: heroBorderRadius,
@@ -211,7 +211,7 @@ const Kaleabase = () => {
           <motion.img 
             src={productKaleabase} 
             alt="KALEA BASE"
-            className="absolute inset-0 w-full h-full object-contain will-change-transform"
+            className="absolute inset-0 w-full h-full object-cover object-center will-change-transform"
             style={{ 
               y: heroImageY,
               scale: 1.1,
