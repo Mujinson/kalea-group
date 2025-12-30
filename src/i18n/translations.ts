@@ -40,7 +40,7 @@ export const translations: Record<Language, Translations> = {
         onewallHero: "Pannelli verticali di design per pareti e boiserie contemporanee.",
         ctaInfo: "Richiedi informazioni",
         ctaProducts: "Scopri i prodotti",
-        scrollDown: "SCORRI GIÙ",
+        scrollDown: "SCORRI",
         toStartJourney: "Per iniziare il viaggio",
       },
       manifesto: {
