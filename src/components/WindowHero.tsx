@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import heroImage from "@/assets/hero-kalea.webp";
+import FloatingPanel from "./FloatingPanel";
 
 // Import floor finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -13,6 +14,16 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
+// Panel keywords that appear on hover
+const panelKeywords = [
+  "ECOLOGICO",
+  "IGNIFUGO", 
+  "IMPERMEABILE",
+  "NATURALE",
+  "WOOW",
+  "ZERO VOC",
+];
+
 // 6 panels - 3 on each side, shaped like floor planks (longer than wide)
 // Responsive sizes: mobile closer to window, tablet as-is, desktop 3x bigger
 const getPanelConfig = () => {
@@ -22,13 +33,13 @@ const getPanelConfig = () => {
     height: 360,
     panels: [
       // Left side - staggered positions using more horizontal space
-      { id: 1, x: -520, y: -180, rotate: -12, floatDelay: 0, image: finishAurora },
-      { id: 2, x: -340, y: 80, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
-      { id: 3, x: -500, y: 280, rotate: -15, floatDelay: 1.2, image: finishPerla },
+      { id: 1, x: -520, y: -180, rotate: -12, floatDelay: 0, image: finishAurora, keyword: panelKeywords[0] },
+      { id: 2, x: -340, y: 80, rotate: -8, floatDelay: 0.5, image: finishCorteccia, keyword: panelKeywords[1] },
+      { id: 3, x: -500, y: 280, rotate: -15, floatDelay: 1.2, image: finishPerla, keyword: panelKeywords[2] },
       // Right side - staggered positions using more horizontal space
-      { id: 4, x: 520, y: -180, rotate: 14, floatDelay: 0.3, image: finishSabbia },
-      { id: 5, x: 340, y: 80, rotate: 10, floatDelay: 0.8, image: finishSilven },
-      { id: 6, x: 500, y: 280, rotate: 18, floatDelay: 1.5, image: finishTerram },
+      { id: 4, x: 520, y: -180, rotate: 14, floatDelay: 0.3, image: finishSabbia, keyword: panelKeywords[3] },
+      { id: 5, x: 340, y: 80, rotate: 10, floatDelay: 0.8, image: finishSilven, keyword: panelKeywords[4] },
+      { id: 6, x: 500, y: 280, rotate: 18, floatDelay: 1.5, image: finishTerram, keyword: panelKeywords[5] },
     ]
   };
   
@@ -37,12 +48,12 @@ const getPanelConfig = () => {
     width: 55,
     height: 120,
     panels: [
-      { id: 1, x: -300, y: -150, rotate: -12, floatDelay: 0, image: finishAurora },
-      { id: 2, x: -300, y: 10, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
-      { id: 3, x: -300, y: 170, rotate: -15, floatDelay: 1.2, image: finishPerla },
-      { id: 4, x: 300, y: -150, rotate: 14, floatDelay: 0.3, image: finishSabbia },
-      { id: 5, x: 300, y: 10, rotate: 10, floatDelay: 0.8, image: finishSilven },
-      { id: 6, x: 300, y: 170, rotate: 18, floatDelay: 1.5, image: finishTerram },
+      { id: 1, x: -300, y: -150, rotate: -12, floatDelay: 0, image: finishAurora, keyword: panelKeywords[0] },
+      { id: 2, x: -300, y: 10, rotate: -8, floatDelay: 0.5, image: finishCorteccia, keyword: panelKeywords[1] },
+      { id: 3, x: -300, y: 170, rotate: -15, floatDelay: 1.2, image: finishPerla, keyword: panelKeywords[2] },
+      { id: 4, x: 300, y: -150, rotate: 14, floatDelay: 0.3, image: finishSabbia, keyword: panelKeywords[3] },
+      { id: 5, x: 300, y: 10, rotate: 10, floatDelay: 0.8, image: finishSilven, keyword: panelKeywords[4] },
+      { id: 6, x: 300, y: 170, rotate: 18, floatDelay: 1.5, image: finishTerram, keyword: panelKeywords[5] },
     ]
   };
   
@@ -51,12 +62,12 @@ const getPanelConfig = () => {
     width: 40,
     height: 90,
     panels: [
-      { id: 1, x: -145, y: -110, rotate: -12, floatDelay: 0, image: finishAurora },
-      { id: 2, x: -145, y: 10, rotate: -8, floatDelay: 0.5, image: finishCorteccia },
-      { id: 3, x: -145, y: 130, rotate: -15, floatDelay: 1.2, image: finishPerla },
-      { id: 4, x: 145, y: -110, rotate: 14, floatDelay: 0.3, image: finishSabbia },
-      { id: 5, x: 145, y: 10, rotate: 10, floatDelay: 0.8, image: finishSilven },
-      { id: 6, x: 145, y: 130, rotate: 18, floatDelay: 1.5, image: finishTerram },
+      { id: 1, x: -145, y: -110, rotate: -12, floatDelay: 0, image: finishAurora, keyword: panelKeywords[0] },
+      { id: 2, x: -145, y: 10, rotate: -8, floatDelay: 0.5, image: finishCorteccia, keyword: panelKeywords[1] },
+      { id: 3, x: -145, y: 130, rotate: -15, floatDelay: 1.2, image: finishPerla, keyword: panelKeywords[2] },
+      { id: 4, x: 145, y: -110, rotate: 14, floatDelay: 0.3, image: finishSabbia, keyword: panelKeywords[3] },
+      { id: 5, x: 145, y: 10, rotate: 10, floatDelay: 0.8, image: finishSilven, keyword: panelKeywords[4] },
+      { id: 6, x: 145, y: 130, rotate: 18, floatDelay: 1.5, image: finishTerram, keyword: panelKeywords[5] },
     ]
   };
   
@@ -180,53 +191,13 @@ const WindowHero = () => {
           }}
         >
           {panelConfigs.mobile.panels.map((panel) => (
-            <motion.div
+            <FloatingPanel
               key={panel.id}
-              className="absolute cursor-pointer pointer-events-auto"
-              style={{
-                x: panel.x,
-                y: panel.y,
-                width: panelConfigs.mobile.width,
-                height: panelConfigs.mobile.height,
-              }}
-              initial={{ opacity: 0, scale: 0.8, rotate: panel.rotate }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1,
-                rotate: [panel.rotate - 2, panel.rotate + 2, panel.rotate - 2],
-                y: [panel.y - 5, panel.y + 5, panel.y - 5],
-                x: [panel.x - 3, panel.x + 3, panel.x - 3],
-              }}
-              whileHover={{ 
-                scale: 1.4,
-                rotate: 0,
-                zIndex: 50,
-                transition: { duration: 0.3, ease: "easeOut" }
-              }}
-              transition={{ 
-                opacity: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
-                scale: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
-                rotate: { duration: 6 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-                y: { duration: 4 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-                x: { duration: 5 + panel.floatDelay * 0.5, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-              }}
-            >
-              <motion.div 
-                className="w-full h-full rounded-sm overflow-hidden"
-                style={{
-                  boxShadow: '0 15px 30px rgba(0,0,0,0.5), 0 6px 12px rgba(0,0,0,0.4)',
-                }}
-                whileHover={{
-                  boxShadow: '0 25px 50px rgba(0,0,0,0.6), 0 10px 20px rgba(0,0,0,0.5), 0 0 30px rgba(200,150,80,0.3)',
-                }}
-              >
-                <img 
-                  src={panel.image} 
-                  alt="" 
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-            </motion.div>
+              panel={panel}
+              width={panelConfigs.mobile.width}
+              height={panelConfigs.mobile.height}
+              shadowSize="small"
+            />
           ))}
         </motion.div>
 
@@ -239,53 +210,13 @@ const WindowHero = () => {
           }}
         >
           {panelConfigs.tablet.panels.map((panel) => (
-            <motion.div
+            <FloatingPanel
               key={panel.id}
-              className="absolute cursor-pointer pointer-events-auto"
-              style={{
-                x: panel.x,
-                y: panel.y,
-                width: panelConfigs.tablet.width,
-                height: panelConfigs.tablet.height,
-              }}
-              initial={{ opacity: 0, scale: 0.8, rotate: panel.rotate }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1,
-                rotate: [panel.rotate - 2, panel.rotate + 2, panel.rotate - 2],
-                y: [panel.y - 8, panel.y + 8, panel.y - 8],
-                x: [panel.x - 4, panel.x + 4, panel.x - 4],
-              }}
-              whileHover={{ 
-                scale: 1.4,
-                rotate: 0,
-                zIndex: 50,
-                transition: { duration: 0.3, ease: "easeOut" }
-              }}
-              transition={{ 
-                opacity: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
-                scale: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
-                rotate: { duration: 6 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-                y: { duration: 4 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-                x: { duration: 5 + panel.floatDelay * 0.5, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-              }}
-            >
-              <motion.div 
-                className="w-full h-full rounded-sm overflow-hidden"
-                style={{
-                  boxShadow: '0 25px 50px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.4)',
-                }}
-                whileHover={{
-                  boxShadow: '0 35px 70px rgba(0,0,0,0.6), 0 15px 30px rgba(0,0,0,0.5), 0 0 40px rgba(200,150,80,0.3)',
-                }}
-              >
-                <img 
-                  src={panel.image} 
-                  alt="" 
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-            </motion.div>
+              panel={panel}
+              width={panelConfigs.tablet.width}
+              height={panelConfigs.tablet.height}
+              shadowSize="medium"
+            />
           ))}
         </motion.div>
 
@@ -298,53 +229,13 @@ const WindowHero = () => {
           }}
         >
           {panelConfigs.desktop.panels.map((panel) => (
-            <motion.div
+            <FloatingPanel
               key={panel.id}
-              className="absolute cursor-pointer pointer-events-auto"
-              style={{
-                x: panel.x,
-                y: panel.y,
-                width: panelConfigs.desktop.width,
-                height: panelConfigs.desktop.height,
-              }}
-              initial={{ opacity: 0, scale: 0.8, rotate: panel.rotate }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1,
-                rotate: [panel.rotate - 2, panel.rotate + 2, panel.rotate - 2],
-                y: [panel.y - 12, panel.y + 12, panel.y - 12],
-                x: [panel.x - 6, panel.x + 6, panel.x - 6],
-              }}
-              whileHover={{ 
-                scale: 1.4,
-                rotate: 0,
-                zIndex: 50,
-                transition: { duration: 0.3, ease: "easeOut" }
-              }}
-              transition={{ 
-                opacity: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
-                scale: { duration: 0.8, delay: 0.2 + panel.id * 0.08 },
-                rotate: { duration: 6 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-                y: { duration: 4 + panel.floatDelay, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-                x: { duration: 5 + panel.floatDelay * 0.5, repeat: Infinity, ease: "easeInOut", delay: panel.floatDelay },
-              }}
-            >
-              <motion.div 
-                className="w-full h-full rounded-sm overflow-hidden"
-                style={{
-                  boxShadow: '0 40px 80px rgba(0,0,0,0.5), 0 20px 40px rgba(0,0,0,0.4)',
-                }}
-                whileHover={{
-                  boxShadow: '0 60px 120px rgba(0,0,0,0.6), 0 30px 60px rgba(0,0,0,0.5), 0 0 60px rgba(200,150,80,0.3)',
-                }}
-              >
-                <img 
-                  src={panel.image} 
-                  alt="" 
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-            </motion.div>
+              panel={panel}
+              width={panelConfigs.desktop.width}
+              height={panelConfigs.desktop.height}
+              shadowSize="large"
+            />
           ))}
         </motion.div>
 
