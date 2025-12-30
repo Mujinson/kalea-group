@@ -207,8 +207,31 @@ const Navbar = () => {
   // Homepage has dark backgrounds throughout, so keep light navbar style (white text on transparent)
   const isHomePage = location.pathname === `/${language}` || location.pathname === `/${language}/`;
   
-  // Use scrolled style (light bg) if actually scrolled AND not on homepage OR if on pages without dark hero
-  const useDarkStyle = (isScrolled && !isHomePage) || forceDarkNavbar;
+  // On homepage, detect when we're past the dark sections (hero + indoor/outdoor section)
+  // The dark sections end approximately at 4x viewport height (WindowHero 300vh + IndoorOutdoorSection ~100vh)
+  const [isPastDarkSections, setIsPastDarkSections] = useState(false);
+  
+  useEffect(() => {
+    const handleDarkSectionDetection = () => {
+      if (isHomePage) {
+        // Dark sections on homepage: WindowHero (300vh) + IndoorOutdoorSection (~100vh) = ~4x viewport
+        const darkSectionEnd = window.innerHeight * 4;
+        setIsPastDarkSections(window.scrollY > darkSectionEnd);
+      } else {
+        setIsPastDarkSections(false);
+      }
+    };
+    
+    handleDarkSectionDetection();
+    window.addEventListener("scroll", handleDarkSectionDetection, { passive: true });
+    return () => window.removeEventListener("scroll", handleDarkSectionDetection);
+  }, [isHomePage]);
+  
+  // Use scrolled style (light bg) if:
+  // - Actually scrolled AND not on homepage OR
+  // - On pages without dark hero OR
+  // - On homepage AND past the dark sections
+  const useDarkStyle = (isScrolled && !isHomePage) || forceDarkNavbar || (isHomePage && isPastDarkSections);
 
   // Dynamic color classes based on scroll state
   const textColor = useDarkStyle ? "text-[#3F3B33]" : "text-white";
