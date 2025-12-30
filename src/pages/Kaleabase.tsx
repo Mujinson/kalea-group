@@ -211,7 +211,7 @@ const Kaleabase = () => {
           <motion.img 
             src={productKaleabase} 
             alt="KALEA BASE"
-            className="absolute inset-0 w-full h-full object-cover object-top will-change-transform"
+            className="absolute inset-0 w-full h-full object-contain will-change-transform"
             style={{ 
               y: heroImageY,
               scale: 1.1,
