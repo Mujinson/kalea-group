@@ -170,7 +170,7 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
   );
 };
 
-// Default StoneCore 10 colors - can be reused
+// Default BIOMAG FLOOR® colors - can be reused
 export const stonecoreColors: ColorItem[] = [
   { name: "Aurora", slug: "aurora", circleImage: finishAurora, plankImage: finishAurora },
   { name: "Corteccia", slug: "corteccia", circleImage: finishCorteccia, plankImage: finishCorteccia },
