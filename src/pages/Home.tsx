@@ -365,59 +365,57 @@ const Home = () => {
 
       {/* Sostenibilità */}
       <section className="relative h-screen bg-background">
-        <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
+        <div className="h-full flex flex-col px-4 md:px-12 lg:px-20 py-6 md:py-14">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-8 md:mb-10"
+            className="text-center mb-4 md:mb-10"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-2 md:mb-3">
               {t('home.sustainabilityTitle')}
             </h2>
-            <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="text-sm md:text-lg text-foreground/70 max-w-2xl mx-auto">
               {t('home.sustainabilitySubtitle')}
             </p>
           </motion.div>
 
-          {/* Cards - centered with consistent aspect ratio */}
-          <div className="flex-1 flex items-center justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto w-full">
-              {sustainability.map((item, index) => (
-                <Link key={item.title} to={item.link} className="block">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{
-                      y: -6,
-                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
-                    }}
-                    className="relative aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden group"
-                  >
-                    <img
-                      src={item.bg}
-                      alt=""
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
-                      <item.icon className="w-10 h-10 md:w-12 md:h-12 text-white mb-3" strokeWidth={1.5} />
-                      <h3 className="text-lg md:text-xl lg:text-2xl font-heading font-semibold text-white mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs md:text-sm text-white font-medium max-w-xs">
-                        {item.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
+          {/* Cards - 3 columns on all screens, fills available space */}
+          <div className="flex-1 grid grid-cols-3 gap-3 md:gap-6 lg:gap-8 max-w-6xl mx-auto w-full">
+            {sustainability.map((item, index) => (
+              <Link key={item.title} to={item.link} className="block h-full">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{
+                    y: -6,
+                    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
+                  }}
+                  className="relative h-full rounded-xl md:rounded-3xl overflow-hidden group"
+                >
+                  <img
+                    src={item.bg}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 md:p-6">
+                    <item.icon className="w-6 h-6 md:w-12 md:h-12 text-white mb-1 md:mb-3" strokeWidth={1.5} />
+                    <h3 className="text-[10px] sm:text-sm md:text-xl lg:text-2xl font-heading font-semibold text-white mb-0.5 md:mb-2 leading-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-[8px] sm:text-xs md:text-sm text-white font-medium max-w-xs hidden sm:block">
+                      {item.description}
+                    </p>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
