@@ -46,7 +46,7 @@ const SustainabilityDurability = () => {
             </div>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              StoneCore 10 è progettato per resistere dove altri pavimenti mostrano i primi segni di cedimento. La struttura in ossido di magnesio garantisce stabilità dimensionale, resistenza all'usura quotidiana e un comportamento eccellente anche in ambienti molto vissuti.
+              BIOMAG FLOOR® è progettato per resistere dove altri pavimenti mostrano i primi segni di cedimento. La struttura in ossido di magnesio garantisce stabilità dimensionale, resistenza all'usura quotidiana e un comportamento eccellente anche in ambienti molto vissuti.
             </p>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">

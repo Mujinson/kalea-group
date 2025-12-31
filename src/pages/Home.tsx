@@ -297,7 +297,7 @@ const Home = () => {
         <MgoBook />
       </section>
 
-      {/* Product Gallery Section - StoneCore 10 */}
+      {/* Product Gallery Section - BIOMAG FLOOR® */}
       <section className="relative h-screen bg-background">
         <ProductGallerySection />
       </section>

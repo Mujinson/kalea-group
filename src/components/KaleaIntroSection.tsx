@@ -61,7 +61,7 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
               <div className="space-y-5">
                 <div className="border-l-2 border-foreground/20 pl-5">
                   <h4 className="text-lg font-heading font-semibold" style={{ color: "#2B2B2B" }}>
-                    STONECORE 10
+                    BIOMAG FLOOR®
                   </h4>
                   <p className="text-base mt-1" style={{ color: "rgba(43, 43, 43, 0.75)" }}>
                     {t("home.kaleaIntro.stonecoreDesc")}

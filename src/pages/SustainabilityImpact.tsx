@@ -46,11 +46,11 @@ const SustainabilityImpact = () => {
             </div>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              Il pavimento StoneCore 10 nasce da una visione precisa: creare una superficie ad alte prestazioni che riduca l'impatto ambientale lungo tutto il suo ciclo di vita.
+              Il pavimento BIOMAG FLOOR® nasce da una visione precisa: creare una superficie ad alte prestazioni che riduca l'impatto ambientale lungo tutto il suo ciclo di vita.
             </p>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              L'ossido di magnesio è un materiale minerale stabile, privo di sostanze nocive, progettato per durare nel tempo senza rilasciare composti dannosi nell'ambiente domestico. A differenza di molte alternative tradizionali, StoneCore 10 non richiede trattamenti chimici aggressivi, né durante la produzione né durante l'utilizzo quotidiano.
+              L'ossido di magnesio è un materiale minerale stabile, privo di sostanze nocive, progettato per durare nel tempo senza rilasciare composti dannosi nell'ambiente domestico. A differenza di molte alternative tradizionali, BIOMAG FLOOR® non richiede trattamenti chimici aggressivi, né durante la produzione né durante l'utilizzo quotidiano.
             </p>
           </motion.div>
 
@@ -85,7 +85,7 @@ const SustainabilityImpact = () => {
             className="mt-12 p-8 rounded-2xl bg-card border border-border"
           >
             <p className="text-lg text-foreground leading-relaxed italic">
-              Scegliere StoneCore 10 significa investire in un pavimento che rispetta l'ambiente, migliora la qualità dell'aria indoor e contribuisce a uno stile di vita più consapevole, senza rinunciare all'estetica.
+              Scegliere BIOMAG FLOOR® significa investire in un pavimento che rispetta l'ambiente, migliora la qualità dell'aria indoor e contribuisce a uno stile di vita più consapevole, senza rinunciare all'estetica.
             </p>
           </motion.div>
 

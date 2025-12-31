@@ -51,7 +51,7 @@ const SustainabilityMaintenance = () => {
             </div>
 
             <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              StoneCore 10 è pensato per semplificare la vita quotidiana. La superficie non richiede cere, solventi o detergenti aggressivi. La pulizia ordinaria può essere effettuata con acqua e detergenti neutri, riducendo l'uso di prodotti chimici che inquinano l'ambiente e l'aria domestica.
+              BIOMAG FLOOR® è pensato per semplificare la vita quotidiana. La superficie non richiede cere, solventi o detergenti aggressivi. La pulizia ordinaria può essere effettuata con acqua e detergenti neutri, riducendo l'uso di prodotti chimici che inquinano l'ambiente e l'aria domestica.
             </p>
           </motion.div>
 
@@ -114,7 +114,7 @@ const SustainabilityMaintenance = () => {
                   Focus salute
                 </h3>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  L'assenza di sostanze nocive rende StoneCore 10 sicuro per bambini e animali domestici, contribuendo a un ambiente domestico più sano.
+                  L'assenza di sostanze nocive rende BIOMAG FLOOR® sicuro per bambini e animali domestici, contribuendo a un ambiente domestico più sano.
                 </p>
               </div>
             </div>
