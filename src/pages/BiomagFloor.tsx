@@ -284,7 +284,7 @@ const BiomagFloor = () => {
             >
               <img 
                 src={stonecoreLayers} 
-                alt="Struttura multistrato StoneCore 10" 
+                alt="Struttura multistrato BIOMAG FLOOR®" 
                 className="w-auto max-w-full h-auto max-h-[325px] object-contain"
               />
             </motion.div>
@@ -459,7 +459,7 @@ const BiomagFloor = () => {
               Perfetto per impianti di riscaldamento a pavimento
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              StoneCore 10 è particolarmente indicato per l'utilizzo con impianti di riscaldamento a pavimento grazie alla sua elevata conducibilità e stabilità termica.
+              BIOMAG FLOOR® è particolarmente indicato per l'utilizzo con impianti di riscaldamento a pavimento grazie alla sua elevata conducibilità e stabilità termica.
             </p>
           </motion.div>
 

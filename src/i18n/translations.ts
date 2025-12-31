@@ -1300,7 +1300,7 @@ export const translations: Record<Language, Translations> = {
       },
       interests: "Interests",
       interestsList: {
-        stonecore: "StoneCore 10",
+        stonecore: "BIOMAG FLOOR®",
         edgeline: "EdgeLine",
         onewall: "BIOWALL®",
         partnership: "Partnership",
@@ -1670,7 +1670,7 @@ export const translations: Record<Language, Translations> = {
         brandTagline: "Italienisches Oberflächendesign.",
       },
       stonecore: {
-        title: "Kalēa StoneCore 10",
+        title: "BIOMAG FLOOR®",
         subtitle: "MgO-Bodenbeläge der neuen Generation. Professionelle Leistung, natürliche Ästhetik, schnelle Installation.",
         ctaPrimary: "Muster anfordern",
         ctaSecondary: "Datenblatt herunterladen",
@@ -1679,7 +1679,7 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa EdgeLine",
         subtitle: "Architektonische Aluminiumprofile. Die Verarbeitung, die jede Oberfläche vollendet.",
         ctaPrimary: "Katalog anfordern",
-        ctaSecondary: "StoneCore 10 entdecken",
+        ctaSecondary: "BIOMAG FLOOR® entdecken",
       },
       onewall: {
         title: "Kalēa BIOWALL®",
@@ -1692,7 +1692,7 @@ export const translations: Record<Language, Translations> = {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Drei integrierte Linien für visuelle Kontinuität in Räumen",
       stonecore: {
-        title: "Kalēa StoneCore 10",
+        title: "BIOMAG FLOOR®",
         description: "Technische Oberflächen in MgO mit Holztextur. Schwimmende Verlegung, visuelle Kontinuität, zertifizierte Leistung.",
       },
       edgeline: {
@@ -1817,9 +1817,9 @@ export const translations: Record<Language, Translations> = {
       },
     },
     gallery: {
-      title: "Entdecken Sie die StoneCore 10 Kollektion",
+      title: "Entdecken Sie die BIOMAG FLOOR® Kollektion",
       subtitle: "Texturen, Farben und Details unseres Magnesiumoxid-Holzstruktur-Bodens.",
-      description: "Der Kalēa-Boden kombiniert MgO-Technologie, überlegene Beständigkeit und ein natürliches Design, inspiriert von echtem Holz. Entdecken Sie alle Oberflächen für Showrooms, Händler und Fachleute.",
+      description: "Der BIOMAG FLOOR® Boden kombiniert MgO-Technologie, überlegene Beständigkeit und ein natürliches Design, inspiriert von echtem Holz. Entdecken Sie alle Oberflächen für Showrooms, Händler und Fachleute.",
       cta: "Alle Oberflächen entdecken",
     },
     colors: {
@@ -1922,7 +1922,7 @@ export const translations: Record<Language, Translations> = {
         },
         baseboard: {
           title: "Sockelleiste",
-          description: "Abgestimmt auf StoneCore 10 Oberflächen",
+          description: "Abgestimmt auf BIOMAG FLOOR® Oberflächen",
         },
         step: {
           title: "Stufenprofil",
@@ -1930,7 +1930,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Verfügbare Oberflächen",
-      finishesSubtitle: "Abgestimmt auf Kalēa StoneCore 10 Oberflächen",
+      finishesSubtitle: "Abgestimmt auf BIOMAG FLOOR® Oberflächen",
       finishes: {
         natural: "Naturaluminium",
         bronze: "Satinierte Bronze",
@@ -2099,7 +2099,7 @@ export const translations: Record<Language, Translations> = {
       },
       interests: "Interessen",
       interestsList: {
-        stonecore: "StoneCore 10",
+        stonecore: "BIOMAG FLOOR®",
         edgeline: "EdgeLine",
         onewall: "BIOWALL®",
         partnership: "Partnerschaft",
@@ -2469,7 +2469,7 @@ export const translations: Record<Language, Translations> = {
         brandTagline: "Design italien des surfaces.",
       },
       stonecore: {
-        title: "Kalēa StoneCore 10",
+        title: "BIOMAG FLOOR®",
         subtitle: "Revêtements de sol MgO de nouvelle génération. Performance professionnelle, esthétique naturelle, pose rapide.",
         ctaPrimary: "Demander des échantillons",
         ctaSecondary: "Télécharger la fiche technique",
@@ -2478,7 +2478,7 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa EdgeLine",
         subtitle: "Profilés architecturaux en aluminium. La finition qui complète chaque surface.",
         ctaPrimary: "Demander le catalogue",
-        ctaSecondary: "Découvrir StoneCore 10",
+        ctaSecondary: "Découvrir BIOMAG FLOOR®",
       },
       onewall: {
         title: "Kalēa BIOWALL®",
@@ -2491,7 +2491,7 @@ export const translations: Record<Language, Translations> = {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
       linesSubtitle: "Trois lignes intégrées pour la continuité visuelle des espaces",
       stonecore: {
-        title: "Kalēa StoneCore 10",
+        title: "BIOMAG FLOOR®",
         description: "Surfaces techniques en MgO avec texture bois. Pose flottante, continuité visuelle, performance certifiée.",
       },
       edgeline: {
@@ -2586,9 +2586,9 @@ export const translations: Record<Language, Translations> = {
         },
     },
     gallery: {
-      title: "Explorez la Collection StoneCore 10",
+      title: "Explorez la Collection BIOMAG FLOOR®",
       subtitle: "Textures, couleurs et détails de notre revêtement de sol en oxyde de magnésium texture bois.",
-      description: "Le revêtement Kalēa combine la technologie MgO, une résistance supérieure et un design naturel inspiré du bois authentique. Découvrez toutes les finitions disponibles pour showrooms, revendeurs et professionnels.",
+      description: "Le revêtement BIOMAG FLOOR® combine la technologie MgO, une résistance supérieure et un design naturel inspiré du bois authentique. Découvrez toutes les finitions disponibles pour showrooms, revendeurs et professionnels.",
       cta: "Découvrir toutes les finitions",
     },
       ctaTitleBefore: "Vous souhaitez utiliser",
@@ -2622,9 +2622,9 @@ export const translations: Record<Language, Translations> = {
       },
     },
     gallery: {
-      title: "Explorez la Collection StoneCore 10",
+      title: "Explorez la Collection BIOMAG FLOOR®",
       subtitle: "Textures, couleurs et détails de notre revêtement en oxyde de magnésium texture bois.",
-      description: "Le revêtement Kalēa combine la technologie MgO, une résistance supérieure et un design naturel inspiré du bois authentique. Découvrez toutes les finitions disponibles pour showrooms, revendeurs et professionnels.",
+      description: "Le revêtement BIOMAG FLOOR® combine la technologie MgO, une résistance supérieure et un design naturel inspiré du bois authentique. Découvrez toutes les finitions disponibles pour showrooms, revendeurs et professionnels.",
       cta: "Découvrir toutes les finitions",
     },
     colors: {
@@ -2727,7 +2727,7 @@ export const translations: Record<Language, Translations> = {
         },
         baseboard: {
           title: "Plinthe",
-          description: "Coordonnée avec les surfaces StoneCore 10",
+          description: "Coordonnée avec les surfaces BIOMAG FLOOR®",
         },
         step: {
           title: "Profilé d'escalier",
@@ -2735,7 +2735,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Finitions disponibles",
-      finishesSubtitle: "Coordonnées avec les surfaces Kalēa StoneCore 10",
+      finishesSubtitle: "Coordonnées avec les surfaces BIOMAG FLOOR®",
       finishes: {
         natural: "Aluminium naturel",
         bronze: "Bronze satiné",
@@ -2904,7 +2904,7 @@ export const translations: Record<Language, Translations> = {
       },
       interests: "Intérêts",
       interestsList: {
-        stonecore: "StoneCore 10",
+        stonecore: "BIOMAG FLOOR®",
         edgeline: "EdgeLine",
         onewall: "BIOWALL®",
         partnership: "Partenariat",

@@ -90,7 +90,7 @@ const AreaTecnica = () => {
 
   // Combine downloadable certifications with static documents
   const allDocuments = [
-    // Add downloadable certifications first (StoneCore 10)
+    // Add downloadable certifications first (BIOMAG FLOOR®)
     ...downloadableCertifications.map(cert => ({
       name: cert.name[language as keyof typeof cert.name] || cert.name.en,
       category: cert.category,

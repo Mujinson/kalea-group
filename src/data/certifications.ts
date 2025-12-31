@@ -209,10 +209,10 @@ export const certifications: Certification[] = [
 export const dopInfo = {
   productCode: 'KALEA-SC10-001',
   productName: {
-    it: 'Kalēa StoneCore 10 – Pavimento in MgO texture wood',
-    en: 'Kalēa StoneCore 10 – MgO wood texture flooring',
-    de: 'Kalēa StoneCore 10 – MgO Bodenbelag mit Holzstruktur',
-    fr: 'Kalēa StoneCore 10 – Revêtement de sol MgO texture bois',
+    it: 'BIOMAG FLOOR® – Pavimento in MgO texture wood',
+    en: 'BIOMAG FLOOR® – MgO wood texture flooring',
+    de: 'BIOMAG FLOOR® – MgO Bodenbelag mit Holzstruktur',
+    fr: 'BIOMAG FLOOR® – Revêtement de sol MgO texture bois',
   },
   intendedUse: {
     it: 'Rivestimento per pavimenti in ambienti interni residenziali e commerciali',
