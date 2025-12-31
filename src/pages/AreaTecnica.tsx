@@ -33,20 +33,20 @@ const AreaTecnica = () => {
   // Static documents without downloadable files
   const staticDocuments = [
     {
-      name: "Catalogo StoneCore 10",
-      category: "StoneCore 10",
+      name: "Catalogo BIOMAG FLOOR®",
+      category: "BIOMAG FLOOR®",
       description: "Gamma completa finiture e colori disponibili",
       size: "4.8 MB",
     },
     {
-      name: "Scheda tecnica StoneCore 10",
-      category: "StoneCore 10",
+      name: "Scheda tecnica BIOMAG FLOOR®",
+      category: "BIOMAG FLOOR®",
       description: "Specifiche complete del pavimento in MgO",
       size: "2.4 MB",
     },
     {
-      name: "Guida di posa StoneCore 10",
-      category: "StoneCore 10",
+      name: "Guida di posa BIOMAG FLOOR®",
+      category: "BIOMAG FLOOR®",
       description: "Istruzioni dettagliate per l'installazione",
       size: "3.2 MB",
     },
@@ -109,7 +109,7 @@ const AreaTecnica = () => {
     })),
   ];
 
-  const categories = ["all", "StoneCore 10", "EdgeLine", "BIOWALL®", "Certificazioni"];
+  const categories = ["all", "BIOMAG FLOOR®", "EdgeLine", "BIOWALL®", "Certificazioni"];
 
   const filteredDocuments = selectedCategory === "all" 
     ? allDocuments 
@@ -254,7 +254,7 @@ const AreaTecnica = () => {
                 Struttura del pavimento in MgO
               </h2>
               <p className="text-body text-muted-foreground mb-6">
-                Il pavimento StoneCore 10 è composto da 5 strati funzionali che garantiscono prestazioni superiori:
+                Il pavimento BIOMAG FLOOR® è composto da 5 strati funzionali che garantiscono prestazioni superiori:
               </p>
               <ul className="space-y-3 mb-6">
                 {[
