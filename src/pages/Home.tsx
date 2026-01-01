@@ -85,7 +85,7 @@ const Home = () => {
   const outdoorProducts = [
     {
       title: "KALEA ELEMENTS",
-      description: "Tutti gli accessori per completare l'installazione del pavimento Kalea Outdoor.",
+      description: "Viti e clips in alluminio per pavimenti esterni WPC, ceiling e rivestimenti a parete.",
       link: `/${language}/kalea-elements`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
