@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import MgoBook from "@/components/MgoBook";
 import ProductGallerySection from "@/components/ProductGallerySection";
 import CWCGallerySection from "@/components/CWCGallerySection";
-import WindowHero from "@/components/WindowHero";
+import HomeHero from "@/components/HomeHero";
 import Carousel3D from "@/components/Carousel3D";
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
@@ -126,8 +126,8 @@ const Home = () => {
 
   return (
     <div className="relative bg-background">
-      {/* Window Hero Section */}
-      <WindowHero />
+      {/* Hero Section */}
+      <HomeHero />
 
       {/* Indoor/Outdoor Section */}
       <IndoorOutdoorSection />
