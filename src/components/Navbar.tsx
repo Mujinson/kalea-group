@@ -32,7 +32,7 @@ const Navbar = () => {
   const [isMobileProductsExpanded, setIsMobileProductsExpanded] = useState(false);
   const [mobileIndoorExpanded, setMobileIndoorExpanded] = useState(false);
   const [mobileOutdoorExpanded, setMobileOutdoorExpanded] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPastHero, setIsPastHero] = useState(false);
@@ -57,18 +57,11 @@ const Navbar = () => {
       // Update scrolled state for style change
       setIsScrolled(currentScrollY > 80);
       
-      // On homepage, navbar only appears after scrolling past WindowHero (300vh * 0.65 ≈ 1.95x viewport height)
-      // This is when the hero image fully appears and CTA buttons show
-      const heroThreshold = isOnHomePage ? window.innerHeight * 1.95 : 0;
+      // On homepage, navbar appears immediately (no WindowHero animation)
+      // Set isPastHero based on whether we've scrolled past the first screen
+      const heroThreshold = isOnHomePage ? window.innerHeight * 0.8 : 0;
       const pastHero = currentScrollY > heroThreshold;
       setIsPastHero(pastHero);
-      
-      // If on homepage and not past hero, always hide navbar
-      if (isOnHomePage && !pastHero) {
-        setIsVisible(false);
-        setLastScrollY(currentScrollY);
-        return;
-      }
       
       // Don't hide navbar if mobile menu is open
       if (isMobileMenuOpen) {
