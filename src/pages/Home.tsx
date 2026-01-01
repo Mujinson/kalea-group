@@ -24,7 +24,7 @@ import productBiomagFloor from "@/assets/product-biomag-floor-new.jpg";
 import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall-interior.jpg";
-import productKaleabaseOut from "@/assets/product-kaleabase-out.jpg";
+import productKaleaElements from "@/assets/product-kalea-elements.png";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
@@ -89,7 +89,7 @@ const Home = () => {
       link: `/${language}/kalea-elements`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productKaleabaseOut,
+      image: productKaleaElements,
     },
     {
       title: "KALEADECK®",
