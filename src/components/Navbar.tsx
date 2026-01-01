@@ -197,18 +197,17 @@ const Navbar = () => {
   // Pages that should always have dark navbar (no dark hero)
   const forceDarkNavbar = location.pathname.includes('/area-tecnica') || location.pathname.includes('/chi-siamo');
   
-  // Homepage has dark backgrounds throughout, so keep light navbar style (white text on transparent)
+  // Homepage has dark hero background, so start with light navbar style (white text on transparent)
   const isHomePage = location.pathname === `/${language}` || location.pathname === `/${language}/`;
   
-  // On homepage, detect when we're past the dark sections (hero + indoor/outdoor section)
-  // The dark sections end approximately at 4x viewport height (WindowHero 300vh + IndoorOutdoorSection ~100vh)
+  // On homepage, detect when we're past the dark hero section (only 100vh now, no WindowHero animation)
   const [isPastDarkSections, setIsPastDarkSections] = useState(false);
   
   useEffect(() => {
     const handleDarkSectionDetection = () => {
       if (isHomePage) {
-        // Dark sections on homepage: WindowHero (300vh) + IndoorOutdoorSection (~100vh) = ~4x viewport
-        const darkSectionEnd = window.innerHeight * 4;
+        // Dark sections on homepage: Hero (100vh) - switch to dark navbar after hero
+        const darkSectionEnd = window.innerHeight * 0.8;
         setIsPastDarkSections(window.scrollY > darkSectionEnd);
       } else {
         setIsPastDarkSections(false);
