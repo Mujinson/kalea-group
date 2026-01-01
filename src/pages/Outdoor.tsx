@@ -38,7 +38,7 @@ const Outdoor = () => {
   const products: Product[] = [
     {
       name: "KALEA ELEMENTS",
-      description: "Tutti gli accessori per completare l'installazione del pavimento Kalea Outdoor.",
+      description: "Viti e clips in alluminio per pavimenti esterni WPC, ceiling e rivestimenti a parete.",
       image: productKaleabaseOut,
       link: `/${language}/kalea-elements`,
     },
