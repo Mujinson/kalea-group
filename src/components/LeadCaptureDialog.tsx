@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Download, Loader2 } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface LeadCaptureDialogProps {
   open: boolean;
@@ -25,6 +26,7 @@ export const setLeadCaptured = (): void => {
 };
 
 const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }: LeadCaptureDialogProps) => {
+  const { t, language } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -37,14 +39,14 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
     e.preventDefault();
     
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
-      toast.error("Compila tutti i campi obbligatori");
+      toast.error(t('leadCapture.errorRequired'));
       return;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      toast.error("Inserisci un indirizzo email valido");
+      toast.error(t('leadCapture.errorEmail'));
       return;
     }
 
@@ -61,14 +63,14 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
 
       if (error) {
         console.error("Error saving lead:", error);
-        toast.error("Si è verificato un errore. Riprova.");
+        toast.error(t('leadCapture.errorGeneric'));
         return;
       }
 
       // Mark lead as captured in localStorage
       setLeadCaptured();
       
-      toast.success("Grazie! Ora puoi scaricare i documenti.");
+      toast.success(t('leadCapture.successMessage'));
       onOpenChange(false);
       onSuccess();
 
@@ -78,7 +80,7 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
       }
     } catch (err) {
       console.error("Error:", err);
-      toast.error("Si è verificato un errore. Riprova.");
+      toast.error(t('leadCapture.errorGeneric'));
     } finally {
       setIsSubmitting(false);
     }
@@ -90,19 +92,19 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Download className="w-5 h-5 text-primary" />
-            Scarica i documenti
+            {t('leadCapture.title')}
           </DialogTitle>
           <DialogDescription>
-            Inserisci i tuoi dati per accedere a tutti i documenti tecnici e le certificazioni.
+            {t('leadCapture.description')}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nome / Nome Azienda *</Label>
+            <Label htmlFor="name">{t('leadCapture.nameLabel')} *</Label>
             <Input
               id="name"
-              placeholder="Es. Mario Rossi o Rossi SRL"
+              placeholder={t('leadCapture.namePlaceholder')}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
@@ -110,11 +112,11 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email">{t('leadCapture.emailLabel')} *</Label>
             <Input
               id="email"
               type="email"
-              placeholder="email@esempio.com"
+              placeholder={t('leadCapture.emailPlaceholder')}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
@@ -122,11 +124,11 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">Telefono *</Label>
+            <Label htmlFor="phone">{t('leadCapture.phoneLabel')} *</Label>
             <Input
               id="phone"
               type="tel"
-              placeholder="+39 123 456 7890"
+              placeholder={t('leadCapture.phonePlaceholder')}
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               required
@@ -134,10 +136,10 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="companyName">Ragione Sociale (opzionale)</Label>
+            <Label htmlFor="companyName">{t('leadCapture.companyLabel')}</Label>
             <Input
               id="companyName"
-              placeholder="Nome azienda"
+              placeholder={t('leadCapture.companyPlaceholder')}
               value={formData.companyName}
               onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
             />
@@ -147,20 +149,20 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Invio in corso...
+                {t('leadCapture.submitting')}
               </>
             ) : (
               <>
                 <Download className="w-4 h-4 mr-2" />
-                Accedi ai documenti
+                {t('leadCapture.submitButton')}
               </>
             )}
           </Button>
 
           <p className="text-xs text-muted-foreground text-center">
-            I tuoi dati saranno trattati secondo la nostra{" "}
-            <a href="/it/privacy" className="underline hover:text-primary">
-              Privacy Policy
+            {t('leadCapture.privacyText')}{" "}
+            <a href={`/${language}/privacy`} className="underline hover:text-primary">
+              {t('leadCapture.privacyLink')}
             </a>
           </p>
         </form>

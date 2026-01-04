@@ -47,12 +47,12 @@ const MgoBook = () => {
   ];
 
   const additionalBenefits = [
-    { icon: ThermometerSun, title: "Riscaldamento a pavimento", description: "Conduttività termica ottimale per sistemi radianti" },
-    { icon: Baby, title: "Sicuro per bambini", description: "Superficie antibatterica e antistatica naturale" },
-    { icon: PawPrint, title: "Pet-friendly", description: "Resistente a graffi e facile da pulire" },
-    { icon: Recycle, title: "Zero formaldeide", description: "Emissioni VOC assenti, aria più sana" },
-    { icon: Shield, title: "Antibatterico naturale", description: "Proprietà igieniche certificate" },
-    { icon: Timer, title: "Durabilità estrema", description: "Resistenza all'usura classe AC5" },
+    { icon: ThermometerSun, title: t('home.mgoBook.additionalBenefits.floorHeating.title'), description: t('home.mgoBook.additionalBenefits.floorHeating.description') },
+    { icon: Baby, title: t('home.mgoBook.additionalBenefits.childSafe.title'), description: t('home.mgoBook.additionalBenefits.childSafe.description') },
+    { icon: PawPrint, title: t('home.mgoBook.additionalBenefits.petFriendly.title'), description: t('home.mgoBook.additionalBenefits.petFriendly.description') },
+    { icon: Recycle, title: t('home.mgoBook.additionalBenefits.zeroFormaldehyde.title'), description: t('home.mgoBook.additionalBenefits.zeroFormaldehyde.description') },
+    { icon: Shield, title: t('home.mgoBook.additionalBenefits.antibacterial.title'), description: t('home.mgoBook.additionalBenefits.antibacterial.description') },
+    { icon: Timer, title: t('home.mgoBook.additionalBenefits.extremeDurability.title'), description: t('home.mgoBook.additionalBenefits.extremeDurability.description') },
   ];
 
   const sustainabilityBullets = [
@@ -121,7 +121,7 @@ const MgoBook = () => {
   const Page2 = () => (
     <div className="h-full flex flex-col p-6 lg:p-8">
       <h3 className="text-xl lg:text-2xl font-heading font-semibold text-foreground mb-4">
-        Vantaggi esclusivi
+        {t('home.mgoBook.exclusiveAdvantages')}
       </h3>
       <div className="flex-1 space-y-3">
         {additionalBenefits.map((benefit) => (
