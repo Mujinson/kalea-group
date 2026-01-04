@@ -25,7 +25,7 @@ const planks = [
 ];
 
 const Carousel3D = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const [screenSize, setScreenSize] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -172,10 +172,10 @@ const Carousel3D = () => {
           className="text-center flex-shrink-0"
         >
           <h2 className="font-heading text-2xl md:text-4xl lg:text-5xl text-foreground/95 tracking-wide mb-0">
-            La Nostra Collezione
+            {t('carousel.title')}
           </h2>
           <p className="text-foreground/60 text-xs md:text-base font-light italic">
-            Esplora le nostre finiture esclusive
+            {t('carousel.subtitle')}
           </p>
         </motion.div>
 
@@ -280,7 +280,7 @@ const Carousel3D = () => {
         >
           <Button asChild className="pointer-events-auto">
             <Link to={`/${language}/biomag-floor`}>
-              Scopri tutta la collezione
+              {t('carousel.cta')}
             </Link>
           </Button>
         </motion.div>

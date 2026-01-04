@@ -62,8 +62,8 @@ const Home = () => {
       image: heroEdgeline,
     },
     {
-      title: "KALEABASE®",
-      description: "Sistemi modulari di sottopavimento per ogni esigenza.",
+      title: t('home.kaleabase.title'),
+      description: t('home.kaleabase.description'),
       link: `/${language}/kaleabase`,
       comingSoon: false,
       image: productKaleabase,
@@ -84,24 +84,24 @@ const Home = () => {
 
   const outdoorProducts = [
     {
-      title: "KALEA ELEMENTS",
-      description: "Viti e clips in alluminio per pavimenti esterni WPC, ceiling e rivestimenti a parete.",
+      title: t('home.kaleaElements.title'),
+      description: t('home.kaleaElements.description'),
       link: `/${language}/kalea-elements`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
       image: productKaleaElements,
     },
     {
-      title: "KALEADECK®",
-      description: "Pavimentazione outdoor per portici, terrazze e piscine.",
+      title: t('home.kaleadeck.title'),
+      description: t('home.kaleadeck.description'),
       link: `/${language}/kaleadeck`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
       image: productKaleadeck,
     },
     {
-      title: "KALEACEILING®",
-      description: "Rivestimenti per soffitti esterni.",
+      title: t('home.kaleaceiling.title'),
+      description: t('home.kaleaceiling.description'),
       link: `/${language}/kaleaceiling`,
       comingSoon: true,
       comingSoonLabel: t('home.onewall.comingSoonLabel'),
@@ -158,7 +158,7 @@ const Home = () => {
               viewport={{ once: true }}
               className="text-lg md:text-xl font-heading font-semibold text-foreground mb-4 md:mb-6"
             >
-              Indoor
+              {t('home.productsSection.indoor')}
             </motion.h3>
             
             {/* Row 1: BIOMAG FLOOR + BIOWOOD FLOOR */}
@@ -238,7 +238,7 @@ const Home = () => {
               viewport={{ once: true }}
               className="text-lg md:text-xl font-heading font-semibold text-foreground mb-4 md:mb-6"
             >
-              Outdoor
+              {t('home.productsSection.outdoor')}
             </motion.h3>
             
             {/* Row 1: 2 cards */}

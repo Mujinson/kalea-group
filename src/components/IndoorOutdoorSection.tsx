@@ -6,20 +6,20 @@ import cardIndoor from "@/assets/card-indoor-new.jpg";
 import cardOutdoor from "@/assets/card-outdoor.jpg";
 
 const IndoorOutdoorSection = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
 
   const sections = [
     {
-      title: "Indoor",
-      description: "Soluzioni per interni ad alte prestazioni. Pavimenti e sistemi innovativi per abitazioni e spazi commerciali.",
-      buttonText: "Scopri Indoor",
+      title: t('indoorOutdoor.indoor.title'),
+      description: t('indoorOutdoor.indoor.description'),
+      buttonText: t('indoorOutdoor.indoor.button'),
       link: `/${language}/indoor`,
       image: cardIndoor,
     },
     {
-      title: "Outdoor",
-      description: "Materiali progettati per resistere all'esterno. Design, durata e funzionalità per ogni ambiente outdoor.",
-      buttonText: "Scopri Outdoor",
+      title: t('indoorOutdoor.outdoor.title'),
+      description: t('indoorOutdoor.outdoor.description'),
+      buttonText: t('indoorOutdoor.outdoor.button'),
       link: `/${language}/outdoor`,
       image: cardOutdoor,
     },
