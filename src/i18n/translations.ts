@@ -106,6 +106,26 @@ export const translations: Record<Language, Translations> = {
         description: "BIOWALL® (pannelli verticali in ossido di magnesio). Il verticale oltre il cartongesso. Zero stuccatura. Zero polvere. Zero pittura.",
         comingSoonLabel: "Novità in arrivo",
       },
+      kaleabase: {
+        title: "KALEABASE®",
+        description: "Sistemi modulari di sottopavimento per ogni esigenza.",
+      },
+      kaleaElements: {
+        title: "KALEA ELEMENTS",
+        description: "Viti e clips in alluminio per pavimenti esterni WPC, ceiling e rivestimenti a parete.",
+      },
+      kaleadeck: {
+        title: "KALEADECK®",
+        description: "Pavimentazione outdoor per portici, terrazze e piscine.",
+      },
+      kaleaceiling: {
+        title: "KALEACEILING®",
+        description: "Rivestimenti per soffitti esterni.",
+      },
+      productsSection: {
+        indoor: "Indoor",
+        outdoor: "Outdoor",
+      },
       mgoTitle: "Perché BIOMAG FLOOR®",
       mgoDescription: "BIOMAG FLOOR® è il pavimento minerale KALEA con core strutturale in ossido di magnesio, progettato per offrire stabilità, salubrità e prestazioni superiori.",
       mgoAdvantages: {
@@ -217,6 +237,23 @@ export const translations: Record<Language, Translations> = {
           designDesc: "Superfici curate, versatili e pensate per ogni ambiente",
         },
       },
+    },
+    indoorOutdoor: {
+      indoor: {
+        title: "Indoor",
+        description: "Soluzioni per interni ad alte prestazioni. Pavimenti e sistemi innovativi per abitazioni e spazi commerciali.",
+        button: "Scopri Indoor",
+      },
+      outdoor: {
+        title: "Outdoor",
+        description: "Materiali progettati per resistere all'esterno. Design, durata e funzionalità per ogni ambiente outdoor.",
+        button: "Scopri Outdoor",
+      },
+    },
+    carousel: {
+      title: "La Nostra Collezione",
+      subtitle: "Esplora le nostre finiture esclusive",
+      cta: "Scopri tutta la collezione",
     },
     gallery: {
       title: "Esplora la Collezione BIOMAG FLOOR®",
@@ -891,10 +928,14 @@ export const translations: Record<Language, Translations> = {
     },
     home: {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
-      linesSubtitle: "Three integrated lines for visual continuity across spaces",
+      linesSubtitle: "Four integrated lines for visual continuity across spaces",
       stonecore: {
-        title: "BIOCORE® Floors",
-        description: "Technical BIOCORE® surfaces with wood texture. Floating installation, visual continuity, certified performance.",
+        title: "BIOMAG FLOOR®",
+        description: "Technical BIOMAG FLOOR® surfaces with wood texture. Floating installation, visual continuity, certified performance.",
+      },
+      biowood: {
+        title: "BIOWOOD FLOOR®",
+        description: "Advanced natural flooring with wood and carbon fibers. Eco-friendly, non-toxic, biodegradable.",
       },
       edgeline: {
         title: "Kalēa EdgeLine",
@@ -904,6 +945,26 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa BIOWALL®",
         description: "BIOWALL® (vertical panels in magnesium oxide). The vertical beyond drywall. Zero plastering. Zero dust. Zero painting.",
         comingSoonLabel: "Coming soon",
+      },
+      kaleabase: {
+        title: "KALEABASE®",
+        description: "Modular underfloor systems for every need.",
+      },
+      kaleaElements: {
+        title: "KALEA ELEMENTS",
+        description: "Aluminum screws and clips for WPC outdoor floors, ceiling and wall cladding.",
+      },
+      kaleadeck: {
+        title: "KALEADECK®",
+        description: "Outdoor flooring for porches, terraces and pools.",
+      },
+      kaleaceiling: {
+        title: "KALEACEILING®",
+        description: "Outdoor ceiling cladding.",
+      },
+      productsSection: {
+        indoor: "Indoor",
+        outdoor: "Outdoor",
       },
       mgoTitle: "Why BIOCORE®",
       mgoDescription: "BIOCORE® is the KALEA mineral flooring with structural magnesium oxide (MgO) core, designed to offer stability, healthiness and superior performance.",
@@ -1016,6 +1077,23 @@ export const translations: Record<Language, Translations> = {
           designDesc: "Curated, versatile surfaces designed for every environment",
         },
       },
+    },
+    indoorOutdoor: {
+      indoor: {
+        title: "Indoor",
+        description: "High-performance interior solutions. Floors and innovative systems for homes and commercial spaces.",
+        button: "Discover Indoor",
+      },
+      outdoor: {
+        title: "Outdoor",
+        description: "Materials designed to withstand the outdoors. Design, durability and functionality for every outdoor environment.",
+        button: "Discover Outdoor",
+      },
+    },
+    carousel: {
+      title: "Our Collection",
+      subtitle: "Explore our exclusive finishes",
+      cta: "Discover the full collection",
     },
     gallery: {
       title: "Explore the BIOCORE® Collection",
@@ -1690,10 +1768,14 @@ export const translations: Record<Language, Translations> = {
     },
     home: {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
-      linesSubtitle: "Drei integrierte Linien für visuelle Kontinuität in Räumen",
+      linesSubtitle: "Vier integrierte Linien für visuelle Kontinuität in Räumen",
       stonecore: {
         title: "BIOMAG FLOOR®",
-        description: "Technische Oberflächen in MgO mit Holztextur. Schwimmende Verlegung, visuelle Kontinuität, zertifizierte Leistung.",
+        description: "Technische Oberflächen BIOMAG FLOOR® mit Holztextur. Schwimmende Verlegung, visuelle Kontinuität, zertifizierte Leistung.",
+      },
+      biowood: {
+        title: "BIOWOOD FLOOR®",
+        description: "Fortschrittlicher Naturboden mit Holz- und Kohlefasern. Umweltfreundlich, ungiftig, biologisch abbaubar.",
       },
       edgeline: {
         title: "Kalēa EdgeLine",
@@ -1703,6 +1785,26 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa BIOWALL®",
         description: "BIOWALL® (vertikale Paneele aus Magnesiumoxid). Das Vertikale jenseits von Trockenbau. Keine Verspachtelung. Kein Staub. Keine Farbe.",
         comingSoonLabel: "Bald verfügbar",
+      },
+      kaleabase: {
+        title: "KALEABASE®",
+        description: "Modulare Unterbodensysteme für jeden Bedarf.",
+      },
+      kaleaElements: {
+        title: "KALEA ELEMENTS",
+        description: "Aluminiumschrauben und -clips für WPC-Außenböden, Decken und Wandverkleidungen.",
+      },
+      kaleadeck: {
+        title: "KALEADECK®",
+        description: "Außenböden für Veranden, Terrassen und Pools.",
+      },
+      kaleaceiling: {
+        title: "KALEACEILING®",
+        description: "Außendeckenverkleidungen.",
+      },
+      productsSection: {
+        indoor: "Innenbereich",
+        outdoor: "Außenbereich",
       },
       mgoTitle: "Warum MgO",
       mgoDescription: "Ein Material, das die Leistung technischer Oberflächen neu definiert.",
@@ -1815,6 +1917,23 @@ export const translations: Record<Language, Translations> = {
           designDesc: "Kuratierte, vielseitige Oberflächen für jede Umgebung",
         },
       },
+    },
+    indoorOutdoor: {
+      indoor: {
+        title: "Innenbereich",
+        description: "Hochleistungslösungen für Innenräume. Böden und innovative Systeme für Wohnungen und Gewerbeflächen.",
+        button: "Innenbereich entdecken",
+      },
+      outdoor: {
+        title: "Außenbereich",
+        description: "Materialien, die für den Außenbereich konzipiert sind. Design, Langlebigkeit und Funktionalität für jede Außenumgebung.",
+        button: "Außenbereich entdecken",
+      },
+    },
+    carousel: {
+      title: "Unsere Kollektion",
+      subtitle: "Entdecken Sie unsere exklusiven Oberflächen",
+      cta: "Entdecken Sie die gesamte Kollektion",
     },
     gallery: {
       title: "Entdecken Sie die BIOMAG FLOOR® Kollektion",
@@ -2489,10 +2608,14 @@ export const translations: Record<Language, Translations> = {
     },
     home: {
       linesTitle: "KALĒA — SURFACE SYSTEM®",
-      linesSubtitle: "Trois lignes intégrées pour la continuité visuelle des espaces",
+      linesSubtitle: "Quatre lignes intégrées pour la continuité visuelle des espaces",
       stonecore: {
         title: "BIOMAG FLOOR®",
-        description: "Surfaces techniques en MgO avec texture bois. Pose flottante, continuité visuelle, performance certifiée.",
+        description: "Surfaces techniques BIOMAG FLOOR® avec texture bois. Pose flottante, continuité visuelle, performance certifiée.",
+      },
+      biowood: {
+        title: "BIOWOOD FLOOR®",
+        description: "Revêtement de sol naturel avancé avec fibres de bois et de carbone. Écologique, non toxique, biodégradable.",
       },
       edgeline: {
         title: "Kalēa EdgeLine",
@@ -2502,6 +2625,26 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa BIOWALL®",
         description: "BIOWALL® (panneaux verticaux en oxyde de magnésium). Le vertical au-delà du placo. Zéro enduit. Zéro poussière. Zéro peinture.",
         comingSoonLabel: "Bientôt disponible",
+      },
+      kaleabase: {
+        title: "KALEABASE®",
+        description: "Systèmes de sous-plancher modulaires pour tous les besoins.",
+      },
+      kaleaElements: {
+        title: "KALEA ELEMENTS",
+        description: "Vis et clips en aluminium pour sols extérieurs WPC, plafonds et revêtements muraux.",
+      },
+      kaleadeck: {
+        title: "KALEADECK®",
+        description: "Revêtement de sol extérieur pour vérandas, terrasses et piscines.",
+      },
+      kaleaceiling: {
+        title: "KALEACEILING®",
+        description: "Revêtements de plafonds extérieurs.",
+      },
+      productsSection: {
+        indoor: "Intérieur",
+        outdoor: "Extérieur",
       },
       mgoTitle: "Pourquoi MgO",
       mgoDescription: "Un matériau qui redéfinit la performance des surfaces techniques.",
@@ -2620,6 +2763,23 @@ export const translations: Record<Language, Translations> = {
           designDesc: "Surfaces soignées, polyvalentes et pensées pour chaque environnement",
         },
       },
+    },
+    indoorOutdoor: {
+      indoor: {
+        title: "Intérieur",
+        description: "Solutions haute performance pour l'intérieur. Sols et systèmes innovants pour habitations et espaces commerciaux.",
+        button: "Découvrir Intérieur",
+      },
+      outdoor: {
+        title: "Extérieur",
+        description: "Matériaux conçus pour résister à l'extérieur. Design, durabilité et fonctionnalité pour chaque environnement extérieur.",
+        button: "Découvrir Extérieur",
+      },
+    },
+    carousel: {
+      title: "Notre Collection",
+      subtitle: "Explorez nos finitions exclusives",
+      cta: "Découvrir toute la collection",
     },
     gallery: {
       title: "Explorez la Collection BIOMAG FLOOR®",
