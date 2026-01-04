@@ -787,7 +787,7 @@ export const translations: Record<Language, Translations> = {
         title: "Perché collaborare con Kalēa",
         tech: {
           title: "Tecnologia esclusiva",
-          description: "Superfici BIOCORE® con sistema KalēaLock®, superiore a SPC e laminati.",
+          description: "Superfici BIOCORE® con sistema di aggancio Välinge 5G. Precisione e stabilità di ultima generazione.",
         },
         margins: {
           title: "Condizioni riservate",
@@ -1657,7 +1657,7 @@ export const translations: Record<Language, Translations> = {
         title: "Why collaborate with Kalēa",
         tech: {
           title: "Exclusive technology",
-          description: "MgO surfaces with KalēaLock® system, superior to SPC and laminates.",
+          description: "BIOCORE® surfaces with Välinge 5G locking system. Next-generation precision and stability.",
         },
         margins: {
           title: "Reserved conditions",
@@ -2527,7 +2527,7 @@ export const translations: Record<Language, Translations> = {
         title: "Warum mit Kalēa zusammenarbeiten",
         tech: {
           title: "Exklusive Technologie",
-          description: "MgO-Oberflächen mit KalēaLock®-System, überlegen gegenüber SPC und Laminaten.",
+          description: "BIOCORE®-Oberflächen mit Välinge 5G-Verriegelungssystem. Präzision und Stabilität der neuesten Generation.",
         },
         margins: {
           title: "Reservierte Konditionen",
@@ -3403,7 +3403,7 @@ export const translations: Record<Language, Translations> = {
         title: "Pourquoi collaborer avec Kalēa",
         tech: {
           title: "Technologie exclusive",
-          description: "Surfaces MgO avec système KalēaLock®, supérieur aux SPC et stratifiés.",
+          description: "Surfaces BIOCORE® avec système de verrouillage Välinge 5G. Précision et stabilité de dernière génération.",
         },
         margins: {
           title: "Conditions réservées",
