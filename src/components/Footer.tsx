@@ -122,10 +122,9 @@ const Footer = () => {
               </li>
             </ul>
 
-            {/* Social Media */}
             <div className="footer-social">
               <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
-                Seguici
+                {t("footer.followUs")}
               </h4>
               <div className="flex items-center gap-6">
                 <a
