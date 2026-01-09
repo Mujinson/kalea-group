@@ -5,19 +5,11 @@ import { ArrowRight } from "lucide-react";
 import { cwcColors } from "@/data/cwcColors";
 import { useDragScroll } from "@/hooks/useDragScroll";
 
-// Helper function to darken a hex color for gradient
-const adjustColor = (hex: string, amount: number): string => {
-  const num = parseInt(hex.replace('#', ''), 16);
-  const r = Math.max(0, Math.min(255, (num >> 16) + amount));
-  const g = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amount));
-  const b = Math.max(0, Math.min(255, (num & 0x0000FF) + amount));
-  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
-};
-
 interface CWCProductType {
   id: string;
   name: string;
   colorHex: string;
+  image: string;
 }
 
 const CWCProductCard = ({ product, language }: { product: CWCProductType; language: string }) => {
@@ -30,26 +22,15 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
           transition: { duration: 0.3, ease: "easeOut" }
         }}
       >
-        {/* Circle Color Container */}
+        {/* Circle Image Container */}
         <div className="relative">
           <div 
             className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden shadow-lg group-hover:shadow-2xl group-hover:shadow-kalea-tan/30 transition-all duration-500"
-            style={{
-              background: `linear-gradient(135deg, ${product.colorHex} 0%, ${adjustColor(product.colorHex, -30)} 100%)`
-            }}
           >
-            {/* Subtle wood grain texture overlay */}
-            <div 
-              className="absolute inset-0 opacity-30"
-              style={{
-                backgroundImage: `repeating-linear-gradient(
-                  90deg,
-                  transparent,
-                  transparent 2px,
-                  rgba(0,0,0,0.05) 2px,
-                  rgba(0,0,0,0.05) 4px
-                )`
-              }}
+            <img 
+              src={product.image} 
+              alt={product.name}
+              className="w-full h-full object-cover"
             />
             {/* Overlay on hover */}
             <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
@@ -86,6 +67,7 @@ const CWCGallerySection = () => {
     id: color.id,
     name: color.name,
     colorHex: color.colorHex,
+    image: color.image,
   }));
 
   // Triple products for infinite scroll
