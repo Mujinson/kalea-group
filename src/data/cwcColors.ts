@@ -13,42 +13,42 @@ export const cwcColors: CWCColor[] = [
     id: 'nexa',
     name: 'Nexa',
     number: 1,
-    colorHex: '#d4cfc9', // Light gray/whitish wood
+    colorHex: '#c9c4be', // Beige chiaro/rovere sbiancato
   },
   {
     id: 'orama',
     name: 'Orama',
     number: 2,
-    colorHex: '#8b8278', // Dark gray wood
+    colorHex: '#6b6058', // Grigio-marrone scuro
   },
   {
     id: 'nuvia',
     name: 'Nuvia',
     number: 3,
-    colorHex: '#c9a96c', // Light golden/blonde wood
+    colorHex: '#c9a55c', // Miele dorato
   },
   {
     id: 'mielea',
     name: 'Mielea',
     number: 4,
-    colorHex: '#d4b896', // Honey/light brown wood
+    colorHex: '#d8c9a8', // Beige naturale chiaro
   },
   {
     id: 'argilla',
     name: 'Argilla',
     number: 5,
-    colorHex: '#a89078', // Medium brown/beige wood
+    colorHex: '#a09690', // Grigio medio
   },
   {
     id: 'radice',
     name: 'Radice',
     number: 6,
-    colorHex: '#7a5d48', // Dark brown wood
+    colorHex: '#8b5a3c', // Marrone caramello scuro
   },
   {
     id: 'vetra',
     name: 'Vetra',
     number: 7,
-    colorHex: '#c8c0b8', // Light gray/white wood
+    colorHex: '#c4bdb5', // Grigio chiaro naturale
   },
 ];
