@@ -182,15 +182,15 @@ export const stonecoreColors: ColorItem[] = [
   { name: "Velora", slug: "velora", circleImage: finishVelora, plankImage: finishVelora },
 ];
 
-// CWC colors - using color circles for now (images can be added later)
+// CWC colors - BIOWOOD FLOOR® collection (7 colors)
 export const cwcColors: ColorItem[] = [
-  { name: "Nexa", slug: "nexa", circleImage: "", plankImage: "", colorHex: "#d4cfc9" },
-  { name: "Orama", slug: "orama", circleImage: "", plankImage: "", colorHex: "#8b8278" },
-  { name: "Nuvia", slug: "nuvia", circleImage: "", plankImage: "", colorHex: "#c9a96c" },
-  { name: "Mielea", slug: "mielea", circleImage: "", plankImage: "", colorHex: "#d4b896" },
-  { name: "Argilla", slug: "argilla", circleImage: "", plankImage: "", colorHex: "#a89078" },
-  { name: "Radice", slug: "radice", circleImage: "", plankImage: "", colorHex: "#7a5d48" },
-  { name: "Vetra", slug: "vetra", circleImage: "", plankImage: "", colorHex: "#c8c0b8" },
+  { name: "Nexa", slug: "nexa", circleImage: "", plankImage: "", colorHex: "#c9c4be" },
+  { name: "Orama", slug: "orama", circleImage: "", plankImage: "", colorHex: "#6b6058" },
+  { name: "Nuvia", slug: "nuvia", circleImage: "", plankImage: "", colorHex: "#c9a55c" },
+  { name: "Mielea", slug: "mielea", circleImage: "", plankImage: "", colorHex: "#d8c9a8" },
+  { name: "Argilla", slug: "argilla", circleImage: "", plankImage: "", colorHex: "#a09690" },
+  { name: "Radice", slug: "radice", circleImage: "", plankImage: "", colorHex: "#8b5a3c" },
+  { name: "Vetra", slug: "vetra", circleImage: "", plankImage: "", colorHex: "#c4bdb5" },
 ];
 
 export type { ColorItem };
