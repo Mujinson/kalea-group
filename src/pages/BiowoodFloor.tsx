@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import heroImage from "@/assets/product-biowood-floor.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import bgAtossicoCard from "@/assets/bg-atossico-card.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -322,7 +323,12 @@ const BiowoodFloor = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {advantages.map((advantage, index) => (
-              <FeatureCard key={advantage.title} {...advantage} index={index} />
+              <FeatureCard 
+                key={advantage.title} 
+                {...advantage} 
+                index={index} 
+                backgroundImage={advantage.title === "Completamente atossico" ? bgAtossicoCard : undefined}
+              />
             ))}
           </div>
         </div>
