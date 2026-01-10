@@ -15,6 +15,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import bgAtossicoCard from "@/assets/bg-atossico-card.png";
 import bgBiodegradabileCard from "@/assets/bg-biodegradabile-card.png";
 import bgComfortCard from "@/assets/bg-comfort-card.png";
+import bgAcusticaCard from "@/assets/bg-acustica-card.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -333,6 +334,7 @@ const BiowoodFloor = () => {
                   advantage.title === "Completamente atossico" ? bgAtossicoCard : 
                   advantage.title === "Materiale biodegradabile" ? bgBiodegradabileCard : 
                   advantage.title === "Elevato comfort di calpestio" ? bgComfortCard :
+                  advantage.title === "Ottime prestazioni acustiche" ? bgAcusticaCard :
                   undefined
                 }
               />
