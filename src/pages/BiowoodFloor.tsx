@@ -14,6 +14,7 @@ import bgStoneCore from "@/assets/bg-stonecore.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import bgAtossicoCard from "@/assets/bg-atossico-card.png";
 import bgBiodegradabileCard from "@/assets/bg-biodegradabile-card.png";
+import bgComfortCard from "@/assets/bg-comfort-card.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -331,6 +332,7 @@ const BiowoodFloor = () => {
                 backgroundImage={
                   advantage.title === "Completamente atossico" ? bgAtossicoCard : 
                   advantage.title === "Materiale biodegradabile" ? bgBiodegradabileCard : 
+                  advantage.title === "Elevato comfort di calpestio" ? bgComfortCard :
                   undefined
                 }
               />
