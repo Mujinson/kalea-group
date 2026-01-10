@@ -40,9 +40,9 @@ const FeatureCard = ({ icon: Icon, title, description, index = 0, backgroundImag
         <div className="absolute inset-0 bg-card-surface" />
       )}
       
-      {/* Gradient overlay - only for images */}
+      {/* Gradient overlay - only for images, very light to show image */}
       {backgroundImage && (
-        <div className="absolute inset-0 bg-gradient-to-b from-card-surface/50 to-card-surface/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/40" />
       )}
       
       <div className={`relative z-10 flex flex-col h-full ${compact ? 'p-4 md:p-8 lg:p-10' : 'p-8 md:p-10'}`}>
