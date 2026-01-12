@@ -31,6 +31,9 @@ const HeroSection = ({
   minHeight = "min-h-screen",
 }: HeroSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Check if this is a full-screen hero (needs fixed background) or shorter hero (needs relative)
+  const isFullScreen = minHeight === "min-h-screen";
 
   const { scale, borderRadius, imageY, contentOpacity, contentY, overlayOpacity } = useHitobaScroll(
     containerRef as React.RefObject<HTMLElement>,
@@ -54,20 +57,30 @@ const HeroSection = ({
 
   return (
     <div ref={containerRef} className={`relative ${minHeight}`}>
-      {/* Fixed background that scales and rounds on scroll */}
-      <motion.div className="fixed inset-0 z-0 overflow-hidden origin-center" style={{ scale, borderRadius }}>
+      {/* Background - fixed for fullscreen, absolute for shorter heroes */}
+      <motion.div 
+        className={`${isFullScreen ? 'fixed' : 'absolute'} inset-0 z-0 overflow-hidden origin-center`} 
+        style={isFullScreen ? { scale, borderRadius } : undefined}
+      >
         {backgroundImage ? (
           <>
             <motion.img
               src={backgroundImage}
               alt=""
               className="absolute inset-0 w-full h-full object-cover will-change-transform"
-              style={{ objectPosition: backgroundPosition, y: imageY, scale: 1.1 }}
+              style={{ 
+                objectPosition: backgroundPosition, 
+                y: isFullScreen ? imageY : 0, 
+                scale: 1.1 
+              }}
               initial={{ filter: "blur(12px)", scale: 1.2 }}
               animate={{ filter: "blur(0px)", scale: 1.1 }}
               transition={{ duration: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             />
-            <motion.div className={`absolute inset-0 ${overlayClassName}`} style={{ opacity: overlayOpacity }} />
+            <motion.div 
+              className={`absolute inset-0 ${overlayClassName}`} 
+              style={isFullScreen ? { opacity: overlayOpacity } : undefined} 
+            />
           </>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-background via-secondary/30 to-background" />
@@ -78,7 +91,10 @@ const HeroSection = ({
       <div
         className={`relative z-10 ${minHeight} flex flex-col items-center justify-start pt-32 pb-16 md:justify-end md:pt-0 md:pb-32`}
       >
-        <motion.div style={{ opacity: contentOpacity, y: contentY }} className="container-custom will-change-transform">
+        <motion.div 
+          style={isFullScreen ? { opacity: contentOpacity, y: contentY } : undefined} 
+          className="container-custom will-change-transform"
+        >
           <div className="max-w-4xl mx-auto text-center">
             <AnimatedTitle
               text={title}
