@@ -12,3 +12,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Sitemap
+Sitemap: https://www.kalea.it/sitemap.xml
+
+# Disallow admin area
+Disallow: /admin/
