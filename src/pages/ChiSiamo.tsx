@@ -80,7 +80,7 @@ const ChiSiamo = () => {
             <h2 className="font-heading text-foreground mb-6">{t('aboutUs.historyTitle')}</h2>
             
             {/* Founder Images */}
-            <div className="flex justify-center gap-8 mb-8">
+            <div className="flex justify-center gap-6 md:gap-10 mb-10">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -88,14 +88,14 @@ const ChiSiamo = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex flex-col items-center"
               >
-                <div className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg mb-3">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
                   <img 
                     src={fondatore1} 
-                    alt="Andrea Facchinetti" 
+                    alt="Andrea Facchinetti - Co-fondatore Kalēa" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="text-foreground font-medium">Andrea Facchinetti</span>
+                <span className="text-sm md:text-base text-foreground font-medium">Andrea Facchinetti</span>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -104,14 +104,14 @@ const ChiSiamo = () => {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="flex flex-col items-center"
               >
-                <div className="w-48 h-48 rounded-lg overflow-hidden border-2 border-border shadow-lg mb-3">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
                   <img 
                     src={fondatore2} 
-                    alt="Gabriel Vladu" 
+                    alt="Gabriel Vladu - Co-fondatore Kalēa" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="text-foreground font-medium">Gabriel Vladu</span>
+                <span className="text-sm md:text-base text-foreground font-medium">Gabriel Vladu</span>
               </motion.div>
             </div>
 
