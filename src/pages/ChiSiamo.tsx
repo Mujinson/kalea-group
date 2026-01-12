@@ -77,7 +77,7 @@ const ChiSiamo = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">{t('aboutUs.historyTitle')}</h2>
+            <h2 className="font-heading text-foreground mb-6">{t('aboutUs.historyTitle')}</h2>
             
             {/* Founder Images */}
             <div className="flex justify-center gap-8 mb-8">
@@ -115,8 +115,8 @@ const ChiSiamo = () => {
               </motion.div>
             </div>
 
-            <div className="space-y-6 text-center text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-              <p className="whitespace-pre-line text-lg font-medium text-foreground">{t('aboutUs.historyIntro')}</p>
+            <div className="space-y-6 text-center text-muted-foreground max-w-3xl mx-auto">
+              <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyIntro')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyAndrea')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyGabriel')}</p>
               <p className="whitespace-pre-line italic text-foreground/80">{t('aboutUs.historyQuestions')}</p>
@@ -129,7 +129,7 @@ const ChiSiamo = () => {
               <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyToday')}</p>
               <p className="whitespace-pre-line text-left inline-block">{t('aboutUs.historyValues')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyProfessionals')}</p>
-              <p className="whitespace-pre-line text-lg font-semibold text-foreground">{t('aboutUs.historyConclusion')}</p>
+              <p className="whitespace-pre-line font-semibold text-foreground">{t('aboutUs.historyConclusion')}</p>
             </div>
           </motion.div>
         </div>
@@ -145,8 +145,8 @@ const ChiSiamo = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('aboutUs.valuesTitle')}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="font-heading text-foreground mb-4">{t('aboutUs.valuesTitle')}</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               {t('aboutUs.valuesSubtitle')}
             </p>
           </motion.div>
@@ -169,8 +169,8 @@ const ChiSiamo = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t('aboutUs.customersTitle')}</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <h2 className="font-heading text-foreground mb-4">{t('aboutUs.customersTitle')}</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               {t('aboutUs.customersSubtitle')}
             </p>
           </motion.div>
@@ -227,13 +227,13 @@ const ChiSiamo = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 
-              className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white"
+              className="font-heading mb-6 text-white"
               style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
             >
               {t('aboutUs.ctaTitle')}
             </h2>
             <p 
-              className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
+              className="mb-8 max-w-2xl mx-auto text-white/90"
               style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
             >
               {t('aboutUs.ctaSubtitle')}
