@@ -47,13 +47,13 @@
     <priority>0.8</priority>
   </url>
   
-  <!-- BIOWOOD FLOOR -->
+  <!-- BIOCORE FLOOR -->
   <url>
-    <loc>https://www.kalea.it/it/biowood-floor</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.it/it/biowood-floor"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.it/en/biowood-floor"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.it/de/biowood-floor"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.it/fr/biowood-floor"/>
+    <loc>https://www.kalea.it/it/biocore-floor</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.it/it/biocore-floor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.it/en/biocore-floor"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.it/de/biocore-floor"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.it/fr/biocore-floor"/>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

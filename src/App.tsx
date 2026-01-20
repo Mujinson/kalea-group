@@ -9,7 +9,7 @@ import Home from "./pages/Home";
 import Indoor from "./pages/Indoor";
 import Outdoor from "./pages/Outdoor";
 import BiomagFloor from "./pages/BiomagFloor";
-import BiowoodFloor from "./pages/BiowoodFloor";
+import BiocoreFloor from "./pages/BiocoreFloor";
 import EdgeLine from "./pages/EdgeLine";
 import Biowall from "./pages/Biowall";
 import Kaleabase from "./pages/Kaleabase";
@@ -132,7 +132,7 @@ const App = () => (
               <Route path="/it/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/it/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/it/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/it/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
@@ -156,7 +156,7 @@ const App = () => (
               <Route path="/en/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/en/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/en/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/en/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
@@ -180,7 +180,7 @@ const App = () => (
               <Route path="/de/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/de/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/de/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/de/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
@@ -204,7 +204,7 @@ const App = () => (
               <Route path="/fr/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/fr/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/fr/biowood-floor" element={<><SEOHandler /><Layout><BiowoodFloor /></Layout></>} />
+              <Route path="/fr/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
