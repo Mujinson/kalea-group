@@ -1,13 +1,13 @@
-// Data for CWC (Carbon Wood Composite) color collection - BIOWOOD FLOOR®
+// Data for CWC (Carbon Wood Composite) color collection - BIOCORE FLOOR®
 
 // Import images
-import biowoodNexa from "@/assets/biowood-nexa.png";
-import biowoodOrama from "@/assets/biowood-orama.png";
-import biowoodNuvia from "@/assets/biowood-nuvia.png";
-import biowoodMielea from "@/assets/biowood-mielea.png";
-import biowoodArgilla from "@/assets/biowood-argilla.png";
-import biowoodRadice from "@/assets/biowood-radice.png";
-import biowoodVetra from "@/assets/biowood-vetra.png";
+import biocoreNexa from "@/assets/biocore-nexa.png";
+import biocoreOrama from "@/assets/biocore-orama.png";
+import biocoreNuvia from "@/assets/biocore-nuvia.png";
+import biocoreMielea from "@/assets/biocore-mielea.png";
+import biocoreArgilla from "@/assets/biocore-argilla.png";
+import biocoreRadice from "@/assets/biocore-radice.png";
+import biocoreVetra from "@/assets/biocore-vetra.png";
 
 export interface CWCColor {
   id: string;
@@ -23,48 +23,48 @@ export const cwcColors: CWCColor[] = [
     name: 'Nexa',
     number: 1,
     colorHex: '#c9c4be',
-    image: biowoodNexa,
+    image: biocoreNexa,
   },
   {
     id: 'orama',
     name: 'Orama',
     number: 2,
     colorHex: '#6b6058',
-    image: biowoodOrama,
+    image: biocoreOrama,
   },
   {
     id: 'nuvia',
     name: 'Nuvia',
     number: 3,
     colorHex: '#c9a55c',
-    image: biowoodNuvia,
+    image: biocoreNuvia,
   },
   {
     id: 'mielea',
     name: 'Mielea',
     number: 4,
     colorHex: '#d8c9a8',
-    image: biowoodMielea,
+    image: biocoreMielea,
   },
   {
     id: 'argilla',
     name: 'Argilla',
     number: 5,
     colorHex: '#a09690',
-    image: biowoodArgilla,
+    image: biocoreArgilla,
   },
   {
     id: 'radice',
     name: 'Radice',
     number: 6,
     colorHex: '#8b5a3c',
-    image: biowoodRadice,
+    image: biocoreRadice,
   },
   {
     id: 'vetra',
     name: 'Vetra',
     number: 7,
     colorHex: '#c4bdb5',
-    image: biowoodVetra,
+    image: biocoreVetra,
   },
 ];

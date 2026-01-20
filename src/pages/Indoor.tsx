@@ -8,7 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import productBiomagFloor from "@/assets/product-biomag-floor.jpg";
-import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
+import productBiocoreFloor from "@/assets/product-biocore-floor.jpg";
 import productKaleabase from "@/assets/product-kaleabase.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
@@ -45,10 +45,10 @@ const Indoor = () => {
       link: `/${language}/biomag-floor`,
     },
     {
-      name: "BIOWOOD FLOOR®",
+      name: "BIOCORE FLOOR®",
       description: "Pavimento in CWC con anima naturale e stabilità superiore.",
-      image: productBiowoodFloor,
-      link: `/${language}/biowood-floor`,
+      image: productBiocoreFloor,
+      link: `/${language}/biocore-floor`,
     },
     {
       name: "KALEABASE®",

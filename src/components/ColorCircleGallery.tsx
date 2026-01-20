@@ -12,14 +12,14 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
-// Import BIOWOOD FLOOR images
-import biowoodNexa from "@/assets/biowood-nexa.png";
-import biowoodOrama from "@/assets/biowood-orama.png";
-import biowoodNuvia from "@/assets/biowood-nuvia.png";
-import biowoodMielea from "@/assets/biowood-mielea.png";
-import biowoodArgilla from "@/assets/biowood-argilla.png";
-import biowoodRadice from "@/assets/biowood-radice.png";
-import biowoodVetra from "@/assets/biowood-vetra.png";
+// Import BIOCORE FLOOR images
+import biocoreNexa from "@/assets/biocore-nexa.png";
+import biocoreOrama from "@/assets/biocore-orama.png";
+import biocoreNuvia from "@/assets/biocore-nuvia.png";
+import biocoreMielea from "@/assets/biocore-mielea.png";
+import biocoreArgilla from "@/assets/biocore-argilla.png";
+import biocoreRadice from "@/assets/biocore-radice.png";
+import biocoreVetra from "@/assets/biocore-vetra.png";
 
 // Helper function to darken a hex color
 const adjustColor = (hex: string, amount: number): string => {
@@ -191,15 +191,15 @@ export const stonecoreColors: ColorItem[] = [
   { name: "Velora", slug: "velora", circleImage: finishVelora, plankImage: finishVelora },
 ];
 
-// CWC colors - BIOWOOD FLOOR® collection (7 colors) with real images
+// CWC colors - BIOCORE FLOOR® collection (7 colors) with real images
 export const cwcColors: ColorItem[] = [
-  { name: "Nexa", slug: "nexa", circleImage: biowoodNexa, plankImage: biowoodNexa, colorHex: "#c9c4be" },
-  { name: "Orama", slug: "orama", circleImage: biowoodOrama, plankImage: biowoodOrama, colorHex: "#6b6058" },
-  { name: "Nuvia", slug: "nuvia", circleImage: biowoodNuvia, plankImage: biowoodNuvia, colorHex: "#c9a55c" },
-  { name: "Mielea", slug: "mielea", circleImage: biowoodMielea, plankImage: biowoodMielea, colorHex: "#d8c9a8" },
-  { name: "Argilla", slug: "argilla", circleImage: biowoodArgilla, plankImage: biowoodArgilla, colorHex: "#a09690" },
-  { name: "Radice", slug: "radice", circleImage: biowoodRadice, plankImage: biowoodRadice, colorHex: "#8b5a3c" },
-  { name: "Vetra", slug: "vetra", circleImage: biowoodVetra, plankImage: biowoodVetra, colorHex: "#c4bdb5" },
+  { name: "Nexa", slug: "nexa", circleImage: biocoreNexa, plankImage: biocoreNexa, colorHex: "#c9c4be" },
+  { name: "Orama", slug: "orama", circleImage: biocoreOrama, plankImage: biocoreOrama, colorHex: "#6b6058" },
+  { name: "Nuvia", slug: "nuvia", circleImage: biocoreNuvia, plankImage: biocoreNuvia, colorHex: "#c9a55c" },
+  { name: "Mielea", slug: "mielea", circleImage: biocoreMielea, plankImage: biocoreMielea, colorHex: "#d8c9a8" },
+  { name: "Argilla", slug: "argilla", circleImage: biocoreArgilla, plankImage: biocoreArgilla, colorHex: "#a09690" },
+  { name: "Radice", slug: "radice", circleImage: biocoreRadice, plankImage: biocoreRadice, colorHex: "#8b5a3c" },
+  { name: "Vetra", slug: "vetra", circleImage: biocoreVetra, plankImage: biocoreVetra, colorHex: "#c4bdb5" },
 ];
 
 export type { ColorItem };

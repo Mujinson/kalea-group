@@ -27,7 +27,7 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       home: {
-        title: "Sistema di superfici BIOMAG FLOOR® e BIOWOOD FLOOR®",
+        title: "Sistema di superfici BIOMAG FLOOR® e BIOCORE FLOOR®",
         subtitle: "Pavimenti, profili e pannelli. Architettura degli interni, progettata in Italia.",
         ctaPrimary: "Scopri il sistema",
         ctaSecondary: "Diventa Partner",
@@ -93,8 +93,8 @@ export const translations: Record<Language, Translations> = {
         title: "BIOMAG FLOOR®",
         description: "Superfici tecniche BIOMAG FLOOR® con texture wood. Posa flottante, continuità visiva, prestazioni certificate.",
       },
-      biowood: {
-        title: "BIOWOOD FLOOR®",
+      biocore: {
+        title: "BIOCORE FLOOR®",
         description: "Pavimento naturale evoluto con fibre di legno e carbonio. Eco-sostenibile, atossico, biodegradabile.",
       },
       edgeline: {

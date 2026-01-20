@@ -9,7 +9,7 @@ import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/product-biowood-floor.jpg";
+import heroImage from "@/assets/product-biocore-floor.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import bgAtossicoCard from "@/assets/bg-atossico-card.png";
@@ -19,7 +19,7 @@ import bgAcusticaCard from "@/assets/bg-acustica-card.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const BiowoodFloor = () => {
+const BiocoreFloor = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
   
@@ -153,7 +153,7 @@ const BiowoodFloor = () => {
         >
           <motion.img 
             src={heroImage} 
-            alt="Pavimenti BIOWOOD® naturale evoluto"
+            alt="Pavimenti BIOCORE® naturale evoluto"
             className="absolute inset-0 w-full h-full object-cover will-change-transform"
             style={{ 
               y: heroImageY,
@@ -174,7 +174,7 @@ const BiowoodFloor = () => {
           >
             <div className="max-w-4xl mx-auto">
               <AnimatedTitle
-                text="Pavimenti BIOWOOD®"
+                text="Pavimenti BIOCORE®"
                 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
               />
 
@@ -184,7 +184,7 @@ const BiowoodFloor = () => {
                 transition={{ duration: 0.7, delay: 0.4 }}
                 className="text-lg md:text-xl lg:text-2xl text-white/90 font-light mb-8 max-w-2xl mx-auto"
               >
-                BIOWOOD® (pavimento naturale evoluto con fibre di legno e carbonio). Pavimenti di nuova generazione progettati per unire prestazioni tecniche, comfort ed ecosostenibilità.
+                BIOCORE® (pavimento naturale evoluto con fibre di legno e carbonio). Pavimenti di nuova generazione progettati per unire prestazioni tecniche, comfort ed ecosostenibilità.
               </motion.p>
 
               <motion.div
@@ -242,7 +242,7 @@ const BiowoodFloor = () => {
             </h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p className="text-lg leading-relaxed mb-6">
-                I pavimenti KALĒA BIOWOOD® sono realizzati con fibre di legno selezionate, componenti a base di carbonio e leganti naturali, senza plastica, senza PVC e senza sostanze tossiche.
+                I pavimenti KALĒA BIOCORE® sono realizzati con fibre di legno selezionate, componenti a base di carbonio e leganti naturali, senza plastica, senza PVC e senza sostanze tossiche.
               </p>
               <p className="text-lg leading-relaxed">
                 Il core strutturale utilizza resine di origine naturale come legante, rendendo il pavimento atossico, eco-sostenibile e biodegradabile, ideale per ambienti abitativi e professionali attenti alla salute e all'impatto ambientale.
@@ -266,7 +266,7 @@ const BiowoodFloor = () => {
               Struttura multistrato
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Ogni tavola BIOWOOD® è progettata per offrire stabilità, comfort e prestazioni durature nel tempo.
+              Ogni tavola BIOCORE® è progettata per offrire stabilità, comfort e prestazioni durature nel tempo.
             </p>
           </motion.div>
 
@@ -299,7 +299,7 @@ const BiowoodFloor = () => {
       <section className="relative z-[3] bg-background py-20">
         <div className="container-custom">
           <ColorCircleGallery 
-            title="La Collezione BIOWOOD®"
+            title="La Collezione BIOCORE®"
             subtitle="Sette tonalità naturali ispirate alle essenze del legno, per ogni stile abitativo"
             colors={cwcColors}
           />
@@ -578,7 +578,7 @@ const BiowoodFloor = () => {
                 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-white"
                 style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
               >
-                Scopri la collezione BIOWOOD® KALĒA
+                Scopri la collezione BIOCORE® KALĒA
               </h2>
               <p 
                 className="text-lg mb-8 max-w-2xl mx-auto text-white/90"
@@ -602,4 +602,4 @@ const BiowoodFloor = () => {
   );
 };
 
-export default BiowoodFloor;
+export default BiocoreFloor;

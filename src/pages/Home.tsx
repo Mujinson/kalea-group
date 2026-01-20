@@ -21,7 +21,7 @@ import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
 import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import productBiomagFloor from "@/assets/product-biomag-floor-new.jpg";
-import productBiowoodFloor from "@/assets/product-biowood-floor.jpg";
+import productBiocoreFloor from "@/assets/product-biocore-floor.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall-interior.jpg";
 import productKaleaElements from "@/assets/product-kalea-elements.png";
@@ -44,11 +44,11 @@ const Home = () => {
       image: productBiomagFloor,
     },
     {
-      title: t('home.biowood.title'),
-      description: t('home.biowood.description'),
-      link: `/${language}/biowood-floor`,
+      title: t('home.biocore.title'),
+      description: t('home.biocore.description'),
+      link: `/${language}/biocore-floor`,
       comingSoon: false,
-      image: productBiowoodFloor,
+      image: productBiocoreFloor,
     },
   ];
 
