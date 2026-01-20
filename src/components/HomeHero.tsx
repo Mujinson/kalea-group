@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import heroImage from "@/assets/hero-kalea.webp";
+import heroImage from "@/assets/hero-kalea-2.jpg";
 
 const HomeHero = () => {
   const { t, language } = useTranslation();
