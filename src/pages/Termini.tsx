@@ -210,7 +210,7 @@ const Termini = () => {
                   </a>
                 </p>
                 <p>
-                  <strong>Tel:</strong> +39 012 345 6789
+                  <strong>Tel:</strong> +39 352 035 1738
                 </p>
               </div>
             </div>
