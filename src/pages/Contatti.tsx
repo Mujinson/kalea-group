@@ -90,6 +90,7 @@ const Contatti = () => {
 
   const interests = [
     t('contacts.interestsList.stonecore'), 
+    t('contacts.interestsList.kaleabase'),
     t('contacts.interestsList.edgeline'), 
     t('contacts.interestsList.onewall'), 
     t('contacts.interestsList.partnership')
