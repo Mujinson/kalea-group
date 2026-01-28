@@ -496,10 +496,11 @@ const BiocoreFloor = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-6 rounded-2xl bg-background border border-border text-center"
+                className="p-6 rounded-2xl bg-card-surface text-center"
+                style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
               >
-                <h3 className="font-heading font-semibold text-foreground mb-2">{app.title}</h3>
-                <p className="text-sm text-muted-foreground">{app.description}</p>
+                <h3 className="font-heading font-semibold text-white mb-2">{app.title}</h3>
+                <p className="text-sm text-white/80 font-medium">{app.description}</p>
               </motion.div>
             ))}
           </div>
