@@ -25,7 +25,7 @@ const MaterialPerformanceCard = () => {
     },
     {
       icon: Zap,
-      text: "Installazione rapida con sistema KalēaLock",
+      text: "Installazione rapida con sistema Kalēa®Lock",
     },
   ];
 

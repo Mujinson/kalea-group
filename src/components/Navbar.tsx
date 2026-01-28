@@ -309,7 +309,7 @@ const Navbar = () => {
             >
               <img 
                 src={logo} 
-                alt="Kalēa" 
+                alt="Kalēa®" 
                 className={`h-8 md:h-10 transition-all duration-300 ${
                   useDarkStyle ? "brightness-0" : "brightness-0 invert"
                 }`} 

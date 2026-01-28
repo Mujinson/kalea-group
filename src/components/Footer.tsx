@@ -31,7 +31,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Logo & Tagline */}
           <div>
-            <img src={logoFooter} alt="Kalēa" className="h-8 mb-3" />
+            <img src={logoFooter} alt="Kalēa®" className="h-8 mb-3" />
             <p className="text-muted-foreground text-body">{t("footer.tagline")}</p>
           </div>
 
@@ -171,7 +171,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Kalēa. {t("footer.copyright")}
+            © {currentYear} Kalēa®. {t("footer.copyright")}
           </p>
           <div className="flex gap-6">
             <Link

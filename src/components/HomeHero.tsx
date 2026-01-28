@@ -12,7 +12,7 @@ const HomeHero = () => {
       <div className="absolute inset-0">
         <img 
           src={heroImage} 
-          alt="Kalēa Surface System" 
+          alt="Kalēa® Surface System®" 
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />

@@ -18,7 +18,7 @@ const Welcome = () => {
   const cards: WelcomeCard[] = [
     {
       icon: Home,
-      title: "Scopri Kalēa",
+      title: "Scopri Kalēa®",
       description: "Esplora il nostro sistema integrato per superfici contemporanee",
       link: `/${language}`,
     },
@@ -65,7 +65,7 @@ const Welcome = () => {
         >
           <img 
             src={logoImage} 
-            alt="Kalēa" 
+            alt="Kalēa®" 
             className="h-12 md:h-16 w-auto brightness-0 invert drop-shadow-lg"
           />
         </motion.div>
@@ -78,7 +78,7 @@ const Welcome = () => {
           className="text-center mb-12"
         >
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4 drop-shadow-lg">
-            Benvenuto in Kalēa
+            Benvenuto in Kalēa®
           </h1>
           <p className="text-white/90 text-lg md:text-xl max-w-md mx-auto drop-shadow-md">
             Surface System® — Superfici contemporanee per interni ed esterni
@@ -124,7 +124,7 @@ const Welcome = () => {
           transition={{ duration: 0.6, delay: 0.8 }}
           className="mt-12 text-white/60 text-sm"
         >
-          © {new Date().getFullYear()} Kalēa Surface System®
+          © {new Date().getFullYear()} Kalēa® Surface System®
         </motion.p>
       </div>
     </div>
