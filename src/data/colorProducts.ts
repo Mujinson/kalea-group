@@ -1,4 +1,4 @@
-// Data for all Kalēa color product pages
+// Data for all Kalēa® color product pages
 
 export interface ColorProduct {
   id: string;

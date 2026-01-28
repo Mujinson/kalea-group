@@ -59,7 +59,7 @@ const Outdoor = () => {
   return (
     <div className="relative bg-background">
       {/* SEO Meta */}
-      <title>Outdoor Solutions | Kalēa Surface System</title>
+      <title>Outdoor Solutions | Kalēa® Surface System®</title>
       <meta
         name="description"
         content="Materiali progettati per resistere all'esterno, senza compromessi. Design, durata e funzionalità per ogni ambiente outdoor."

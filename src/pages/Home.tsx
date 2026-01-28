@@ -467,7 +467,7 @@ const Home = () => {
 
               <div className="pt-5 md:pt-8 space-y-2">
                 <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-foreground font-medium uppercase">
-                  KALĒA — SURFACE SYSTEM®
+                  KALĒA® — SURFACE SYSTEM®
                 </p>
                 <p className="text-sm md:text-base text-foreground/75 font-light">
                   {t('hero.manifesto.brandStatement')}
@@ -509,7 +509,7 @@ const Home = () => {
                 <span>{t('home.ctaTitleBefore')}</span>
                 <img 
                   src={logo} 
-                  alt="Kalēa" 
+                  alt="Kalēa®" 
                   className="inline-block h-[1.2em] w-auto"
                   style={{ 
                     filter: 'brightness(0) invert(1)',

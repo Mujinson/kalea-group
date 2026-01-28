@@ -573,7 +573,7 @@ const Kaleabase = () => {
               { layer: 1, name: "Massetto", desc: "Base portante, deve essere asciutto e livellato" },
               { layer: 2, name: "Barriera Vapore", desc: "Protezione dall'umidità residua (Kalea Base Hydro)" },
               { layer: 3, name: "Sottopavimento", desc: "Isolamento acustico e termico (Kalea Base Silence/Pro/Therm)" },
-              { layer: 4, name: "Pavimento Kalēa", desc: "Superficie flottante con sistema click" },
+              { layer: 4, name: "Pavimento Kalēa®", desc: "Superficie flottante con sistema click" },
             ].map((item, index) => (
               <motion.div
                 key={item.layer}

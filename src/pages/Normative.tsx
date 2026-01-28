@@ -24,7 +24,7 @@ const Normative = () => {
   const texts = {
     it: {
       pageTitle: 'Normative e Certificazioni',
-      pageSubtitle: 'Documentazione completa sulla conformità dei prodotti Kalēa',
+      pageSubtitle: 'Documentazione completa sulla conformità dei prodotti Kalēa®',
       heroDescription: 'Tutti i pavimenti BIOMAG FLOOR® sono conformi al Regolamento UE 305/2011 (CPR) e alle norme armonizzate europee per i rivestimenti da pavimento.',
       
       dopTitle: 'Dichiarazione di Prestazione (DoP)',
@@ -57,7 +57,7 @@ const Normative = () => {
     },
     en: {
       pageTitle: 'Standards & Certifications',
-      pageSubtitle: 'Complete documentation on Kalēa product compliance',
+      pageSubtitle: 'Complete documentation on Kalēa® product compliance',
       heroDescription: 'All BIOMAG FLOOR® floors comply with EU Regulation 305/2011 (CPR) and European harmonized standards for floor coverings.',
       
       dopTitle: 'Declaration of Performance (DoP)',
@@ -90,7 +90,7 @@ const Normative = () => {
     },
     de: {
       pageTitle: 'Normen & Zertifizierungen',
-      pageSubtitle: 'Vollständige Dokumentation zur Kalēa Produktkonformität',
+      pageSubtitle: 'Vollständige Dokumentation zur Kalēa® Produktkonformität',
       heroDescription: 'Alle BIOMAG FLOOR® Böden entsprechen der EU-Verordnung 305/2011 (BauPVO) und den europäischen harmonisierten Normen für Bodenbeläge.',
       
       dopTitle: 'Leistungserklärung (DoP)',
@@ -123,7 +123,7 @@ const Normative = () => {
     },
     fr: {
       pageTitle: 'Normes & Certifications',
-      pageSubtitle: 'Documentation complète sur la conformité des produits Kalēa',
+      pageSubtitle: 'Documentation complète sur la conformité des produits Kalēa®',
       heroDescription: 'Tous les sols BIOMAG FLOOR® sont conformes au Règlement UE 305/2011 (RPC) et aux normes harmonisées européennes pour les revêtements de sol.',
       
       dopTitle: 'Déclaration des Performances (DoP)',

@@ -40,7 +40,7 @@ const KaleaIntroSection = ({ variant = "home" }: KaleaIntroSectionProps) => {
               className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold mb-10 leading-tight"
               style={{ color: "#2B2B2B" }}
             >
-              KALĒA — SURFACE SYSTEM®
+              KALĒA® — SURFACE SYSTEM®
             </motion.h2>
 
             <motion.div

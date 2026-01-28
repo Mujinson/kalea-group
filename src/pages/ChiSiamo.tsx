@@ -91,7 +91,7 @@ const ChiSiamo = () => {
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
                   <img 
                     src={fondatore1} 
-                    alt="Andrea Facchinetti - Co-fondatore Kalēa" 
+                    alt="Andrea Facchinetti - Co-fondatore Kalēa®" 
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -107,7 +107,7 @@ const ChiSiamo = () => {
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
                   <img 
                     src={fondatore2} 
-                    alt="Gabriel Vladu - Co-fondatore Kalēa" 
+                    alt="Gabriel Vladu - Co-fondatore Kalēa®" 
                     className="w-full h-full object-cover"
                   />
                 </div>

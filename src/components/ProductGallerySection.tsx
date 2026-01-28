@@ -78,7 +78,7 @@ const ProductCard = ({ product, language }: { product: ProductType; language: st
           <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full overflow-hidden shadow-lg group-hover:shadow-2xl group-hover:shadow-kalea-tan/30 transition-all duration-500">
             <img
               src={product.image}
-              alt={`Kalēa ${product.name}`}
+              alt={`Kalēa® ${product.name}`}
               className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 filter contrast-[1.02] brightness-[1.02]"
               loading="lazy"
             />

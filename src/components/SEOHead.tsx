@@ -52,7 +52,7 @@ const SEOHead = ({
     setMetaTag("og:type", ogType, true);
     setMetaTag("og:image", ogImage, true);
     setMetaTag("og:url", `${BASE_URL}${location.pathname}`, true);
-    setMetaTag("og:site_name", "Kalēa", true);
+    setMetaTag("og:site_name", "Kalēa®", true);
     setMetaTag("og:locale", location.pathname.startsWith("/it") ? "it_IT" : 
                             location.pathname.startsWith("/de") ? "de_DE" :
                             location.pathname.startsWith("/fr") ? "fr_FR" : "en_US", true);
