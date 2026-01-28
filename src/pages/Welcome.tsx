@@ -83,19 +83,19 @@ const Welcome = () => {
           >
             <Link
               to={card.link}
-              className="group relative block p-6 md:p-8 rounded-2xl bg-kalea-brown/90 hover:bg-kalea-brown transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+              className="group relative block p-6 md:p-8 rounded-2xl bg-kalea-dark hover:bg-kalea-dark/90 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl shadow-md"
             >
-              <card.icon className="w-8 h-8 text-white/80 mb-4 group-hover:text-white transition-colors" />
+              <card.icon className="w-8 h-8 text-kalea-tan mb-4 group-hover:text-kalea-cream transition-colors" />
               
-              <h3 className="text-xl md:text-2xl font-heading font-semibold text-white mb-2">
+              <h3 className="text-xl md:text-2xl font-heading font-semibold text-kalea-cream mb-2">
                 {card.title}
               </h3>
               
-              <p className="text-white/70 text-sm md:text-base mb-4 font-medium">
+              <p className="text-kalea-cream/70 text-sm md:text-base mb-4 font-medium">
                 {card.description}
               </p>
               
-              <div className="flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
+              <div className="flex items-center gap-2 text-kalea-tan group-hover:text-kalea-cream transition-colors">
                 <span className="text-sm font-medium">Vai</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
