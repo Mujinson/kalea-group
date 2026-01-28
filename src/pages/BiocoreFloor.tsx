@@ -534,20 +534,20 @@ const BiocoreFloor = () => {
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
             <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-white/90">
-                <Check className="w-5 h-5 text-white/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Design italiano contemporaneo</span>
               </li>
-              <li className="flex items-start gap-3 text-white/90">
-                <Check className="w-5 h-5 text-white/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Ricerca continua sui materiali naturali</span>
               </li>
-              <li className="flex items-start gap-3 text-white/90">
-                <Check className="w-5 h-5 text-white/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Attenzione all'impatto ambientale</span>
               </li>
-              <li className="flex items-start gap-3 text-white/90">
-                <Check className="w-5 h-5 text-white/70 mt-0.5 flex-shrink-0" />
+              <li className="flex items-start gap-3 text-white font-medium">
+                <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span>Soluzioni per professionisti esigenti</span>
               </li>
             </ul>
