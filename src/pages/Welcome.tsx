@@ -9,7 +9,6 @@ interface WelcomeCard {
   title: string;
   description: string;
   link: string;
-  gradient: string;
 }
 
 const Welcome = () => {
@@ -21,33 +20,29 @@ const Welcome = () => {
       title: "Scopri Kalēa",
       description: "Esplora il nostro sistema integrato per superfici contemporanee",
       link: `/${language}`,
-      gradient: "from-[#1a1a1a] to-[#2d2d2d]",
     },
     {
       icon: FileText,
       title: "Area Tecnica",
       description: "Schede tecniche, certificazioni e documentazione",
       link: `/${language}/area-tecnica`,
-      gradient: "from-[#2d2d2d] to-[#3d3d3d]",
     },
     {
       icon: Users,
       title: "Diventa Partner",
       description: "Collabora con noi come rivenditore o professionista",
       link: `/${language}/diventa-partner`,
-      gradient: "from-[#3d3d3d] to-[#4d4d4d]",
     },
     {
       icon: Mail,
       title: "Contattaci",
       description: "Richiedi informazioni o preventivi personalizzati",
       link: `/${language}/contatti`,
-      gradient: "from-[#4d4d4d] to-[#5d5d5d]",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-12">
       {/* Logo */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -58,7 +53,7 @@ const Welcome = () => {
         <img 
           src={logoImage} 
           alt="Kalēa" 
-          className="h-12 md:h-16 w-auto brightness-0 invert"
+          className="h-12 md:h-16 w-auto"
         />
       </motion.div>
 
@@ -69,10 +64,10 @@ const Welcome = () => {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="text-center mb-12"
       >
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
           Benvenuto in Kalēa
         </h1>
-        <p className="text-white/60 text-lg md:text-xl max-w-md mx-auto">
+        <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto">
           Surface System® — Superfici contemporanee per interni ed esterni
         </p>
       </motion.div>
@@ -88,7 +83,7 @@ const Welcome = () => {
           >
             <Link
               to={card.link}
-              className={`group relative block p-6 md:p-8 rounded-2xl bg-gradient-to-br ${card.gradient} border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl`}
+              className="group relative block p-6 md:p-8 rounded-2xl bg-kalea-brown/90 hover:bg-kalea-brown transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
             >
               <card.icon className="w-8 h-8 text-white/80 mb-4 group-hover:text-white transition-colors" />
               
@@ -96,11 +91,11 @@ const Welcome = () => {
                 {card.title}
               </h3>
               
-              <p className="text-white/60 text-sm md:text-base mb-4">
+              <p className="text-white/70 text-sm md:text-base mb-4 font-medium">
                 {card.description}
               </p>
               
-              <div className="flex items-center gap-2 text-white/50 group-hover:text-white/80 transition-colors">
+              <div className="flex items-center gap-2 text-white/60 group-hover:text-white transition-colors">
                 <span className="text-sm font-medium">Vai</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
@@ -114,7 +109,7 @@ const Welcome = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.8 }}
-        className="mt-12 text-white/40 text-sm"
+        className="mt-12 text-muted-foreground text-sm"
       >
         © {new Date().getFullYear()} Kalēa Surface System®
       </motion.p>
