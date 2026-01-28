@@ -53,7 +53,7 @@ const Privacy = () => {
                     <div className="bg-secondary/10 p-4 rounded-lg">
                       <p className="font-medium text-foreground mb-2">Kalēa</p>
                       <p>Email: info@kalea.space</p>
-                      <p>Tel: +39 012 345 6789</p>
+                      <p>Tel: +39 352 035 1738</p>
                     </div>
                   </div>
                 </div>
@@ -210,7 +210,7 @@ const Privacy = () => {
                       </a>
                     </p>
                     <p>
-                      <strong>Tel:</strong> +39 012 345 6789
+                      <strong>Tel:</strong> +39 352 035 1738
                     </p>
                   </div>
                 </div>
