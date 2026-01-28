@@ -63,13 +63,13 @@ const SustainabilityImpact = () => {
             className="mt-12 rounded-2xl p-8 bg-card-surface"
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
-            <h3 className="text-xl font-heading font-semibold text-background mb-6">
+            <h3 className="text-xl font-heading font-semibold text-white mb-6">
               Punti chiave
             </h3>
             <ul className="space-y-4">
               {keyPoints.map((point, index) => (
-                <li key={index} className="flex items-start gap-3 text-background/90">
-                  <Check className="w-5 h-5 text-background/70 mt-0.5 flex-shrink-0" />
+                <li key={index} className="flex items-start gap-3 text-white/90">
+                  <Check className="w-5 h-5 text-white/70 mt-0.5 flex-shrink-0" />
                   <span>{point}</span>
                 </li>
               ))}
