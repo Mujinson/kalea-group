@@ -28,6 +28,7 @@ import SustainabilityDurability from "./pages/SustainabilityDurability";
 import SustainabilityMaintenance from "./pages/SustainabilityMaintenance";
 import Normative from "./pages/Normative";
 import Realizzazioni from "./pages/Realizzazioni";
+import Welcome from "./pages/Welcome";
 import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
@@ -124,6 +125,9 @@ const App = () => (
               </Route>
 
               {/* Main site routes */}
+              {/* Welcome landing page (QR code access) */}
+              <Route path="/welcome" element={<Welcome />} />
+              
               {/* Redirect root to /it */}
               <Route path="/" element={<Navigate to="/it" replace />} />
 
