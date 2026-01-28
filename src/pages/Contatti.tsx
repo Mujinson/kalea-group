@@ -287,8 +287,23 @@ const Contatti = () => {
                       <MapPin className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-heading font-semibold text-foreground mb-1">{t('contacts.locationLabel')}</h3>
-                      <p className="text-muted-foreground">{t('contacts.locationValue')}</p>
+                      <h3 className="font-heading font-semibold text-foreground mb-3">{t('contacts.locationLabel')}</h3>
+                      <div className="space-y-3 text-muted-foreground">
+                        <div>
+                          <p className="font-semibold text-foreground text-sm">{t('footer.legalHQ')}</p>
+                          <p>Via 4 Novembre, 15</p>
+                          <p>25078 Vestone (BS) Italy</p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-foreground text-sm">{t('footer.operationalHQ')}</p>
+                          <p>Via Generale Bernasconi, 8A</p>
+                          <p>25015 Desenzano del Garda (BS)</p>
+                        </div>
+                        <div className="pt-2 border-t border-foreground/10">
+                          <p>P.IVA: 04203540986</p>
+                          <p>REA: BS - 596517</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

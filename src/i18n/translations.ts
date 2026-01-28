@@ -611,6 +611,8 @@ export const translations: Record<Language, Translations> = {
       privacy: "Privacy Policy",
       terms: "Termini e Condizioni",
       certifications: "Normative e Certificazioni",
+      legalHQ: "Sede Legale",
+      operationalHQ: "Sede Operativa",
     },
     privacy: {
       title: "Privacy Policy",
@@ -1481,6 +1483,8 @@ export const translations: Record<Language, Translations> = {
       privacy: "Privacy Policy",
       terms: "Terms and Conditions",
       certifications: "Standards & Certifications",
+      legalHQ: "Registered Office",
+      operationalHQ: "Operational Office",
     },
     privacy: {
       title: "Privacy Policy",
@@ -2351,6 +2355,8 @@ export const translations: Record<Language, Translations> = {
       privacy: "Datenschutzerklärung",
       terms: "Allgemeine Geschäftsbedingungen",
       certifications: "Normen & Zertifizierungen",
+      legalHQ: "Rechtssitz",
+      operationalHQ: "Betriebssitz",
     },
     privacy: {
       title: "Datenschutzerklärung",
@@ -3227,6 +3233,8 @@ export const translations: Record<Language, Translations> = {
       privacy: "Politique de confidentialité",
       terms: "Termes et conditions",
       certifications: "Normes & Certifications",
+      legalHQ: "Siège Social",
+      operationalHQ: "Siège Opérationnel",
     },
     privacy: {
       title: "Politique de confidentialité",
