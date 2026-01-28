@@ -339,27 +339,27 @@ const BiomagFloor = () => {
                   <h3 className="text-xl font-heading font-semibold text-white mb-6">Specifiche tecniche</h3>
                   <ul className="space-y-3 text-white font-medium">
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Dimensioni plancia: 1220 x 180 mm</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Classe di reazione al fuoco: A2-s1, d0</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Resistenza all'acqua: IP68</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Resistenza all'abrasione: AC5</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Riduzione acustica: 19 dB</span>
                     </li>
                   </ul>
@@ -377,27 +377,27 @@ const BiomagFloor = () => {
                   <h3 className="text-xl font-heading font-semibold text-white mb-6">Istruzioni di posa</h3>
                   <ul className="space-y-3 text-white font-medium">
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Sistema flottante senza colla</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Preparazione sottofondo: livellato e pulito</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Acclimatazione: 24-48 ore in ambiente</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Giunto perimetrale: 8-10 mm</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Totale assenza di fughe</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Calpestabile immediatamente dopo la posa</span>
                     </li>
                   </ul>
@@ -415,23 +415,23 @@ const BiomagFloor = () => {
                   <h3 className="text-xl font-heading font-semibold text-white mb-6">Cura e manutenzione</h3>
                   <ul className="space-y-3 text-white font-medium">
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Pulizia quotidiana: panno umido o aspirapolvere</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Detergenti neutri per macchie ostinate</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Evitare prodotti abrasivi o solventi aggressivi</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Protezioni in feltro sotto mobili pesanti</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
                       <span>Nessuna ceratura o trattamento periodico necessario</span>
                     </li>
                   </ul>

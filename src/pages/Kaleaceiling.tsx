@@ -268,7 +268,7 @@ const Kaleaceiling = () => {
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white">
               Presto Disponibile
             </h2>
-            <p className="text-lg mb-8 max-w-2xl mx-auto text-white/90">
+            <p className="text-lg mb-8 max-w-2xl mx-auto text-white font-medium">
               KALEACEILING sarà presto disponibile. Contattaci per scoprire i nostri rivestimenti per soffitti esterni.
             </p>
             <Button asChild size="lg" variant="secondary">
