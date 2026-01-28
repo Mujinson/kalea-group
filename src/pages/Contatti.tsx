@@ -275,8 +275,8 @@ const Contatti = () => {
                     </div>
                     <div>
                       <h3 className="font-heading font-semibold text-foreground mb-1">{t('contacts.phoneLabel')}</h3>
-                      <a href="tel:+390123456789" className="text-muted-foreground hover:text-primary transition-colors">
-                        +39 012 345 6789
+                      <a href="tel:+393520351738" className="text-muted-foreground hover:text-primary transition-colors">
+                        +39 352 035 1738
                       </a>
                       <p className="text-sm text-muted-foreground mt-1">{t('contacts.phoneHours')}</p>
                     </div>
