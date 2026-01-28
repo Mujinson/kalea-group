@@ -282,7 +282,7 @@ export const translations: Record<Language, Translations> = {
     },
     stonecore: {
       structureTitle: "Struttura multistrato ad alte prestazioni",
-      structureSubtitle: "Ogni tavola BIOMAG FLOOR® è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in ossido di magnesio da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Alla base, il tappetino integrato da 1,5 mm migliora l'isolamento acustico, aumenta il comfort al calpestio e semplifica l'installazione. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
+      structureSubtitle: "Ogni tavola BIOMAG FLOOR® è progettata per offrire stabilità dimensionale, resistenza e una posa impeccabile. Il core in ossido di magnesio da 8,5 mm garantisce una rigidità superiore e un comportamento perfetto su grandi superfici, mentre lo strato decorativo è completato da uno strato protettivo progettato per resistere a graffi, urti e abrasioni, mantenendo intatta la bellezza della superficie nel tempo. Per un isolamento acustico ottimale e un comfort al calpestio superiore, è possibile abbinare i sottopavimenti KALEABASE®, scelti in base alle specifiche esigenze di ogni progetto. Una soluzione nata per installatori, architetti e professionisti che cercano materiali affidabili, durevoli e di fascia alta.",
       layers: {
         decorative: "Strato decorativo",
         wear: "Strato di usura",
@@ -1156,7 +1156,7 @@ export const translations: Record<Language, Translations> = {
     },
     stonecore: {
       structureTitle: "High-performance multilayer structure",
-      structureSubtitle: "Each BIOCORE® plank is designed to offer dimensional stability, resistance and impeccable installation. The 8.5 mm magnesium oxide core ensures superior rigidity and perfect performance on large surfaces, while the decorative layer is completed by a protective layer designed to resist scratches, impacts and abrasions, preserving the beauty of the surface over time. At the base, the integrated 1.5 mm mat improves acoustic insulation, increases walking comfort and simplifies installation. A solution created for installers, architects and professionals seeking reliable, durable and high-end materials.",
+      structureSubtitle: "Each BIOMAG FLOOR® plank is designed to offer dimensional stability, resistance and impeccable installation. The 8.5 mm magnesium oxide core ensures superior rigidity and perfect performance on large surfaces, while the decorative layer is completed by a protective layer designed to resist scratches, impacts and abrasions, preserving the beauty of the surface over time. For optimal acoustic insulation and superior walking comfort, KALEABASE® underlays can be paired, chosen based on the specific needs of each project. A solution created for installers, architects and professionals seeking reliable, durable and high-end materials.",
       layers: {
         decorative: "Decorative layer",
         wear: "Wear layer",
@@ -2030,7 +2030,7 @@ export const translations: Record<Language, Translations> = {
     },
     stonecore: {
       structureTitle: "Hochleistungs-Mehrschichtstruktur",
-      structureSubtitle: "Jede Kalēa-Diele ist für dimensionale Stabilität, Festigkeit und einwandfreie Verlegung konzipiert. Der 8,5 mm MgO-Kern gewährleistet überlegene Steifigkeit und perfektes Verhalten auf großen Flächen, während die Dekorschicht durch eine Schutzschicht ergänzt wird, die gegen Kratzer, Stöße und Abrieb beständig ist und die Schönheit der Oberfläche über die Zeit bewahrt. An der Basis verbessert die integrierte 1,5 mm Matte die Schalldämmung, erhöht den Gehkomfort und vereinfacht die Installation. Eine Lösung für Installateure, Architekten und Fachleute, die zuverlässige, langlebige und hochwertige Materialien suchen.",
+      structureSubtitle: "Jede BIOMAG FLOOR®-Diele ist für dimensionale Stabilität, Festigkeit und einwandfreie Verlegung konzipiert. Der 8,5 mm MgO-Kern gewährleistet überlegene Steifigkeit und perfektes Verhalten auf großen Flächen, während die Dekorschicht durch eine Schutzschicht ergänzt wird, die gegen Kratzer, Stöße und Abrieb beständig ist und die Schönheit der Oberfläche über die Zeit bewahrt. Für optimale Schalldämmung und überlegenen Gehkomfort können KALEABASE®-Unterlagen kombiniert werden, die je nach den spezifischen Anforderungen jedes Projekts ausgewählt werden. Eine Lösung für Installateure, Architekten und Fachleute, die zuverlässige, langlebige und hochwertige Materialien suchen.",
       layers: {
         decorative: "Dekorschicht",
         wear: "Verschleißschicht",
@@ -2910,7 +2910,7 @@ export const translations: Record<Language, Translations> = {
     },
     stonecore: {
       structureTitle: "Structure multicouche haute performance",
-      structureSubtitle: "Chaque lame Kalēa est conçue pour offrir stabilité dimensionnelle, résistance et une pose impeccable. Le noyau MgO de 8,5 mm garantit une rigidité supérieure et un comportement parfait sur de grandes surfaces, tandis que la couche décorative est complétée par une couche protectrice conçue pour résister aux rayures, aux chocs et à l'abrasion, préservant la beauté de la surface dans le temps. À la base, le tapis intégré de 1,5 mm améliore l'isolation acoustique, augmente le confort de marche et simplifie l'installation. Une solution conçue pour les installateurs, architectes et professionnels à la recherche de matériaux fiables, durables et haut de gamme.",
+      structureSubtitle: "Chaque lame BIOMAG FLOOR® est conçue pour offrir stabilité dimensionnelle, résistance et une pose impeccable. Le noyau MgO de 8,5 mm garantit une rigidité supérieure et un comportement parfait sur de grandes surfaces, tandis que la couche décorative est complétée par une couche protectrice conçue pour résister aux rayures, aux chocs et à l'abrasion, préservant la beauté de la surface dans le temps. Pour une isolation acoustique optimale et un confort de marche supérieur, les sous-couches KALEABASE® peuvent être associées, choisies en fonction des besoins spécifiques de chaque projet. Une solution conçue pour les installateurs, architectes et professionnels à la recherche de matériaux fiables, durables et haut de gamme.",
       layers: {
         decorative: "Couche décorative",
         wear: "Couche d'usure",
