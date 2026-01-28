@@ -547,8 +547,9 @@ export const translations: Record<Language, Translations> = {
       },
       interests: "Interessi",
       interestsList: {
-        stonecore: "BIOCORE®",
-        edgeline: "EdgeLine",
+        stonecore: "BIOMAG FLOOR®",
+        kaleabase: "KALEABASE®",
+        edgeline: "EDGELINE®",
         onewall: "BIOWALL®",
         partnership: "Partnership",
       },
@@ -1420,7 +1421,8 @@ export const translations: Record<Language, Translations> = {
       interests: "Interests",
       interestsList: {
         stonecore: "BIOMAG FLOOR®",
-        edgeline: "EdgeLine",
+        kaleabase: "KALEABASE®",
+        edgeline: "EDGELINE®",
         onewall: "BIOWALL®",
         partnership: "Partnership",
       },
@@ -2292,7 +2294,8 @@ export const translations: Record<Language, Translations> = {
       interests: "Interessen",
       interestsList: {
         stonecore: "BIOMAG FLOOR®",
-        edgeline: "EdgeLine",
+        kaleabase: "KALEABASE®",
+        edgeline: "EDGELINE®",
         onewall: "BIOWALL®",
         partnership: "Partnerschaft",
       },
@@ -3170,7 +3173,8 @@ export const translations: Record<Language, Translations> = {
       interests: "Intérêts",
       interestsList: {
         stonecore: "BIOMAG FLOOR®",
-        edgeline: "EdgeLine",
+        kaleabase: "KALEABASE®",
+        edgeline: "EDGELINE®",
         onewall: "BIOWALL®",
         partnership: "Partenariat",
       },
