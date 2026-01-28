@@ -331,7 +331,7 @@ const Kaleabase = () => {
                   <item.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">{item.title}</h3>
-                <p className="text-white/90 text-sm leading-relaxed font-medium">{item.description}</p>
+                <p className="text-white text-sm leading-relaxed font-medium">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -397,8 +397,8 @@ const Kaleabase = () => {
                   </div>
                 
                   <h3 className="text-lg font-semibold text-white mb-1">{product.name}</h3>
-                  <p className="text-sm text-white/80 mb-2 font-medium">{product.material}</p>
-                  <p className="text-sm text-white/90 mb-4 font-medium">{product.shortDesc}</p>
+                  <p className="text-sm text-white mb-2 font-medium">{product.material}</p>
+                  <p className="text-sm text-white mb-4 font-medium">{product.shortDesc}</p>
                   
                   {/* Expanded content */}
                   <motion.div
@@ -410,11 +410,11 @@ const Kaleabase = () => {
                     className="overflow-hidden"
                   >
                     <div className="pt-4 border-t border-white/20">
-                      <p className="text-sm text-white/90 mb-4 font-medium">{product.description}</p>
+                      <p className="text-sm text-white mb-4 font-medium">{product.description}</p>
                       
                       <div className="space-y-2 mb-4">
                         {product.specs.map((spec, i) => (
-                          <div key={i} className="flex items-start gap-2 text-sm text-white/90 font-medium">
+                          <div key={i} className="flex items-start gap-2 text-sm text-white font-medium">
                             <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 flex-shrink-0" />
                             <span>{spec}</span>
                           </div>
@@ -432,7 +432,7 @@ const Kaleabase = () => {
                         ))}
                       </div>
                       
-                      <p className="text-xs text-white/80 font-medium">
+                      <p className="text-xs text-white font-medium">
                         <strong>Ideale per:</strong> {product.bestFor}
                       </p>
                       
@@ -444,7 +444,7 @@ const Kaleabase = () => {
                     </div>
                   </motion.div>
                   
-                  <div className="flex items-center justify-between mt-4 text-xs text-white/70 font-medium">
+                  <div className="flex items-center justify-between mt-4 text-xs text-white font-medium">
                     <span>Clicca per dettagli</span>
                     <ArrowRight className={`w-4 h-4 transition-transform ${selectedProduct === product.id ? 'rotate-90' : ''}`} />
                   </div>
@@ -588,7 +588,7 @@ const Kaleabase = () => {
                 </div>
                 <div className="flex-1 bg-[#C6B195] rounded-xl p-4">
                   <h4 className="text-white font-semibold">{item.name}</h4>
-                  <p className="text-white/90 text-sm font-medium">{item.desc}</p>
+                  <p className="text-white text-sm font-medium">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -614,7 +614,7 @@ const Kaleabase = () => {
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white">
               Inizia con il piede giusto
             </h2>
-            <p className="text-lg mb-8 max-w-2xl mx-auto text-white/90">
+            <p className="text-lg mb-8 max-w-2xl mx-auto text-white font-medium">
               Scarica la guida tecnica alla posa o contatta il nostro team per un supporto personalizzato.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -68,8 +68,8 @@ const SustainabilityDurability = () => {
             </h3>
             <ul className="space-y-4">
               {benefits.map((benefit, index) => (
-                <li key={index} className="flex items-start gap-3 text-white/90">
-                  <Check className="w-5 h-5 text-white/70 mt-0.5 flex-shrink-0" />
+                <li key={index} className="flex items-start gap-3 text-white font-medium">
+                  <Check className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                   <span>{benefit}</span>
                 </li>
               ))}
