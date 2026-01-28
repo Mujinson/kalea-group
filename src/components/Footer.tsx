@@ -28,11 +28,29 @@ const Footer = () => {
   return (
     <footer className="relative z-10 bg-background border-t border-foreground/10">
       <div className="container-custom py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-          {/* Logo & Tagline */}
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+          {/* Logo & Company Info */}
+          <div className="md:col-span-1">
             <img src={logoFooter} alt="Kalēa®" className="h-8 mb-3" />
-            <p className="text-muted-foreground text-body">{t("footer.tagline")}</p>
+            <p className="text-muted-foreground text-body mb-4">{t("footer.tagline")}</p>
+            
+            {/* Company Details */}
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <div>
+                <p className="font-semibold text-foreground text-xs uppercase tracking-wider mb-1">{t("footer.legalHQ")}</p>
+                <p>Via 4 Novembre, 15</p>
+                <p>25078 Vestone (BS) Italy</p>
+              </div>
+              <div>
+                <p className="font-semibold text-foreground text-xs uppercase tracking-wider mb-1">{t("footer.operationalHQ")}</p>
+                <p>Via Generale Bernasconi, 8A</p>
+                <p>25015 Desenzano del Garda (BS)</p>
+              </div>
+              <div className="pt-2 border-t border-foreground/5">
+                <p>P.IVA: 04203540986</p>
+                <p>REA: BS - 596517</p>
+              </div>
+            </div>
           </div>
 
           {/* Link Rapidi */}

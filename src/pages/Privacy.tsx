@@ -50,10 +50,26 @@ const Privacy = () => {
                   </h2>
                   <div className="space-y-3 text-body text-muted-foreground">
                     <p>{t("privacy.section1.content1")}</p>
-                    <div className="bg-secondary/10 p-4 rounded-lg">
-                      <p className="font-medium text-foreground mb-2">Kalēa</p>
-                      <p>Email: info@kalea.space</p>
-                      <p>Tel: +39 352 035 1738</p>
+                    <div className="bg-secondary/10 p-4 rounded-lg space-y-3">
+                      <p className="font-medium text-foreground mb-2">Kalēa®</p>
+                      <div>
+                        <p className="font-semibold text-foreground text-sm">{t("footer.legalHQ")}</p>
+                        <p>Via 4 Novembre, 15</p>
+                        <p>25078 Vestone (BS) Italy</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground text-sm">{t("footer.operationalHQ")}</p>
+                        <p>Via Generale Bernasconi, 8A</p>
+                        <p>25015 Desenzano del Garda (BS)</p>
+                      </div>
+                      <div className="pt-2 border-t border-foreground/10">
+                        <p>P.IVA: 04203540986</p>
+                        <p>REA: BS - 596517</p>
+                      </div>
+                      <div className="pt-2 border-t border-foreground/10">
+                        <p>Email: info@kalea.space</p>
+                        <p>Tel: +39 352 035 1738</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -202,16 +218,36 @@ const Privacy = () => {
                   <p className="text-body text-muted-foreground mb-4">
                     {t("privacy.contact.content")}
                   </p>
-                  <div className="space-y-2 text-body">
-                    <p>
-                      <strong>Email:</strong>{" "}
-                      <a href="mailto:info@kalea.space" className="text-primary hover:underline">
-                        info@kalea.space
-                      </a>
-                    </p>
-                    <p>
-                      <strong>Tel:</strong> +39 352 035 1738
-                    </p>
+                  <div className="space-y-3 text-body">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <p className="font-semibold text-foreground text-sm">{t("footer.legalHQ")}</p>
+                        <p className="text-muted-foreground">Via 4 Novembre, 15</p>
+                        <p className="text-muted-foreground">25078 Vestone (BS) Italy</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground text-sm">{t("footer.operationalHQ")}</p>
+                        <p className="text-muted-foreground">Via Generale Bernasconi, 8A</p>
+                        <p className="text-muted-foreground">25015 Desenzano del Garda (BS)</p>
+                      </div>
+                    </div>
+                    <div className="space-y-1 text-muted-foreground">
+                      <p>P.IVA: 04203540986 | REA: BS - 596517</p>
+                    </div>
+                    <div className="pt-2 border-t border-foreground/10 space-y-1">
+                      <p>
+                        <strong>Email:</strong>{" "}
+                        <a href="mailto:info@kalea.space" className="text-primary hover:underline">
+                          info@kalea.space
+                        </a>
+                      </p>
+                      <p>
+                        <strong>Tel:</strong>{" "}
+                        <a href="tel:+393520351738" className="text-primary hover:underline">
+                          +39 352 035 1738
+                        </a>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
