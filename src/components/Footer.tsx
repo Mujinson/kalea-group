@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Linkedin, Facebook, Instagram } from "lucide-react";
+import { Mail, Phone, Linkedin, Facebook, Instagram } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import logoFooter from "@/assets/logo-new.png";
 
@@ -28,33 +28,39 @@ const Footer = () => {
   return (
     <footer className="relative z-10 bg-background border-t border-foreground/10">
       <div className="container-custom py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
-          {/* Logo & Company Info */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-8">
+          {/* Section 1: Logo Only */}
           <div className="md:col-span-1">
-            <img src={logoFooter} alt="Kalēa®" className="h-8 mb-3" />
-            <p className="text-muted-foreground text-body mb-4">{t("footer.tagline")}</p>
+            <img src={logoFooter} alt="Kalēa®" className="h-8 mb-4" />
+            <p className="text-muted-foreground text-sm leading-relaxed">{t("footer.tagline")}</p>
+          </div>
+
+          {/* Section 2: Sedi */}
+          <div className="flex flex-col justify-start">
+            <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
+              {t("footer.legalHQ")}
+            </h4>
+            <div className="space-y-1 text-sm text-muted-foreground mb-5">
+              <p>Via 4 Novembre, 15</p>
+              <p>25078 Vestone (BS) Italy</p>
+            </div>
             
-            {/* Company Details */}
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <div>
-                <p className="font-semibold text-foreground text-xs uppercase tracking-wider mb-1">{t("footer.legalHQ")}</p>
-                <p>Via 4 Novembre, 15</p>
-                <p>25078 Vestone (BS) Italy</p>
-              </div>
-              <div>
-                <p className="font-semibold text-foreground text-xs uppercase tracking-wider mb-1">{t("footer.operationalHQ")}</p>
-                <p>Via Generale Bernasconi, 8A</p>
-                <p>25015 Desenzano del Garda (BS)</p>
-              </div>
-              <div className="pt-2 border-t border-foreground/5">
-                <p>P.IVA: 04203540986</p>
-                <p>REA: BS - 596517</p>
-              </div>
+            <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
+              {t("footer.operationalHQ")}
+            </h4>
+            <div className="space-y-1 text-sm text-muted-foreground mb-5">
+              <p>Via Generale Bernasconi, 8A</p>
+              <p>25015 Desenzano del Garda (BS)</p>
+            </div>
+            
+            <div className="text-sm text-muted-foreground pt-3 border-t border-foreground/5">
+              <p>P.IVA: 04203540986</p>
+              <p>REA: BS - 596517</p>
             </div>
           </div>
 
-          {/* Link Rapidi */}
-          <div>
+          {/* Section 3: Link Rapidi */}
+          <div className="flex flex-col justify-start">
             <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
               {t("footer.quickLinks")}
             </h4>
@@ -110,14 +116,14 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contatti */}
-          <div>
+          {/* Section 4: Contatti & Social */}
+          <div className="flex flex-col justify-start">
             <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
               {t("footer.contactsTitle")}
             </h4>
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3 mb-6">
               <li className="flex items-start gap-3">
-                <Mail size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                <Mail size={16} className="text-primary mt-0.5 flex-shrink-0" />
                 <a
                   href="mailto:info@kalea.space"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -126,7 +132,7 @@ const Footer = () => {
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <Phone size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                <Phone size={16} className="text-primary mt-0.5 flex-shrink-0" />
                 <a
                   href="tel:+393520351738"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -134,54 +140,48 @@ const Footer = () => {
                   +39 352 035 1738
                 </a>
               </li>
-              <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-primary mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-muted-foreground">{t("contacts.locationValue")}</span>
-              </li>
             </ul>
 
-            <div className="footer-social">
-              <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
-                {t("footer.followUs")}
-              </h4>
-              <div className="flex items-center gap-6">
-                <a
-                  href="https://x.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 -m-2 group"
-                  aria-label="X"
-                >
-                  <XIcon size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
-                </a>
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 -m-2 group"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
-                </a>
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 -m-2 group"
-                  aria-label="Facebook"
-                >
-                  <Facebook size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
-                </a>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 -m-2 group"
-                  aria-label="Instagram"
-                >
-                  <Instagram size={24} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
-                </a>
-              </div>
+            <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
+              {t("footer.followUs")}
+            </h4>
+            <div className="flex items-center gap-5">
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 -m-2 group"
+                aria-label="X"
+              >
+                <XIcon size={22} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 -m-2 group"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={22} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 -m-2 group"
+                aria-label="Facebook"
+              >
+                <Facebook size={22} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 -m-2 group"
+                aria-label="Instagram"
+              >
+                <Instagram size={22} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
+              </a>
             </div>
           </div>
         </div>
