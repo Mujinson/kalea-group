@@ -262,10 +262,6 @@ const Contatti = () => {
                       <a href="mailto:info@kalea.it" className="text-muted-foreground hover:text-primary transition-colors">
                         info@kalea.it
                       </a>
-                      <br />
-                      <a href="mailto:tecnico@kalea.it" className="text-muted-foreground hover:text-primary transition-colors">
-                        tecnico@kalea.it
-                      </a>
                     </div>
                   </div>
 
