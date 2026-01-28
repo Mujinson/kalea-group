@@ -278,15 +278,16 @@ const BiocoreFloor = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-6 rounded-2xl bg-background border border-border"
+                className="p-6 rounded-2xl bg-card-surface"
+                style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <span className="text-sm font-bold text-primary">{index + 1}</span>
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                    <span className="text-sm font-bold text-white">{index + 1}</span>
                   </div>
                   <div>
-                    <h3 className="font-heading font-semibold text-foreground mb-2">{layer.name}</h3>
-                    <p className="text-sm text-muted-foreground">{layer.description}</p>
+                    <h3 className="font-heading font-semibold text-white mb-2">{layer.name}</h3>
+                    <p className="text-sm text-white/80 font-medium">{layer.description}</p>
                   </div>
                 </div>
               </motion.div>
