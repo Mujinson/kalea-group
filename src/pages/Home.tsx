@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import MgoBook from "@/components/MgoBook";
 import DualCarouselSection from "@/components/DualCarouselSection";
 import HomeHero from "@/components/HomeHero";
-import Carousel3D from "@/components/Carousel3D";
+import DualCarousel3D from "@/components/DualCarousel3D";
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -131,9 +131,9 @@ const Home = () => {
       {/* Indoor/Outdoor Section */}
       <IndoorOutdoorSection />
 
-      {/* 3D Carousel Collection */}
-      <section className="relative h-screen bg-background">
-        <Carousel3D />
+      {/* 3D Dual Carousel Collection - BIOMAG + BIOCORE side by side */}
+      <section className="relative min-h-screen bg-background">
+        <DualCarousel3D />
       </section>
 
       {/* Products Section */}
