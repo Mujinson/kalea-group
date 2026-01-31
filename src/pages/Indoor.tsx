@@ -9,7 +9,7 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import productBiomagFloor from "@/assets/product-biomag-floor.jpg";
 import productBiocoreFloor from "@/assets/product-biocore-floor.jpg";
-import productKaleabase from "@/assets/product-kaleabase.jpg";
+import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
 
