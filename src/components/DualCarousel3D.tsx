@@ -170,13 +170,13 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
         {title}
       </h3>
 
-      {/* 3D Carousel - positioned higher */}
+      {/* 3D Carousel */}
       <div 
-        className="relative flex items-start justify-center w-full"
+        className="relative flex items-center justify-center w-full"
         style={{ 
           perspective: "800px",
-          height: screenSize === 'mobile' ? "280px" : screenSize === 'tablet' ? "360px" : "420px",
-          marginTop: screenSize === 'mobile' ? "-40px" : "-80px"
+          height: screenSize === 'mobile' ? "300px" : screenSize === 'tablet' ? "380px" : "440px",
+          marginTop: screenSize === 'mobile' ? "20px" : "40px"
         }}
       >
         <motion.div
