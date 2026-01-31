@@ -6,6 +6,7 @@ import ColorCircleGallery, { stonecoreColors } from "@/components/ColorCircleGal
 import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import CertificationsSection from "@/components/CertificationsSection";
+import MgoBook from "@/components/MgoBook";
 import ProductGallerySection from "@/components/ProductGallerySection";
 import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check, ChevronDown } from "lucide-react";
 import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
@@ -569,6 +570,11 @@ const BiomagFloor = () => {
             </motion.div>
           </div>
         </div>
+      </section>
+
+      {/* Perché BIOMAG FLOOR - MgoBook */}
+      <section className="relative h-screen bg-background">
+        <MgoBook />
       </section>
 
       {/* Certificazioni */}
