@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
+import { Button } from "@/components/ui/button";
 import { useEffect, useState, useRef, useCallback } from "react";
 
 // Import BIOMAG finish images
@@ -45,11 +46,12 @@ interface CarouselWheelProps {
   planks: typeof biomagPlanks;
   title: string;
   link: string;
-  direction: 1 | -1; // 1 = clockwise, -1 = counter-clockwise
+  ctaText: string;
+  direction: 1 | -1;
   screenSize: 'mobile' | 'tablet' | 'desktop';
 }
 
-const CarouselWheel = ({ planks, title, link, direction, screenSize }: CarouselWheelProps) => {
+const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: CarouselWheelProps) => {
   const { language } = useTranslation();
   const [rotation, setRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -68,7 +70,8 @@ const CarouselWheel = ({ planks, title, link, direction, screenSize }: CarouselW
       animationFrameRef.current = requestAnimationFrame(animateInertia);
     } else {
       velocityRef.current = 0;
-      setTimeout(() => setAutoRotate(true), 2000);
+      // Resume auto-rotation immediately
+      setAutoRotate(true);
     }
   }, []);
 
@@ -131,7 +134,8 @@ const CarouselWheel = ({ planks, title, link, direction, screenSize }: CarouselW
     if (Math.abs(velocityRef.current) > 0.5) {
       animationFrameRef.current = requestAnimationFrame(animateInertia);
     } else {
-      setTimeout(() => setAutoRotate(true), 2000);
+      // Resume auto-rotation immediately
+      setAutoRotate(true);
     }
   }, [animateInertia]);
 
@@ -252,6 +256,13 @@ const CarouselWheel = ({ planks, title, link, direction, screenSize }: CarouselW
           })}
         </motion.div>
       </div>
+
+      {/* CTA Button */}
+      <Button asChild className="mt-4 pointer-events-auto">
+        <Link to={`/${language}${link}`}>
+          {ctaText}
+        </Link>
+      </Button>
     </div>
   );
 };
@@ -311,6 +322,7 @@ const DualCarousel3D = () => {
             planks={biomagPlanks}
             title="BIOMAG FLOOR®"
             link="/biomag-floor"
+            ctaText="Scopri BIOMAG FLOOR®"
             direction={1}
             screenSize={screenSize}
           />
@@ -320,6 +332,7 @@ const DualCarousel3D = () => {
             planks={biocorePlanks}
             title="BIOCORE FLOOR®"
             link="/biocore-floor"
+            ctaText="Scopri BIOCORE FLOOR®"
             direction={-1}
             screenSize={screenSize}
           />
