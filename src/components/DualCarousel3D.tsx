@@ -308,7 +308,7 @@ const DualCarousel3D = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-6 md:mb-10"
         >
-          <h2 className="text-foreground mb-3">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
             Le Nostre Linee di Pavimenti
           </h2>
           <p className="text-foreground/60 text-sm md:text-base font-light max-w-xl mx-auto">
