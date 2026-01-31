@@ -165,8 +165,8 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
       onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
       onTouchEnd={handleDragEnd}
     >
-      {/* Title */}
-      <h3 className="font-heading text-lg md:text-xl lg:text-2xl text-foreground/90 tracking-wide mb-2 text-center">
+      {/* Product Title */}
+      <h3 className="text-foreground/90 tracking-wide mb-2 text-center text-lg md:text-xl">
         {title}
       </h3>
 
@@ -300,21 +300,21 @@ const DualCarousel3D = () => {
       />
 
       <div className="relative z-10 h-full flex flex-col items-center px-4">
-        {/* Main Header */}
-        <motion.div
+        {/* Section Header */}
+        <motion.header
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
           className="text-center mb-6 md:mb-10"
         >
-          <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl text-foreground/95 tracking-wide mb-3 italic">
+          <h2 className="text-foreground/95 italic mb-3">
             Le Nostre Linee di Pavimenti
           </h2>
-          <p className="text-foreground/60 text-sm md:text-lg font-light italic">
+          <p className="text-foreground/60 text-sm md:text-base font-light italic max-w-xl mx-auto">
             Due tecnologie innovative, infinite possibilità di design
           </p>
-        </motion.div>
+        </motion.header>
 
         {/* Dual Carousels Container */}
         <div className={`w-full max-w-7xl flex ${screenSize === 'mobile' ? 'flex-col gap-12' : 'flex-row gap-4 md:gap-8'}`}>
