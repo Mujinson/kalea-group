@@ -4,6 +4,7 @@ import FeatureCard from "@/components/FeatureCard";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import CertificationsSection from "@/components/CertificationsSection";
 import ColorCircleGallery, { cwcColors } from "@/components/ColorCircleGallery";
+import CWCGallerySection from "@/components/CWCGallerySection";
 import { Leaf, Recycle, Heart, AudioWaveform, Layers, Shield, Check, ChevronDown, Droplets, ThermometerSun } from "lucide-react";
 import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -307,6 +308,11 @@ const BiocoreFloor = () => {
             colors={cwcColors}
           />
         </div>
+      </section>
+
+      {/* Gallery Carousel Section */}
+      <section className="relative z-[3] h-screen bg-background">
+        <CWCGallerySection />
       </section>
 
       {/* Vantaggi Section */}

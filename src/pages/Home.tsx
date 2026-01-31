@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 import MgoBook from "@/components/MgoBook";
-import ProductGallerySection from "@/components/ProductGallerySection";
-import CWCGallerySection from "@/components/CWCGallerySection";
 import DualCarouselSection from "@/components/DualCarouselSection";
 import HomeHero from "@/components/HomeHero";
 import Carousel3D from "@/components/Carousel3D";
@@ -296,16 +294,6 @@ const Home = () => {
       {/* Perché MgO - 3D Book */}
       <section className="relative h-screen bg-background">
         <MgoBook />
-      </section>
-
-      {/* Product Gallery Section - BIOMAG FLOOR® */}
-      <section className="relative h-screen bg-background">
-        <ProductGallerySection />
-      </section>
-
-      {/* Product Gallery Section - CWC */}
-      <section className="relative h-screen bg-background">
-        <CWCGallerySection />
       </section>
 
       {/* Dual Carousel Section - BIOMAG + BIOCORE side by side */}
