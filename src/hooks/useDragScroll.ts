@@ -63,9 +63,13 @@ export const useDragScroll = (options: UseDragScrollOptions = {}) => {
   }, []);
 
   const resumeAutoScroll = useCallback(() => {
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+    }
+    // Resume immediately after a very short delay
     resumeTimeoutRef.current = setTimeout(() => {
       isPausedRef.current = false;
-    }, 2000);
+    }, 300);
   }, []);
 
   // Mouse events
