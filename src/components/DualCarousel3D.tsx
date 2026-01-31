@@ -175,8 +175,8 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
         className="relative flex items-start justify-center w-full"
         style={{ 
           perspective: "800px",
-          height: screenSize === 'mobile' ? "320px" : screenSize === 'tablet' ? "400px" : "480px",
-          marginTop: screenSize === 'mobile' ? "-20px" : "-40px"
+          height: screenSize === 'mobile' ? "280px" : screenSize === 'tablet' ? "360px" : "420px",
+          marginTop: screenSize === 'mobile' ? "-40px" : "-80px"
         }}
       >
         <motion.div
