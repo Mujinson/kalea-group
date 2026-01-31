@@ -180,12 +180,11 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
         }}
       >
         <motion.div
-          className="relative"
+          className="absolute left-1/2 top-1/2"
           style={{ 
             transformStyle: "preserve-3d",
-            width: "100%",
-            height: "100%",
-            transform: `rotateY(${rotation}deg)`
+            transformOrigin: "center center",
+            transform: `translate(-50%, -50%) rotateY(${rotation}deg)`
           }}
         >
           {planks.map((plank, index) => {
