@@ -150,7 +150,7 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
 
   return (
     <div 
-      className="flex-1 flex flex-col items-center cursor-grab active:cursor-grabbing select-none"
+      className="flex-1 flex flex-col items-center cursor-grab active:cursor-grabbing select-none pb-8"
       onMouseDown={(e) => {
         e.stopPropagation();
         handleDragStart(e.clientX);
@@ -166,17 +166,17 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
       onTouchEnd={handleDragEnd}
     >
       {/* Title */}
-      <h3 className="font-heading text-lg md:text-xl lg:text-2xl text-foreground/90 tracking-wide mb-4 text-center">
+      <h3 className="font-heading text-lg md:text-xl lg:text-2xl text-foreground/90 tracking-wide mb-2 text-center">
         {title}
       </h3>
 
-      {/* 3D Carousel */}
+      {/* 3D Carousel - positioned higher */}
       <div 
-        className="relative flex items-center justify-center flex-1 w-full"
+        className="relative flex items-start justify-center w-full"
         style={{ 
           perspective: "800px",
-          minHeight: screenSize === 'mobile' ? "200px" : screenSize === 'tablet' ? "280px" : "340px",
-          maxHeight: screenSize === 'mobile' ? "240px" : screenSize === 'tablet' ? "320px" : "380px"
+          height: screenSize === 'mobile' ? "320px" : screenSize === 'tablet' ? "400px" : "480px",
+          marginTop: screenSize === 'mobile' ? "-20px" : "-40px"
         }}
       >
         <motion.div
@@ -257,12 +257,14 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
         </motion.div>
       </div>
 
-      {/* CTA Button */}
-      <Button asChild className="mt-4 pointer-events-auto">
-        <Link to={`/${language}${link}`}>
-          {ctaText}
-        </Link>
-      </Button>
+      {/* CTA Button - positioned at bottom */}
+      <div className="mt-auto pt-8">
+        <Button asChild className="pointer-events-auto">
+          <Link to={`/${language}${link}`}>
+            {ctaText}
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 };
