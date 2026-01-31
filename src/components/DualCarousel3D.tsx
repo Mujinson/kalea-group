@@ -193,9 +193,9 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
               <Link
                 key={plank.id}
                 to={`/${language}${link}`}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer group pointer-events-auto"
+                className="absolute left-1/2 top-1/2 cursor-pointer group pointer-events-auto"
                 style={{
-                  transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
+                  transform: `translate(-50%, -50%) rotateY(${angle}deg) translateZ(${radius}px)`,
                   transformStyle: "preserve-3d"
                 }}
                 onClick={(e) => {
