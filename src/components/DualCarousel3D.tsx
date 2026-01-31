@@ -258,7 +258,7 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
       </div>
 
       {/* CTA Button - positioned at bottom */}
-      <div className="mt-auto pt-8">
+      <div className="mt-auto pt-16 md:pt-20">
         <Button asChild className="pointer-events-auto">
           <Link to={`/${language}${link}`}>
             {ctaText}
