@@ -31,7 +31,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-8">
           {/* Section 1: Logo Only */}
           <div className="md:col-span-1">
-            <img src={logoFooter} alt="Kalēa®" className="h-8 mb-4" />
+            <img src={logoFooter} alt="Kalēa®" className="h-12 mb-4" />
             <p className="text-muted-foreground text-sm leading-relaxed">{t("footer.tagline")}</p>
           </div>
 
