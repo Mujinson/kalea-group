@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import MgoBook from "@/components/MgoBook";
 import DualCarouselSection from "@/components/DualCarouselSection";
 import HomeHero from "@/components/HomeHero";
 import DualCarousel3D from "@/components/DualCarousel3D";
@@ -291,10 +290,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Perché MgO - 3D Book */}
-      <section className="relative h-screen bg-background">
-        <MgoBook />
-      </section>
 
       {/* Dual Carousel Section - BIOMAG + BIOCORE side by side */}
       <DualCarouselSection />
