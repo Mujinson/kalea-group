@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown, ChevronRight, Clock } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/assets/logo-new.png";
+import logo from "@/assets/logo-kalea-cream.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Language } from "@/i18n/translations";
 
