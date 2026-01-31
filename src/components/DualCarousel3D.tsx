@@ -306,13 +306,13 @@ const DualCarousel3D = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-8 md:mb-12"
+          className="text-center mb-6 md:mb-10"
         >
-          <h2 className="font-heading text-2xl md:text-4xl lg:text-5xl text-foreground/95 tracking-wide mb-2">
-            {t('carousel.title')}
+          <h2 className="font-heading text-3xl md:text-5xl lg:text-6xl text-foreground/95 tracking-wide mb-3 italic">
+            Le Nostre Linee di Pavimenti
           </h2>
-          <p className="text-foreground/60 text-xs md:text-base font-light italic">
-            {t('carousel.subtitle')}
+          <p className="text-foreground/60 text-sm md:text-lg font-light italic">
+            Due tecnologie innovative, infinite possibilità di design
           </p>
         </motion.div>
 
