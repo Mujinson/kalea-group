@@ -28,7 +28,7 @@ const HomeHero = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] h-auto drop-shadow-2xl"
+          className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] h-auto brightness-0 invert drop-shadow-2xl"
         />
       </div>
 
