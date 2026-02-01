@@ -4,6 +4,8 @@ import { useTranslation } from "@/i18n/useTranslation";
 import heroImage from "@/assets/hero-home-new.webp";
 import logoImage from "@/assets/logo-kalea-cream.png";
 
+const words = ["Innovate", "Living", "Nature"];
+
 const HomeHero = () => {
   const { t, language } = useTranslation();
 
@@ -31,15 +33,36 @@ const HomeHero = () => {
           className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] h-auto brightness-0 invert drop-shadow-2xl"
         />
         
-        {/* Payoff - always in English */}
-        <motion.p
+        {/* Payoff with continuous zoom-out animation */}
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-          className="mt-1 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[0.2em] drop-shadow-lg"
+          className="mt-1 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[0.2em] drop-shadow-lg flex items-center gap-1"
         >
-          Innovate | Living | Nature
-        </motion.p>
+          {words.map((word, index) => (
+            <span key={word} className="flex items-center">
+              <motion.span
+                animate={{
+                  scale: [1, 1.15, 1],
+                }}
+                transition={{
+                  duration: 1.2,
+                  delay: index * 1.5, // Stagger each word
+                  repeat: Infinity,
+                  repeatDelay: (words.length - 1) * 1.5, // Wait for all words to animate
+                  ease: "easeInOut",
+                }}
+                className="inline-block origin-center"
+              >
+                {word}
+              </motion.span>
+              {index < words.length - 1 && (
+                <span className="mx-2 sm:mx-3">|</span>
+              )}
+            </span>
+          ))}
+        </motion.div>
       </div>
 
       {/* CTA Buttons - positioned at bottom */}
