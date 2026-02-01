@@ -178,7 +178,7 @@ const BiocoreFloor = () => {
             <div className="max-w-4xl mx-auto">
               <AnimatedTitle
                 text="Pavimenti BIOCORE®"
-                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
+                className="text-[clamp(1.5rem,6vw,4.5rem)] text-white font-bold mb-4 tracking-tight whitespace-nowrap"
               />
 
               <motion.p
