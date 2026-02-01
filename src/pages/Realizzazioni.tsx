@@ -197,22 +197,53 @@ const projects: Project[] = [
   }
 ];
 
-const categories = ["Tutti", "Soggiorno", "Bagno", "Cucina", "Camera", "Hotel", "Ufficio", "Retail"];
-
 const Realizzazioni = () => {
-  const { t } = useTranslation();
-  const [activeCategory, setActiveCategory] = useState("Tutti");
+  const { t, language } = useTranslation();
+  const [activeCategory, setActiveCategory] = useState("all");
 
-  const filteredProjects = activeCategory === "Tutti" 
+  // Category key mapping for filtering
+  const categoryKeyToFilter: Record<string, string> = {
+    "all": "all",
+    "livingRoom": "Soggiorno",
+    "bathroom": "Bagno",
+    "kitchen": "Cucina",
+    "bedroom": "Camera",
+    "hotel": "Hotel",
+    "office": "Ufficio",
+    "retail": "Retail",
+  };
+
+  const categoryKeys = ["all", "livingRoom", "bathroom", "kitchen", "bedroom", "hotel", "office", "retail"];
+
+  const filteredProjects = activeCategory === "all" 
     ? projects 
-    : projects.filter(p => p.category === activeCategory);
+    : projects.filter(p => p.category === categoryKeyToFilter[activeCategory]);
+
+  // Get translated category name
+  const getCategoryLabel = (key: string) => {
+    return t(`realizzazioni.categories.${key}`) as string;
+  };
+
+  // Get translated category for project display
+  const getProjectCategoryLabel = (category: string) => {
+    const keyMap: Record<string, string> = {
+      "Soggiorno": "livingRoom",
+      "Bagno": "bathroom",
+      "Cucina": "kitchen",
+      "Camera": "bedroom",
+      "Hotel": "hotel",
+      "Ufficio": "office",
+      "Retail": "retail",
+    };
+    return t(`realizzazioni.categories.${keyMap[category]}`) as string;
+  };
 
   return (
     <main className="relative z-10 min-h-screen">
       {/* Hero Section */}
       <HeroSection
-        title="REALIZZAZIONI"
-        subtitle="Progetti che raccontano la qualità delle nostre superfici"
+        title={t('realizzazioni.heroTitle') as string}
+        subtitle={t('realizzazioni.heroSubtitle') as string}
         backgroundImage={heroImage}
         overlayClassName="bg-gradient-to-b from-black/30 via-black/20 to-black/40"
       />
@@ -228,11 +259,10 @@ const Realizzazioni = () => {
             className="text-center mb-16"
           >
             <h2 className="font-display text-3xl md:text-5xl font-light text-foreground mb-6">
-              I Nostri Progetti
+              {t('realizzazioni.sectionTitle')}
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Ogni ambiente racconta una storia unica, dove le nostre superfici 
-              diventano protagoniste del design d'interni contemporaneo.
+              {t('realizzazioni.sectionSubtitle')}
             </p>
           </motion.div>
 
@@ -244,17 +274,17 @@ const Realizzazioni = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-wrap justify-center gap-3 mb-12"
           >
-            {categories.map((category) => (
+            {categoryKeys.map((key) => (
               <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
+                key={key}
+                onClick={() => setActiveCategory(key)}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all
-                  ${activeCategory === category 
+                  ${activeCategory === key 
                     ? "bg-foreground text-background" 
                     : "bg-card-beige/30 text-foreground hover:bg-card-beige/60"
                   }`}
               >
-                {category}
+                {getCategoryLabel(key)}
               </button>
             ))}
           </motion.div>
@@ -287,7 +317,7 @@ const Realizzazioni = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <div className="flex items-center gap-3 mb-2">
                     <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium">
-                      {project.category}
+                      {getProjectCategoryLabel(project.category)}
                     </span>
                     <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs text-white font-medium">
                       {project.color}
@@ -316,18 +346,17 @@ const Realizzazioni = () => {
             transition={{ duration: 0.8 }}
           >
             <h2 className="font-display text-3xl md:text-5xl font-light text-foreground mb-6">
-              Vuoi realizzare il tuo progetto?
+              {t('realizzazioni.cta.title')}
             </h2>
             <p className="text-foreground/80 text-lg max-w-2xl mx-auto mb-10">
-              Contattaci per una consulenza personalizzata e scopri come le nostre 
-              superfici possono trasformare i tuoi spazi.
+              {t('realizzazioni.cta.subtitle')}
             </p>
             <a
-              href="/it/contatti"
+              href={`/${language}/contatti`}
               className="inline-flex items-center px-8 py-4 bg-foreground text-background 
                 font-medium rounded-full hover:bg-foreground/90 transition-colors"
             >
-              Contattaci
+              {t('realizzazioni.cta.button')}
             </a>
           </motion.div>
         </div>
