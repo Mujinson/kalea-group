@@ -36,7 +36,7 @@ const HomeHero = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-          className="mt-1 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-light tracking-[0.2em] drop-shadow-lg"
+          className="mt-1 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[0.2em] drop-shadow-lg"
         >
           Innovate | Living | Nature
         </motion.p>
