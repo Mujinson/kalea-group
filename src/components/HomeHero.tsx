@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import heroImage from "@/assets/hero-home-new.webp";
+import logoImage from "@/assets/logo-kalea-cream.png";
 
 const HomeHero = () => {
   const { t, language } = useTranslation();
@@ -19,8 +20,20 @@ const HomeHero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col items-center justify-end pb-16 md:pb-24">
-        {/* CTA Buttons */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-center">
+        {/* Centered Logo */}
+        <motion.img
+          src={logoImage}
+          alt="Kalēa®"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] h-auto drop-shadow-2xl"
+        />
+      </div>
+
+      {/* CTA Buttons - positioned at bottom */}
+      <div className="absolute bottom-16 md:bottom-24 left-0 right-0 z-10">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
