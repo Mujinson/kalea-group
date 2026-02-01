@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
-import heroImage from "@/assets/hero-home-new.webp";
+import heroImage from "@/assets/hero-home-new.jpg";
 import logoImage from "@/assets/logo-kalea-cream.png";
 
 const words = ["Innovate", "Living", "Nature"];
