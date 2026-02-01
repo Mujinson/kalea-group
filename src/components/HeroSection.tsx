@@ -89,7 +89,7 @@ const HeroSection = ({
 
       {/* Content overlay */}
       <div
-        className={`relative z-10 ${minHeight} flex flex-col items-center justify-start pt-32 pb-16 md:justify-end md:pt-0 md:pb-32`}
+        className={`relative z-10 ${minHeight} flex flex-col items-center justify-center md:justify-end md:pb-32`}
       >
         <motion.div 
           style={isFullScreen ? { opacity: contentOpacity, y: contentY } : undefined} 
