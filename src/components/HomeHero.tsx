@@ -30,6 +30,16 @@ const HomeHero = () => {
           transition={{ duration: 1, ease: "easeOut" }}
           className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] h-auto brightness-0 invert drop-shadow-2xl"
         />
+        
+        {/* Payoff - always in English */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+          className="mt-6 md:mt-8 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-light tracking-[0.2em] drop-shadow-lg"
+        >
+          Innovate | Living | Nature
+        </motion.p>
       </div>
 
       {/* CTA Buttons - positioned at bottom */}
