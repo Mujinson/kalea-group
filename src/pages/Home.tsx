@@ -230,50 +230,22 @@ const Home = () => {
             </div>
 
             {/* Outdoor Products */}
-            <motion.h3
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-lg md:text-xl font-heading font-semibold text-foreground mb-4 md:mb-6"
+              className="mb-4 md:mb-6"
             >
-              {t('home.productsSection.outdoor')}
-            </motion.h3>
+              <h3 className="text-lg md:text-xl font-heading font-semibold text-foreground">
+                {t('home.productsSection.outdoor')}
+              </h3>
+              <p className="text-sm md:text-base text-foreground/60 font-medium">
+                Novità in arrivo
+              </p>
+            </motion.div>
             
-            {/* Outdoor Cards Container with overlay */}
+            {/* Outdoor Cards Container */}
             <div className="relative max-w-4xl mx-auto">
-              {/* Animated "Novità in arrivo" overlay */}
-              <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9, rotate: 45 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: 45 }}
-                  viewport={{ once: true }}
-                  className="text-center"
-                >
-                  <div className="flex items-center gap-2 md:gap-4">
-                    {["Novità", "in", "arrivo"].map((word, index) => (
-                      <motion.span
-                        key={word}
-                        animate={{
-                          scale: [1, 1.15, 1.15, 1],
-                          color: ["#FFFFFF", "#1a1a1a", "#1a1a1a", "#FFFFFF"],
-                        }}
-                        transition={{
-                          duration: 1.2,
-                          times: [0, 0.2, 0.8, 1],
-                          delay: index * 1.5,
-                          repeat: Infinity,
-                          repeatDelay: 2 * 1.5,
-                          ease: "easeInOut",
-                        }}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold drop-shadow-2xl"
-                        style={{ textShadow: "0 4px 20px rgba(0,0,0,0.5)" }}
-                      >
-                        {word}
-                      </motion.span>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
 
               {/* Row 1: 2 cards */}
               <div className="grid grid-cols-2 gap-3 md:gap-5 mb-3 md:mb-5">
