@@ -17,7 +17,7 @@ const LayerDiagram = () => {
     },
     {
       name: t('stonecore.layers.core'),
-      thickness: "8.5 mm",
+      thickness: "7.5 mm",
       bgColor: "bg-[#3D3833]",
       isCore: true,
     },
