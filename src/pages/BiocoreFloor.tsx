@@ -428,7 +428,7 @@ const BiocoreFloor = () => {
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Giunto perimetrale: 8-10 mm</span>
+                      <span>Giunto perimetrale: 5-7 mm (superfici &gt;18 m² senza giunti)</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
