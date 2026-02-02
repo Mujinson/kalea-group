@@ -76,7 +76,7 @@ const EdgeLine = () => {
 
       {/* Vantaggi */}
       <section 
-        className="section-spacing relative"
+        className="section-spacing relative z-10"
         style={{
           backgroundImage: `url(${bgEdgeLine})`,
           backgroundSize: 'cover',
@@ -112,7 +112,7 @@ const EdgeLine = () => {
       </section>
 
       {/* Griglia prodotti */}
-      <section className="section-spacing bg-background">
+      <section className="section-spacing bg-background relative z-10">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -142,7 +142,7 @@ const EdgeLine = () => {
       </section>
 
       {/* Finiture */}
-      <section className="section-spacing bg-background">
+      <section className="section-spacing bg-background relative z-10">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -176,7 +176,7 @@ const EdgeLine = () => {
       </section>
 
       {/* CTA finale */}
-      <section className="section-spacing relative overflow-hidden bg-background">
+      <section className="section-spacing relative z-10 overflow-hidden bg-background">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
