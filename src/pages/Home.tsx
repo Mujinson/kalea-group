@@ -244,10 +244,10 @@ const Home = () => {
               {/* Animated "Novità in arrivo" overlay */}
               <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, scale: 0.9, rotate: 45 }}
+                  whileInView={{ opacity: 1, scale: 1, rotate: 45 }}
                   viewport={{ once: true }}
-                  className="text-center rotate-45"
+                  className="text-center"
                 >
                   <div className="flex items-center gap-2 md:gap-4">
                     {["Novità", "in", "arrivo"].map((word, index) => (
