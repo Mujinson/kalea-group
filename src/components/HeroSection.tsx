@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import { useHitobaScroll } from "@/hooks/useHitobaScroll";
 import AnimatedTitle from "@/components/AnimatedTitle";
@@ -52,7 +52,6 @@ const HeroSection = ({
   const titleDelay = 0.05;
   const subtitleDelay = TITLE_VISUAL_DURATION + 0.1;
   const ctaDelay = TITLE_VISUAL_DURATION + 0.2;
-  const scrollDelay = TITLE_VISUAL_DURATION + 0.5;
 
 
   return (
@@ -158,17 +157,6 @@ const HeroSection = ({
             )}
           </div>
 
-          {/* Scroll indicator */}
-          <motion.div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: scrollDelay }}
-          >
-            <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}>
-              <ChevronDown className="w-6 h-6 text-white/60" />
-            </motion.div>
-          </motion.div>
         </motion.div>
       </div>
     </div>
