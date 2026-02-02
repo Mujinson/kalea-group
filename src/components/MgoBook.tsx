@@ -200,11 +200,8 @@ const MgoBook = () => {
           {/* Section Title */}
           <div className="text-center mb-6">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-2">
-              {t('home.mgoTitle')}
+              {t('home.mgoBook.exclusiveAdvantages')}
             </h2>
-            <p className="text-sm md:text-base text-foreground/70 max-w-md mx-auto">
-              {t('home.mgoDescription')}
-            </p>
           </div>
           <motion.div
             ref={bookRef}
@@ -284,11 +281,8 @@ const MgoBook = () => {
         {/* Section Title */}
         <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-            {t('home.mgoTitle')}
+            {t('home.mgoBook.exclusiveAdvantages')}
           </h2>
-          <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-            {t('home.mgoDescription')}
-          </p>
         </div>
         <motion.div
           ref={bookRef}
