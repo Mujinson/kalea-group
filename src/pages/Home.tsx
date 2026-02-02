@@ -247,7 +247,7 @@ const Home = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  className="text-center -rotate-12"
+                  className="text-center rotate-12"
                 >
                   <div className="flex items-center gap-2 md:gap-4">
                     {["Novità", "in", "arrivo"].map((word, index) => (
