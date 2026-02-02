@@ -175,7 +175,10 @@ const DualCarouselSection = () => {
             transition={{ duration: 0.6 }}
             className="bg-card rounded-3xl p-5 sm:p-6 md:p-8 shadow-lg"
           >
-            <div className="flex items-center justify-between mb-4">
+            <Link 
+              to={`/${language}/biomag-floor`}
+              className="flex items-center justify-between mb-4 group/header hover:opacity-80 transition-opacity"
+            >
               <div>
                 <h3 className="text-lg sm:text-xl font-heading font-semibold text-foreground">
                   BIOMAG FLOOR®
@@ -187,13 +190,8 @@ const DualCarouselSection = () => {
                    'Technologie MgO avancée'}
                 </p>
               </div>
-              <Link 
-                to={`/${language}/biomag-floor`}
-                className="text-foreground/70 hover:text-foreground transition-colors"
-              >
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
+              <ArrowRight className="w-5 h-5 text-foreground/70 group-hover/header:text-foreground group-hover/header:translate-x-1 transition-all" />
+            </Link>
             
             {/* Mini Carousel */}
             <div className="h-32 sm:h-36 md:h-40">
@@ -209,7 +207,10 @@ const DualCarouselSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="bg-card rounded-3xl p-5 sm:p-6 md:p-8 shadow-lg"
           >
-            <div className="flex items-center justify-between mb-4">
+            <Link 
+              to={`/${language}/biocore-floor`}
+              className="flex items-center justify-between mb-4 group/header hover:opacity-80 transition-opacity"
+            >
               <div>
                 <h3 className="text-lg sm:text-xl font-heading font-semibold text-foreground">
                   BIOCORE FLOOR®
@@ -221,13 +222,8 @@ const DualCarouselSection = () => {
                    'Fibres naturelles et carbone'}
                 </p>
               </div>
-              <Link 
-                to={`/${language}/biocore-floor`}
-                className="text-foreground/70 hover:text-foreground transition-colors"
-              >
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
+              <ArrowRight className="w-5 h-5 text-foreground/70 group-hover/header:text-foreground group-hover/header:translate-x-1 transition-all" />
+            </Link>
             
             {/* Mini Carousel */}
             <div className="h-32 sm:h-36 md:h-40">
