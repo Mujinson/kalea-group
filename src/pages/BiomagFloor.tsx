@@ -347,7 +347,7 @@ const BiomagFloor = () => {
                   <ul className="space-y-3 text-white font-medium">
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Spessore totale: 10 mm (8,5 mm + 1,5 mm)</span>
+                      <span>Spessore plancia: 8,5 mm</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />

@@ -339,7 +339,7 @@ const AreaTecnica = () => {
                 <tbody>
                   {[
                     { char: "Reazione al fuoco", val: "A1 / A1fl", norm: "EN 13501-1" },
-                    { char: "Spessore totale", val: "10 mm", norm: "EN 428" },
+                    { char: "Spessore plancia", val: "8,5 mm", norm: "EN 428" },
                     { char: "Resistenza all'abrasione", val: "Classe AC5", norm: "EN 13329" },
                     { char: "Stabilità dimensionale", val: "≤ 0,10%", norm: "EN 434" },
                     { char: "Emissioni VOC", val: "A+", norm: "ISO 16000" }
