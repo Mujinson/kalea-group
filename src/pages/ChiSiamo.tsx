@@ -117,8 +117,8 @@ const ChiSiamo = () => {
 
             <div className="space-y-6 text-center text-muted-foreground max-w-3xl mx-auto">
               <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyIntro')}</p>
-              <p className="whitespace-pre-line">{t('aboutUs.historyGabriel')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyAndrea')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyGabriel')}</p>
               <p className="whitespace-pre-line italic text-foreground/80">{t('aboutUs.historyQuestions')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyIntuition')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyMgo')}</p>
