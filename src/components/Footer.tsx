@@ -27,8 +27,8 @@ const Footer = () => {
 
   return (
     <footer className="relative z-10 bg-background border-t border-foreground/10">
-      <div className="container-custom py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-8">
+      <div className="container-custom py-6 md:py-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
           {/* Section 1: Logo Only */}
           <div className="md:col-span-1">
             <img src={logoFooter} alt="Kalēa®" className="h-20 mb-4" />
@@ -187,7 +187,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-6 pt-4 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
             © {currentYear} Kalēa®. {t("footer.copyright")}
           </p>
