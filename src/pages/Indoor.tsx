@@ -143,7 +143,7 @@ const Indoor = () => {
       </section>
 
       {/* Products Grid Section */}
-      <section className="relative z-[1] bg-background py-20 md:py-32">
+      <section className="relative z-[1] bg-background pt-20 md:pt-32 pb-12 md:pb-16">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
