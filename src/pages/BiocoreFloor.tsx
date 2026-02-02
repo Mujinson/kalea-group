@@ -10,7 +10,7 @@ import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/product-biocore-floor-new.jpg";
+import heroImage from "@/assets/hero-biomag-floor-new.webp";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import bgAtossicoCard from "@/assets/bg-atossico-card.png";
