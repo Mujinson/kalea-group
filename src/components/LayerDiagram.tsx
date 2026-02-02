@@ -23,8 +23,9 @@ const LayerDiagram = () => {
     },
     {
       name: t('stonecore.layers.mat'),
-      thickness: "1.5 mm",
+      thickness: "2 mm",
       bgColor: "bg-[#B8B8B8]",
+      isSeparate: true,
     },
   ];
 
