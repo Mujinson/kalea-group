@@ -115,7 +115,7 @@ const Contatti = () => {
         backgroundImage={heroContatti}
         backgroundPosition="center 25%"
         overlayClassName="bg-gradient-to-b from-black/40 via-black/20 to-black/40"
-        minHeight="min-h-[50vh]"
+        minHeight="min-h-[60vh]"
       />
       <section className="section-spacing bg-background">
         <div className="container-custom">
