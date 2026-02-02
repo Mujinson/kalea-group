@@ -79,8 +79,8 @@ const Indoor = () => {
         content="Tecnologie avanzate per pavimenti e superfici indoor. Soluzioni ad alte prestazioni per abitazioni e spazi commerciali."
       />
 
-      {/* Hero Section */}
-      <section ref={heroRef} className="relative h-screen z-[0]">
+      {/* Hero Section - Fixed background */}
+      <div ref={heroRef} className="fixed inset-0 z-[0]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ 
@@ -140,10 +140,13 @@ const Indoor = () => {
             </div>
           </motion.div>
         </div>
-      </section>
+      </div>
+
+      {/* Spacer to push content below fixed hero */}
+      <div className="h-screen" />
 
       {/* Products Grid Section */}
-      <section className="relative z-[1] bg-background pt-20 md:pt-32 pb-0">
+      <section className="relative z-[1] bg-background pt-20 md:pt-32 pb-8">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
