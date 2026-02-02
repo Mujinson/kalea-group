@@ -6,9 +6,9 @@ import ColorCircleGallery, { stonecoreColors } from "@/components/ColorCircleGal
 import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import CertificationsSection from "@/components/CertificationsSection";
-import MgoBook from "@/components/MgoBook";
+
 import ProductGallerySection from "@/components/ProductGallerySection";
-import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check, ChevronDown } from "lucide-react";
+import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
 import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -572,9 +572,53 @@ const BiomagFloor = () => {
         </div>
       </section>
 
-      {/* Perché BIOMAG FLOOR - MgoBook */}
-      <section className="relative h-screen bg-background">
-        <MgoBook />
+      {/* Vantaggi Esclusivi */}
+      <section className="py-20 md:py-28 bg-background">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground">
+              {t('home.mgoBook.exclusiveAdvantages')}
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {[
+              { icon: ThermometerSun, titleKey: 'home.mgoBook.additionalBenefits.floorHeating.title', descKey: 'home.mgoBook.additionalBenefits.floorHeating.description' },
+              { icon: Baby, titleKey: 'home.mgoBook.additionalBenefits.childSafe.title', descKey: 'home.mgoBook.additionalBenefits.childSafe.description' },
+              { icon: PawPrint, titleKey: 'home.mgoBook.additionalBenefits.petFriendly.title', descKey: 'home.mgoBook.additionalBenefits.petFriendly.description' },
+              { icon: Recycle, titleKey: 'home.mgoBook.additionalBenefits.zeroFormaldehyde.title', descKey: 'home.mgoBook.additionalBenefits.zeroFormaldehyde.description' },
+              { icon: Shield, titleKey: 'home.mgoBook.additionalBenefits.antibacterial.title', descKey: 'home.mgoBook.additionalBenefits.antibacterial.description' },
+              { icon: Timer, titleKey: 'home.mgoBook.additionalBenefits.extremeDurability.title', descKey: 'home.mgoBook.additionalBenefits.extremeDurability.description' },
+            ].map((benefit, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="p-6 rounded-2xl"
+                style={{ 
+                  backgroundColor: '#FAF9F6',
+                  boxShadow: '0 4px 24px rgba(0, 0, 0, 0.06)'
+                }}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-[hsl(var(--kalea-logo))]/10 shrink-0">
+                    <benefit.icon className="w-5 h-5 text-[hsl(var(--kalea-logo))]" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-medium text-foreground mb-1">
+                      {t(benefit.titleKey)}
+                    </h3>
+                    <p className="text-sm text-foreground/60">
+                      {t(benefit.descKey)}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Certificazioni */}
