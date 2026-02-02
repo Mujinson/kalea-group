@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
-import heroIndoor from "@/assets/hero-indoor.jpg";
+import heroIndoor from "@/assets/hero-indoor-wood.jpg";
 import productBiomagFloor from "@/assets/product-biomag-floor.jpg";
 import productBiocoreFloor from "@/assets/product-biocore-floor.jpg";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
