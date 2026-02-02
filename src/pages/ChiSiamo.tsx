@@ -90,12 +90,12 @@ const ChiSiamo = () => {
               >
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
                   <img 
-                    src={fondatore1} 
-                    alt="Andrea Facchinetti - Co-fondatore Kalēa®" 
+                    src={fondatore2} 
+                    alt="Gabriel Vladu - Co-fondatore Kalēa®" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="text-sm md:text-base text-foreground font-medium">Andrea Facchinetti</span>
+                <span className="text-sm md:text-base text-foreground font-medium">Gabriel Vladu</span>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -106,19 +106,19 @@ const ChiSiamo = () => {
               >
                 <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
                   <img 
-                    src={fondatore2} 
-                    alt="Gabriel Vladu - Co-fondatore Kalēa®" 
+                    src={fondatore1} 
+                    alt="Andrea Facchinetti - Co-fondatore Kalēa®" 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="text-sm md:text-base text-foreground font-medium">Gabriel Vladu</span>
+                <span className="text-sm md:text-base text-foreground font-medium">Andrea Facchinetti</span>
               </motion.div>
             </div>
 
             <div className="space-y-6 text-center text-muted-foreground max-w-3xl mx-auto">
               <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyIntro')}</p>
-              <p className="whitespace-pre-line">{t('aboutUs.historyAndrea')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyGabriel')}</p>
+              <p className="whitespace-pre-line">{t('aboutUs.historyAndrea')}</p>
               <p className="whitespace-pre-line italic text-foreground/80">{t('aboutUs.historyQuestions')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyIntuition')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyMgo')}</p>
