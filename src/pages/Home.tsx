@@ -239,52 +239,83 @@ const Home = () => {
               {t('home.productsSection.outdoor')}
             </motion.h3>
             
-            {/* Row 1: 2 cards */}
-            <div className="grid grid-cols-2 gap-3 md:gap-5 max-w-4xl mx-auto mb-3 md:mb-5">
-              {outdoorProducts.slice(0, 2).map((product, index) => (
+            {/* Outdoor Cards Container with overlay */}
+            <div className="relative max-w-4xl mx-auto">
+              {/* Animated "Novità in arrivo" overlay */}
+              <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
                 <motion.div
-                  key={product.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
+                  className="text-center -rotate-12"
                 >
-                  <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                  <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                    <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full">
-                      {product.comingSoonLabel || "Novità in arrivo"}
-                    </div>
-                    <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
-                    <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
+                  <div className="flex items-center gap-2 md:gap-4">
+                    {["Novità", "in", "arrivo"].map((word, index) => (
+                      <motion.span
+                        key={word}
+                        animate={{
+                          scale: [1, 1.15, 1.15, 1],
+                          color: ["#FFFFFF", "#1a1a1a", "#1a1a1a", "#FFFFFF"],
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          times: [0, 0.2, 0.8, 1],
+                          delay: index * 1.5,
+                          repeat: Infinity,
+                          repeatDelay: 2 * 1.5,
+                          ease: "easeInOut",
+                        }}
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold drop-shadow-2xl"
+                        style={{ textShadow: "0 4px 20px rgba(0,0,0,0.5)" }}
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
                   </div>
                 </motion.div>
-              ))}
-            </div>
-            
-            {/* Row 2: 1 card centered */}
-            <div className="flex justify-center gap-3 md:gap-5 max-w-4xl mx-auto">
-              {outdoorProducts.slice(2).map((product, index) => (
-                <motion.div
-                  key={product.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group w-[calc(50%-6px)]"
-                >
-                  <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                  <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                    <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full">
-                      {product.comingSoonLabel || "Novità in arrivo"}
+              </div>
+
+              {/* Row 1: 2 cards */}
+              <div className="grid grid-cols-2 gap-3 md:gap-5 mb-3 md:mb-5">
+                {outdoorProducts.slice(0, 2).map((product, index) => (
+                  <motion.div
+                    key={product.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
+                  >
+                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
+                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
+                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
                     </div>
-                    <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
-                    <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
+              </div>
+              
+              {/* Row 2: 1 card centered */}
+              <div className="flex justify-center gap-3 md:gap-5">
+                {outdoorProducts.slice(2).map((product, index) => (
+                  <motion.div
+                    key={product.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group w-[calc(50%-6px)]"
+                  >
+                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
+                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
+                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
