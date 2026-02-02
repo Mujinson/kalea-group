@@ -573,7 +573,7 @@ const BiomagFloor = () => {
       </section>
 
       {/* Vantaggi Esclusivi */}
-      <section className="py-20 md:py-28 bg-background">
+      <section className="relative z-[6] py-20 md:py-28" style={{ backgroundColor: 'hsl(var(--background))' }}>
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground">
