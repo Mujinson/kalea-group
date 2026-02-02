@@ -45,12 +45,13 @@ const HomeHero = () => {
               <motion.span
                 animate={{
                   scale: [1, 1.15, 1],
+                  color: ["#FFFFFF", "#1a1a1a", "#FFFFFF"],
                 }}
                 transition={{
                   duration: 1.2,
-                  delay: index * 1.5, // Stagger each word
+                  delay: index * 1.5,
                   repeat: Infinity,
-                  repeatDelay: (words.length - 1) * 1.5, // Wait for all words to animate
+                  repeatDelay: (words.length - 1) * 1.5,
                   ease: "easeInOut",
                 }}
                 className="inline-block origin-center"
