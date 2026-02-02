@@ -44,11 +44,12 @@ const HomeHero = () => {
             <span key={word} className="flex items-center">
               <motion.span
                 animate={{
-                  scale: [1, 1.15, 1],
-                  color: ["#FFFFFF", "#1a1a1a", "#FFFFFF"],
+                  scale: [1, 1.15, 1.15, 1],
+                  color: ["#FFFFFF", "#1a1a1a", "#1a1a1a", "#FFFFFF"],
                 }}
                 transition={{
                   duration: 1.2,
+                  times: [0, 0.2, 0.8, 1],
                   delay: index * 1.5,
                   repeat: Infinity,
                   repeatDelay: (words.length - 1) * 1.5,
