@@ -298,8 +298,8 @@ const Home = () => {
       <DualCarouselSection />
 
       {/* Applicazioni */}
-      <section className="relative min-h-[100svh] md:min-h-0 md:py-16 lg:h-[100svh] lg:py-0 bg-background">
-        <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 lg:py-14">
+      <section className="relative h-[100svh] bg-background">
+        <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -317,7 +317,7 @@ const Home = () => {
           </motion.div>
 
           {/* Cards - 3 per row on desktop, 2 rows */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6 max-w-6xl mx-auto w-full lg:flex-1">
+          <div className="flex-1 min-h-0 grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6 max-w-6xl mx-auto w-full md:max-h-[65vh] lg:max-h-none">
             {applications.map((app, index) => (
               <motion.div
                 key={app.title}
