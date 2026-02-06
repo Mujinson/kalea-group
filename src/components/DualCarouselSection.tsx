@@ -140,7 +140,7 @@ const DualCarouselSection = () => {
   const { t, language } = useTranslation();
 
   return (
-    <section className="min-h-[70vh] w-full flex flex-col justify-center bg-background py-12 md:py-20">
+    <section className="min-h-[70vh] md:min-h-0 lg:min-h-[70vh] w-full flex flex-col justify-center bg-background py-12 md:py-16 lg:py-20">
       {/* Header */}
       <div className="container-custom text-center mb-8 md:mb-12">
         <motion.div
