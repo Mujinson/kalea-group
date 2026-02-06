@@ -14,6 +14,9 @@ export const useDragScroll = (options: UseDragScrollOptions = {}) => {
   const animationRef = useRef<number | null>(null);
   const isPausedRef = useRef(false);
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Keep track of scroll position as a decimal to avoid browser rounding issues
+  const currentScrollRef = useRef<number | null>(null);
 
   // Auto-scroll animation
   const animate = useCallback(() => {
@@ -25,25 +28,49 @@ export const useDragScroll = (options: UseDragScrollOptions = {}) => {
     const container = containerRef.current;
     const maxScroll = container.scrollWidth - container.clientWidth;
     
+    // Initialize currentScrollRef if not set
+    if (currentScrollRef.current === null) {
+      currentScrollRef.current = container.scrollLeft;
+    }
+    
     if (direction === 'left') {
-      container.scrollLeft += autoScrollSpeed;
+      currentScrollRef.current += autoScrollSpeed;
       // Reset to beginning when reaching end
-      if (container.scrollLeft >= maxScroll) {
-        container.scrollLeft = 0;
+      if (currentScrollRef.current >= maxScroll) {
+        currentScrollRef.current = 0;
       }
     } else {
-      container.scrollLeft -= autoScrollSpeed;
+      currentScrollRef.current -= autoScrollSpeed;
       // Reset to end when reaching beginning
-      if (container.scrollLeft <= 0) {
-        container.scrollLeft = maxScroll;
+      if (currentScrollRef.current <= 0) {
+        currentScrollRef.current = maxScroll;
       }
     }
+    
+    // Apply the scroll position (browser will round, but we keep the decimal in ref)
+    container.scrollLeft = currentScrollRef.current;
 
     animationRef.current = requestAnimationFrame(animate);
   }, [autoScrollSpeed, direction]);
 
-  // Start auto-scroll on mount
+  // Initialize scroll position and start auto-scroll on mount
   useEffect(() => {
+    // Set initial scroll position based on direction
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      
+      if (direction === 'right') {
+        // For right direction (scroll decreasing), start at the end
+        currentScrollRef.current = maxScroll;
+        container.scrollLeft = maxScroll;
+      } else {
+        // For left direction (scroll increasing), start at beginning
+        currentScrollRef.current = 0;
+        container.scrollLeft = 0;
+      }
+    }
+    
     animationRef.current = requestAnimationFrame(animate);
     return () => {
       if (animationRef.current) {
@@ -53,7 +80,7 @@ export const useDragScroll = (options: UseDragScrollOptions = {}) => {
         clearTimeout(resumeTimeoutRef.current);
       }
     };
-  }, [animate]);
+  }, [animate, direction]);
 
   const pauseAutoScroll = useCallback(() => {
     isPausedRef.current = true;
@@ -68,6 +95,10 @@ export const useDragScroll = (options: UseDragScrollOptions = {}) => {
     }
     // Resume immediately after a very short delay
     resumeTimeoutRef.current = setTimeout(() => {
+      // Sync the ref with the actual DOM scroll position after drag
+      if (containerRef.current) {
+        currentScrollRef.current = containerRef.current.scrollLeft;
+      }
       isPausedRef.current = false;
     }, 300);
   }, []);
