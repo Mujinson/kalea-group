@@ -26,8 +26,8 @@ const IndoorOutdoorSection = () => {
   ];
 
   return (
-    <section className="relative h-[100svh] bg-background px-4 md:px-8 lg:px-12 py-8 md:py-16 flex flex-col overflow-hidden">
-      <div className="grid flex-1 min-h-0 grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-4 md:gap-6">
+    <section className="relative min-h-[100svh] md:h-auto md:min-h-0 lg:h-[100svh] bg-background px-4 md:px-8 lg:px-12 py-8 md:py-12 lg:py-16 flex flex-col overflow-hidden">
+      <div className="grid flex-1 min-h-0 grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-4 md:gap-6 md:max-h-[70vh] lg:max-h-none">
         {sections.map((section, index) => (
           <Link
             key={section.title}
