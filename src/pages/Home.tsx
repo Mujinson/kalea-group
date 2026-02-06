@@ -27,6 +27,7 @@ import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
+import { GlassCubeSection } from "@/components/GlassCube";
 
 const Home = () => {
   const { t, language } = useTranslation();
@@ -126,6 +127,9 @@ const Home = () => {
     <div className="relative bg-background">
       {/* Hero Section */}
       <HomeHero />
+
+      {/* 3D Glass Cube - MgO Technology */}
+      <GlassCubeSection />
 
       {/* Indoor/Outdoor Section */}
       <IndoorOutdoorSection />
