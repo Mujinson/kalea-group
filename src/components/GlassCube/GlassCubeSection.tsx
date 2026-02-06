@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useRef, useCallback, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { motion } from "framer-motion";
@@ -8,6 +8,7 @@ const GlassCubeScene = lazy(() => import("./GlassCubeScene"));
 
 const GlassCubeSection = () => {
   const { language } = useTranslation();
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   const title = language === 'it' ? 'Tecnologia MgO' : 
     language === 'en' ? 'MgO Technology' :
@@ -29,7 +30,7 @@ const GlassCubeSection = () => {
       }}
     >
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-10 pt-8 md:pt-12 lg:pt-16 text-center px-6">
+      <div className="relative z-20 pt-8 md:pt-12 lg:pt-16 text-center px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -45,9 +46,13 @@ const GlassCubeSection = () => {
         </motion.div>
       </div>
 
-      {/* 3D Canvas - centered with proper sizing */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-full h-[70%] md:h-[75%] mt-8 md:mt-4">
+      {/* 3D Canvas - only the cube area captures touch, rest allows scroll */}
+      <div className="flex-1 flex items-center justify-center absolute inset-0 top-20 md:top-28 pointer-events-none">
+        <div 
+          ref={canvasContainerRef}
+          className="w-[85vw] h-[55vh] md:w-[60vw] md:h-[65vh] lg:w-[50vw] lg:h-[70vh] max-w-[700px] pointer-events-auto"
+          style={{ touchAction: 'none' }}
+        >
           <Suspense fallback={
             <div className="w-full h-full flex items-center justify-center">
               <div className="w-10 h-10 border-2 border-white/20 border-t-white/60 rounded-full animate-spin" />
@@ -57,6 +62,7 @@ const GlassCubeSection = () => {
               camera={{ position: [4, 2.8, 4], fov: 32 }}
               dpr={[1, 1.5]}
               gl={{ antialias: true, alpha: true }}
+              style={{ touchAction: 'none' }}
             >
               <GlassCubeScene />
               <OrbitControls
