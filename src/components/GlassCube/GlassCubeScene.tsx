@@ -58,161 +58,205 @@ const GlassEdges = () => (
   </lineSegments>
 );
 
-// MgO powder using InstancedMesh - visible dense spheres filling bottom half
-const MgoPowder = ({ count = 800 }: { count?: number }) => {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
-
-  const state = useMemo(() => {
-    const positions = new Float32Array(count * 3);
-    const velocities = new Float32Array(count * 3);
-    const scales = new Float32Array(count);
-
-    for (let i = 0; i < count; i++) {
-      // Fill the bottom ~45% of the cube densely
-      positions[i * 3] = (Math.random() - 0.5) * (CUBE_SIZE - 0.1);
-      positions[i * 3 + 1] = -HALF + Math.random() * (CUBE_SIZE * 0.45);
-      positions[i * 3 + 2] = (Math.random() - 0.5) * (CUBE_SIZE - 0.1);
-      scales[i] = 0.018 + Math.random() * 0.022;
-    }
-    return { positions, velocities, scales };
-  }, [count]);
-
-  useFrame((_, delta) => {
-    if (!meshRef.current) return;
-    const dt = Math.min(delta, 0.05);
-    const { positions: p, velocities: v, scales: s } = state;
-    const rotVY = rotationState.velocityY;
-    const rotVX = rotationState.velocityX;
-
-    for (let i = 0; i < count; i++) {
-      let x = p[i * 3], y = p[i * 3 + 1], z = p[i * 3 + 2];
-      let vx = v[i * 3], vy = v[i * 3 + 1], vz = v[i * 3 + 2];
-
-      // Rotation force pushes particles
-      vx += rotVY * 10 * z;
-      vz -= rotVY * 10 * x;
-      vy -= rotVX * 4;
-
-      // Gravity
-      vy -= 3.0 * dt;
-
-      // Slight random jitter
-      vx += (Math.random() - 0.5) * 0.02;
-      vz += (Math.random() - 0.5) * 0.02;
-
-      // Damping
-      vx *= 0.94;
-      vy *= 0.94;
-      vz *= 0.94;
-
-      x += vx * dt;
-      y += vy * dt;
-      z += vz * dt;
-
-      // Cube bounds
-      if (x > HALF) { x = HALF; vx *= -0.2; }
-      if (x < -HALF) { x = -HALF; vx *= -0.2; }
-      if (y < -HALF) { y = -HALF; vy *= -0.1; }
-      if (y > HALF) { y = HALF; vy *= -0.3; }
-      if (z > HALF) { z = HALF; vz *= -0.2; }
-      if (z < -HALF) { z = -HALF; vz *= -0.2; }
-
-      p[i * 3] = x;
-      p[i * 3 + 1] = y;
-      p[i * 3 + 2] = z;
-      v[i * 3] = vx;
-      v[i * 3 + 1] = vy;
-      v[i * 3 + 2] = vz;
-
-      dummy.position.set(x, y, z);
-      dummy.scale.setScalar(s[i]);
-      dummy.updateMatrix();
-      meshRef.current.setMatrixAt(i, dummy.matrix);
-    }
-    meshRef.current.instanceMatrix.needsUpdate = true;
-  });
-
-  return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[1, 6, 6]} />
-      <meshStandardMaterial color="#ede8e0" roughness={0.9} metalness={0.02} />
-    </instancedMesh>
-  );
+// Circular point texture for smooth sand grains
+const useCircleTexture = () => {
+  return useMemo(() => {
+    const size = 32;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d")!;
+    const center = size / 2;
+    const radius = size / 2 - 1;
+    const gradient = ctx.createRadialGradient(center, center, 0, center, center, radius);
+    gradient.addColorStop(0, "rgba(237,232,224,1)");
+    gradient.addColorStop(0.7, "rgba(230,224,214,0.9)");
+    gradient.addColorStop(1, "rgba(220,214,204,0)");
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(center, center, radius, 0, Math.PI * 2);
+    ctx.fill();
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    return tex;
+  }, []);
 };
 
-// Floating dust (very fine particles in the air)
-const MgoDust = ({ count = 120 }: { count?: number }) => {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+// MgO Sand - massive point cloud that fills half the cube like dense white sand
+const MgoSand = ({ count = 200000 }: { count?: number }) => {
+  const pointsRef = useRef<THREE.Points>(null);
+  const texture = useCircleTexture();
 
-  const state = useMemo(() => {
+  const { positions, velocities } = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const velocities = new Float32Array(count * 3);
-    const scales = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 1.6;
-      positions[i * 3 + 1] = -HALF + Math.random() * CUBE_SIZE;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 1.6;
-      scales[i] = 0.006 + Math.random() * 0.01;
+      const i3 = i * 3;
+      // Densely pack in bottom ~48% of cube
+      positions[i3] = (Math.random() - 0.5) * (CUBE_SIZE - 0.06);
+      positions[i3 + 1] = -HALF + Math.random() * (CUBE_SIZE * 0.48);
+      positions[i3 + 2] = (Math.random() - 0.5) * (CUBE_SIZE - 0.06);
     }
-    return { positions, velocities, scales };
+    return { positions, velocities };
   }, [count]);
 
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    return geo;
+  }, [positions]);
+
   useFrame((_, delta) => {
-    if (!meshRef.current) return;
-    const dt = Math.min(delta, 0.05);
-    const { positions: p, velocities: v, scales: s } = state;
+    if (!pointsRef.current) return;
+    const dt = Math.min(delta, 0.04);
     const rotVY = rotationState.velocityY;
+    const rotVX = rotationState.velocityX;
+    const p = positions;
+    const v = velocities;
 
     for (let i = 0; i < count; i++) {
-      let x = p[i * 3], y = p[i * 3 + 1], z = p[i * 3 + 2];
-      let vx = v[i * 3], vy = v[i * 3 + 1], vz = v[i * 3 + 2];
+      const i3 = i * 3;
+      let x = p[i3], y = p[i3 + 1], z = p[i3 + 2];
+      let vx = v[i3], vy = v[i3 + 1], vz = v[i3 + 2];
 
-      vx += rotVY * 14 * z;
-      vz -= rotVY * 14 * x;
-      vy -= 0.3 * dt;
+      // Rotation force — sand shifts like in an hourglass
+      vx += rotVY * 12 * z;
+      vz -= rotVY * 12 * x;
+      vy -= rotVX * 5;
 
-      vx += (Math.random() - 0.5) * 0.04;
-      vy += (Math.random() - 0.5) * 0.02;
-      vz += (Math.random() - 0.5) * 0.04;
+      // Gravity
+      vy -= 4.0 * dt;
 
+      // Very light jitter for natural look
+      vx += (Math.random() - 0.5) * 0.008;
+      vz += (Math.random() - 0.5) * 0.008;
+
+      // Heavy damping for sand-like behavior
       vx *= 0.92;
-      vy *= 0.95;
+      vy *= 0.92;
       vz *= 0.92;
 
       x += vx * dt;
       y += vy * dt;
       z += vz * dt;
 
+      // Cube bounds with slight bounce
       if (x > HALF) { x = HALF; vx *= -0.15; }
       if (x < -HALF) { x = -HALF; vx *= -0.15; }
-      if (y < -HALF) { y = -HALF; vy *= -0.1; }
-      if (y > HALF) { y = HALF; vy *= -0.15; }
+      if (y < -HALF) { y = -HALF; vy *= -0.08; }
+      if (y > HALF) { y = HALF; vy *= -0.2; }
       if (z > HALF) { z = HALF; vz *= -0.15; }
       if (z < -HALF) { z = -HALF; vz *= -0.15; }
 
-      p[i * 3] = x; p[i * 3 + 1] = y; p[i * 3 + 2] = z;
-      v[i * 3] = vx; v[i * 3 + 1] = vy; v[i * 3 + 2] = vz;
-
-      dummy.position.set(x, y, z);
-      dummy.scale.setScalar(s[i]);
-      dummy.updateMatrix();
-      meshRef.current.setMatrixAt(i, dummy.matrix);
+      p[i3] = x;
+      p[i3 + 1] = y;
+      p[i3 + 2] = z;
+      v[i3] = vx;
+      v[i3 + 1] = vy;
+      v[i3 + 2] = vz;
     }
-    meshRef.current.instanceMatrix.needsUpdate = true;
+
+    (geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
-      <sphereGeometry args={[1, 4, 4]} />
-      <meshStandardMaterial color="#ffffff" transparent opacity={0.5} roughness={0.8} />
-    </instancedMesh>
+    <points ref={pointsRef} geometry={geometry}>
+      <pointsMaterial
+        map={texture}
+        size={0.012}
+        sizeAttenuation
+        transparent
+        opacity={0.85}
+        depthWrite={false}
+        color="#ede8e0"
+        blending={THREE.NormalBlending}
+      />
+    </points>
   );
 };
 
-// Thin short natural fiber segments
+// Floating dust — very fine particles suspended in air
+const MgoDust = ({ count = 150 }: { count?: number }) => {
+  const pointsRef = useRef<THREE.Points>(null);
+  const texture = useCircleTexture();
+
+  const { positions, velocities } = useMemo(() => {
+    const positions = new Float32Array(count * 3);
+    const velocities = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+      positions[i3] = (Math.random() - 0.5) * 1.6;
+      positions[i3 + 1] = -HALF + Math.random() * CUBE_SIZE;
+      positions[i3 + 2] = (Math.random() - 0.5) * 1.6;
+    }
+    return { positions, velocities };
+  }, [count]);
+
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    return geo;
+  }, [positions]);
+
+  useFrame((_, delta) => {
+    if (!pointsRef.current) return;
+    const dt = Math.min(delta, 0.04);
+    const rotVY = rotationState.velocityY;
+    const p = positions;
+    const v = velocities;
+
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3;
+      let x = p[i3], y = p[i3 + 1], z = p[i3 + 2];
+      let vx = v[i3], vy = v[i3 + 1], vz = v[i3 + 2];
+
+      vx += rotVY * 16 * z;
+      vz -= rotVY * 16 * x;
+      vy -= 0.2 * dt;
+
+      vx += (Math.random() - 0.5) * 0.05;
+      vy += (Math.random() - 0.5) * 0.03;
+      vz += (Math.random() - 0.5) * 0.05;
+
+      vx *= 0.90;
+      vy *= 0.94;
+      vz *= 0.90;
+
+      x += vx * dt;
+      y += vy * dt;
+      z += vz * dt;
+
+      if (x > HALF) { x = HALF; vx *= -0.1; }
+      if (x < -HALF) { x = -HALF; vx *= -0.1; }
+      if (y < -HALF) { y = -HALF; vy *= -0.05; }
+      if (y > HALF) { y = HALF; vy *= -0.1; }
+      if (z > HALF) { z = HALF; vz *= -0.1; }
+      if (z < -HALF) { z = -HALF; vz *= -0.1; }
+
+      p[i3] = x; p[i3 + 1] = y; p[i3 + 2] = z;
+      v[i3] = vx; v[i3 + 1] = vy; v[i3 + 2] = vz;
+    }
+
+    (geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+  });
+
+  return (
+    <points ref={pointsRef} geometry={geometry}>
+      <pointsMaterial
+        map={texture}
+        size={0.006}
+        sizeAttenuation
+        transparent
+        opacity={0.4}
+        depthWrite={false}
+        color="#ffffff"
+      />
+    </points>
+  );
+};
+
+// Thin short natural fiber segments mixed into the sand
 const NaturalFibers = ({ count = 35 }: { count?: number }) => {
   const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
 
@@ -235,21 +279,21 @@ const NaturalFibers = ({ count = 35 }: { count?: number }) => {
 
   const fiberGeometries = useMemo(() => {
     return Array.from({ length: count }, () => {
-      const len = 0.04 + Math.random() * 0.08;
+      const len = 0.04 + Math.random() * 0.06;
       const curve = new THREE.LineCurve3(
         new THREE.Vector3(0, -len / 2, 0),
         new THREE.Vector3(
-          (Math.random() - 0.5) * 0.02,
+          (Math.random() - 0.5) * 0.015,
           len / 2,
-          (Math.random() - 0.5) * 0.02
+          (Math.random() - 0.5) * 0.015
         )
       );
-      return new THREE.TubeGeometry(curve, 2, 0.002 + Math.random() * 0.0015, 3, false);
+      return new THREE.TubeGeometry(curve, 2, 0.0015 + Math.random() * 0.001, 3, false);
     });
   }, [count]);
 
   useFrame((_, delta) => {
-    const dt = Math.min(delta, 0.05);
+    const dt = Math.min(delta, 0.04);
     const { positions: p, velocities: v, angles: a, angVel: av } = fiberState;
     const rotVY = rotationState.velocityY;
     const rotVX = rotationState.velocityX;
@@ -261,15 +305,15 @@ const NaturalFibers = ({ count = 35 }: { count?: number }) => {
       let x = p[i * 3], y = p[i * 3 + 1], z = p[i * 3 + 2];
       let vx = v[i * 3], vy = v[i * 3 + 1], vz = v[i * 3 + 2];
 
-      vx += rotVY * 7 * z;
-      vz -= rotVY * 7 * x;
+      vx += rotVY * 10 * z;
+      vz -= rotVY * 10 * x;
       vy -= rotVX * 3;
-      vy -= 2.5 * dt;
+      vy -= 3.0 * dt;
 
       vx += (Math.random() - 0.5) * 0.01;
       vz += (Math.random() - 0.5) * 0.01;
 
-      vx *= 0.94; vy *= 0.94; vz *= 0.94;
+      vx *= 0.93; vy *= 0.93; vz *= 0.93;
 
       x += vx * dt; y += vy * dt; z += vz * dt;
 
@@ -326,8 +370,8 @@ const GlassCubeScene = () => (
     <RotatingGroup>
       <GlassCube />
       <GlassEdges />
-      <MgoPowder count={700} />
-      <MgoDust count={100} />
+      <MgoSand count={200000} />
+      <MgoDust count={150} />
       <NaturalFibers count={30} />
       <Pedestal />
     </RotatingGroup>
