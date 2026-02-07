@@ -11,7 +11,7 @@ export const rotationState = {
   velocityX: 0,
 };
 
-// Single rotating group for all elements
+// Rotating group
 const RotatingGroup = ({ children }: { children: React.ReactNode }) => {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -19,10 +19,8 @@ const RotatingGroup = ({ children }: { children: React.ReactNode }) => {
     if (groupRef.current) {
       const prevY = groupRef.current.rotation.y;
       const prevX = groupRef.current.rotation.x;
-
       groupRef.current.rotation.y += 0.003;
       groupRef.current.rotation.x = Math.sin(Date.now() * 0.00025) * 0.06;
-
       rotationState.velocityY = groupRef.current.rotation.y - prevY;
       rotationState.velocityX = groupRef.current.rotation.x - prevX;
     }
@@ -31,166 +29,237 @@ const RotatingGroup = ({ children }: { children: React.ReactNode }) => {
   return <group ref={groupRef}>{children}</group>;
 };
 
-// Glass cube
+// Glass cube — rendered AFTER internal contents via renderOrder
 const GlassCube = () => (
-  <mesh>
+  <mesh renderOrder={10}>
     <boxGeometry args={[CUBE_SIZE, CUBE_SIZE, CUBE_SIZE]} />
     <meshPhysicalMaterial
       transparent
       opacity={0.08}
       roughness={0.05}
       metalness={0.05}
-      transmission={0.95}
+      transmission={0.92}
       thickness={0.3}
       clearcoat={1}
       clearcoatRoughness={0.05}
       ior={1.45}
       color="#c8e4f0"
       side={THREE.DoubleSide}
+      depthWrite={false}
     />
   </mesh>
 );
 
 const GlassEdges = () => (
-  <lineSegments>
+  <lineSegments renderOrder={11}>
     <edgesGeometry args={[new THREE.BoxGeometry(CUBE_SIZE + 0.02, CUBE_SIZE + 0.02, CUBE_SIZE + 0.02)]} />
     <lineBasicMaterial color="#9dd4e8" transparent opacity={0.5} />
   </lineSegments>
 );
 
 // ============================================================
-// Dense white powder mass — solid-looking base filling ~42% of cube
-// Uses a large point cloud with overlapping points for solid appearance
+// Solid powder body — an opaque white mesh filling the bottom
+// ~42% of the cube. This is the BULK of the visible powder.
+// Uses a plane with displaced vertices for undulating surface.
 // ============================================================
-const MgoPowderMass = ({ count = 250000 }: { count?: number }) => {
-  const pointsRef = useRef<THREE.Points>(null);
+const PowderBody = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const fillHeight = CUBE_SIZE * 0.42;
+  const bodyWidth = CUBE_SIZE - 0.08;
 
-  const { positions, velocities } = useMemo(() => {
+  // Create a custom geometry: box with an undulating top face
+  const geometry = useMemo(() => {
+    const geo = new THREE.BoxGeometry(bodyWidth, fillHeight, bodyWidth, 24, 1, 24);
+    const pos = geo.attributes.position;
+
+    for (let i = 0; i < pos.count; i++) {
+      const y = pos.getY(i);
+      // Only displace top vertices
+      if (y > fillHeight / 2 - 0.01) {
+        const x = pos.getX(i);
+        const z = pos.getZ(i);
+        const wave = Math.sin(x * 3.5) * 0.055
+          + Math.cos(z * 4.0) * 0.045
+          + Math.sin(x * 1.5 + z * 2.0) * 0.035
+          + Math.sin(x * 6 + z * 3) * 0.015;
+        pos.setY(i, y + wave);
+      }
+    }
+    geo.computeVertexNormals();
+    return geo;
+  }, [fillHeight, bodyWidth]);
+
+  return (
+    <mesh
+      ref={meshRef}
+      geometry={geometry}
+      position={[0, -HALF + fillHeight / 2, 0]}
+      renderOrder={1}
+    >
+      <meshStandardMaterial
+        color="#f0ebe4"
+        roughness={0.95}
+        metalness={0.0}
+      />
+    </mesh>
+  );
+};
+
+// ============================================================
+// Surface grain particles — small spheres on the powder surface
+// to give it a granular/sandy texture. Uses InstancedMesh.
+// ============================================================
+const SurfaceGrains = ({ count = 3000 }: { count?: number }) => {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const fillHeight = CUBE_SIZE * 0.42;
+  const bodyWidth = CUBE_SIZE - 0.08;
+
+  const grainData = useMemo(() => {
     const positions = new Float32Array(count * 3);
-    const velocities = new Float32Array(count * 3);
-    const fillHeight = CUBE_SIZE * 0.42;
+    const scales = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
-      const i3 = i * 3;
-      const x = (Math.random() - 0.5) * (CUBE_SIZE - 0.04);
-      const z = (Math.random() - 0.5) * (CUBE_SIZE - 0.04);
-      // Undulating surface: sine waves create natural hills
-      const surfaceWave = Math.sin(x * 3.5) * 0.06 + Math.cos(z * 4.0) * 0.05 + Math.sin(x * 1.5 + z * 2.0) * 0.04;
-      const maxY = -HALF + fillHeight + surfaceWave;
-      // Concentrate more particles near the surface for density
-      const t = Math.random();
-      const y = -HALF + t * t * (maxY + HALF - (-HALF)) + (-HALF - (-HALF));
-      positions[i3] = x;
-      positions[i3 + 1] = -HALF + Math.pow(Math.random(), 0.7) * (fillHeight + surfaceWave);
-      positions[i3 + 2] = z;
+      const x = (Math.random() - 0.5) * bodyWidth;
+      const z = (Math.random() - 0.5) * bodyWidth;
+      // Surface wave matching the powder body
+      const wave = Math.sin(x * 3.5) * 0.055
+        + Math.cos(z * 4.0) * 0.045
+        + Math.sin(x * 1.5 + z * 2.0) * 0.035
+        + Math.sin(x * 6 + z * 3) * 0.015;
+      const surfaceY = -HALF + fillHeight + wave;
+      // Scatter grains on and slightly above surface
+      positions[i * 3] = x;
+      positions[i * 3 + 1] = surfaceY + Math.random() * 0.04;
+      positions[i * 3 + 2] = z;
+      scales[i] = 0.008 + Math.random() * 0.012;
     }
-    return { positions, velocities };
-  }, [count]);
+    return { positions, scales };
+  }, [count, bodyWidth, fillHeight]);
 
-  const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    return geo;
-  }, [positions]);
+  useFrame(() => {
+    if (!meshRef.current) return;
+    const { positions: p, scales: s } = grainData;
+    for (let i = 0; i < count; i++) {
+      dummy.position.set(p[i * 3], p[i * 3 + 1], p[i * 3 + 2]);
+      dummy.scale.setScalar(s[i]);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]} renderOrder={2}>
+      <sphereGeometry args={[1, 5, 5]} />
+      <meshStandardMaterial color="#ede8e0" roughness={0.9} metalness={0.02} />
+    </instancedMesh>
+  );
+};
+
+// ============================================================
+// Loose powder particles — these ones have physics and shift
+// when the cube rotates, creating the hourglass/sand effect.
+// Sits on top of the solid body.
+// ============================================================
+const LoosePowder = ({ count = 4000 }: { count?: number }) => {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const fillHeight = CUBE_SIZE * 0.42;
+
+  const state = useMemo(() => {
+    const positions = new Float32Array(count * 3);
+    const velocities = new Float32Array(count * 3);
+    const scales = new Float32Array(count);
+
+    for (let i = 0; i < count; i++) {
+      const x = (Math.random() - 0.5) * (CUBE_SIZE - 0.1);
+      const z = (Math.random() - 0.5) * (CUBE_SIZE - 0.1);
+      const wave = Math.sin(x * 3.5) * 0.055 + Math.cos(z * 4.0) * 0.045 + Math.sin(x * 1.5 + z * 2.0) * 0.035;
+      const surfaceY = -HALF + fillHeight + wave;
+      positions[i * 3] = x;
+      positions[i * 3 + 1] = surfaceY + Math.random() * 0.12;
+      positions[i * 3 + 2] = z;
+      scales[i] = 0.006 + Math.random() * 0.01;
+    }
+    return { positions, velocities, scales };
+  }, [count, fillHeight]);
 
   useFrame((_, delta) => {
-    if (!pointsRef.current) return;
+    if (!meshRef.current) return;
     const dt = Math.min(delta, 0.04);
+    const { positions: p, velocities: v, scales: s } = state;
     const rotVY = rotationState.velocityY;
     const rotVX = rotationState.velocityX;
-    const p = positions;
-    const v = velocities;
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
       let x = p[i3], y = p[i3 + 1], z = p[i3 + 2];
       let vx = v[i3], vy = v[i3 + 1], vz = v[i3 + 2];
 
-      // Rotation force — sand shifts like hourglass
       vx += rotVY * 10 * z;
       vz -= rotVY * 10 * x;
       vy -= rotVX * 4;
+      vy -= 4.0 * dt;
 
-      // Gravity
-      vy -= 5.0 * dt;
+      vx += (Math.random() - 0.5) * 0.01;
+      vz += (Math.random() - 0.5) * 0.01;
 
-      // Tiny jitter
-      vx += (Math.random() - 0.5) * 0.005;
-      vz += (Math.random() - 0.5) * 0.005;
+      vx *= 0.91; vy *= 0.91; vz *= 0.91;
 
-      // Heavy damping — sand is dense
-      vx *= 0.90;
-      vy *= 0.90;
-      vz *= 0.90;
+      x += vx * dt; y += vy * dt; z += vz * dt;
 
-      x += vx * dt;
-      y += vy * dt;
-      z += vz * dt;
+      if (x > HALF) { x = HALF; vx *= -0.15; }
+      if (x < -HALF) { x = -HALF; vx *= -0.15; }
+      if (y < -HALF) { y = -HALF; vy *= -0.06; }
+      if (y > HALF) { y = HALF; vy *= -0.2; }
+      if (z > HALF) { z = HALF; vz *= -0.15; }
+      if (z < -HALF) { z = -HALF; vz *= -0.15; }
 
-      // Cube bounds
-      if (x > HALF) { x = HALF; vx *= -0.1; }
-      if (x < -HALF) { x = -HALF; vx *= -0.1; }
-      if (y < -HALF) { y = -HALF; vy *= -0.05; }
-      if (y > HALF) { y = HALF; vy *= -0.15; }
-      if (z > HALF) { z = HALF; vz *= -0.1; }
-      if (z < -HALF) { z = -HALF; vz *= -0.1; }
+      p[i3] = x; p[i3 + 1] = y; p[i3 + 2] = z;
+      v[i3] = vx; v[i3 + 1] = vy; v[i3 + 2] = vz;
 
-      p[i3] = x;
-      p[i3 + 1] = y;
-      p[i3 + 2] = z;
-      v[i3] = vx;
-      v[i3 + 1] = vy;
-      v[i3 + 2] = vz;
+      dummy.position.set(x, y, z);
+      dummy.scale.setScalar(s[i]);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
     }
-
-    (geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+    meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <points ref={pointsRef} geometry={geometry}>
-      <pointsMaterial
-        size={0.028}
-        sizeAttenuation
-        transparent
-        opacity={0.92}
-        depthWrite={false}
-        color="#f0ebe4"
-        blending={THREE.NormalBlending}
-      />
-    </points>
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]} renderOrder={3}>
+      <sphereGeometry args={[1, 4, 4]} />
+      <meshStandardMaterial color="#ede8e0" roughness={0.9} metalness={0.02} />
+    </instancedMesh>
   );
 };
 
 // ============================================================
-// Floating dust — fine particles suspended in the air
+// Floating dust — very fine particles in the air
 // ============================================================
-const MgoDust = ({ count = 200 }: { count?: number }) => {
-  const pointsRef = useRef<THREE.Points>(null);
+const MgoDust = ({ count = 150 }: { count?: number }) => {
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  const { positions, velocities } = useMemo(() => {
+  const state = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const velocities = new Float32Array(count * 3);
+    const scales = new Float32Array(count);
     for (let i = 0; i < count; i++) {
-      const i3 = i * 3;
-      positions[i3] = (Math.random() - 0.5) * 1.7;
-      positions[i3 + 1] = -HALF + CUBE_SIZE * 0.3 + Math.random() * CUBE_SIZE * 0.65;
-      positions[i3 + 2] = (Math.random() - 0.5) * 1.7;
+      positions[i * 3] = (Math.random() - 0.5) * 1.6;
+      positions[i * 3 + 1] = -HALF + CUBE_SIZE * 0.35 + Math.random() * CUBE_SIZE * 0.6;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 1.6;
+      scales[i] = 0.003 + Math.random() * 0.005;
     }
-    return { positions, velocities };
+    return { positions, velocities, scales };
   }, [count]);
 
-  const geometry = useMemo(() => {
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    return geo;
-  }, [positions]);
-
   useFrame((_, delta) => {
-    if (!pointsRef.current) return;
+    if (!meshRef.current) return;
     const dt = Math.min(delta, 0.04);
+    const { positions: p, velocities: v, scales: s } = state;
     const rotVY = rotationState.velocityY;
-    const p = positions;
-    const v = velocities;
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
@@ -199,12 +268,10 @@ const MgoDust = ({ count = 200 }: { count?: number }) => {
 
       vx += rotVY * 14 * z;
       vz -= rotVY * 14 * x;
-      vy -= 0.15 * dt;
-
+      vy -= 0.2 * dt;
       vx += (Math.random() - 0.5) * 0.04;
       vy += (Math.random() - 0.5) * 0.025;
       vz += (Math.random() - 0.5) * 0.04;
-
       vx *= 0.91; vy *= 0.95; vz *= 0.91;
 
       x += vx * dt; y += vy * dt; z += vz * dt;
@@ -218,52 +285,46 @@ const MgoDust = ({ count = 200 }: { count?: number }) => {
 
       p[i3] = x; p[i3 + 1] = y; p[i3 + 2] = z;
       v[i3] = vx; v[i3 + 1] = vy; v[i3 + 2] = vz;
-    }
 
-    (geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+      dummy.position.set(x, y, z);
+      dummy.scale.setScalar(s[i]);
+      dummy.updateMatrix();
+      meshRef.current.setMatrixAt(i, dummy.matrix);
+    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <points ref={pointsRef} geometry={geometry}>
-      <pointsMaterial
-        size={0.008}
-        sizeAttenuation
-        transparent
-        opacity={0.35}
-        depthWrite={false}
-        color="#ffffff"
-      />
-    </points>
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]} renderOrder={4}>
+      <sphereGeometry args={[1, 3, 3]} />
+      <meshStandardMaterial color="#ffffff" transparent opacity={0.45} roughness={0.8} />
+    </instancedMesh>
   );
 };
 
 // ============================================================
-// Natural fibers — long, curved, tangled strands sitting on
-// top of the powder mass, partially embedded
+// Natural fibers — long curved tangled strands
 // ============================================================
 const NaturalFibers = ({ count = 70 }: { count?: number }) => {
   const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const fillHeight = CUBE_SIZE * 0.42;
+  const powderTop = -HALF + fillHeight;
 
   const fiberState = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const velocities = new Float32Array(count * 3);
     const angles = new Float32Array(count * 3);
     const angVel = new Float32Array(count * 3);
-    const powderTop = -HALF + CUBE_SIZE * 0.42;
 
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 1.2;
-      // Some embedded in powder, some sitting on top, some floating above
       const layerRoll = Math.random();
       if (layerRoll < 0.3) {
-        // Embedded in powder
-        positions[i * 3 + 1] = -HALF + Math.random() * CUBE_SIZE * 0.35;
+        positions[i * 3 + 1] = -HALF + Math.random() * fillHeight * 0.8;
       } else if (layerRoll < 0.75) {
-        // On the surface / tangled nest
-        positions[i * 3 + 1] = powderTop - 0.05 + Math.random() * 0.35;
+        positions[i * 3 + 1] = powderTop - 0.05 + Math.random() * 0.3;
       } else {
-        // Floating higher
-        positions[i * 3 + 1] = powderTop + 0.1 + Math.random() * 0.4;
+        positions[i * 3 + 1] = powderTop + 0.1 + Math.random() * 0.35;
       }
       positions[i * 3 + 2] = (Math.random() - 0.5) * 1.2;
       angles[i * 3] = Math.random() * Math.PI;
@@ -271,28 +332,23 @@ const NaturalFibers = ({ count = 70 }: { count?: number }) => {
       angles[i * 3 + 2] = Math.random() * Math.PI;
     }
     return { positions, velocities, angles, angVel };
-  }, [count]);
+  }, [count, fillHeight, powderTop]);
 
-  // Create curved fiber geometries — tangled, natural look
   const fiberGeometries = useMemo(() => {
     return Array.from({ length: count }, () => {
-      const numPoints = 4 + Math.floor(Math.random() * 4); // 4-7 control points
-      const totalLen = 0.12 + Math.random() * 0.28; // 12-40cm equivalent
+      const numPoints = 4 + Math.floor(Math.random() * 4);
+      const totalLen = 0.12 + Math.random() * 0.28;
       const points: THREE.Vector3[] = [];
-
-      // Generate curvy path with random bends
       let cx = 0, cy = 0, cz = 0;
       for (let j = 0; j < numPoints; j++) {
         points.push(new THREE.Vector3(cx, cy, cz));
         const segLen = totalLen / (numPoints - 1);
-        // Random direction for each segment — creates tangled look
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.random() * Math.PI * 0.6 + Math.PI * 0.2;
         cx += Math.sin(phi) * Math.cos(theta) * segLen;
         cy += Math.sin(phi) * Math.sin(theta) * segLen * 0.5;
         cz += Math.cos(phi) * segLen;
       }
-
       const curve = new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.5);
       const thickness = 0.0012 + Math.random() * 0.0012;
       return new THREE.TubeGeometry(curve, 12, thickness, 4, false);
@@ -321,7 +377,6 @@ const NaturalFibers = ({ count = 70 }: { count?: number }) => {
       vz += (Math.random() - 0.5) * 0.008;
 
       vx *= 0.93; vy *= 0.93; vz *= 0.93;
-
       x += vx * dt; y += vy * dt; z += vz * dt;
 
       if (x > HALF) { x = HALF; vx *= -0.15; }
@@ -334,7 +389,6 @@ const NaturalFibers = ({ count = 70 }: { count?: number }) => {
       p[i * 3] = x; p[i * 3 + 1] = y; p[i * 3 + 2] = z;
       v[i * 3] = vx; v[i * 3 + 1] = vy; v[i * 3 + 2] = vz;
 
-      // Angular momentum from rotation
       av[i * 3] += rotVY * 3;
       av[i * 3 + 1] += rotVX * 2;
       av[i * 3 + 2] += rotVY * 1.5;
@@ -353,12 +407,8 @@ const NaturalFibers = ({ count = 70 }: { count?: number }) => {
   return (
     <group>
       {fiberGeometries.map((geo, i) => (
-        <mesh key={i} ref={(el) => { meshRefs.current[i] = el; }} geometry={geo}>
-          <meshStandardMaterial
-            color={colors[i % colors.length]}
-            roughness={0.65}
-            metalness={0.05}
-          />
+        <mesh key={i} ref={(el) => { meshRefs.current[i] = el; }} geometry={geo} renderOrder={5}>
+          <meshStandardMaterial color={colors[i % colors.length]} roughness={0.65} metalness={0.05} />
         </mesh>
       ))}
     </group>
@@ -375,18 +425,22 @@ const Pedestal = () => (
 
 const GlassCubeScene = () => (
   <>
-    <ambientLight intensity={0.45} />
+    <ambientLight intensity={0.5} />
     <directionalLight position={[5, 8, 5]} intensity={1.3} color="#f0f0ff" />
     <directionalLight position={[-3, 4, -2]} intensity={0.5} color="#e0e8f0" />
     <spotLight position={[0, 6, 0]} angle={0.4} penumbra={0.8} intensity={2.5} color="#ffffff" />
     <pointLight position={[2, 1, 2]} intensity={0.3} color="#87ceeb" />
 
     <RotatingGroup>
+      {/* Internal contents rendered first */}
+      <PowderBody />
+      <SurfaceGrains count={3000} />
+      <LoosePowder count={4000} />
+      <MgoDust count={150} />
+      <NaturalFibers count={70} />
+      {/* Glass rendered last so contents show through */}
       <GlassCube />
       <GlassEdges />
-      <MgoPowderMass count={250000} />
-      <MgoDust count={200} />
-      <NaturalFibers count={70} />
       <Pedestal />
     </RotatingGroup>
   </>
