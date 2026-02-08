@@ -386,9 +386,16 @@ const NaturalFibers = ({ count = 90 }: { count?: number }) => {
       vx *= 0.93; vy *= 0.93; vz *= 0.93;
       x += vx * dt; y += vy * dt; z += vz * dt;
 
+      // Collision with powder surface — fibers must stay ON TOP
+      const surfaceWave = Math.sin(x * 3.5) * 0.055
+        + Math.cos(z * 4.0) * 0.045
+        + Math.sin(x * 1.5 + z * 2.0) * 0.035
+        + Math.sin(x * 6 + z * 3) * 0.015;
+      const powderSurfaceY = -HALF + fillHeight + surfaceWave;
+      if (y < powderSurfaceY) { y = powderSurfaceY; vy *= -0.05; vy = Math.max(vy, 0); }
+
       if (x > HALF) { x = HALF; vx *= -0.15; }
       if (x < -HALF) { x = -HALF; vx *= -0.15; }
-      if (y < -HALF) { y = -HALF; vy *= -0.08; }
       if (y > HALF) { y = HALF; vy *= -0.15; }
       if (z > HALF) { z = HALF; vz *= -0.15; }
       if (z < -HALF) { z = -HALF; vz *= -0.15; }
