@@ -1,6 +1,7 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import CubeBranding from "./CubeBranding";
 
 const CUBE_SIZE = 2.0;
 const HALF = CUBE_SIZE / 2 - 0.05;
@@ -456,6 +457,8 @@ const GlassCubeScene = () => (
       {/* Glass rendered last so contents show through */}
       <GlassCube />
       <GlassEdges />
+      {/* Branding decals on two opposite faces */}
+      <CubeBranding />
       <Pedestal />
     </RotatingGroup>
   </>
