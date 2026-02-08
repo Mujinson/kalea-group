@@ -305,7 +305,7 @@ const MgoDust = ({ count = 150 }: { count?: number }) => {
 // ============================================================
 // Natural fibers — long curved tangled strands
 // ============================================================
-const NaturalFibers = ({ count = 70 }: { count?: number }) => {
+const NaturalFibers = ({ count = 90 }: { count?: number }) => {
   const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
   const fillHeight = CUBE_SIZE * 0.42;
   const powderTop = -HALF + fillHeight;
@@ -317,16 +317,20 @@ const NaturalFibers = ({ count = 70 }: { count?: number }) => {
     const angVel = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 1.2;
+      positions[i * 3] = (Math.random() - 0.5) * 1.4;
+      // Most fibers sit ON TOP of the powder surface, like in the reference photo
       const layerRoll = Math.random();
-      if (layerRoll < 0.3) {
-        positions[i * 3 + 1] = -HALF + Math.random() * fillHeight * 0.8;
-      } else if (layerRoll < 0.75) {
-        positions[i * 3 + 1] = powderTop - 0.05 + Math.random() * 0.3;
+      if (layerRoll < 0.15) {
+        // Some partially embedded in powder
+        positions[i * 3 + 1] = powderTop - 0.02 + Math.random() * 0.08;
+      } else if (layerRoll < 0.6) {
+        // Most sitting right on the surface
+        positions[i * 3 + 1] = powderTop + Math.random() * 0.15;
       } else {
-        positions[i * 3 + 1] = powderTop + 0.1 + Math.random() * 0.35;
+        // Some sticking up / tangled higher
+        positions[i * 3 + 1] = powderTop + 0.05 + Math.random() * 0.25;
       }
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 1.2;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 1.4;
       angles[i * 3] = Math.random() * Math.PI;
       angles[i * 3 + 1] = Math.random() * Math.PI * 2;
       angles[i * 3 + 2] = Math.random() * Math.PI;
@@ -336,22 +340,25 @@ const NaturalFibers = ({ count = 70 }: { count?: number }) => {
 
   const fiberGeometries = useMemo(() => {
     return Array.from({ length: count }, () => {
-      const numPoints = 4 + Math.floor(Math.random() * 4);
-      const totalLen = 0.12 + Math.random() * 0.28;
+      const numPoints = 5 + Math.floor(Math.random() * 5);
+      // Much LONGER fibers — 0.25 to 0.7 total length
+      const totalLen = 0.25 + Math.random() * 0.45;
       const points: THREE.Vector3[] = [];
       let cx = 0, cy = 0, cz = 0;
       for (let j = 0; j < numPoints; j++) {
         points.push(new THREE.Vector3(cx, cy, cz));
         const segLen = totalLen / (numPoints - 1);
         const theta = Math.random() * Math.PI * 2;
-        const phi = Math.random() * Math.PI * 0.6 + Math.PI * 0.2;
+        // More horizontal spread to look like tangled shavings
+        const phi = Math.random() * Math.PI * 0.4 + Math.PI * 0.3;
         cx += Math.sin(phi) * Math.cos(theta) * segLen;
-        cy += Math.sin(phi) * Math.sin(theta) * segLen * 0.5;
+        cy += Math.sin(phi) * Math.sin(theta) * segLen * 0.3;
         cz += Math.cos(phi) * segLen;
       }
       const curve = new THREE.CatmullRomCurve3(points, false, "catmullrom", 0.5);
-      const thickness = 0.0012 + Math.random() * 0.0012;
-      return new THREE.TubeGeometry(curve, 12, thickness, 4, false);
+      // MUCH THICKER fibers — 10x thicker than before (0.008 to 0.018)
+      const thickness = 0.008 + Math.random() * 0.01;
+      return new THREE.TubeGeometry(curve, 16, thickness, 6, false);
     });
   }, [count]);
 
@@ -402,13 +409,14 @@ const NaturalFibers = ({ count = 70 }: { count?: number }) => {
     }
   });
 
-  const colors = ["#c4a050", "#b89545", "#a88430", "#d4b56a", "#9a7a35", "#cba855", "#ae8e3d"];
+  // Natural wood/plant fiber colors — golden, amber, straw tones
+  const colors = ["#c4a050", "#b89545", "#a88430", "#d4b56a", "#9a7a35", "#cba855", "#ae8e3d", "#c9a84c", "#8b7028"];
 
   return (
     <group>
       {fiberGeometries.map((geo, i) => (
         <mesh key={i} ref={(el) => { meshRefs.current[i] = el; }} geometry={geo} renderOrder={5}>
-          <meshStandardMaterial color={colors[i % colors.length]} roughness={0.65} metalness={0.05} />
+          <meshStandardMaterial color={colors[i % colors.length]} roughness={0.7} metalness={0.02} />
         </mesh>
       ))}
     </group>
@@ -437,7 +445,7 @@ const GlassCubeScene = () => (
       <SurfaceGrains count={3000} />
       <LoosePowder count={4000} />
       <MgoDust count={150} />
-      <NaturalFibers count={70} />
+      <NaturalFibers count={90} />
       {/* Glass rendered last so contents show through */}
       <GlassCube />
       <GlassEdges />
