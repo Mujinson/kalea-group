@@ -118,35 +118,59 @@ const SurfaceGrains = ({ count = 3000 }: { count?: number }) => {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const fillHeight = CUBE_SIZE * 0.42;
-  const bodyWidth = CUBE_SIZE - 0.08;
 
-  const grainData = useMemo(() => {
+  const state = useMemo(() => {
     const positions = new Float32Array(count * 3);
+    const velocities = new Float32Array(count * 3);
     const scales = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
-      const x = (Math.random() - 0.5) * bodyWidth;
-      const z = (Math.random() - 0.5) * bodyWidth;
-      // Surface wave matching the powder body
-      const wave = Math.sin(x * 3.5) * 0.055
-        + Math.cos(z * 4.0) * 0.045
-        + Math.sin(x * 1.5 + z * 2.0) * 0.035
-        + Math.sin(x * 6 + z * 3) * 0.015;
+      const x = (Math.random() - 0.5) * (CUBE_SIZE - 0.1);
+      const z = (Math.random() - 0.5) * (CUBE_SIZE - 0.1);
+      const wave = Math.sin(x * 3.5) * 0.055 + Math.cos(z * 4.0) * 0.045 + Math.sin(x * 1.5 + z * 2.0) * 0.035;
       const surfaceY = -HALF + fillHeight + wave;
-      // Scatter grains on and slightly above surface
       positions[i * 3] = x;
-      positions[i * 3 + 1] = surfaceY + Math.random() * 0.04;
+      positions[i * 3 + 1] = surfaceY + Math.random() * 0.06;
       positions[i * 3 + 2] = z;
       scales[i] = 0.008 + Math.random() * 0.012;
     }
-    return { positions, scales };
-  }, [count, bodyWidth, fillHeight]);
+    return { positions, velocities, scales };
+  }, [count, fillHeight]);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (!meshRef.current) return;
-    const { positions: p, scales: s } = grainData;
+    const dt = Math.min(delta, 0.04);
+    const { positions: p, velocities: v, scales: s } = state;
+    const rotVY = rotationState.velocityY;
+    const rotVX = rotationState.velocityX;
+
     for (let i = 0; i < count; i++) {
-      dummy.position.set(p[i * 3], p[i * 3 + 1], p[i * 3 + 2]);
+      const i3 = i * 3;
+      let x = p[i3], y = p[i3 + 1], z = p[i3 + 2];
+      let vx = v[i3], vy = v[i3 + 1], vz = v[i3 + 2];
+
+      vx += rotVY * 10 * z;
+      vz -= rotVY * 10 * x;
+      vy -= rotVX * 4;
+      vy -= 4.0 * dt;
+
+      vx += (Math.random() - 0.5) * 0.008;
+      vz += (Math.random() - 0.5) * 0.008;
+
+      vx *= 0.92; vy *= 0.92; vz *= 0.92;
+      x += vx * dt; y += vy * dt; z += vz * dt;
+
+      if (x > HALF) { x = HALF; vx *= -0.15; }
+      if (x < -HALF) { x = -HALF; vx *= -0.15; }
+      if (y < -HALF) { y = -HALF; vy *= -0.06; }
+      if (y > HALF) { y = HALF; vy *= -0.2; }
+      if (z > HALF) { z = HALF; vz *= -0.15; }
+      if (z < -HALF) { z = -HALF; vz *= -0.15; }
+
+      p[i3] = x; p[i3 + 1] = y; p[i3 + 2] = z;
+      v[i3] = vx; v[i3 + 1] = vy; v[i3 + 2] = vz;
+
+      dummy.position.set(x, y, z);
       dummy.scale.setScalar(s[i]);
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
