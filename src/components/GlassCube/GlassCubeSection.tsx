@@ -59,7 +59,7 @@ const GlassCubeSection = () => {
             </div>
           }>
             <Canvas
-              camera={{ position: [4, 2.8, 4], fov: 32 }}
+              camera={{ position: [4, 3.2, 4], fov: 32 }}
               dpr={[1, 1.5]}
               gl={{ antialias: true, alpha: true }}
               style={{ touchAction: 'none' }}

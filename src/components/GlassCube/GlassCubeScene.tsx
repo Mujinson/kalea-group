@@ -13,6 +13,10 @@ export const rotationState = {
 };
 
 // Rotating group
+// Fiber-specific inner bounds (tighter to prevent visual escape)
+const FIBER_MARGIN = 0.2;
+const FIBER_HALF = HALF - FIBER_MARGIN;
+
 const RotatingGroup = ({ children }: { children: React.ReactNode }) => {
   const groupRef = useRef<THREE.Group>(null);
 
@@ -318,20 +322,17 @@ const NaturalFibers = ({ count = 90 }: { count?: number }) => {
     const angVel = new Float32Array(count * 3);
 
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 1.4;
-      // Most fibers sit ON TOP of the powder surface, like in the reference photo
+      positions[i * 3] = (Math.random() - 0.5) * (CUBE_SIZE - 0.5);
+      // Most fibers sit ON TOP of the powder surface
       const layerRoll = Math.random();
       if (layerRoll < 0.15) {
-        // Some partially embedded in powder
         positions[i * 3 + 1] = powderTop - 0.02 + Math.random() * 0.08;
       } else if (layerRoll < 0.6) {
-        // Most sitting right on the surface
         positions[i * 3 + 1] = powderTop + Math.random() * 0.15;
       } else {
-        // Some sticking up / tangled higher
-        positions[i * 3 + 1] = powderTop + 0.05 + Math.random() * 0.25;
+        positions[i * 3 + 1] = powderTop + 0.05 + Math.random() * 0.2;
       }
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 1.4;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * (CUBE_SIZE - 0.5);
       angles[i * 3] = Math.random() * Math.PI;
       angles[i * 3 + 1] = Math.random() * Math.PI * 2;
       angles[i * 3 + 2] = Math.random() * Math.PI;
@@ -395,11 +396,11 @@ const NaturalFibers = ({ count = 90 }: { count?: number }) => {
       const powderSurfaceY = -HALF + fillHeight + surfaceWave;
       if (y < powderSurfaceY) { y = powderSurfaceY; vy *= -0.05; vy = Math.max(vy, 0); }
 
-      if (x > HALF) { x = HALF; vx *= -0.15; }
-      if (x < -HALF) { x = -HALF; vx *= -0.15; }
-      if (y > HALF) { y = HALF; vy *= -0.15; }
-      if (z > HALF) { z = HALF; vz *= -0.15; }
-      if (z < -HALF) { z = -HALF; vz *= -0.15; }
+      if (x > FIBER_HALF) { x = FIBER_HALF; vx *= -0.3; }
+      if (x < -FIBER_HALF) { x = -FIBER_HALF; vx *= -0.3; }
+      if (y > FIBER_HALF) { y = FIBER_HALF; vy *= -0.3; }
+      if (z > FIBER_HALF) { z = FIBER_HALF; vz *= -0.3; }
+      if (z < -FIBER_HALF) { z = -FIBER_HALF; vz *= -0.3; }
 
       p[i * 3] = x; p[i * 3 + 1] = y; p[i * 3 + 2] = z;
       v[i * 3] = vx; v[i * 3 + 1] = vy; v[i * 3 + 2] = vz;
@@ -431,10 +432,10 @@ const NaturalFibers = ({ count = 90 }: { count?: number }) => {
   );
 };
 
-// Pedestal
+// Pedestal — positioned directly below the cube
 const Pedestal = () => (
-  <mesh position={[0, -1.35, 0]}>
-    <boxGeometry args={[2.4, 0.3, 2.4]} />
+  <mesh position={[0, -1.25, 0]}>
+    <boxGeometry args={[2.4, 0.25, 2.4]} />
     <meshStandardMaterial color="#1a1816" roughness={0.2} metalness={0.6} />
   </mesh>
 );
