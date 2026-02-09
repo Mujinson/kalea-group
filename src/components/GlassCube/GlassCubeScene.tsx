@@ -164,10 +164,14 @@ const SurfaceGrains = ({ count = 800 }: { count?: number }) => {
       vx *= 0.90; vy *= 0.90; vz *= 0.90;
       x += vx * dt; y += vy * dt; z += vz * dt;
 
+      // Collision with powder surface — pearls stay ON TOP
+      const surfaceWave = Math.sin(x * 3.5) * 0.055 + Math.cos(z * 4.0) * 0.045 + Math.sin(x * 1.5 + z * 2.0) * 0.035;
+      const powderSurfaceY = -HALF + fillHeight + surfaceWave;
+      if (y < powderSurfaceY) { y = powderSurfaceY; vy *= -0.05; vy = Math.max(vy, 0); }
+
       // Wall collisions
       if (x > HALF) { x = HALF; vx *= -0.2; }
       if (x < -HALF) { x = -HALF; vx *= -0.2; }
-      if (y < -HALF) { y = -HALF; vy *= -0.08; }
       if (y > HALF) { y = HALF; vy *= -0.2; }
       if (z > HALF) { z = HALF; vz *= -0.2; }
       if (z < -HALF) { z = -HALF; vz *= -0.2; }
