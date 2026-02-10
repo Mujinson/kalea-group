@@ -144,24 +144,26 @@ const SurfaceGrains = ({ count = 800 }: { count?: number }) => {
     const { positions: p, velocities: v, scales: s } = state;
     const rotVY = rotationState.velocityY;
     const rotVX = rotationState.velocityX;
+    // Tight inner bound so spheres never poke through glass
+    const WALL = HALF - 0.08;
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3;
       let x = p[i3], y = p[i3 + 1], z = p[i3 + 2];
       let vx = v[i3], vy = v[i3 + 1], vz = v[i3 + 2];
 
-      // React to cube rotation
-      vx += rotVY * 12 * z;
-      vz -= rotVY * 12 * x;
-      vy -= rotVX * 5;
+      // Strong random impulses for chaotic, non-circular movement
+      vx += (Math.random() - 0.5) * 0.15;
+      vy += (Math.random() - 0.5) * 0.04;
+      vz += (Math.random() - 0.5) * 0.15;
+      // Mild reaction to rotation (not circular)
+      vx += rotVY * 4 * (Math.random() - 0.3);
+      vz -= rotVY * 4 * (Math.random() - 0.3);
+      vy -= rotVX * 2;
       // Gravity
-      vy -= 3.5 * dt;
-      // Random jitter for organic movement
-      vx += (Math.random() - 0.5) * 0.02;
-      vy += (Math.random() - 0.5) * 0.005;
-      vz += (Math.random() - 0.5) * 0.02;
+      vy -= 3.0 * dt;
 
-      vx *= 0.90; vy *= 0.90; vz *= 0.90;
+      vx *= 0.88; vy *= 0.88; vz *= 0.88;
       x += vx * dt; y += vy * dt; z += vz * dt;
 
       // Collision with powder surface — pearls stay ON TOP
@@ -169,12 +171,12 @@ const SurfaceGrains = ({ count = 800 }: { count?: number }) => {
       const powderSurfaceY = -HALF + fillHeight + surfaceWave;
       if (y < powderSurfaceY) { y = powderSurfaceY; vy *= -0.05; vy = Math.max(vy, 0); }
 
-      // Wall collisions
-      if (x > HALF) { x = HALF; vx *= -0.2; }
-      if (x < -HALF) { x = -HALF; vx *= -0.2; }
-      if (y > HALF) { y = HALF; vy *= -0.2; }
-      if (z > HALF) { z = HALF; vz *= -0.2; }
-      if (z < -HALF) { z = -HALF; vz *= -0.2; }
+      // Wall collisions — tight bounds
+      if (x > WALL) { x = WALL; vx *= -0.4; }
+      if (x < -WALL) { x = -WALL; vx *= -0.4; }
+      if (y > WALL) { y = WALL; vy *= -0.4; }
+      if (z > WALL) { z = WALL; vz *= -0.4; }
+      if (z < -WALL) { z = -WALL; vz *= -0.4; }
 
       p[i3] = x; p[i3 + 1] = y; p[i3 + 2] = z;
       v[i3] = vx; v[i3 + 1] = vy; v[i3 + 2] = vz;
