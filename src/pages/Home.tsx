@@ -1,120 +1,121 @@
 import { motion } from "framer-motion";
-import DualCarouselSection from "@/components/DualCarouselSection";
 import HomeHero from "@/components/HomeHero";
-import DualCarousel3D from "@/components/DualCarousel3D";
-import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ArrowRight, Leaf, Clock, Wrench } from "lucide-react";
 import logo from "@/assets/logo-new.png";
 
-import bgManifesto from "@/assets/bg-manifesto.jpg";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
 import bgSustainabilityMaintenance from "@/assets/bg-sustainability-maintenance.jpg";
-import bgApplicationResidential from "@/assets/bg-application-residential.jpg";
-import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
-import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
-import bgApplicationOffices from "@/assets/bg-application-offices.jpg";
-import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
-import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
-import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
-import productBiocoreFloor from "@/assets/hero-biomag-floor-new.webp";
-import heroEdgeline from "@/assets/hero-edgeline.jpg";
-import productBiowall from "@/assets/product-biowall-interior.jpg";
-import productKaleaElements from "@/assets/product-kalea-elements.png";
-import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
-import productKaleadeck from "@/assets/product-kaleadeck.jpg";
-import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
+
+// Category images
+import categorySuperfici from "@/assets/category-superfici.jpg";
+import categoryAperture from "@/assets/category-aperture.jpg";
+import categoryBagno from "@/assets/category-bagno.jpg";
+import categoryTecnologia from "@/assets/category-tecnologia.jpg";
+import categoryOutdoor from "@/assets/category-outdoor-luxury.jpg";
+
 import { useTranslation } from "@/i18n/useTranslation";
 import { GlassCubeSection } from "@/components/GlassCube";
+
+interface CategoryData {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  products: string[];
+  cta: string;
+}
+
+const CategoryCard = ({ category, index, language }: { category: CategoryData; index: number; language: string }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay: index * 0.1 }}
+    whileHover={{ y: -8, boxShadow: "0 24px 64px rgba(0, 0, 0, 0.2)" }}
+    className="relative rounded-2xl overflow-hidden group cursor-pointer min-h-[340px] md:min-h-[420px]"
+  >
+    <img 
+      src={category.image} 
+      alt={category.title} 
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+      loading="lazy"
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+    <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-8">
+      <span className="text-white/60 text-xs tracking-[0.2em] uppercase font-medium mb-2">{category.subtitle}</span>
+      <h3 className="text-white font-heading font-bold text-xl md:text-2xl lg:text-3xl mb-2">{category.title}</h3>
+      <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4 max-w-md">{category.description}</p>
+      
+      {/* Product list */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {category.products.map(product => (
+          <span key={product} className="text-[10px] md:text-xs px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/90 border border-white/10">
+            {product}
+          </span>
+        ))}
+      </div>
+      
+      <div className="inline-flex items-center gap-2 text-white font-medium text-sm group-hover:gap-3 transition-all">
+        {category.cta}
+        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+      </div>
+    </div>
+  </motion.div>
+);
 
 const Home = () => {
   const { t, language } = useTranslation();
 
-  // Indoor products organized by rows:
-  // Row 1: BIOMAG FLOOR + BIOWOOD FLOOR
-  const indoorRow1 = [
+  const categories: CategoryData[] = [
     {
-      title: t('home.stonecore.title'),
-      description: t('home.stonecore.description'),
-      link: `/${language}/biomag-floor`,
-      comingSoon: false,
-      image: productBiomagFloor,
+      id: 'superfici',
+      title: 'Superfici',
+      subtitle: 'Pavimenti & Rivestimenti',
+      description: 'Dalla pietra naturale alle grandi lastre ceramiche, dal parquet bio al microcemento. Selezione curata per l\'eccellenza architettonica.',
+      image: categorySuperfici,
+      products: ['BIOMAG FLOOR® (MgO)', 'Grandi Lastre', 'Parquet Bio', 'Microcemento'],
+      cta: 'Esplora le superfici',
     },
     {
-      title: t('home.biocore.title'),
-      description: t('home.biocore.description'),
-      link: `/${language}/biocore-floor`,
-      comingSoon: false,
-      image: productBiocoreFloor,
-    },
-  ];
-
-  // Row 2: EDGELINE + KALEABASE
-  const indoorRow2 = [
-    {
-      title: t('home.edgeline.title'),
-      description: t('home.edgeline.description'),
-      link: `/${language}/edgeline`,
-      comingSoon: false,
-      image: heroEdgeline,
+      id: 'aperture',
+      title: 'Aperture',
+      subtitle: 'Porte & Sistemi',
+      description: 'Porte filo muro, sistemi in vetro e alluminio, blindati di design. Soluzioni architettoniche che definiscono lo spazio.',
+      image: categoryAperture,
+      products: ['Porte Filo Muro', 'Sistemi Vetro/Alluminio', 'Blindati di Design'],
+      cta: 'Scopri le aperture',
     },
     {
-      title: t('home.kaleabase.title'),
-      description: t('home.kaleabase.description'),
-      link: `/${language}/kaleabase`,
-      comingSoon: false,
-      image: productKaleabase,
-    },
-  ];
-
-  // Row 3: BIOWALL (centered)
-  const indoorRow3 = [
-    {
-      title: t('home.onewall.title'),
-      description: t('home.onewall.description'),
-      link: `/${language}/biowall`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productBiowall,
-    },
-  ];
-
-  const outdoorProducts = [
-    {
-      title: t('home.kaleaElements.title'),
-      description: t('home.kaleaElements.description'),
-      link: `/${language}/kalea-elements`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productKaleaElements,
+      id: 'bagno',
+      title: 'Bagno & Wellness',
+      subtitle: 'Custom & Premium',
+      description: 'Lavabi su misura, rubinetteria PVD, vasche freestanding. Ogni elemento selezionato per la perfezione funzionale e estetica.',
+      image: categoryBagno,
+      products: ['Lavabi Custom', 'Rubinetteria PVD', 'Vasche Freestanding'],
+      cta: 'Scopri il bagno',
     },
     {
-      title: t('home.kaleadeck.title'),
-      description: t('home.kaleadeck.description'),
-      link: `/${language}/kaleadeck`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productKaleadeck,
+      id: 'tecnologia',
+      title: 'Tecnologia',
+      subtitle: 'Comfort & Innovazione',
+      description: 'Termoarredo materico, domotica invisibile, profili luce LED. La tecnologia al servizio del design.',
+      image: categoryTecnologia,
+      products: ['Termoarredo Materico', 'Domotica Invisibile', 'Profili Luce LED'],
+      cta: 'Scopri la tecnologia',
     },
     {
-      title: t('home.kaleaceiling.title'),
-      description: t('home.kaleaceiling.description'),
-      link: `/${language}/kaleaceiling`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productKaleaceiling,
+      id: 'outdoor',
+      title: 'Outdoor',
+      subtitle: 'Esterni & Facciate',
+      description: 'Decking, cucine da esterno, facciate ventilate. Materiali progettati per resistere e valorizzare ogni ambiente outdoor.',
+      image: categoryOutdoor,
+      products: ['Decking', 'Cucine da Esterno', 'Facciate Ventilate'],
+      cta: 'Scopri l\'outdoor',
     },
-  ];
-
-  const applications = [
-    { icon: HomeIcon, title: t('home.applications.residential.title'), description: t('home.applications.residential.description'), bg: bgApplicationResidential },
-    { icon: Building2, title: t('home.applications.hospitality.title'), description: t('home.applications.hospitality.description'), bg: bgApplicationHospitality },
-    { icon: ShoppingBag, title: t('home.applications.retail.title'), description: t('home.applications.retail.description'), bg: bgApplicationRetail },
-    { icon: Briefcase, title: t('home.applications.offices.title'), description: t('home.applications.offices.description'), bg: bgApplicationOffices },
-    { icon: Heart, title: t('home.applications.healthcare.title'), description: t('home.applications.healthcare.description'), bg: bgApplicationHealthcare },
-    { icon: ShoppingCart, title: t('home.applications.commercial.title'), description: t('home.applications.commercial.description'), bg: bgApplicationCommercial },
   ];
 
   const sustainability = [
@@ -131,226 +132,103 @@ const Home = () => {
       {/* 3D Glass Cube - MgO Technology */}
       <GlassCubeSection />
 
-      {/* Indoor/Outdoor Section */}
-      <IndoorOutdoorSection />
-
-      {/* 3D Dual Carousel Collection - BIOMAG + BIOCORE side by side */}
-      <section className="relative min-h-screen bg-background">
-        <DualCarousel3D />
-      </section>
-
-      {/* Products Section */}
-      <section className="relative min-h-screen bg-background py-10 md:py-16 overflow-hidden">
-        <div className="relative z-10 h-full flex flex-col justify-center px-4 md:px-8 lg:px-12">
-          <div className="text-center">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="text-foreground/85 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-8 md:mb-12"
-            >
-              {t('hero.home.systemDescription')}
-            </motion.p>
-
-            {/* Indoor Products */}
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-lg md:text-xl font-heading font-semibold text-foreground mb-4 md:mb-6"
-            >
-              {t('home.productsSection.indoor')}
-            </motion.h3>
-            
-            {/* Row 1: BIOMAG FLOOR + BIOWOOD FLOOR */}
-            <div className="grid grid-cols-2 gap-3 md:gap-5 max-w-4xl mx-auto mb-3 md:mb-5">
-              {indoorRow1.map((product, index) => (
-                <Link key={product.title} to={product.link} className="h-full">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -6, scale: 1.02, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title.toUpperCase()}</h3>
-                      <p className="text-white/90 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-            
-            {/* Row 2: EDGELINE + KALEABASE */}
-            <div className="grid grid-cols-2 gap-3 md:gap-5 max-w-4xl mx-auto mb-3 md:mb-5">
-              {indoorRow2.map((product, index) => (
-                <Link key={product.title} to={product.link} className="h-full">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -6, scale: 1.02, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" }}
-                    transition={{ duration: 0.5, delay: (index + 2) * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title.toUpperCase()}</h3>
-                      <p className="text-white/90 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-            
-            {/* Row 3: BIOWALL (centered) */}
-            <div className="flex justify-center gap-3 md:gap-5 max-w-4xl mx-auto mb-10 md:mb-14">
-              {indoorRow3.map((product, index) => (
-                <motion.div
-                  key={product.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group w-[calc(50%-6px)]"
-                >
-                  <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                  <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                    <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full">
-                      {product.comingSoonLabel || "Novità in arrivo"}
-                    </div>
-                    <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title.toUpperCase()}</h3>
-                    <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Outdoor Products */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-4 md:mb-6"
-            >
-              <h3 className="text-lg md:text-xl font-heading font-semibold text-foreground">
-                {t('home.productsSection.outdoor')}
-              </h3>
-              <p className="text-sm md:text-base text-foreground/60 font-medium">
-                Novità in arrivo
-              </p>
-            </motion.div>
-            
-            {/* Outdoor Cards Container */}
-            <div className="relative max-w-4xl mx-auto">
-
-              {/* Row 1: 2 cards */}
-              <div className="grid grid-cols-2 gap-3 md:gap-5 mb-3 md:mb-5">
-                {outdoorProducts.slice(0, 2).map((product, index) => (
-                  <motion.div
-                    key={product.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
-                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-              
-              {/* Row 2: 1 card centered */}
-              <div className="flex justify-center gap-3 md:gap-5">
-                {outdoorProducts.slice(2).map((product, index) => (
-                  <motion.div
-                    key={product.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group w-[calc(50%-6px)]"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
-                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
+      {/* Hub Positioning Statement */}
+      <section className="relative py-20 md:py-32 bg-background">
+        <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="space-y-6"
+          >
+            <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-foreground/50 font-medium">
+              Hub di Fornitura per l'Architettura d'Interni
+            </p>
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
+              Selezione curata.<br />Eccellenza tecnica.<br />Fornitura integrata.
+            </h2>
+            <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
+              Kalēa® è il partner di riferimento per architetti e general contractor che cercano materiali di alta gamma, consulenza tecnica dedicata e un unico interlocutore per la fornitura completa dei propri progetti.
+            </p>
+          </motion.div>
         </div>
       </section>
 
-
-      {/* Dual Carousel Section - BIOMAG + BIOCORE side by side */}
-      <DualCarouselSection />
-
-      {/* Applicazioni */}
-      <section className="relative h-[100svh] bg-background">
-        <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
-          {/* Header */}
+      {/* 5 Macro-Categories */}
+      <section className="relative bg-background py-10 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-6 md:mb-8"
+            className="text-center mb-10 md:mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-              {t('home.applicationsTitle')}
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+              Le Nostre Aree
             </h2>
-            <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-              {t('home.applicationsSubtitle')}
+            <p className="text-base md:text-lg text-foreground/60 max-w-2xl mx-auto">
+              Cinque macro-aree per una fornitura completa e coordinata
             </p>
           </motion.div>
 
-          {/* Cards - 3 per row on desktop, 2 rows */}
-          <div className="flex-1 min-h-0 grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6 max-w-6xl mx-auto w-full md:max-h-[65vh] lg:max-h-none">
-            {applications.map((app, index) => (
+          {/* Grid: 2 top + 3 bottom */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-5 md:mb-6">
+            {categories.slice(0, 2).map((cat, i) => (
+              <CategoryCard key={cat.id} category={cat} index={i} language={language} />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+            {categories.slice(2).map((cat, i) => (
+              <CategoryCard key={cat.id} category={cat} index={i + 2} language={language} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Kalēa® - Value Proposition */}
+      <section className="relative py-20 md:py-28 bg-background">
+        <div className="max-w-5xl mx-auto px-6 md:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+              Perché Kalēa®
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            {[
+              { 
+                num: '01', 
+                title: 'Selezione Curata', 
+                desc: 'Non vendiamo tutto. Selezioniamo solo materiali e soluzioni che superano i nostri standard di qualità, estetica e prestazione tecnica.' 
+              },
+              { 
+                num: '02', 
+                title: 'Eccellenza Tecnica', 
+                desc: 'Ogni prodotto è accompagnato da documentazione completa, supporto alla progettazione e consulenza tecnica dedicata.' 
+              },
+              { 
+                num: '03', 
+                title: 'Fornitura Integrata', 
+                desc: 'Un unico interlocutore per superfici, aperture, bagno, tecnologia e outdoor. Coordinamento completo per il tuo progetto.' 
+              },
+            ].map((item, i) => (
               <motion.div
-                key={app.title}
+                key={item.num}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                whileHover={{
-                  y: -6,
-                  boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)",
-                }}
-                className="relative rounded-2xl overflow-hidden group"
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+                className="text-center md:text-left"
               >
-                <img
-                  src={app.bg}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/75" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                  <app.icon className="w-10 h-10 md:w-12 md:h-12 text-white mb-3" strokeWidth={1.5} />
-                  <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1">
-                    {app.title}
-                  </h3>
-                  <p className="text-xs md:text-sm text-white font-medium hidden sm:block">
-                    {app.description}
-                  </p>
-                </div>
+                <span className="text-4xl md:text-5xl font-heading font-bold text-foreground/10 block mb-3">{item.num}</span>
+                <h3 className="text-lg md:text-xl font-heading font-semibold text-foreground mb-3">{item.title}</h3>
+                <p className="text-sm md:text-base text-foreground/60 leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -360,7 +238,6 @@ const Home = () => {
       {/* Sostenibilità */}
       <section className="relative h-screen bg-background">
         <div className="h-full flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-6 sm:py-10 md:py-14">
-          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -376,41 +253,24 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* Cards - mobile: stacked squares that always fit; md+: original 3 columns */}
           <div className="flex-1 min-h-0 md:flex md:items-center md:justify-center">
             <div className="h-full grid grid-rows-3 gap-4 max-w-6xl mx-auto w-full md:h-auto md:grid-rows-1 md:grid-cols-3 md:gap-6 lg:gap-8">
               {sustainability.map((item, index) => (
-                <Link
-                  key={item.title}
-                  to={item.link}
-                  className="h-full flex items-center justify-center md:block md:h-auto"
-                >
+                <Link key={item.title} to={item.link} className="h-full flex items-center justify-center md:block md:h-auto">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{
-                      y: -6,
-                      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
-                    }}
+                    whileHover={{ y: -6, boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)" }}
                     className="relative h-full aspect-square rounded-2xl overflow-hidden group md:aspect-[4/5] md:h-auto md:w-full md:rounded-3xl"
                   >
-                    <img
-                      src={item.bg}
-                      alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
+                    <img src={item.bg} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-3 sm:p-4 md:p-6">
                       <item.icon className="w-8 h-8 md:w-12 md:h-12 text-white mb-2 md:mb-3" strokeWidth={1.5} />
-                      <h3 className="text-sm md:text-xl lg:text-2xl font-heading font-semibold text-white mb-1 md:mb-2 leading-tight">
-                        {item.title}
-                      </h3>
-                      <p className="text-xs md:text-sm text-white font-medium max-w-xs line-clamp-2">
-                        {item.description}
-                      </p>
+                      <h3 className="text-sm md:text-xl lg:text-2xl font-heading font-semibold text-white mb-1 md:mb-2 leading-tight">{item.title}</h3>
+                      <p className="text-xs md:text-sm text-white font-medium max-w-xs line-clamp-2">{item.description}</p>
                     </div>
                   </motion.div>
                 </Link>
@@ -429,45 +289,34 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9 }}
-              className="max-w-3xl mx-auto text-center space-y-3 md:space-y-4"
+              className="max-w-3xl mx-auto text-center space-y-6 md:space-y-8"
             >
-              <div className="space-y-2 md:space-y-3">
+              <div className="space-y-3 md:space-y-4">
                 <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line1')}
+                  La superficie non è solo decorazione.
                 </p>
                 <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line2')}
+                  È l'interfaccia tra l'idea e lo spazio.
                 </p>
                 <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line3')}
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line4')}
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line5')}
+                  È ciò che l'architettura mostra di sé.
                 </p>
               </div>
 
-              <div className="h-px w-16 mx-auto bg-foreground/30 my-4" />
+              <div className="h-px w-16 mx-auto bg-foreground/30" />
 
-              <div className="space-y-2 text-sm md:text-base text-foreground/75 font-light leading-relaxed">
-                <p>{t('hero.manifesto.problem1')}<br />{t('hero.manifesto.problem2')}</p>
-                <p className="mt-3">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
-                <p className="mt-3">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
-                <p className="mt-3">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
-                <p className="mt-3">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
+              <div className="space-y-4 text-sm md:text-base text-foreground/70 font-light leading-relaxed">
+                <p>Kalēa® nasce dalla convinzione che ogni progetto meriti un interlocutore unico, competente e affidabile.</p>
+                <p>Non un catalogo infinito, ma una selezione rigorosa di materiali e soluzioni che rispondono a criteri precisi di qualità, innovazione e sostenibilità.</p>
+                <p>Per architetti, interior designer e general contractor che cercano eccellenza senza compromessi.</p>
               </div>
 
-              <div className="pt-5 md:pt-8 space-y-2">
+              <div className="pt-4 md:pt-6 space-y-2">
                 <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-foreground font-medium uppercase">
-                  KALĒA® — SURFACE SYSTEM®
+                  KALĒA® — LUXURY SUPPLY HUB
                 </p>
-                <p className="text-sm md:text-base text-foreground/75 font-light">
-                  {t('hero.manifesto.brandStatement')}
-                </p>
-                <p className="text-sm md:text-base text-foreground/75 font-light">
-                  {t('hero.manifesto.brandStatement2')}
+                <p className="text-sm md:text-base text-foreground/60 font-light">
+                  Fornitura integrata per l'architettura d'interni.
                 </p>
               </div>
             </motion.div>
@@ -481,12 +330,7 @@ const Home = () => {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
         />
-        <div 
-          className="absolute inset-0"
-          style={{ 
-            background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' 
-          }}
-        />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' }} />
         
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="container-custom text-center">
@@ -500,37 +344,24 @@ const Home = () => {
                 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold mb-6 flex flex-wrap items-center justify-center gap-3 text-white"
                 style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
               >
-                <span>{t('home.ctaTitleBefore')}</span>
-                <img 
-                  src={logo} 
-                  alt="Kalēa®" 
-                  className="inline-block h-[1.2em] w-auto"
-                  style={{ 
-                    filter: 'brightness(0) invert(1)',
-                    verticalAlign: 'middle',
-                    transform: 'translateY(0.02em)'
-                  }}
-                />
-                <span>{t('home.ctaTitleAfter')}</span>
+                <span>Collabora con</span>
+                <img src={logo} alt="Kalēa®" className="inline-block h-[1.2em] w-auto" style={{ filter: 'brightness(0) invert(1)', verticalAlign: 'middle', transform: 'translateY(0.02em)' }} />
               </h2>
-              <p 
-                className="text-base mb-10 max-w-2xl mx-auto text-white/90"
-                style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
-              >
-                {t('home.ctaSubtitle')}
+              <p className="text-base mb-10 max-w-2xl mx-auto text-white/90" style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}>
+                Consulenza tecnica, campionature dedicate e un unico punto di riferimento per la fornitura completa dei tuoi progetti di architettura d'interni.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link 
                   to={`/${language}/contatti`}
                   className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
                 >
-                  {t('home.ctaButton1')}
+                  Richiedi Consulenza
                 </Link>
                 <Link 
                   to={`/${language}/diventa-partner`}
                   className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
                 >
-                  {t('home.ctaButton2')}
+                  Diventa Partner
                 </Link>
               </div>
             </motion.div>
