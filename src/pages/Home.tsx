@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import HomeHero from "@/components/HomeHero";
+import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Clock, Wrench } from "lucide-react";
 import logo from "@/assets/logo-new.png";
@@ -8,6 +9,7 @@ import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
 import bgSustainabilityMaintenance from "@/assets/bg-sustainability-maintenance.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import bgManifesto from "@/assets/bg-manifesto.jpg";
 
 // Category images
 import categorySuperfici from "@/assets/category-superfici.jpg";
@@ -22,10 +24,7 @@ import { GlassCubeSection } from "@/components/GlassCube";
 interface CategoryData {
   id: string;
   title: string;
-  subtitle: string;
-  description: string;
   image: string;
-  products: string[];
   cta: string;
 }
 
@@ -36,7 +35,7 @@ const CategoryCard = ({ category, index, language }: { category: CategoryData; i
     viewport={{ once: true }}
     transition={{ duration: 0.6, delay: index * 0.1 }}
     whileHover={{ y: -8, boxShadow: "0 24px 64px rgba(0, 0, 0, 0.2)" }}
-    className="relative rounded-2xl overflow-hidden group cursor-pointer min-h-[340px] md:min-h-[420px]"
+    className="relative rounded-2xl overflow-hidden group cursor-pointer aspect-[4/5]"
   >
     <img 
       src={category.image} 
@@ -44,21 +43,9 @@ const CategoryCard = ({ category, index, language }: { category: CategoryData; i
       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
       loading="lazy"
     />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
     <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-8">
-      <span className="text-white/60 text-xs tracking-[0.2em] uppercase font-medium mb-2">{category.subtitle}</span>
-      <h3 className="text-white font-heading font-bold text-xl md:text-2xl lg:text-3xl mb-2">{category.title}</h3>
-      <p className="text-white/80 text-sm md:text-base leading-relaxed mb-4 max-w-md">{category.description}</p>
-      
-      {/* Product list */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {category.products.map(product => (
-          <span key={product} className="text-[10px] md:text-xs px-2.5 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/90 border border-white/10">
-            {product}
-          </span>
-        ))}
-      </div>
-      
+      <h3 className="text-white font-heading font-bold text-xl md:text-2xl lg:text-3xl mb-3">{category.title}</h3>
       <div className="inline-flex items-center gap-2 text-white font-medium text-sm group-hover:gap-3 transition-all">
         {category.cta}
         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -71,51 +58,11 @@ const Home = () => {
   const { t, language } = useTranslation();
 
   const categories: CategoryData[] = [
-    {
-      id: 'superfici',
-      title: 'Superfici',
-      subtitle: 'Pavimenti & Rivestimenti',
-      description: 'Dalla pietra naturale alle grandi lastre ceramiche, dal parquet bio al microcemento. Selezione curata per l\'eccellenza architettonica.',
-      image: categorySuperfici,
-      products: ['BIOMAG FLOOR® (MgO)', 'Grandi Lastre', 'Parquet Bio', 'Microcemento'],
-      cta: 'Esplora le superfici',
-    },
-    {
-      id: 'aperture',
-      title: 'Aperture',
-      subtitle: 'Porte & Sistemi',
-      description: 'Porte filo muro, sistemi in vetro e alluminio, blindati di design. Soluzioni architettoniche che definiscono lo spazio.',
-      image: categoryAperture,
-      products: ['Porte Filo Muro', 'Sistemi Vetro/Alluminio', 'Blindati di Design'],
-      cta: 'Scopri le aperture',
-    },
-    {
-      id: 'bagno',
-      title: 'Bagno & Wellness',
-      subtitle: 'Custom & Premium',
-      description: 'Lavabi su misura, rubinetteria PVD, vasche freestanding. Ogni elemento selezionato per la perfezione funzionale e estetica.',
-      image: categoryBagno,
-      products: ['Lavabi Custom', 'Rubinetteria PVD', 'Vasche Freestanding'],
-      cta: 'Scopri il bagno',
-    },
-    {
-      id: 'tecnologia',
-      title: 'Tecnologia',
-      subtitle: 'Comfort & Innovazione',
-      description: 'Termoarredo materico, domotica invisibile, profili luce LED. La tecnologia al servizio del design.',
-      image: categoryTecnologia,
-      products: ['Termoarredo Materico', 'Domotica Invisibile', 'Profili Luce LED'],
-      cta: 'Scopri la tecnologia',
-    },
-    {
-      id: 'outdoor',
-      title: 'Outdoor',
-      subtitle: 'Esterni & Facciate',
-      description: 'Decking, cucine da esterno, facciate ventilate. Materiali progettati per resistere e valorizzare ogni ambiente outdoor.',
-      image: categoryOutdoor,
-      products: ['Decking', 'Cucine da Esterno', 'Facciate Ventilate'],
-      cta: 'Scopri l\'outdoor',
-    },
+    { id: 'superfici', title: 'Superfici', image: categorySuperfici, cta: 'Esplora' },
+    { id: 'aperture', title: 'Aperture', image: categoryAperture, cta: 'Scopri' },
+    { id: 'bagno', title: 'Bagno & Wellness', image: categoryBagno, cta: 'Scopri' },
+    { id: 'tecnologia', title: 'Tecnologia', image: categoryTecnologia, cta: 'Scopri' },
+    { id: 'outdoor', title: 'Outdoor', image: categoryOutdoor, cta: 'Scopri' },
   ];
 
   const sustainability = [
@@ -132,28 +79,8 @@ const Home = () => {
       {/* 3D Glass Cube - MgO Technology */}
       <GlassCubeSection />
 
-      {/* Hub Positioning Statement */}
-      <section className="relative py-20 md:py-32 bg-background">
-        <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-foreground/50 font-medium">
-              Hub di Fornitura per l'Architettura d'Interni
-            </p>
-            <h2 className="text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground leading-tight">
-              Selezione curata.<br />Eccellenza tecnica.<br />Fornitura integrata.
-            </h2>
-            <p className="text-base md:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-              Kalēa® è il partner di riferimento per architetti e general contractor che cercano materiali di alta gamma, consulenza tecnica dedicata e un unico interlocutore per la fornitura completa dei propri progetti.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Indoor / Outdoor Section - RESTORED */}
+      <IndoorOutdoorSection />
 
       {/* 5 Macro-Categories */}
       <section className="relative bg-background py-10 md:py-20">
@@ -172,7 +99,7 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* Grid: 2 top + 3 bottom */}
+          {/* Grid: 2 top + 3 bottom — all same aspect ratio */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-5 md:mb-6">
             {categories.slice(0, 2).map((cat, i) => (
               <CategoryCard key={cat.id} category={cat} index={i} language={language} />
@@ -186,7 +113,51 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Why Kalēa® - Value Proposition */}
+      {/* Manifesto Section - with background image */}
+      <section className="relative min-h-screen">
+        <div className="absolute inset-0">
+          <img 
+            src={bgManifesto} 
+            alt="" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
+        <div className="relative z-10 min-h-screen flex items-center justify-center">
+          <div className="w-full px-6 md:px-12 lg:px-16">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.9 }}
+              className="max-w-3xl mx-auto text-center space-y-6 md:space-y-8"
+            >
+              <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-white/50 font-medium">
+                Hub di Fornitura per l'Architettura d'Interni
+              </p>
+
+              <h2 className="text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight">
+                Selezione curata.<br />Eccellenza tecnica.<br />Fornitura integrata.
+              </h2>
+
+              <div className="h-px w-16 mx-auto bg-white/30" />
+
+              <div className="space-y-4 text-base md:text-lg text-white/80 font-light leading-relaxed">
+                <p>Kalēa® nasce dalla convinzione che ogni progetto meriti un interlocutore unico, competente e affidabile.</p>
+                <p>Non un catalogo infinito, ma una selezione rigorosa di materiali e soluzioni che rispondono a criteri precisi di qualità, innovazione e sostenibilità.</p>
+              </div>
+
+              <div className="pt-4 md:pt-6">
+                <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-white font-medium uppercase">
+                  KALĒA® — LUXURY SUPPLY HUB
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Perché Kalēa - Value Proposition */}
       <section className="relative py-20 md:py-28 bg-background">
         <div className="max-w-5xl mx-auto px-6 md:px-12">
           <motion.div
@@ -202,21 +173,9 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {[
-              { 
-                num: '01', 
-                title: 'Selezione Curata', 
-                desc: 'Non vendiamo tutto. Selezioniamo solo materiali e soluzioni che superano i nostri standard di qualità, estetica e prestazione tecnica.' 
-              },
-              { 
-                num: '02', 
-                title: 'Eccellenza Tecnica', 
-                desc: 'Ogni prodotto è accompagnato da documentazione completa, supporto alla progettazione e consulenza tecnica dedicata.' 
-              },
-              { 
-                num: '03', 
-                title: 'Fornitura Integrata', 
-                desc: 'Un unico interlocutore per superfici, aperture, bagno, tecnologia e outdoor. Coordinamento completo per il tuo progetto.' 
-              },
+              { num: '01', title: 'Selezione Curata', desc: 'Non vendiamo tutto. Selezioniamo solo materiali e soluzioni che superano i nostri standard di qualità, estetica e prestazione tecnica.' },
+              { num: '02', title: 'Eccellenza Tecnica', desc: 'Ogni prodotto è accompagnato da documentazione completa, supporto alla progettazione e consulenza tecnica dedicata.' },
+              { num: '03', title: 'Fornitura Integrata', desc: 'Un unico interlocutore per superfici, aperture, bagno, tecnologia e outdoor. Coordinamento completo per il tuo progetto.' },
             ].map((item, i) => (
               <motion.div
                 key={item.num}
@@ -276,50 +235,6 @@ const Home = () => {
                 </Link>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Manifesto Section */}
-      <section className="relative h-screen bg-background">
-        <div className="h-full flex items-center justify-center">
-          <div className="w-full px-6 md:px-12 lg:px-16">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9 }}
-              className="max-w-3xl mx-auto text-center space-y-6 md:space-y-8"
-            >
-              <div className="space-y-3 md:space-y-4">
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  La superficie non è solo decorazione.
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  È l'interfaccia tra l'idea e lo spazio.
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  È ciò che l'architettura mostra di sé.
-                </p>
-              </div>
-
-              <div className="h-px w-16 mx-auto bg-foreground/30" />
-
-              <div className="space-y-4 text-sm md:text-base text-foreground/70 font-light leading-relaxed">
-                <p>Kalēa® nasce dalla convinzione che ogni progetto meriti un interlocutore unico, competente e affidabile.</p>
-                <p>Non un catalogo infinito, ma una selezione rigorosa di materiali e soluzioni che rispondono a criteri precisi di qualità, innovazione e sostenibilità.</p>
-                <p>Per architetti, interior designer e general contractor che cercano eccellenza senza compromessi.</p>
-              </div>
-
-              <div className="pt-4 md:pt-6 space-y-2">
-                <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-foreground font-medium uppercase">
-                  KALĒA® — LUXURY SUPPLY HUB
-                </p>
-                <p className="text-sm md:text-base text-foreground/60 font-light">
-                  Fornitura integrata per l'architettura d'interni.
-                </p>
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
