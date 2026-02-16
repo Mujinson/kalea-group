@@ -72,7 +72,7 @@ const Navbar = () => {
       ],
     },
     {
-      label: 'Aperture',
+      label: 'Sistemi di Accesso',
       items: [
         { label: "Porte Filo Muro", path: null, comingSoon: true },
         { label: "Sistemi Vetro/Alluminio", path: null, comingSoon: true },

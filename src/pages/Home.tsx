@@ -59,7 +59,7 @@ const Home = () => {
 
   const categories: CategoryData[] = [
     { id: 'superfici', title: 'Superfici', image: categorySuperfici, cta: 'Esplora' },
-    { id: 'aperture', title: 'Aperture', image: categoryAperture, cta: 'Scopri' },
+    { id: 'aperture', title: 'Sistemi di Accesso', image: categoryAperture, cta: 'Scopri' },
     { id: 'bagno', title: 'Bagno & Wellness', image: categoryBagno, cta: 'Scopri' },
     { id: 'tecnologia', title: 'Tecnologia', image: categoryTecnologia, cta: 'Scopri' },
     { id: 'outdoor', title: 'Outdoor', image: categoryOutdoor, cta: 'Scopri' },
@@ -175,7 +175,7 @@ const Home = () => {
             {[
               { num: '01', title: 'Selezione Curata', desc: 'Non vendiamo tutto. Selezioniamo solo materiali e soluzioni che superano i nostri standard di qualità, estetica e prestazione tecnica.' },
               { num: '02', title: 'Eccellenza Tecnica', desc: 'Ogni prodotto è accompagnato da documentazione completa, supporto alla progettazione e consulenza tecnica dedicata.' },
-              { num: '03', title: 'Fornitura Integrata', desc: 'Un unico interlocutore per superfici, aperture, bagno, tecnologia e outdoor. Coordinamento completo per il tuo progetto.' },
+              { num: '03', title: 'Fornitura Integrata', desc: 'Un unico interlocutore per superfici, sistemi di accesso, bagno, tecnologia e outdoor. Coordinamento completo per il tuo progetto.' },
             ].map((item, i) => (
               <motion.div
                 key={item.num}
