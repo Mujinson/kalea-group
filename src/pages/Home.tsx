@@ -58,7 +58,7 @@ const Home = () => {
   const { t, language } = useTranslation();
 
   const categories: CategoryData[] = [
-    { id: 'superfici', title: 'Superfici', image: categorySuperfici, cta: 'Esplora' },
+    { id: 'superfici', title: 'Superfici', image: categorySuperfici, cta: 'Scopri' },
     { id: 'aperture', title: 'Sistemi di Accesso', image: categoryAperture, cta: 'Scopri' },
     { id: 'bagno', title: 'Bagno & Wellness', image: categoryBagno, cta: 'Scopri' },
     { id: 'tecnologia', title: 'Tecnologia', image: categoryTecnologia, cta: 'Scopri' },
