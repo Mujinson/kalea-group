@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import HomeHero from "@/components/HomeHero";
+import Carousel3D from "@/components/Carousel3D";
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Clock, Wrench } from "lucide-react";
@@ -19,8 +20,6 @@ import categoryTecnologia from "@/assets/category-tecnologia.jpg";
 import categoryOutdoor from "@/assets/category-outdoor-luxury.jpg";
 
 import { useTranslation } from "@/i18n/useTranslation";
-import { GlassCubeSection } from "@/components/GlassCube";
-
 interface CategoryData {
   id: string;
   title: string;
@@ -76,11 +75,11 @@ const Home = () => {
       {/* Hero Section */}
       <HomeHero />
 
-      {/* 3D Glass Cube - MgO Technology */}
-      <GlassCubeSection />
-
-      {/* Indoor / Outdoor Section - RESTORED */}
+      {/* Indoor / Outdoor Section */}
       <IndoorOutdoorSection />
+
+      {/* BIOMAG FLOOR® 3D Carousel */}
+      <Carousel3D />
 
       {/* 5 Macro-Categories */}
       <section className="relative bg-background py-10 md:py-20">
