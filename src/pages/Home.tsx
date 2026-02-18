@@ -98,15 +98,10 @@ const Home = () => {
             </p>
           </motion.div>
 
-          {/* Grid: 2 top + 3 bottom — all same aspect ratio */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 mb-5 md:mb-6">
-            {categories.slice(0, 2).map((cat, i) => (
+          {/* Grid: uniform cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {categories.map((cat, i) => (
               <CategoryCard key={cat.id} category={cat} index={i} language={language} />
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-            {categories.slice(2).map((cat, i) => (
-              <CategoryCard key={cat.id} category={cat} index={i + 2} language={language} />
             ))}
           </div>
         </div>
