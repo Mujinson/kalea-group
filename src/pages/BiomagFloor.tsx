@@ -19,6 +19,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import Carousel3D from "@/components/Carousel3D";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -231,6 +232,9 @@ const BiomagFloor = () => {
           />
         </div>
       </section>
+
+      {/* Collezione 3D Carousel */}
+      <Carousel3D />
 
       {/* Gallery Carousel Section */}
       <section className="relative z-[1] h-screen bg-background">

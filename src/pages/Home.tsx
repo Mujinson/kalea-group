@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import HomeHero from "@/components/HomeHero";
-import Carousel3D from "@/components/Carousel3D";
+
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Clock, Wrench } from "lucide-react";
@@ -78,8 +78,8 @@ const Home = () => {
       {/* Indoor / Outdoor Section */}
       <IndoorOutdoorSection />
 
-      {/* BIOMAG FLOOR® 3D Carousel */}
-      <Carousel3D />
+
+
 
       {/* 5 Macro-Categories */}
       <section className="relative bg-background py-10 md:py-20">
