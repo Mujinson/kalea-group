@@ -82,7 +82,7 @@ const Home = () => {
 
 
       {/* 5 Macro-Categories */}
-      <section className="relative bg-background py-10 md:py-20">
+      <section className="relative bg-background py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ const Home = () => {
       </section>
 
       {/* Manifesto Section - with background image */}
-      <section className="relative min-h-screen">
+      <section className="relative py-16 md:py-24">
         <div className="absolute inset-0">
           <img 
             src={bgManifesto} 
@@ -117,8 +117,8 @@ const Home = () => {
           />
           <div className="absolute inset-0 bg-black/60" />
         </div>
-        <div className="relative z-10 min-h-screen flex items-center justify-center">
-          <div className="w-full px-6 md:px-12 lg:px-16">
+        <div className="relative z-10 flex items-center justify-center">
+          <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -152,8 +152,8 @@ const Home = () => {
       </section>
 
       {/* Perché Kalēa - Value Proposition */}
-      <section className="relative py-20 md:py-28 bg-background">
-        <div className="max-w-5xl mx-auto px-6 md:px-12">
+      <section className="relative py-16 md:py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -189,8 +189,8 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="relative h-screen bg-background">
-        <div className="h-full flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-6 sm:py-10 md:py-14">
+      <section className="relative py-16 md:py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -206,17 +206,16 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <div className="flex-1 min-h-0 md:flex md:items-center md:justify-center">
-            <div className="h-full grid grid-rows-3 gap-4 max-w-6xl mx-auto w-full md:h-auto md:grid-rows-1 md:grid-cols-3 md:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
               {sustainability.map((item, index) => (
-                <Link key={item.title} to={item.link} className="h-full flex items-center justify-center md:block md:h-auto">
+                <Link key={item.title} to={item.link}>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     whileHover={{ y: -6, boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)" }}
-                    className="relative h-full aspect-square rounded-2xl overflow-hidden group md:aspect-[4/5] md:h-auto md:w-full md:rounded-3xl"
+                    className="relative aspect-[4/5] rounded-2xl overflow-hidden group"
                   >
                     <img src={item.bg} alt={item.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
@@ -228,21 +227,20 @@ const Home = () => {
                   </motion.div>
                 </Link>
               ))}
-            </div>
           </div>
         </div>
       </section>
 
       {/* CTA Finale */}
-      <section className="relative h-screen bg-background">
+      <section className="relative py-16 md:py-24 bg-background">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
         />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%)' }} />
         
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="container-custom text-center">
+        <div className="relative z-10 flex items-center justify-center min-h-[60vh]">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
