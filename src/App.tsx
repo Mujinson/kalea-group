@@ -28,6 +28,14 @@ import SustainabilityMaintenance from "./pages/SustainabilityMaintenance";
 import Normative from "./pages/Normative";
 import Realizzazioni from "./pages/Realizzazioni";
 import Welcome from "./pages/Welcome";
+import ProgettazioneConsulenza from "./pages/ProgettazioneConsulenza";
+import OpereEdili from "./pages/OpereEdili";
+import SuperficiRivestimenti from "./pages/SuperficiRivestimenti";
+import SistemiAccesso from "./pages/SistemiAccesso";
+import BagnoWellness from "./pages/BagnoWellness";
+import TecnologiaImpianti from "./pages/TecnologiaImpianti";
+import ArredamentoComplementi from "./pages/ArredamentoComplementi";
+import OutdoorGiardini from "./pages/OutdoorGiardini";
 import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
@@ -146,6 +154,14 @@ const App = () => (
                 <Route key={`${lang}-sust-maint`} path={`/${lang}/sostenibilita/manutenzione`} element={<LangRoute><SustainabilityMaintenance /></LangRoute>} />,
                 <Route key={`${lang}-norm`} path={`/${lang}/normative`} element={<LangRoute><Normative /></LangRoute>} />,
                 <Route key={`${lang}-real`} path={`/${lang}/realizzazioni`} element={<LangRoute><Realizzazioni /></LangRoute>} />,
+                <Route key={`${lang}-progettazione`} path={`/${lang}/progettazione-consulenza`} element={<LangRoute><ProgettazioneConsulenza /></LangRoute>} />,
+                <Route key={`${lang}-opere`} path={`/${lang}/opere-edili`} element={<LangRoute><OpereEdili /></LangRoute>} />,
+                <Route key={`${lang}-superfici-riv`} path={`/${lang}/superfici-rivestimenti`} element={<LangRoute><SuperficiRivestimenti /></LangRoute>} />,
+                <Route key={`${lang}-sistemi`} path={`/${lang}/sistemi-accesso`} element={<LangRoute><SistemiAccesso /></LangRoute>} />,
+                <Route key={`${lang}-bagno-well`} path={`/${lang}/bagno-wellness`} element={<LangRoute><BagnoWellness /></LangRoute>} />,
+                <Route key={`${lang}-tech`} path={`/${lang}/tecnologia-impianti`} element={<LangRoute><TecnologiaImpianti /></LangRoute>} />,
+                <Route key={`${lang}-arredo`} path={`/${lang}/arredamento-complementi`} element={<LangRoute><ArredamentoComplementi /></LangRoute>} />,
+                <Route key={`${lang}-outdoor-giardini`} path={`/${lang}/outdoor-giardini`} element={<LangRoute><OutdoorGiardini /></LangRoute>} />,
               ]).flat()}
 
               {/* 404 */}
