@@ -13,7 +13,13 @@ const HomeHero = () => {
       {/* Background image */}
       <div className="absolute inset-0">
         <video 
-          ref={(el) => { if (el) { el.playbackRate = 0.5; el.currentTime = 2; } }}
+          ref={(el) => { 
+            if (el) { 
+              el.playbackRate = 0.5; 
+              el.currentTime = 2; 
+              el.addEventListener('timeupdate', () => { if (el.currentTime < 2) el.currentTime = 2; });
+            } 
+          }}
           src="/videos/hero-home.mp4"
           autoPlay
           muted
