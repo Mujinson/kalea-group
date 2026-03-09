@@ -120,7 +120,7 @@ const Home = () => {
 
   const sustainability = [
     { icon: Leaf, title: t('home.sustainability.impact.title'), description: t('home.sustainability.impact.description'), bg: bgSustainabilityForest, video: '/videos/sustainability-forest.mp4', link: `/${language}/sostenibilita/impatto-ambientale` },
-    { icon: Clock, title: t('home.sustainability.durability.title'), description: t('home.sustainability.durability.description'), bg: bgSustainabilityDurability, link: `/${language}/sostenibilita/lunga-durata` },
+    { icon: Clock, title: t('home.sustainability.durability.title'), description: t('home.sustainability.durability.description'), bg: bgSustainabilityDurability, video: '/videos/sustainability-durability.mp4', link: `/${language}/sostenibilita/lunga-durata` },
     { icon: Wrench, title: t('home.sustainability.maintenance.title'), description: t('home.sustainability.maintenance.description'), bg: bgSustainabilityMaintenance, link: `/${language}/sostenibilita/manutenzione` },
   ];
 
