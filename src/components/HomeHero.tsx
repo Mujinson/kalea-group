@@ -36,7 +36,7 @@ const HomeHero = () => {
               document.addEventListener('click', forcePlay, { once: true });
             } 
           }}
-          src="/videos/hero-home.mp4"
+          src="https://ulvnhevuqhcmgxuexdil.supabase.co/storage/v1/object/public/videos/hero-home.mp4"
           autoPlay
           muted
           loop
