@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import SEOHead from "@/components/SEOHead";
 import heroIndoor from "@/assets/hero-indoor-wood.jpg";
 import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
 import productBiocoreFloor from "@/assets/hero-biomag-floor-new.webp";
