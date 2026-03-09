@@ -18,7 +18,7 @@ const HomeHero = () => {
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
+          className="absolute inset-0 w-full h-full object-contain bg-black"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
       </div>
