@@ -475,56 +475,174 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Manifesto Section */}
-      <section className="relative h-screen bg-background">
-        <div className="h-full flex items-center justify-center">
-          <div className="w-full px-6 md:px-12 lg:px-16">
+      {/* Manifesto Part 1 — Philosophy */}
+      <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
+        <div className="w-full py-16 md:py-24 px-6 md:px-12 lg:px-16">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Staggered italic lines — each reveals on scroll */}
+            <div className="space-y-6 md:space-y-8">
+              {[
+                t('hero.manifesto.line1'),
+                t('hero.manifesto.line2'),
+                t('hero.manifesto.line3'),
+                t('hero.manifesto.line4'),
+                t('hero.manifesto.line5'),
+              ].map((line, i) => (
+                <motion.p
+                  key={i}
+                  initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.8, delay: i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="text-xl md:text-2xl lg:text-3xl text-foreground/90 font-light tracking-wide leading-relaxed italic"
+                >
+                  {line}
+                </motion.p>
+              ))}
+            </div>
+
+            {/* Animated divider */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
+              className="h-px w-24 mx-auto bg-foreground/30 my-10 md:my-14 origin-center"
+            />
+
+            {/* Problem & Question — fade in as blocks */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="space-y-6 text-base md:text-lg text-foreground/70 font-light leading-relaxed max-w-2xl mx-auto"
+            >
+              <p>
+                {t('hero.manifesto.problem1')}<br />
+                {t('hero.manifesto.problem2')}
+              </p>
+              <p>
+                {t('hero.manifesto.question1')}<br />
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="inline-block italic text-foreground/90 text-lg md:text-xl mt-2"
+                >
+                  {t('hero.manifesto.question2')}
+                </motion.span>
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Manifesto Part 2 — Vision & System */}
+      <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
+        {/* Subtle background accent */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.03 }}
+          viewport={{ once: true }}
+          transition={{ duration: 2 }}
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url(${bgManifesto})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        
+        <div className="relative w-full py-16 md:py-24 px-6 md:px-12 lg:px-16">
+          <div className="max-w-4xl mx-auto">
+            {/* Reflection lines — horizontal scroll-reveal */}
+            <div className="space-y-4 md:space-y-5 text-center mb-12 md:mb-16">
+              {[
+                t('hero.manifesto.reflection1'),
+                t('hero.manifesto.reflection2'),
+                t('hero.manifesto.reflection3'),
+                t('hero.manifesto.reflection4'),
+              ].map((line, i) => (
+                <motion.p
+                  key={i}
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="text-base md:text-lg text-foreground/70 font-light leading-relaxed"
+                >
+                  {line}
+                </motion.p>
+              ))}
+            </div>
+
+            {/* Value propositions — card-like reveals */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
+              {[
+                t('hero.manifesto.value1'),
+                t('hero.manifesto.value2'),
+                t('hero.manifesto.value3'),
+                t('hero.manifesto.value4'),
+              ].map((value, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-30px" }}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
+                  className="group relative p-6 md:p-8 rounded-2xl border border-foreground/10 bg-foreground/[0.02] backdrop-blur-sm hover:border-foreground/20 hover:bg-foreground/[0.04] transition-all duration-500 cursor-default"
+                >
+                  <div className="absolute top-4 left-6 text-foreground/15 text-4xl font-heading font-bold">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
+                  <p className="relative text-sm md:text-base text-foreground/75 font-light leading-relaxed pt-6">
+                    {value}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Conclusion + Brand signature */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.9 }}
-              className="max-w-3xl mx-auto text-center space-y-3 md:space-y-4"
+              transition={{ duration: 1, delay: 0.3 }}
+              className="text-center space-y-6"
             >
-              <div className="space-y-2 md:space-y-3">
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line1')}
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line2')}
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line3')}
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line4')}
-                </p>
-                <p className="text-lg md:text-xl lg:text-2xl text-foreground/90 font-light tracking-wide leading-relaxed italic">
-                  {t('hero.manifesto.line5')}
-                </p>
+              <div className="space-y-2 text-base md:text-lg text-foreground/70 font-light">
+                <p>{t('hero.manifesto.conclusion1')}</p>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="text-lg md:text-xl text-foreground/90 font-normal"
+                >
+                  {t('hero.manifesto.conclusion2')}
+                </motion.p>
               </div>
 
-              <div className="h-px w-16 mx-auto bg-foreground/30 my-4" />
-
-              <div className="space-y-2 text-sm md:text-base text-foreground/75 font-light leading-relaxed">
-                <p>{t('hero.manifesto.problem1')}<br />{t('hero.manifesto.problem2')}</p>
-                <p className="mt-3">{t('hero.manifesto.question1')}<br /><span className="italic">{t('hero.manifesto.question2')}</span></p>
-                <p className="mt-3">{t('hero.manifesto.reflection1')}<br />{t('hero.manifesto.reflection2')}<br />{t('hero.manifesto.reflection3')}<br />{t('hero.manifesto.reflection4')}</p>
-                <p className="mt-3">{t('hero.manifesto.value1')}<br />{t('hero.manifesto.value2')}<br />{t('hero.manifesto.value3')}<br />{t('hero.manifesto.value4')}</p>
-                <p className="mt-3">{t('hero.manifesto.conclusion1')}<br />{t('hero.manifesto.conclusion2')}</p>
-              </div>
-
-              <div className="pt-5 md:pt-8 space-y-2">
-                <p className="text-sm md:text-base lg:text-lg tracking-[0.25em] text-foreground font-medium uppercase">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="pt-8 md:pt-12 space-y-3"
+              >
+                <p className="text-sm md:text-base lg:text-lg tracking-[0.3em] text-foreground font-medium uppercase">
                   KALĒA® — SURFACE SYSTEM®
                 </p>
-                <p className="text-sm md:text-base text-foreground/75 font-light">
+                <div className="h-px w-12 mx-auto bg-foreground/20" />
+                <p className="text-sm md:text-base text-foreground/60 font-light">
                   {t('hero.manifesto.brandStatement')}
                 </p>
-                <p className="text-sm md:text-base text-foreground/75 font-light">
+                <p className="text-sm md:text-base text-foreground/60 font-light">
                   {t('hero.manifesto.brandStatement2')}
                 </p>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
