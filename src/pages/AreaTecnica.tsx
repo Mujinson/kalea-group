@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { downloadableCertifications } from "@/data/downloadableCertifications";
 import LeadCaptureDialog, { checkLeadCaptured, setLeadCaptured } from "@/components/LeadCaptureDialog";
+import SEOHead from "@/components/SEOHead";
 
 const AreaTecnica = () => {
   const { t, language } = useTranslation();
