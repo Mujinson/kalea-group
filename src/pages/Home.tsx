@@ -459,7 +459,7 @@ const Home = () => {
                           loop
                           muted
                           playsInline
-                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[180%] min-h-[180%] transition-transform duration-700 group-hover:scale-105"
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[45%] min-w-[200%] min-h-[200%] transition-transform duration-700 group-hover:scale-105"
                         />
                       </div>
                     ) : (
