@@ -161,6 +161,17 @@ const Normative = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={language === 'it' ? "Normative e Certificazioni Pavimenti | CE, SGS, ISO | Kalēa®" :
+               language === 'en' ? "Standards & Certifications | CE, SGS, ISO | Kalēa®" :
+               language === 'de' ? "Normen & Zertifizierungen | CE, SGS, ISO | Kalēa®" :
+               "Normes et Certifications | CE, SGS, ISO | Kalēa®"}
+        description={language === 'it' ? "Normative e certificazioni dei pavimenti Kalēa®: marcatura CE, test SGS, ISO 9001. Conformità europea per pavimenti flottanti in MgO." :
+                     language === 'en' ? "Kalēa® floor standards and certifications: CE marking, SGS testing, ISO 9001. European compliance for MgO floating floors." :
+                     language === 'de' ? "Kalēa® Normen und Zertifizierungen: CE-Kennzeichnung, SGS-Prüfung, ISO 9001." :
+                     "Normes et certifications Kalēa® : marquage CE, tests SGS, ISO 9001."}
+        keywords="certificazioni pavimenti, normative pavimenti, CE pavimenti flottanti, SGS pavimenti, ISO 9001 pavimenti, conformità europea pavimenti"
+      />
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-b from-muted/50 to-background">
         <div className="container-custom">
