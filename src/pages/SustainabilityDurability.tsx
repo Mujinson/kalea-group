@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import bgSustainabilityDurability from "@/assets/bg-sustainability-durability.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 
 const SustainabilityDurability = () => {
   const { language } = useTranslation();
