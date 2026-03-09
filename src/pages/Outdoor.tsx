@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import SEOHead from "@/components/SEOHead";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import productKaleaElements from "@/assets/product-kalea-elements.png";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
