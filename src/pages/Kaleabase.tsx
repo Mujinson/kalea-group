@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SEOHead from "@/components/SEOHead";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import underlaySilence from "@/assets/underlay-silence-cork.jpg";
@@ -208,6 +209,17 @@ const Kaleabase = () => {
 
   return (
     <div className="relative bg-background">
+      <SEOHead
+        title={language === 'it' ? "KALEABASE® — Sottopavimenti per Pavimenti Flottanti | Kalēa®" :
+               language === 'en' ? "KALEABASE® — Underlays for Floating Floors | Kalēa®" :
+               language === 'de' ? "KALEABASE® — Unterlagen für Schwimmböden | Kalēa®" :
+               "KALEABASE® — Sous-couches pour Sols Flottants | Kalēa®"}
+        description={language === 'it' ? "KALEABASE® di Kalēa®: sottopavimenti tecnici per pavimenti flottanti. Isolamento acustico, barriera vapore, comfort termico. Sughero, gomma, XPO." :
+                     language === 'en' ? "KALEABASE® by Kalēa®: technical underlays for floating floors. Acoustic insulation, vapor barrier, thermal comfort." :
+                     language === 'de' ? "KALEABASE® von Kalēa®: technische Unterlagen für Schwimmböden. Schalldämmung, Dampfsperre, thermischer Komfort." :
+                     "KALEABASE® par Kalēa® : sous-couches techniques pour sols flottants. Isolation acoustique, barrière vapeur."}
+        keywords="sottopavimento pavimento flottante, materassino acustico, barriera vapore pavimento, isolamento acustico pavimento, sottopavimento sughero, sottopavimento gomma"
+      />
       {/* Hero Section */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 

@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/i18n/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
 import HeroSection from "@/components/HeroSection";
+import SEOHead from "@/components/SEOHead";
 import heroContatti from "@/assets/hero-contatti.png";
 
 const Contatti = () => {
@@ -108,6 +109,12 @@ const Contatti = () => {
 
   return (
     <div className="min-h-screen">
+      <SEOHead
+        title={t('contact.seoTitle') !== 'contact.seoTitle' ? t('contact.seoTitle') :
+               "Contatti — Richiedi Informazioni sui Pavimenti Flottanti | Kalēa®"}
+        description="Contatta Kalēa® per informazioni su pavimenti flottanti in MgO e fibra naturale. Richiedi preventivi, campioni gratuiti e consulenza tecnica per il tuo progetto."
+        keywords="contatti Kalēa, preventivo pavimenti flottanti, campioni pavimento, consulenza pavimenti, richiedi informazioni pavimenti"
+      />
       {/* Hero */}
       <HeroSection
         title={t('contacts.title')}

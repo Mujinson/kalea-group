@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { downloadableCertifications } from "@/data/downloadableCertifications";
 import LeadCaptureDialog, { checkLeadCaptured, setLeadCaptured } from "@/components/LeadCaptureDialog";
+import SEOHead from "@/components/SEOHead";
 
 const AreaTecnica = () => {
   const { t, language } = useTranslation();
@@ -117,6 +118,17 @@ const AreaTecnica = () => {
 
   return (
     <div className="min-h-screen pt-20">
+      <SEOHead
+        title={language === 'it' ? "Area Tecnica — Certificazioni e Schede Tecniche | Kalēa®" :
+               language === 'en' ? "Technical Area — Certifications & Data Sheets | Kalēa®" :
+               language === 'de' ? "Technischer Bereich — Zertifizierungen & Datenblätter | Kalēa®" :
+               "Espace Technique — Certifications et Fiches Techniques | Kalēa®"}
+        description={language === 'it' ? "Scarica certificazioni CE, SGS, ISO 9001 e schede tecniche dei pavimenti flottanti Kalēa®. Documentazione completa per professionisti e progettisti." :
+                     language === 'en' ? "Download CE, SGS, ISO 9001 certifications and technical data sheets for Kalēa® floating floors." :
+                     language === 'de' ? "CE-, SGS-, ISO 9001-Zertifizierungen und technische Datenblätter für Kalēa® Schwimmböden herunterladen." :
+                     "Téléchargez les certifications CE, SGS, ISO 9001 et fiches techniques des sols flottants Kalēa®."}
+        keywords="certificazioni pavimenti, schede tecniche pavimento, CE pavimenti, SGS pavimenti, ISO 9001 pavimenti, documentazione tecnica pavimenti flottanti"
+      />
       {/* Hero */}
       <section className="section-spacing bg-gradient-to-b from-muted/30 to-background">
         <div className="container-custom text-center">

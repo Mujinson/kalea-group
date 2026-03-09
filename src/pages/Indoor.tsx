@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import SEOHead from "@/components/SEOHead";
 import heroIndoor from "@/assets/hero-indoor-wood.jpg";
 import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
 import productBiocoreFloor from "@/assets/hero-biomag-floor-new.webp";
@@ -72,7 +73,17 @@ const Indoor = () => {
 
   return (
     <div className="relative bg-background">
-      {/* SEO Meta */}
+      <SEOHead
+        title={language === 'it' ? "Pavimenti Flottanti per Interni | BIOMAG & BIOCORE | Kalēa®" :
+               language === 'en' ? "Indoor Floating Floors | BIOMAG & BIOCORE | Kalēa®" :
+               language === 'de' ? "Schwimmende Böden für Innenräume | BIOMAG & BIOCORE | Kalēa®" :
+               "Sols Flottants d'Intérieur | BIOMAG & BIOCORE | Kalēa®"}
+        description={language === 'it' ? "Scopri i pavimenti flottanti Kalēa® per interni: BIOMAG FLOOR in MgO e BIOCORE FLOOR in fibra naturale. Installazione click-clack senza colla, ideali per residenze, uffici e hotel." :
+                     language === 'en' ? "Discover Kalēa® indoor floating floors: BIOMAG FLOOR in MgO and BIOCORE FLOOR in natural fiber. Click-clack installation without glue, ideal for homes, offices and hotels." :
+                     language === 'de' ? "Entdecken Sie Kalēa® schwimmende Böden für Innenräume: BIOMAG FLOOR aus MgO und BIOCORE FLOOR aus Naturfaser. Klick-Installation ohne Kleber." :
+                     "Découvrez les sols flottants Kalēa® pour intérieurs : BIOMAG FLOOR en MgO et BIOCORE FLOOR en fibre naturelle. Installation click sans colle."}
+        keywords="pavimenti flottanti interni, pavimento flottante indoor, pavimenti click clack, pavimenti senza colla, pavimenti MgO interni, pavimenti fibra naturale, pavimento galleggiante interni, pavimenti per uffici, pavimenti per hotel, pavimenti residenziali"
+      />
       <title>Indoor Solutions | Kalēa Surface System</title>
       <meta
         name="description"

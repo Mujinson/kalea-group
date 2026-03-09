@@ -10,6 +10,7 @@ import bgOneWall from "@/assets/bg-onewall.jpg";
 import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 
 const Biowall = () => {
   const { t, language } = useTranslation();
@@ -90,6 +91,17 @@ const Biowall = () => {
 
   return (
     <div>
+      <SEOHead
+        title={language === 'it' ? "BIOWALL® — Pannelli a Parete in MgO per Interni | Kalēa®" :
+               language === 'en' ? "BIOWALL® — MgO Wall Panels for Interiors | Kalēa®" :
+               language === 'de' ? "BIOWALL® — MgO-Wandpaneele für Innenräume | Kalēa®" :
+               "BIOWALL® — Panneaux Muraux en MgO pour Intérieurs | Kalēa®"}
+        description={language === 'it' ? "BIOWALL® di Kalēa®: pannelli a parete in MgO, resistenti al fuoco e all'umidità. Installazione rapida, design contemporaneo per ambienti interni." :
+                     language === 'en' ? "BIOWALL® by Kalēa®: MgO wall panels, fire and moisture resistant. Quick installation, contemporary design." :
+                     language === 'de' ? "BIOWALL® von Kalēa®: MgO-Wandpaneele, feuer- und feuchtigkeitsbeständig. Schnelle Installation." :
+                     "BIOWALL® par Kalēa® : panneaux muraux en MgO, résistants au feu et à l'humidité. Installation rapide."}
+        keywords="pannelli parete MgO, rivestimento parete minerale, pannelli murali ignifughi, rivestimento parete impermeabile, BIOWALL, parete decorativa"
+      />
       {/* Hero */}
       <HeroSection
         title={t('hero.onewall.title')}

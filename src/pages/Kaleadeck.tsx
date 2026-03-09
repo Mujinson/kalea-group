@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SEOHead from "@/components/SEOHead";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 
@@ -72,6 +73,17 @@ const Kaleadeck = () => {
 
   return (
     <div className="relative bg-background">
+      <SEOHead
+        title={language === 'it' ? "KALEADECK® — Decking per Esterni in MgO | Kalēa®" :
+               language === 'en' ? "KALEADECK® — Outdoor MgO Decking | Kalēa®" :
+               language === 'de' ? "KALEADECK® — MgO-Terrassendielen für Außen | Kalēa®" :
+               "KALEADECK® — Terrasse Extérieure en MgO | Kalēa®"}
+        description={language === 'it' ? "KALEADECK® di Kalēa®: decking in MgO per esterni, impermeabile, resistente a UV e gelo. Zero manutenzione, aspetto legno naturale." :
+                     language === 'en' ? "KALEADECK® by Kalēa®: outdoor MgO decking, waterproof, UV and frost resistant. Zero maintenance, natural wood look." :
+                     language === 'de' ? "KALEADECK® von Kalēa®: MgO-Terrassendielen für Außen, wasserdicht, UV- und frostbeständig. Wartungsfrei." :
+                     "KALEADECK® par Kalēa® : terrasse en MgO pour extérieurs, imperméable, résistant UV et gel. Zéro entretien."}
+        keywords="decking esterno, decking MgO, pavimento esterno impermeabile, decking senza manutenzione, terrazza pavimento, decking resistente gelo, pavimento esterno effetto legno"
+      />
       {/* Hero Section */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 

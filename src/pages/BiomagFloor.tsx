@@ -19,6 +19,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SEOHead from "@/components/SEOHead";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -136,6 +137,17 @@ const BiomagFloor = () => {
 
   return (
     <div className="relative bg-background">
+      <SEOHead
+        title={language === 'it' ? "BIOCORE FLOOR® — Pavimento Flottante in Fibra Naturale | Kalēa®" :
+               language === 'en' ? "BIOCORE FLOOR® — Natural Fiber Floating Floor | Kalēa®" :
+               language === 'de' ? "BIOCORE FLOOR® — Schwimmender Boden aus Naturfaser | Kalēa®" :
+               "BIOCORE FLOOR® — Sol Flottant en Fibre Naturelle | Kalēa®"}
+        description={language === 'it' ? "BIOCORE FLOOR® di Kalēa®: pavimento flottante in fibra naturale e minerale, ecologico e biodegradabile. Click-clack senza colla, fonoassorbente. 7 finiture esclusive." :
+                     language === 'en' ? "BIOCORE FLOOR® by Kalēa®: natural fiber floating floor, eco-friendly and biodegradable. Click-clack installation, sound-absorbing. 7 exclusive finishes." :
+                     language === 'de' ? "BIOCORE FLOOR® von Kalēa®: Naturfaser-Schwimmboden, umweltfreundlich und biologisch abbaubar. Klick-Installation, schallabsorbierend." :
+                     "BIOCORE FLOOR® par Kalēa® : sol flottant en fibre naturelle, écologique et biodégradable. Installation click sans colle."}
+        keywords="pavimento flottante fibra naturale, pavimento ecologico, pavimento biodegradabile, pavimento fonoassorbente, BIOCORE FLOOR, pavimento click senza colla, pavimento sostenibile, pavimento galleggiante naturale"
+      />
       {/* Hero Section - Sticky with scroll shrink effect */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 

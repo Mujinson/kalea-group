@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 
 const SustainabilityImpact = () => {
   const { language } = useTranslation();
@@ -18,6 +19,17 @@ const SustainabilityImpact = () => {
 
   return (
     <div>
+      <SEOHead
+        title={language === 'it' ? "Impatto Ambientale — Pavimenti Sostenibili | Kalēa®" :
+               language === 'en' ? "Environmental Impact — Sustainable Floors | Kalēa®" :
+               language === 'de' ? "Umweltauswirkungen — Nachhaltige Böden | Kalēa®" :
+               "Impact Environnemental — Sols Durables | Kalēa®"}
+        description={language === 'it' ? "L'impatto ambientale dei pavimenti Kalēa®: materiali minerali stabili, nessuna emissione nociva, riduzione del consumo di risorse." :
+                     language === 'en' ? "Environmental impact of Kalēa® floors: stable mineral materials, no harmful emissions, reduced resource consumption." :
+                     language === 'de' ? "Umweltauswirkungen der Kalēa® Böden: stabile Mineralstoffe, keine schädlichen Emissionen." :
+                     "Impact environnemental des sols Kalēa® : matériaux minéraux stables, aucune émission nocive."}
+        keywords="pavimenti sostenibili, impatto ambientale pavimenti, pavimenti ecologici, pavimenti senza emissioni, sostenibilità edilizia"
+      />
       {/* Hero */}
       <HeroSection
         title="Pavimenti a basso impatto ambientale in ossido di magnesio"

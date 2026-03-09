@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SEOHead from "@/components/SEOHead";
 import heroKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 
@@ -72,6 +73,17 @@ const Kaleaceiling = () => {
 
   return (
     <div className="relative bg-background">
+      <SEOHead
+        title={language === 'it' ? "KALEACEILING® — Controsoffitti per Esterni in MgO | Kalēa®" :
+               language === 'en' ? "KALEACEILING® — Outdoor Ceiling Panels in MgO | Kalēa®" :
+               language === 'de' ? "KALEACEILING® — Außendeckenverkleidungen aus MgO | Kalēa®" :
+               "KALEACEILING® — Plafonds Extérieurs en MgO | Kalēa®"}
+        description={language === 'it' ? "KALEACEILING® di Kalēa®: controsoffitti in MgO per esterni, resistenti a umidità e raggi UV. Ideali per pergole, porticati e terrazze." :
+                     language === 'en' ? "KALEACEILING® by Kalēa®: MgO outdoor ceiling panels, resistant to moisture and UV. Ideal for pergolas, porches and terraces." :
+                     language === 'de' ? "KALEACEILING® von Kalēa®: MgO-Deckenverkleidungen für Außen, feuchtigkeits- und UV-beständig." :
+                     "KALEACEILING® par Kalēa® : plafonds extérieurs en MgO, résistants à l'humidité et aux UV."}
+        keywords="controsoffitto esterno, controsoffitto pergola, controsoffitto MgO, pannello soffitto esterno, soffitto porticato, controsoffitto terrazza, soffitto resistente umidità"
+      />
       {/* Hero Section */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 
