@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Shield, Download, ExternalLink, FileText, CheckCircle } from "lucide-react";
 import { certifications, dopInfo } from "@/data/certifications";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
