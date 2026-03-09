@@ -12,9 +12,12 @@ const HomeHero = () => {
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
-        <img 
-          src={heroImage} 
-          alt="Kalēa® Surface System®" 
+        <video 
+          src="/videos/hero-home.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
