@@ -10,6 +10,7 @@ import bgOneWall from "@/assets/bg-onewall.jpg";
 import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 
 const Biowall = () => {
   const { t, language } = useTranslation();
