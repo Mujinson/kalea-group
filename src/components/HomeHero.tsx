@@ -23,10 +23,18 @@ const HomeHero = () => {
 
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col items-center justify-center">
+        {/* H1 for SEO - visually hidden but accessible */}
+        <h1 className="sr-only">
+          {language === 'it' ? 'Kalēa® — Pavimenti Flottanti di Design in MgO e Fibra Naturale' :
+           language === 'en' ? 'Kalēa® — Designer Floating Floors in MgO and Natural Fiber' :
+           language === 'de' ? 'Kalēa® — Design-Schwimmböden aus MgO und Naturfaser' :
+           'Kalēa® — Sols Flottants Design en MgO et Fibre Naturelle'}
+        </h1>
+        
         {/* Centered Logo */}
         <motion.img
           src={logoImage}
-          alt="Kalēa®"
+          alt="Kalēa® Surface System — Pavimenti flottanti di design"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}

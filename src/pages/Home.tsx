@@ -126,6 +126,63 @@ const Home = () => {
 
   return (
     <div className="relative bg-background">
+      <SEOHead
+        title={language === 'it' ? "Pavimenti Flottanti in MgO e Fibra Naturale | Kalēa® Surface System" :
+               language === 'en' ? "Floating Floors in MgO & Natural Fiber | Kalēa® Surface System" :
+               language === 'de' ? "Schwimmende Böden aus MgO & Naturfaser | Kalēa® Surface System" :
+               "Sols Flottants en MgO & Fibre Naturelle | Kalēa® Surface System"}
+        description={language === 'it' ? "Pavimenti flottanti di nuova generazione in ossido di magnesio e fibra naturale. Waterproof, ignifughi, click-clack senza colla. Ideali per ristrutturazioni, abitazioni e spazi commerciali. Progettati in Italia." :
+                     language === 'en' ? "Next-generation floating floors in magnesium oxide and natural fiber. Waterproof, fireproof, click-lock installation. Ideal for renovations, homes and commercial spaces. Designed in Italy." :
+                     language === 'de' ? "Schwimmende Böden der neuen Generation aus Magnesiumoxid und Naturfaser. Wasserdicht, feuerfest, Klick-Verlegung. Ideal für Renovierungen, Wohnungen und Gewerbeflächen. In Italien entworfen." :
+                     "Sols flottants de nouvelle génération en oxyde de magnésium et fibre naturelle. Étanches, ignifuges, pose clipsable. Idéaux pour rénovations, habitations et espaces commerciaux. Conçus en Italie."}
+        keywords={language === 'it' ? "pavimenti flottanti, pavimento flottante, pavimenti in MgO, pavimenti click clack, pavimento senza colla, pavimenti waterproof, pavimenti ignifughi, pavimento galleggiante, pavimento sopraelevato, pavimento flottante prezzi, ristrutturazione pavimenti, pavimento per ristrutturazione, pavimenti innovativi, pavimenti di design, pavimenti sostenibili, pavimento ecologico, parquet flottante, laminato flottante, SPC pavimento, LVT pavimento" :
+                  language === 'en' ? "floating floors, floating floor, MgO flooring, click-lock flooring, glueless flooring, waterproof flooring, fireproof flooring, raised flooring, innovative flooring, sustainable flooring, eco-friendly floor, design flooring" :
+                  language === 'de' ? "schwimmender Boden, Klickboden, MgO Boden, wasserdichter Boden, feuerfester Boden, nachhaltiger Bodenbelag, Design Bodenbelag, ökologischer Boden" :
+                  "sol flottant, parquet flottant, sol clipsable, sol MgO, sol étanche, sol ignifuge, revêtement de sol design, sol écologique"}
+        ogType="website"
+      />
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Kalēa® Surface System",
+            url: "https://www.kalea.it",
+            logo: "https://www.kalea.it/favicon-k.png",
+            description: "Pavimenti flottanti di nuova generazione in ossido di magnesio e fibra naturale. Progettati in Italia.",
+            sameAs: [],
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "customer service",
+              availableLanguage: ["Italian", "English", "German", "French"],
+            },
+            makesOffer: [
+              {
+                "@type": "Offer",
+                itemOffered: {
+                  "@type": "Product",
+                  name: "BIOMAG FLOOR®",
+                  description: "Pavimento flottante in ossido di magnesio, waterproof e ignifugo con installazione click-clack.",
+                  category: "Pavimenti flottanti",
+                },
+              },
+              {
+                "@type": "Offer",
+                itemOffered: {
+                  "@type": "Product",
+                  name: "BIOCORE FLOOR®",
+                  description: "Pavimento flottante in fibra naturale e carbonio, ecologico e biodegradabile.",
+                  category: "Pavimenti flottanti",
+                },
+              },
+            ],
+          }),
+        }}
+      />
+
       {/* Hero Section */}
       <HomeHero />
 
