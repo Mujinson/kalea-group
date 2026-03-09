@@ -15,9 +15,11 @@ const HomeHero = () => {
         <video 
           ref={(el) => { 
             if (el) { 
-              el.playbackRate = 0.5; 
-              el.currentTime = 2; 
-              el.addEventListener('timeupdate', () => { if (el.currentTime < 2) el.currentTime = 2; });
+              el.playbackRate = 0.5;
+              const setStart = () => { el.currentTime = 2; };
+              if (el.readyState >= 1) setStart();
+              else el.addEventListener('loadedmetadata', setStart, { once: true });
+              el.addEventListener('seeking', () => { if (el.currentTime < 2) el.currentTime = 2; });
             } 
           }}
           src="/videos/hero-home.mp4"
