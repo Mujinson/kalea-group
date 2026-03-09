@@ -5,6 +5,7 @@ import { Target, Lightbulb, Users, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 import fondatore1 from "@/assets/fondatore-1.png";
 import fondatore2 from "@/assets/fondatore-2.png";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
