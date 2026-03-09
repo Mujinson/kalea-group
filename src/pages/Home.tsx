@@ -150,8 +150,8 @@ const Home = () => {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "Kalēa® Surface System",
-            url: "https://www.kalea.it",
-            logo: "https://www.kalea.it/favicon-k.png",
+            url: "https://www.kalea.space",
+            logo: "https://www.kalea.space/favicon-k.png",
             description: "Pavimenti flottanti di nuova generazione in ossido di magnesio e fibra naturale. Progettati in Italia.",
             sameAs: [],
             contactPoint: {
