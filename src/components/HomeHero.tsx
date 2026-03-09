@@ -11,15 +11,17 @@ const HomeHero = () => {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Background image */}
-      <div className="absolute inset-0">
-        <video 
-          src="/videos/hero-home.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-contain bg-black"
-        />
+      <div className="absolute inset-0 bg-black flex items-center justify-center">
+        <div className="relative w-full" style={{ aspectRatio: '16/9', maxHeight: '100vh' }}>
+          <video 
+            src="/videos/hero-home.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
       </div>
 
