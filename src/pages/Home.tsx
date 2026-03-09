@@ -452,15 +452,16 @@ const Home = () => {
                     className="relative h-full aspect-square rounded-2xl overflow-hidden group md:aspect-[4/5] md:h-auto md:w-full md:rounded-3xl"
                   >
                     {item.video ? (
-                      <video
-                        src={item.video}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="absolute inset-0 w-full h-full transition-transform duration-700 group-hover:scale-105"
-                        style={{ objectFit: 'cover', objectPosition: 'center center' }}
-                      />
+                      <div className="absolute inset-[-10%] overflow-hidden">
+                        <video
+                          src={item.video}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
                     ) : (
                       <img
                         src={item.bg}
