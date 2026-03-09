@@ -16,10 +16,24 @@ const HomeHero = () => {
           ref={(el) => { 
             if (el) { 
               el.playbackRate = 0.5;
-              const setStart = () => { el.currentTime = 2; };
-              if (el.readyState >= 1) setStart();
-              else el.addEventListener('loadedmetadata', setStart, { once: true });
-              el.addEventListener('seeking', () => { if (el.currentTime < 2) el.currentTime = 2; });
+              const setStart = () => { 
+                if (el.currentTime < 2) el.currentTime = 2; 
+              };
+              el.addEventListener('loadedmetadata', setStart, { once: true });
+              el.addEventListener('seeked', () => {
+                el.play().catch(() => {});
+              }, { once: true });
+              el.addEventListener('timeupdate', () => { 
+                if (el.currentTime < 2) el.currentTime = 2; 
+              });
+              // Force play on interaction for browsers that block autoplay
+              const forcePlay = () => {
+                el.play().catch(() => {});
+                document.removeEventListener('touchstart', forcePlay);
+                document.removeEventListener('click', forcePlay);
+              };
+              document.addEventListener('touchstart', forcePlay, { once: true });
+              document.addEventListener('click', forcePlay, { once: true });
             } 
           }}
           src="/videos/hero-home.mp4"
@@ -27,6 +41,8 @@ const HomeHero = () => {
           muted
           loop
           playsInline
+          preload="auto"
+          poster="/images/hero-kalea-2.jpg"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
