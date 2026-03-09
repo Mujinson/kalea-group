@@ -241,6 +241,17 @@ const Realizzazioni = () => {
 
   return (
     <main className="relative z-10 min-h-screen">
+      <SEOHead
+        title={language === 'it' ? "Realizzazioni — Progetti con Pavimenti Flottanti Kalēa®" :
+               language === 'en' ? "Projects — Floating Floor Installations by Kalēa®" :
+               language === 'de' ? "Projekte — Schwimmboden-Installationen von Kalēa®" :
+               "Réalisations — Installations de Sols Flottants Kalēa®"}
+        description={language === 'it' ? "Galleria di realizzazioni con pavimenti flottanti Kalēa®: residenze, hotel, ristoranti, uffici, cliniche e negozi. Scopri i nostri progetti completati in Italia." :
+                     language === 'en' ? "Gallery of Kalēa® floating floor installations: homes, hotels, restaurants, offices, clinics and shops." :
+                     language === 'de' ? "Galerie der Kalēa® Schwimmboden-Installationen: Wohnungen, Hotels, Restaurants, Büros." :
+                     "Galerie des réalisations Kalēa® : maisons, hôtels, restaurants, bureaux, cliniques et boutiques."}
+        keywords="realizzazioni pavimenti flottanti, progetti pavimenti, installazioni pavimento, pavimenti hotel, pavimenti ristorante, pavimenti ufficio, pavimenti negozio, foto pavimenti"
+      />
       {/* Hero Section */}
       <HeroSection
         title={t('realizzazioni.heroTitle') as string}

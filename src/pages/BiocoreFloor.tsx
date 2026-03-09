@@ -146,6 +146,17 @@ const BiocoreFloor = () => {
 
   return (
     <div className="relative bg-background">
+      <SEOHead
+        title={language === 'it' ? "BIOMAG FLOOR® — Pavimento Flottante in MgO | Kalēa®" :
+               language === 'en' ? "BIOMAG FLOOR® — MgO Floating Floor | Kalēa®" :
+               language === 'de' ? "BIOMAG FLOOR® — Schwimmender Boden aus MgO | Kalēa®" :
+               "BIOMAG FLOOR® — Sol Flottant en MgO | Kalēa®"}
+        description={language === 'it' ? "BIOMAG FLOOR® di Kalēa®: pavimento flottante in ossido di magnesio, ignifugo, impermeabile, atossico. Installazione click-clack senza colla. Certificato CE, SGS. 7 finiture naturali." :
+                     language === 'en' ? "BIOMAG FLOOR® by Kalēa®: MgO floating floor, fireproof, waterproof, non-toxic. Click-clack installation. CE and SGS certified. 7 natural finishes." :
+                     language === 'de' ? "BIOMAG FLOOR® von Kalēa®: MgO-Schwimmboden, feuerfest, wasserdicht, ungiftig. Klick-Installation. CE- und SGS-zertifiziert." :
+                     "BIOMAG FLOOR® par Kalēa® : sol flottant en MgO, ignifuge, imperméable, atoxique. Installation click sans colle. Certifié CE et SGS."}
+        keywords="pavimento flottante MgO, pavimento in ossido di magnesio, pavimento ignifugo, pavimento impermeabile, pavimento click clack, pavimento senza colla, pavimento atossico, BIOMAG FLOOR, pavimento minerale, pavimento galleggiante"
+      />
       {/* Hero Section - Sticky with scroll shrink effect */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div 

@@ -66,6 +66,17 @@ const EdgeLine = () => {
 
   return (
     <div>
+      <SEOHead
+        title={language === 'it' ? "EDGELINE® — Profili e Battiscopa per Pavimenti Flottanti | Kalēa®" :
+               language === 'en' ? "EDGELINE® — Profiles & Skirting for Floating Floors | Kalēa®" :
+               language === 'de' ? "EDGELINE® — Profile & Sockelleisten für Schwimmböden | Kalēa®" :
+               "EDGELINE® — Profilés et Plinthes pour Sols Flottants | Kalēa®"}
+        description={language === 'it' ? "EDGELINE® di Kalēa®: profili terminali, battiscopa e giunti di espansione coordinati per pavimenti flottanti. Design minimale, resistenza superiore." :
+                     language === 'en' ? "EDGELINE® by Kalēa®: coordinated profiles, skirting boards and expansion joints for floating floors. Minimal design, superior resistance." :
+                     language === 'de' ? "EDGELINE® von Kalēa®: koordinierte Profile, Sockelleisten und Dehnungsfugen für Schwimmböden." :
+                     "EDGELINE® par Kalēa® : profilés, plinthes et joints de dilatation coordonnés pour sols flottants."}
+        keywords="battiscopa pavimenti flottanti, profili pavimento, giunti espansione pavimento, accessori pavimento flottante, profilo terminale, battiscopa minerale"
+      />
       {/* Hero */}
       <HeroSection
         title={t('hero.edgeline.title')}

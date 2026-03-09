@@ -164,6 +164,17 @@ const DiventaPartner = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title={language === 'it' ? "Diventa Partner Kalēa® — Rivendita Pavimenti Flottanti" :
+               language === 'en' ? "Become a Kalēa® Partner — Floating Floor Distribution" :
+               language === 'de' ? "Kalēa® Partner werden — Vertrieb von Schwimmböden" :
+               "Devenir Partenaire Kalēa® — Distribution de Sols Flottants"}
+        description={language === 'it' ? "Diventa rivenditore Kalēa®: unisciti alla rete di partner per pavimenti flottanti in MgO e fibra naturale. Margini competitivi, supporto marketing e formazione." :
+                     language === 'en' ? "Become a Kalēa® dealer: join our partner network for MgO and natural fiber floating floors." :
+                     language === 'de' ? "Werden Sie Kalēa® Händler: treten Sie unserem Partnernetzwerk für MgO-Schwimmböden bei." :
+                     "Devenez revendeur Kalēa® : rejoignez notre réseau de partenaires pour sols flottants en MgO."}
+        keywords="diventa partner Kalēa, rivenditore pavimenti flottanti, distributore pavimenti, partner pavimenti MgO, rivendita pavimenti"
+      />
       {/* HERO SECTION */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <img

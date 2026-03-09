@@ -24,6 +24,17 @@ const SustainabilityMaintenance = () => {
 
   return (
     <div>
+      <SEOHead
+        title={language === 'it' ? "Manutenzione Pavimenti Flottanti — Pulizia e Cura | Kalēa®" :
+               language === 'en' ? "Floating Floor Maintenance — Cleaning & Care | Kalēa®" :
+               language === 'de' ? "Pflege Schwimmböden — Reinigung & Pflege | Kalēa®" :
+               "Entretien Sols Flottants — Nettoyage et Soin | Kalēa®"}
+        description={language === 'it' ? "Come pulire e mantenere i pavimenti flottanti Kalēa®: guida alla manutenzione semplice con acqua e detergenti neutri. Niente cere o solventi." :
+                     language === 'en' ? "How to clean and maintain Kalēa® floating floors: simple maintenance guide with water and neutral cleaners." :
+                     language === 'de' ? "Wie man Kalēa® Schwimmböden reinigt und pflegt: einfache Pflegeanleitung mit Wasser und neutralen Reinigern." :
+                     "Comment nettoyer et entretenir les sols flottants Kalēa® : guide d'entretien simple."}
+        keywords="manutenzione pavimenti flottanti, pulizia pavimento flottante, come pulire pavimento, cura pavimenti, manutenzione pavimento MgO"
+      />
       {/* Hero */}
       <HeroSection
         title="Manutenzione semplice, rispetto per l'ambiente"

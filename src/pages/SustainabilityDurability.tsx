@@ -19,6 +19,17 @@ const SustainabilityDurability = () => {
 
   return (
     <div>
+      <SEOHead
+        title={language === 'it' ? "Lunga Durata — Pavimenti Resistenti nel Tempo | Kalēa®" :
+               language === 'en' ? "Long-Lasting — Durable Floors Over Time | Kalēa®" :
+               language === 'de' ? "Langlebigkeit — Beständige Böden | Kalēa®" :
+               "Longue Durée — Sols Résistants dans le Temps | Kalēa®"}
+        description={language === 'it' ? "Pavimenti Kalēa® progettati per durare: superficie stabile, minore deterioramento, ideali per famiglie e animali domestici." :
+                     language === 'en' ? "Kalēa® floors designed to last: stable surface, less deterioration, ideal for families and pets." :
+                     language === 'de' ? "Kalēa® Böden für Langlebigkeit: stabile Oberfläche, weniger Verschleiß, ideal für Familien." :
+                     "Sols Kalēa® conçus pour durer : surface stable, moins de détérioration, idéaux pour les familles."}
+        keywords="pavimenti resistenti, pavimenti lunga durata, pavimenti famiglie, pavimenti animali domestici, durabilità pavimenti"
+      />
       {/* Hero */}
       <HeroSection
         title="Un pavimento progettato per durare nel tempo"
