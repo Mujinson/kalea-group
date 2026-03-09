@@ -119,7 +119,7 @@ const Home = () => {
   ];
 
   const sustainability = [
-    { icon: Leaf, title: t('home.sustainability.impact.title'), description: t('home.sustainability.impact.description'), bg: bgSustainabilityForest, link: `/${language}/sostenibilita/impatto-ambientale` },
+    { icon: Leaf, title: t('home.sustainability.impact.title'), description: t('home.sustainability.impact.description'), bg: bgSustainabilityForest, video: '/videos/sustainability-forest.mp4', link: `/${language}/sostenibilita/impatto-ambientale` },
     { icon: Clock, title: t('home.sustainability.durability.title'), description: t('home.sustainability.durability.description'), bg: bgSustainabilityDurability, link: `/${language}/sostenibilita/lunga-durata` },
     { icon: Wrench, title: t('home.sustainability.maintenance.title'), description: t('home.sustainability.maintenance.description'), bg: bgSustainabilityMaintenance, link: `/${language}/sostenibilita/manutenzione` },
   ];
@@ -451,12 +451,23 @@ const Home = () => {
                     }}
                     className="relative h-full aspect-square rounded-2xl overflow-hidden group md:aspect-[4/5] md:h-auto md:w-full md:rounded-3xl"
                   >
-                    <img
-                      src={item.bg}
-                      alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
+                    {item.video ? (
+                      <video
+                        src={item.video}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <img
+                        src={item.bg}
+                        alt={item.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-foreground/10 to-foreground/70" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-3 sm:p-4 md:p-6">
                       <item.icon className="w-8 h-8 md:w-12 md:h-12 text-white mb-2 md:mb-3" strokeWidth={1.5} />
