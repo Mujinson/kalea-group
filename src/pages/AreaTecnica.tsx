@@ -245,7 +245,7 @@ const AreaTecnica = () => {
               {t('technicalArea.ctaSubtitle')}
             </p>
             <Button asChild size="lg" variant="default">
-              <a href="mailto:tecnico@kalea.it">{t('technicalArea.ctaButton')}</a>
+              <a href="mailto:tecnico@kalea.space">{t('technicalArea.ctaButton')}</a>
             </Button>
           </motion.div>
         </div>

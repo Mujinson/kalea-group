@@ -268,8 +268,8 @@ const Contatti = () => {
                     </div>
                     <div>
                       <h3 className="font-heading font-semibold text-foreground mb-1">{t('contacts.emailLabel')}</h3>
-                      <a href="mailto:info@kalea.it" className="text-muted-foreground hover:text-primary transition-colors">
-                        info@kalea.it
+                      <a href="mailto:info@kalea.space" className="text-muted-foreground hover:text-primary transition-colors">
+                        info@kalea.space
                       </a>
                     </div>
                   </div>
