@@ -21,6 +21,7 @@ import bgNoPlasticCard from "@/assets/bg-no-plastic-card.png";
 import bgStabilitaCard from "@/assets/bg-stabilita-card.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SEOHead from "@/components/SEOHead";
 
 const BiocoreFloor = () => {
   const { language } = useTranslation();
