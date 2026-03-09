@@ -26,8 +26,30 @@ const IndoorOutdoorSection = () => {
   ];
 
   return (
-    <section className="relative min-h-[100svh] md:h-auto md:min-h-0 lg:h-[100svh] bg-background px-4 md:px-8 lg:px-12 py-8 md:py-12 lg:py-16 flex flex-col overflow-hidden">
-      <div className="grid flex-1 min-h-0 grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-4 md:gap-6 md:max-h-[70vh] lg:max-h-none">
+    <section className="relative bg-background px-4 md:px-8 lg:px-12 py-16 md:py-24 flex flex-col overflow-hidden">
+      {/* Section Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-8 md:mb-12 max-w-3xl mx-auto"
+      >
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+          {language === 'it' ? 'Soluzioni per Ogni Ambiente' :
+           language === 'en' ? 'Solutions for Every Space' :
+           language === 'de' ? 'Lösungen für jeden Raum' :
+           'Solutions pour Chaque Espace'}
+        </h2>
+        <p className="text-base md:text-lg text-foreground/70">
+          {language === 'it' ? 'Pavimenti flottanti di design per interni ed esterni, progettati per durare nel tempo' :
+           language === 'en' ? 'Designer floating floors for indoor and outdoor, built to last' :
+           language === 'de' ? 'Design-Schwimmböden für Innen- und Außenbereiche, gebaut für die Ewigkeit' :
+           'Sols flottants design pour intérieur et extérieur, conçus pour durer'}
+        </p>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-h-[60vh] md:max-h-[55vh] lg:max-h-[65vh]">
         {sections.map((section, index) => (
           <Link
             key={section.title}
