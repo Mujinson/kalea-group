@@ -13,6 +13,7 @@ const HomeHero = () => {
       {/* Background image */}
       <div className="absolute inset-0">
         <video 
+          ref={(el) => { if (el) el.playbackRate = 0.5; }}
           src="/videos/hero-home.mp4"
           autoPlay
           muted
