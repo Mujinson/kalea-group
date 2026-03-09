@@ -91,10 +91,7 @@ const Home = () => {
       {/* Indoor / Outdoor Section */}
       <IndoorOutdoorSection />
 
-
-
-
-      {/* 5 Macro-Categories */}
+      {/* 8 Macro-Categories - HIDDEN: uncomment when ready
       <section className="relative bg-background py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
           <motion.div
@@ -110,8 +107,6 @@ const Home = () => {
               Otto macro-aree per una fornitura completa e coordinata
             </p>
           </motion.div>
-
-          {/* Grid: all 5 cards same size */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
             {categories.map((cat, i) => (
               <CategoryCard key={cat.id} category={cat} index={i} language={language} />
@@ -119,6 +114,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      */}
 
       {/* Manifesto Section - with background image */}
       <section className="relative py-16 md:py-24">
