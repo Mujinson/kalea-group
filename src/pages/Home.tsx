@@ -459,6 +459,7 @@ const Home = () => {
                         muted
                         playsInline
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        style={{ objectFit: 'cover', minWidth: '100%', minHeight: '100%' }}
                       />
                     ) : (
                       <img
