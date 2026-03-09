@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import bgSustainabilityForest from "@/assets/bg-sustainability-forest.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 
 const SustainabilityImpact = () => {
   const { language } = useTranslation();
