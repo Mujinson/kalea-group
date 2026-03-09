@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SEOHead from "@/components/SEOHead";
 import heroKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 
