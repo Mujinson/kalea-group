@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import { useTranslation } from "@/i18n/useTranslation";
+import SEOHead from "@/components/SEOHead";
 
 // Hero image
 import heroImage from "@/assets/hero-biomag-floor.jpg";
