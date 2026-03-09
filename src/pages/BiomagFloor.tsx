@@ -19,6 +19,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import SEOHead from "@/components/SEOHead";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
