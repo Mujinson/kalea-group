@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/i18n/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
 import HeroSection from "@/components/HeroSection";
+import SEOHead from "@/components/SEOHead";
 import heroContatti from "@/assets/hero-contatti.png";
 
 const Contatti = () => {
