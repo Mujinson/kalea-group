@@ -343,14 +343,19 @@ const AdminLeads = () => {
       <Sheet open={!!detailLead} onOpenChange={open => { if (!open) setDetailLead(null); }}>
         <SheetContent className="sm:max-w-lg overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>{detailLead?.name}</SheetTitle>
+            <SheetTitle>{detailLead?.company_name || detailLead?.name}</SheetTitle>
           </SheetHeader>
           {detailLead && (
             <div className="space-y-4 mt-4">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 {getStatusBadge(detailLead.status)}
-                <span className="text-sm text-muted-foreground">
-                  Responsabile: {getSalespersonName(detailLead.assigned_salesperson_id)}
+                {detailLead.company_name && detailLead.name && (
+                  <span className="text-sm font-medium">Ref: {detailLead.name}</span>
+                )}
+                <span className="text-sm text-muted-foreground ml-auto">
+                  {getSalespersonName(detailLead.assigned_salesperson_id) !== '-' 
+                    ? `Resp: ${getSalespersonName(detailLead.assigned_salesperson_id)}`
+                    : 'Non assegnato'}
                 </span>
               </div>
               <Card>
