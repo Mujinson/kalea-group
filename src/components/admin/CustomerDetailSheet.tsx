@@ -15,8 +15,21 @@ import { it } from 'date-fns/locale';
 import { 
   User, Phone, Mail, MapPin, Building, Euro, TrendingUp, 
   Calendar, Plus, FileText, Clock, MessageSquare, CheckCircle2,
-  Upload, Download, Eye, Send, Trash2, File
+  Upload, Download, Eye, Send, Trash2, File, Pencil, Save
 } from 'lucide-react';
+import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
+
+const CUSTOMER_TYPES = [
+  { value: 'cliente_privato', label: 'Cliente privato' },
+  { value: 'rivenditore', label: 'Rivenditore' },
+  { value: 'costruttore', label: 'Costruttore' },
+  { value: 'posatore', label: 'Posatore' },
+  { value: 'architetto', label: 'Architetto' },
+  { value: 'interior_designer', label: 'Interior designer' },
+  { value: 'showroom', label: 'Showroom' },
+  { value: 'studio_design', label: 'Studio di design' },
+  { value: 'azienda_pubblica', label: 'Azienda pubblica' },
+];
 
 interface CustomerDetailSheetProps {
   customerId: string | null;
