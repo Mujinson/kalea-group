@@ -63,6 +63,10 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   const [newReminder, setNewReminder] = useState({ title: '', reminder_date: '', description: '' });
   const [newAction, setNewAction] = useState('');
   const [newContract, setNewContract] = useState({ title: '', contract_type: '', value: '', start_date: '', notes: '' });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState<any>({});
+  const [saving, setSaving] = useState(false);
+  const [newContract, setNewContract] = useState({ title: '', contract_type: '', value: '', start_date: '', notes: '' });
 
   useEffect(() => {
     if (customerId && open) {
