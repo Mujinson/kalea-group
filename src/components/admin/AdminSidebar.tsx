@@ -26,29 +26,30 @@ import {
   BarChart3,
   FileText,
   UserPlus,
-  
 } from 'lucide-react';
 
-const menuItems = [
-  { title: 'Overview', url: '/admin', icon: LayoutDashboard },
-  { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart },
-  { title: 'Preventivi', url: '/admin/preventivi', icon: FileText },
-  { title: 'Clienti', url: '/admin/clienti', icon: Users },
-  { title: 'Magazzino', url: '/admin/magazzino', icon: Package },
-  { title: 'Analytics', url: '/admin/analytics', icon: BarChart3 },
-  { title: 'Leads', url: '/admin/leads', icon: UserPlus },
-  { title: 'Costi', url: '/admin/costi', icon: DollarSign },
-  { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard },
-  
-  { title: 'Import Dati', url: '/admin/import', icon: Upload },
-  { title: 'Impostazioni', url: '/admin/impostazioni', icon: Settings },
+const allMenuItems = [
+  { title: 'Overview', url: '/admin', icon: LayoutDashboard, adminOnly: false },
+  { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart, adminOnly: true },
+  { title: 'Preventivi', url: '/admin/preventivi', icon: FileText, adminOnly: false },
+  { title: 'Clienti', url: '/admin/clienti', icon: Users, adminOnly: false },
+  { title: 'Magazzino', url: '/admin/magazzino', icon: Package, adminOnly: true },
+  { title: 'Analytics', url: '/admin/analytics', icon: BarChart3, adminOnly: true },
+  { title: 'Leads', url: '/admin/leads', icon: UserPlus, adminOnly: false },
+  { title: 'Costi', url: '/admin/costi', icon: DollarSign, adminOnly: true },
+  { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard, adminOnly: true },
+  { title: 'Import Dati', url: '/admin/import', icon: Upload, adminOnly: true },
+  { title: 'Impostazioni', url: '/admin/impostazioni', icon: Settings, adminOnly: true },
 ];
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signOut, user } = useAdminAuth();
+  const { signOut, user, role } = useAdminAuth();
   const { setOpenMobile, isMobile } = useSidebar();
+
+  const isAdminRole = role === 'admin';
+  const menuItems = allMenuItems.filter(item => isAdminRole || !item.adminOnly);
 
   const handleSignOut = async () => {
     if (isMobile) setOpenMobile(false);
@@ -62,9 +63,7 @@ const AdminSidebar = () => {
   };
 
   const isActive = (path: string) => {
-    if (path === '/admin') {
-      return location.pathname === '/admin';
-    }
+    if (path === '/admin') return location.pathname === '/admin';
     return location.pathname.startsWith(path);
   };
 
@@ -94,9 +93,14 @@ const AdminSidebar = () => {
       </SidebarContent>
       
       <SidebarFooter className="p-4 border-t border-sidebar-border">
-        <div className="text-xs text-sidebar-foreground/50 mb-2 truncate">
+        <div className="text-xs text-sidebar-foreground/50 mb-1 truncate">
           {user?.email}
         </div>
+        {role && (
+          <div className="text-xs text-sidebar-foreground/40 mb-2">
+            {isAdminRole ? '👑 Admin' : '📊 Commerciale'}
+          </div>
+        )}
         <Button
           variant="outline"
           size="sm"

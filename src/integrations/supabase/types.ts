@@ -1003,6 +1003,7 @@ export type Database = {
           notes: string | null
           phone: string | null
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           commission_rate?: number | null
@@ -1015,6 +1016,7 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           commission_rate?: number | null
@@ -1027,8 +1029,41 @@ export type Database = {
           notes?: string | null
           phone?: string | null
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
+      }
+      salesperson_territories: {
+        Row: {
+          created_at: string
+          id: string
+          salesperson_id: string
+          territory_type: string
+          territory_value: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          salesperson_id: string
+          territory_type: string
+          territory_value: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          salesperson_id?: string
+          territory_type?: string
+          territory_value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salesperson_territories_salesperson_id_fkey"
+            columns: ["salesperson_id"]
+            isOneToOne: false
+            referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       static_costs: {
         Row: {
@@ -1276,7 +1311,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "commerciale"
       contract_status: "in_corso" | "completato" | "annullato"
       cost_frequency: "mensile" | "trimestrale" | "annuale" | "una_tantum"
       customer_status: "opportunity" | "signed" | "working"
@@ -1434,7 +1469,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "commerciale"],
       contract_status: ["in_corso", "completato", "annullato"],
       cost_frequency: ["mensile", "trimestrale", "annuale", "una_tantum"],
       customer_status: ["opportunity", "signed", "working"],
