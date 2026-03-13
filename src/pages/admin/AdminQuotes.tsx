@@ -604,7 +604,7 @@ const AdminQuotes = () => {
                   {/* Actions */}
                   <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t">
                     {/* View/Edit button */}
-                    <Button size="sm" variant="ghost" onClick={() => openQuoteForEdit(quote)}>
+                    <Button size="sm" variant="ghost" onClick={() => navigate(`/admin/preventivi/modifica?edit=${quote.id}`)}>
                       <Eye className="w-3 h-3 mr-1" />{quote.status === 'converted' ? 'Visualizza' : 'Apri'}
                     </Button>
                     {quote.status === 'draft' && (
