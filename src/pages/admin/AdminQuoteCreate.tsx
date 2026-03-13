@@ -739,39 +739,131 @@ const AdminQuoteCreate = () => {
         </div>
       </div>
 
-      {/* Product Catalog Dialog */}
+      {/* Product Catalog Dialog (quick-add) */}
       <Dialog open={catalogOpen} onOpenChange={setCatalogOpen}>
-        <DialogContent className="max-w-lg max-h-[80vh]">
+        <DialogContent className="max-w-2xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle>
-              Catalogo {catalogTarget === 'article' ? 'Articoli' : catalogTarget === 'accessory' ? 'Accessori' : 'Servizi'}
+              Seleziona — {catalogTarget === 'article' ? 'Articoli' : catalogTarget === 'accessory' ? 'Accessori' : 'Servizi'}
             </DialogTitle>
           </DialogHeader>
           <div className="relative mb-3">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Cerca nel catalogo..." value={catalogSearch} onChange={e => setCatalogSearch(e.target.value)} className="pl-10" />
+            <Input placeholder="Cerca..." value={catalogSearch} onChange={e => setCatalogSearch(e.target.value)} className="pl-10" />
           </div>
-          <div className="overflow-y-auto max-h-[50vh] divide-y rounded-lg border">
-            {filteredCatalog.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-6">Nessun prodotto trovato</p>
-            ) : (
-              filteredCatalog.map(p => (
-                <button key={p.code} onClick={() => addFromCatalog(p)}
-                  className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors flex items-center justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{p.code}</span>
-                      <span className="font-medium text-sm truncate">{p.name}</span>
-                    </div>
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-muted-foreground">{p.defaultUnit}</span>
-                      {p.hasColor && <span className="text-xs text-muted-foreground">• Con tonalità</span>}
-                    </div>
+          <div className="overflow-y-auto max-h-[55vh] rounded-lg border">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-background border-b">
+                <tr>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Codice</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Nome</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Descrizione</th>
+                  <th className="text-right py-2 px-3 font-medium text-muted-foreground">Prezzo netto</th>
+                  {catalogTarget !== 'service' && <th className="text-left py-2 px-3 font-medium text-muted-foreground">Tonalità</th>}
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {filteredCatalog.length === 0 ? (
+                  <tr><td colSpan={5} className="text-center py-6 text-muted-foreground">Nessun prodotto trovato</td></tr>
+                ) : (
+                  filteredCatalog.map(p => (
+                    <tr key={p.code} onClick={() => addFromCatalog(p)}
+                      className="hover:bg-muted/50 cursor-pointer transition-colors">
+                      <td className="py-3 px-3">
+                        <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">{p.code}</span>
+                      </td>
+                      <td className="py-3 px-3 font-medium">{p.name}</td>
+                      <td className="py-3 px-3 text-muted-foreground">{p.description}</td>
+                      <td className="py-3 px-3 text-right font-semibold whitespace-nowrap">€{p.defaultPrice.toFixed(2)}</td>
+                      {catalogTarget !== 'service' && (
+                        <td className="py-3 px-3 text-muted-foreground">{p.hasColor ? 'Sì' : '—'}</td>
+                      )}
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* "Nuovo" Dialog (Geopietra-style) */}
+      <Dialog open={newItemDialog.open} onOpenChange={open => setNewItemDialog(prev => ({ ...prev, open }))}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              Salva {newItemDialog.target === 'article' ? 'Articolo' : newItemDialog.target === 'accessory' ? 'Accessorio' : 'Servizio'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-sm font-semibold">Articolo <span className="text-destructive">*</span></Label>
+              {newItemDialog.selectedProduct ? (
+                <div className="mt-2 p-3 border rounded-lg bg-muted/50 flex items-center justify-between">
+                  <div>
+                    <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded mr-2">{newItemDialog.selectedProduct.code}</span>
+                    <span className="font-medium">{newItemDialog.selectedProduct.name}</span>
+                    <span className="ml-2 text-muted-foreground">— €{newItemDialog.selectedProduct.defaultPrice.toFixed(2)}</span>
                   </div>
-                  <span className="text-sm font-semibold whitespace-nowrap">€{p.defaultPrice.toFixed(2)}</span>
-                </button>
-              ))
-            )}
+                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setNewItemDialog(prev => ({ ...prev, selectedProduct: null }))}>
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="mt-2">
+                  <p className="text-sm text-muted-foreground mb-2">Nessun elemento selezionato.</p>
+                  <Button variant="outline" size="sm" onClick={() => { setNewItemCatalogSearch(''); setNewItemCatalogOpen(true); }}>
+                    <Package className="w-4 h-4 mr-1" />Seleziona
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 pt-4">
+            <Button onClick={saveNewItem} disabled={!newItemDialog.selectedProduct}>Salva</Button>
+            <Button variant="outline" onClick={() => { saveNewItem(); if (newItemDialog.selectedProduct) openNewItemDialog(newItemDialog.target); }}>Salva &amp; crea un altro</Button>
+            <Button variant="ghost" onClick={() => setNewItemDialog(prev => ({ ...prev, open: false }))}>Annulla</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Catalog picker inside "Nuovo" dialog */}
+      <Dialog open={newItemCatalogOpen} onOpenChange={setNewItemCatalogOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>Seleziona</DialogTitle>
+          </DialogHeader>
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input placeholder="Cerca..." value={newItemCatalogSearch} onChange={e => setNewItemCatalogSearch(e.target.value)} className="pl-10" />
+          </div>
+          <div className="overflow-y-auto max-h-[55vh] rounded-lg border">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-background border-b">
+                <tr>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Codice</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Nome</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Descrizione</th>
+                  <th className="text-right py-2 px-3 font-medium text-muted-foreground">Prezzo netto</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {newItemFilteredCatalog.length === 0 ? (
+                  <tr><td colSpan={4} className="text-center py-6 text-muted-foreground">Nessun prodotto trovato</td></tr>
+                ) : (
+                  newItemFilteredCatalog.map(p => (
+                    <tr key={p.code}
+                      onClick={() => { setNewItemDialog(prev => ({ ...prev, selectedProduct: p })); setNewItemCatalogOpen(false); }}
+                      className="hover:bg-muted/50 cursor-pointer transition-colors">
+                      <td className="py-3 px-3"><span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">{p.code}</span></td>
+                      <td className="py-3 px-3 font-medium">{p.name}</td>
+                      <td className="py-3 px-3 text-muted-foreground">{p.description}</td>
+                      <td className="py-3 px-3 text-right font-semibold whitespace-nowrap">€{p.defaultPrice.toFixed(2)}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </DialogContent>
       </Dialog>
