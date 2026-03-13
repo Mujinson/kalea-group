@@ -259,6 +259,28 @@ const AdminQuoteCreate = () => {
     setCatalogOpen(false);
   };
 
+  // "Nuovo" dialog helpers
+  const openNewItemDialog = (target: 'article' | 'accessory' | 'service') => {
+    setNewItemDialog({ open: true, target, selectedProduct: null });
+    setNewItemCatalogSearch('');
+  };
+
+  const saveNewItem = () => {
+    const p = newItemDialog.selectedProduct;
+    if (!p) { toast.error('Seleziona un prodotto dal catalogo'); return; }
+    const newItem = fromCatalog(p);
+    if (newItemDialog.target === 'article') setArticles(prev => [...prev, newItem]);
+    else if (newItemDialog.target === 'accessory') setAccessories(prev => [...prev, newItem]);
+    else setServices(prev => [...prev, newItem]);
+    setNewItemDialog({ open: false, target: 'article', selectedProduct: null });
+  };
+
+  const newItemFilteredCatalog = PRODUCT_CATALOG.filter(p => {
+    if (p.category !== newItemDialog.target) return false;
+    if (!newItemCatalogSearch) return true;
+    return p.name.toLowerCase().includes(newItemCatalogSearch.toLowerCase()) || p.code.toLowerCase().includes(newItemCatalogSearch.toLowerCase());
+  });
+
   const filteredCatalog = PRODUCT_CATALOG.filter(p => {
     if (p.category !== catalogTarget) return false;
     if (!catalogSearch) return true;
