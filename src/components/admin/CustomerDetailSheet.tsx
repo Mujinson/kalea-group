@@ -243,16 +243,81 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   };
 
   const addActionLog = async () => {
-    if (!customerId || !newAction) return;
+    if (!customerId || !newAction.action_description) return;
     try {
       await supabase.from('customer_action_logs').insert({
         customer_id: customerId,
-        action_type: 'note',
-        action_description: newAction,
+        action_type: newAction.action_type,
+        action_description: newAction.action_description,
+        contact_person_name: newAction.contact_person_name || null,
+        contact_person_role: newAction.contact_person_role || null,
+        contact_person_contact: newAction.contact_person_contact || null,
+        next_steps: newAction.next_steps || null,
       });
-      setNewAction('');
+      setNewAction({ action_type: 'call', action_description: '', contact_person_name: '', contact_person_role: '', contact_person_contact: '', next_steps: '' });
       fetchAllData();
-      toast.success('Nota aggiunta');
+      toast.success('Attività aggiunta');
+    } catch (error) {
+      toast.error('Errore');
+    }
+  };
+
+  const addDocument = async () => {
+    if (!customerId || !newDocTitle) return;
+    try {
+      const { data } = await supabase.from('customer_documents').insert({
+        customer_id: customerId,
+        title: newDocTitle,
+        document_type: newDocType,
+      }).select().single();
+      setNewDocTitle('');
+      setNewDocType('altro');
+      fetchAllData();
+      toast.success('Documento aggiunto');
+      if (data) setPendingDocId(data.id);
+    } catch (error) {
+      toast.error('Errore');
+    }
+  };
+
+  const handleDocUpload = async (docId: string, file: File) => {
+    setUploadingDoc(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${customerId}/${docId}/${Date.now()}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage.from('customer-documents').upload(fileName, file);
+      if (uploadError) throw uploadError;
+      await supabase.from('customer_documents').update({ file_url: fileName }).eq('id', docId);
+      fetchAllData();
+      toast.success('File caricato');
+    } catch (error) {
+      toast.error('Errore caricamento');
+    } finally {
+      setUploadingDoc(false);
+    }
+  };
+
+  const downloadDoc = async (fileUrl: string, title: string) => {
+    try {
+      const { data, error } = await supabase.storage.from('customer-documents').download(fileUrl);
+      if (error) throw error;
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title}.${fileUrl.split('.').pop()}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toast.error('Errore download');
+    }
+  };
+
+  const deleteDoc = async (id: string, fileUrl?: string) => {
+    try {
+      if (fileUrl) await supabase.storage.from('customer-documents').remove([fileUrl]);
+      await supabase.from('customer_documents').delete().eq('id', id);
+      fetchAllData();
+      toast.success('Documento eliminato');
     } catch (error) {
       toast.error('Errore');
     }
