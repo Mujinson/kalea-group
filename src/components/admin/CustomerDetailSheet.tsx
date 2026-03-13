@@ -104,7 +104,65 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     }
   };
 
-  const updateCustomerStatus = async (status: string) => {
+  const startEditing = () => {
+    setEditData({
+      customer_type: customer?.customer_type || '',
+      first_name: customer?.first_name || '',
+      last_name: customer?.last_name || '',
+      company_name: customer?.company_name || '',
+      email: customer?.email || '',
+      phone: customer?.phone || '',
+      address: customer?.address || '',
+      city: customer?.city || '',
+      postal_code: customer?.postal_code || '',
+      province: customer?.province || '',
+      region: customer?.region || '',
+      country: customer?.country || 'Italia',
+      vat_number: customer?.vat_number || '',
+      pec: customer?.pec || '',
+      sdi_code: customer?.sdi_code || '',
+      notes: customer?.notes || '',
+    });
+    setIsEditing(true);
+  };
+
+  const saveCustomer = async () => {
+    if (!customerId) return;
+    setSaving(true);
+    try {
+      const updatePayload = {
+        customer_type: editData.customer_type as any,
+        first_name: editData.first_name || null,
+        last_name: editData.last_name || null,
+        company_name: editData.company_name || null,
+        email: editData.email || null,
+        phone: editData.phone || null,
+        address: editData.address || null,
+        city: editData.city || null,
+        postal_code: editData.postal_code || null,
+        province: editData.province || null,
+        region: editData.region || null,
+        country: editData.country || null,
+        vat_number: editData.vat_number || null,
+        pec: editData.pec || null,
+        sdi_code: editData.sdi_code || null,
+        notes: editData.notes || null,
+      };
+      const { error } = await supabase.from('customers').update(updatePayload).eq('id', customerId);
+      if (error) throw error;
+      setCustomer({ ...customer, ...updatePayload });
+      setIsEditing(false);
+      onUpdate();
+      toast.success('Cliente aggiornato');
+    } catch (error) {
+      console.error('Error updating customer:', error);
+      toast.error('Errore nel salvataggio');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+
     if (!customerId) return;
     try {
       await supabase.from('customers').update({ status: status as any }).eq('id', customerId);
