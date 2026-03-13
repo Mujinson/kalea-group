@@ -15,8 +15,21 @@ import { it } from 'date-fns/locale';
 import { 
   User, Phone, Mail, MapPin, Building, Euro, TrendingUp, 
   Calendar, Plus, FileText, Clock, MessageSquare, CheckCircle2,
-  Upload, Download, Eye, Send, Trash2, File
+  Upload, Download, Eye, Send, Trash2, File, Pencil, Save
 } from 'lucide-react';
+import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
+
+const CUSTOMER_TYPES = [
+  { value: 'cliente_privato', label: 'Cliente privato' },
+  { value: 'rivenditore', label: 'Rivenditore' },
+  { value: 'costruttore', label: 'Costruttore' },
+  { value: 'posatore', label: 'Posatore' },
+  { value: 'architetto', label: 'Architetto' },
+  { value: 'interior_designer', label: 'Interior designer' },
+  { value: 'showroom', label: 'Showroom' },
+  { value: 'studio_design', label: 'Studio di design' },
+  { value: 'azienda_pubblica', label: 'Azienda pubblica' },
+];
 
 interface CustomerDetailSheetProps {
   customerId: string | null;
@@ -50,6 +63,9 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   const [newReminder, setNewReminder] = useState({ title: '', reminder_date: '', description: '' });
   const [newAction, setNewAction] = useState('');
   const [newContract, setNewContract] = useState({ title: '', contract_type: '', value: '', start_date: '', notes: '' });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState<any>({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (customerId && open) {
@@ -88,7 +104,65 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     }
   };
 
-  const updateCustomerStatus = async (status: string) => {
+  const startEditing = () => {
+    setEditData({
+      customer_type: customer?.customer_type || '',
+      first_name: customer?.first_name || '',
+      last_name: customer?.last_name || '',
+      company_name: customer?.company_name || '',
+      email: customer?.email || '',
+      phone: customer?.phone || '',
+      address: customer?.address || '',
+      city: customer?.city || '',
+      postal_code: customer?.postal_code || '',
+      province: customer?.province || '',
+      region: customer?.region || '',
+      country: customer?.country || 'Italia',
+      vat_number: customer?.vat_number || '',
+      pec: customer?.pec || '',
+      sdi_code: customer?.sdi_code || '',
+      notes: customer?.notes || '',
+    });
+    setIsEditing(true);
+  };
+
+  const saveCustomer = async () => {
+    if (!customerId) return;
+    setSaving(true);
+    try {
+      const updatePayload = {
+        customer_type: editData.customer_type as any,
+        first_name: editData.first_name || null,
+        last_name: editData.last_name || null,
+        company_name: editData.company_name || null,
+        email: editData.email || null,
+        phone: editData.phone || null,
+        address: editData.address || null,
+        city: editData.city || null,
+        postal_code: editData.postal_code || null,
+        province: editData.province || null,
+        region: editData.region || null,
+        country: editData.country || null,
+        vat_number: editData.vat_number || null,
+        pec: editData.pec || null,
+        sdi_code: editData.sdi_code || null,
+        notes: editData.notes || null,
+      };
+      const { error } = await supabase.from('customers').update(updatePayload).eq('id', customerId);
+      if (error) throw error;
+      setCustomer({ ...customer, ...updatePayload });
+      setIsEditing(false);
+      onUpdate();
+      toast.success('Cliente aggiornato');
+    } catch (error) {
+      console.error('Error updating customer:', error);
+      toast.error('Errore nel salvataggio');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+
     if (!customerId) return;
     try {
       await supabase.from('customers').update({ status: status as any }).eq('id', customerId);
@@ -429,23 +503,143 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
               </Card>
             </div>
 
-            {/* Contact Info */}
+            {/* Contact Info / Edit Form */}
             <Card>
-              <CardContent className="p-3 space-y-2 text-sm">
-                {customer.email && (
-                  <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> {customer.email}</div>
-                )}
-                {customer.phone && (
-                  <div className="flex items-center gap-2"><Phone className="w-4 h-4" /> {customer.phone}</div>
-                )}
-                {(customer.address || customer.city) && (
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" /> 
-                    {[customer.address, customer.city, customer.province, customer.region].filter(Boolean).join(', ')}
+              <CardContent className="p-3">
+                {isEditing ? (
+                  <div className="space-y-3">
+                    <div className="space-y-2">
+                      <Label className="text-xs">Tipologia *</Label>
+                      <Select value={editData.customer_type} onValueChange={(v) => setEditData({...editData, customer_type: v})}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {CUSTOMER_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Nome</Label>
+                        <Input value={editData.first_name} onChange={e => setEditData({...editData, first_name: e.target.value})} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Cognome</Label>
+                        <Input value={editData.last_name} onChange={e => setEditData({...editData, last_name: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Azienda</Label>
+                      <Input value={editData.company_name} onChange={e => setEditData({...editData, company_name: e.target.value})} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Email</Label>
+                        <Input type="email" value={editData.email} onChange={e => setEditData({...editData, email: e.target.value})} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Telefono</Label>
+                        <Input value={editData.phone} onChange={e => setEditData({...editData, phone: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Indirizzo</Label>
+                      <Input value={editData.address} onChange={e => setEditData({...editData, address: e.target.value})} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Regione</Label>
+                        <Select value={editData.region} onValueChange={(v) => setEditData({...editData, region: v, province: '', city: ''})}>
+                          <SelectTrigger><SelectValue placeholder="Regione" /></SelectTrigger>
+                          <SelectContent className="max-h-60">
+                            {getRegionNames().map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Provincia</Label>
+                        <Select value={editData.province} onValueChange={(v) => setEditData({...editData, province: v, city: ''})} disabled={!editData.region}>
+                          <SelectTrigger><SelectValue placeholder="Provincia" /></SelectTrigger>
+                          <SelectContent className="max-h-60">
+                            {getProvincesForRegion(editData.region).map(p => <SelectItem key={p.code} value={p.code}>{p.name} ({p.code})</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Città</Label>
+                        <Select value={editData.city} onValueChange={(v) => setEditData({...editData, city: v})} disabled={!editData.province}>
+                          <SelectTrigger><SelectValue placeholder="Città" /></SelectTrigger>
+                          <SelectContent className="max-h-60">
+                            {getCitiesForProvince(editData.region, editData.province).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">CAP</Label>
+                        <Input value={editData.postal_code} onChange={e => setEditData({...editData, postal_code: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <Label className="text-xs">P.IVA</Label>
+                        <Input value={editData.vat_number} onChange={e => setEditData({...editData, vat_number: e.target.value})} />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Codice SDI</Label>
+                        <Input value={editData.sdi_code} onChange={e => setEditData({...editData, sdi_code: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">PEC</Label>
+                      <Input type="email" value={editData.pec} onChange={e => setEditData({...editData, pec: e.target.value})} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Note</Label>
+                      <Textarea value={editData.notes} onChange={e => setEditData({...editData, notes: e.target.value})} rows={3} />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" onClick={saveCustomer} disabled={saving} className="flex-1">
+                        <Save className="w-3 h-3 mr-1" />{saving ? 'Salvataggio...' : 'Salva'}
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => setIsEditing(false)} className="flex-1">Annulla</Button>
+                    </div>
                   </div>
-                )}
-                {customer.vat_number && (
-                  <div className="flex items-center gap-2"><Building className="w-4 h-4" /> P.IVA: {customer.vat_number}</div>
+                ) : (
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs font-medium text-muted-foreground uppercase">
+                        {CUSTOMER_TYPES.find(t => t.value === customer.customer_type)?.label || customer.customer_type}
+                      </span>
+                      <Button size="sm" variant="ghost" onClick={startEditing}>
+                        <Pencil className="w-3 h-3 mr-1" />Modifica
+                      </Button>
+                    </div>
+                    {customer.email && (
+                      <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> {customer.email}</div>
+                    )}
+                    {customer.phone && (
+                      <div className="flex items-center gap-2"><Phone className="w-4 h-4" /> {customer.phone}</div>
+                    )}
+                    {(customer.address || customer.city) && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4" /> 
+                        {[customer.address, customer.city, customer.province, customer.region].filter(Boolean).join(', ')}
+                      </div>
+                    )}
+                    {customer.vat_number && (
+                      <div className="flex items-center gap-2"><Building className="w-4 h-4" /> P.IVA: {customer.vat_number}</div>
+                    )}
+                    {customer.pec && (
+                      <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> PEC: {customer.pec}</div>
+                    )}
+                    {customer.sdi_code && (
+                      <div className="flex items-center gap-2"><FileText className="w-4 h-4" /> SDI: {customer.sdi_code}</div>
+                    )}
+                    {customer.notes && (
+                      <div className="flex items-start gap-2 pt-2 border-t"><MessageSquare className="w-4 h-4 mt-0.5" /> <span className="text-muted-foreground">{customer.notes}</span></div>
+                    )}
+                  </div>
                 )}
               </CardContent>
             </Card>
