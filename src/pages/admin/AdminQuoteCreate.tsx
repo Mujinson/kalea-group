@@ -365,7 +365,7 @@ const AdminQuoteCreate = () => {
             <Button size="sm" variant="outline" onClick={() => openCatalog(catalogCategory)}>
               <Package className="w-4 h-4 mr-1" />Catalogo
             </Button>
-            <Button size="sm" onClick={() => setItems(prev => [...prev, emptyItem()])}>
+            <Button size="sm" onClick={() => openNewItemDialog(catalogCategory)}>
               <Plus className="w-4 h-4 mr-1" />Nuovo
             </Button>
           </div>
@@ -375,69 +375,69 @@ const AdminQuoteCreate = () => {
         ) : (
           <>
             <div className="overflow-x-auto -mx-4 md:-mx-6 px-4 md:px-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-20">Codice</TableHead>
-                    <TableHead>Nome</TableHead>
-                    <TableHead className="w-28">Tonalità</TableHead>
-                    <TableHead className="w-24 text-right">Prezzo</TableHead>
-                    <TableHead className="w-20 text-right">Qtà</TableHead>
-                    <TableHead className="w-28">Unità</TableHead>
-                    <TableHead className="w-20 text-right">Sconto</TableHead>
-                    <TableHead className="w-28 text-right">Totale</TableHead>
-                    <TableHead className="w-10"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground w-[100px]">Codice</th>
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground min-w-[180px]">Nome</th>
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground w-[130px]">Tonalità</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[100px]">Prezzo</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[80px]">Qtà</th>
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground w-[130px]">Unità</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[100px]">Sconto</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[110px]">Totale</th>
+                    <th className="w-[40px]"></th>
+                  </tr>
+                </thead>
+                <tbody>
                   {items.map(item => (
-                    <TableRow key={item.id}>
-                      <TableCell>
-                        <Input value={item.code} onChange={e => updateItem(items, setItems, item.id, 'code', e.target.value)} className="h-8 text-xs" />
-                      </TableCell>
-                      <TableCell>
-                        <Input value={item.name} onChange={e => updateItem(items, setItems, item.id, 'name', e.target.value)} className="h-8 text-xs" placeholder="Nome prodotto" />
-                      </TableCell>
-                      <TableCell>
+                    <tr key={item.id} className="border-b last:border-0">
+                      <td className="py-2 px-2">
+                        <Input value={item.code} onChange={e => updateItem(items, setItems, item.id, 'code', e.target.value)} className="h-9" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input value={item.name} onChange={e => updateItem(items, setItems, item.id, 'name', e.target.value)} className="h-9" placeholder="Nome prodotto" />
+                      </td>
+                      <td className="py-2 px-2">
                         <Select value={item.color} onValueChange={v => updateItem(items, setItems, item.id, 'color', v)}>
-                          <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="—" /></SelectTrigger>
+                          <SelectTrigger className="h-9"><SelectValue placeholder="—" /></SelectTrigger>
                           <SelectContent>
                             {MGO_COLORS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                           </SelectContent>
                         </Select>
-                      </TableCell>
-                      <TableCell>
-                        <Input type="number" value={item.price || ''} onChange={e => updateItem(items, setItems, item.id, 'price', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right" />
-                      </TableCell>
-                      <TableCell>
-                        <Input type="number" value={item.quantity || ''} onChange={e => updateItem(items, setItems, item.id, 'quantity', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right" />
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input type="number" value={item.price || ''} onChange={e => updateItem(items, setItems, item.id, 'price', parseFloat(e.target.value) || 0)} className="h-9 text-right" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input type="number" value={item.quantity || ''} onChange={e => updateItem(items, setItems, item.id, 'quantity', parseFloat(e.target.value) || 0)} className="h-9 text-right" />
+                      </td>
+                      <td className="py-2 px-2">
                         <Select value={item.unit} onValueChange={v => updateItem(items, setItems, item.id, 'unit', v)}>
-                          <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
                           <SelectContent>
                             {UNITS.map(u => <SelectItem key={u} value={u}>{u}</SelectItem>)}
                           </SelectContent>
                         </Select>
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="py-2 px-2">
                         <div className="flex items-center gap-1">
-                          <Input type="number" value={item.discount || ''} onChange={e => updateItem(items, setItems, item.id, 'discount', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right w-16" />
-                          <span className="text-xs text-muted-foreground">%</span>
+                          <Input type="number" value={item.discount || ''} onChange={e => updateItem(items, setItems, item.id, 'discount', parseFloat(e.target.value) || 0)} className="h-9 text-right" />
+                          <span className="text-sm text-muted-foreground">%</span>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-right font-medium text-sm">
+                      </td>
+                      <td className="py-2 px-2 text-right font-semibold whitespace-nowrap">
                         €{calcTotal(item).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => removeItem(items, setItems, item.id)}>
-                          <Trash2 className="w-3 h-3" />
+                      </td>
+                      <td className="py-2 px-1">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => removeItem(items, setItems, item.id)}>
+                          <Trash2 className="w-4 h-4" />
                         </Button>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
+                </tbody>
+              </table>
             </div>
             <div className="flex justify-end pt-3 border-t mt-3">
               <div className="text-sm">
