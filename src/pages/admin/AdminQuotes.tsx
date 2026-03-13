@@ -398,9 +398,7 @@ const AdminQuotes = () => {
           setDialogOpen(open);
           if (!open) resetForm();
         }}>
-          <DialogTrigger asChild>
-            <Button onClick={() => { resetForm(); }}><Plus className="w-4 h-4 mr-2" />Nuovo Preventivo</Button>
-          </DialogTrigger>
+          <Button onClick={() => navigate('/admin/preventivi/nuovo')}><Plus className="w-4 h-4 mr-2" />Nuovo Preventivo</Button>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingQuote ? 'Modifica Preventivo' : 'Nuovo Preventivo'}</DialogTitle>
