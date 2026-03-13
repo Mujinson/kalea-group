@@ -64,6 +64,13 @@ interface LineItem {
   total: number;
 }
 
+// "Nuovo" dialog state
+type NewItemDialogState = {
+  open: boolean;
+  target: 'article' | 'accessory' | 'service';
+  selectedProduct: CatalogProduct | null;
+};
+
 interface Customer {
   id: string;
   company_name: string | null;
