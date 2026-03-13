@@ -91,7 +91,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     setLoading(true);
     
     try {
-      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes, quotesRes, costsRes] = await Promise.all([
+      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes, quotesRes, costsRes, docsRes] = await Promise.all([
         supabase.from('customers').select('*').eq('id', customerId).single(),
         supabase.from('sales').select('*').eq('customer_id', customerId).order('sale_date', { ascending: false }),
         supabase.from('customer_visits').select('*').eq('customer_id', customerId).order('visit_date', { ascending: false }),
@@ -100,6 +100,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         supabase.from('customer_contracts').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
         supabase.from('quotes').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
         supabase.from('static_costs').select('*'),
+        supabase.from('customer_documents').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
       ]);
 
       if (customerRes.data) setCustomer(customerRes.data);
@@ -110,6 +111,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
       setContracts(contractsRes.data || []);
       setQuotes(quotesRes.data || []);
       setStaticCosts(costsRes.data || []);
+      setDocuments(docsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
