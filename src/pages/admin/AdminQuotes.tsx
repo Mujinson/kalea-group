@@ -44,6 +44,7 @@ interface Quote {
   items: QuoteItem[];
   created_at: string;
   converted_sale_id: string | null;
+  created_by: string | null;
   customer?: { company_name: string | null; first_name: string | null; last_name: string | null };
 }
 
