@@ -370,15 +370,19 @@ const AdminQuotes = () => {
     }
   };
 
+  const QUOTE_STATUSES = [
+    { value: 'draft', label: 'Nuova', color: 'bg-blue-100 text-blue-700 border-blue-300' },
+    { value: 'sent', label: 'Inviata', color: 'bg-orange-100 text-orange-700 border-orange-300' },
+    { value: 'in_trattativa', label: 'In trattativa', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+    { value: 'accepted', label: 'Accettata', color: 'bg-teal-100 text-teal-700 border-teal-300' },
+    { value: 'converted', label: 'Vinta', color: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+    { value: 'rejected', label: 'Persa', color: 'bg-red-100 text-red-700 border-red-300' },
+    { value: 'expired', label: 'Scaduta', color: 'bg-gray-100 text-gray-600 border-gray-300' },
+  ];
+
   const getStatusBadge = (status: string) => {
-    const styles: Record<string, string> = {
-      draft: 'bg-gray-100 text-gray-800',
-      sent: 'bg-blue-100 text-blue-800',
-      accepted: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      converted: 'bg-purple-100 text-purple-800',
-    };
-    return styles[status] || styles.draft;
+    const s = QUOTE_STATUSES.find(qs => qs.value === status) || QUOTE_STATUSES[0];
+    return <Badge variant="outline" className={`${s.color} text-xs font-medium`}>● {s.label}</Badge>;
   };
 
   const getCustomerName = (quote: Quote) => {
