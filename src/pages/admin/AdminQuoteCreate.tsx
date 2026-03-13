@@ -119,6 +119,13 @@ const AdminQuoteCreate = () => {
   const [catalogTarget, setCatalogTarget] = useState<'article' | 'accessory' | 'service'>('article');
   const [catalogSearch, setCatalogSearch] = useState('');
 
+  // "Nuovo" dialog (Geopietra-style)
+  const [newItemDialog, setNewItemDialog] = useState<NewItemDialogState>({
+    open: false, target: 'article', selectedProduct: null,
+  });
+  const [newItemCatalogOpen, setNewItemCatalogOpen] = useState(false);
+  const [newItemCatalogSearch, setNewItemCatalogSearch] = useState('');
+
   // Form
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
