@@ -48,6 +48,7 @@ import AdminImport from "./pages/admin/AdminImport";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
+import AdminQuoteCreate from "./pages/admin/AdminQuoteCreate";
 import AdminLeads from "./pages/admin/AdminLeads";
 
 
@@ -105,6 +106,8 @@ const App = () => (
                 {/* Italian slugs (used in sidebar) */}
                 <Route path="vendite" element={<AdminSales />} />
                 <Route path="preventivi" element={<AdminQuotes />} />
+                <Route path="preventivi/nuovo" element={<AdminQuoteCreate />} />
+                <Route path="preventivi/modifica" element={<AdminQuoteCreate />} />
                 <Route path="clienti" element={<AdminCustomers />} />
                 <Route path="magazzino" element={<AdminInventory />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
