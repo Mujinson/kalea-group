@@ -698,7 +698,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
 
               {/* Quotes Tab */}
               <TabsContent value="quotes" className="space-y-2">
-                <Button size="sm" variant="outline" className="w-full" onClick={() => window.location.href = '/admin/preventivi'}>
+                <Button size="sm" variant="outline" className="w-full" onClick={() => window.location.href = `/admin/preventivi/nuovo?customer=${customerId}`}>
                   <Plus className="w-3 h-3 mr-1" />Crea Preventivo
                 </Button>
                 {quotes.length === 0 ? (
