@@ -148,11 +148,17 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         sdi_code: editData.sdi_code || null,
         notes: editData.notes || null,
       };
-      const { error } = await supabase.from('customers').update(updatePayload).eq('id', customerId);
+      const { data, error } = await supabase
+        .from('customers')
+        .update(updatePayload)
+        .eq('id', customerId)
+        .select()
+        .single();
       if (error) throw error;
-      setCustomer({ ...customer, ...updatePayload });
+      // Use the returned data from DB to ensure consistency
+      if (data) setCustomer(data);
       setIsEditing(false);
-      onUpdate();
+      onUpdate(); // refresh parent list
       toast.success('Cliente aggiornato');
     } catch (error) {
       console.error('Error updating customer:', error);
