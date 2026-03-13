@@ -13,7 +13,7 @@ export const useDragScroll = (options: UseDragScrollOptions = {}) => {
   const scrollLeftRef = useRef(0);
   const animationRef = useRef<number | null>(null);
   const isPausedRef = useRef(false);
-  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Keep track of scroll position as a decimal to avoid browser rounding issues
   const currentScrollRef = useRef<number | null>(null);
