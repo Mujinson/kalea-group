@@ -61,11 +61,24 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   // Form states
   const [newVisit, setNewVisit] = useState({ visit_date: '', visit_type: '', outcome: '', notes: '' });
   const [newReminder, setNewReminder] = useState({ title: '', reminder_date: '', description: '' });
-  const [newAction, setNewAction] = useState('');
+  const [newAction, setNewAction] = useState({
+    action_type: 'call',
+    action_description: '',
+    contact_person_name: '',
+    contact_person_role: '',
+    contact_person_contact: '',
+    next_steps: '',
+  });
   const [newContract, setNewContract] = useState({ title: '', contract_type: '', value: '', start_date: '', notes: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<any>({});
   const [saving, setSaving] = useState(false);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [newDocTitle, setNewDocTitle] = useState('');
+  const [newDocType, setNewDocType] = useState('altro');
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  const docFileRef = useRef<HTMLInputElement>(null);
+  const [pendingDocId, setPendingDocId] = useState<string | null>(null);
 
   useEffect(() => {
     if (customerId && open) {
