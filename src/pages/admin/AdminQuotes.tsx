@@ -11,7 +11,9 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Plus, Send, FileText, CheckCircle2, X, Trash2, Eye, Edit } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import { Plus, Send, FileText, CheckCircle2, X, Trash2, Eye, Edit, Search, MoreVertical, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -42,6 +44,7 @@ interface Quote {
   items: QuoteItem[];
   created_at: string;
   converted_sale_id: string | null;
+  created_by: string | null;
   customer?: { company_name: string | null; first_name: string | null; last_name: string | null };
 }
 
@@ -56,6 +59,8 @@ const AdminQuotes = () => {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   // Form state
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
@@ -368,15 +373,19 @@ const AdminQuotes = () => {
     }
   };
 
+  const QUOTE_STATUSES = [
+    { value: 'draft', label: 'Nuova', color: 'bg-blue-100 text-blue-700 border-blue-300' },
+    { value: 'sent', label: 'Inviata', color: 'bg-orange-100 text-orange-700 border-orange-300' },
+    { value: 'in_trattativa', label: 'In trattativa', color: 'bg-amber-100 text-amber-700 border-amber-300' },
+    { value: 'accepted', label: 'Accettata', color: 'bg-teal-100 text-teal-700 border-teal-300' },
+    { value: 'converted', label: 'Vinta', color: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+    { value: 'rejected', label: 'Persa', color: 'bg-red-100 text-red-700 border-red-300' },
+    { value: 'expired', label: 'Scaduta', color: 'bg-gray-100 text-gray-600 border-gray-300' },
+  ];
+
   const getStatusBadge = (status: string) => {
-    const styles: Record<string, string> = {
-      draft: 'bg-gray-100 text-gray-800',
-      sent: 'bg-blue-100 text-blue-800',
-      accepted: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      converted: 'bg-purple-100 text-purple-800',
-    };
-    return styles[status] || styles.draft;
+    const s = QUOTE_STATUSES.find(qs => qs.value === status) || QUOTE_STATUSES[0];
+    return <Badge variant="outline" className={`${s.color} text-xs font-medium`}>● {s.label}</Badge>;
   };
 
   const getCustomerName = (quote: Quote) => {
@@ -387,255 +396,160 @@ const AdminQuotes = () => {
 
   const { subtotal, vat, total } = calculateTotals();
 
+  const filteredQuotes = quotes.filter(q => {
+    const customerName = getCustomerName(q).toLowerCase();
+    const matchSearch = searchTerm === '' ||
+      customerName.includes(searchTerm.toLowerCase()) ||
+      (q.quote_number && q.quote_number.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchStatus = statusFilter === 'all' || q.status === statusFilter;
+    return matchSearch && matchStatus;
+  });
+
+  const statCounts = {
+    total: quotes.length,
+    nuove: quotes.filter(q => q.status === 'draft').length,
+    inviate: quotes.filter(q => q.status === 'sent').length,
+    in_trattativa: quotes.filter(q => q.status === 'in_trattativa').length,
+    vinte: quotes.filter(q => q.status === 'converted' || q.status === 'accepted').length,
+    perse: quotes.filter(q => q.status === 'rejected').length,
+  };
+
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
+          <p className="text-sm text-muted-foreground">Preventivi &gt; Lista</p>
           <h2 className="text-xl md:text-2xl font-bold">Preventivi</h2>
-          <p className="text-sm text-muted-foreground">Gestione preventivi e conversione in vendite</p>
         </div>
-        <Dialog open={dialogOpen} onOpenChange={(open) => {
-          setDialogOpen(open);
-          if (!open) resetForm();
-        }}>
-          <Button onClick={() => navigate('/admin/preventivi/nuovo')}><Plus className="w-4 h-4 mr-2" />Nuovo Preventivo</Button>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{editingQuote ? 'Modifica Preventivo' : 'Nuovo Preventivo'}</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              {/* Customer Selection */}
-              <div className="space-y-2">
-                <Label>Cliente *</Label>
-                <Select value={selectedCustomerId} onValueChange={setSelectedCustomerId}>
-                  <SelectTrigger><SelectValue placeholder="Seleziona cliente" /></SelectTrigger>
-                  <SelectContent className="max-h-60">
-                    {customers.map(c => (
-                      <SelectItem key={c.id} value={c.id}>
-                        {c.company_name || `${c.first_name} ${c.last_name}`}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Validity Date */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Valido fino a</Label>
-                  <Input type="date" value={validUntil} onChange={e => setValidUntil(e.target.value)} />
-                </div>
-                <div className="flex items-center gap-2 pt-6">
-                  <Checkbox 
-                    id="vatIncluded" 
-                    checked={vatIncluded} 
-                    onCheckedChange={(c) => setVatIncluded(c === true)} 
-                  />
-                  <Label htmlFor="vatIncluded">IVA inclusa</Label>
-                </div>
-              </div>
-
-              {/* Add Product */}
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm">Aggiungi Prodotto</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
-                    <Select value={newItemProductType} onValueChange={setNewItemProductType}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="MgO">MgO</SelectItem>
-                        <SelectItem value="CWC">CWC</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {newItemProductType === 'MgO' ? (
-                      <Select value={newItemColor} onValueChange={setNewItemColor}>
-                        <SelectTrigger><SelectValue placeholder="Colore" /></SelectTrigger>
-                        <SelectContent>
-                          {MGO_COLORS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    ) : (
-                      <Select value={newItemColor} onValueChange={setNewItemColor}>
-                        <SelectTrigger><SelectValue placeholder="Variante" /></SelectTrigger>
-                        <SelectContent>
-                          {CWC_VARIANTS.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <Input 
-                      type="number" 
-                      placeholder="Quantità mq" 
-                      value={newItemQty}
-                      onChange={e => setNewItemQty(e.target.value)}
-                    />
-                    <Input 
-                      type="number" 
-                      placeholder="€/mq" 
-                      value={newItemPrice}
-                      onChange={e => setNewItemPrice(e.target.value)}
-                    />
-                    <Button onClick={addItem}><Plus className="w-4 h-4" /></Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Items List */}
-              {items.length > 0 && (
-                <div className="space-y-2">
-                  {items.map(item => (
-                    <div key={item.id} className="flex items-center justify-between p-2 border rounded text-sm">
-                      <div>
-                        <span className="font-medium">{item.product_type}</span>
-                        {item.color && <span className="text-muted-foreground ml-2">{item.color}</span>}
-                        <span className="text-muted-foreground ml-2">• {item.quantity_sqm} mq × €{item.unit_price}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold">€{item.total_price.toLocaleString()}</span>
-                        <Button size="icon" variant="ghost" onClick={() => removeItem(item.id)}>
-                          <X className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Totals */}
-              {items.length > 0 && (
-                <div className="border-t pt-3 space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span>Subtotale</span>
-                    <span>€{subtotal.toLocaleString()}</span>
-                  </div>
-                  {!vatIncluded && (
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>IVA 22%</span>
-                      <span>€{vat.toLocaleString()}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between font-bold text-lg">
-                    <span>Totale</span>
-                    <span>€{total.toLocaleString()}</span>
-                  </div>
-                </div>
-              )}
-
-              {/* Notes */}
-              <div className="space-y-2">
-                <Label>Note</Label>
-                <Textarea 
-                  value={notes} 
-                  onChange={e => setNotes(e.target.value)}
-                  placeholder="Note aggiuntive..."
-                />
-              </div>
-
-              <Button onClick={handleSubmit} className="w-full">
-                {editingQuote ? 'Aggiorna Preventivo' : 'Crea Preventivo'}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => navigate('/admin/preventivi/nuovo')}>
+          <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
+        </Button>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card>
-          <CardContent className="p-3">
-            <div className="text-xs text-muted-foreground">Totale Preventivi</div>
-            <div className="text-2xl font-bold">{quotes.length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-3">
-            <div className="text-xs text-muted-foreground">In attesa</div>
-            <div className="text-2xl font-bold">{quotes.filter(q => q.status === 'sent').length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-3">
-            <div className="text-xs text-muted-foreground">Convertiti</div>
-            <div className="text-2xl font-bold">{quotes.filter(q => q.status === 'converted').length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-3">
-            <div className="text-xs text-muted-foreground">Valore Totale</div>
-            <div className="text-xl font-bold">
-              €{quotes.reduce((sum, q) => sum + (q.total_amount || 0), 0).toLocaleString()}
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
+        {[
+          { label: 'Totale', count: statCounts.total, color: '' },
+          { label: 'Nuove', count: statCounts.nuove, color: 'text-blue-600' },
+          { label: 'Inviate', count: statCounts.inviate, color: 'text-orange-600' },
+          { label: 'In trattativa', count: statCounts.in_trattativa, color: 'text-amber-600' },
+          { label: 'Vinte', count: statCounts.vinte, color: 'text-emerald-600' },
+          { label: 'Perse', count: statCounts.perse, color: 'text-red-600' },
+        ].map(s => (
+          <Card key={s.label}>
+            <CardContent className="p-3">
+              <p className="text-xs text-muted-foreground">{s.label}</p>
+              <p className={`text-xl font-bold ${s.color}`}>{s.count}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* Quotes List */}
+      {/* Filters */}
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">{quotes.length} preventivi</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p className="text-center py-8">Caricamento...</p>
-          ) : quotes.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">Nessun preventivo</p>
-          ) : (
-            <div className="space-y-2">
-              {quotes.map(quote => (
-                <div key={quote.id} className="p-3 border rounded-lg">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium">{quote.quote_number || `#${quote.id.slice(0,6)}`}</span>
-                        <Badge className={getStatusBadge(quote.status)}>{quote.status}</Badge>
-                      </div>
-                      <div className="text-sm text-muted-foreground mt-1">
-                        {getCustomerName(quote)} • {format(new Date(quote.created_at), 'dd/MM/yyyy', { locale: it })}
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="font-bold">€{(quote.total_amount || 0).toLocaleString()}</div>
-                    </div>
-                  </div>
-                  
-                  {/* Actions */}
-                  <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t">
-                    {/* View/Edit button */}
-                    <Button size="sm" variant="ghost" onClick={() => navigate(`/admin/preventivi/modifica?edit=${quote.id}`)}>
-                      <Eye className="w-3 h-3 mr-1" />{quote.status === 'converted' ? 'Visualizza' : 'Apri'}
-                    </Button>
-                    {quote.status === 'draft' && (
-                      <Button size="sm" variant="outline" onClick={() => sendQuoteByEmail(quote)}>
-                        <Send className="w-3 h-3 mr-1" />Invia
-                      </Button>
-                    )}
-                    {quote.status === 'sent' && (
-                      <>
-                        <Button size="sm" variant="default" onClick={() => convertToSale(quote)}>
-                          <CheckCircle2 className="w-3 h-3 mr-1" />Converti in Vendita
-                        </Button>
-                        <Button size="sm" variant="outline" onClick={() => updateQuoteStatus(quote.id, 'rejected')}>
-                          <X className="w-3 h-3 mr-1" />Rifiutato
-                        </Button>
-                      </>
-                    )}
-                    {quote.status === 'converted' && (
-                      <Badge variant="outline" className="bg-green-50">
-                        <CheckCircle2 className="w-3 h-3 mr-1" />Convertito
-                      </Badge>
-                    )}
-                    {/* Delete button - always available */}
-                    <Button size="sm" variant="ghost" onClick={() => handleDeleteQuote(quote)}>
-                      <Trash2 className="w-3 h-3 text-destructive" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row gap-3 items-end">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input placeholder="Cerca per cliente o codice..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
             </div>
-          )}
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[180px]"><SelectValue placeholder="Stato" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Tutti gli stati</SelectItem>
+                {QUOTE_STATUSES.map(s => (
+                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Table */}
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Codice</TableHead>
+                <TableHead>Cliente</TableHead>
+                <TableHead>Stato</TableHead>
+                <TableHead>Responsabile</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead className="text-right">Totale</TableHead>
+                <TableHead className="w-10"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {loading ? (
+                <TableRow><TableCell colSpan={7} className="text-center py-8">Caricamento...</TableCell></TableRow>
+              ) : filteredQuotes.length > 0 ? (
+                filteredQuotes.map(quote => (
+                  <TableRow
+                    key={quote.id}
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => navigate(`/admin/preventivi/modifica?edit=${quote.id}`)}
+                  >
+                    <TableCell className="font-mono text-xs text-primary">
+                      {quote.quote_number || `#${quote.id.slice(0,8)}`}
+                    </TableCell>
+                    <TableCell className="font-medium">{getCustomerName(quote)}</TableCell>
+                    <TableCell>{getStatusBadge(quote.status)}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{quote.created_by || '-'}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {format(new Date(quote.created_at), 'dd MMM yyyy', { locale: it })}
+                    </TableCell>
+                    <TableCell className="text-right font-medium">
+                      €{(quote.total_amount || 0).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreVertical className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={e => { e.stopPropagation(); navigate(`/admin/preventivi/modifica?edit=${quote.id}`); }}>
+                            <Eye className="w-4 h-4 mr-2" />Apri
+                          </DropdownMenuItem>
+                          {quote.status === 'draft' && (
+                            <DropdownMenuItem onClick={e => { e.stopPropagation(); sendQuoteByEmail(quote); }}>
+                              <Send className="w-4 h-4 mr-2" />Invia
+                            </DropdownMenuItem>
+                          )}
+                          <DropdownMenuSeparator />
+                          {QUOTE_STATUSES.filter(s => s.value !== quote.status).map(s => (
+                            <DropdownMenuItem key={s.value} onClick={e => {
+                              e.stopPropagation();
+                              if (s.value === 'converted') {
+                                convertToSale(quote);
+                              } else {
+                                updateQuoteStatus(quote.id, s.value);
+                              }
+                            }}>
+                              Segna come: {s.label}
+                            </DropdownMenuItem>
+                          ))}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem className="text-destructive" onClick={e => { e.stopPropagation(); handleDeleteQuote(quote); }}>
+                            <Trash2 className="w-4 h-4 mr-2" />Elimina
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    {searchTerm || statusFilter !== 'all' ? 'Nessun preventivo trovato' : 'Nessun preventivo'}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>
