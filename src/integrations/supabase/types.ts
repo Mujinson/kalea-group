@@ -71,25 +71,37 @@ export type Database = {
         Row: {
           action_description: string
           action_type: string
+          contact_person_contact: string | null
+          contact_person_name: string | null
+          contact_person_role: string | null
           created_at: string
           customer_id: string
           id: string
+          next_steps: string | null
           user_email: string | null
         }
         Insert: {
           action_description: string
           action_type: string
+          contact_person_contact?: string | null
+          contact_person_name?: string | null
+          contact_person_role?: string | null
           created_at?: string
           customer_id: string
           id?: string
+          next_steps?: string | null
           user_email?: string | null
         }
         Update: {
           action_description?: string
           action_type?: string
+          contact_person_contact?: string | null
+          contact_person_name?: string | null
+          contact_person_role?: string | null
           created_at?: string
           customer_id?: string
           id?: string
+          next_steps?: string | null
           user_email?: string | null
         }
         Relationships: [
@@ -164,6 +176,47 @@ export type Database = {
             columns: ["sale_id"]
             isOneToOne: false
             referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_documents: {
+        Row: {
+          created_at: string
+          customer_id: string
+          document_type: string
+          file_url: string | null
+          id: string
+          notes: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          document_type?: string
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          document_type?: string
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_documents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
             referencedColumns: ["id"]
           },
         ]
@@ -508,39 +561,65 @@ export type Database = {
       }
       leads: {
         Row: {
+          assigned_salesperson_id: string | null
+          city: string | null
           company_name: string | null
           created_at: string
           email: string
           id: string
           ip_address: string | null
           name: string
+          notes: string | null
           phone: string
+          province: string | null
+          region: string | null
           source: string | null
+          status: string
           updated_at: string
         }
         Insert: {
+          assigned_salesperson_id?: string | null
+          city?: string | null
           company_name?: string | null
           created_at?: string
           email: string
           id?: string
           ip_address?: string | null
           name: string
+          notes?: string | null
           phone: string
+          province?: string | null
+          region?: string | null
           source?: string | null
+          status?: string
           updated_at?: string
         }
         Update: {
+          assigned_salesperson_id?: string | null
+          city?: string | null
           company_name?: string | null
           created_at?: string
           email?: string
           id?: string
           ip_address?: string | null
           name?: string
+          notes?: string | null
           phone?: string
+          province?: string | null
+          region?: string | null
           source?: string | null
+          status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "leads_assigned_salesperson_id_fkey"
+            columns: ["assigned_salesperson_id"]
+            isOneToOne: false
+            referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payment_agreements: {
         Row: {

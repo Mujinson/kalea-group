@@ -61,11 +61,24 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   // Form states
   const [newVisit, setNewVisit] = useState({ visit_date: '', visit_type: '', outcome: '', notes: '' });
   const [newReminder, setNewReminder] = useState({ title: '', reminder_date: '', description: '' });
-  const [newAction, setNewAction] = useState('');
+  const [newAction, setNewAction] = useState({
+    action_type: 'call',
+    action_description: '',
+    contact_person_name: '',
+    contact_person_role: '',
+    contact_person_contact: '',
+    next_steps: '',
+  });
   const [newContract, setNewContract] = useState({ title: '', contract_type: '', value: '', start_date: '', notes: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<any>({});
   const [saving, setSaving] = useState(false);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [newDocTitle, setNewDocTitle] = useState('');
+  const [newDocType, setNewDocType] = useState('altro');
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  const docFileRef = useRef<HTMLInputElement>(null);
+  const [pendingDocId, setPendingDocId] = useState<string | null>(null);
 
   useEffect(() => {
     if (customerId && open) {
@@ -78,7 +91,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     setLoading(true);
     
     try {
-      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes, quotesRes, costsRes] = await Promise.all([
+      const [customerRes, salesRes, visitsRes, remindersRes, logsRes, contractsRes, quotesRes, costsRes, docsRes] = await Promise.all([
         supabase.from('customers').select('*').eq('id', customerId).single(),
         supabase.from('sales').select('*').eq('customer_id', customerId).order('sale_date', { ascending: false }),
         supabase.from('customer_visits').select('*').eq('customer_id', customerId).order('visit_date', { ascending: false }),
@@ -87,6 +100,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
         supabase.from('customer_contracts').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
         supabase.from('quotes').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
         supabase.from('static_costs').select('*'),
+        supabase.from('customer_documents').select('*').eq('customer_id', customerId).order('created_at', { ascending: false }),
       ]);
 
       if (customerRes.data) setCustomer(customerRes.data);
@@ -97,6 +111,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
       setContracts(contractsRes.data || []);
       setQuotes(quotesRes.data || []);
       setStaticCosts(costsRes.data || []);
+      setDocuments(docsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -228,16 +243,81 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
   };
 
   const addActionLog = async () => {
-    if (!customerId || !newAction) return;
+    if (!customerId || !newAction.action_description) return;
     try {
       await supabase.from('customer_action_logs').insert({
         customer_id: customerId,
-        action_type: 'note',
-        action_description: newAction,
+        action_type: newAction.action_type,
+        action_description: newAction.action_description,
+        contact_person_name: newAction.contact_person_name || null,
+        contact_person_role: newAction.contact_person_role || null,
+        contact_person_contact: newAction.contact_person_contact || null,
+        next_steps: newAction.next_steps || null,
       });
-      setNewAction('');
+      setNewAction({ action_type: 'call', action_description: '', contact_person_name: '', contact_person_role: '', contact_person_contact: '', next_steps: '' });
       fetchAllData();
-      toast.success('Nota aggiunta');
+      toast.success('Attività aggiunta');
+    } catch (error) {
+      toast.error('Errore');
+    }
+  };
+
+  const addDocument = async () => {
+    if (!customerId || !newDocTitle) return;
+    try {
+      const { data } = await supabase.from('customer_documents').insert({
+        customer_id: customerId,
+        title: newDocTitle,
+        document_type: newDocType,
+      }).select().single();
+      setNewDocTitle('');
+      setNewDocType('altro');
+      fetchAllData();
+      toast.success('Documento aggiunto');
+      if (data) setPendingDocId(data.id);
+    } catch (error) {
+      toast.error('Errore');
+    }
+  };
+
+  const handleDocUpload = async (docId: string, file: File) => {
+    setUploadingDoc(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${customerId}/${docId}/${Date.now()}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage.from('customer-documents').upload(fileName, file);
+      if (uploadError) throw uploadError;
+      await supabase.from('customer_documents').update({ file_url: fileName }).eq('id', docId);
+      fetchAllData();
+      toast.success('File caricato');
+    } catch (error) {
+      toast.error('Errore caricamento');
+    } finally {
+      setUploadingDoc(false);
+    }
+  };
+
+  const downloadDoc = async (fileUrl: string, title: string) => {
+    try {
+      const { data, error } = await supabase.storage.from('customer-documents').download(fileUrl);
+      if (error) throw error;
+      const url = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${title}.${fileUrl.split('.').pop()}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toast.error('Errore download');
+    }
+  };
+
+  const deleteDoc = async (id: string, fileUrl?: string) => {
+    try {
+      if (fileUrl) await supabase.storage.from('customer-documents').remove([fileUrl]);
+      await supabase.from('customer_documents').delete().eq('id', id);
+      fetchAllData();
+      toast.success('Documento eliminato');
     } catch (error) {
       toast.error('Errore');
     }
@@ -651,12 +731,13 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
             </Card>
 
             <Tabs defaultValue="sales" className="w-full">
-              <TabsList className="grid grid-cols-6 w-full">
+              <TabsList className="grid grid-cols-7 w-full">
                 <TabsTrigger value="sales" className="text-xs">Vendite</TabsTrigger>
                 <TabsTrigger value="quotes" className="text-xs">Preventivi</TabsTrigger>
                 <TabsTrigger value="visits" className="text-xs">Visite</TabsTrigger>
                 <TabsTrigger value="reminders" className="text-xs">Reminder</TabsTrigger>
                 <TabsTrigger value="actions" className="text-xs">Log</TabsTrigger>
+                <TabsTrigger value="docs" className="text-xs">Documenti</TabsTrigger>
                 <TabsTrigger value="contracts" className="text-xs">Contratti</TabsTrigger>
               </TabsList>
 
@@ -803,27 +884,129 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
 
               {/* Action Log Tab */}
               <TabsContent value="actions" className="space-y-3">
-                <div className="flex gap-2">
-                  <Input 
-                    placeholder="Aggiungi nota..."
-                    value={newAction}
-                    onChange={e => setNewAction(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && addActionLog()}
-                  />
-                  <Button size="sm" onClick={addActionLog}><Plus className="w-3 h-3" /></Button>
-                </div>
+                <Card>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      <Select value={newAction.action_type} onValueChange={v => setNewAction({...newAction, action_type: v})}>
+                        <SelectTrigger className="text-xs"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="call">📞 Chiamata</SelectItem>
+                          <SelectItem value="meeting">🤝 Meeting</SelectItem>
+                          <SelectItem value="email">📧 Email</SelectItem>
+                          <SelectItem value="visita">🏢 Visita</SelectItem>
+                          <SelectItem value="nota">📝 Nota</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={newAction.contact_person_role} onValueChange={v => setNewAction({...newAction, contact_person_role: v})}>
+                        <SelectTrigger className="text-xs"><SelectValue placeholder="Ruolo contatto" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ceo">CEO / Titolare</SelectItem>
+                          <SelectItem value="direttore">Direttore</SelectItem>
+                          <SelectItem value="architetto">Architetto</SelectItem>
+                          <SelectItem value="geometra">Geometra</SelectItem>
+                          <SelectItem value="segreteria">Segreteria</SelectItem>
+                          <SelectItem value="responsabile_acquisti">Resp. Acquisti</SelectItem>
+                          <SelectItem value="tecnico">Tecnico</SelectItem>
+                          <SelectItem value="altro">Altro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input placeholder="Nome persona" className="text-xs" value={newAction.contact_person_name} onChange={e => setNewAction({...newAction, contact_person_name: e.target.value})} />
+                      <Input placeholder="Contatto (tel/email)" className="text-xs" value={newAction.contact_person_contact} onChange={e => setNewAction({...newAction, contact_person_contact: e.target.value})} />
+                    </div>
+                    <Textarea placeholder="Cosa è stato discusso..." rows={2} className="text-xs" value={newAction.action_description} onChange={e => setNewAction({...newAction, action_description: e.target.value})} />
+                    <Input placeholder="Next steps..." className="text-xs" value={newAction.next_steps} onChange={e => setNewAction({...newAction, next_steps: e.target.value})} />
+                    <Button size="sm" onClick={addActionLog} className="w-full"><Plus className="w-3 h-3 mr-1" />Aggiungi Attività</Button>
+                  </CardContent>
+                </Card>
                 
-                <div className="space-y-2 mt-4">
+                <div className="space-y-2">
                   {actionLogs.map(log => (
                     <Card key={log.id}>
-                      <CardContent className="p-3 text-sm">
-                        <p>{log.action_description}</p>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          {format(new Date(log.created_at), 'dd/MM/yyyy HH:mm')}
+                      <CardContent className="p-3 text-sm space-y-1">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">
+                              {log.action_type === 'call' ? '📞' : log.action_type === 'meeting' ? '🤝' : log.action_type === 'email' ? '📧' : log.action_type === 'visita' ? '🏢' : '📝'} {log.action_type}
+                            </Badge>
+                            {log.contact_person_role && (
+                              <span className="text-xs text-muted-foreground capitalize">{log.contact_person_role}</span>
+                            )}
+                          </div>
+                          <span className="text-xs text-muted-foreground">{format(new Date(log.created_at), 'dd/MM/yy HH:mm')}</span>
+                        </div>
+                        {log.contact_person_name && (
+                          <p className="text-xs"><span className="text-muted-foreground">Con:</span> {log.contact_person_name} {log.contact_person_contact && `(${log.contact_person_contact})`}</p>
+                        )}
+                        <p className="text-sm">{log.action_description}</p>
+                        {log.next_steps && (
+                          <p className="text-xs text-primary font-medium">→ Next: {log.next_steps}</p>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Documents Tab */}
+              <TabsContent value="docs" className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <Input placeholder="Titolo documento" value={newDocTitle} onChange={e => setNewDocTitle(e.target.value)} />
+                  <Select value={newDocType} onValueChange={setNewDocType}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="visura_camerale">Visura Camerale</SelectItem>
+                      <SelectItem value="contratto_vendita">Contratto Vendita B2B</SelectItem>
+                      <SelectItem value="documento_identita">Documento Identità</SelectItem>
+                      <SelectItem value="preventivo_firmato">Preventivo Firmato</SelectItem>
+                      <SelectItem value="ordine">Ordine</SelectItem>
+                      <SelectItem value="fattura">Fattura</SelectItem>
+                      <SelectItem value="altro">Altro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button size="sm" onClick={addDocument}><Plus className="w-3 h-3 mr-1" />Aggiungi Documento</Button>
+
+                <input type="file" className="hidden" ref={docFileRef} onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (file && pendingDocId) handleDocUpload(pendingDocId, file);
+                }} />
+                
+                <div className="space-y-2 mt-4">
+                  {documents.map((doc: any) => (
+                    <Card key={doc.id}>
+                      <CardContent className="p-3 text-sm space-y-2">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="font-medium">{doc.title}</span>
+                            <Badge variant="outline" className="ml-2 text-xs">{doc.document_type}</Badge>
+                          </div>
+                          <span className="text-xs text-muted-foreground">{format(new Date(doc.created_at), 'dd/MM/yyyy')}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {doc.file_url ? (
+                            <>
+                              <Button size="sm" variant="outline" onClick={() => downloadDoc(doc.file_url, doc.title)}>
+                                <Download className="w-3 h-3 mr-1" />Scarica
+                              </Button>
+                            </>
+                          ) : (
+                            <Button size="sm" variant="outline" disabled={uploadingDoc} onClick={() => {
+                              setPendingDocId(doc.id);
+                              docFileRef.current?.click();
+                            }}>
+                              <Upload className="w-3 h-3 mr-1" />{uploadingDoc ? 'Caricamento...' : 'Carica file'}
+                            </Button>
+                          )}
+                          <Button size="sm" variant="ghost" className="text-destructive" onClick={() => deleteDoc(doc.id, doc.file_url)}>
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
                   ))}
+                  {documents.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">Nessun documento</p>}
                 </div>
               </TabsContent>
 
