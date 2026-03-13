@@ -5,7 +5,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import { Loader2 } from 'lucide-react';
-import logoKalea from '@/assets/logo-kalea-cream.png';
+import logoDark from '@/assets/logo-new.png';
 
 const AdminLayout = () => {
   const { user, isAdmin, loading } = useAdminAuth();
