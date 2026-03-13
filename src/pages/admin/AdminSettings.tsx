@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { toast } from 'sonner';
 import { UserPlus, Trash2, Shield, Users, AlertTriangle, Key } from 'lucide-react';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
+import CommercialiSection from '@/components/admin/CommercialiSection';
 
 interface AdminUser {
   id: string;
@@ -315,6 +316,9 @@ const AdminSettings = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Commerciali Section */}
+      <CommercialiSection />
 
       {/* Current User Info */}
       <Card>
