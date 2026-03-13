@@ -10,9 +10,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { ArrowLeft, Save, X, Search, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, X, Search, Plus, Trash2, Package } from 'lucide-react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { PRODUCT_CATALOG, CatalogProduct } from '@/data/quoteProducts';
 
 const QUOTE_STATUSES = [
   { value: 'draft', label: 'Bozza' },
@@ -82,6 +84,11 @@ const emptyItem = (): LineItem => ({
   code: '', name: '', description: '', color: '', price: 0, quantity: 0, unit: 'Metro quadro', discount: 0, total: 0,
 });
 
+const fromCatalog = (p: CatalogProduct): LineItem => ({
+  id: Date.now().toString() + Math.random().toString(36).slice(2),
+  code: p.code, name: p.name, description: '', color: '', price: p.defaultPrice, quantity: 1, unit: p.defaultUnit, discount: 0, total: p.defaultPrice,
+});
+
 const calcTotal = (item: LineItem) => {
   const sub = item.price * item.quantity;
   return sub - (sub * item.discount / 100);
@@ -99,6 +106,11 @@ const AdminQuoteCreate = () => {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [customerSearch, setCustomerSearch] = useState('');
+
+  // Catalog dialog
+  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [catalogTarget, setCatalogTarget] = useState<'article' | 'accessory' | 'service'>('article');
+  const [catalogSearch, setCatalogSearch] = useState('');
 
   // Form
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
@@ -147,7 +159,6 @@ const AdminQuoteCreate = () => {
     setCustomers(custList);
     setSalespeople(spRes.data || []);
 
-    // Pre-select customer from URL param
     const custId = preselectedCustomerId;
     if (custId) {
       const c = custList.find(c => c.id === custId);
@@ -179,7 +190,6 @@ const AdminQuoteCreate = () => {
     setPaymentTermsText(data.payment_terms_text || '');
     setNotes(data.notes || '');
 
-    // Load items from JSON
     const items = data.items as any;
     if (items) {
       setArticles(items.articles || []);
@@ -207,7 +217,6 @@ const AdminQuoteCreate = () => {
     return getCustomerName(c).toLowerCase().includes(customerSearch.toLowerCase());
   });
 
-  // Line items helpers
   const updateItem = (list: LineItem[], setList: React.Dispatch<React.SetStateAction<LineItem[]>>, id: string, field: keyof LineItem, value: any) => {
     setList(prev => prev.map(item => {
       if (item.id !== id) return item;
@@ -217,9 +226,30 @@ const AdminQuoteCreate = () => {
     }));
   };
 
-  const removeItem = (list: LineItem[], setList: React.Dispatch<React.SetStateAction<LineItem[]>>, id: string) => {
+  const removeItem = (_list: LineItem[], setList: React.Dispatch<React.SetStateAction<LineItem[]>>, id: string) => {
     setList(prev => prev.filter(i => i.id !== id));
   };
+
+  // Catalog helpers
+  const openCatalog = (target: 'article' | 'accessory' | 'service') => {
+    setCatalogTarget(target);
+    setCatalogSearch('');
+    setCatalogOpen(true);
+  };
+
+  const addFromCatalog = (product: CatalogProduct) => {
+    const newItem = fromCatalog(product);
+    if (catalogTarget === 'article') setArticles(prev => [...prev, newItem]);
+    else if (catalogTarget === 'accessory') setAccessories(prev => [...prev, newItem]);
+    else setServices(prev => [...prev, newItem]);
+    setCatalogOpen(false);
+  };
+
+  const filteredCatalog = PRODUCT_CATALOG.filter(p => {
+    if (p.category !== catalogTarget) return false;
+    if (!catalogSearch) return true;
+    return p.name.toLowerCase().includes(catalogSearch.toLowerCase()) || p.code.toLowerCase().includes(catalogSearch.toLowerCase());
+  });
 
   // Totals
   const articlesTotal = articles.reduce((s, i) => s + calcTotal(i), 0);
@@ -289,20 +319,26 @@ const AdminQuoteCreate = () => {
     items: LineItem[],
     setItems: React.Dispatch<React.SetStateAction<LineItem[]>>,
     sectionTotal: number,
+    catalogCategory: 'article' | 'accessory' | 'service',
   ) => (
     <Card>
-      <CardContent className="p-6">
+      <CardContent className="p-4 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">{title}</h3>
-          <Button size="sm" onClick={() => setItems(prev => [...prev, emptyItem()])}>
-            <Plus className="w-4 h-4 mr-1" />Nuovo
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="outline" onClick={() => openCatalog(catalogCategory)}>
+              <Package className="w-4 h-4 mr-1" />Catalogo
+            </Button>
+            <Button size="sm" onClick={() => setItems(prev => [...prev, emptyItem()])}>
+              <Plus className="w-4 h-4 mr-1" />Nuovo
+            </Button>
+          </div>
         </div>
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-6">Nessun elemento. Clicca "Nuovo" per aggiungere.</p>
+          <p className="text-sm text-muted-foreground text-center py-4">Nessun elemento. Clicca "Catalogo" o "Nuovo" per aggiungere.</p>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto -mx-4 md:-mx-6 px-4 md:px-6">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -310,7 +346,7 @@ const AdminQuoteCreate = () => {
                     <TableHead>Nome</TableHead>
                     <TableHead className="w-28">Tonalità</TableHead>
                     <TableHead className="w-24 text-right">Prezzo</TableHead>
-                    <TableHead className="w-20 text-right">Quantità</TableHead>
+                    <TableHead className="w-20 text-right">Qtà</TableHead>
                     <TableHead className="w-28">Unità</TableHead>
                     <TableHead className="w-20 text-right">Sconto</TableHead>
                     <TableHead className="w-28 text-right">Totale</TableHead>
@@ -382,9 +418,9 @@ const AdminQuoteCreate = () => {
   if (loading) return <div className="flex items-center justify-center h-96">Caricamento...</div>;
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div>
       {/* Top bar */}
-      <div className="sticky top-0 z-10 bg-background border-b px-4 py-3 flex items-center justify-between">
+      <div className="bg-background border-b px-4 py-3 flex items-center justify-between -m-3 md:-m-6 mb-4 md:mb-6 px-3 md:px-6">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate('/admin/preventivi')}>
             <ArrowLeft className="w-5 h-5" />
@@ -399,13 +435,13 @@ const AdminQuoteCreate = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
           {/* Main content */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Cliente */}
             <Card>
-              <CardContent className="p-6">
+              <CardContent className="p-4 md:p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <Label className="text-sm font-semibold">Cliente <span className="text-destructive">*</span></Label>
@@ -456,7 +492,7 @@ const AdminQuoteCreate = () => {
 
             {/* Offerta */}
             <Card>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
                 <h3 className="text-lg font-semibold">Offerta</h3>
                 <Separator />
                 <div className="space-y-2">
@@ -465,7 +501,7 @@ const AdminQuoteCreate = () => {
                 </div>
                 <div className="space-y-2">
                   <Label>Oggetto offerta</Label>
-                  <Textarea value={subject} onChange={e => setSubject(e.target.value)} placeholder="Descrizione dell'offerta..." rows={4} />
+                  <Textarea value={subject} onChange={e => setSubject(e.target.value)} placeholder="Descrizione dell'offerta..." rows={3} />
                 </div>
                 <div className="space-y-2">
                   <Label>Valido fino a</Label>
@@ -476,7 +512,7 @@ const AdminQuoteCreate = () => {
 
             {/* Indirizzo cantiere */}
             <Card>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
                 <h3 className="text-lg font-semibold">Indirizzo cantiere</h3>
                 <Separator />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -516,9 +552,20 @@ const AdminQuoteCreate = () => {
               </CardContent>
             </Card>
 
+            {/* Articoli */}
+            {renderLineTable('Articoli', articles, setArticles, articlesTotal, 'article')}
+
+            {/* Accessori */}
+            {renderLineTable('Accessori', accessories, setAccessories, accessoriesTotal, 'accessory')}
+
+            {/* Servizi */}
+            {renderLineTable('Servizi', services, setServices, servicesTotal, 'service')}
+
             {/* Totals Section */}
             <Card>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
+                <h3 className="text-lg font-semibold">Riepilogo economico</h3>
+                <Separator />
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="space-y-1">
                     <Label className="text-sm">Subtotale</Label>
@@ -528,20 +575,17 @@ const AdminQuoteCreate = () => {
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-sm">Sconto <span className="text-destructive">*</span></Label>
+                    <Label className="text-sm">Sconto globale</Label>
                     <div className="flex items-center gap-1">
                       <Input type="number" value={discountPercent || ''} onChange={e => setDiscountPercent(parseFloat(e.target.value) || 0)} className="h-10" />
                       <span className="text-muted-foreground text-sm">%</span>
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-sm">Totale</Label>
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2 h-10 px-3 border rounded-md bg-muted/50">
-                        <span className="text-muted-foreground text-sm">€</span>
-                        <span className="font-medium">{grandTotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground mt-1">Tasse incluse</span>
+                    <Label className="text-sm">Totale (IVA incl.)</Label>
+                    <div className="flex items-center gap-2 h-10 px-3 border rounded-md bg-muted/50">
+                      <span className="text-muted-foreground text-sm">€</span>
+                      <span className="font-semibold">{grandTotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
                     </div>
                   </div>
                   <div className="space-y-1">
@@ -550,7 +594,6 @@ const AdminQuoteCreate = () => {
                       <span className="text-muted-foreground text-sm">€</span>
                       <Input type="number" value={agreedTotal} onChange={e => setAgreedTotal(e.target.value)} placeholder={grandTotal.toFixed(2)} />
                     </div>
-                    <span className="text-xs text-muted-foreground">Tasse incluse</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 pt-2">
@@ -563,18 +606,9 @@ const AdminQuoteCreate = () => {
               </CardContent>
             </Card>
 
-            {/* Articoli */}
-            {renderLineTable('Articoli', articles, setArticles, articlesTotal)}
-
-            {/* Accessori */}
-            {renderLineTable('Accessori', accessories, setAccessories, accessoriesTotal)}
-
-            {/* Servizi */}
-            {renderLineTable('Servizi', services, setServices, servicesTotal)}
-
             {/* Condizioni */}
             <Card>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
                 <h3 className="text-lg font-semibold">Condizioni</h3>
                 <Separator />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -598,7 +632,7 @@ const AdminQuoteCreate = () => {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Aliquota IVA predefinita <span className="text-destructive">*</span></Label>
+                    <Label>Aliquota IVA</Label>
                     <Select value={vatRate} onValueChange={setVatRate}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
@@ -609,14 +643,14 @@ const AdminQuoteCreate = () => {
                 </div>
                 <div className="space-y-2">
                   <Label>Termini di pagamento</Label>
-                  <Textarea value={paymentTermsText} onChange={e => setPaymentTermsText(e.target.value)} placeholder="Es. 30% anticipo, saldo alla consegna..." rows={4} />
+                  <Textarea value={paymentTermsText} onChange={e => setPaymentTermsText(e.target.value)} placeholder="Es. 30% anticipo, saldo alla consegna..." rows={3} />
                 </div>
               </CardContent>
             </Card>
 
             {/* Note */}
             <Card>
-              <CardContent className="p-6 space-y-4">
+              <CardContent className="p-4 md:p-6 space-y-4">
                 <h3 className="text-lg font-semibold">Note interne</h3>
                 <Separator />
                 <Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Note visibili solo internamente..." rows={3} />
@@ -668,6 +702,43 @@ const AdminQuoteCreate = () => {
           </div>
         </div>
       </div>
+
+      {/* Product Catalog Dialog */}
+      <Dialog open={catalogOpen} onOpenChange={setCatalogOpen}>
+        <DialogContent className="max-w-lg max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>
+              Catalogo {catalogTarget === 'article' ? 'Articoli' : catalogTarget === 'accessory' ? 'Accessori' : 'Servizi'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input placeholder="Cerca nel catalogo..." value={catalogSearch} onChange={e => setCatalogSearch(e.target.value)} className="pl-10" />
+          </div>
+          <div className="overflow-y-auto max-h-[50vh] divide-y rounded-lg border">
+            {filteredCatalog.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6">Nessun prodotto trovato</p>
+            ) : (
+              filteredCatalog.map(p => (
+                <button key={p.code} onClick={() => addFromCatalog(p)}
+                  className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors flex items-center justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{p.code}</span>
+                      <span className="font-medium text-sm truncate">{p.name}</span>
+                    </div>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-xs text-muted-foreground">{p.defaultUnit}</span>
+                      {p.hasColor && <span className="text-xs text-muted-foreground">• Con tonalità</span>}
+                    </div>
+                  </div>
+                  <span className="text-sm font-semibold whitespace-nowrap">€{p.defaultPrice.toFixed(2)}</span>
+                </button>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
