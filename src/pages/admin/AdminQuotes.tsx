@@ -61,6 +61,13 @@ const AdminQuotes = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
+  // Form state
+  const [selectedCustomerId, setSelectedCustomerId] = useState('');
+  const [validUntil, setValidUntil] = useState('');
+  const [notes, setNotes] = useState('');
+  const [vatIncluded, setVatIncluded] = useState(false);
+  const [items, setItems] = useState<QuoteItem[]>([]);
+
   // New item state
   const [newItemProductType, setNewItemProductType] = useState('MgO');
   const [newItemColor, setNewItemColor] = useState('');
