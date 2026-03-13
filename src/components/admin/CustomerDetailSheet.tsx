@@ -731,12 +731,13 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
             </Card>
 
             <Tabs defaultValue="sales" className="w-full">
-              <TabsList className="grid grid-cols-6 w-full">
+              <TabsList className="grid grid-cols-7 w-full">
                 <TabsTrigger value="sales" className="text-xs">Vendite</TabsTrigger>
                 <TabsTrigger value="quotes" className="text-xs">Preventivi</TabsTrigger>
                 <TabsTrigger value="visits" className="text-xs">Visite</TabsTrigger>
                 <TabsTrigger value="reminders" className="text-xs">Reminder</TabsTrigger>
                 <TabsTrigger value="actions" className="text-xs">Log</TabsTrigger>
+                <TabsTrigger value="docs" className="text-xs">Documenti</TabsTrigger>
                 <TabsTrigger value="contracts" className="text-xs">Contratti</TabsTrigger>
               </TabsList>
 
