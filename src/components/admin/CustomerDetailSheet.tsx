@@ -162,7 +162,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
     }
   };
 
-
+  const updateCustomerStatus = async (status: string) => {
     if (!customerId) return;
     try {
       await supabase.from('customers').update({ status: status as any }).eq('id', customerId);
