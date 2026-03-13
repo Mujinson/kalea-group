@@ -317,6 +317,9 @@ const AdminSettings = () => {
         </CardContent>
       </Card>
 
+      {/* Commerciali Section */}
+      <CommercialiSection />
+
       {/* Current User Info */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
