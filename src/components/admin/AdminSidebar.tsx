@@ -69,10 +69,10 @@ const AdminSidebar = () => {
   };
 
   return (
-    <Sidebar className="border-r">
-      <SidebarContent className="bg-white text-black md:bg-sidebar md:text-sidebar-foreground">
+    <Sidebar className="border-r border-sidebar-border">
+      <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-gray-600 md:text-sidebar-foreground/70">
+          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-sidebar-foreground/50">
             Menu
           </SidebarGroupLabel>
           <SidebarGroupContent>
@@ -81,7 +81,7 @@ const AdminSidebar = () => {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     onClick={() => handleNavigate(item.url)}
-                    className={`${isActive(item.url) ? 'bg-primary/10 text-primary' : 'text-gray-800 md:text-sidebar-foreground'} hover:bg-gray-100 md:hover:bg-sidebar-accent`}
+                    className={`${isActive(item.url) ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'text-sidebar-foreground/80'} hover:bg-sidebar-accent/60`}
                   >
                     <item.icon className="w-4 h-4 mr-2" />
                     <span>{item.title}</span>
@@ -93,14 +93,14 @@ const AdminSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
       
-      <SidebarFooter className="p-4 border-t bg-white md:bg-sidebar">
-        <div className="text-xs text-gray-500 md:text-muted-foreground mb-2 truncate">
+      <SidebarFooter className="p-4 border-t border-sidebar-border">
+        <div className="text-xs text-sidebar-foreground/50 mb-2 truncate">
           {user?.email}
         </div>
         <Button
           variant="outline"
           size="sm"
-          className="w-full"
+          className="w-full border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent"
           onClick={handleSignOut}
         >
           <LogOut className="w-4 h-4 mr-2" />
