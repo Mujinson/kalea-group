@@ -884,27 +884,129 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
 
               {/* Action Log Tab */}
               <TabsContent value="actions" className="space-y-3">
-                <div className="flex gap-2">
-                  <Input 
-                    placeholder="Aggiungi nota..."
-                    value={newAction}
-                    onChange={e => setNewAction(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && addActionLog()}
-                  />
-                  <Button size="sm" onClick={addActionLog}><Plus className="w-3 h-3" /></Button>
-                </div>
+                <Card>
+                  <CardContent className="p-3 space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      <Select value={newAction.action_type} onValueChange={v => setNewAction({...newAction, action_type: v})}>
+                        <SelectTrigger className="text-xs"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="call">📞 Chiamata</SelectItem>
+                          <SelectItem value="meeting">🤝 Meeting</SelectItem>
+                          <SelectItem value="email">📧 Email</SelectItem>
+                          <SelectItem value="visita">🏢 Visita</SelectItem>
+                          <SelectItem value="nota">📝 Nota</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Select value={newAction.contact_person_role} onValueChange={v => setNewAction({...newAction, contact_person_role: v})}>
+                        <SelectTrigger className="text-xs"><SelectValue placeholder="Ruolo contatto" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ceo">CEO / Titolare</SelectItem>
+                          <SelectItem value="direttore">Direttore</SelectItem>
+                          <SelectItem value="architetto">Architetto</SelectItem>
+                          <SelectItem value="geometra">Geometra</SelectItem>
+                          <SelectItem value="segreteria">Segreteria</SelectItem>
+                          <SelectItem value="responsabile_acquisti">Resp. Acquisti</SelectItem>
+                          <SelectItem value="tecnico">Tecnico</SelectItem>
+                          <SelectItem value="altro">Altro</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input placeholder="Nome persona" className="text-xs" value={newAction.contact_person_name} onChange={e => setNewAction({...newAction, contact_person_name: e.target.value})} />
+                      <Input placeholder="Contatto (tel/email)" className="text-xs" value={newAction.contact_person_contact} onChange={e => setNewAction({...newAction, contact_person_contact: e.target.value})} />
+                    </div>
+                    <Textarea placeholder="Cosa è stato discusso..." rows={2} className="text-xs" value={newAction.action_description} onChange={e => setNewAction({...newAction, action_description: e.target.value})} />
+                    <Input placeholder="Next steps..." className="text-xs" value={newAction.next_steps} onChange={e => setNewAction({...newAction, next_steps: e.target.value})} />
+                    <Button size="sm" onClick={addActionLog} className="w-full"><Plus className="w-3 h-3 mr-1" />Aggiungi Attività</Button>
+                  </CardContent>
+                </Card>
                 
-                <div className="space-y-2 mt-4">
+                <div className="space-y-2">
                   {actionLogs.map(log => (
                     <Card key={log.id}>
-                      <CardContent className="p-3 text-sm">
-                        <p>{log.action_description}</p>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          {format(new Date(log.created_at), 'dd/MM/yyyy HH:mm')}
+                      <CardContent className="p-3 text-sm space-y-1">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">
+                              {log.action_type === 'call' ? '📞' : log.action_type === 'meeting' ? '🤝' : log.action_type === 'email' ? '📧' : log.action_type === 'visita' ? '🏢' : '📝'} {log.action_type}
+                            </Badge>
+                            {log.contact_person_role && (
+                              <span className="text-xs text-muted-foreground capitalize">{log.contact_person_role}</span>
+                            )}
+                          </div>
+                          <span className="text-xs text-muted-foreground">{format(new Date(log.created_at), 'dd/MM/yy HH:mm')}</span>
+                        </div>
+                        {log.contact_person_name && (
+                          <p className="text-xs"><span className="text-muted-foreground">Con:</span> {log.contact_person_name} {log.contact_person_contact && `(${log.contact_person_contact})`}</p>
+                        )}
+                        <p className="text-sm">{log.action_description}</p>
+                        {log.next_steps && (
+                          <p className="text-xs text-primary font-medium">→ Next: {log.next_steps}</p>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              {/* Documents Tab */}
+              <TabsContent value="docs" className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <Input placeholder="Titolo documento" value={newDocTitle} onChange={e => setNewDocTitle(e.target.value)} />
+                  <Select value={newDocType} onValueChange={setNewDocType}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="visura_camerale">Visura Camerale</SelectItem>
+                      <SelectItem value="contratto_vendita">Contratto Vendita B2B</SelectItem>
+                      <SelectItem value="documento_identita">Documento Identità</SelectItem>
+                      <SelectItem value="preventivo_firmato">Preventivo Firmato</SelectItem>
+                      <SelectItem value="ordine">Ordine</SelectItem>
+                      <SelectItem value="fattura">Fattura</SelectItem>
+                      <SelectItem value="altro">Altro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button size="sm" onClick={addDocument}><Plus className="w-3 h-3 mr-1" />Aggiungi Documento</Button>
+
+                <input type="file" className="hidden" ref={docFileRef} onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (file && pendingDocId) handleDocUpload(pendingDocId, file);
+                }} />
+                
+                <div className="space-y-2 mt-4">
+                  {documents.map((doc: any) => (
+                    <Card key={doc.id}>
+                      <CardContent className="p-3 text-sm space-y-2">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="font-medium">{doc.title}</span>
+                            <Badge variant="outline" className="ml-2 text-xs">{doc.document_type}</Badge>
+                          </div>
+                          <span className="text-xs text-muted-foreground">{format(new Date(doc.created_at), 'dd/MM/yyyy')}</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {doc.file_url ? (
+                            <>
+                              <Button size="sm" variant="outline" onClick={() => downloadDoc(doc.file_url, doc.title)}>
+                                <Download className="w-3 h-3 mr-1" />Scarica
+                              </Button>
+                            </>
+                          ) : (
+                            <Button size="sm" variant="outline" disabled={uploadingDoc} onClick={() => {
+                              setPendingDocId(doc.id);
+                              docFileRef.current?.click();
+                            }}>
+                              <Upload className="w-3 h-3 mr-1" />{uploadingDoc ? 'Caricamento...' : 'Carica file'}
+                            </Button>
+                          )}
+                          <Button size="sm" variant="ghost" className="text-destructive" onClick={() => deleteDoc(doc.id, doc.file_url)}>
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
                   ))}
+                  {documents.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">Nessun documento</p>}
                 </div>
               </TabsContent>
 
