@@ -656,59 +656,101 @@ export type Database = {
         Row: {
           accepted_date: string | null
           additional_costs: Json | null
+          assigned_to: string | null
           converted_sale_id: string | null
           created_at: string
           created_by: string | null
           customer_id: string | null
+          delivery_time: string | null
           id: string
           items: Json | null
           notes: string | null
+          payment_terms_text: string | null
+          payment_type: string | null
+          project_name: string | null
           quote_number: string | null
           sent_date: string | null
+          site_address: string | null
+          site_city: string | null
+          site_country: string | null
+          site_postal_code: string | null
+          site_province: string | null
           status: string
+          subject: string | null
+          tipologia: string | null
           total_amount: number
+          transport_method: string | null
           updated_at: string
           valid_until: string | null
           vat_amount: number | null
           vat_included: boolean | null
+          vat_rate: number | null
         }
         Insert: {
           accepted_date?: string | null
           additional_costs?: Json | null
+          assigned_to?: string | null
           converted_sale_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
+          delivery_time?: string | null
           id?: string
           items?: Json | null
           notes?: string | null
+          payment_terms_text?: string | null
+          payment_type?: string | null
+          project_name?: string | null
           quote_number?: string | null
           sent_date?: string | null
+          site_address?: string | null
+          site_city?: string | null
+          site_country?: string | null
+          site_postal_code?: string | null
+          site_province?: string | null
           status?: string
+          subject?: string | null
+          tipologia?: string | null
           total_amount?: number
+          transport_method?: string | null
           updated_at?: string
           valid_until?: string | null
           vat_amount?: number | null
           vat_included?: boolean | null
+          vat_rate?: number | null
         }
         Update: {
           accepted_date?: string | null
           additional_costs?: Json | null
+          assigned_to?: string | null
           converted_sale_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
+          delivery_time?: string | null
           id?: string
           items?: Json | null
           notes?: string | null
+          payment_terms_text?: string | null
+          payment_type?: string | null
+          project_name?: string | null
           quote_number?: string | null
           sent_date?: string | null
+          site_address?: string | null
+          site_city?: string | null
+          site_country?: string | null
+          site_postal_code?: string | null
+          site_province?: string | null
           status?: string
+          subject?: string | null
+          tipologia?: string | null
           total_amount?: number
+          transport_method?: string | null
           updated_at?: string
           valid_until?: string | null
           vat_amount?: number | null
           vat_included?: boolean | null
+          vat_rate?: number | null
         }
         Relationships: [
           {
