@@ -64,6 +64,13 @@ interface LineItem {
   total: number;
 }
 
+// "Nuovo" dialog state
+type NewItemDialogState = {
+  open: boolean;
+  target: 'article' | 'accessory' | 'service';
+  selectedProduct: CatalogProduct | null;
+};
+
 interface Customer {
   id: string;
   company_name: string | null;
@@ -111,6 +118,13 @@ const AdminQuoteCreate = () => {
   const [catalogOpen, setCatalogOpen] = useState(false);
   const [catalogTarget, setCatalogTarget] = useState<'article' | 'accessory' | 'service'>('article');
   const [catalogSearch, setCatalogSearch] = useState('');
+
+  // "Nuovo" dialog (Geopietra-style)
+  const [newItemDialog, setNewItemDialog] = useState<NewItemDialogState>({
+    open: false, target: 'article', selectedProduct: null,
+  });
+  const [newItemCatalogOpen, setNewItemCatalogOpen] = useState(false);
+  const [newItemCatalogSearch, setNewItemCatalogSearch] = useState('');
 
   // Form
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
@@ -245,6 +259,28 @@ const AdminQuoteCreate = () => {
     setCatalogOpen(false);
   };
 
+  // "Nuovo" dialog helpers
+  const openNewItemDialog = (target: 'article' | 'accessory' | 'service') => {
+    setNewItemDialog({ open: true, target, selectedProduct: null });
+    setNewItemCatalogSearch('');
+  };
+
+  const saveNewItem = () => {
+    const p = newItemDialog.selectedProduct;
+    if (!p) { toast.error('Seleziona un prodotto dal catalogo'); return; }
+    const newItem = fromCatalog(p);
+    if (newItemDialog.target === 'article') setArticles(prev => [...prev, newItem]);
+    else if (newItemDialog.target === 'accessory') setAccessories(prev => [...prev, newItem]);
+    else setServices(prev => [...prev, newItem]);
+    setNewItemDialog({ open: false, target: 'article', selectedProduct: null });
+  };
+
+  const newItemFilteredCatalog = PRODUCT_CATALOG.filter(p => {
+    if (p.category !== newItemDialog.target) return false;
+    if (!newItemCatalogSearch) return true;
+    return p.name.toLowerCase().includes(newItemCatalogSearch.toLowerCase()) || p.code.toLowerCase().includes(newItemCatalogSearch.toLowerCase());
+  });
+
   const filteredCatalog = PRODUCT_CATALOG.filter(p => {
     if (p.category !== catalogTarget) return false;
     if (!catalogSearch) return true;
@@ -329,7 +365,7 @@ const AdminQuoteCreate = () => {
             <Button size="sm" variant="outline" onClick={() => openCatalog(catalogCategory)}>
               <Package className="w-4 h-4 mr-1" />Catalogo
             </Button>
-            <Button size="sm" onClick={() => setItems(prev => [...prev, emptyItem()])}>
+            <Button size="sm" onClick={() => openNewItemDialog(catalogCategory)}>
               <Plus className="w-4 h-4 mr-1" />Nuovo
             </Button>
           </div>
@@ -339,69 +375,69 @@ const AdminQuoteCreate = () => {
         ) : (
           <>
             <div className="overflow-x-auto -mx-4 md:-mx-6 px-4 md:px-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-20">Codice</TableHead>
-                    <TableHead>Nome</TableHead>
-                    <TableHead className="w-28">Tonalità</TableHead>
-                    <TableHead className="w-24 text-right">Prezzo</TableHead>
-                    <TableHead className="w-20 text-right">Qtà</TableHead>
-                    <TableHead className="w-28">Unità</TableHead>
-                    <TableHead className="w-20 text-right">Sconto</TableHead>
-                    <TableHead className="w-28 text-right">Totale</TableHead>
-                    <TableHead className="w-10"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground w-[100px]">Codice</th>
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground min-w-[180px]">Nome</th>
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground w-[130px]">Tonalità</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[100px]">Prezzo</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[80px]">Qtà</th>
+                    <th className="text-left py-2 px-2 font-medium text-muted-foreground w-[130px]">Unità</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[100px]">Sconto</th>
+                    <th className="text-right py-2 px-2 font-medium text-muted-foreground w-[110px]">Totale</th>
+                    <th className="w-[40px]"></th>
+                  </tr>
+                </thead>
+                <tbody>
                   {items.map(item => (
-                    <TableRow key={item.id}>
-                      <TableCell>
-                        <Input value={item.code} onChange={e => updateItem(items, setItems, item.id, 'code', e.target.value)} className="h-8 text-xs" />
-                      </TableCell>
-                      <TableCell>
-                        <Input value={item.name} onChange={e => updateItem(items, setItems, item.id, 'name', e.target.value)} className="h-8 text-xs" placeholder="Nome prodotto" />
-                      </TableCell>
-                      <TableCell>
+                    <tr key={item.id} className="border-b last:border-0">
+                      <td className="py-2 px-2">
+                        <Input value={item.code} onChange={e => updateItem(items, setItems, item.id, 'code', e.target.value)} className="h-9" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input value={item.name} onChange={e => updateItem(items, setItems, item.id, 'name', e.target.value)} className="h-9" placeholder="Nome prodotto" />
+                      </td>
+                      <td className="py-2 px-2">
                         <Select value={item.color} onValueChange={v => updateItem(items, setItems, item.id, 'color', v)}>
-                          <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="—" /></SelectTrigger>
+                          <SelectTrigger className="h-9"><SelectValue placeholder="—" /></SelectTrigger>
                           <SelectContent>
                             {MGO_COLORS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                           </SelectContent>
                         </Select>
-                      </TableCell>
-                      <TableCell>
-                        <Input type="number" value={item.price || ''} onChange={e => updateItem(items, setItems, item.id, 'price', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right" />
-                      </TableCell>
-                      <TableCell>
-                        <Input type="number" value={item.quantity || ''} onChange={e => updateItem(items, setItems, item.id, 'quantity', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right" />
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input type="number" value={item.price || ''} onChange={e => updateItem(items, setItems, item.id, 'price', parseFloat(e.target.value) || 0)} className="h-9 text-right" />
+                      </td>
+                      <td className="py-2 px-2">
+                        <Input type="number" value={item.quantity || ''} onChange={e => updateItem(items, setItems, item.id, 'quantity', parseFloat(e.target.value) || 0)} className="h-9 text-right" />
+                      </td>
+                      <td className="py-2 px-2">
                         <Select value={item.unit} onValueChange={v => updateItem(items, setItems, item.id, 'unit', v)}>
-                          <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
                           <SelectContent>
                             {UNITS.map(u => <SelectItem key={u} value={u}>{u}</SelectItem>)}
                           </SelectContent>
                         </Select>
-                      </TableCell>
-                      <TableCell>
+                      </td>
+                      <td className="py-2 px-2">
                         <div className="flex items-center gap-1">
-                          <Input type="number" value={item.discount || ''} onChange={e => updateItem(items, setItems, item.id, 'discount', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right w-16" />
-                          <span className="text-xs text-muted-foreground">%</span>
+                          <Input type="number" value={item.discount || ''} onChange={e => updateItem(items, setItems, item.id, 'discount', parseFloat(e.target.value) || 0)} className="h-9 text-right" />
+                          <span className="text-sm text-muted-foreground">%</span>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-right font-medium text-sm">
+                      </td>
+                      <td className="py-2 px-2 text-right font-semibold whitespace-nowrap">
                         €{calcTotal(item).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => removeItem(items, setItems, item.id)}>
-                          <Trash2 className="w-3 h-3" />
+                      </td>
+                      <td className="py-2 px-1">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => removeItem(items, setItems, item.id)}>
+                          <Trash2 className="w-4 h-4" />
                         </Button>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
+                </tbody>
+              </table>
             </div>
             <div className="flex justify-end pt-3 border-t mt-3">
               <div className="text-sm">
@@ -703,39 +739,131 @@ const AdminQuoteCreate = () => {
         </div>
       </div>
 
-      {/* Product Catalog Dialog */}
+      {/* Product Catalog Dialog (quick-add) */}
       <Dialog open={catalogOpen} onOpenChange={setCatalogOpen}>
-        <DialogContent className="max-w-lg max-h-[80vh]">
+        <DialogContent className="max-w-2xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle>
-              Catalogo {catalogTarget === 'article' ? 'Articoli' : catalogTarget === 'accessory' ? 'Accessori' : 'Servizi'}
+              Seleziona — {catalogTarget === 'article' ? 'Articoli' : catalogTarget === 'accessory' ? 'Accessori' : 'Servizi'}
             </DialogTitle>
           </DialogHeader>
           <div className="relative mb-3">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Cerca nel catalogo..." value={catalogSearch} onChange={e => setCatalogSearch(e.target.value)} className="pl-10" />
+            <Input placeholder="Cerca..." value={catalogSearch} onChange={e => setCatalogSearch(e.target.value)} className="pl-10" />
           </div>
-          <div className="overflow-y-auto max-h-[50vh] divide-y rounded-lg border">
-            {filteredCatalog.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-6">Nessun prodotto trovato</p>
-            ) : (
-              filteredCatalog.map(p => (
-                <button key={p.code} onClick={() => addFromCatalog(p)}
-                  className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors flex items-center justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{p.code}</span>
-                      <span className="font-medium text-sm truncate">{p.name}</span>
-                    </div>
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-muted-foreground">{p.defaultUnit}</span>
-                      {p.hasColor && <span className="text-xs text-muted-foreground">• Con tonalità</span>}
-                    </div>
+          <div className="overflow-y-auto max-h-[55vh] rounded-lg border">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-background border-b">
+                <tr>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Codice</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Nome</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Descrizione</th>
+                  <th className="text-right py-2 px-3 font-medium text-muted-foreground">Prezzo netto</th>
+                  {catalogTarget !== 'service' && <th className="text-left py-2 px-3 font-medium text-muted-foreground">Tonalità</th>}
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {filteredCatalog.length === 0 ? (
+                  <tr><td colSpan={5} className="text-center py-6 text-muted-foreground">Nessun prodotto trovato</td></tr>
+                ) : (
+                  filteredCatalog.map(p => (
+                    <tr key={p.code} onClick={() => addFromCatalog(p)}
+                      className="hover:bg-muted/50 cursor-pointer transition-colors">
+                      <td className="py-3 px-3">
+                        <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">{p.code}</span>
+                      </td>
+                      <td className="py-3 px-3 font-medium">{p.name}</td>
+                      <td className="py-3 px-3 text-muted-foreground">{p.description}</td>
+                      <td className="py-3 px-3 text-right font-semibold whitespace-nowrap">€{p.defaultPrice.toFixed(2)}</td>
+                      {catalogTarget !== 'service' && (
+                        <td className="py-3 px-3 text-muted-foreground">{p.hasColor ? 'Sì' : '—'}</td>
+                      )}
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* "Nuovo" Dialog (Geopietra-style) */}
+      <Dialog open={newItemDialog.open} onOpenChange={open => setNewItemDialog(prev => ({ ...prev, open }))}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              Salva {newItemDialog.target === 'article' ? 'Articolo' : newItemDialog.target === 'accessory' ? 'Accessorio' : 'Servizio'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label className="text-sm font-semibold">Articolo <span className="text-destructive">*</span></Label>
+              {newItemDialog.selectedProduct ? (
+                <div className="mt-2 p-3 border rounded-lg bg-muted/50 flex items-center justify-between">
+                  <div>
+                    <span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded mr-2">{newItemDialog.selectedProduct.code}</span>
+                    <span className="font-medium">{newItemDialog.selectedProduct.name}</span>
+                    <span className="ml-2 text-muted-foreground">— €{newItemDialog.selectedProduct.defaultPrice.toFixed(2)}</span>
                   </div>
-                  <span className="text-sm font-semibold whitespace-nowrap">€{p.defaultPrice.toFixed(2)}</span>
-                </button>
-              ))
-            )}
+                  <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setNewItemDialog(prev => ({ ...prev, selectedProduct: null }))}>
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="mt-2">
+                  <p className="text-sm text-muted-foreground mb-2">Nessun elemento selezionato.</p>
+                  <Button variant="outline" size="sm" onClick={() => { setNewItemCatalogSearch(''); setNewItemCatalogOpen(true); }}>
+                    <Package className="w-4 h-4 mr-1" />Seleziona
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 pt-4">
+            <Button onClick={saveNewItem} disabled={!newItemDialog.selectedProduct}>Salva</Button>
+            <Button variant="outline" onClick={() => { saveNewItem(); if (newItemDialog.selectedProduct) openNewItemDialog(newItemDialog.target); }}>Salva &amp; crea un altro</Button>
+            <Button variant="ghost" onClick={() => setNewItemDialog(prev => ({ ...prev, open: false }))}>Annulla</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Catalog picker inside "Nuovo" dialog */}
+      <Dialog open={newItemCatalogOpen} onOpenChange={setNewItemCatalogOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>Seleziona</DialogTitle>
+          </DialogHeader>
+          <div className="relative mb-3">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input placeholder="Cerca..." value={newItemCatalogSearch} onChange={e => setNewItemCatalogSearch(e.target.value)} className="pl-10" />
+          </div>
+          <div className="overflow-y-auto max-h-[55vh] rounded-lg border">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-background border-b">
+                <tr>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Codice</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Nome</th>
+                  <th className="text-left py-2 px-3 font-medium text-muted-foreground">Descrizione</th>
+                  <th className="text-right py-2 px-3 font-medium text-muted-foreground">Prezzo netto</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {newItemFilteredCatalog.length === 0 ? (
+                  <tr><td colSpan={4} className="text-center py-6 text-muted-foreground">Nessun prodotto trovato</td></tr>
+                ) : (
+                  newItemFilteredCatalog.map(p => (
+                    <tr key={p.code}
+                      onClick={() => { setNewItemDialog(prev => ({ ...prev, selectedProduct: p })); setNewItemCatalogOpen(false); }}
+                      className="hover:bg-muted/50 cursor-pointer transition-colors">
+                      <td className="py-3 px-3"><span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">{p.code}</span></td>
+                      <td className="py-3 px-3 font-medium">{p.name}</td>
+                      <td className="py-3 px-3 text-muted-foreground">{p.description}</td>
+                      <td className="py-3 px-3 text-right font-semibold whitespace-nowrap">€{p.defaultPrice.toFixed(2)}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </DialogContent>
       </Dialog>
