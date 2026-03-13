@@ -8,10 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from 'sonner';
-import { ArrowLeft, Save, X, Search } from 'lucide-react';
+import { ArrowLeft, Save, X, Search, Plus, Trash2 } from 'lucide-react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
 
 const QUOTE_STATUSES = [
   { value: 'draft', label: 'Bozza' },
@@ -29,13 +30,6 @@ const TIPOLOGIE = [
   { value: 'sanitario', label: 'Sanitario' },
 ];
 
-const TRANSPORT_METHODS = [
-  { value: 'corriere', label: 'Corriere' },
-  { value: 'ritiro', label: 'Ritiro in sede' },
-  { value: 'consegna_diretta', label: 'Consegna diretta' },
-  { value: 'spedizioniere', label: 'Spedizioniere' },
-];
-
 const PAYMENT_TYPES = [
   { value: 'bonifico', label: 'Bonifico bancario' },
   { value: 'carta_credito', label: 'Carta di credito' },
@@ -50,6 +44,23 @@ const VAT_RATES = [
   { value: '0.04', label: '4%' },
   { value: '0', label: 'Esente' },
 ];
+
+const UNITS = ['Metro quadro', 'Metro lineare', 'Pezzo', 'Sacco', 'Kg', 'Confezione'];
+
+const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
+
+interface LineItem {
+  id: string;
+  code: string;
+  name: string;
+  description: string;
+  color: string;
+  price: number;
+  quantity: number;
+  unit: string;
+  discount: number;
+  total: number;
+}
 
 interface Customer {
   id: string;
@@ -66,11 +77,22 @@ interface Customer {
   phone: string | null;
 }
 
+const emptyItem = (): LineItem => ({
+  id: Date.now().toString() + Math.random().toString(36).slice(2),
+  code: '', name: '', description: '', color: '', price: 0, quantity: 0, unit: 'Metro quadro', discount: 0, total: 0,
+});
+
+const calcTotal = (item: LineItem) => {
+  const sub = item.price * item.quantity;
+  return sub - (sub * item.discount / 100);
+};
+
 const AdminQuoteCreate = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user } = useAdminAuth();
   const editId = searchParams.get('edit');
+  const preselectedCustomerId = searchParams.get('customer');
 
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [salespeople, setSalespeople] = useState<any[]>([]);
@@ -78,27 +100,24 @@ const AdminQuoteCreate = () => {
   const [saving, setSaving] = useState(false);
   const [customerSearch, setCustomerSearch] = useState('');
 
-  // Form state
+  // Form
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [status, setStatus] = useState('draft');
   const [assignedTo, setAssignedTo] = useState('');
   const [tipologia, setTipologia] = useState('');
-
-  // Offerta
   const [projectName, setProjectName] = useState('');
   const [subject, setSubject] = useState('');
   const [validUntil, setValidUntil] = useState('');
 
-  // Indirizzo cantiere
+  // Site address
   const [siteCountry, setSiteCountry] = useState('Italia');
   const [siteAddress, setSiteAddress] = useState('');
   const [sitePostalCode, setSitePostalCode] = useState('');
   const [siteCity, setSiteCity] = useState('');
   const [siteProvince, setSiteProvince] = useState('');
-  const [siteRegion, setSiteRegion] = useState('');
 
-  // Condizioni
+  // Conditions
   const [transportMethod, setTransportMethod] = useState('');
   const [deliveryTime, setDeliveryTime] = useState('');
   const [paymentType, setPaymentType] = useState('');
@@ -106,40 +125,41 @@ const AdminQuoteCreate = () => {
   const [paymentTermsText, setPaymentTermsText] = useState('');
   const [notes, setNotes] = useState('');
 
-  useEffect(() => {
-    fetchInitialData();
-  }, []);
+  // Line items
+  const [articles, setArticles] = useState<LineItem[]>([]);
+  const [accessories, setAccessories] = useState<LineItem[]>([]);
+  const [services, setServices] = useState<LineItem[]>([]);
 
-  useEffect(() => {
-    if (editId) {
-      loadQuote(editId);
-    }
-  }, [editId]);
+  // Totals
+  const [discountPercent, setDiscountPercent] = useState(0);
+  const [hidePrices, setHidePrices] = useState(false);
+  const [agreedTotal, setAgreedTotal] = useState('');
+
+  useEffect(() => { fetchInitialData(); }, []);
+  useEffect(() => { if (editId) loadQuote(editId); }, [editId]);
 
   const fetchInitialData = async () => {
     const [custRes, spRes] = await Promise.all([
       supabase.from('customers').select('id, company_name, first_name, last_name, address, city, province, postal_code, region, country, email, phone').order('company_name'),
       supabase.from('salespeople').select('*').eq('is_active', true).order('first_name'),
     ]);
-    setCustomers(custRes.data || []);
+    const custList = custRes.data || [];
+    setCustomers(custList);
     setSalespeople(spRes.data || []);
 
-    // Pre-select customer if from URL
-    const custParam = searchParams.get('customer');
-    if (custParam) {
-      selectCustomer(custParam, custRes.data || []);
+    // Pre-select customer from URL param
+    const custId = preselectedCustomerId;
+    if (custId) {
+      const c = custList.find(c => c.id === custId);
+      if (c) { setSelectedCustomerId(c.id); setSelectedCustomer(c); }
     }
   };
 
   const loadQuote = async (id: string) => {
     setLoading(true);
     const { data, error } = await supabase.from('quotes').select('*').eq('id', id).single();
-    if (error || !data) {
-      toast.error('Preventivo non trovato');
-      navigate('/admin/preventivi');
-      return;
-    }
-    // Populate form
+    if (error || !data) { toast.error('Preventivo non trovato'); navigate('/admin/preventivi'); return; }
+
     setSelectedCustomerId(data.customer_id || '');
     setStatus(data.status || 'draft');
     setAssignedTo(data.assigned_to || '');
@@ -159,7 +179,17 @@ const AdminQuoteCreate = () => {
     setPaymentTermsText(data.payment_terms_text || '');
     setNotes(data.notes || '');
 
-    // Select customer
+    // Load items from JSON
+    const items = data.items as any;
+    if (items) {
+      setArticles(items.articles || []);
+      setAccessories(items.accessories || []);
+      setServices(items.services || []);
+      setDiscountPercent(items.discountPercent || 0);
+      setHidePrices(items.hidePrices || false);
+      setAgreedTotal(items.agreedTotal || '');
+    }
+
     if (data.customer_id) {
       const { data: cust } = await supabase.from('customers')
         .select('id, company_name, first_name, last_name, address, city, province, postal_code, region, country, email, phone')
@@ -169,39 +199,49 @@ const AdminQuoteCreate = () => {
     setLoading(false);
   };
 
-  const selectCustomer = (id: string, custList?: Customer[]) => {
-    const list = custList || customers;
-    const c = list.find(c => c.id === id);
-    if (c) {
-      setSelectedCustomerId(c.id);
-      setSelectedCustomer(c);
-    }
-  };
-
-  const clearCustomer = () => {
-    setSelectedCustomerId('');
-    setSelectedCustomer(null);
-  };
-
-  const getCustomerName = (c: Customer) => {
-    if (c.company_name) return c.company_name;
-    return `${c.first_name || ''} ${c.last_name || ''}`.trim() || 'Senza nome';
-  };
+  const clearCustomer = () => { setSelectedCustomerId(''); setSelectedCustomer(null); };
+  const getCustomerName = (c: Customer) => c.company_name || `${c.first_name || ''} ${c.last_name || ''}`.trim() || 'Senza nome';
 
   const filteredCustomers = customers.filter(c => {
     if (!customerSearch) return true;
-    const name = getCustomerName(c).toLowerCase();
-    return name.includes(customerSearch.toLowerCase());
+    return getCustomerName(c).toLowerCase().includes(customerSearch.toLowerCase());
   });
 
+  // Line items helpers
+  const updateItem = (list: LineItem[], setList: React.Dispatch<React.SetStateAction<LineItem[]>>, id: string, field: keyof LineItem, value: any) => {
+    setList(prev => prev.map(item => {
+      if (item.id !== id) return item;
+      const updated = { ...item, [field]: value };
+      updated.total = calcTotal(updated);
+      return updated;
+    }));
+  };
+
+  const removeItem = (list: LineItem[], setList: React.Dispatch<React.SetStateAction<LineItem[]>>, id: string) => {
+    setList(prev => prev.filter(i => i.id !== id));
+  };
+
+  // Totals
+  const articlesTotal = articles.reduce((s, i) => s + calcTotal(i), 0);
+  const accessoriesTotal = accessories.reduce((s, i) => s + calcTotal(i), 0);
+  const servicesTotal = services.reduce((s, i) => s + calcTotal(i), 0);
+  const subtotal = articlesTotal + accessoriesTotal + servicesTotal;
+  const discountAmount = subtotal * discountPercent / 100;
+  const afterDiscount = subtotal - discountAmount;
+  const vatAmount = afterDiscount * parseFloat(vatRate);
+  const grandTotal = afterDiscount + vatAmount;
+
   const handleSave = async () => {
-    if (!selectedCustomerId) {
-      toast.error('Seleziona un cliente');
-      return;
-    }
+    if (!selectedCustomerId) { toast.error('Seleziona un cliente'); return; }
     setSaving(true);
     try {
-      const payload = {
+      const itemsJson = {
+        articles, accessories, services,
+        discountPercent, hidePrices,
+        agreedTotal: agreedTotal || null,
+      };
+
+      const payload: any = {
         customer_id: selectedCustomerId,
         status,
         assigned_to: assignedTo || null,
@@ -221,6 +261,10 @@ const AdminQuoteCreate = () => {
         payment_terms_text: paymentTermsText || null,
         notes: notes || null,
         created_by: user?.email || null,
+        items: itemsJson,
+        total_amount: grandTotal,
+        vat_amount: vatAmount,
+        vat_included: false,
       };
 
       if (editId) {
@@ -228,12 +272,8 @@ const AdminQuoteCreate = () => {
         if (error) throw error;
         toast.success('Preventivo aggiornato');
       } else {
-        const quoteNumber = `PRV-${Date.now().toString().slice(-6)}`;
-        const { error } = await supabase.from('quotes').insert({
-          ...payload,
-          quote_number: quoteNumber,
-          total_amount: 0,
-        });
+        payload.quote_number = `PRV-${Date.now().toString().slice(-6)}`;
+        const { error } = await supabase.from('quotes').insert(payload);
         if (error) throw error;
         toast.success('Preventivo creato');
       }
@@ -241,14 +281,105 @@ const AdminQuoteCreate = () => {
     } catch (error) {
       console.error('Error saving quote:', error);
       toast.error('Errore nel salvataggio');
-    } finally {
-      setSaving(false);
-    }
+    } finally { setSaving(false); }
   };
 
-  if (loading) {
-    return <div className="flex items-center justify-center h-96">Caricamento...</div>;
-  }
+  const renderLineTable = (
+    title: string,
+    items: LineItem[],
+    setItems: React.Dispatch<React.SetStateAction<LineItem[]>>,
+    sectionTotal: number,
+  ) => (
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">{title}</h3>
+          <Button size="sm" onClick={() => setItems(prev => [...prev, emptyItem()])}>
+            <Plus className="w-4 h-4 mr-1" />Nuovo
+          </Button>
+        </div>
+        {items.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-6">Nessun elemento. Clicca "Nuovo" per aggiungere.</p>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-20">Codice</TableHead>
+                    <TableHead>Nome</TableHead>
+                    <TableHead className="w-28">Tonalità</TableHead>
+                    <TableHead className="w-24 text-right">Prezzo</TableHead>
+                    <TableHead className="w-20 text-right">Quantità</TableHead>
+                    <TableHead className="w-28">Unità</TableHead>
+                    <TableHead className="w-20 text-right">Sconto</TableHead>
+                    <TableHead className="w-28 text-right">Totale</TableHead>
+                    <TableHead className="w-10"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {items.map(item => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <Input value={item.code} onChange={e => updateItem(items, setItems, item.id, 'code', e.target.value)} className="h-8 text-xs" />
+                      </TableCell>
+                      <TableCell>
+                        <Input value={item.name} onChange={e => updateItem(items, setItems, item.id, 'name', e.target.value)} className="h-8 text-xs" placeholder="Nome prodotto" />
+                      </TableCell>
+                      <TableCell>
+                        <Select value={item.color} onValueChange={v => updateItem(items, setItems, item.id, 'color', v)}>
+                          <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="—" /></SelectTrigger>
+                          <SelectContent>
+                            {MGO_COLORS.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <Input type="number" value={item.price || ''} onChange={e => updateItem(items, setItems, item.id, 'price', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right" />
+                      </TableCell>
+                      <TableCell>
+                        <Input type="number" value={item.quantity || ''} onChange={e => updateItem(items, setItems, item.id, 'quantity', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right" />
+                      </TableCell>
+                      <TableCell>
+                        <Select value={item.unit} onValueChange={v => updateItem(items, setItems, item.id, 'unit', v)}>
+                          <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            {UNITS.map(u => <SelectItem key={u} value={u}>{u}</SelectItem>)}
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Input type="number" value={item.discount || ''} onChange={e => updateItem(items, setItems, item.id, 'discount', parseFloat(e.target.value) || 0)} className="h-8 text-xs text-right w-16" />
+                          <span className="text-xs text-muted-foreground">%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right font-medium text-sm">
+                        €{calcTotal(item).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => removeItem(items, setItems, item.id)}>
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="flex justify-end pt-3 border-t mt-3">
+              <div className="text-sm">
+                <span className="text-muted-foreground mr-2">Riepilogo</span>
+                <span className="font-semibold">€{sectionTotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
+              </div>
+            </div>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
+
+  if (loading) return <div className="flex items-center justify-center h-96">Caricamento...</div>;
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -270,7 +401,7 @@ const AdminQuoteCreate = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
-          {/* Main content - Left */}
+          {/* Main content */}
           <div className="space-y-6">
             {/* Cliente */}
             <Card>
@@ -300,27 +431,17 @@ const AdminQuoteCreate = () => {
                       <div className="mt-2 space-y-2">
                         <div className="relative">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                          <Input
-                            placeholder="Cerca cliente..."
-                            value={customerSearch}
-                            onChange={e => setCustomerSearch(e.target.value)}
-                            className="pl-10"
-                          />
+                          <Input placeholder="Cerca cliente..." value={customerSearch} onChange={e => setCustomerSearch(e.target.value)} className="pl-10" />
                         </div>
                         <div className="max-h-48 overflow-y-auto border rounded-lg divide-y">
                           {filteredCustomers.slice(0, 10).map(c => (
-                            <button
-                              key={c.id}
-                              onClick={() => { selectCustomer(c.id); setCustomerSearch(''); }}
-                              className="w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors text-sm"
-                            >
+                            <button key={c.id} onClick={() => { setSelectedCustomerId(c.id); setSelectedCustomer(c); setCustomerSearch(''); }}
+                              className="w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors text-sm">
                               <span className="font-medium">{getCustomerName(c)}</span>
                               {c.city && <span className="text-muted-foreground ml-2">— {c.city}</span>}
                             </button>
                           ))}
-                          {filteredCustomers.length === 0 && (
-                            <p className="text-sm text-muted-foreground text-center py-3">Nessun cliente trovato</p>
-                          )}
+                          {filteredCustomers.length === 0 && <p className="text-sm text-muted-foreground text-center py-3">Nessun cliente trovato</p>}
                         </div>
                       </div>
                     )}
@@ -395,6 +516,62 @@ const AdminQuoteCreate = () => {
               </CardContent>
             </Card>
 
+            {/* Totals Section */}
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="space-y-1">
+                    <Label className="text-sm">Subtotale</Label>
+                    <div className="flex items-center gap-2 h-10 px-3 border rounded-md bg-muted/50">
+                      <span className="text-muted-foreground text-sm">€</span>
+                      <span className="font-medium">{subtotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-sm">Sconto <span className="text-destructive">*</span></Label>
+                    <div className="flex items-center gap-1">
+                      <Input type="number" value={discountPercent || ''} onChange={e => setDiscountPercent(parseFloat(e.target.value) || 0)} className="h-10" />
+                      <span className="text-muted-foreground text-sm">%</span>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-sm">Totale</Label>
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2 h-10 px-3 border rounded-md bg-muted/50">
+                        <span className="text-muted-foreground text-sm">€</span>
+                        <span className="font-medium">{grandTotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</span>
+                      </div>
+                      <span className="text-xs text-muted-foreground mt-1">Tasse incluse</span>
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-sm">Totale concordato</Label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground text-sm">€</span>
+                      <Input type="number" value={agreedTotal} onChange={e => setAgreedTotal(e.target.value)} placeholder={grandTotal.toFixed(2)} />
+                    </div>
+                    <span className="text-xs text-muted-foreground">Tasse incluse</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 pt-2">
+                  <Switch checked={hidePrices} onCheckedChange={setHidePrices} />
+                  <div>
+                    <Label className="text-sm font-medium">Nascondi prezzi</Label>
+                    <p className="text-xs text-muted-foreground">Nascondi il prezzo di prodotti e accessori nel documento PDF</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Articoli */}
+            {renderLineTable('Articoli', articles, setArticles, articlesTotal)}
+
+            {/* Accessori */}
+            {renderLineTable('Accessori', accessories, setAccessories, accessoriesTotal)}
+
+            {/* Servizi */}
+            {renderLineTable('Servizi', services, setServices, servicesTotal)}
+
             {/* Condizioni */}
             <Card>
               <CardContent className="p-6 space-y-4">
@@ -445,14 +622,9 @@ const AdminQuoteCreate = () => {
                 <Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Note visibili solo internamente..." rows={3} />
               </CardContent>
             </Card>
-
-            {/* Placeholder for future sections */}
-            <div className="text-center text-muted-foreground text-sm py-8 border-2 border-dashed rounded-lg">
-              Le sezioni <strong>Prodotti</strong>, <strong>Accessori</strong> e <strong>Servizi</strong> verranno aggiunte nella prossima fase.
-            </div>
           </div>
 
-          {/* Sidebar - Right */}
+          {/* Sidebar */}
           <div className="space-y-4">
             <Card>
               <CardContent className="p-4 space-y-4">
@@ -476,7 +648,6 @@ const AdminQuoteCreate = () => {
                 </div>
               </CardContent>
             </Card>
-
             <Card>
               <CardContent className="p-4 space-y-4">
                 <div className="space-y-2">
