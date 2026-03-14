@@ -92,6 +92,17 @@ const AdminLeads = () => {
     return sp ? `${sp.first_name} ${sp.last_name}` : '-';
   };
 
+  const getSalespersonBadge = (id: string | null) => {
+    if (!id || !salespeople) return <span className="text-muted-foreground">-</span>;
+    const sp = salespeople.find(s => s.id === id);
+    if (!sp) return <span className="text-muted-foreground">-</span>;
+    return (
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style={getSalespersonBadgeStyle(sp.id)}>
+        {sp.first_name} {sp.last_name}
+      </span>
+    );
+  };
+
   const getStatusBadge = (status: string) => {
     const s = LEAD_STATUSES.find(ls => ls.value === status) || LEAD_STATUSES[0];
     return <Badge variant="outline" className={`${s.color} text-xs font-medium`}>● {s.label}</Badge>;
