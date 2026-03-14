@@ -322,26 +322,82 @@ const AdminImport = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h4 className="font-medium mb-2">Vendite</h4>
-              <div className="bg-muted/50 p-3 rounded-lg text-sm font-mono">
-                <p>prodotto,quantita,prezzo,canale,cliente,data</p>
-                <p className="text-muted-foreground">MgO,100,35,B2B,Nome,2024-01-15</p>
+            {/* Vendite */}
+            <div className="border border-border rounded-xl p-4 space-y-3">
+              <h4 className="font-semibold text-base">📊 Vendite</h4>
+              <p className="text-sm text-muted-foreground">File per importare le vendite registrate</p>
+              <div className="space-y-1 text-sm">
+                <p className="font-medium mb-1">Colonne richieste:</p>
+                <div className="space-y-0.5">
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">prodotto</span> — tipo prodotto (MgO, CWC)</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">quantita</span> — mq venduti</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">prezzo</span> — prezzo €/mq</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">canale</span> — B2B o B2C</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">cliente</span> — nome cliente</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">data</span> — data vendita (YYYY-MM-DD)</p>
+                </div>
               </div>
+              <div className="bg-muted/40 p-3 rounded-lg text-xs font-mono leading-relaxed overflow-x-auto">
+                <p className="font-semibold">Esempio:</p>
+                <p>prodotto,quantita,prezzo,canale,cliente,data</p>
+                <p className="text-muted-foreground">MgO,100,35,B2B,Ristorante Mimmi,2024-01-15</p>
+                <p className="text-muted-foreground">CWC,50,28,B2C,,2024-01-20</p>
+              </div>
+              <Button variant="outline" size="sm" className="w-full" onClick={() => downloadTemplate('sales')}>
+                <Download className="w-3.5 h-3.5 mr-2" />
+                Scarica Template Vendite
+              </Button>
             </div>
-            <div>
-              <h4 className="font-medium mb-2">Magazzino</h4>
-              <div className="bg-muted/50 p-3 rounded-lg text-sm font-mono">
+
+            {/* Magazzino */}
+            <div className="border border-border rounded-xl p-4 space-y-3">
+              <h4 className="font-semibold text-base">📦 Magazzino</h4>
+              <p className="text-sm text-muted-foreground">File per importare movimenti di magazzino</p>
+              <div className="space-y-1 text-sm">
+                <p className="font-medium mb-1">Colonne richieste:</p>
+                <div className="space-y-0.5">
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">prodotto</span> — tipo prodotto (MgO, CWC)</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">quantita</span> — mq movimentati</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">costo</span> — costo acquisto €/mq</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">tipo</span> — IN (ingresso) o OUT (uscita)</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">data</span> — data movimento (YYYY-MM-DD)</p>
+                </div>
+              </div>
+              <div className="bg-muted/40 p-3 rounded-lg text-xs font-mono leading-relaxed overflow-x-auto">
+                <p className="font-semibold">Esempio:</p>
                 <p>prodotto,quantita,costo,tipo,data</p>
                 <p className="text-muted-foreground">MgO,1000,15,IN,2024-01-01</p>
+                <p className="text-muted-foreground">CWC,500,12,IN,2024-01-01</p>
               </div>
+              <Button variant="outline" size="sm" className="w-full" onClick={() => downloadTemplate('inventory')}>
+                <Download className="w-3.5 h-3.5 mr-2" />
+                Scarica Template Magazzino
+              </Button>
             </div>
-            <div>
-              <h4 className="font-medium mb-2">Costi</h4>
-              <div className="bg-muted/50 p-3 rounded-lg text-sm font-mono">
+
+            {/* Costi */}
+            <div className="border border-border rounded-xl p-4 space-y-3">
+              <h4 className="font-semibold text-base">💰 Costi</h4>
+              <p className="text-sm text-muted-foreground">File per importare i costi statici dei prodotti</p>
+              <div className="space-y-1 text-sm">
+                <p className="font-medium mb-1">Colonne richieste:</p>
+                <div className="space-y-0.5">
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">prodotto</span> — tipo prodotto (MgO, CWC)</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">fob</span> — costo FOB €/mq</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">dazi</span> — % dazi doganali</p>
+                  <p><span className="font-mono bg-muted/60 px-1.5 py-0.5 rounded text-xs">logistica</span> — costo logistica €/mq</p>
+                </div>
+              </div>
+              <div className="bg-muted/40 p-3 rounded-lg text-xs font-mono leading-relaxed overflow-x-auto">
+                <p className="font-semibold">Esempio:</p>
                 <p>prodotto,fob,dazi,logistica</p>
                 <p className="text-muted-foreground">MgO,15,1.7,0.49</p>
+                <p className="text-muted-foreground">CWC,12,1.7,0.49</p>
               </div>
+              <Button variant="outline" size="sm" className="w-full" onClick={() => downloadTemplate('costs')}>
+                <Download className="w-3.5 h-3.5 mr-2" />
+                Scarica Template Costi
+              </Button>
             </div>
           </div>
         </CardContent>
