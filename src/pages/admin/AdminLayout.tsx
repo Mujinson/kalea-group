@@ -46,7 +46,7 @@ const AdminLayout = () => {
             <NotificationCenter />
           </div>
           </header>
-          <div className="flex-1 p-3 md:p-6 overflow-auto">
+          <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: '#ffffff' }}>
             <Outlet />
           </div>
         </main>
