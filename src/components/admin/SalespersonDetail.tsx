@@ -12,6 +12,7 @@ import { FileText, TrendingUp, Briefcase, MapPin, Plus, X, UserPlus, AlertTriang
 import { toast } from 'sonner';
 import { ITALIAN_REGIONS, getRegionNames } from '@/data/italianTerritories';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
+import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
 
 interface Props {
   salespersonId: string;
