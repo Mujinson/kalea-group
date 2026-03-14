@@ -242,7 +242,7 @@ const NotificationCenter = () => {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-96 p-0" align="end">
+      <PopoverContent className="w-96 p-0 bg-white text-black" align="end">
         <div className="p-4 border-b">
           <h4 className="font-semibold">Notifiche</h4>
           <p className="text-sm text-muted-foreground">
