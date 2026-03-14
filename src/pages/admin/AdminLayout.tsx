@@ -35,17 +35,18 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
+      <div className="min-h-screen flex w-full" style={{ background: '#ffffff' }}>
         <AdminSidebar />
         <main className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 border-b border-border bg-background flex items-center px-3 md:px-4 gap-3">
+          <header className="h-14 border-b border-border" style={{ background: '#ffffff' }}><div className="h-full flex items-center px-3 md:px-4 gap-3">
             <SidebarTrigger className="text-foreground hover:bg-muted" />
             <img src={logoDark} alt="Kalēa" className="h-7" />
             <span className="text-muted-foreground text-sm font-light">Dashboard</span>
             <div className="flex-1" />
             <NotificationCenter />
+          </div>
           </header>
-          <div className="flex-1 p-3 md:p-6 overflow-auto">
+          <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: '#ffffff' }}>
             <Outlet />
           </div>
         </main>
