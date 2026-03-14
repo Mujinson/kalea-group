@@ -52,7 +52,7 @@ All colors MUST be HSL.
     /* Brand colors from Kalea Brand Manual 2025 */
     /* Light cream background: #F7F1E7 (RGB 247, 241, 231) */
     --background: 39 47% 94%;
-    --foreground: 22 59% 18%;
+    --foreground: 0 0% 10%;
 
     --card: 37 40% 95%;
     --card-foreground: 22 59% 18%;
