@@ -35,7 +35,7 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full" style={{ background: '#ffffff' }}>
+      <div className="min-h-screen flex w-full admin-theme" style={{ background: '#ffffff' }}>
         <AdminSidebar />
         <main className="flex-1 flex flex-col min-w-0">
           <header className="h-14 border-b border-border" style={{ background: '#ffffff' }}><div className="h-full flex items-center px-3 md:px-4 gap-3">

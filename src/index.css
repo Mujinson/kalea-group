@@ -169,6 +169,17 @@ All colors MUST be HSL.
   }
 }
 
+/* Admin/CRM theme: black text */
+.admin-theme {
+  --foreground: 0 0% 10%;
+  --card-foreground: 0 0% 10%;
+  --popover-foreground: 0 0% 10%;
+  --muted-foreground: 0 0% 30%;
+  --sidebar-foreground: 0 0% 10%;
+  --sidebar-accent-foreground: 0 0% 10%;
+  color: hsl(0 0% 10%);
+}
+
 @layer base {
   * {
     @apply border-border;
