@@ -364,10 +364,10 @@ const AdminLeads = () => {
                 {detailLead.company_name && detailLead.name && (
                   <span className="text-sm font-medium">Ref: {detailLead.name}</span>
                 )}
-                <span className="text-sm text-muted-foreground ml-auto">
-                  {getSalespersonName(detailLead.assigned_salesperson_id) !== '-' 
-                    ? `Resp: ${getSalespersonName(detailLead.assigned_salesperson_id)}`
-                    : 'Non assegnato'}
+                <span className="ml-auto">
+                  {detailLead.assigned_salesperson_id 
+                    ? getSalespersonBadge(detailLead.assigned_salesperson_id)
+                    : <span className="text-sm text-muted-foreground">Non assegnato</span>}
                 </span>
               </div>
               <Card>
