@@ -257,7 +257,7 @@ const AdminLeads = () => {
                     <TableCell className="font-medium">{lead.name}</TableCell>
                     <TableCell>{lead.company_name || '-'}</TableCell>
                     <TableCell>{getStatusBadge(lead.status)}</TableCell>
-                    <TableCell>{getSalespersonName(lead.assigned_salesperson_id)}</TableCell>
+                    <TableCell>{getSalespersonBadge(lead.assigned_salesperson_id)}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">
                       {format(new Date(lead.created_at), "dd MMM yyyy · HH:mm", { locale: it })}
                     </TableCell>
