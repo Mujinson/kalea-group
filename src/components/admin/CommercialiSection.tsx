@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { toast } from 'sonner';
 import { UserPlus, Trash2, Pencil, Eye, Briefcase } from 'lucide-react';
 import SalespersonDetail from './SalespersonDetail';
+import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
 
 interface Salesperson {
   id: string;
@@ -185,7 +186,14 @@ const CommercialiSection = () => {
               <TableBody>
                 {salespeople.map(sp => (
                   <TableRow key={sp.id}>
-                    <TableCell className="font-medium">{sp.first_name} {sp.last_name}</TableCell>
+                    <TableCell>
+                      <span
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                        style={getSalespersonBadgeStyle(sp.id)}
+                      >
+                        {sp.first_name} {sp.last_name}
+                      </span>
+                    </TableCell>
                     <TableCell>{sp.email || '-'}</TableCell>
                     <TableCell>{sp.phone || '-'}</TableCell>
                     <TableCell>{sp.commission_rate ?? 0}%</TableCell>

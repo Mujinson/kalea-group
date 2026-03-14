@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Users, Search, Download, Plus, MoreVertical, Pencil, Eye } from "lucide-react";
 import { toast } from "sonner";
+import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 
 const LEAD_STATUSES = [
   { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
@@ -89,6 +90,17 @@ const AdminLeads = () => {
     if (!id || !salespeople) return '-';
     const sp = salespeople.find(s => s.id === id);
     return sp ? `${sp.first_name} ${sp.last_name}` : '-';
+  };
+
+  const getSalespersonBadge = (id: string | null) => {
+    if (!id || !salespeople) return <span className="text-muted-foreground">-</span>;
+    const sp = salespeople.find(s => s.id === id);
+    if (!sp) return <span className="text-muted-foreground">-</span>;
+    return (
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style={getSalespersonBadgeStyle(sp.id)}>
+        {sp.first_name} {sp.last_name}
+      </span>
+    );
   };
 
   const getStatusBadge = (status: string) => {
@@ -245,7 +257,7 @@ const AdminLeads = () => {
                     <TableCell className="font-medium">{lead.name}</TableCell>
                     <TableCell>{lead.company_name || '-'}</TableCell>
                     <TableCell>{getStatusBadge(lead.status)}</TableCell>
-                    <TableCell>{getSalespersonName(lead.assigned_salesperson_id)}</TableCell>
+                    <TableCell>{getSalespersonBadge(lead.assigned_salesperson_id)}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">
                       {format(new Date(lead.created_at), "dd MMM yyyy · HH:mm", { locale: it })}
                     </TableCell>
@@ -352,10 +364,10 @@ const AdminLeads = () => {
                 {detailLead.company_name && detailLead.name && (
                   <span className="text-sm font-medium">Ref: {detailLead.name}</span>
                 )}
-                <span className="text-sm text-muted-foreground ml-auto">
-                  {getSalespersonName(detailLead.assigned_salesperson_id) !== '-' 
-                    ? `Resp: ${getSalespersonName(detailLead.assigned_salesperson_id)}`
-                    : 'Non assegnato'}
+                <span className="ml-auto">
+                  {detailLead.assigned_salesperson_id 
+                    ? getSalespersonBadge(detailLead.assigned_salesperson_id)
+                    : <span className="text-sm text-muted-foreground">Non assegnato</span>}
                 </span>
               </div>
               <Card>

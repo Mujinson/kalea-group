@@ -12,6 +12,7 @@ import { FileText, TrendingUp, Briefcase, MapPin, Plus, X, UserPlus, AlertTriang
 import { toast } from 'sonner';
 import { ITALIAN_REGIONS, getRegionNames } from '@/data/italianTerritories';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
+import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
 
 interface Props {
   salespersonId: string;
@@ -207,7 +208,9 @@ const SalespersonDetail = ({ salespersonId }: Props) => {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Briefcase className="w-5 h-5" />
-            {sp.first_name} {sp.last_name}
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" style={getSalespersonBadgeStyle(sp.id)}>
+              {sp.first_name} {sp.last_name}
+            </span>
           </CardTitle>
           {!sp.user_id && (
             <Button size="sm" variant="outline" onClick={() => setAccountDialogOpen(true)}>
