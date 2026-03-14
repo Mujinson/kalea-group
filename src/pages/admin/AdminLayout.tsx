@@ -44,6 +44,7 @@ const AdminLayout = () => {
             <span className="text-muted-foreground text-sm font-light">Dashboard</span>
             <div className="flex-1" />
             <NotificationCenter />
+          </div>
           </header>
           <div className="flex-1 p-3 md:p-6 overflow-auto">
             <Outlet />
