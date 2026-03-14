@@ -120,14 +120,14 @@ All colors MUST be HSL.
     --shadow-medium: 0 12px 48px -12px hsla(0, 0%, 0%, 0.4);
     --shadow-large: 0 20px 64px -16px hsla(0, 0%, 0%, 0.5);
 
-    --sidebar-background: 25 59% 18%;
-    --sidebar-foreground: 39 47% 94%;
-    --sidebar-primary: 39 47% 94%;
-    --sidebar-primary-foreground: 25 59% 18%;
-    --sidebar-accent: 25 50% 24%;
-    --sidebar-accent-foreground: 39 47% 94%;
-    --sidebar-border: 25 40% 28%;
-    --sidebar-ring: 34 33% 68%;
+    --sidebar-background: 39 47% 94%;
+    --sidebar-foreground: 22 59% 18%;
+    --sidebar-primary: 22 59% 18%;
+    --sidebar-primary-foreground: 39 47% 94%;
+    --sidebar-accent: 34 32% 85%;
+    --sidebar-accent-foreground: 22 59% 18%;
+    --sidebar-border: 30 15% 82%;
+    --sidebar-ring: 22 59% 18%;
   }
 
   .dark {
