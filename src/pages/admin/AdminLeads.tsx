@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Users, Search, Download, Plus, MoreVertical, Pencil, Eye } from "lucide-react";
 import { toast } from "sonner";
+import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 
 const LEAD_STATUSES = [
   { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
