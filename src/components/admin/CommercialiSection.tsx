@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { toast } from 'sonner';
 import { UserPlus, Trash2, Pencil, Eye, Briefcase } from 'lucide-react';
 import SalespersonDetail from './SalespersonDetail';
+import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
 
 interface Salesperson {
   id: string;
