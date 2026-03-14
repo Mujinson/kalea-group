@@ -208,7 +208,9 @@ const SalespersonDetail = ({ salespersonId }: Props) => {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Briefcase className="w-5 h-5" />
-            {sp.first_name} {sp.last_name}
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" style={getSalespersonBadgeStyle(sp.id)}>
+              {sp.first_name} {sp.last_name}
+            </span>
           </CardTitle>
           {!sp.user_id && (
             <Button size="sm" variant="outline" onClick={() => setAccountDialogOpen(true)}>
