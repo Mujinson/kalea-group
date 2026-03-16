@@ -170,21 +170,61 @@ All colors MUST be HSL.
 }
 
 /* Admin/CRM theme: clean white with black text */
-.admin-theme {
+.admin-theme,
+.admin-theme [data-radix-popper-content-wrapper] *,
+body:has(.admin-theme) [role="dialog"] {
   --foreground: 0 0% 10%;
   --card: 0 0% 100%;
   --card-foreground: 0 0% 10%;
+  --popover: 0 0% 100%;
   --popover-foreground: 0 0% 10%;
   --muted: 220 14% 96%;
   --muted-foreground: 0 0% 40%;
   --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 220 13% 70%;
+  --background: 0 0% 100%;
   --sidebar-foreground: 0 0% 10%;
   --sidebar-accent-foreground: 0 0% 10%;
-  --background: 220 14% 96%;
   color: hsl(0 0% 10%);
 }
 
+/* Admin page background stays gray */
+.admin-theme {
+  --background: 220 14% 96%;
+}
+
 .admin-theme .rounded-2xl {
+  border-color: hsl(220 13% 91%);
+}
+
+/* Admin dialog styling */
+body:has(.admin-theme) [role="dialog"] {
+  --background: 0 0% 100%;
+  border-radius: 1rem;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.15);
+}
+
+body:has(.admin-theme) [role="dialog"] input,
+body:has(.admin-theme) [role="dialog"] textarea,
+body:has(.admin-theme) [role="dialog"] [data-radix-select-trigger] {
+  border-radius: 0.625rem;
+  border-color: hsl(220 13% 91%);
+  background: hsl(220 14% 98%);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body:has(.admin-theme) [role="dialog"] input:focus,
+body:has(.admin-theme) [role="dialog"] textarea:focus,
+body:has(.admin-theme) [role="dialog"] [data-radix-select-trigger]:focus {
+  border-color: hsl(220 13% 70%);
+  box-shadow: 0 0 0 3px hsl(220 13% 70% / 0.12);
+}
+
+body:has(.admin-theme) [data-radix-select-content] {
+  --background: 0 0% 100%;
+  --popover: 0 0% 100%;
+  border-radius: 0.625rem;
   border-color: hsl(220 13% 91%);
 }
 
