@@ -450,7 +450,7 @@ const AdminLeads = () => {
                     <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="none">-</SelectItem>
-                      {dlg.form.province && getCitiesForProvince(dlg.form.province).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                      {dlg.form.province && dlg.form.region && getCitiesForProvince(dlg.form.region, dlg.form.province).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
