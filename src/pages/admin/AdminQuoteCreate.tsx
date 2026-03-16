@@ -257,8 +257,25 @@ const AdminQuoteCreate = () => {
 
   const filteredCustomers = customers.filter(c => {
     if (!customerSearch) return true;
-    return getCustomerName(c).toLowerCase().includes(customerSearch.toLowerCase());
+    const name = getCustomerName(c).toLowerCase();
+    const q = customerSearch.toLowerCase();
+    return name.includes(q) || (c.email && c.email.toLowerCase().includes(q)) || (c.city && c.city.toLowerCase().includes(q));
   });
+
+  const filteredLeads = allLeads.filter(l => {
+    if (!leadSearch) return true;
+    const q = leadSearch.toLowerCase();
+    return (
+      l.name.toLowerCase().includes(q) ||
+      (l.company_name && l.company_name.toLowerCase().includes(q)) ||
+      l.email.toLowerCase().includes(q) ||
+      l.phone.includes(q) ||
+      (l.city && l.city.toLowerCase().includes(q)) ||
+      (l.region && l.region.toLowerCase().includes(q))
+    );
+  });
+
+  const getLeadDisplayName = (l: LeadInfo) => l.company_name || l.name;
 
   const updateItem = (list: LineItem[], setList: React.Dispatch<React.SetStateAction<LineItem[]>>, id: string, field: keyof LineItem, value: any) => {
     setList(prev => prev.map(item => {
