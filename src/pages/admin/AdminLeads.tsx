@@ -298,6 +298,34 @@ const AdminLeads = () => {
     toast.success("Export completato");
   };
 
+  const navigateToQuoteForLead = (lead: Lead) => {
+    // Navigate to quote creation with lead info as params
+    const params = new URLSearchParams();
+    params.set('leadName', lead.company_name || lead.name);
+    params.set('leadEmail', lead.email);
+    params.set('leadPhone', lead.phone);
+    if (lead.region) params.set('leadRegion', lead.region);
+    if (lead.province) params.set('leadProvince', lead.province);
+    if (lead.city) params.set('leadCity', lead.city);
+    if ((lead as any).address) params.set('leadAddress', (lead as any).address);
+    params.set('leadId', lead.id);
+    navigate(`/admin/preventivi/nuovo?${params.toString()}`);
+  };
+
+  const quoteSearchFiltered = leads?.filter(lead => {
+    if (!quoteSearchTerm) return true;
+    const q = quoteSearchTerm.toLowerCase();
+    return (
+      lead.name.toLowerCase().includes(q) ||
+      (lead.company_name && lead.company_name.toLowerCase().includes(q)) ||
+      lead.email.toLowerCase().includes(q) ||
+      lead.phone.includes(q) ||
+      ((lead as any).contact_person_name && (lead as any).contact_person_name.toLowerCase().includes(q)) ||
+      (lead.city && lead.city.toLowerCase().includes(q)) ||
+      (lead.region && lead.region.toLowerCase().includes(q))
+    );
+  });
+
   const statCounts = {
     total: leads?.length || 0,
     nuovo: leads?.filter(l => l.status === 'nuovo').length || 0,
