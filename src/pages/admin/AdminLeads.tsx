@@ -122,6 +122,7 @@ const emptyLeadForm = {
 const AdminLeads = () => {
   const { role, salespersonId } = useAdminAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [detailLead, setDetailLead] = useState<Lead | null>(null);
@@ -129,6 +130,8 @@ const AdminLeads = () => {
   const [editForm, setEditForm] = useState<any>({});
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [createForm, setCreateForm] = useState<any>({ ...emptyLeadForm });
+  const [quoteSearchOpen, setQuoteSearchOpen] = useState(false);
+  const [quoteSearchTerm, setQuoteSearchTerm] = useState("");
 
   const isAdmin = role === 'admin';
 
