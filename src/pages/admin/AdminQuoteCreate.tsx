@@ -86,6 +86,23 @@ interface Customer {
   phone: string | null;
 }
 
+interface LeadInfo {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  company_name: string | null;
+  city: string | null;
+  province: string | null;
+  region: string | null;
+  address: string | null;
+  lead_type: string | null;
+  contact_person_name: string | null;
+  contact_person_role: string | null;
+  contact_person_email: string | null;
+  contact_person_phone: string | null;
+}
+
 const emptyItem = (): LineItem => ({
   id: Date.now().toString() + Math.random().toString(36).slice(2),
   code: '', name: '', description: '', color: '', price: 0, quantity: 0, unit: 'Metro quadro', discount: 0, total: 0,
@@ -107,12 +124,16 @@ const AdminQuoteCreate = () => {
   const { user } = useAdminAuth();
   const editId = searchParams.get('edit');
   const preselectedCustomerId = searchParams.get('customer');
+  const preselectedLeadId = searchParams.get('leadId');
 
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [allLeads, setAllLeads] = useState<LeadInfo[]>([]);
   const [salespeople, setSalespeople] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [customerSearch, setCustomerSearch] = useState('');
+  const [leadSearch, setLeadSearch] = useState('');
+  const [selectedLead, setSelectedLead] = useState<LeadInfo | null>(null);
 
   // Catalog dialog
   const [catalogOpen, setCatalogOpen] = useState(false);
@@ -165,18 +186,26 @@ const AdminQuoteCreate = () => {
   useEffect(() => { if (editId) loadQuote(editId); }, [editId]);
 
   const fetchInitialData = async () => {
-    const [custRes, spRes] = await Promise.all([
+    const [custRes, spRes, leadRes] = await Promise.all([
       supabase.from('customers').select('id, company_name, first_name, last_name, address, city, province, postal_code, region, country, email, phone').order('company_name'),
       supabase.from('salespeople').select('*').eq('is_active', true).order('first_name'),
+      supabase.from('leads').select('*').order('company_name'),
     ]);
     const custList = custRes.data || [];
     setCustomers(custList);
     setSalespeople(spRes.data || []);
+    const leadList = (leadRes.data || []) as LeadInfo[];
+    setAllLeads(leadList);
 
     const custId = preselectedCustomerId;
     if (custId) {
       const c = custList.find(c => c.id === custId);
       if (c) { setSelectedCustomerId(c.id); setSelectedCustomer(c); }
+    }
+
+    if (preselectedLeadId) {
+      const l = leadList.find(l => l.id === preselectedLeadId);
+      if (l) setSelectedLead(l);
     }
   };
 
@@ -228,8 +257,25 @@ const AdminQuoteCreate = () => {
 
   const filteredCustomers = customers.filter(c => {
     if (!customerSearch) return true;
-    return getCustomerName(c).toLowerCase().includes(customerSearch.toLowerCase());
+    const name = getCustomerName(c).toLowerCase();
+    const q = customerSearch.toLowerCase();
+    return name.includes(q) || (c.email && c.email.toLowerCase().includes(q)) || (c.city && c.city.toLowerCase().includes(q));
   });
+
+  const filteredLeads = allLeads.filter(l => {
+    if (!leadSearch) return true;
+    const q = leadSearch.toLowerCase();
+    return (
+      l.name.toLowerCase().includes(q) ||
+      (l.company_name && l.company_name.toLowerCase().includes(q)) ||
+      l.email.toLowerCase().includes(q) ||
+      l.phone.includes(q) ||
+      (l.city && l.city.toLowerCase().includes(q)) ||
+      (l.region && l.region.toLowerCase().includes(q))
+    );
+  });
+
+  const getLeadDisplayName = (l: LeadInfo) => l.company_name || l.name;
 
   const updateItem = (list: LineItem[], setList: React.Dispatch<React.SetStateAction<LineItem[]>>, id: string, field: keyof LineItem, value: any) => {
     setList(prev => prev.map(item => {
@@ -520,7 +566,40 @@ const AdminQuoteCreate = () => {
                   </div>
                   <div>
                     <Label className="text-sm font-semibold">Lead</Label>
-                    <p className="text-sm text-muted-foreground mt-2">Nessun elemento selezionato.</p>
+                    {selectedLead ? (
+                      <div className="mt-2 p-3 border rounded-lg bg-muted/50">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="font-medium">{getLeadDisplayName(selectedLead)}</p>
+                            {selectedLead.company_name && <p className="text-xs text-muted-foreground">Ref: {selectedLead.name}</p>}
+                            {selectedLead.email && <p className="text-sm text-muted-foreground">{selectedLead.email}</p>}
+                            {selectedLead.phone && <p className="text-sm text-muted-foreground">{selectedLead.phone}</p>}
+                            {selectedLead.city && <p className="text-sm text-muted-foreground">{[selectedLead.city, selectedLead.province, selectedLead.region].filter(Boolean).join(', ')}</p>}
+                          </div>
+                          <Button variant="ghost" size="icon" onClick={() => setSelectedLead(null)} className="h-6 w-6">
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-2 space-y-2">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          <Input placeholder="Cerca lead..." value={leadSearch} onChange={e => setLeadSearch(e.target.value)} className="pl-10" />
+                        </div>
+                        <div className="max-h-48 overflow-y-auto border rounded-lg divide-y">
+                          {filteredLeads.slice(0, 10).map(l => (
+                            <button key={l.id} onClick={() => { setSelectedLead(l); setLeadSearch(''); }}
+                              className="w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors text-sm">
+                              <span className="font-medium">{getLeadDisplayName(l)}</span>
+                              {l.company_name && <span className="text-muted-foreground ml-1 text-xs">· {l.name}</span>}
+                              {l.city && <span className="text-muted-foreground ml-2">— {l.city}</span>}
+                            </button>
+                          ))}
+                          {filteredLeads.length === 0 && <p className="text-sm text-muted-foreground text-center py-3">Nessun lead trovato</p>}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
