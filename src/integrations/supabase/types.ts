@@ -561,13 +561,19 @@ export type Database = {
       }
       leads: {
         Row: {
+          address: string | null
           assigned_salesperson_id: string | null
           city: string | null
           company_name: string | null
+          contact_person_email: string | null
+          contact_person_name: string | null
+          contact_person_phone: string | null
+          contact_person_role: string | null
           created_at: string
           email: string
           id: string
           ip_address: string | null
+          lead_type: string | null
           name: string
           notes: string | null
           phone: string
@@ -578,13 +584,19 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          address?: string | null
           assigned_salesperson_id?: string | null
           city?: string | null
           company_name?: string | null
+          contact_person_email?: string | null
+          contact_person_name?: string | null
+          contact_person_phone?: string | null
+          contact_person_role?: string | null
           created_at?: string
           email: string
           id?: string
           ip_address?: string | null
+          lead_type?: string | null
           name: string
           notes?: string | null
           phone: string
@@ -595,13 +607,19 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          address?: string | null
           assigned_salesperson_id?: string | null
           city?: string | null
           company_name?: string | null
+          contact_person_email?: string | null
+          contact_person_name?: string | null
+          contact_person_phone?: string | null
+          contact_person_role?: string | null
           created_at?: string
           email?: string
           id?: string
           ip_address?: string | null
+          lead_type?: string | null
           name?: string
           notes?: string | null
           phone?: string
