@@ -394,9 +394,12 @@ const AdminOverview = () => {
 
       {/* ATTIVITÀ Section */}
       <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-          <Calendar className="w-4 h-4" /> Attività
-        </h3>
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+            <Calendar className="w-4 h-4 text-purple-500" />
+          </div>
+          <h3 className="text-sm font-semibold text-foreground">Attività</h3>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <KPICard
             title="Task Settimana"
