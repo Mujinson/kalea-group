@@ -364,22 +364,24 @@ const AdminLeads = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Nome contatto</TableHead>
-                <TableHead>Cliente</TableHead>
+                <TableHead>Referente</TableHead>
+                <TableHead>Azienda</TableHead>
+                <TableHead>Tipologia</TableHead>
                 <TableHead>Stato</TableHead>
-                <TableHead>Responsabile</TableHead>
+                <TableHead>Commerciale</TableHead>
                 <TableHead>Creato il</TableHead>
                 <TableHead className="w-10"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading ? (
-                <TableRow><TableCell colSpan={6} className="text-center py-8">Caricamento...</TableCell></TableRow>
+                <TableRow><TableCell colSpan={7} className="text-center py-8">Caricamento...</TableCell></TableRow>
               ) : filteredLeads && filteredLeads.length > 0 ? (
                 filteredLeads.map(lead => (
                   <TableRow key={lead.id} className="cursor-pointer hover:bg-muted/50" onClick={() => setDetailLead(lead)}>
                     <TableCell className="font-medium">{lead.name}</TableCell>
                     <TableCell>{lead.company_name || '-'}</TableCell>
+                    <TableCell>{(lead as any).lead_type ? <Badge variant="outline" className="text-xs">{LEAD_TYPES.find(t => t.value === (lead as any).lead_type)?.label || (lead as any).lead_type}</Badge> : '-'}</TableCell>
                     <TableCell>{getStatusBadge(lead.status)}</TableCell>
                     <TableCell>{getSalespersonBadge(lead.assigned_salesperson_id)}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">
