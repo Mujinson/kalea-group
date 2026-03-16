@@ -224,7 +224,19 @@ const AdminOverview = () => {
     return format(new Date(dateStr), 'dd MMM HH:mm', { locale: it });
   };
 
-  // Small clickable KPI card
+  // Icon background color mapping
+  const getIconBg = (color: string) => {
+    if (color.includes('orange')) return 'bg-orange-100';
+    if (color.includes('blue')) return 'bg-blue-100';
+    if (color.includes('green')) return 'bg-green-100';
+    if (color.includes('emerald')) return 'bg-emerald-100';
+    if (color.includes('red')) return 'bg-red-100';
+    if (color.includes('purple')) return 'bg-purple-100';
+    if (color.includes('amber')) return 'bg-amber-100';
+    return 'bg-muted';
+  };
+
+  // Modern KPI card with prominent icon
   const KPICard = ({ 
     title, 
     value, 
@@ -244,22 +256,37 @@ const AdminOverview = () => {
     badge?: string | number;
     badgeVariant?: 'default' | 'secondary' | 'destructive' | 'outline';
   }) => (
-    <Card 
-      className={`${onClick ? 'cursor-pointer hover:shadow-md hover:border-primary/30 transition-all' : ''}`}
+    <div 
+      className={`group relative rounded-2xl border border-border/60 bg-white p-5 transition-all duration-200 ${onClick ? 'cursor-pointer hover:shadow-lg hover:border-border hover:-translate-y-0.5' : ''}`}
       onClick={onClick}
     >
-      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4">
-        <CardTitle className="text-xs font-medium text-muted-foreground">{title}</CardTitle>
-        <div className="flex items-center gap-2">
-          {badge !== undefined && <Badge variant={badgeVariant}>{badge}</Badge>}
-          <Icon className={`w-4 h-4 ${iconColor}`} />
+      {/* Badge alert */}
+      {badge !== undefined && (
+        <div className="absolute -top-2 -right-2 z-10">
+          <Badge variant={badgeVariant} className="rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm">
+            {badge}
+          </Badge>
         </div>
-      </CardHeader>
-      <CardContent className="px-4 pb-4">
-        <div className="text-2xl font-bold">{value}</div>
-        {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
-      </CardContent>
-    </Card>
+      )}
+
+      <div className="flex items-start gap-4">
+        {/* Icon circle */}
+        <div className={`shrink-0 w-11 h-11 rounded-xl ${getIconBg(iconColor)} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}>
+          <Icon className={`w-5 h-5 ${iconColor}`} />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">{title}</p>
+          <p className="text-xl font-bold text-foreground leading-tight truncate">{value}</p>
+          {subtitle && <p className="text-[11px] text-muted-foreground mt-1 truncate">{subtitle}</p>}
+        </div>
+      </div>
+
+      {/* Hover arrow indicator */}
+      {onClick && (
+        <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/0 group-hover:text-muted-foreground/50 transition-all duration-200" />
+      )}
+    </div>
   );
 
   if (loading) {
