@@ -110,6 +110,12 @@ const emptyLeadForm = {
   region: '',
   province: '',
   city: '',
+  lead_type: '',
+  contact_person_name: '',
+  contact_person_role: '',
+  contact_person_email: '',
+  contact_person_phone: '',
+  address: '',
 };
 
 const AdminLeads = () => {
