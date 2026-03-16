@@ -200,6 +200,12 @@ const AdminLeads = () => {
       region: lead.region || '',
       province: lead.province || '',
       city: lead.city || '',
+      lead_type: lead.lead_type || '',
+      contact_person_name: lead.contact_person_name || '',
+      contact_person_role: lead.contact_person_role || '',
+      contact_person_email: lead.contact_person_email || '',
+      contact_person_phone: lead.contact_person_phone || '',
+      address: lead.address || '',
     });
     setEditDialogOpen(true);
   };
