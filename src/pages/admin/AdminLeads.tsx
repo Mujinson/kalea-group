@@ -29,6 +29,35 @@ const LEAD_STATUSES = [
   { value: 'perso', label: 'Perso', color: 'bg-red-100 text-red-700 border-red-300' },
 ];
 
+const LEAD_TYPES = [
+  { value: 'rivenditore', label: 'Rivenditore' },
+  { value: 'architetto', label: 'Architetto' },
+  { value: 'geometra', label: 'Geometra' },
+  { value: 'impresa_edile', label: 'Impresa Edile' },
+  { value: 'general_contractor', label: 'General Contractor' },
+  { value: 'interior_designer', label: 'Interior Designer' },
+  { value: 'showroom', label: 'Showroom' },
+  { value: 'posatore', label: 'Posatore' },
+  { value: 'costruttore', label: 'Costruttore' },
+  { value: 'privato', label: 'Privato' },
+  { value: 'studio_design', label: 'Studio Design' },
+  { value: 'azienda_pubblica', label: 'Azienda Pubblica' },
+  { value: 'altro', label: 'Altro' },
+];
+
+const CONTACT_ROLES = [
+  { value: 'titolare', label: 'Titolare' },
+  { value: 'ceo', label: 'CEO' },
+  { value: 'direttore_commerciale', label: 'Direttore Commerciale' },
+  { value: 'responsabile_acquisti', label: 'Resp. Acquisti' },
+  { value: 'architetto', label: 'Architetto' },
+  { value: 'geometra', label: 'Geometra' },
+  { value: 'ingegnere', label: 'Ingegnere' },
+  { value: 'project_manager', label: 'Project Manager' },
+  { value: 'dipendente', label: 'Dipendente' },
+  { value: 'altro', label: 'Altro' },
+];
+
 interface Lead {
   id: string;
   name: string;
@@ -42,6 +71,12 @@ interface Lead {
   region: string | null;
   province: string | null;
   city: string | null;
+  lead_type: string | null;
+  contact_person_name: string | null;
+  contact_person_role: string | null;
+  contact_person_email: string | null;
+  contact_person_phone: string | null;
+  address: string | null;
   created_at: string;
   updated_at: string;
 }
