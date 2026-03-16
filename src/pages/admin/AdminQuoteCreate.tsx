@@ -86,6 +86,23 @@ interface Customer {
   phone: string | null;
 }
 
+interface LeadInfo {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  company_name: string | null;
+  city: string | null;
+  province: string | null;
+  region: string | null;
+  address: string | null;
+  lead_type: string | null;
+  contact_person_name: string | null;
+  contact_person_role: string | null;
+  contact_person_email: string | null;
+  contact_person_phone: string | null;
+}
+
 const emptyItem = (): LineItem => ({
   id: Date.now().toString() + Math.random().toString(36).slice(2),
   code: '', name: '', description: '', color: '', price: 0, quantity: 0, unit: 'Metro quadro', discount: 0, total: 0,
