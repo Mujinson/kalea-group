@@ -223,7 +223,13 @@ const AdminLeads = () => {
       region: editForm.region || null,
       province: editForm.province || null,
       city: editForm.city || null,
-    }).eq("id", editForm.id);
+      lead_type: editForm.lead_type || null,
+      contact_person_name: editForm.contact_person_name || null,
+      contact_person_role: editForm.contact_person_role || null,
+      contact_person_email: editForm.contact_person_email || null,
+      contact_person_phone: editForm.contact_person_phone || null,
+      address: editForm.address || null,
+    } as any).eq("id", editForm.id);
 
     if (error) { toast.error("Errore salvataggio"); return; }
     toast.success("Lead aggiornato");
@@ -248,7 +254,13 @@ const AdminLeads = () => {
       region: createForm.region || null,
       province: createForm.province || null,
       city: createForm.city || null,
-    });
+      lead_type: createForm.lead_type || null,
+      contact_person_name: createForm.contact_person_name || null,
+      contact_person_role: createForm.contact_person_role || null,
+      contact_person_email: createForm.contact_person_email || null,
+      contact_person_phone: createForm.contact_person_phone || null,
+      address: createForm.address || null,
+    } as any);
 
     if (error) { toast.error("Errore creazione lead"); return; }
     toast.success("Lead creato con successo");
