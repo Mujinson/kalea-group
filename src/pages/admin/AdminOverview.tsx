@@ -296,10 +296,10 @@ const AdminOverview = () => {
   const debtProgress = data.debtTotal > 0 ? ((data.debtTotal - data.debtRemaining) / data.debtTotal) * 100 : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold">Dashboard</h2>
-        <p className="text-muted-foreground">Panoramica aziendale</p>
+        <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
+        <p className="text-sm text-muted-foreground mt-1">Panoramica aziendale</p>
       </div>
 
       {/* CLIENTI Section */}
