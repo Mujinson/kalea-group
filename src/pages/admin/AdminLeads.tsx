@@ -52,6 +52,31 @@ interface Salesperson {
   last_name: string;
 }
 
+const LEAD_SOURCES = [
+  { value: 'area_tecnica', label: 'Area Tecnica' },
+  { value: 'sito_web', label: 'Sito Web' },
+  { value: 'referral', label: 'Referral' },
+  { value: 'fiera', label: 'Fiera' },
+  { value: 'social', label: 'Social Media' },
+  { value: 'telefono', label: 'Telefono' },
+  { value: 'email', label: 'Email' },
+  { value: 'altro', label: 'Altro' },
+];
+
+const emptyLeadForm = {
+  name: '',
+  email: '',
+  phone: '',
+  company_name: '',
+  source: 'area_tecnica',
+  status: 'nuovo',
+  assigned_salesperson_id: '',
+  notes: '',
+  region: '',
+  province: '',
+  city: '',
+};
+
 const AdminLeads = () => {
   const { role, salespersonId } = useAdminAuth();
   const queryClient = useQueryClient();
@@ -60,6 +85,8 @@ const AdminLeads = () => {
   const [detailLead, setDetailLead] = useState<Lead | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editForm, setEditForm] = useState<any>({});
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [createForm, setCreateForm] = useState<any>({ ...emptyLeadForm });
 
   const isAdmin = role === 'admin';
 
