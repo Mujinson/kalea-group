@@ -357,18 +357,18 @@ const AdminLeads = () => {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
-          { label: 'Totale', count: statCounts.total, color: '' },
-          { label: 'Nuovi', count: statCounts.nuovo, color: 'text-blue-600' },
-          { label: 'Contattati', count: statCounts.contattato, color: 'text-orange-600' },
-          { label: 'Qualificati', count: statCounts.qualificato, color: 'text-green-600' },
-          { label: 'Proposta', count: statCounts.proposta, color: 'text-amber-600' },
+          { label: 'Totale', count: statCounts.total, color: 'text-foreground', bg: 'bg-muted' },
+          { label: 'Nuovi', count: statCounts.nuovo, color: 'text-blue-600', bg: 'bg-blue-100' },
+          { label: 'Contattati', count: statCounts.contattato, color: 'text-orange-600', bg: 'bg-orange-100' },
+          { label: 'Qualificati', count: statCounts.qualificato, color: 'text-green-600', bg: 'bg-green-100' },
+          { label: 'Proposta', count: statCounts.proposta, color: 'text-amber-600', bg: 'bg-amber-100' },
         ].map(s => (
-          <Card key={s.label}>
-            <CardContent className="p-3">
-              <p className="text-xs text-muted-foreground">{s.label}</p>
-              <p className={`text-xl font-bold ${s.color}`}>{s.count}</p>
-            </CardContent>
-          </Card>
+          <div key={s.label} className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
+              <span className={`text-lg font-bold ${s.color}`}>{s.count}</span>
+            </div>
+            <p className="text-xs font-medium text-muted-foreground">{s.label}</p>
+          </div>
         ))}
       </div>
 

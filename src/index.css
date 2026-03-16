@@ -54,7 +54,7 @@ All colors MUST be HSL.
     --background: 39 47% 94%;
     --foreground: 22 59% 18%;
 
-    --card: 37 40% 95%;
+    --card: 0 0% 100%;
     --card-foreground: 22 59% 18%;
 
     --popover: 39 47% 94%;
@@ -169,15 +169,23 @@ All colors MUST be HSL.
   }
 }
 
-/* Admin/CRM theme: black text */
+/* Admin/CRM theme: clean white with black text */
 .admin-theme {
   --foreground: 0 0% 10%;
+  --card: 0 0% 100%;
   --card-foreground: 0 0% 10%;
   --popover-foreground: 0 0% 10%;
-  --muted-foreground: 0 0% 30%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 0 0% 40%;
+  --border: 220 13% 91%;
   --sidebar-foreground: 0 0% 10%;
   --sidebar-accent-foreground: 0 0% 10%;
+  --background: 220 14% 96%;
   color: hsl(0 0% 10%);
+}
+
+.admin-theme .rounded-2xl {
+  border-color: hsl(220 13% 91%);
 }
 
 @layer base {

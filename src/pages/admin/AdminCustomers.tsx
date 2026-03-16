@@ -352,36 +352,39 @@ const AdminCustomers = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Card>
-          <CardContent className="p-3">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Users className="w-4 h-4" />
-              <span className="text-xs">Totale Clienti</span>
-            </div>
-            <div className="text-2xl font-bold">{customers.length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-3">
-            <div className="text-xs text-muted-foreground">Opportunity</div>
-            <div className="text-2xl font-bold">{customers.filter(c => c.status === 'opportunity').length}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-3">
-            <div className="text-xs text-muted-foreground">Valore Totale</div>
-            <div className="text-xl font-bold">€{totalValue.toLocaleString()}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-3">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <TrendingUp className="w-4 h-4" />
-              <span className="text-xs">Margine Totale</span>
-            </div>
-            <div className="text-xl font-bold">€{totalMargin.toLocaleString()}</div>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+            <Users className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Totale Clienti</p>
+            <p className="text-xl font-bold">{customers.length}</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
+            <span className="text-lg font-bold text-orange-600">{customers.filter(c => c.status === 'opportunity').length}</span>
+          </div>
+          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Opportunity</p>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-green-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Valore Totale</p>
+            <p className="text-lg font-bold">€{totalValue.toLocaleString()}</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Margine Totale</p>
+            <p className="text-lg font-bold">€{totalMargin.toLocaleString()}</p>
+          </div>
+        </div>
       </div>
 
       {/* Filters */}

@@ -400,44 +400,42 @@ const AdminCosts = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-        <Card><CardContent className="p-3">
-          <div className="flex items-center gap-2">
-            <TrendingDown className="w-4 h-4 text-red-500 shrink-0" />
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground truncate">Costi Fissi</p>
-              <p className="text-sm md:text-lg font-bold">{formatCurrency(totalFixedCosts)}</p>
-            </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
+            <TrendingDown className="w-5 h-5 text-red-500" />
           </div>
-        </CardContent></Card>
-        <Card><CardContent className="p-3">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-orange-500 shrink-0" />
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground truncate">Costi Variabili</p>
-              <p className="text-sm md:text-lg font-bold">{formatCurrency(totalVariableCosts)}</p>
-            </div>
+          <div className="min-w-0">
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Costi Fissi</p>
+            <p className="text-lg font-bold">{formatCurrency(totalFixedCosts)}</p>
           </div>
-        </CardContent></Card>
-        <Card><CardContent className="p-3">
-          <div className="flex items-center gap-2">
-            <Receipt className="w-4 h-4 text-yellow-500 shrink-0" />
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground truncate">Da Pagare</p>
-              <p className="text-sm md:text-lg font-bold">{formatCurrency(unpaidTotal)}</p>
-            </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
+            <TrendingUp className="w-5 h-5 text-orange-500" />
           </div>
-        </CardContent></Card>
-        <Card className="cursor-pointer hover:bg-muted/50" onClick={() => setStockDialog(true)}>
-          <CardContent className="p-3">
-            <div className="flex items-center gap-2">
-              <Euro className="w-4 h-4 text-blue-500 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-xs text-muted-foreground truncate">Stock Terni</p>
-                <p className="text-sm md:text-lg font-bold">{formatCurrency(stockValuation?.total_value || 0)}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <div className="min-w-0">
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Costi Variabili</p>
+            <p className="text-lg font-bold">{formatCurrency(totalVariableCosts)}</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-yellow-100 flex items-center justify-center shrink-0">
+            <Receipt className="w-5 h-5 text-yellow-600" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Da Pagare</p>
+            <p className="text-lg font-bold">{formatCurrency(unpaidTotal)}</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setStockDialog(true)}>
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
+            <Euro className="w-5 h-5 text-blue-600" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Stock Terni</p>
+            <p className="text-lg font-bold">{formatCurrency(stockValuation?.total_value || 0)}</p>
+          </div>
+        </div>
       </div>
 
       {/* Tabs */}
