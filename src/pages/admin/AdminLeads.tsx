@@ -152,9 +152,13 @@ const AdminLeads = () => {
       email: lead.email,
       phone: lead.phone,
       company_name: lead.company_name || '',
+      source: lead.source || 'area_tecnica',
       status: lead.status,
       assigned_salesperson_id: lead.assigned_salesperson_id || '',
       notes: lead.notes || '',
+      region: lead.region || '',
+      province: lead.province || '',
+      city: lead.city || '',
     });
     setEditDialogOpen(true);
   };
@@ -165,14 +169,44 @@ const AdminLeads = () => {
       email: editForm.email,
       phone: editForm.phone,
       company_name: editForm.company_name || null,
+      source: editForm.source || null,
       status: editForm.status,
       assigned_salesperson_id: editForm.assigned_salesperson_id || null,
       notes: editForm.notes || null,
+      region: editForm.region || null,
+      province: editForm.province || null,
+      city: editForm.city || null,
     }).eq("id", editForm.id);
 
     if (error) { toast.error("Errore salvataggio"); return; }
     toast.success("Lead aggiornato");
     setEditDialogOpen(false);
+    queryClient.invalidateQueries({ queryKey: ["leads"] });
+  };
+
+  const createLead = async () => {
+    if (!createForm.name || !createForm.email || !createForm.phone) {
+      toast.error("Nome, email e telefono sono obbligatori");
+      return;
+    }
+    const { error } = await supabase.from("leads").insert({
+      name: createForm.name,
+      email: createForm.email,
+      phone: createForm.phone,
+      company_name: createForm.company_name || null,
+      source: createForm.source || null,
+      status: createForm.status || 'nuovo',
+      assigned_salesperson_id: createForm.assigned_salesperson_id || null,
+      notes: createForm.notes || null,
+      region: createForm.region || null,
+      province: createForm.province || null,
+      city: createForm.city || null,
+    });
+
+    if (error) { toast.error("Errore creazione lead"); return; }
+    toast.success("Lead creato con successo");
+    setCreateDialogOpen(false);
+    setCreateForm({ ...emptyLeadForm });
     queryClient.invalidateQueries({ queryKey: ["leads"] });
   };
 
