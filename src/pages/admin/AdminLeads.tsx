@@ -408,7 +408,7 @@ const AdminLeads = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                     {searchTerm ? "Nessun lead trovato" : "Nessun lead registrato"}
                   </TableCell>
                 </TableRow>
