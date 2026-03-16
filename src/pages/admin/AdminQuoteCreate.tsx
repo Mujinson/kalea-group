@@ -566,7 +566,40 @@ const AdminQuoteCreate = () => {
                   </div>
                   <div>
                     <Label className="text-sm font-semibold">Lead</Label>
-                    <p className="text-sm text-muted-foreground mt-2">Nessun elemento selezionato.</p>
+                    {selectedLead ? (
+                      <div className="mt-2 p-3 border rounded-lg bg-muted/50">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <p className="font-medium">{getLeadDisplayName(selectedLead)}</p>
+                            {selectedLead.company_name && <p className="text-xs text-muted-foreground">Ref: {selectedLead.name}</p>}
+                            {selectedLead.email && <p className="text-sm text-muted-foreground">{selectedLead.email}</p>}
+                            {selectedLead.phone && <p className="text-sm text-muted-foreground">{selectedLead.phone}</p>}
+                            {selectedLead.city && <p className="text-sm text-muted-foreground">{[selectedLead.city, selectedLead.province, selectedLead.region].filter(Boolean).join(', ')}</p>}
+                          </div>
+                          <Button variant="ghost" size="icon" onClick={() => setSelectedLead(null)} className="h-6 w-6">
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-2 space-y-2">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          <Input placeholder="Cerca lead..." value={leadSearch} onChange={e => setLeadSearch(e.target.value)} className="pl-10" />
+                        </div>
+                        <div className="max-h-48 overflow-y-auto border rounded-lg divide-y">
+                          {filteredLeads.slice(0, 10).map(l => (
+                            <button key={l.id} onClick={() => { setSelectedLead(l); setLeadSearch(''); }}
+                              className="w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors text-sm">
+                              <span className="font-medium">{getLeadDisplayName(l)}</span>
+                              {l.company_name && <span className="text-muted-foreground ml-1 text-xs">· {l.name}</span>}
+                              {l.city && <span className="text-muted-foreground ml-2">— {l.city}</span>}
+                            </button>
+                          ))}
+                          {filteredLeads.length === 0 && <p className="text-sm text-muted-foreground text-center py-3">Nessun lead trovato</p>}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
