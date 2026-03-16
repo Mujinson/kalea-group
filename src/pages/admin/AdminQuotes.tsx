@@ -429,19 +429,19 @@ const AdminQuotes = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
         {[
-          { label: 'Totale', count: statCounts.total, color: '' },
-          { label: 'Nuove', count: statCounts.nuove, color: 'text-blue-600' },
-          { label: 'Inviate', count: statCounts.inviate, color: 'text-orange-600' },
-          { label: 'In trattativa', count: statCounts.in_trattativa, color: 'text-amber-600' },
-          { label: 'Vinte', count: statCounts.vinte, color: 'text-emerald-600' },
-          { label: 'Perse', count: statCounts.perse, color: 'text-red-600' },
+          { label: 'Totale', count: statCounts.total, color: 'text-foreground', bg: 'bg-muted' },
+          { label: 'Nuove', count: statCounts.nuove, color: 'text-blue-600', bg: 'bg-blue-100' },
+          { label: 'Inviate', count: statCounts.inviate, color: 'text-orange-600', bg: 'bg-orange-100' },
+          { label: 'In trattativa', count: statCounts.in_trattativa, color: 'text-amber-600', bg: 'bg-amber-100' },
+          { label: 'Vinte', count: statCounts.vinte, color: 'text-emerald-600', bg: 'bg-emerald-100' },
+          { label: 'Perse', count: statCounts.perse, color: 'text-red-600', bg: 'bg-red-100' },
         ].map(s => (
-          <Card key={s.label}>
-            <CardContent className="p-3">
-              <p className="text-xs text-muted-foreground">{s.label}</p>
-              <p className={`text-xl font-bold ${s.color}`}>{s.count}</p>
-            </CardContent>
-          </Card>
+          <div key={s.label} className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
+              <span className={`text-lg font-bold ${s.color}`}>{s.count}</span>
+            </div>
+            <p className="text-xs font-medium text-muted-foreground">{s.label}</p>
+          </div>
         ))}
       </div>
 
