@@ -905,10 +905,42 @@ const AdminSales = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <Card><CardHeader className="pb-2"><CardTitle className="text-xs sm:text-sm font-medium">Venduto</CardTitle></CardHeader><CardContent><div className="text-lg sm:text-2xl font-bold">{totalMq.toFixed(0)} mq</div></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-xs sm:text-sm font-medium">Fatturato</CardTitle></CardHeader><CardContent><div className="text-lg sm:text-2xl font-bold">{formatCurrency(totalRevenue)}</div></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-xs sm:text-sm font-medium">Margine</CardTitle></CardHeader><CardContent><div className="text-lg sm:text-2xl font-bold text-green-600">{formatCurrency(totalMargin)}</div></CardContent></Card>
-        <Card><CardHeader className="pb-2"><CardTitle className="text-xs sm:text-sm font-medium">Pagate</CardTitle></CardHeader><CardContent><div className="text-lg sm:text-2xl font-bold">{paidCount}/{sales.length}</div></CardContent></Card>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+            <Package className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Venduto</p>
+            <p className="text-lg font-bold">{totalMq.toFixed(0)} mq</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-green-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Fatturato</p>
+            <p className="text-lg font-bold">{formatCurrency(totalRevenue)}</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Margine</p>
+            <p className="text-lg font-bold text-green-600">{formatCurrency(totalMargin)}</p>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+            <CreditCard className="w-5 h-5 text-purple-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Pagate</p>
+            <p className="text-lg font-bold">{paidCount}/{sales.length}</p>
+          </div>
+        </div>
       </div>
 
       {/* Sales Table */}
