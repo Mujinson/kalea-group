@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
@@ -15,9 +15,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
-import { Users, Search, Download, Plus, MoreVertical, Pencil, Eye } from "lucide-react";
+import { Search, Download, Plus, MoreVertical, Pencil, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
+import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
 
 const LEAD_STATUSES = [
   { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
