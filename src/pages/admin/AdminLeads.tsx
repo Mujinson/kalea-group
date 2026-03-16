@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
@@ -15,9 +15,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
-import { Users, Search, Download, Plus, MoreVertical, Pencil, Eye } from "lucide-react";
+import { Search, Download, Plus, MoreVertical, Pencil, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
+import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
 
 const LEAD_STATUSES = [
   { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
@@ -51,6 +52,31 @@ interface Salesperson {
   last_name: string;
 }
 
+const LEAD_SOURCES = [
+  { value: 'area_tecnica', label: 'Area Tecnica' },
+  { value: 'sito_web', label: 'Sito Web' },
+  { value: 'referral', label: 'Referral' },
+  { value: 'fiera', label: 'Fiera' },
+  { value: 'social', label: 'Social Media' },
+  { value: 'telefono', label: 'Telefono' },
+  { value: 'email', label: 'Email' },
+  { value: 'altro', label: 'Altro' },
+];
+
+const emptyLeadForm = {
+  name: '',
+  email: '',
+  phone: '',
+  company_name: '',
+  source: 'area_tecnica',
+  status: 'nuovo',
+  assigned_salesperson_id: '',
+  notes: '',
+  region: '',
+  province: '',
+  city: '',
+};
+
 const AdminLeads = () => {
   const { role, salespersonId } = useAdminAuth();
   const queryClient = useQueryClient();
@@ -59,6 +85,8 @@ const AdminLeads = () => {
   const [detailLead, setDetailLead] = useState<Lead | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editForm, setEditForm] = useState<any>({});
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [createForm, setCreateForm] = useState<any>({ ...emptyLeadForm });
 
   const isAdmin = role === 'admin';
 
@@ -124,9 +152,13 @@ const AdminLeads = () => {
       email: lead.email,
       phone: lead.phone,
       company_name: lead.company_name || '',
+      source: lead.source || 'area_tecnica',
       status: lead.status,
       assigned_salesperson_id: lead.assigned_salesperson_id || '',
       notes: lead.notes || '',
+      region: lead.region || '',
+      province: lead.province || '',
+      city: lead.city || '',
     });
     setEditDialogOpen(true);
   };
@@ -137,14 +169,44 @@ const AdminLeads = () => {
       email: editForm.email,
       phone: editForm.phone,
       company_name: editForm.company_name || null,
+      source: editForm.source || null,
       status: editForm.status,
       assigned_salesperson_id: editForm.assigned_salesperson_id || null,
       notes: editForm.notes || null,
+      region: editForm.region || null,
+      province: editForm.province || null,
+      city: editForm.city || null,
     }).eq("id", editForm.id);
 
     if (error) { toast.error("Errore salvataggio"); return; }
     toast.success("Lead aggiornato");
     setEditDialogOpen(false);
+    queryClient.invalidateQueries({ queryKey: ["leads"] });
+  };
+
+  const createLead = async () => {
+    if (!createForm.name || !createForm.email || !createForm.phone) {
+      toast.error("Nome, email e telefono sono obbligatori");
+      return;
+    }
+    const { error } = await supabase.from("leads").insert({
+      name: createForm.name,
+      email: createForm.email,
+      phone: createForm.phone,
+      company_name: createForm.company_name || null,
+      source: createForm.source || null,
+      status: createForm.status || 'nuovo',
+      assigned_salesperson_id: createForm.assigned_salesperson_id || null,
+      notes: createForm.notes || null,
+      region: createForm.region || null,
+      province: createForm.province || null,
+      city: createForm.city || null,
+    });
+
+    if (error) { toast.error("Errore creazione lead"); return; }
+    toast.success("Lead creato con successo");
+    setCreateDialogOpen(false);
+    setCreateForm({ ...emptyLeadForm });
     queryClient.invalidateQueries({ queryKey: ["leads"] });
   };
 
@@ -189,6 +251,9 @@ const AdminLeads = () => {
           <h1 className="text-2xl font-bold">Lead</h1>
         </div>
         <div className="flex gap-2">
+          <Button onClick={() => { setCreateForm({ ...emptyLeadForm }); setCreateDialogOpen(true); }} size="sm">
+            <Plus className="w-4 h-4 mr-2" />Aggiungi Lead
+          </Button>
           <Button onClick={exportToCsv} variant="outline" size="sm">
             <Download className="w-4 h-4 mr-2" />Esporta
           </Button>
@@ -292,64 +357,113 @@ const AdminLeads = () => {
         </CardContent>
       </Card>
 
-      {/* Edit Dialog */}
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Modifica Lead</DialogTitle>
-            <DialogDescription>Aggiorna i dati e lo stato del lead</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label className="text-xs">Nome contatto</Label>
-                <Input value={editForm.name || ''} onChange={e => setEditForm({ ...editForm, name: e.target.value })} />
+      {/* Lead Form Dialog (shared for create & edit) */}
+      {[
+        { open: editDialogOpen, setOpen: setEditDialogOpen, form: editForm, setForm: setEditForm, onSave: saveEdit, title: "Modifica Lead", desc: "Aggiorna i dati e lo stato del lead", btnLabel: "Salva Modifiche" },
+        { open: createDialogOpen, setOpen: setCreateDialogOpen, form: createForm, setForm: setCreateForm, onSave: createLead, title: "Nuovo Lead", desc: "Inserisci i dati del nuovo lead", btnLabel: "Crea Lead" },
+      ].map((dlg, idx) => (
+        <Dialog key={idx} open={dlg.open} onOpenChange={dlg.setOpen}>
+          <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>{dlg.title}</DialogTitle>
+              <DialogDescription>{dlg.desc}</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Nome contatto *</Label>
+                  <Input value={dlg.form.name || ''} onChange={e => dlg.setForm({ ...dlg.form, name: e.target.value })} placeholder="Mario Rossi" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Azienda</Label>
+                  <Input value={dlg.form.company_name || ''} onChange={e => dlg.setForm({ ...dlg.form, company_name: e.target.value })} placeholder="Azienda S.r.l." />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Email *</Label>
+                  <Input type="email" value={dlg.form.email || ''} onChange={e => dlg.setForm({ ...dlg.form, email: e.target.value })} placeholder="email@esempio.it" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Telefono *</Label>
+                  <Input value={dlg.form.phone || ''} onChange={e => dlg.setForm({ ...dlg.form, phone: e.target.value })} placeholder="+39 333 1234567" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Stato</Label>
+                  <Select value={dlg.form.status || 'nuovo'} onValueChange={v => dlg.setForm({ ...dlg.form, status: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {LEAD_STATUSES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Fonte</Label>
+                  <Select value={dlg.form.source || 'area_tecnica'} onValueChange={v => dlg.setForm({ ...dlg.form, source: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {LEAD_SOURCES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Responsabile</Label>
+                  <Select value={dlg.form.assigned_salesperson_id || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, assigned_salesperson_id: v === 'none' ? '' : v })}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Nessuno</SelectItem>
+                      {salespeople?.map(sp => (
+                        <SelectItem key={sp.id} value={sp.id}>{sp.first_name} {sp.last_name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Regione</Label>
+                  <Select value={dlg.form.region || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, region: v === 'none' ? '' : v, province: '', city: '' })}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-</SelectItem>
+                      {getRegionNames().map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Provincia</Label>
+                  <Select value={dlg.form.province || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, province: v === 'none' ? '' : v, city: '' })} disabled={!dlg.form.region}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-</SelectItem>
+                      {dlg.form.region && getProvincesForRegion(dlg.form.region).map(p => <SelectItem key={p.code} value={p.code}>{p.name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Città</Label>
+                  <Select value={dlg.form.city || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, city: v === 'none' ? '' : v })} disabled={!dlg.form.province}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-</SelectItem>
+                      {dlg.form.province && dlg.form.region && getCitiesForProvince(dlg.form.region, dlg.form.province).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">Azienda</Label>
-                <Input value={editForm.company_name || ''} onChange={e => setEditForm({ ...editForm, company_name: e.target.value })} />
+                <Label className="text-xs">Note / Dettagli</Label>
+                <Textarea value={dlg.form.notes || ''} onChange={e => dlg.setForm({ ...dlg.form, notes: e.target.value })} rows={3} placeholder="Dettagli, next steps..." />
               </div>
+              <Button onClick={dlg.onSave} className="w-full">{dlg.btnLabel}</Button>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label className="text-xs">Email</Label>
-                <Input value={editForm.email || ''} onChange={e => setEditForm({ ...editForm, email: e.target.value })} />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Telefono</Label>
-                <Input value={editForm.phone || ''} onChange={e => setEditForm({ ...editForm, phone: e.target.value })} />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label className="text-xs">Stato</Label>
-                <Select value={editForm.status || 'nuovo'} onValueChange={v => setEditForm({ ...editForm, status: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {LEAD_STATUSES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Responsabile</Label>
-                <Select value={editForm.assigned_salesperson_id || ''} onValueChange={v => setEditForm({ ...editForm, assigned_salesperson_id: v })}>
-                  <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
-                  <SelectContent>
-                    {salespeople?.map(sp => (
-                      <SelectItem key={sp.id} value={sp.id}>{sp.first_name} {sp.last_name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs">Note / Dettagli conversazione</Label>
-              <Textarea value={editForm.notes || ''} onChange={e => setEditForm({ ...editForm, notes: e.target.value })} rows={4} placeholder="Cosa è stato discusso, next steps..." />
-            </div>
-            <Button onClick={saveEdit} className="w-full">Salva Modifiche</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      ))}
 
       {/* Detail Sheet */}
       <Sheet open={!!detailLead} onOpenChange={open => { if (!open) setDetailLead(null); }}>
@@ -376,6 +490,9 @@ const AdminLeads = () => {
                   <div className="flex justify-between"><span className="text-muted-foreground">Telefono</span><span>{detailLead.phone}</span></div>
                   {detailLead.company_name && <div className="flex justify-between"><span className="text-muted-foreground">Azienda</span><span>{detailLead.company_name}</span></div>}
                   <div className="flex justify-between"><span className="text-muted-foreground">Fonte</span><Badge variant="secondary">{detailLead.source || 'area_tecnica'}</Badge></div>
+                  {detailLead.region && <div className="flex justify-between"><span className="text-muted-foreground">Regione</span><span>{detailLead.region}</span></div>}
+                  {detailLead.province && <div className="flex justify-between"><span className="text-muted-foreground">Provincia</span><span>{detailLead.province}</span></div>}
+                  {detailLead.city && <div className="flex justify-between"><span className="text-muted-foreground">Città</span><span>{detailLead.city}</span></div>}
                   <div className="flex justify-between"><span className="text-muted-foreground">Data</span><span>{format(new Date(detailLead.created_at), "dd MMM yyyy, HH:mm", { locale: it })}</span></div>
                 </CardContent>
               </Card>
