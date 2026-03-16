@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +16,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
-import { Search, Download, Plus, MoreVertical, Pencil, Eye } from "lucide-react";
+import { Search, Download, Plus, MoreVertical, Pencil, Eye, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
