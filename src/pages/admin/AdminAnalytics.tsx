@@ -245,51 +245,59 @@ const AdminAnalytics = () => {
 
       {/* KPI Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Fatturato Totale</CardTitle>
-            <DollarSign className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(totalRevenue)}</div>
-            <p className="text-xs text-muted-foreground">{totalMq.toFixed(0)} mq venduti</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Costi Totali</CardTitle>
-            <TrendingDown className="w-4 h-4 text-red-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(totalCost)}</div>
-            <p className="text-xs text-muted-foreground">COGS prodotti</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Margine Lordo</CardTitle>
-            <TrendingUp className="w-4 h-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(totalMargin)}</div>
-            <p className="text-xs text-muted-foreground">Guadagno periodo</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">% Margine Medio</CardTitle>
-            <TrendingUp className="w-4 h-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${avgMarginPercent >= 40 ? 'text-green-600' : avgMarginPercent >= 30 ? 'text-yellow-600' : 'text-red-600'}`}>
-              {avgMarginPercent.toFixed(1)}%
+        <div className="rounded-2xl border border-border/60 bg-white p-5">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center">
+              <DollarSign className="w-5 h-5 text-blue-600" />
             </div>
-            <p className="text-xs text-muted-foreground">Target: 40%</p>
-          </CardContent>
-        </Card>
+            <div>
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Fatturato Totale</p>
+              <p className="text-xl font-bold">{formatCurrency(totalRevenue)}</p>
+              <p className="text-[11px] text-muted-foreground mt-1">{totalMq.toFixed(0)} mq venduti</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border/60 bg-white p-5">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center">
+              <TrendingDown className="w-5 h-5 text-red-500" />
+            </div>
+            <div>
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Costi Totali</p>
+              <p className="text-xl font-bold">{formatCurrency(totalCost)}</p>
+              <p className="text-[11px] text-muted-foreground mt-1">COGS prodotti</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border/60 bg-white p-5">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-green-600" />
+            </div>
+            <div>
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">Margine Lordo</p>
+              <p className="text-xl font-bold text-green-600">{formatCurrency(totalMargin)}</p>
+              <p className="text-[11px] text-muted-foreground mt-1">Guadagno periodo</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border/60 bg-white p-5">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-emerald-600" />
+            </div>
+            <div>
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">% Margine Medio</p>
+              <p className={`text-xl font-bold ${avgMarginPercent >= 40 ? 'text-green-600' : avgMarginPercent >= 30 ? 'text-yellow-600' : 'text-red-600'}`}>
+                {avgMarginPercent.toFixed(1)}%
+              </p>
+              <p className="text-[11px] text-muted-foreground mt-1">Target: 40%</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Charts */}
