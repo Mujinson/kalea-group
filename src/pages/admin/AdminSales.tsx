@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X, Eye, Pencil } from 'lucide-react';
+import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X, Eye, Pencil, TrendingUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
