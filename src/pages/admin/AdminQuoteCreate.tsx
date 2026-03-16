@@ -124,12 +124,16 @@ const AdminQuoteCreate = () => {
   const { user } = useAdminAuth();
   const editId = searchParams.get('edit');
   const preselectedCustomerId = searchParams.get('customer');
+  const preselectedLeadId = searchParams.get('leadId');
 
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [allLeads, setAllLeads] = useState<LeadInfo[]>([]);
   const [salespeople, setSalespeople] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [customerSearch, setCustomerSearch] = useState('');
+  const [leadSearch, setLeadSearch] = useState('');
+  const [selectedLead, setSelectedLead] = useState<LeadInfo | null>(null);
 
   // Catalog dialog
   const [catalogOpen, setCatalogOpen] = useState(false);
