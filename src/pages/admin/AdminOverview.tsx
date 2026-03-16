@@ -488,57 +488,61 @@ const AdminOverview = () => {
 
       {/* DEBT Progress (if exists) */}
       {data.debtTotal > 0 && (
-        <Card className="cursor-pointer hover:shadow-md transition-all" onClick={() => navigate('/admin/pagamenti')}>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Accordo Pagamento Fornitore</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between text-sm mb-2">
-              <span>Pagato: {formatCurrency(data.debtTotal - data.debtRemaining)}</span>
-              <span>Residuo: {formatCurrency(data.debtRemaining)}</span>
-            </div>
-            <Progress value={debtProgress} className="h-2" />
-            <p className="text-xs text-muted-foreground mt-1 text-center">{debtProgress.toFixed(0)}% completato</p>
-          </CardContent>
-        </Card>
+        <div 
+          className="rounded-2xl border border-border/60 bg-white p-5 cursor-pointer hover:shadow-lg transition-all"
+          onClick={() => navigate('/admin/pagamenti')}
+        >
+          <p className="text-sm font-semibold text-foreground mb-3">Accordo Pagamento Fornitore</p>
+          <div className="flex justify-between text-sm mb-2">
+            <span className="text-muted-foreground">Pagato: {formatCurrency(data.debtTotal - data.debtRemaining)}</span>
+            <span className="font-medium text-foreground">Residuo: {formatCurrency(data.debtRemaining)}</span>
+          </div>
+          <Progress value={debtProgress} className="h-2" />
+          <p className="text-xs text-muted-foreground mt-2 text-center">{debtProgress.toFixed(0)}% completato</p>
+        </div>
       )}
 
-      {/* Recent Activity Sidebar */}
+      {/* Recent Activity */}
       <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-2">
-          <Clock className="w-4 h-4" /> Attività Recente
-        </h3>
-        <Card>
-          <CardContent className="p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+            <Clock className="w-4 h-4 text-muted-foreground" />
+          </div>
+          <h3 className="text-sm font-semibold text-foreground">Attività Recente</h3>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-white overflow-hidden">
+          <div className="p-4">
             {recentItems.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">Nessuna attività recente</p>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-1">
                 {recentItems.map((item) => (
                   <div 
                     key={item.id}
-                    className="flex items-center gap-3 p-2 -m-2 rounded hover:bg-muted/50 cursor-pointer"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 cursor-pointer transition-colors"
                     onClick={() => {
                       if (item.type === 'sale') navigate('/admin/vendite');
                       if (item.type === 'quote') navigate('/admin/preventivi');
                     }}
                   >
-                    {item.type === 'sale' && <Receipt className="w-4 h-4 text-green-500 shrink-0" />}
-                    {item.type === 'quote' && <FileText className="w-4 h-4 text-blue-500 shrink-0" />}
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${item.type === 'sale' ? 'bg-green-100' : 'bg-blue-100'}`}>
+                      {item.type === 'sale' && <Receipt className="w-4 h-4 text-green-600" />}
+                      {item.type === 'quote' && <FileText className="w-4 h-4 text-blue-600" />}
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{item.title}</p>
+                      <p className="text-sm font-medium text-foreground truncate">{item.title}</p>
                       <p className="text-xs text-muted-foreground">{item.subtitle}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      {item.value !== undefined && <p className="text-sm font-medium">{formatCurrency(item.value)}</p>}
-                      <p className="text-xs text-muted-foreground">{formatDate(item.date)}</p>
+                      {item.value !== undefined && <p className="text-sm font-semibold text-foreground">{formatCurrency(item.value)}</p>}
+                      <p className="text-[11px] text-muted-foreground">{formatDate(item.date)}</p>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
