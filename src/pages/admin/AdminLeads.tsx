@@ -466,7 +466,7 @@ const AdminLeads = () => {
             </DialogHeader>
             <div className="space-y-4">
               {/* Sezione Azienda */}
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b pb-1">Dati Azienda</p>
+              <p className="text-[11px] font-semibold text-foreground/50 uppercase tracking-widest border-b border-border/60 pb-2">Dati Azienda</p>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs">Azienda</Label>
