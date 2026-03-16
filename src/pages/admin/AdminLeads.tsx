@@ -422,33 +422,77 @@ const AdminLeads = () => {
         { open: createDialogOpen, setOpen: setCreateDialogOpen, form: createForm, setForm: setCreateForm, onSave: createLead, title: "Nuovo Lead", desc: "Inserisci i dati del nuovo lead", btnLabel: "Crea Lead" },
       ].map((dlg, idx) => (
         <Dialog key={idx} open={dlg.open} onOpenChange={dlg.setOpen}>
-          <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+           <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{dlg.title}</DialogTitle>
               <DialogDescription>{dlg.desc}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
+              {/* Sezione Azienda */}
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b pb-1">Dati Azienda</p>
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Nome contatto *</Label>
-                  <Input value={dlg.form.name || ''} onChange={e => dlg.setForm({ ...dlg.form, name: e.target.value })} placeholder="Mario Rossi" />
-                </div>
                 <div className="space-y-1">
                   <Label className="text-xs">Azienda</Label>
                   <Input value={dlg.form.company_name || ''} onChange={e => dlg.setForm({ ...dlg.form, company_name: e.target.value })} placeholder="Azienda S.r.l." />
                 </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Tipologia</Label>
+                  <Select value={dlg.form.lead_type || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, lead_type: v === 'none' ? '' : v })}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona tipo" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-</SelectItem>
+                      {LEAD_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-xs">Email *</Label>
-                  <Input type="email" value={dlg.form.email || ''} onChange={e => dlg.setForm({ ...dlg.form, email: e.target.value })} placeholder="email@esempio.it" />
+                  <Label className="text-xs">Email azienda *</Label>
+                  <Input type="email" value={dlg.form.email || ''} onChange={e => dlg.setForm({ ...dlg.form, email: e.target.value })} placeholder="info@azienda.it" />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs">Telefono *</Label>
-                  <Input value={dlg.form.phone || ''} onChange={e => dlg.setForm({ ...dlg.form, phone: e.target.value })} placeholder="+39 333 1234567" />
+                  <Label className="text-xs">Telefono azienda *</Label>
+                  <Input value={dlg.form.phone || ''} onChange={e => dlg.setForm({ ...dlg.form, phone: e.target.value })} placeholder="+39 06 1234567" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs">Indirizzo</Label>
+                <Input value={dlg.form.address || ''} onChange={e => dlg.setForm({ ...dlg.form, address: e.target.value })} placeholder="Via Roma 1" />
+              </div>
+
+              {/* Sezione Persona di Riferimento */}
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b pb-1 mt-2">Persona di Riferimento</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Nome referente *</Label>
+                  <Input value={dlg.form.name || ''} onChange={e => dlg.setForm({ ...dlg.form, name: e.target.value })} placeholder="Mario Rossi" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Ruolo</Label>
+                  <Select value={dlg.form.contact_person_role || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, contact_person_role: v === 'none' ? '' : v })}>
+                    <SelectTrigger><SelectValue placeholder="Seleziona ruolo" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">-</SelectItem>
+                      {CONTACT_ROLES.map(r => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs">Email referente</Label>
+                  <Input type="email" value={dlg.form.contact_person_email || ''} onChange={e => dlg.setForm({ ...dlg.form, contact_person_email: e.target.value })} placeholder="mario@azienda.it" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs">Telefono referente</Label>
+                  <Input value={dlg.form.contact_person_phone || ''} onChange={e => dlg.setForm({ ...dlg.form, contact_person_phone: e.target.value })} placeholder="+39 333 1234567" />
+                </div>
+              </div>
+
+              {/* Sezione Gestione */}
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b pb-1 mt-2">Gestione Lead</p>
+              <div className="grid grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs">Stato</Label>
                   <Select value={dlg.form.status || 'nuovo'} onValueChange={v => dlg.setForm({ ...dlg.form, status: v })}>
@@ -467,10 +511,8 @@ const AdminLeads = () => {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-xs">Responsabile</Label>
+                  <Label className="text-xs">Commerciale</Label>
                   <Select value={dlg.form.assigned_salesperson_id || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, assigned_salesperson_id: v === 'none' ? '' : v })}>
                     <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
                     <SelectContent>
@@ -481,6 +523,10 @@ const AdminLeads = () => {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+
+              {/* Localizzazione */}
+              <div className="grid grid-cols-3 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs">Regione</Label>
                   <Select value={dlg.form.region || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, region: v === 'none' ? '' : v, province: '', city: '' })}>
@@ -491,8 +537,6 @@ const AdminLeads = () => {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs">Provincia</Label>
                   <Select value={dlg.form.province || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, province: v === 'none' ? '' : v, city: '' })} disabled={!dlg.form.region}>
@@ -514,6 +558,7 @@ const AdminLeads = () => {
                   </Select>
                 </div>
               </div>
+
               <div className="space-y-1">
                 <Label className="text-xs">Note / Dettagli</Label>
                 <Textarea value={dlg.form.notes || ''} onChange={e => dlg.setForm({ ...dlg.form, notes: e.target.value })} rows={3} placeholder="Dettagli, next steps..." />
@@ -534,8 +579,8 @@ const AdminLeads = () => {
             <div className="space-y-4 mt-4">
               <div className="flex items-center gap-2 flex-wrap">
                 {getStatusBadge(detailLead.status)}
-                {detailLead.company_name && detailLead.name && (
-                  <span className="text-sm font-medium">Ref: {detailLead.name}</span>
+                {(detailLead as any).lead_type && (
+                  <Badge variant="secondary" className="text-xs">{LEAD_TYPES.find(t => t.value === (detailLead as any).lead_type)?.label || (detailLead as any).lead_type}</Badge>
                 )}
                 <span className="ml-auto">
                   {detailLead.assigned_salesperson_id 
@@ -543,18 +588,37 @@ const AdminLeads = () => {
                     : <span className="text-sm text-muted-foreground">Non assegnato</span>}
                 </span>
               </div>
+
+              {/* Dati Azienda */}
               <Card>
-                <CardContent className="p-4 space-y-2 text-sm">
+                <CardHeader className="pb-2"><CardTitle className="text-sm">Dati Azienda</CardTitle></CardHeader>
+                <CardContent className="p-4 pt-0 space-y-2 text-sm">
+                  {detailLead.company_name && <div className="flex justify-between"><span className="text-muted-foreground">Azienda</span><span>{detailLead.company_name}</span></div>}
                   <div className="flex justify-between"><span className="text-muted-foreground">Email</span><span>{detailLead.email}</span></div>
                   <div className="flex justify-between"><span className="text-muted-foreground">Telefono</span><span>{detailLead.phone}</span></div>
-                  {detailLead.company_name && <div className="flex justify-between"><span className="text-muted-foreground">Azienda</span><span>{detailLead.company_name}</span></div>}
+                  {(detailLead as any).address && <div className="flex justify-between"><span className="text-muted-foreground">Indirizzo</span><span>{(detailLead as any).address}</span></div>}
                   <div className="flex justify-between"><span className="text-muted-foreground">Fonte</span><Badge variant="secondary">{detailLead.source || 'area_tecnica'}</Badge></div>
-                  {detailLead.region && <div className="flex justify-between"><span className="text-muted-foreground">Regione</span><span>{detailLead.region}</span></div>}
-                  {detailLead.province && <div className="flex justify-between"><span className="text-muted-foreground">Provincia</span><span>{detailLead.province}</span></div>}
-                  {detailLead.city && <div className="flex justify-between"><span className="text-muted-foreground">Città</span><span>{detailLead.city}</span></div>}
-                  <div className="flex justify-between"><span className="text-muted-foreground">Data</span><span>{format(new Date(detailLead.created_at), "dd MMM yyyy, HH:mm", { locale: it })}</span></div>
+                  {detailLead.region && <div className="flex justify-between"><span className="text-muted-foreground">Località</span><span>{[detailLead.city, detailLead.province, detailLead.region].filter(Boolean).join(', ')}</span></div>}
                 </CardContent>
               </Card>
+
+              {/* Persona di Riferimento */}
+              <Card>
+                <CardHeader className="pb-2"><CardTitle className="text-sm">Persona di Riferimento</CardTitle></CardHeader>
+                <CardContent className="p-4 pt-0 space-y-2 text-sm">
+                  <div className="flex justify-between"><span className="text-muted-foreground">Nome</span><span>{detailLead.name}</span></div>
+                  {(detailLead as any).contact_person_role && <div className="flex justify-between"><span className="text-muted-foreground">Ruolo</span><Badge variant="outline">{CONTACT_ROLES.find(r => r.value === (detailLead as any).contact_person_role)?.label || (detailLead as any).contact_person_role}</Badge></div>}
+                  {(detailLead as any).contact_person_email && <div className="flex justify-between"><span className="text-muted-foreground">Email</span><span>{(detailLead as any).contact_person_email}</span></div>}
+                  {(detailLead as any).contact_person_phone && <div className="flex justify-between"><span className="text-muted-foreground">Telefono</span><span>{(detailLead as any).contact_person_phone}</span></div>}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-4 space-y-2 text-sm">
+                  <div className="flex justify-between"><span className="text-muted-foreground">Data creazione</span><span>{format(new Date(detailLead.created_at), "dd MMM yyyy, HH:mm", { locale: it })}</span></div>
+                </CardContent>
+              </Card>
+
               {detailLead.notes && (
                 <Card>
                   <CardHeader className="pb-2"><CardTitle className="text-sm">Note</CardTitle></CardHeader>
