@@ -634,7 +634,7 @@ const AdminLeads = () => {
                   <div className="flex justify-between"><span className="text-muted-foreground">Email</span><span>{detailLead.email}</span></div>
                   <div className="flex justify-between"><span className="text-muted-foreground">Telefono</span><span>{detailLead.phone}</span></div>
                   {(detailLead as any).address && <div className="flex justify-between"><span className="text-muted-foreground">Indirizzo</span><span>{(detailLead as any).address}</span></div>}
-                  <div className="flex justify-between"><span className="text-muted-foreground">Fonte</span><Badge variant="secondary">{detailLead.source || 'area_tecnica'}</Badge></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Fonte</span><Badge variant="secondary">{LEAD_SOURCES.find(s => s.value === detailLead.source)?.label || detailLead.source || 'Area Tecnica'}</Badge></div>
                   {detailLead.region && <div className="flex justify-between"><span className="text-muted-foreground">Località</span><span>{[detailLead.city, detailLead.province, detailLead.region].filter(Boolean).join(', ')}</span></div>}
                 </CardContent>
               </Card>
@@ -666,11 +666,74 @@ const AdminLeads = () => {
                 <Button size="sm" className="flex-1" onClick={() => { openEdit(detailLead); setDetailLead(null); }}>
                   <Pencil className="w-4 h-4 mr-2" />Modifica
                 </Button>
+                <Button size="sm" className="flex-1" variant="outline" onClick={() => { setDetailLead(null); navigateToQuoteForLead(detailLead); }}>
+                  <FileText className="w-4 h-4 mr-2" />Crea Preventivo
+                </Button>
               </div>
             </div>
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Quote Search Dialog - cerca lead e crea preventivo */}
+      <Dialog open={quoteSearchOpen} onOpenChange={setQuoteSearchOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Crea Preventivo per Lead</DialogTitle>
+            <DialogDescription>Cerca un lead esistente o creane uno nuovo</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Cerca per nome, azienda, email, telefono, città..."
+                value={quoteSearchTerm}
+                onChange={e => setQuoteSearchTerm(e.target.value)}
+                className="pl-10"
+                autoFocus
+              />
+            </div>
+            <div className="max-h-72 overflow-y-auto border rounded-lg divide-y">
+              {quoteSearchFiltered && quoteSearchFiltered.length > 0 ? (
+                quoteSearchFiltered.map(lead => (
+                  <button
+                    key={lead.id}
+                    onClick={() => { setQuoteSearchOpen(false); navigateToQuoteForLead(lead); }}
+                    className="w-full text-left px-3 py-2.5 hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-medium text-sm">{lead.company_name || lead.name}</span>
+                        {lead.company_name && <span className="text-xs text-muted-foreground ml-2">· {lead.name}</span>}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {(lead as any).lead_type && (
+                          <Badge variant="outline" className="text-[10px]">{LEAD_TYPES.find(t => t.value === (lead as any).lead_type)?.label || (lead as any).lead_type}</Badge>
+                        )}
+                        {getStatusBadge(lead.status)}
+                      </div>
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      {[lead.email, lead.phone, lead.city].filter(Boolean).join(' · ')}
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="text-center py-6 text-sm text-muted-foreground">
+                  {quoteSearchTerm ? 'Nessun lead trovato' : 'Digita per cercare tra tutti i lead'}
+                </div>
+              )}
+            </div>
+            <Button variant="outline" className="w-full" onClick={() => {
+              setQuoteSearchOpen(false);
+              setCreateForm({ ...emptyLeadForm });
+              setCreateDialogOpen(true);
+            }}>
+              <Plus className="w-4 h-4 mr-2" />Crea nuovo lead
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
