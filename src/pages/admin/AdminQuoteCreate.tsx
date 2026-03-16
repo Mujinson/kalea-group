@@ -186,18 +186,26 @@ const AdminQuoteCreate = () => {
   useEffect(() => { if (editId) loadQuote(editId); }, [editId]);
 
   const fetchInitialData = async () => {
-    const [custRes, spRes] = await Promise.all([
+    const [custRes, spRes, leadRes] = await Promise.all([
       supabase.from('customers').select('id, company_name, first_name, last_name, address, city, province, postal_code, region, country, email, phone').order('company_name'),
       supabase.from('salespeople').select('*').eq('is_active', true).order('first_name'),
+      supabase.from('leads').select('*').order('company_name'),
     ]);
     const custList = custRes.data || [];
     setCustomers(custList);
     setSalespeople(spRes.data || []);
+    const leadList = (leadRes.data || []) as LeadInfo[];
+    setAllLeads(leadList);
 
     const custId = preselectedCustomerId;
     if (custId) {
       const c = custList.find(c => c.id === custId);
       if (c) { setSelectedCustomerId(c.id); setSelectedCustomer(c); }
+    }
+
+    if (preselectedLeadId) {
+      const l = leadList.find(l => l.id === preselectedLeadId);
+      if (l) setSelectedLead(l);
     }
   };
 
