@@ -342,6 +342,9 @@ const AdminLeads = () => {
           <h1 className="text-2xl font-bold">Lead</h1>
         </div>
         <div className="flex gap-2">
+          <Button onClick={() => { setQuoteSearchTerm(''); setQuoteSearchOpen(true); }} size="sm" variant="outline">
+            <FileText className="w-4 h-4 mr-2" />Crea Preventivo
+          </Button>
           <Button onClick={() => { setCreateForm({ ...emptyLeadForm }); setCreateDialogOpen(true); }} size="sm">
             <Plus className="w-4 h-4 mr-2" />Aggiungi Lead
           </Button>
