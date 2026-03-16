@@ -389,25 +389,6 @@ const AdminInventory = () => {
           </div>
         </div>
       </div>
-              Tappetino
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{tappetino.toFixed(0)} mq</div>
-          </CardContent>
-        </Card>
-        <Card className="cursor-pointer hover:bg-muted/50" onClick={() => setActiveTab('profili')}>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Package className="w-4 h-4" />
-              Profili
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{profili.toFixed(0)} mq</div>
-          </CardContent>
-        </Card>
-      </div>
 
       {/* Detailed Stock Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
