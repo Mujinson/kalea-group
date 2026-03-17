@@ -50,6 +50,9 @@ import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminQuoteCreate from "./pages/admin/AdminQuoteCreate";
 import AdminLeads from "./pages/admin/AdminLeads";
+import AdminPipeline from "./pages/admin/AdminPipeline";
+import AdminAppointments from "./pages/admin/AdminAppointments";
+import AdminChatbot from "./pages/admin/AdminChatbot";
 
 
 const queryClient = new QueryClient();
