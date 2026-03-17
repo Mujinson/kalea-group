@@ -26,6 +26,9 @@ import {
   BarChart3,
   FileText,
   UserPlus,
+  Kanban,
+  CalendarClock,
+  Bot,
 } from 'lucide-react';
 
 const allMenuItems = [
