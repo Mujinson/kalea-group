@@ -17,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Footer />
       <CookieConsent />
       <AudioPlayer />
+      <ChatbotWidget />
     </div>
   );
 };
