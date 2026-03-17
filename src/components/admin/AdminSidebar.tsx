@@ -33,9 +33,12 @@ import {
 
 const allMenuItems = [
   { title: 'Overview', url: '/admin', icon: LayoutDashboard, adminOnly: false },
+  { title: 'Pipeline', url: '/admin/pipeline', icon: Kanban, adminOnly: false },
   { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart, adminOnly: true },
   { title: 'Preventivi', url: '/admin/preventivi', icon: FileText, adminOnly: false },
   { title: 'Leads', url: '/admin/leads', icon: UserPlus, adminOnly: false },
+  { title: 'Appuntamenti', url: '/admin/appuntamenti', icon: CalendarClock, adminOnly: false },
+  { title: 'Chatbot', url: '/admin/chatbot', icon: Bot, adminOnly: true },
   { title: 'Clienti', url: '/admin/clienti', icon: Users, adminOnly: false },
   { title: 'Magazzino', url: '/admin/magazzino', icon: Package, adminOnly: true },
   { title: 'Analytics', url: '/admin/analytics', icon: BarChart3, adminOnly: true },
