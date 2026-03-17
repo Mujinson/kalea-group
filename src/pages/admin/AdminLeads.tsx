@@ -91,11 +91,17 @@ interface Salesperson {
 const LEAD_SOURCES = [
   { value: 'area_tecnica', label: 'Area Tecnica' },
   { value: 'sito_web', label: 'Sito Web' },
+  { value: 'chatbot_website', label: '🤖 Chatbot Sito' },
+  { value: 'chatbot_instagram', label: '📸 Chatbot Instagram' },
+  { value: 'chatbot_whatsapp', label: '💬 Chatbot WhatsApp' },
+  { value: 'chatbot_facebook', label: '📘 Chatbot Facebook' },
+  { value: 'landing_page', label: '📄 Landing Page' },
   { value: 'referral', label: 'Referral' },
   { value: 'fiera', label: 'Fiera' },
   { value: 'social', label: 'Social Media' },
   { value: 'telefono', label: 'Telefono' },
   { value: 'email', label: 'Email' },
+  { value: 'ads_campaign', label: '📢 Campagna Ads' },
   { value: 'altro', label: 'Altro' },
 ];
 

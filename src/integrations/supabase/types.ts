@@ -14,6 +14,148 @@ export type Database = {
   }
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          appointment_date: string
+          appointment_type: string
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          duration_minutes: number
+          id: string
+          lead_id: string | null
+          location: string | null
+          notes: string | null
+          reminder_sent: boolean | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          appointment_date: string
+          appointment_type?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          duration_minutes?: number
+          id?: string
+          lead_id?: string | null
+          location?: string | null
+          notes?: string | null
+          reminder_sent?: boolean | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          appointment_date?: string
+          appointment_type?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          duration_minutes?: number
+          id?: string
+          lead_id?: string | null
+          location?: string | null
+          notes?: string | null
+          reminder_sent?: boolean | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chatbot_conversations: {
+        Row: {
+          channel: string
+          created_at: string
+          id: string
+          lead_id: string | null
+          qualification_data: Json | null
+          session_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          channel?: string
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          qualification_data?: Json | null
+          session_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+          qualification_data?: Json | null
+          session_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_conversations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chatbot_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          role?: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chatbot_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commercial_invoices: {
         Row: {
           attachment_url: string | null
@@ -559,10 +701,52 @@ export type Database = {
           },
         ]
       }
+      lead_automations: {
+        Row: {
+          automation_type: string
+          created_at: string
+          executed_at: string | null
+          id: string
+          lead_id: string
+          payload: Json | null
+          scheduled_at: string
+          status: string
+        }
+        Insert: {
+          automation_type: string
+          created_at?: string
+          executed_at?: string | null
+          id?: string
+          lead_id: string
+          payload?: Json | null
+          scheduled_at: string
+          status?: string
+        }
+        Update: {
+          automation_type?: string
+          created_at?: string
+          executed_at?: string | null
+          id?: string
+          lead_id?: string
+          payload?: Json | null
+          scheduled_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_automations_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           address: string | null
           assigned_salesperson_id: string | null
+          budget_range: string | null
           city: string | null
           company_name: string | null
           contact_person_email: string | null
@@ -573,11 +757,17 @@ export type Database = {
           email: string
           id: string
           ip_address: string | null
+          last_interaction_at: string | null
           lead_type: string | null
           name: string
           notes: string | null
           phone: string
+          pipeline_stage: string
+          preferred_contact_method: string | null
+          project_sqm: string | null
+          project_type: string | null
           province: string | null
+          qualification_score: number | null
           region: string | null
           source: string | null
           status: string
@@ -586,6 +776,7 @@ export type Database = {
         Insert: {
           address?: string | null
           assigned_salesperson_id?: string | null
+          budget_range?: string | null
           city?: string | null
           company_name?: string | null
           contact_person_email?: string | null
@@ -596,11 +787,17 @@ export type Database = {
           email: string
           id?: string
           ip_address?: string | null
+          last_interaction_at?: string | null
           lead_type?: string | null
           name: string
           notes?: string | null
           phone: string
+          pipeline_stage?: string
+          preferred_contact_method?: string | null
+          project_sqm?: string | null
+          project_type?: string | null
           province?: string | null
+          qualification_score?: number | null
           region?: string | null
           source?: string | null
           status?: string
@@ -609,6 +806,7 @@ export type Database = {
         Update: {
           address?: string | null
           assigned_salesperson_id?: string | null
+          budget_range?: string | null
           city?: string | null
           company_name?: string | null
           contact_person_email?: string | null
@@ -619,11 +817,17 @@ export type Database = {
           email?: string
           id?: string
           ip_address?: string | null
+          last_interaction_at?: string | null
           lead_type?: string | null
           name?: string
           notes?: string | null
           phone?: string
+          pipeline_stage?: string
+          preferred_contact_method?: string | null
+          project_sqm?: string | null
+          project_type?: string | null
           province?: string | null
+          qualification_score?: number | null
           region?: string | null
           source?: string | null
           status?: string

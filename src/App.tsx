@@ -50,6 +50,9 @@ import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminQuoteCreate from "./pages/admin/AdminQuoteCreate";
 import AdminLeads from "./pages/admin/AdminLeads";
+import AdminPipeline from "./pages/admin/AdminPipeline";
+import AdminAppointments from "./pages/admin/AdminAppointments";
+import AdminChatbot from "./pages/admin/AdminChatbot";
 
 
 const queryClient = new QueryClient();
@@ -112,6 +115,9 @@ const App = () => (
                 <Route path="magazzino" element={<AdminInventory />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="leads" element={<AdminLeads />} />
+                <Route path="pipeline" element={<AdminPipeline />} />
+                <Route path="appuntamenti" element={<AdminAppointments />} />
+                <Route path="chatbot" element={<AdminChatbot />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="import" element={<AdminImport />} />

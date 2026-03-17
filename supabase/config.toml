@@ -1,1 +1,13 @@
 project_id = "ulvnhevuqhcmgxuexdil"
+
+[functions.send-contact-email]
+verify_jwt = false
+
+[functions.chatbot]
+verify_jwt = false
+
+[functions.meta-webhook]
+verify_jwt = false
+
+[functions.lead-automation]
+verify_jwt = false
