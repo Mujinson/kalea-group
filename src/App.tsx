@@ -119,6 +119,7 @@ const App = () => (
                 <Route path="pipeline" element={<AdminPipeline />} />
                 <Route path="appuntamenti" element={<AdminAppointments />} />
                 <Route path="chatbot" element={<AdminChatbot />} />
+                <Route path="mappa" element={<AdminMap />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="import" element={<AdminImport />} />
