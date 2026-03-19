@@ -53,6 +53,7 @@ import AdminLeads from "./pages/admin/AdminLeads";
 import AdminPipeline from "./pages/admin/AdminPipeline";
 import AdminAppointments from "./pages/admin/AdminAppointments";
 import AdminChatbot from "./pages/admin/AdminChatbot";
+import AdminMap from "./pages/admin/AdminMap";
 
 
 const queryClient = new QueryClient();
