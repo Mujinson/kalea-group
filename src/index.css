@@ -470,3 +470,18 @@ body:has(.admin-theme) [data-radix-select-content] {
     display: none;  /* Chrome, Safari and Opera */
   }
 }
+
+/* Leaflet custom markers */
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px !important;
+}
