@@ -150,9 +150,17 @@ const AdminMap = () => {
     },
   });
 
+  const { data: cantieri } = useQuery({
+    queryKey: ['map-cantieri'],
+    queryFn: async () => {
+      const { data } = await supabase.from('construction_sites').select('id, title, address, city, province, region, tipologia');
+      return data || [];
+    },
+  });
+
   useEffect(() => {
     const geocodeAll = async () => {
-      if (!leads && !customers) return;
+      if (!leads && !customers && !cantieri) return;
       setLoading(true);
 
       const items: { id: string; type: MapPoint['type']; name: string; address: string | null; city: string | null; province: string | null; region: string | null; extra?: string }[] = [];
