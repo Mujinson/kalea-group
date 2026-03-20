@@ -54,7 +54,9 @@ import AdminPipeline from "./pages/admin/AdminPipeline";
 import AdminAppointments from "./pages/admin/AdminAppointments";
 import AdminChatbot from "./pages/admin/AdminChatbot";
 import AdminMap from "./pages/admin/AdminMap";
-
+import AdminCantieri from "./pages/admin/AdminCantieri";
+import AdminCantiereDetail from "./pages/admin/AdminCantiereDetail";
+import AdminMedia from "./pages/admin/AdminMedia";
 
 const queryClient = new QueryClient();
 
