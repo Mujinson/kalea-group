@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           appointment_date: string
           appointment_type: string
+          assigned_to: string | null
           created_at: string
           created_by: string | null
           customer_id: string | null
@@ -34,6 +35,7 @@ export type Database = {
         Insert: {
           appointment_date: string
           appointment_type?: string
+          assigned_to?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
@@ -50,6 +52,7 @@ export type Database = {
         Update: {
           appointment_date?: string
           appointment_type?: string
+          assigned_to?: string | null
           created_at?: string
           created_by?: string | null
           customer_id?: string | null
@@ -64,6 +67,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "appointments_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "appointments_customer_id_fkey"
             columns: ["customer_id"]
@@ -205,6 +215,99 @@ export type Database = {
             columns: ["salesperson_id"]
             isOneToOne: false
             referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      construction_sites: {
+        Row: {
+          address: string | null
+          city: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          contact_surname: string | null
+          country: string | null
+          created_at: string
+          customer_id: string | null
+          end_date: string | null
+          id: string
+          lead_id: string | null
+          notes: string | null
+          postal_code: string | null
+          product_model: string | null
+          project_name: string | null
+          province: string | null
+          region: string | null
+          start_date: string | null
+          status: string
+          tipologia: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          contact_surname?: string | null
+          country?: string | null
+          created_at?: string
+          customer_id?: string | null
+          end_date?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          postal_code?: string | null
+          product_model?: string | null
+          project_name?: string | null
+          province?: string | null
+          region?: string | null
+          start_date?: string | null
+          status?: string
+          tipologia?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          contact_surname?: string | null
+          country?: string | null
+          created_at?: string
+          customer_id?: string | null
+          end_date?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          postal_code?: string | null
+          product_model?: string | null
+          project_name?: string | null
+          province?: string | null
+          region?: string | null
+          start_date?: string | null
+          status?: string
+          tipologia?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "construction_sites_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "construction_sites_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
             referencedColumns: ["id"]
           },
         ]
@@ -1362,6 +1465,47 @@ export type Database = {
             columns: ["salesperson_id"]
             isOneToOne: false
             referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_media: {
+        Row: {
+          created_at: string
+          description: string | null
+          file_name: string
+          file_size: number | null
+          file_type: string
+          file_url: string
+          id: string
+          site_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string
+          file_url: string
+          id?: string
+          site_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          site_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_media_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
             referencedColumns: ["id"]
           },
         ]

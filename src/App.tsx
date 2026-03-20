@@ -54,7 +54,9 @@ import AdminPipeline from "./pages/admin/AdminPipeline";
 import AdminAppointments from "./pages/admin/AdminAppointments";
 import AdminChatbot from "./pages/admin/AdminChatbot";
 import AdminMap from "./pages/admin/AdminMap";
-
+import AdminCantieri from "./pages/admin/AdminCantieri";
+import AdminCantiereDetail from "./pages/admin/AdminCantiereDetail";
+import AdminMedia from "./pages/admin/AdminMedia";
 
 const queryClient = new QueryClient();
 
@@ -120,6 +122,9 @@ const App = () => (
                 <Route path="appuntamenti" element={<AdminAppointments />} />
                 <Route path="chatbot" element={<AdminChatbot />} />
                 <Route path="mappa" element={<AdminMap />} />
+                <Route path="cantieri" element={<AdminCantieri />} />
+                <Route path="cantieri/:id" element={<AdminCantiereDetail />} />
+                <Route path="media" element={<AdminMedia />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="import" element={<AdminImport />} />

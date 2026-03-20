@@ -150,9 +150,17 @@ const AdminMap = () => {
     },
   });
 
+  const { data: cantieri } = useQuery({
+    queryKey: ['map-cantieri'],
+    queryFn: async () => {
+      const { data } = await supabase.from('construction_sites').select('id, title, address, city, province, region, tipologia');
+      return data || [];
+    },
+  });
+
   useEffect(() => {
     const geocodeAll = async () => {
-      if (!leads && !customers) return;
+      if (!leads && !customers && !cantieri) return;
       setLoading(true);
 
       const items: { id: string; type: MapPoint['type']; name: string; address: string | null; city: string | null; province: string | null; region: string | null; extra?: string }[] = [];
@@ -172,6 +180,15 @@ const AdminMap = () => {
           name: c.company_name || [c.first_name, c.last_name].filter(Boolean).join(' '),
           address: c.address, city: c.city, province: c.province, region: c.region,
           extra: c.customer_type,
+        });
+      });
+
+      (cantieri || []).forEach((s) => {
+        items.push({
+          id: s.id, type: 'cantiere',
+          name: s.title,
+          address: s.address, city: s.city, province: s.province, region: s.region,
+          extra: s.tipologia,
         });
       });
 
@@ -209,7 +226,7 @@ const AdminMap = () => {
     };
 
     geocodeAll();
-  }, [leads, customers]);
+  }, [leads, customers, cantieri]);
 
   const filteredPoints = useMemo(() => {
     if (filter === 'all') return mapPoints;
