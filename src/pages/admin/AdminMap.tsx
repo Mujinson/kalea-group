@@ -183,6 +183,15 @@ const AdminMap = () => {
         });
       });
 
+      (cantieri || []).forEach((s) => {
+        items.push({
+          id: s.id, type: 'cantiere',
+          name: s.title,
+          address: s.address, city: s.city, province: s.province, region: s.region,
+          extra: s.tipologia,
+        });
+      });
+
       setGeocodeProgress({ done: 0, total: items.length });
       const points: MapPoint[] = [];
 
