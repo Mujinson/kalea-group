@@ -226,7 +226,7 @@ const AdminMap = () => {
     };
 
     geocodeAll();
-  }, [leads, customers]);
+  }, [leads, customers, cantieri]);
 
   const filteredPoints = useMemo(() => {
     if (filter === 'all') return mapPoints;
