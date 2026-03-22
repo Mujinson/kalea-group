@@ -85,10 +85,10 @@ const ChatbotWidget = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-colors duration-300 hover:bg-foreground",
+          "fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-colors duration-300",
           isOpen
             ? "bg-foreground text-background"
-            : "bg-foreground/90 text-background backdrop-blur-sm"
+            : "bg-accent-warm text-background backdrop-blur-sm hover:bg-foreground"
         )}
         aria-label={isOpen ? "Chiudi chat" : "Apri chat"}
       >
