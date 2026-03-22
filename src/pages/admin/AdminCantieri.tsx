@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { HardHat, Plus, Search, MapPin, Eye, Trash2, Edit } from "lucide-react";
+import { HardHat, Plus, Search, MapPin, Eye, Trash2, Edit, Upload, X, Image, Film, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +24,8 @@ const AdminCantieri = () => {
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     title: "", project_name: "", address: "", city: "", province: "",
     region: "", postal_code: "", country: "Italia", tipologia: "",
@@ -64,6 +66,7 @@ const AdminCantieri = () => {
       contact_email: "", contact_phone: "", status: "attivo",
     });
     setEditId(null);
+    setPendingFiles([]);
   };
 
   const openEdit = (site: any) => {
@@ -81,21 +84,50 @@ const AdminCantieri = () => {
     setCreateOpen(true);
   };
 
+  const uploadFilesForSite = async (siteId: string) => {
+    for (const file of pendingFiles) {
+      const ext = file.name.split(".").pop();
+      const path = `${siteId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from("site-media").upload(path, file);
+      if (uploadError) { toast.error(`Errore upload: ${file.name}`); continue; }
+      const { data: urlData } = supabase.storage.from("site-media").getPublicUrl(path);
+      const fileType = file.type.startsWith("video") ? "video" : file.type.startsWith("image") ? "image" : "document";
+      await supabase.from("site_media").insert({
+        site_id: siteId, file_url: urlData.publicUrl, file_name: file.name, file_type: fileType, file_size: file.size,
+      });
+    }
+  };
+
   const handleSave = async () => {
     if (!form.title) { toast.error("Il titolo è obbligatorio"); return; }
 
     if (editId) {
       const { error } = await supabase.from("construction_sites").update(form).eq("id", editId);
       if (error) { toast.error("Errore nel salvataggio"); return; }
+      if (pendingFiles.length > 0) await uploadFilesForSite(editId);
       toast.success("Cantiere aggiornato");
     } else {
-      const { error } = await supabase.from("construction_sites").insert(form);
-      if (error) { toast.error("Errore nella creazione"); return; }
+      const { data, error } = await supabase.from("construction_sites").insert(form).select("id").single();
+      if (error || !data) { toast.error("Errore nella creazione"); return; }
+      if (pendingFiles.length > 0) await uploadFilesForSite(data.id);
       toast.success("Cantiere creato");
     }
     setCreateOpen(false);
     resetForm();
     queryClient.invalidateQueries({ queryKey: ["construction-sites"] });
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) setPendingFiles(prev => [...prev, ...Array.from(e.target.files!)]);
+    e.target.value = "";
+  };
+
+  const removeFile = (idx: number) => setPendingFiles(prev => prev.filter((_, i) => i !== idx));
+
+  const getFileIcon = (file: File) => {
+    if (file.type.startsWith("image")) return <Image className="w-4 h-4 text-blue-500" />;
+    if (file.type.startsWith("video")) return <Film className="w-4 h-4 text-purple-500" />;
+    return <FileText className="w-4 h-4 text-muted-foreground" />;
   };
 
   const handleDelete = async (id: string) => {
@@ -255,6 +287,28 @@ const AdminCantieri = () => {
                   <Label>Modello posato</Label>
                   <Input value={form.product_model} onChange={(e) => setForm({ ...form, product_model: e.target.value })} placeholder="Es: Biomag Oak Natural" />
                 </div>
+              </div>
+
+              {/* File upload */}
+              <div className="border-t pt-4 mt-4">
+                <h3 className="font-semibold text-sm mb-2">Allegati</h3>
+                <input ref={fileInputRef} type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx" className="hidden" onChange={handleFileSelect} />
+                <Button type="button" variant="outline" size="sm" className="w-full" onClick={() => fileInputRef.current?.click()}>
+                  <Upload className="w-4 h-4 mr-2" /> Carica file
+                </Button>
+                {pendingFiles.length > 0 && (
+                  <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
+                    {pendingFiles.map((file, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs bg-background rounded px-2 py-1">
+                        {getFileIcon(file)}
+                        <span className="truncate flex-1">{file.name}</span>
+                        <button onClick={() => removeFile(idx)} className="text-destructive hover:text-destructive/80">
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
