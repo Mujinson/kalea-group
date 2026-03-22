@@ -17,7 +17,7 @@ const ChatbotWidget = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Ciao! 👋 Sono l'assistente Kalea. Posso aiutarti a trovare il pavimento perfetto per il tuo progetto. Come posso aiutarti?",
+      content: "Ciao! 👋 Sono l'assistente Kalea®. Stai cercando un pavimento per il tuo progetto? Raccontami di cosa hai bisogno!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -29,7 +29,7 @@ const ChatbotWidget = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
 
   useEffect(() => {
     if (isOpen) inputRef.current?.focus();
@@ -44,6 +44,9 @@ const ChatbotWidget = () => {
     setInput("");
     setIsLoading(true);
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30s client timeout
+
     try {
       const resp = await fetch(CHAT_URL, {
         method: "POST",
@@ -56,23 +59,31 @@ const ChatbotWidget = () => {
           session_id: sessionId,
           conversation_id: conversationId,
         }),
+        signal: controller.signal,
       });
 
-      if (!resp.ok) {
-        throw new Error("Errore nella risposta");
-      }
+      clearTimeout(timeout);
 
       const data = await resp.json();
       if (data.conversation_id) setConversationId(data.conversation_id);
 
       if (data.content) {
         setMessages((prev) => [...prev, { role: "assistant", content: data.content }]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: "Scusa, puoi ripetere? 😊" },
+        ]);
       }
-    } catch (e) {
+    } catch (e: any) {
+      clearTimeout(timeout);
       console.error("Chatbot error:", e);
+      const fallback = e?.name === "AbortError"
+        ? "Scusa, sto avendo qualche difficoltà tecnica. Riprova! 😊"
+        : "Mi scuso, c'è stato un errore. Riprova tra un momento.";
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Mi scuso, c'è stato un errore. Riprova tra un momento." },
+        { role: "assistant", content: fallback },
       ]);
     } finally {
       setIsLoading(false);
@@ -104,7 +115,7 @@ const ChatbotWidget = () => {
               <Bot className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-sm">Kalea Assistant</h3>
+              <h3 className="font-semibold text-sm">Kalea® Assistant</h3>
               <p className="text-xs opacity-70">Online • Rispondiamo subito</p>
             </div>
           </div>
@@ -134,7 +145,7 @@ const ChatbotWidget = () => {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-muted rounded-2xl rounded-bl-md px-4 py-3">
-                  <div className="flex gap-1">
+                  <div className="flex gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-foreground/40 animate-bounce [animation-delay:0ms]" />
                     <span className="w-2 h-2 rounded-full bg-foreground/40 animate-bounce [animation-delay:150ms]" />
                     <span className="w-2 h-2 rounded-full bg-foreground/40 animate-bounce [animation-delay:300ms]" />
