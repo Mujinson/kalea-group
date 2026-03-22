@@ -84,21 +84,50 @@ const AdminCantieri = () => {
     setCreateOpen(true);
   };
 
+  const uploadFilesForSite = async (siteId: string) => {
+    for (const file of pendingFiles) {
+      const ext = file.name.split(".").pop();
+      const path = `${siteId}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from("site-media").upload(path, file);
+      if (uploadError) { toast.error(`Errore upload: ${file.name}`); continue; }
+      const { data: urlData } = supabase.storage.from("site-media").getPublicUrl(path);
+      const fileType = file.type.startsWith("video") ? "video" : file.type.startsWith("image") ? "image" : "document";
+      await supabase.from("site_media").insert({
+        site_id: siteId, file_url: urlData.publicUrl, file_name: file.name, file_type: fileType, file_size: file.size,
+      });
+    }
+  };
+
   const handleSave = async () => {
     if (!form.title) { toast.error("Il titolo è obbligatorio"); return; }
 
     if (editId) {
       const { error } = await supabase.from("construction_sites").update(form).eq("id", editId);
       if (error) { toast.error("Errore nel salvataggio"); return; }
+      if (pendingFiles.length > 0) await uploadFilesForSite(editId);
       toast.success("Cantiere aggiornato");
     } else {
-      const { error } = await supabase.from("construction_sites").insert(form);
-      if (error) { toast.error("Errore nella creazione"); return; }
+      const { data, error } = await supabase.from("construction_sites").insert(form).select("id").single();
+      if (error || !data) { toast.error("Errore nella creazione"); return; }
+      if (pendingFiles.length > 0) await uploadFilesForSite(data.id);
       toast.success("Cantiere creato");
     }
     setCreateOpen(false);
     resetForm();
     queryClient.invalidateQueries({ queryKey: ["construction-sites"] });
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) setPendingFiles(prev => [...prev, ...Array.from(e.target.files!)]);
+    e.target.value = "";
+  };
+
+  const removeFile = (idx: number) => setPendingFiles(prev => prev.filter((_, i) => i !== idx));
+
+  const getFileIcon = (file: File) => {
+    if (file.type.startsWith("image")) return <Image className="w-4 h-4 text-blue-500" />;
+    if (file.type.startsWith("video")) return <Film className="w-4 h-4 text-purple-500" />;
+    return <FileText className="w-4 h-4 text-muted-foreground" />;
   };
 
   const handleDelete = async (id: string) => {
