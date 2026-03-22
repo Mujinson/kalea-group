@@ -24,6 +24,8 @@ const AdminCantieri = () => {
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     title: "", project_name: "", address: "", city: "", province: "",
     region: "", postal_code: "", country: "Italia", tipologia: "",
