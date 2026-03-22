@@ -337,7 +337,7 @@ const AdminCantieri = () => {
           </div>
           <div className="flex justify-end gap-2 mt-4">
             <Button variant="outline" onClick={() => { setCreateOpen(false); resetForm(); }}>Annulla</Button>
-            <Button onClick={handleSave} className="bg-orange-500 hover:bg-orange-600">Salva</Button>
+            <Button onClick={handleSave}>Salva</Button>
           </div>
         </DialogContent>
       </Dialog>
