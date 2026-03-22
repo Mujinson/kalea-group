@@ -66,6 +66,7 @@ const AdminCantieri = () => {
       contact_email: "", contact_phone: "", status: "attivo",
     });
     setEditId(null);
+    setPendingFiles([]);
   };
 
   const openEdit = (site: any) => {
