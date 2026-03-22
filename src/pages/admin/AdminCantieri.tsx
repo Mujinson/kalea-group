@@ -144,7 +144,7 @@ const AdminCantieri = () => {
           <p className="text-xs text-muted-foreground">Cantieri › Lista</p>
           <h1 className="text-2xl font-bold text-foreground">Cantieri</h1>
         </div>
-        <Button onClick={() => { resetForm(); setCreateOpen(true); }} className="bg-orange-500 hover:bg-orange-600">
+        <Button onClick={() => { resetForm(); setCreateOpen(true); }}>
           <Plus className="w-4 h-4 mr-2" /> Nuovo
         </Button>
       </div>
@@ -337,7 +337,7 @@ const AdminCantieri = () => {
           </div>
           <div className="flex justify-end gap-2 mt-4">
             <Button variant="outline" onClick={() => { setCreateOpen(false); resetForm(); }}>Annulla</Button>
-            <Button onClick={handleSave} className="bg-orange-500 hover:bg-orange-600">Salva</Button>
+            <Button onClick={handleSave}>Salva</Button>
           </div>
         </DialogContent>
       </Dialog>
