@@ -81,7 +81,7 @@ const AudioPlayer = () => {
       />
       <motion.button
         onClick={toggleAudio}
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-foreground/90 text-background flex items-center justify-center shadow-lg backdrop-blur-sm hover:bg-foreground transition-colors duration-300"
+        className="fixed bottom-6 right-24 z-50 w-12 h-12 rounded-full bg-foreground/90 text-background flex items-center justify-center shadow-lg backdrop-blur-sm hover:bg-foreground transition-colors duration-300"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, y: 20 }}
