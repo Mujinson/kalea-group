@@ -85,14 +85,14 @@ const ChatbotWidget = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110",
+          "fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-colors duration-300 hover:bg-foreground",
           isOpen
             ? "bg-foreground text-background"
-            : "bg-primary text-primary-foreground animate-pulse"
+            : "bg-foreground/90 text-background backdrop-blur-sm"
         )}
         aria-label={isOpen ? "Chiudi chat" : "Apri chat"}
       >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+        {isOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
       </button>
 
       {/* Chat window */}
