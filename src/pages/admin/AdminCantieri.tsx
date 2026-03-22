@@ -288,6 +288,28 @@ const AdminCantieri = () => {
                   <Input value={form.product_model} onChange={(e) => setForm({ ...form, product_model: e.target.value })} placeholder="Es: Biomag Oak Natural" />
                 </div>
               </div>
+
+              {/* File upload */}
+              <div className="border-t pt-4 mt-4">
+                <h3 className="font-semibold text-sm mb-2">Allegati</h3>
+                <input ref={fileInputRef} type="file" multiple accept="image/*,video/*,.pdf,.doc,.docx" className="hidden" onChange={handleFileSelect} />
+                <Button type="button" variant="outline" size="sm" className="w-full" onClick={() => fileInputRef.current?.click()}>
+                  <Upload className="w-4 h-4 mr-2" /> Carica file
+                </Button>
+                {pendingFiles.length > 0 && (
+                  <div className="mt-2 space-y-1 max-h-32 overflow-y-auto">
+                    {pendingFiles.map((file, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs bg-background rounded px-2 py-1">
+                        {getFileIcon(file)}
+                        <span className="truncate flex-1">{file.name}</span>
+                        <button onClick={() => removeFile(idx)} className="text-destructive hover:text-destructive/80">
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Contact sidebar */}
