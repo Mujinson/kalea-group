@@ -6,45 +6,32 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `Sei Kalea Assistant, l'assistente virtuale di Kalea Surfaces — azienda italiana specializzata in pavimenti innovativi e sostenibili.
+const SYSTEM_PROMPT = `Sei l'assistente Kalea®, azienda italiana di pavimenti innovativi e sostenibili.
 
-Il tuo obiettivo è QUALIFICARE il lead e portarlo a:
-1. Prenotare un appuntamento/chiamata
-2. Lasciare i propri contatti (nome, email, telefono)
+OBIETTIVO: Qualificare il contatto e farlo prenotare una consulenza gratuita.
 
-REGOLE:
-- Rispondi SEMPRE in italiano, in modo cordiale e professionale
-- Fai domande per qualificare il lead:
-  • Tipo di progetto (residenziale, commerciale, hotel, ufficio, retail)
-  • Metratura approssimativa (mq)
-  • Zona/città del progetto
-  • Budget indicativo
-  • Tempistiche
-- NON inventare informazioni tecniche che non conosci
-- Se il lead è qualificato (ha risposto ad almeno 2-3 domande), proponi di:
-  • Fissare una chiamata con un consulente
-  • Lasciare email e telefono per essere ricontattato
-- Sii conciso, max 2-3 frasi per risposta
-- Se ti chiedono prezzi specifici, rispondi che dipende dal progetto e proponi una consulenza gratuita
+STILE:
+- Risposte BREVI: max 2 frasi + 1 domanda
+- Tono amichevole ma professionale
+- Mai inventare dati tecnici
+- Se chiedono prezzi: "Dipende dal progetto! Posso farti fare una consulenza gratuita?"
 
-PRODOTTI KALEA:
-- StoneCore 10: Pavimento SPC con nucleo in pietra, resistente e waterproof
-- BioCore Floor: Pavimento bio-based, eco-sostenibile
-- BioMag Floor: Pavimento magnetico, installazione rapida senza colla
-- Kalea Deck: Pavimento per esterni
-- Kalea Ceiling: Pannelli per soffitto
-- EdgeLine: Profili e battiscopa coordinati
+QUALIFICAZIONE (chiedi 1 cosa alla volta):
+1. Che tipo di progetto? (casa, hotel, ufficio, negozio)
+2. Quanti mq circa?
+3. In che zona?
+4. Quando vorresti iniziare?
 
-Quando il lead fornisce informazioni di qualificazione, rispondi con un JSON tool call usando la funzione "qualify_lead".
-Quando il lead vuole prenotare un appuntamento, usa la funzione "book_appointment".
-Quando il lead fornisce i propri contatti, usa la funzione "capture_contact".`;
+Dopo 2-3 risposte → proponi subito di lasciare nome e telefono per una consulenza gratuita.
+
+PRODOTTI: StoneCore 10 (SPC waterproof), BioCore Floor (bio-based), BioMag Floor (magnetico), Kalea Deck (esterni), Kalea Ceiling (soffitti), EdgeLine (profili).`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     const { messages, session_id, conversation_id } = await req.json();
-    
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -73,151 +60,136 @@ serve(async (req) => {
       });
     }
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
+    const tools = [
+      {
+        type: "function",
+        function: {
+          name: "qualify_lead",
+          description: "Salva i dati di qualificazione del lead",
+          parameters: {
+            type: "object",
+            properties: {
+              project_type: { type: "string" },
+              sqm: { type: "string" },
+              city: { type: "string" },
+              budget: { type: "string" },
+              timeline: { type: "string" },
+            },
+          },
+        },
       },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...messages,
-        ],
-        tools: [
-          {
-            type: "function",
-            function: {
-              name: "qualify_lead",
-              description: "Salva i dati di qualificazione del lead",
-              parameters: {
-                type: "object",
-                properties: {
-                  project_type: { type: "string", description: "Tipo di progetto" },
-                  sqm: { type: "string", description: "Metratura" },
-                  city: { type: "string", description: "Città/zona" },
-                  budget: { type: "string", description: "Budget indicativo" },
-                  timeline: { type: "string", description: "Tempistiche" },
-                },
-              },
+      {
+        type: "function",
+        function: {
+          name: "book_appointment",
+          description: "Prenota un appuntamento/chiamata",
+          parameters: {
+            type: "object",
+            properties: {
+              name: { type: "string" },
+              email: { type: "string" },
+              phone: { type: "string" },
+              preferred_date: { type: "string" },
+              preferred_time: { type: "string" },
+              appointment_type: { type: "string", enum: ["chiamata", "videochiamata", "visita"] },
             },
+            required: ["name", "phone"],
           },
-          {
-            type: "function",
-            function: {
-              name: "book_appointment",
-              description: "Prenota un appuntamento/chiamata",
-              parameters: {
-                type: "object",
-                properties: {
-                  name: { type: "string" },
-                  email: { type: "string" },
-                  phone: { type: "string" },
-                  preferred_date: { type: "string" },
-                  preferred_time: { type: "string" },
-                  appointment_type: { type: "string", enum: ["chiamata", "videochiamata", "visita"] },
-                },
-                required: ["name", "phone"],
-              },
+        },
+      },
+      {
+        type: "function",
+        function: {
+          name: "capture_contact",
+          description: "Salva i contatti del lead",
+          parameters: {
+            type: "object",
+            properties: {
+              name: { type: "string" },
+              email: { type: "string" },
+              phone: { type: "string" },
+              company: { type: "string" },
             },
+            required: ["name"],
           },
-          {
-            type: "function",
-            function: {
-              name: "capture_contact",
-              description: "Salva i contatti del lead",
-              parameters: {
-                type: "object",
-                properties: {
-                  name: { type: "string" },
-                  email: { type: "string" },
-                  phone: { type: "string" },
-                  company: { type: "string" },
-                },
-                required: ["name"],
-              },
-            },
-          },
-        ],
-        stream: true,
-      }),
-    });
+        },
+      },
+    ];
+
+    // Use non-streaming for reliability
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 25000); // 25s timeout
+
+    let response: Response;
+    try {
+      response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            ...messages.slice(-10), // Keep last 10 messages for context, avoid huge payloads
+          ],
+          tools,
+        }),
+        signal: controller.signal,
+      });
+    } catch (e) {
+      clearTimeout(timeout);
+      if (e.name === "AbortError") {
+        return new Response(JSON.stringify({
+          content: "Scusa, ci sto mettendo troppo! 😅 Riprova con la tua domanda.",
+          conversation_id: convId,
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      throw e;
+    }
+    clearTimeout(timeout);
 
     if (!response.ok) {
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Troppe richieste, riprova tra poco." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({
+          content: "Un attimo, sono un po' occupato! Riprova tra qualche secondo. 😊",
+          conversation_id: convId,
+        }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Crediti AI esauriti." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({
+          content: "Mi scuso, ho un problema tecnico temporaneo. Puoi contattarci direttamente a info@kaleasurfaces.com!",
+          conversation_id: convId,
+        }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       const t = await response.text();
       console.error("AI gateway error:", response.status, t);
-      return new Response(JSON.stringify({ error: "Errore AI gateway" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({
+        content: "Scusa, ho avuto un problema. Riprova! 😊",
+        conversation_id: convId,
+      }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // We need to process tool calls, so we can't just stream through.
-    // Collect the full response first to handle tool calls
-    const reader = response.body!.getReader();
-    const decoder = new TextDecoder();
-    let fullContent = "";
-    let toolCalls: any[] = [];
-    let buffer = "";
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-
-      let newlineIndex: number;
-      while ((newlineIndex = buffer.indexOf("\n")) !== -1) {
-        let line = buffer.slice(0, newlineIndex);
-        buffer = buffer.slice(newlineIndex + 1);
-        if (line.endsWith("\r")) line = line.slice(0, -1);
-        if (!line.startsWith("data: ")) continue;
-        const jsonStr = line.slice(6).trim();
-        if (jsonStr === "[DONE]") continue;
-        try {
-          const parsed = JSON.parse(jsonStr);
-          const delta = parsed.choices?.[0]?.delta;
-          if (delta?.content) fullContent += delta.content;
-          if (delta?.tool_calls) {
-            for (const tc of delta.tool_calls) {
-              if (tc.index !== undefined) {
-                if (!toolCalls[tc.index]) toolCalls[tc.index] = { id: tc.id, function: { name: "", arguments: "" } };
-                if (tc.id) toolCalls[tc.index].id = tc.id;
-                if (tc.function?.name) toolCalls[tc.index].function.name = tc.function.name;
-                if (tc.function?.arguments) toolCalls[tc.index].function.arguments += tc.function.arguments;
-              }
-            }
-          }
-        } catch { /* partial */ }
-      }
-    }
+    const data = await response.json();
+    const choice = data.choices?.[0];
+    let fullContent = choice?.message?.content || "";
+    const toolCalls = choice?.message?.tool_calls || [];
 
     // Process tool calls
-    const toolResults: any[] = [];
     for (const tc of toolCalls) {
       if (!tc?.function?.name) continue;
       try {
         const args = JSON.parse(tc.function.arguments);
-        
+
         if (tc.function.name === "qualify_lead" && convId) {
           await supabase
             .from("chatbot_conversations")
             .update({ qualification_data: args })
             .eq("id", convId);
-          toolResults.push({ tool_call_id: tc.id, result: "Dati salvati" });
         }
-        
+
         if (tc.function.name === "capture_contact") {
-          // Create lead in CRM
           const { data: lead } = await supabase.from("leads").insert({
             name: args.name || "Contatto Chatbot",
             email: args.email || "",
@@ -233,11 +205,9 @@ serve(async (req) => {
               .update({ lead_id: lead.id })
               .eq("id", convId);
           }
-          toolResults.push({ tool_call_id: tc.id, result: "Contatto salvato nel CRM" });
         }
-        
+
         if (tc.function.name === "book_appointment") {
-          // Create lead + appointment
           const { data: lead } = await supabase.from("leads").insert({
             name: args.name || "Contatto Chatbot",
             email: args.email || "",
@@ -248,16 +218,16 @@ serve(async (req) => {
           }).select("id").single();
 
           if (lead) {
-            const appointmentDate = args.preferred_date 
+            const appointmentDate = args.preferred_date
               ? new Date(`${args.preferred_date}T${args.preferred_time || "10:00"}:00`)
-              : new Date(Date.now() + 24 * 60 * 60 * 1000); // tomorrow
+              : new Date(Date.now() + 24 * 60 * 60 * 1000);
 
             await supabase.from("appointments").insert({
               lead_id: lead.id,
               title: `Appuntamento con ${args.name}`,
               appointment_date: appointmentDate.toISOString(),
               appointment_type: args.appointment_type || "chiamata",
-              notes: `Prenotato via chatbot`,
+              notes: "Prenotato via chatbot",
             });
 
             if (convId) {
@@ -266,15 +236,51 @@ serve(async (req) => {
                 .eq("id", convId);
             }
           }
-          toolResults.push({ tool_call_id: tc.id, result: "Appuntamento prenotato" });
         }
       } catch (e) {
         console.error("Tool call error:", e);
       }
     }
 
+    // If model returned only tool calls with no content, do a follow-up call
+    if (!fullContent && toolCalls.length > 0) {
+      try {
+        const followUp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-2.5-flash-lite",
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              ...messages.slice(-6),
+              { role: "assistant", content: null, tool_calls: toolCalls.map((tc: any) => ({
+                id: tc.id, type: "function", function: { name: tc.function.name, arguments: tc.function.arguments }
+              }))},
+              ...toolCalls.map((tc: any) => ({
+                role: "tool", tool_call_id: tc.id, content: "Fatto con successo"
+              })),
+            ],
+          }),
+        });
+        if (followUp.ok) {
+          const followData = await followUp.json();
+          fullContent = followData.choices?.[0]?.message?.content || "Perfetto, ho salvato tutto! Come posso aiutarti ancora? 😊";
+        }
+      } catch {
+        fullContent = "Perfetto, ho preso nota! Posso aiutarti con altro? 😊";
+      }
+    }
+
+    // Fallback if still empty
+    if (!fullContent) {
+      fullContent = "Scusa, puoi ripetere? Sono qui per aiutarti! 😊";
+    }
+
     // Save assistant message
-    if (fullContent && convId) {
+    if (convId) {
       await supabase.from("chatbot_messages").insert({
         conversation_id: convId,
         role: "assistant",
@@ -285,14 +291,16 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       content: fullContent,
       conversation_id: convId,
-      tool_results: toolResults,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("Chatbot error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
+    return new Response(JSON.stringify({
+      content: "Mi scuso, c'è stato un problema tecnico. Riprova tra un momento! 😊",
+      conversation_id: null,
+    }), {
+      status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
