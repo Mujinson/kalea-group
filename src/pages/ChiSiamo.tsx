@@ -10,6 +10,14 @@ import fondatore1 from "@/assets/fondatore-1.png";
 import fondatore2 from "@/assets/fondatore-2.png";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import heroChiSiamo from "@/assets/hero-chi-siamo.webp";
+import cardInnovation from "@/assets/card-innovation.webp";
+import cardDesign from "@/assets/card-design.webp";
+import cardCollaboration from "@/assets/card-collaboration.webp";
+import cardQuality from "@/assets/card-quality.webp";
+import cardArchitects from "@/assets/card-architects.webp";
+import cardDesigners from "@/assets/card-designers.webp";
+import cardBuilders from "@/assets/card-builders.webp";
+import cardRetailers from "@/assets/card-retailers.webp";
 
 const ChiSiamo = () => {
   const { t, language } = useTranslation();
