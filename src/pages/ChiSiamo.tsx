@@ -217,12 +217,18 @@ const ChiSiamo = () => {
                   boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
                 }}
                 transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-                className="kalea-card relative overflow-hidden rounded-2xl"
+                className="kalea-card relative overflow-hidden rounded-2xl min-h-[220px]"
               >
-                {/* Background beige */}
-                <div className="absolute inset-0 bg-card-surface" />
+                {/* Background image */}
+                <img
+                  src={customer.backgroundImage}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/70" />
                 
-                <div className="relative z-10 p-8 md:p-10">
+                <div className="relative z-10 p-8 md:p-10 flex flex-col justify-end h-full">
                   <h3 className="text-xl md:text-2xl font-heading font-semibold text-white mb-3">{customer.title}</h3>
                   <p className="text-white font-medium">{customer.description}</p>
                 </div>
