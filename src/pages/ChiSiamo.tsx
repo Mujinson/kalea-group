@@ -52,19 +52,23 @@ const ChiSiamo = () => {
   const customers = [
     { 
       title: t('aboutUs.customers.architects.title'), 
-      description: t('aboutUs.customers.architects.description')
+      description: t('aboutUs.customers.architects.description'),
+      backgroundImage: cardArchitects,
     },
     { 
       title: t('aboutUs.customers.designers.title'), 
-      description: t('aboutUs.customers.designers.description')
+      description: t('aboutUs.customers.designers.description'),
+      backgroundImage: cardDesigners,
     },
     { 
       title: t('aboutUs.customers.builders.title'), 
-      description: t('aboutUs.customers.builders.description')
+      description: t('aboutUs.customers.builders.description'),
+      backgroundImage: cardBuilders,
     },
     { 
       title: t('aboutUs.customers.retailers.title'), 
-      description: t('aboutUs.customers.retailers.description')
+      description: t('aboutUs.customers.retailers.description'),
+      backgroundImage: cardRetailers,
     },
   ];
 
