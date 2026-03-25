@@ -27,21 +27,25 @@ const ChiSiamo = () => {
       icon: Target,
       title: t('aboutUs.values.innovation.title'),
       description: t('aboutUs.values.innovation.description'),
+      backgroundImage: cardInnovation,
     },
     {
       icon: Lightbulb,
       title: t('aboutUs.values.design.title'),
       description: t('aboutUs.values.design.description'),
+      backgroundImage: cardDesign,
     },
     {
       icon: Users,
       title: t('aboutUs.values.collaboration.title'),
       description: t('aboutUs.values.collaboration.description'),
+      backgroundImage: cardCollaboration,
     },
     {
       icon: Award,
       title: t('aboutUs.values.quality.title'),
       description: t('aboutUs.values.quality.description'),
+      backgroundImage: cardQuality,
     },
   ];
 
