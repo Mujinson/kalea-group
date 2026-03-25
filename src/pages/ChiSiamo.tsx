@@ -10,6 +10,14 @@ import fondatore1 from "@/assets/fondatore-1.png";
 import fondatore2 from "@/assets/fondatore-2.png";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import heroChiSiamo from "@/assets/hero-chi-siamo.webp";
+import cardInnovation from "@/assets/card-innovation.webp";
+import cardDesign from "@/assets/card-design.webp";
+import cardCollaboration from "@/assets/card-collaboration.webp";
+import cardQuality from "@/assets/card-quality.webp";
+import cardArchitects from "@/assets/card-architects.webp";
+import cardDesigners from "@/assets/card-designers.webp";
+import cardBuilders from "@/assets/card-builders.webp";
+import cardRetailers from "@/assets/card-retailers.webp";
 
 const ChiSiamo = () => {
   const { t, language } = useTranslation();
@@ -19,40 +27,48 @@ const ChiSiamo = () => {
       icon: Target,
       title: t('aboutUs.values.innovation.title'),
       description: t('aboutUs.values.innovation.description'),
+      backgroundImage: cardInnovation,
     },
     {
       icon: Lightbulb,
       title: t('aboutUs.values.design.title'),
       description: t('aboutUs.values.design.description'),
+      backgroundImage: cardDesign,
     },
     {
       icon: Users,
       title: t('aboutUs.values.collaboration.title'),
       description: t('aboutUs.values.collaboration.description'),
+      backgroundImage: cardCollaboration,
     },
     {
       icon: Award,
       title: t('aboutUs.values.quality.title'),
       description: t('aboutUs.values.quality.description'),
+      backgroundImage: cardQuality,
     },
   ];
 
   const customers = [
     { 
       title: t('aboutUs.customers.architects.title'), 
-      description: t('aboutUs.customers.architects.description')
+      description: t('aboutUs.customers.architects.description'),
+      backgroundImage: cardArchitects,
     },
     { 
       title: t('aboutUs.customers.designers.title'), 
-      description: t('aboutUs.customers.designers.description')
+      description: t('aboutUs.customers.designers.description'),
+      backgroundImage: cardDesigners,
     },
     { 
       title: t('aboutUs.customers.builders.title'), 
-      description: t('aboutUs.customers.builders.description')
+      description: t('aboutUs.customers.builders.description'),
+      backgroundImage: cardBuilders,
     },
     { 
       title: t('aboutUs.customers.retailers.title'), 
-      description: t('aboutUs.customers.retailers.description')
+      description: t('aboutUs.customers.retailers.description'),
+      backgroundImage: cardRetailers,
     },
   ];
 
@@ -201,12 +217,18 @@ const ChiSiamo = () => {
                   boxShadow: "0 16px 48px rgba(0, 0, 0, 0.35)",
                 }}
                 transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-                className="kalea-card relative overflow-hidden rounded-2xl"
+                className="kalea-card relative overflow-hidden rounded-2xl min-h-[220px]"
               >
-                {/* Background beige */}
-                <div className="absolute inset-0 bg-card-surface" />
+                {/* Background image */}
+                <img
+                  src={customer.backgroundImage}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/70" />
                 
-                <div className="relative z-10 p-8 md:p-10">
+                <div className="relative z-10 p-8 md:p-10 flex flex-col justify-end h-full">
                   <h3 className="text-xl md:text-2xl font-heading font-semibold text-white mb-3">{customer.title}</h3>
                   <p className="text-white font-medium">{customer.description}</p>
                 </div>
