@@ -20,6 +20,10 @@ import bgApplicationOffices from "@/assets/bg-application-offices.jpg";
 import bgApplicationHealthcare from "@/assets/bg-application-healthcare.jpg";
 import bgApplicationCommercial from "@/assets/bg-application-commercial.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import valueContinuousSystem from "@/assets/value-continuous-system.jpg";
+import valueSeamlessMaterial from "@/assets/value-seamless-material.jpg";
+import valueTimelessAesthetic from "@/assets/value-timeless-aesthetic.jpg";
+import valueSimpleTechnology from "@/assets/value-simple-technology.jpg";
 import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
 import productBiocoreFloor from "@/assets/hero-biomag-floor-new.webp";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
@@ -591,28 +595,37 @@ const Home = () => {
               ))}
             </div>
 
-            {/* Value propositions — card-like reveals */}
+            {/* Value propositions — card-like reveals with background images */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
               {[
-                t('hero.manifesto.value1'),
-                t('hero.manifesto.value2'),
-                t('hero.manifesto.value3'),
-                t('hero.manifesto.value4'),
-              ].map((value, i) => (
+                { text: t('hero.manifesto.value1'), image: valueContinuousSystem },
+                { text: t('hero.manifesto.value2'), image: valueSeamlessMaterial },
+                { text: t('hero.manifesto.value3'), image: valueTimelessAesthetic },
+                { text: t('hero.manifesto.value4'), image: valueSimpleTechnology },
+              ].map((item, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 30, scale: 0.97 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: "-30px" }}
                   transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
-                  className="group relative p-6 md:p-8 rounded-2xl border border-foreground/10 bg-foreground/[0.02] backdrop-blur-sm hover:border-foreground/20 hover:bg-foreground/[0.04] transition-all duration-500 cursor-default"
+                  className="group relative overflow-hidden rounded-2xl min-h-[200px] md:min-h-[220px] cursor-default"
                 >
-                  <div className="absolute top-4 left-6 text-foreground/15 text-4xl font-heading font-bold">
-                    {String(i + 1).padStart(2, '0')}
+                  <img
+                    src={item.image}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/65" />
+                  <div className="relative z-10 p-6 md:p-8 flex flex-col justify-end h-full">
+                    <div className="text-white/30 text-4xl font-heading font-bold mb-2">
+                      {String(i + 1).padStart(2, '0')}
+                    </div>
+                    <p className="text-sm md:text-base text-white font-medium leading-relaxed">
+                      {item.text}
+                    </p>
                   </div>
-                  <p className="relative text-sm md:text-base text-foreground/75 font-light leading-relaxed pt-6">
-                    {value}
-                  </p>
                 </motion.div>
               ))}
             </div>
