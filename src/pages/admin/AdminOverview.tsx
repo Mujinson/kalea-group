@@ -81,7 +81,7 @@ const AdminOverview = () => {
   }, []);
 
   useRealtimeSubscription({
-    tables: ['customers', 'sales', 'quotes', 'inventory', 'payment_schedules'],
+    tables: ['customers', 'sales', 'quotes', 'inventory', 'payment_schedules', 'leads'],
     onDataChange: handleDataChange,
   });
 
