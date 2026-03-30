@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
-type TableName = 'customers' | 'sales' | 'quotes' | 'inventory' | 'payment_schedules' | 'fixed_costs' | 'variable_costs';
+type TableName = 'customers' | 'sales' | 'quotes' | 'inventory' | 'payment_schedules' | 'fixed_costs' | 'variable_costs' | 'leads' | 'construction_sites' | 'appointments';
 
 interface UseRealtimeSubscriptionOptions {
   tables: TableName[];
