@@ -316,10 +316,10 @@ const AdminOverview = () => {
           <KPICard
             title="Opportunity"
             value={data.opportunityCustomers}
-            subtitle="Potenziali lead"
+            subtitle="Lead + prospect"
             icon={UserPlus}
             iconColor="text-orange-500"
-            onClick={() => navigate('/admin/clienti?status=opportunity')}
+            onClick={() => navigate('/admin/leads')}
           />
           <KPICard
             title="Signed"
