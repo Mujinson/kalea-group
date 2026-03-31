@@ -67,6 +67,7 @@ const AdminCustomers = () => {
   const [filterRegion, setFilterRegion] = useState<string>('all');
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [leadsCount, setLeadsCount] = useState(0);
   
   const [formData, setFormData] = useState({
     customer_type: '',
@@ -87,17 +88,24 @@ const AdminCustomers = () => {
     notes: '',
   });
 
+  const fetchLeadsCount = async () => {
+    const { count } = await supabase.from('leads').select('*', { count: 'exact', head: true });
+    setLeadsCount(count || 0);
+  };
+
   const handleDataChange = useCallback(() => {
     fetchCustomers();
+    fetchLeadsCount();
   }, []);
 
   useRealtimeSubscription({
-    tables: ['customers', 'sales'],
+    tables: ['customers', 'sales', 'leads'],
     onDataChange: handleDataChange,
   });
 
   useEffect(() => {
     fetchCustomers();
+    fetchLeadsCount();
   }, []);
 
   const fetchCustomers = async () => {
@@ -363,7 +371,7 @@ const AdminCustomers = () => {
         </div>
         <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-            <span className="text-lg font-bold text-orange-600">{customers.filter(c => c.status === 'opportunity').length}</span>
+            <span className="text-lg font-bold text-orange-600">{customers.filter(c => c.status === 'opportunity').length + leadsCount}</span>
           </div>
           <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Opportunity</p>
         </div>
