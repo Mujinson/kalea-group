@@ -114,7 +114,7 @@ const AdminOverview = () => {
       ]);
 
       // Customer stats by status - leads count as opportunities
-      const opportunityCustomers = (customers?.filter(c => c.status === 'opportunity').length || 0) + (leads?.length || 0);
+      const opportunityCustomers = (customers?.filter(c => c.status === 'opportunity').length || 0) + (leadsCount || 0);
       const signedCustomers = customers?.filter(c => c.status === 'signed').length || 0;
       const workingCustomers = customers?.filter(c => c.status === 'working').length || 0;
 
