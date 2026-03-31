@@ -371,7 +371,7 @@ const AdminCustomers = () => {
         </div>
         <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-            <span className="text-lg font-bold text-orange-600">{customers.filter(c => c.status === 'opportunity').length}</span>
+            <span className="text-lg font-bold text-orange-600">{customers.filter(c => c.status === 'opportunity').length + leadsCount}</span>
           </div>
           <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Opportunity</p>
         </div>
