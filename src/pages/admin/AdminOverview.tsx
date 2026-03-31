@@ -100,7 +100,7 @@ const AdminOverview = () => {
         { data: agreement },
         { data: payments },
         { data: reminders },
-        { data: leads }
+        { count: leadsCount }
       ] = await Promise.all([
         supabase.from('customers').select('*'),
         supabase.from('sales').select('*').order('created_at', { ascending: false }),
@@ -110,11 +110,11 @@ const AdminOverview = () => {
         supabase.from('payment_agreements').select('*').maybeSingle(),
         supabase.from('supplier_payments').select('*'),
         supabase.from('customer_reminders').select('*'),
-        supabase.from('leads').select('id')
+        supabase.from('leads').select('*', { count: 'exact', head: true })
       ]);
 
       // Customer stats by status - leads count as opportunities
-      const opportunityCustomers = (customers?.filter(c => c.status === 'opportunity').length || 0) + (leads?.length || 0);
+      const opportunityCustomers = (customers?.filter(c => c.status === 'opportunity').length || 0) + (leadsCount || 0);
       const signedCustomers = customers?.filter(c => c.status === 'signed').length || 0;
       const workingCustomers = customers?.filter(c => c.status === 'working').length || 0;
 
