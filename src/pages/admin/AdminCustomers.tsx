@@ -67,6 +67,7 @@ const AdminCustomers = () => {
   const [filterRegion, setFilterRegion] = useState<string>('all');
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [leadsCount, setLeadsCount] = useState(0);
   
   const [formData, setFormData] = useState({
     customer_type: '',
