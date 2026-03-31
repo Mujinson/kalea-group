@@ -88,17 +88,24 @@ const AdminCustomers = () => {
     notes: '',
   });
 
+  const fetchLeadsCount = async () => {
+    const { count } = await supabase.from('leads').select('*', { count: 'exact', head: true });
+    setLeadsCount(count || 0);
+  };
+
   const handleDataChange = useCallback(() => {
     fetchCustomers();
+    fetchLeadsCount();
   }, []);
 
   useRealtimeSubscription({
-    tables: ['customers', 'sales'],
+    tables: ['customers', 'sales', 'leads'],
     onDataChange: handleDataChange,
   });
 
   useEffect(() => {
     fetchCustomers();
+    fetchLeadsCount();
   }, []);
 
   const fetchCustomers = async () => {
