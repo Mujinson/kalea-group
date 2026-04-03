@@ -191,7 +191,7 @@ const Kaleadeck = () => {
       </section>
 
       {/* Finiture Skudo Section */}
-      <section className="relative z-[1] bg-muted/30 py-20 md:py-32">
+      <section className="relative z-[1] bg-background py-20 md:py-32">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
