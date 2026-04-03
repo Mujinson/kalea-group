@@ -39,7 +39,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
           {/* Badge positioned at top-right of circle */}
           <div className="absolute -top-1 -right-1 sm:top-0 sm:right-0">
             <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-medium bg-kalea-cream/90 backdrop-blur-sm text-kalea-dark shadow-sm">
-              BIOCORE FLOOR®
+              Hypermatt
             </span>
           </div>
         </div>
