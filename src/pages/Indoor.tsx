@@ -65,7 +65,7 @@ const Indoor = () => {
     {
       title: "Ceramiche da Interni",
       description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia.",
-      image: bgApplicationRetail,
+      image: ceramicheInterni,
       comingSoon: true,
     },
     {
