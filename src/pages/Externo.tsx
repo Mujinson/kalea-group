@@ -76,7 +76,8 @@ const Externo = () => {
   ];
 
   return (
-    <div className="relative bg-background">
+    <>
+      <div className="relative bg-background">
       <SEOHead
         title={language === 'it' ? "EXTERNO® — Decking per Esterni in MgO | Kalēa®" :
                language === 'en' ? "EXTERNO® — Outdoor MgO Decking | Kalēa®" :
