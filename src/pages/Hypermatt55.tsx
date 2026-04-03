@@ -110,6 +110,100 @@ const Hypermatt55 = () => {
         </div>
       </section>
 
+      {/* Specifiche Tecniche */}
+      <section className="relative z-[2] bg-muted/20 py-20 md:py-28">
+        <div className="container-custom">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Specifiche Tecniche</h2>
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">Prestazioni certificate per ogni ambiente</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* SPC 5G */}
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="bg-card rounded-2xl p-8 shadow-lg">
+              <h3 className="text-xl font-heading font-bold text-foreground mb-2">Specifiche Tecniche</h3>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-48 h-8 bg-muted rounded" />
+              </div>
+              <p className="text-sm text-muted-foreground mb-6">228,6x1524 mm</p>
+
+              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
+              <div className="space-y-0 divide-y divide-border">
+                {[
+                  { label: "Formato", value: "228,6x1524 mm" },
+                  { label: "Spessore", value: "5,5 mm" },
+                  { label: "Classe D'uso", value: "23/33" },
+                  { label: "Incastro", value: "5G" },
+                  { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
+                  { label: "Materassino", value: "IXPE 1 mm" },
+                  { label: "Strato D'usura", value: "0,55 mm" },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between items-center py-3">
+                    <span className="text-sm text-muted-foreground">{label}</span>
+                    <span className="text-sm font-bold text-foreground">{value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* 5G Icon */}
+              <div className="mt-8 flex items-center gap-3">
+                <div className="w-14 h-14 rounded-lg bg-foreground text-background flex items-center justify-center font-heading font-black text-lg">5G</div>
+              </div>
+
+              <p className="text-sm text-muted-foreground leading-relaxed mt-4">
+                SPC effetto legno, tavole formato <strong>228,6 x 1524 mm</strong> con spessore ridotto <strong>5,5 mm</strong>.
+                Resistente ad acqua e usura. Facilità di installazione con <strong>aggancio a secco 5G</strong> e materassino fonoassorbente incorporato.
+                A questo straordinario livello di realismo si aggiunge l'innovativa <strong>Hypermatt Laser Technology</strong>.
+              </p>
+            </motion.div>
+
+            {/* Glue Down */}
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="bg-card rounded-2xl p-8 shadow-lg">
+              <h3 className="text-xl font-heading font-bold text-foreground mb-2">Specifiche Tecniche Glue Down</h3>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-48 h-8 bg-muted rounded" />
+              </div>
+              <p className="text-sm text-muted-foreground mb-6">230x1500 mm</p>
+
+              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
+              <div className="space-y-0 divide-y divide-border">
+                {[
+                  { label: "Formato", value: "230x1500 mm" },
+                  { label: "Spessore", value: "2,5 mm" },
+                  { label: "Classe D'uso", value: "23/33/42" },
+                  { label: "Incastro", value: "-" },
+                  { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
+                  { label: "Materassino", value: "-" },
+                  { label: "Strato D'usura", value: "0,55 mm" },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between items-center py-3">
+                    <span className="text-sm text-muted-foreground">{label}</span>
+                    <span className="text-sm font-bold text-foreground">{value}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Feature Icons */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 mt-12 max-w-5xl mx-auto">
+            {[
+              { icon: Ruler, label: "228,6x1524 mm" },
+              { icon: Layers, label: "5,5 mm spessore" },
+              { icon: Shield, label: "Classe 23/33" },
+              { icon: Flame, label: "Bfl-s1" },
+              { icon: Volume2, label: "IXPE 1 mm" },
+              { icon: Paintbrush, label: "0,55 mm usura" },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-card shadow-sm">
+                <Icon className="w-7 h-7 text-foreground/70" strokeWidth={1.5} />
+                <span className="text-xs font-medium text-muted-foreground text-center">{label}</span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="relative z-[2] bg-muted/30 py-16 md:py-24">
         <div className="container-custom text-center">
