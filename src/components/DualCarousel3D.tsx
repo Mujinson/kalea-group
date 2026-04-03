@@ -13,14 +13,8 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
-// Import BIOCORE images
-import biocoreNexa from "@/assets/biocore-nexa.png";
-import biocoreOrama from "@/assets/biocore-orama.png";
-import biocoreNuvia from "@/assets/biocore-nuvia.png";
-import biocoreMielea from "@/assets/biocore-mielea.png";
-import biocoreArgilla from "@/assets/biocore-argilla.png";
-import biocoreRadice from "@/assets/biocore-radice.png";
-import biocoreVetra from "@/assets/biocore-vetra.png";
+// Import Hypermatt product data
+import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
 
 const biomagPlanks = [
   { id: 1, name: "Aurora", image: finishAurora },
@@ -32,15 +26,13 @@ const biomagPlanks = [
   { id: 7, name: "Velora", image: finishVelora },
 ];
 
-const biocorePlanks = [
-  { id: 1, name: "Nexa", image: biocoreNexa },
-  { id: 2, name: "Orama", image: biocoreOrama },
-  { id: 3, name: "Nuvia", image: biocoreNuvia },
-  { id: 4, name: "Mielea", image: biocoreMielea },
-  { id: 5, name: "Argilla", image: biocoreArgilla },
-  { id: 6, name: "Radice", image: biocoreRadice },
-  { id: 7, name: "Vetra", image: biocoreVetra },
-];
+// Convert Hypermatt data to plank format
+const toPlankFormat = (products: { id: string; name: string; image: string }[]) =>
+  products.map((p, i) => ({ id: i + 1, name: p.name, image: p.image }));
+
+const hypermattXLPlanks = toPlankFormat(hypermattXL.products);
+const hypermattSpinaPlanks = toPlankFormat(hypermattSpina.products);
+const hypermatt55Planks = toPlankFormat(hypermatt55.products);
 
 interface CarouselWheelProps {
   planks: typeof biomagPlanks;
@@ -312,13 +304,13 @@ const DualCarousel3D = () => {
             Le Nostre Collezioni
           </h2>
           <p className="text-foreground/60 text-sm md:text-base font-light max-w-xl mx-auto">
-            Due tecnologie innovative, infinite possibilità di design
+            Quattro collezioni iconiche, infinite possibilità di design
           </p>
         </motion.header>
 
-        {/* Dual Carousels Container */}
-        <div className={`w-full max-w-7xl flex ${screenSize === 'mobile' ? 'flex-col gap-12' : 'flex-row gap-4 md:gap-8'}`}>
-          {/* BIOMAG Carousel - rotates clockwise */}
+        {/* Dual Carousels Container - 2x2 Grid */}
+        <div className={`w-full max-w-7xl grid ${screenSize === 'mobile' ? 'grid-cols-1 gap-12' : 'grid-cols-2 gap-4 md:gap-8'}`}>
+          {/* BIOMAG Carousel */}
           <CarouselWheel 
             planks={biomagPlanks}
             title="Biomag Floor®"
@@ -328,12 +320,32 @@ const DualCarousel3D = () => {
             screenSize={screenSize}
           />
           
-          {/* Hypermatt Carousel - rotates counter-clockwise */}
+          {/* Hypermatt XL */}
           <CarouselWheel 
-            planks={biocorePlanks}
-            title="Hypermatt"
-            link="/biocore-floor"
-            ctaText="Scopri Hypermatt"
+            planks={hypermattXLPlanks}
+            title="Hypermatt XL"
+            link="/hypermatt-xl"
+            ctaText="Scopri Hypermatt XL"
+            direction={-1}
+            screenSize={screenSize}
+          />
+
+          {/* Hypermatt Spina */}
+          <CarouselWheel 
+            planks={hypermattSpinaPlanks}
+            title="Hypermatt Spina"
+            link="/hypermatt-spina"
+            ctaText="Scopri Hypermatt Spina"
+            direction={1}
+            screenSize={screenSize}
+          />
+
+          {/* Hypermatt 55 */}
+          <CarouselWheel 
+            planks={hypermatt55Planks}
+            title="Hypermatt 55"
+            link="/hypermatt-55"
+            ctaText="Scopri Hypermatt 55"
             direction={-1}
             screenSize={screenSize}
           />
