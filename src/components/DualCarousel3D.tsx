@@ -188,6 +188,12 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
         >
           {planks.map((plank, index) => {
             const angle = (360 / planks.length) * index;
+            const visibleAngle = ((angle + rotation) % 360 + 360) % 360;
+            const distanceFromFront = Math.min(visibleAngle, 360 - visibleAngle);
+            const isFrontFacing = distanceFromFront < 32;
+            const labelOpacity = Math.max(0, 1 - distanceFromFront / 42);
+            const labelOffset = screenSize === 'mobile' ? 20 : 26;
+
             return (
               <Link
                 key={plank.id}
@@ -224,7 +230,6 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/15 opacity-50 group-hover:opacity-30 transition-opacity" />
                   </div>
 
-                  {/* Side edge */}
                   <div
                     className="absolute top-0 bg-kalea-tan/25"
                     style={{
@@ -236,15 +241,17 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
                     }}
                   />
 
-                  {/* Name label */}
-                  <div 
-                    className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap pt-1 md:pt-2"
-                    style={{ 
-                      top: `${plankHeight + 3}px`,
-                      transform: "translateX(-50%) rotateY(0deg)"
+                  <div
+                    className="absolute left-1/2 whitespace-nowrap pt-1 md:pt-2 transition-opacity duration-200"
+                    style={{
+                      top: `${plankHeight + labelOffset}px`,
+                      transform: "translateX(-50%) rotateY(0deg)",
+                      opacity: labelOpacity,
+                      pointerEvents: isFrontFacing ? "auto" : "none"
                     }}
+                    aria-hidden={!isFrontFacing}
                   >
-                    <span className="text-foreground/70 text-[8px] md:text-[10px] font-medium tracking-wider uppercase group-hover:text-foreground transition-colors">
+                    <span className="text-foreground/70 text-[10px] md:text-xs font-medium tracking-[0.18em] uppercase group-hover:text-foreground transition-colors whitespace-nowrap">
                       {plank.name}
                     </span>
                   </div>
