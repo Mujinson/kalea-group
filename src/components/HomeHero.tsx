@@ -103,7 +103,7 @@ const HomeHero = () => {
 
       {/* Description section below hero */}
       <section className="bg-[#F7F1E7] min-h-screen flex items-center justify-center">
-        <div className="max-w-3xl mx-auto px-6 text-center">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
