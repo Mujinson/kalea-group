@@ -1,11 +1,11 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
-import { ChevronDown, Search, X } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { ChevronDown, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
+import ProductLightbox from "@/components/ProductLightbox";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, type HypermattProduct } from "@/data/hypermattProducts";
