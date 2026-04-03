@@ -11,6 +11,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
 const Kaleadeck = () => {
   const { language } = useTranslation();
