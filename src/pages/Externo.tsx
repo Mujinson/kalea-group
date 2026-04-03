@@ -13,6 +13,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
+import lifestylePool from "@/assets/externo/lifestyle-pool.webp";
+import lifestyleTraditional from "@/assets/externo/lifestyle-traditional.webp";
 import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
 const Externo = () => {
