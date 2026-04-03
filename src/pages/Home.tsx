@@ -177,8 +177,8 @@ const Home = () => {
                 "@type": "Offer",
                 itemOffered: {
                   "@type": "Product",
-                  name: "BIOCORE FLOOR®",
-                  description: "Pavimento flottante in fibra naturale e carbonio, ecologico e biodegradabile.",
+                  name: "Hypermatt",
+                  description: "Collezione SPC ultra-matte con finitura laser. Realismo estremo del legno e del cemento.",
                   category: "Pavimenti flottanti",
                 },
               },
