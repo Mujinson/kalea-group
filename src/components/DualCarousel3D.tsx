@@ -34,6 +34,7 @@ const toPlankFormat = (products: { id: string; name: string; image: string }[]) 
 const hypermattXLPlanks = toPlankFormat(hypermattXL.products);
 const hypermattSpinaPlanks = toPlankFormat(hypermattSpina.products);
 const hypermatt55Planks = toPlankFormat(hypermatt55.products);
+const externoPlanks = toPlankFormat([...externoTraditional.products, ...externoSkudo.products]);
 
 interface CarouselWheelProps {
   planks: { id: number; name: string; image: string }[];
