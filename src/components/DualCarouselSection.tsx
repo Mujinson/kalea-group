@@ -139,11 +139,18 @@ const DualCarouselSection = () => {
       direction: 'left',
     },
     {
-      title: "Externo",
-      subtitle: "Decking e superfici outdoor",
-      link: `/${language}/outdoor`,
-      products: externoProducts,
+      title: "Externo Traditional",
+      subtitle: "Composito WPC ad alta resistenza",
+      link: `/${language}/kaleadeck`,
+      products: externoTraditionalProducts,
       direction: 'right',
+    },
+    {
+      title: "Externo Skudo",
+      subtitle: "Schermatura coestrusa con protezione UV",
+      link: `/${language}/kaleadeck`,
+      products: externoSkudoProducts,
+      direction: 'left',
     },
   ];
 
