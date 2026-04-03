@@ -16,7 +16,7 @@ import Hypermatt55 from "./pages/Hypermatt55";
 import EdgeLine from "./pages/EdgeLine";
 import Biowall from "./pages/Biowall";
 import Kaleabase from "./pages/Kaleabase";
-import Kaleadeck from "./pages/Kaleadeck";
+import Externo from "./pages/Externo";
 import Kaleaceiling from "./pages/Kaleaceiling";
 import AreaTecnica from "./pages/AreaTecnica";
 import ChiSiamo from "./pages/ChiSiamo";
@@ -162,7 +162,7 @@ const App = () => (
               <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-              <Route path="/it/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/it/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/it/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/it/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
@@ -189,7 +189,7 @@ const App = () => (
               <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-              <Route path="/en/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/en/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/en/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/en/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
@@ -216,7 +216,7 @@ const App = () => (
               <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-              <Route path="/de/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/de/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/de/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/de/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
@@ -243,7 +243,7 @@ const App = () => (
               <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
-              <Route path="/fr/kaleadeck" element={<><SEOHandler /><Layout><Kaleadeck /></Layout></>} />
+              <Route path="/fr/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/fr/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />

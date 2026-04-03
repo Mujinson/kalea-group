@@ -13,7 +13,7 @@ import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
-const Kaleadeck = () => {
+const Externo = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
   
@@ -75,14 +75,14 @@ const Kaleadeck = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title={language === 'it' ? "KALEADECK® — Decking per Esterni in MgO | Kalēa®" :
-               language === 'en' ? "KALEADECK® — Outdoor MgO Decking | Kalēa®" :
-               language === 'de' ? "KALEADECK® — MgO-Terrassendielen für Außen | Kalēa®" :
-               "KALEADECK® — Terrasse Extérieure en MgO | Kalēa®"}
-        description={language === 'it' ? "KALEADECK® di Kalēa®: decking in MgO per esterni, impermeabile, resistente a UV e gelo. Zero manutenzione, aspetto legno naturale." :
-                     language === 'en' ? "KALEADECK® by Kalēa®: outdoor MgO decking, waterproof, UV and frost resistant. Zero maintenance, natural wood look." :
-                     language === 'de' ? "KALEADECK® von Kalēa®: MgO-Terrassendielen für Außen, wasserdicht, UV- und frostbeständig. Wartungsfrei." :
-                     "KALEADECK® par Kalēa® : terrasse en MgO pour extérieurs, imperméable, résistant UV et gel. Zéro entretien."}
+        title={language === 'it' ? "EXTERNO® — Decking per Esterni in MgO | Kalēa®" :
+               language === 'en' ? "EXTERNO® — Outdoor MgO Decking | Kalēa®" :
+               language === 'de' ? "EXTERNO® — MgO-Terrassendielen für Außen | Kalēa®" :
+               "EXTERNO® — Terrasse Extérieure en MgO | Kalēa®"}
+        description={language === 'it' ? "EXTERNO® di Kalēa®: decking in MgO per esterni, impermeabile, resistente a UV e gelo. Zero manutenzione, aspetto legno naturale." :
+                     language === 'en' ? "EXTERNO® by Kalēa®: outdoor MgO decking, waterproof, UV and frost resistant. Zero maintenance, natural wood look." :
+                     language === 'de' ? "EXTERNO® von Kalēa®: MgO-Terrassendielen für Außen, wasserdicht, UV- und frostbeständig. Wartungsfrei." :
+                     "EXTERNO® par Kalēa® : terrasse en MgO pour extérieurs, imperméable, résistant UV et gel. Zéro entretien."}
         keywords="decking esterno, decking MgO, pavimento esterno impermeabile, decking senza manutenzione, terrazza pavimento, decking resistente gelo, pavimento esterno effetto legno"
       />
       {/* Hero Section */}
@@ -96,7 +96,7 @@ const Kaleadeck = () => {
         >
           <motion.img 
             src={heroOutdoor} 
-            alt="KALEADECK" 
+            alt="EXTERNO" 
             className="absolute inset-0 w-full h-full object-cover will-change-transform"
             style={{ 
               y: heroImageY,
@@ -116,7 +116,7 @@ const Kaleadeck = () => {
           >
             <div className="max-w-4xl mx-auto">
               <AnimatedTitle
-                text="KALEADECK"
+                text="EXTERNO"
                 suffix={<sup className="text-2xl md:text-3xl">®</sup>}
                 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
               />
@@ -242,7 +242,7 @@ const Kaleadeck = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Perché scegliere KALEADECK
+              Perché scegliere EXTERNO
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               La pavimentazione outdoor premium per i tuoi spazi esterni più belli.
@@ -364,7 +364,7 @@ const Kaleadeck = () => {
               Presto Disponibile
             </h2>
             <p className="text-lg mb-8 max-w-2xl mx-auto text-white font-medium">
-              KALEADECK sarà presto disponibile. Contattaci per scoprire la nostra pavimentazione outdoor premium.
+              EXTERNO sarà presto disponibile. Contattaci per scoprire la nostra pavimentazione outdoor premium.
             </p>
             <Button asChild size="lg" variant="secondary">
               <Link to={`/${language}/contatti`}>Richiedi Informazioni</Link>
@@ -376,4 +376,4 @@ const Kaleadeck = () => {
   );
 };
 
-export default Kaleadeck;
+export default Externo;

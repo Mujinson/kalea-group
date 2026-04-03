@@ -47,7 +47,7 @@ const Outdoor = () => {
       name: "EXTERNO",
       description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno.",
       image: productKaleadeck,
-      link: `/${language}/kaleadeck`,
+      link: `/${language}/externo`,
     },
     {
       name: "KALEACEILING®",
