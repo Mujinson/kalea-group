@@ -71,7 +71,7 @@ const MiniProductCard = ({ product, link }: { product: ProductType; link: string
           loading="lazy"
         />
       </div>
-      <p className="text-[10px] sm:text-xs font-medium text-foreground mt-2 text-center">
+      <p className="text-[10px] sm:text-xs font-medium text-foreground mt-2 text-center whitespace-nowrap">
         {product.name}
       </p>
     </motion.div>
