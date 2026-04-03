@@ -26,7 +26,7 @@ const IndoorOutdoorSection = () => {
   ];
 
   return (
-    <section className="relative bg-background px-4 md:px-8 lg:px-12 py-16 md:py-24 flex flex-col overflow-hidden">
+    <section className="relative min-h-screen bg-background px-4 md:px-8 lg:px-12 flex flex-col justify-center overflow-hidden py-10">
       {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

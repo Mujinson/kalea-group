@@ -194,13 +194,13 @@ const Home = () => {
       <IndoorOutdoorSection />
 
       {/* 3D Dual Carousel Collection - BIOMAG + BIOCORE side by side */}
-      <section className="relative min-h-screen bg-background">
+      <section className="relative min-h-screen bg-background flex items-center">
         <DualCarousel3D />
       </section>
 
       {/* Products Section */}
-      <section className="relative min-h-screen bg-background py-10 md:py-16 overflow-hidden">
-        <div className="relative z-10 h-full flex flex-col justify-center px-4 md:px-8 lg:px-12">
+      <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
+        <div className="relative z-10 w-full flex flex-col justify-center px-4 md:px-8 lg:px-12 py-10">
           <div className="text-center">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -361,8 +361,8 @@ const Home = () => {
       <DualCarouselSection />
 
       {/* Applicazioni */}
-      <section className="relative h-[100svh] bg-background">
-        <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
+      <section className="relative min-h-screen bg-background flex items-center">
+        <div className="w-full flex flex-col px-6 md:px-12 lg:px-20 py-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -417,8 +417,8 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="relative h-screen bg-background">
-        <div className="h-full flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-6 sm:py-10 md:py-14">
+      <section className="relative min-h-screen bg-background flex items-center">
+        <div className="w-full flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -675,7 +675,7 @@ const Home = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="relative h-screen bg-background">
+      <section className="relative min-h-screen bg-background">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
