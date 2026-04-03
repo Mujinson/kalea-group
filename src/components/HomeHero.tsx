@@ -124,7 +124,7 @@ const HomeHero = () => {
           </motion.p>
 
           {/* Indoor / Outdoor Cards */}
-          <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 max-w-5xl mx-auto w-full">
+          <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 w-full">
             {[
               { title: "Indoor", desc: "Pavimenti di design per interni di alto livello", link: `/${language}/indoor`, image: cardIndoor },
               { title: "Outdoor", desc: "Soluzioni per terrazze, deck e living all'aperto", link: `/${language}/outdoor`, image: cardOutdoor },
