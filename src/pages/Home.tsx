@@ -5,7 +5,7 @@ import HomeHero from "@/components/HomeHero";
 import DualCarousel3D from "@/components/DualCarousel3D";
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import SEOHead from "@/components/SEOHead";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
+import { Leaf, Clock, Wrench, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-new.png";
 
@@ -24,94 +24,12 @@ import valueContinuousSystem from "@/assets/value-continuous-system.jpg";
 import valueSeamlessMaterial from "@/assets/value-seamless-material.jpg";
 import valueTimelessAesthetic from "@/assets/value-timeless-aesthetic.jpg";
 import valueSimpleTechnology from "@/assets/value-simple-technology.jpg";
-import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
-import productBiocoreFloor from "@/assets/hero-biomag-floor-new.webp";
-import heroEdgeline from "@/assets/hero-edgeline.jpg";
-import productBiowall from "@/assets/product-biowall-interior.jpg";
-import productKaleaElements from "@/assets/product-kalea-elements.png";
-import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
-import productKaleadeck from "@/assets/product-kaleadeck.jpg";
-import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
   const { t, language } = useTranslation();
 
-  // Indoor products organized by rows:
-  // Row 1: BIOMAG FLOOR + BIOWOOD FLOOR
-  const indoorRow1 = [
-    {
-      title: t('home.stonecore.title'),
-      description: t('home.stonecore.description'),
-      link: `/${language}/biomag-floor`,
-      comingSoon: false,
-      image: productBiomagFloor,
-    },
-    {
-      title: t('home.biocore.title'),
-      description: t('home.biocore.description'),
-      link: `/${language}/biocore-floor`,
-      comingSoon: false,
-      image: productBiocoreFloor,
-    },
-  ];
 
-  // Row 2: EDGELINE + KALEABASE
-  const indoorRow2 = [
-    {
-      title: t('home.edgeline.title'),
-      description: t('home.edgeline.description'),
-      link: `/${language}/edgeline`,
-      comingSoon: false,
-      image: heroEdgeline,
-    },
-    {
-      title: t('home.kaleabase.title'),
-      description: t('home.kaleabase.description'),
-      link: `/${language}/kaleabase`,
-      comingSoon: false,
-      image: productKaleabase,
-    },
-  ];
-
-  // Row 3: BIOWALL (centered)
-  const indoorRow3 = [
-    {
-      title: t('home.onewall.title'),
-      description: t('home.onewall.description'),
-      link: `/${language}/biowall`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productBiowall,
-    },
-  ];
-
-  const outdoorProducts = [
-    {
-      title: t('home.kaleaElements.title'),
-      description: t('home.kaleaElements.description'),
-      link: `/${language}/kalea-elements`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productKaleaElements,
-    },
-    {
-      title: t('home.kaleadeck.title'),
-      description: t('home.kaleadeck.description'),
-      link: `/${language}/kaleadeck`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productKaleadeck,
-    },
-    {
-      title: t('home.kaleaceiling.title'),
-      description: t('home.kaleaceiling.description'),
-      link: `/${language}/kaleaceiling`,
-      comingSoon: true,
-      comingSoonLabel: t('home.onewall.comingSoonLabel'),
-      image: productKaleaceiling,
-    },
-  ];
 
   const applications = [
     { icon: HomeIcon, title: t('home.applications.residential.title'), description: t('home.applications.residential.description'), bg: bgApplicationResidential },
@@ -177,8 +95,8 @@ const Home = () => {
                 "@type": "Offer",
                 itemOffered: {
                   "@type": "Product",
-                  name: "BIOCORE FLOOR®",
-                  description: "Pavimento flottante in fibra naturale e carbonio, ecologico e biodegradabile.",
+                  name: "Hypermatt",
+                  description: "Collezione SPC ultra-matte con finitura laser. Realismo estremo del legno e del cemento.",
                   category: "Pavimenti flottanti",
                 },
               },
@@ -193,167 +111,9 @@ const Home = () => {
       {/* Indoor/Outdoor Section */}
       <IndoorOutdoorSection />
 
-      {/* 3D Dual Carousel Collection - BIOMAG + BIOCORE side by side */}
+      {/* 3D Dual Carousel Collection */}
       <section className="relative min-h-screen bg-background flex items-center">
         <DualCarousel3D />
-      </section>
-
-      {/* Products Section */}
-      <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
-        <div className="relative z-10 w-full flex flex-col justify-center px-4 md:px-8 lg:px-12 py-10">
-          <div className="text-center">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="text-foreground/85 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto mb-8 md:mb-12"
-            >
-              {t('hero.home.systemDescription')}
-            </motion.p>
-
-            {/* Indoor Products */}
-            <motion.h3
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-lg md:text-xl font-heading font-semibold text-foreground mb-4 md:mb-6"
-            >
-              {t('home.productsSection.indoor')}
-            </motion.h3>
-            
-            {/* Row 1: BIOMAG FLOOR + BIOWOOD FLOOR */}
-            <div className="grid grid-cols-2 gap-3 md:gap-5 max-w-4xl mx-auto mb-3 md:mb-5">
-              {indoorRow1.map((product, index) => (
-                <Link key={product.title} to={product.link} className="h-full">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -6, scale: 1.02, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title.toUpperCase()}</h3>
-                      <p className="text-white/90 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-            
-            {/* Row 2: EDGELINE + KALEABASE */}
-            <div className="grid grid-cols-2 gap-3 md:gap-5 max-w-4xl mx-auto mb-3 md:mb-5">
-              {indoorRow2.map((product, index) => (
-                <Link key={product.title} to={product.link} className="h-full">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -6, scale: 1.02, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" }}
-                    transition={{ duration: 0.5, delay: (index + 2) * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-pointer h-full min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title.toUpperCase()}</h3>
-                      <p className="text-white/90 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                </Link>
-              ))}
-            </div>
-            
-            {/* Row 3: BIOWALL (centered) */}
-            <div className="flex justify-center gap-3 md:gap-5 max-w-4xl mx-auto mb-10 md:mb-14">
-              {indoorRow3.map((product, index) => (
-                <motion.div
-                  key={product.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group w-[calc(50%-6px)]"
-                >
-                  <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                  <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                    <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full">
-                      {product.comingSoonLabel || "Novità in arrivo"}
-                    </div>
-                    <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title.toUpperCase()}</h3>
-                    <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Outdoor Products */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-4 md:mb-6"
-            >
-              <h3 className="text-lg md:text-xl font-heading font-semibold text-foreground">
-                {t('home.productsSection.outdoor')}
-              </h3>
-              <p className="text-sm md:text-base text-foreground/60 font-medium">
-                Novità in arrivo
-              </p>
-            </motion.div>
-            
-            {/* Outdoor Cards Container */}
-            <div className="relative max-w-4xl mx-auto">
-
-              {/* Row 1: 2 cards */}
-              <div className="grid grid-cols-2 gap-3 md:gap-5 mb-3 md:mb-5">
-                {outdoorProducts.slice(0, 2).map((product, index) => (
-                  <motion.div
-                    key={product.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
-                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-              
-              {/* Row 2: 1 card centered */}
-              <div className="flex justify-center gap-3 md:gap-5">
-                {outdoorProducts.slice(2).map((product, index) => (
-                  <motion.div
-                    key={product.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="relative rounded-2xl overflow-hidden cursor-default min-h-[200px] sm:min-h-[220px] md:min-h-[250px] group w-[calc(50%-6px)]"
-                  >
-                    <img src={product.image} alt={product.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-40" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-                    <div className="relative z-10 h-full flex flex-col justify-end p-3 sm:p-4 md:p-5">
-                      <h3 className="text-white font-semibold text-xs sm:text-sm md:text-base tracking-wider mb-1">{product.title}</h3>
-                      <p className="text-white/80 text-[10px] sm:text-xs leading-relaxed line-clamp-2">{product.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
 
