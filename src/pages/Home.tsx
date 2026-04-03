@@ -152,7 +152,7 @@ const Home = () => {
                   y: -6,
                   boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)",
                 }}
-                className="relative rounded-2xl overflow-hidden group"
+                className="relative rounded-2xl overflow-hidden group min-h-[180px] sm:min-h-[220px] md:min-h-[250px]"
               >
                 <img
                   src={app.bg}
