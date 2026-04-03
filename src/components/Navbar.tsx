@@ -629,7 +629,16 @@ const Navbar = () => {
                       {/* Outdoor Section */}
                       <div>
                         <button
-                          onClick={() => setMobileOutdoorExpanded(!mobileOutdoorExpanded)}
+                          onClick={() => {
+                            if (mobileOutdoorExpanded) {
+                              setIsMobileMenuOpen(false);
+                              setIsMobileProductsExpanded(false);
+                              setMobileOutdoorExpanded(false);
+                              window.location.href = `/${language}/outdoor`;
+                            } else {
+                              setMobileOutdoorExpanded(!mobileOutdoorExpanded);
+                            }
+                          }}
                           className="flex items-center justify-between w-full text-sm font-medium py-2 text-[#3F3B33]"
                         >
                           {t('nav.outdoor')}
@@ -654,16 +663,35 @@ const Navbar = () => {
                                     {category.label}
                                   </div>
                                   {category.products.map((product) => (
-                                    <div
-                                      key={product.label}
-                                      className="flex items-center justify-between py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
-                                    >
-                                      <div className="flex items-center gap-2">
-                                        <Clock size={10} />
-                                        {product.label}
+                                    product.comingSoon ? (
+                                      <div
+                                        key={product.label}
+                                        className="flex items-center justify-between py-1.5 text-sm cursor-not-allowed opacity-50 text-[#3F3B33]/60"
+                                      >
+                                        <div className="flex items-center gap-2">
+                                          <Clock size={10} />
+                                          {product.label}
+                                        </div>
+                                        <span className="text-xs italic">Coming soon</span>
                                       </div>
-                                      <span className="text-xs italic">Coming soon</span>
-                                    </div>
+                                    ) : (
+                                      <Link
+                                        key={product.path}
+                                        to={product.path!}
+                                        className={`block py-1.5 text-sm transition-colors ${
+                                          location.pathname === product.path 
+                                            ? "text-[#3F3B33]" 
+                                            : "text-[#3F3B33]/60 hover:text-[#3F3B33]"
+                                        }`}
+                                        onClick={() => {
+                                          setIsMobileMenuOpen(false);
+                                          setIsMobileProductsExpanded(false);
+                                          setMobileOutdoorExpanded(false);
+                                        }}
+                                      >
+                                        {product.label}
+                                      </Link>
+                                    )
                                   ))}
                                 </div>
                               ))}
