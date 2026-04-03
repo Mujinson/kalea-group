@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import productBiomag from "@/assets/product-biocore-floor-new.jpg";
-import productBiocore from "@/assets/hero-biomag-floor-new.webp";
-import productKaleadeck from "@/assets/product-kaleadeck.jpg";
+import cardHypermattAmbient from "@/assets/card-hypermatt-ambient.jpg";
+import cardExternoAmbient from "@/assets/card-externo-ambient.jpg";
 import cardIndoor from "@/assets/card-indoor-new.jpg";
 import cardOutdoor from "@/assets/card-outdoor.jpg";
 import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
@@ -32,7 +32,7 @@ const IndoorOutdoorSection = () => {
       title: "Hypermatt",
       description: "Ultra-matte al tatto con finitura laser. Realismo estremo del legno e del cemento, resistenza all'acqua e all'usura superiore. Il perfetto equilibrio tra bellezza naturale e performance quotidiana.",
       link: `/${language}/biocore-floor`,
-      image: productBiocore,
+      image: cardHypermattAmbient,
     },
     {
       title: "Parquet",
@@ -44,7 +44,7 @@ const IndoorOutdoorSection = () => {
       title: "Externo",
       description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno e manutenzione minima.",
       link: `/${language}/outdoor`,
-      image: productKaleadeck,
+      image: cardExternoAmbient,
     },
     {
       title: "Ceramiche da Interni",
