@@ -193,7 +193,7 @@ const Hypermatt55 = () => {
         </section>
 
         {/* CTA */}
-        <section className="bg-muted/30 py-16 md:py-24">
+        <section className="bg-background py-16 md:py-24">
           <div className="container-custom text-center">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
               <p className="text-lg text-muted-foreground mb-6">Scopri le altre collezioni Hypermatt</p>
