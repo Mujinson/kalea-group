@@ -98,6 +98,8 @@ const HypermattXL = () => {
         </div>
       </section>
 
+      {/* All content after hero */}
+      <div className="relative z-[1]">
       {/* Description */}
       <section className="relative z-[1] bg-background py-20 md:py-32">
         <div className="container-custom">
