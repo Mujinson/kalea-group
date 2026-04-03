@@ -123,19 +123,13 @@ const CWCGallerySection = () => {
           className="max-w-3xl mx-auto"
         >
 <p className="text-sm md:text-lg text-foreground/70 leading-relaxed mb-4 md:mb-8">
-            {language === 'it' ? 'BIOCORE FLOOR® è il pavimento naturale evoluto KALEA, realizzato con fibre di legno e carbonio e leganti naturali, privo di plastica e sostanze tossiche.' : 
-             language === 'en' ? 'BIOCORE FLOOR® is the evolved natural KALEA flooring, made with wood fibers and carbon and natural binders, free from plastic and toxic substances.' :
-             language === 'de' ? 'BIOCORE FLOOR® ist der weiterentwickelte natürliche KALEA-Boden, hergestellt aus Holzfasern und Kohlenstoff und natürlichen Bindemitteln, frei von Plastik und Giftstoffen.' :
-             'BIOCORE FLOOR® est le sol naturel évolué KALEA, fabriqué avec des fibres de bois et carbone et des liants naturels, sans plastique ni substances toxiques.'}
+            La Collezione SPC Hypermatt è il pavimento ultra-matte con finitura laser di KALĒA®, con texture vellutata e performance tecniche avanzate.
           </p>
           <Link
             to={`/${language}/biocore-floor`}
             className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all duration-300 group"
           >
-            {language === 'it' ? 'Scopri tutta la collezione BIOCORE FLOOR®' : 
-             language === 'en' ? 'Discover the full BIOCORE FLOOR® collection' :
-             language === 'de' ? 'Entdecken Sie die komplette BIOCORE FLOOR®-Kollektion' :
-             'Découvrez toute la collection BIOCORE FLOOR®'}
+            Scopri tutta la collezione Hypermatt
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
