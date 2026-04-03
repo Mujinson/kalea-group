@@ -136,14 +136,14 @@ const HomeHero = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
                   whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
-                  className="relative group overflow-hidden rounded-3xl min-h-[220px] sm:min-h-[260px] md:min-h-[300px] cursor-pointer"
+                  className="relative group overflow-hidden rounded-3xl min-h-[300px] sm:min-h-[350px] md:min-h-[420px] lg:min-h-[480px] cursor-pointer"
                 >
                   <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
                   <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-12">
                     <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">{card.title}</h3>
                     <p className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed">{card.desc}</p>
-                    <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white">
+                    <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white w-fit">
                       Scopri <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
