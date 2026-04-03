@@ -555,7 +555,16 @@ const Navbar = () => {
                       {/* Indoor Section */}
                       <div>
                         <button
-                          onClick={() => setMobileIndoorExpanded(!mobileIndoorExpanded)}
+                          onClick={() => {
+                            if (mobileIndoorExpanded) {
+                              setIsMobileMenuOpen(false);
+                              setIsMobileProductsExpanded(false);
+                              setMobileIndoorExpanded(false);
+                              window.location.href = `/${language}/indoor`;
+                            } else {
+                              setMobileIndoorExpanded(!mobileIndoorExpanded);
+                            }
+                          }}
                           className="flex items-center justify-between w-full text-sm font-medium py-2 text-[#3F3B33]"
                         >
                           {t('nav.indoor')}
