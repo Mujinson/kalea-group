@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useDragScroll } from "@/hooks/useDragScroll";
 import { hypermattXL, hypermattSpina, hypermatt55, type HypermattProduct } from "@/data/hypermattProducts";
+import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
 // Import BIOMAG finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
