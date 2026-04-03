@@ -54,7 +54,7 @@ const Indoor = () => {
       title: "Hypermatt",
       description: "Ultra-matte al tatto con finitura laser. Realismo estremo del legno e del cemento, resistenza all'acqua e all'usura superiore.",
       link: `/${language}/biocore-floor`,
-      image: productHypermatt,
+      image: cardHypermattAmbient,
     },
     {
       title: "Parquet",
