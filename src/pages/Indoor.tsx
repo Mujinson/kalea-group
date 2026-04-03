@@ -46,8 +46,8 @@ const Indoor = () => {
       link: `/${language}/biomag-floor`,
     },
     {
-      name: "BIOCORE FLOOR®",
-      description: "Pavimento in CWC con anima naturale e stabilità superiore.",
+      name: "Hypermatt",
+      description: "Collezione SPC ultra-matte con finitura laser.",
       image: productBiocoreFloor,
       link: `/${language}/biocore-floor`,
     },
