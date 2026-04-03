@@ -675,7 +675,7 @@ const Home = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="relative h-screen bg-background">
+      <section className="relative min-h-screen bg-background">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
