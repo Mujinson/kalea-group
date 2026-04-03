@@ -101,11 +101,29 @@ const HomeHero = () => {
       {/* Description section below hero */}
       <section className="bg-[#F7F1E7] py-16 md:py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <motion.p
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-[#4A2A13] text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.12em] mb-6"
+          >
+            KALĒA® — SURFACE SYSTEM®
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+            className="text-[#4A2A13]/80 text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide mb-8"
+          >
+            Superfici di pregio per interni ed esterni. Soluzioni complete di pavimenti, rivestimenti e accessori.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             className="text-[#4A2A13] text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide"
           >
             Da Biomag Floor® alle collezioni SPC Hypermatt, parquet pregiato e soluzioni WPC per l'outdoor.
@@ -114,7 +132,7 @@ const HomeHero = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.45, ease: "easeOut" }}
             className="mt-6 text-[#4A2A13]/75 text-sm sm:text-base md:text-lg leading-relaxed font-light tracking-wide"
           >
             Un sistema integrato di superfici selezionate per progetti residenziali e contract di alto livello, con consulenza, posa e showroom mobile direttamente in cantiere.
