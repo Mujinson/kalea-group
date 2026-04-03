@@ -182,7 +182,7 @@ const Kaleadeck = () => {
                 <div className="w-28 h-28 md:w-36 md:h-36 mx-auto rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                 </div>
-                <p className="mt-3 text-sm md:text-base font-medium text-foreground">{product.name}</p>
+                <p className="mt-3 text-sm md:text-base font-medium text-foreground whitespace-nowrap">{product.name}</p>
                 <p className="text-xs text-muted-foreground">{product.finish}</p>
               </motion.div>
             ))}
