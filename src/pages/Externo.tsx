@@ -180,10 +180,16 @@ const Externo = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="group text-center"
+                className="group text-center cursor-pointer"
+                onClick={() => setSelectedProduct(product)}
               >
-                <div className="w-28 h-28 md:w-36 md:h-36 mx-auto rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                <div className="relative w-28 h-28 md:w-36 md:h-36 mx-auto">
+                  <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  </div>
+                  <button className="absolute -top-1 -right-1 md:top-0 md:right-0 w-8 h-8 md:w-10 md:h-10 bg-foreground/60 hover:bg-foreground/80 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm shadow-md" aria-label={`Visualizza ${product.name}`}>
+                    <Search className="w-4 h-4 md:w-5 md:h-5 text-background" />
+                  </button>
                 </div>
                 <p className="mt-3 text-sm md:text-base font-medium text-foreground whitespace-nowrap">{product.name}</p>
                 <p className="text-xs text-muted-foreground">{product.finish}</p>
