@@ -11,6 +11,9 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
+import roomXL from "@/assets/hypermatt/room-xl.jpg";
+import roomSpina from "@/assets/hypermatt/room-spina.jpg";
+import room55 from "@/assets/hypermatt/room-55.jpg";
 
 const BiocoreFloor = () => {
   const { language } = useTranslation();
@@ -221,33 +224,20 @@ const BiocoreFloor = () => {
       <section className="relative z-[3] bg-background py-20 md:py-32">
         <div className="container-custom">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Le Collezioni Hypermatt</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Tre linee, infinite possibilità di design</p>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto italic">Tre collezioni, molteplici soluzioni di interior design per ambienti straordinari e unici.</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {[
-              { collection: hypermattXL, link: `/${language}/hypermatt-xl`, desc: "Le doghe di grande formato creano continuità visiva e una sensazione di ampiezza. Disponibile in Wood e Tile." },
-              { collection: hypermattSpina, link: `/${language}/hypermatt-spina`, desc: "Il fascino dei pavimenti a spina in chiave contemporanea: Spina Italiana e Spina Francese." },
-              { collection: hypermatt55, link: `/${language}/hypermatt-55`, desc: "Caldo ed elegante, l'alleato ideale per progetti di interior design. Disponibile in Wood e Cement." },
-            ].map(({ collection, link, desc }, index) => (
-              <motion.div key={collection.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
-                <Link to={link} className="group block rounded-2xl overflow-hidden bg-card shadow-lg hover:shadow-xl transition-all duration-300">
-                  {/* Preview circles */}
-                  <div className="flex justify-center gap-3 pt-8 pb-4">
-                    {collection.products.slice(0, 4).map(p => (
-                      <div key={p.id} className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shadow-md group-hover:scale-105 transition-transform duration-300">
-                        <img src={p.image} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-6 pt-2">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xl font-heading font-bold text-foreground">{collection.title}</h3>
-                      <ArrowRight className="w-5 h-5 text-foreground/50 group-hover:text-foreground group-hover:translate-x-1 transition-all" />
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-2">{collection.subtitle}</p>
-                    <p className="text-sm text-muted-foreground/70">{desc}</p>
-                    <p className="text-xs text-muted-foreground/50 mt-3">{collection.products.length} finiture disponibili</p>
+              { title: "Hypermatt XL", image: roomXL, link: `/${language}/hypermatt-xl` },
+              { title: "Hypermatt Spina", image: roomSpina, link: `/${language}/hypermatt-spina` },
+              { title: "Hypermatt 55", image: room55, link: `/${language}/hypermatt-55` },
+            ].map(({ title, image, link }, index) => (
+              <motion.div key={title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
+                <Link to={link} className="group block rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img src={image} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <h3 className="absolute bottom-4 left-5 text-lg md:text-xl font-heading font-bold text-white">{title}</h3>
                   </div>
                 </Link>
               </motion.div>

@@ -10,6 +10,8 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, type HypermattProduct } from "@/data/hypermattProducts";
 import heroImage from "@/assets/hero-biomag-floor-new.webp";
+import icon5G from "@/assets/hypermatt/5g-valinge.png";
+import formatoSpina from "@/assets/hypermatt/formato-spina.jpg";
 
 const HypermattSpina = () => {
   const { language } = useTranslation();
@@ -106,6 +108,55 @@ const HypermattSpina = () => {
             "Geometrie inclinate e ritmo regolare danno vita a una spina elegante, dinamica e luminosa.",
             spinaFrancese
           )}
+        </div>
+      </section>
+
+      {/* Specifiche Tecniche */}
+      <section className="bg-muted py-20 md:py-28">
+        <div className="container-custom">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Specifiche Tecniche</h2>
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">Prestazioni certificate per ogni ambiente</p>
+          </motion.div>
+
+          <div className="max-w-2xl mx-auto">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="bg-card rounded-2xl p-8 shadow-lg">
+              <h3 className="text-xl font-heading font-bold text-foreground mb-4">SPECIFICHE TECNICHE</h3>
+              <div className="mb-4">
+                <img src={formatoSpina} alt="Formato spina 128x640 mm" className="max-w-[200px] h-auto" />
+              </div>
+              <p className="text-sm text-muted-foreground mb-6">128x640 mm</p>
+
+              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
+              <div className="space-y-0 divide-y divide-border">
+                {[
+                  { label: "Formato", value: "128x640 mm" },
+                  { label: "Spessore Totale", value: "6,5 mm" },
+                  { label: "Classe D'uso", value: "23/33" },
+                  { label: "Incastro", value: "5G" },
+                  { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
+                  { label: "Materassino", value: "IXPE 1 mm" },
+                  { label: "Strato D'usura", value: "0,55 mm" },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between items-center py-3">
+                    <span className="text-sm text-muted-foreground">{label}</span>
+                    <span className="text-sm font-bold text-foreground">{value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* 5G Icon */}
+              <div className="mt-8 flex items-center gap-4">
+                <img src={icon5G} alt="5G Välinge" className="w-12 h-12" />
+              </div>
+
+              <p className="text-sm text-muted-foreground leading-relaxed mt-4">
+                SPC effetto legno, listelli formato <strong>128 x 640 mm</strong> con spessore <strong>6,5 mm</strong>.
+                Finitura ultra realistica e vellutata grazie all'esclusiva tecnologia al laser <strong>Hypermatt</strong>. Resistente ad acqua e usura.
+                Facilità di installazione con <strong>aggancio a secco 5G</strong> e materassino fonoassorbente incorporato.
+              </p>
+            </motion.div>
+          </div>
         </div>
       </section>
 
