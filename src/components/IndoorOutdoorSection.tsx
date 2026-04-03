@@ -55,7 +55,7 @@ const IndoorOutdoorSection = () => {
     {
       title: "Ceramiche da Esterni",
       description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica per una continuità perfetta tra interno ed esterno.",
-      image: bgApplicationHospitality,
+      image: ceramicheEsterni,
       comingSoon: true,
     },
   ];
