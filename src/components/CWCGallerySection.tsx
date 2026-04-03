@@ -39,7 +39,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
           {/* Badge positioned at top-right of circle */}
           <div className="absolute -top-1 -right-1 sm:top-0 sm:right-0">
             <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-medium bg-kalea-cream/90 backdrop-blur-sm text-kalea-dark shadow-sm">
-              BIOCORE FLOOR®
+              Hypermatt
             </span>
           </div>
         </div>
@@ -50,7 +50,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
             {product.name}
           </h3>
           <p className="text-xs sm:text-sm text-foreground/60 mt-1">
-            Pavimento naturale evoluto
+            SPC ultra-matte laser
           </p>
         </div>
       </motion.div>
@@ -84,16 +84,10 @@ const CWCGallerySection = () => {
           transition={{ duration: 0.6 }}
         >
 <h2 className="text-[clamp(1.25rem,5vw,3rem)] font-heading font-bold text-foreground mb-2 md:mb-4 whitespace-nowrap">
-            {language === 'it' ? 'Esplora la Collezione BIOCORE FLOOR®' : 
-             language === 'en' ? 'Explore the BIOCORE FLOOR® Collection' :
-             language === 'de' ? 'Entdecken Sie die BIOCORE FLOOR®-Kollektion' :
-             'Découvrez la Collection BIOCORE FLOOR®'}
+            Esplora la Collezione Hypermatt
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-            {language === 'it' ? 'BIOCORE FLOOR® (pavimento naturale evoluto con fibre di legno e carbonio). Texture, colori e dettagli.' : 
-             language === 'en' ? 'BIOCORE FLOOR® (evolved natural flooring with wood fibers and carbon). Textures, colors and details.' :
-             language === 'de' ? 'BIOCORE FLOOR® (entwickelter Naturboden mit Holzfasern und Kohlenstoff). Texturen, Farben und Details.' :
-             'BIOCORE FLOOR® (sol naturel évolué avec fibres de bois et carbone). Textures, couleurs et détails.'}
+            Collezione SPC Hypermatt con finitura laser ultra-matte. Texture, colori e dettagli.
           </p>
         </motion.div>
       </div>
@@ -129,19 +123,13 @@ const CWCGallerySection = () => {
           className="max-w-3xl mx-auto"
         >
 <p className="text-sm md:text-lg text-foreground/70 leading-relaxed mb-4 md:mb-8">
-            {language === 'it' ? 'BIOCORE FLOOR® è il pavimento naturale evoluto KALEA, realizzato con fibre di legno e carbonio e leganti naturali, privo di plastica e sostanze tossiche.' : 
-             language === 'en' ? 'BIOCORE FLOOR® is the evolved natural KALEA flooring, made with wood fibers and carbon and natural binders, free from plastic and toxic substances.' :
-             language === 'de' ? 'BIOCORE FLOOR® ist der weiterentwickelte natürliche KALEA-Boden, hergestellt aus Holzfasern und Kohlenstoff und natürlichen Bindemitteln, frei von Plastik und Giftstoffen.' :
-             'BIOCORE FLOOR® est le sol naturel évolué KALEA, fabriqué avec des fibres de bois et carbone et des liants naturels, sans plastique ni substances toxiques.'}
+            La Collezione SPC Hypermatt è il pavimento ultra-matte con finitura laser di KALĒA®, con texture vellutata e performance tecniche avanzate.
           </p>
           <Link
             to={`/${language}/biocore-floor`}
             className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all duration-300 group"
           >
-            {language === 'it' ? 'Scopri tutta la collezione BIOCORE FLOOR®' : 
-             language === 'en' ? 'Discover the full BIOCORE FLOOR® collection' :
-             language === 'de' ? 'Entdecken Sie die komplette BIOCORE FLOOR®-Kollektion' :
-             'Découvrez toute la collection BIOCORE FLOOR®'}
+            Scopri tutta la collezione Hypermatt
             <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>

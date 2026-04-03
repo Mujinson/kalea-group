@@ -150,16 +150,10 @@ const DualCarouselSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-foreground mb-3">
-            {language === 'it' ? 'Le Nostre Linee di Pavimenti' : 
-             language === 'en' ? 'Our Flooring Lines' :
-             language === 'de' ? 'Unsere Bodenbelagslinien' :
-             'Nos Gammes de Sols'}
+            Le Nostre Collezioni
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-            {language === 'it' ? 'Due tecnologie innovative, infinite possibilità di design' : 
-             language === 'en' ? 'Two innovative technologies, endless design possibilities' :
-             language === 'de' ? 'Zwei innovative Technologien, unendliche Designmöglichkeiten' :
-             'Deux technologies innovantes, des possibilités de design infinies'}
+            Due tecnologie innovative, infinite possibilità di design
           </p>
         </motion.div>
       </div>
@@ -181,25 +175,20 @@ const DualCarouselSection = () => {
             >
               <div>
                 <h3 className="text-lg sm:text-xl font-heading font-semibold text-foreground">
-                  BIOMAG FLOOR®
+                  Biomag Floor®
                 </h3>
                 <p className="text-xs sm:text-sm text-foreground/60 mt-1">
-                  {language === 'it' ? 'Tecnologia MgO avanzata' : 
-                   language === 'en' ? 'Advanced MgO technology' :
-                   language === 'de' ? 'Fortschrittliche MgO-Technologie' :
-                   'Technologie MgO avancée'}
+                  Tecnologia MgO avanzata
                 </p>
               </div>
               <ArrowRight className="w-5 h-5 text-foreground/70 group-hover/header:text-foreground group-hover/header:translate-x-1 transition-all" />
             </Link>
-            
-            {/* Mini Carousel */}
             <div className="h-32 sm:h-36 md:h-40">
               <BiomagMiniCarousel language={language} t={t} />
             </div>
           </motion.div>
 
-          {/* BIOCORE FLOOR Card */}
+          {/* Hypermatt Card */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -213,19 +202,14 @@ const DualCarouselSection = () => {
             >
               <div>
                 <h3 className="text-lg sm:text-xl font-heading font-semibold text-foreground">
-                  BIOCORE FLOOR®
+                  Hypermatt
                 </h3>
                 <p className="text-xs sm:text-sm text-foreground/60 mt-1">
-                  {language === 'it' ? 'Fibre naturali e carbonio' : 
-                   language === 'en' ? 'Natural fibers and carbon' :
-                   language === 'de' ? 'Naturfasern und Kohlenstoff' :
-                   'Fibres naturelles et carbone'}
+                  Finitura SPC ultra-matte laser
                 </p>
               </div>
               <ArrowRight className="w-5 h-5 text-foreground/70 group-hover/header:text-foreground group-hover/header:translate-x-1 transition-all" />
             </Link>
-            
-            {/* Mini Carousel */}
             <div className="h-32 sm:h-36 md:h-40">
               <BiocoreMiniCarousel language={language} />
             </div>
