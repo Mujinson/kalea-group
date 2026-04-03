@@ -7,8 +7,8 @@ import productBiocore from "@/assets/hero-biomag-floor-new.webp";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardIndoor from "@/assets/card-indoor-new.jpg";
 import cardOutdoor from "@/assets/card-outdoor.jpg";
-import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
-import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
+import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
+import ceramicheEsterni from "@/assets/ceramiche-esterni-hero.jpg";
 
 interface Surface {
   title: string;
