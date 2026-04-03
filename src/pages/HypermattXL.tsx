@@ -10,6 +10,8 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { xlWood, xlTile, type HypermattProduct } from "@/data/hypermattProducts";
 import heroImage from "@/assets/hero-biomag-floor-new.webp";
+import lifestyleLiving from "@/assets/hypermatt-xl/lifestyle-living.webp";
+import lifestyleKitchen from "@/assets/hypermatt-xl/lifestyle-kitchen.webp";
 
 const HypermattXL = () => {
   const { language } = useTranslation();
