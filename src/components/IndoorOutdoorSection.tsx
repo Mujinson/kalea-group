@@ -2,31 +2,43 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
+import productBiomag from "@/assets/product-biocore-floor-new.jpg";
+import productBiocore from "@/assets/hero-biomag-floor-new.webp";
+import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardIndoor from "@/assets/card-indoor-new.jpg";
-import cardOutdoor from "@/assets/card-outdoor.jpg";
 
 const IndoorOutdoorSection = () => {
-  const { language, t } = useTranslation();
+  const { language } = useTranslation();
 
-  const sections = [
+  const surfaces = [
     {
-      title: t('indoorOutdoor.indoor.title'),
-      description: t('indoorOutdoor.indoor.description'),
-      buttonText: t('indoorOutdoor.indoor.button'),
+      title: "BIOMAG FLOOR®",
+      description: "Il cuore del sistema. Pavimento flottante in ossido di magnesio e fibre naturali. Impermeabile, ignifugo, leggero e ad altissima stabilità. Performance tecnica avanzata per interni di alto livello.",
+      link: `/${language}/biomag-floor`,
+      image: productBiomag,
+    },
+    {
+      title: "Collezione SPC Hypermatt",
+      description: "Ultra-matte al tatto con finitura laser. Realismo estremo del legno e del cemento, resistenza all'acqua e all'usura superiore. Il perfetto equilibrio tra bellezza naturale e performance quotidiana.",
+      link: `/${language}/biocore-floor`,
+      image: productBiocore,
+    },
+    {
+      title: "Parquet & Legno Pregiato",
+      description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
       link: `/${language}/indoor`,
       image: cardIndoor,
     },
     {
-      title: t('indoorOutdoor.outdoor.title'),
-      description: t('indoorOutdoor.outdoor.description'),
-      buttonText: t('indoorOutdoor.outdoor.button'),
-      link: `/${language}/outdoor`,
-      image: cardOutdoor,
+      title: "WPC Outdoor",
+      description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno e manutenzione minima.",
+      link: `/${language}/kaleadeck`,
+      image: productKaleadeck,
     },
   ];
 
   return (
-    <section className="relative min-h-screen bg-background px-4 md:px-8 lg:px-12 flex flex-col justify-center overflow-hidden py-10">
+    <section className="relative min-h-screen bg-background flex flex-col justify-center overflow-hidden px-4 md:px-8 lg:px-12 py-10">
       {/* Section Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -36,87 +48,66 @@ const IndoorOutdoorSection = () => {
         className="text-center mb-8 md:mb-12 max-w-3xl mx-auto"
       >
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-          {language === 'it' ? 'Soluzioni per Ogni Ambiente' :
-           language === 'en' ? 'Solutions for Every Space' :
-           language === 'de' ? 'Lösungen für jeden Raum' :
-           'Solutions pour Chaque Espace'}
+          Le Nostre Superfici
         </h2>
-        <p className="text-base md:text-lg text-foreground/70">
-          {language === 'it' ? 'Pavimenti flottanti di design per interni ed esterni, progettati per durare nel tempo' :
-           language === 'en' ? 'Designer floating floors for indoor and outdoor, built to last' :
-           language === 'de' ? 'Design-Schwimmböden für Innen- und Außenbereiche, gebaut für die Ewigkeit' :
-           'Sols flottants design pour intérieur et extérieur, conçus pour durer'}
+        <p className="text-base md:text-lg text-foreground/70 font-light">
+          KALĒA® — SURFACE SYSTEM® offre quattro mondi di eccellenza per interni ed esterni.
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-h-[60vh] md:max-h-[55vh] lg:max-h-[65vh]">
-        {sections.map((section, index) => (
+      {/* 4 Cards Grid - 2x2 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto w-full">
+        {surfaces.map((surface, index) => (
           <Link
-            key={section.title}
-            to={section.link}
-            className="block h-full"
+            key={surface.title}
+            to={surface.link}
+            className="block"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: index * 0.2 }}
-              className="relative group overflow-hidden rounded-2xl md:rounded-3xl min-h-0 h-full cursor-pointer"
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" }}
+              className="relative group overflow-hidden rounded-2xl min-h-[220px] sm:min-h-[250px] md:min-h-[280px] cursor-pointer"
             >
               {/* Background Image */}
-              <div className="absolute inset-0">
-                <img
-                  src={section.image}
-                  alt={section.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-              </div>
+              <img
+                src={surface.image}
+                alt={surface.title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
 
               {/* Content */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-12">
-                <motion.h2
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 + index * 0.2 }}
-                  className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3"
-                >
-                  {section.title}
-                </motion.h2>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.2 }}
-                  className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed"
-                >
-                  {section.description}
-                </motion.p>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.2 }}
-                >
-                  <span
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white"
-                  >
-                    {section.buttonText}
-                    <ArrowRight 
-                      size={16} 
-                      className="transition-transform duration-300 group-hover:translate-x-1" 
-                    />
-                  </span>
-                </motion.div>
+              <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-7">
+                <h3 className="text-lg md:text-xl lg:text-2xl font-heading font-semibold text-white mb-2 tracking-wide">
+                  {surface.title}
+                </h3>
+                <p className="text-xs md:text-sm text-white/85 leading-relaxed line-clamp-3 mb-3">
+                  {surface.description}
+                </p>
+                <span className="inline-flex items-center gap-2 text-white/90 text-xs md:text-sm font-medium transition-all duration-300 group-hover:text-white">
+                  Scopri
+                  <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
               </div>
             </motion.div>
           </Link>
         ))}
       </div>
+
+      {/* Bottom connector text */}
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, delay: 0.3 }}
+        className="text-center text-sm md:text-base text-foreground/60 font-light max-w-2xl mx-auto mt-8 md:mt-12 leading-relaxed"
+      >
+        Tutto completato con pezzi speciali per scale, battiscopa, profili e accessori coordinati. Showroom mobile direttamente nel tuo cantiere per una consulenza sul posto.
+      </motion.p>
     </section>
   );
 };
