@@ -50,7 +50,7 @@ const CWCProductCard = ({ product, language }: { product: CWCProductType; langua
             {product.name}
           </h3>
           <p className="text-xs sm:text-sm text-foreground/60 mt-1">
-            Pavimento naturale evoluto
+            SPC ultra-matte laser
           </p>
         </div>
       </motion.div>
