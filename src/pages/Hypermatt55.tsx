@@ -193,14 +193,15 @@ const Hypermatt55 = () => {
         </section>
 
         {/* CTA */}
-        <section className="bg-background py-16 md:py-24">
+        <section className="bg-primary py-16 md:py-24">
           <div className="container-custom text-center">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <p className="text-lg text-muted-foreground mb-6">Scopri le altre collezioni Hypermatt</p>
+              <h3 className="text-2xl md:text-3xl font-heading font-bold text-primary-foreground mb-3">Scopri le altre collezioni Hypermatt</h3>
+              <p className="text-primary-foreground/80 mb-8">Trova la soluzione perfetta per il tuo progetto</p>
               <div className="flex flex-wrap gap-4 justify-center">
-                <Button asChild variant="outline"><Link to={`/${language}/hypermatt-xl`}>Hypermatt XL</Link></Button>
-                <Button asChild variant="outline"><Link to={`/${language}/hypermatt-spina`}>Hypermatt Spina</Link></Button>
-                <Button asChild><Link to={`/${language}/contatti`}>Richiedi Campionatura</Link></Button>
+                <Button asChild variant="outline" className="border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10"><Link to={`/${language}/hypermatt-xl`}>Hypermatt XL</Link></Button>
+                <Button asChild variant="outline" className="border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10"><Link to={`/${language}/hypermatt-spina`}>Hypermatt Spina</Link></Button>
+                <Button asChild className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"><Link to={`/${language}/contatti`}>Richiedi Campionatura</Link></Button>
               </div>
             </motion.div>
           </div>
