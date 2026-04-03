@@ -134,7 +134,7 @@ const Navbar = () => {
         {
           label: t('nav.floors'),
           products: [
-            { label: "WPC OUTDOOR", path: `/${language}/kaleadeck`, comingSoon: false },
+            { label: "EXTERNO", path: `/${language}/kaleadeck`, comingSoon: false },
           ]
         },
         {
