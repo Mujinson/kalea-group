@@ -53,14 +53,9 @@ const parquetProducts: ProductType[] = [
   { id: 6, name: "Ciliegio", image: finishVelora },
 ];
 
-// Externo finishes
-const externoProducts: ProductType[] = [
-  { id: 1, name: "Teak", image: finishCorteccia },
-  { id: 2, name: "Grigio Ardesia", image: finishSilven },
-  { id: 3, name: "Noce Tropicale", image: finishTerram },
-  { id: 4, name: "Sabbia Marina", image: finishSabbia },
-  { id: 5, name: "Antracite", image: finishVelora },
-];
+// Externo products from data file
+const externoTraditionalProducts: ProductType[] = externoTraditional.products.map(p => ({ id: p.id, name: p.name, image: p.image }));
+const externoSkudoProducts: ProductType[] = externoSkudo.products.map(p => ({ id: p.id, name: p.name, image: p.image }));
 
 const MiniProductCard = ({ product, link }: { product: ProductType; link: string }) => (
   <Link to={link}>
