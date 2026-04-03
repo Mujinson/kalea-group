@@ -13,14 +13,8 @@ import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
 
-// Import BIOCORE images
-import biocoreNexa from "@/assets/biocore-nexa.png";
-import biocoreOrama from "@/assets/biocore-orama.png";
-import biocoreNuvia from "@/assets/biocore-nuvia.png";
-import biocoreMielea from "@/assets/biocore-mielea.png";
-import biocoreArgilla from "@/assets/biocore-argilla.png";
-import biocoreRadice from "@/assets/biocore-radice.png";
-import biocoreVetra from "@/assets/biocore-vetra.png";
+// Import Hypermatt product data
+import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
 
 const biomagPlanks = [
   { id: 1, name: "Aurora", image: finishAurora },
