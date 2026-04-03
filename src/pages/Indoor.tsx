@@ -9,16 +9,21 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import heroIndoor from "@/assets/hero-indoor-wood.jpg";
 import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
-import productBiocoreFloor from "@/assets/hero-biomag-floor-new.webp";
+import productHypermatt from "@/assets/hero-biomag-floor-new.webp";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
+import productKaleadeck from "@/assets/product-kaleadeck.jpg";
+import cardIndoor from "@/assets/card-indoor-new.jpg";
+import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
+import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
 
-interface Product {
-  name: string;
+interface Surface {
+  title: string;
   description: string;
+  link?: string;
   image: string;
-  link: string;
+  comingSoon?: boolean;
 }
 
 const Indoor = () => {
@@ -38,19 +43,46 @@ const Indoor = () => {
   const heroContentY = useTransform(heroProgress, [0, 0.4], [0, isMobile ? -40 : -80]);
   const heroImageY = useTransform(heroProgress, [0, 1], ["0%", isMobile ? "8%" : "15%"]);
 
-  const products: Product[] = [
+  const surfaces: Surface[] = [
     {
-      name: "BIOMAG FLOOR®",
-      description: "Pavimento minerale in MgO ad alte prestazioni per interni.",
-      image: productBiomagFloor,
+      title: "Biomag Floor®",
+      description: "Il cuore del sistema. Pavimento flottante in ossido di magnesio e fibre naturali. Impermeabile, ignifugo, leggero e ad altissima stabilità.",
       link: `/${language}/biomag-floor`,
+      image: productBiomagFloor,
     },
     {
-      name: "Hypermatt",
-      description: "Collezione SPC ultra-matte con finitura laser.",
-      image: productBiocoreFloor,
+      title: "Hypermatt",
+      description: "Ultra-matte al tatto con finitura laser. Realismo estremo del legno e del cemento, resistenza all'acqua e all'usura superiore.",
       link: `/${language}/biocore-floor`,
+      image: productHypermatt,
     },
+    {
+      title: "Parquet",
+      description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
+      link: `/${language}/indoor`,
+      image: cardIndoor,
+    },
+    {
+      title: "WPC Outdoor",
+      description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno.",
+      link: `/${language}/kaleadeck`,
+      image: productKaleadeck,
+    },
+    {
+      title: "Ceramiche da Interni",
+      description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia.",
+      image: bgApplicationRetail,
+      comingSoon: true,
+    },
+    {
+      title: "Ceramiche da Esterni",
+      description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica.",
+      image: bgApplicationHospitality,
+      comingSoon: true,
+    },
+  ];
+
+  const systemProducts = [
     {
       name: "KALEABASE®",
       description: "Sistemi modulari di sottopavimento per ogni esigenza.",
@@ -78,35 +110,24 @@ const Indoor = () => {
                language === 'en' ? "Indoor Floating Floors | BIOMAG & Hypermatt | Kalēa®" :
                language === 'de' ? "Schwimmende Böden für Innenräume | BIOMAG & Hypermatt | Kalēa®" :
                "Sols Flottants d'Intérieur | BIOMAG & Hypermatt | Kalēa®"}
-        description={language === 'it' ? "Scopri i pavimenti flottanti Kalēa® per interni: Biomag Floor in MgO e Collezione Hypermatt SPC ultra-matte. Installazione click-clack senza colla, ideali per residenze, uffici e hotel." :
-                     language === 'en' ? "Discover Kalēa® indoor floating floors: Biomag Floor in MgO and Hypermatt SPC ultra-matte collection. Click-clack installation without glue." :
-                     language === 'de' ? "Entdecken Sie Kalēa® schwimmende Böden für Innenräume: Biomag Floor aus MgO und Hypermatt SPC Kollektion. Klick-Installation ohne Kleber." :
-                     "Découvrez les sols flottants Kalēa® pour intérieurs : Biomag Floor en MgO et collection Hypermatt SPC ultra-matte. Installation click sans colle."}
-        keywords="pavimenti flottanti interni, pavimento flottante indoor, pavimenti click clack, pavimenti senza colla, pavimenti MgO interni, pavimenti fibra naturale, pavimento galleggiante interni, pavimenti per uffici, pavimenti per hotel, pavimenti residenziali"
-      />
-      <title>Indoor Solutions | Kalēa Surface System</title>
-      <meta
-        name="description"
-        content="Tecnologie avanzate per pavimenti e superfici indoor. Soluzioni ad alte prestazioni per abitazioni e spazi commerciali."
+        description={language === 'it' ? "Scopri i pavimenti flottanti Kalēa® per interni: Biomag Floor in MgO e Collezione Hypermatt SPC ultra-matte. Installazione click-clack senza colla." :
+                     language === 'en' ? "Discover Kalēa® indoor floating floors: Biomag Floor in MgO and Hypermatt SPC ultra-matte collection." :
+                     language === 'de' ? "Entdecken Sie Kalēa® schwimmende Böden für Innenräume: Biomag Floor aus MgO und Hypermatt SPC Kollektion." :
+                     "Découvrez les sols flottants Kalēa® pour intérieurs : Biomag Floor en MgO et collection Hypermatt SPC ultra-matte."}
+        keywords="pavimenti flottanti interni, pavimento flottante indoor, pavimenti click clack, pavimenti senza colla, pavimenti MgO interni, Hypermatt, pavimento galleggiante interni"
       />
 
       {/* Hero Section - Fixed background */}
       <div ref={heroRef} className="fixed inset-0 z-[0]">
         <motion.div 
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
-          style={{ 
-            scale: heroScale,
-            borderRadius: heroBorderRadius,
-          }}
+          style={{ scale: heroScale, borderRadius: heroBorderRadius }}
         >
           <motion.img 
             src={heroIndoor} 
             alt="Indoor Solutions" 
             className="absolute inset-0 w-full h-full object-cover will-change-transform"
-            style={{ 
-              y: heroImageY,
-              scale: 1.1,
-            }}
+            style={{ y: heroImageY, scale: 1.1 }}
             initial={{ filter: "blur(10px)", scale: 1.15 }}
             animate={{ filter: "blur(0px)", scale: 1.1 }}
             transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -124,7 +145,6 @@ const Indoor = () => {
                 text="Indoor Solutions"
                 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight"
               />
-
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -133,7 +153,6 @@ const Indoor = () => {
               >
                 Tecnologie avanzate per pavimenti e superfici indoor.
               </motion.p>
-
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -153,12 +172,96 @@ const Indoor = () => {
         </div>
       </div>
 
-      {/* Spacer to push content below fixed hero */}
+      {/* Spacer */}
       <div className="h-screen" />
 
-      {/* Products Grid Section */}
-      <section className="relative z-[1] bg-background pt-20 md:pt-32 pb-8">
-        <div className="container-custom">
+      {/* Le Nostre Superfici - 6 Cards Grid */}
+      <section className="relative z-[1] bg-background py-20 md:py-32 px-4 md:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+              Le Nostre Superfici
+            </h2>
+            <p className="text-base md:text-lg text-foreground/70 font-light">
+              KALĒA® — SURFACE SYSTEM® offre sei mondi di eccellenza per interni ed esterni.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 w-full">
+            {surfaces.map((surface, index) => {
+              const cardContent = (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.08 }}
+                  whileHover={!surface.comingSoon ? { y: -6, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" } : undefined}
+                  className={`relative group overflow-hidden rounded-2xl min-h-[220px] sm:min-h-[250px] md:min-h-[280px] ${surface.comingSoon ? 'cursor-default' : 'cursor-pointer'}`}
+                >
+                  <img
+                    src={surface.image}
+                    alt={surface.title}
+                    className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${surface.comingSoon ? 'opacity-50' : 'group-hover:scale-105'}`}
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
+
+                  {surface.comingSoon && (
+                    <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-white text-[10px] md:text-xs font-medium px-3 py-1 rounded-full z-20">
+                      Novità in arrivo
+                    </div>
+                  )}
+
+                  <div className="relative z-10 h-full flex flex-col justify-end p-4 md:p-6">
+                    <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1.5 tracking-wide">
+                      {surface.title}
+                    </h3>
+                    <p className="text-[10px] md:text-xs text-white/85 leading-relaxed line-clamp-3 mb-2">
+                      {surface.description}
+                    </p>
+                    {!surface.comingSoon && (
+                      <span className="inline-flex items-center gap-2 text-white/90 text-[10px] md:text-xs font-medium transition-all duration-300 group-hover:text-white">
+                        Scopri
+                        <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
+              );
+
+              if (surface.comingSoon) {
+                return <div key={surface.title}>{cardContent}</div>;
+              }
+
+              return (
+                <Link key={surface.title} to={surface.link!} className="block">
+                  {cardContent}
+                </Link>
+              );
+            })}
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="text-center text-sm md:text-base text-foreground/60 font-light max-w-2xl mx-auto mt-8 md:mt-12 leading-relaxed"
+          >
+            Tutto completato con pezzi speciali per scale, battiscopa, profili e accessori coordinati.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* System Products Section */}
+      <section className="relative z-[1] bg-background pb-20 md:pb-32 px-4 md:px-8 lg:px-12">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -167,28 +270,26 @@ const Indoor = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Linea Indoor
+              Componenti di Sistema
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Soluzioni complete per pavimenti e rivestimenti interni di alta qualità.
+              Sottopavimenti, profili e rivestimenti per completare ogni progetto.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            {products.map((product, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {systemProducts.map((product, index) => (
               <motion.div
                 key={product.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={index === products.length - 1 && products.length % 2 !== 0 ? "md:col-span-2 md:max-w-[50%] md:mx-auto" : ""}
               >
                 <Link 
                   to={product.link}
                   className="group relative block h-[320px] md:h-[380px] rounded-2xl overflow-hidden"
                 >
-                  {/* Background Image */}
                   <div className="absolute inset-0">
                     <img 
                       src={product.image} 
@@ -196,20 +297,14 @@ const Indoor = () => {
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </div>
-                  
-                  {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10 transition-all duration-500 group-hover:from-black/90 group-hover:via-black/50" />
-                  
-                  {/* Content - fixed height layout for alignment */}
                   <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                    <div className="min-h-[120px] flex flex-col justify-start">
-                      <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2 tracking-tight">
-                        {product.name}
-                      </h3>
-                      <p className="text-white/80 text-base md:text-lg mb-4">
-                        {product.description}
-                      </p>
-                    </div>
+                    <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2 tracking-tight">
+                      {product.name}
+                    </h3>
+                    <p className="text-white/80 text-base md:text-lg mb-4">
+                      {product.description}
+                    </p>
                     <div className="flex items-center gap-2 text-white font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                       <span>Scopri di più</span>
                       <ArrowRight className="w-4 h-4" />
