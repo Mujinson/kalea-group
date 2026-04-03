@@ -98,8 +98,10 @@ const HypermattXL = () => {
         </div>
       </section>
 
+      {/* All content after hero */}
+      <div className="relative z-[1]">
       {/* Description */}
-      <section className="relative z-[1] bg-background py-20 md:py-32">
+      <section className="bg-background py-20 md:py-32">
         <div className="container-custom">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">La collezione che amplifica lo spazio</h2>
@@ -128,7 +130,7 @@ const HypermattXL = () => {
       </section>
 
       {/* CTA */}
-      <section className="relative z-[2] bg-muted/30 py-16 md:py-24">
+      <section className="bg-muted/30 py-16 md:py-24">
         <div className="container-custom text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <p className="text-lg text-muted-foreground mb-6">Scopri le altre collezioni Hypermatt</p>
@@ -140,6 +142,7 @@ const HypermattXL = () => {
           </motion.div>
         </div>
       </section>
+      </div>
 
       {/* Lightbox */}
       <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
