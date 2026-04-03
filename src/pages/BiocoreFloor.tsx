@@ -2,9 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import CertificationsSection from "@/components/CertificationsSection";
-import ColorCircleGallery, { cwcColors } from "@/components/ColorCircleGallery";
-import CWCGallerySection from "@/components/CWCGallerySection";
-import { Check, ChevronDown, Droplets, Shield, Layers, Sparkles, Ruler, Wind } from "lucide-react";
+import { Check, ChevronDown, Droplets, Shield, Layers, Sparkles, Ruler, Wind, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-biomag-floor-new.webp";
@@ -12,6 +10,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
+import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
 
 const BiocoreFloor = () => {
   const { language } = useTranslation();
