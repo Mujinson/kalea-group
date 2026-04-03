@@ -141,14 +141,14 @@ const DualCarouselSection = () => {
     {
       title: "Externo Traditional",
       subtitle: "Composito WPC ad alta resistenza",
-      link: `/${language}/kaleadeck`,
+      link: `/${language}/externo`,
       products: externoTraditionalProducts,
       direction: 'right',
     },
     {
       title: "Externo Skudo",
       subtitle: "Schermatura coestrusa con protezione UV",
-      link: `/${language}/kaleadeck`,
+      link: `/${language}/externo`,
       products: externoSkudoProducts,
       direction: 'left',
     },
