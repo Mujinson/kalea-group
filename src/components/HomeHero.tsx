@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import heroImage from "@/assets/hero-home-new.jpg";
+import logoImage from "@/assets/logo-kalea-cream.png";
+import cardIndoor from "@/assets/card-indoor-new.jpg";
+import cardOutdoor from "@/assets/card-outdoor.jpg";
 import logoImage from "@/assets/logo-kalea-cream.png";
 
 const words = ["Innovate", "Living", "Nature"];
