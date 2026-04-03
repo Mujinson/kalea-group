@@ -116,7 +116,7 @@ const Hypermatt55 = () => {
         </section>
 
         {/* Specifiche Tecniche */}
-        <section className="bg-muted/20 py-20 md:py-28">
+        <section className="bg-muted py-20 md:py-28">
           <div className="container-custom">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Specifiche Tecniche</h2>
