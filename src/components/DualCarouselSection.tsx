@@ -3,7 +3,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useDragScroll } from "@/hooks/useDragScroll";
-import { cwcColors } from "@/data/cwcColors";
+import { hypermattXL, hypermattSpina, hypermatt55, type HypermattProduct } from "@/data/hypermattProducts";
 
 // Import BIOMAG finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -38,13 +38,11 @@ const biomagProducts: ProductType[] = [
   { id: 7, name: "Silven", image: finishSilven },
 ];
 
-const hypermattProducts: ProductType[] = cwcColors.map(color => ({
-  id: color.id,
-  name: color.name,
-  image: color.image,
-}));
+// Convert Hypermatt data to ProductType
+const toProductType = (products: HypermattProduct[]): ProductType[] =>
+  products.map(p => ({ id: p.id, name: p.name, image: p.image }));
 
-// Parquet finishes - using a mix of warm wood tones
+// Parquet finishes
 const parquetProducts: ProductType[] = [
   { id: 1, name: "Rovere Naturale", image: finishCorteccia },
   { id: 2, name: "Noce Scuro", image: finishTerram },
@@ -117,10 +115,24 @@ const DualCarouselSection = () => {
       direction: 'left',
     },
     {
-      title: "Hypermatt",
-      subtitle: "Finitura SPC ultra-matte laser",
+      title: hypermattXL.title,
+      subtitle: hypermattXL.subtitle,
       link: `/${language}/biocore-floor`,
-      products: hypermattProducts,
+      products: toProductType(hypermattXL.products),
+      direction: 'right',
+    },
+    {
+      title: hypermattSpina.title,
+      subtitle: hypermattSpina.subtitle,
+      link: `/${language}/biocore-floor`,
+      products: toProductType(hypermattSpina.products),
+      direction: 'left',
+    },
+    {
+      title: hypermatt55.title,
+      subtitle: hypermatt55.subtitle,
+      link: `/${language}/biocore-floor`,
+      products: toProductType(hypermatt55.products),
       direction: 'right',
     },
     {
@@ -153,12 +165,12 @@ const DualCarouselSection = () => {
             Le Nostre Collezioni
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-            Quattro mondi di finiture, infinite possibilità di design
+            Sei mondi di finiture, infinite possibilità di design
           </p>
         </motion.div>
       </div>
 
-      {/* Four Cards - 2x2 Grid */}
+      {/* Six Cards - 2x3 Grid */}
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {collections.map((col, i) => (
