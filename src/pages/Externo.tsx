@@ -155,6 +155,57 @@ const Externo = () => {
         </div>
       </section>
 
+      {/* Lifestyle Gallery */}
+      <section className="relative z-[1] bg-background py-20 md:py-32">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+              Vivi l'esterno con stile
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Per non rinunciare alle emozioni che sa offrire la naturalezza del parquet, nasce Externo: la soluzione intelligente ed ecologica per vivere la passione dei pavimenti in legno anche all'esterno.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="overflow-hidden rounded-2xl shadow-xl"
+            >
+              <img src={lifestylePool} alt="Externo bordo piscina con area lounge" className="w-full h-[300px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="overflow-hidden rounded-2xl shadow-xl"
+            >
+              <img src={lifestyleTraditional} alt="Externo Traditional posa su terrazza" className="w-full h-[300px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </motion.div>
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-base text-muted-foreground/80 max-w-4xl mx-auto mt-10 text-center leading-relaxed"
+          >
+            Una linea high-tech dalle performance meccaniche d'eccellenza, un pavimento in composito ideale per il decking, perfetto per arredare gli spazi esterni con alto impatto estetico ed estrema robustezza. Le doghe sono resistenti alle radiazioni UV, alle alte e basse temperature, non invecchiano e non marciscono.
+          </motion.p>
+        </div>
+      </section>
+
       {/* Finiture Traditional Section */}
       <section className="relative z-[1] bg-background py-20 md:py-32">
         <div className="container-custom">
