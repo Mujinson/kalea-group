@@ -24,6 +24,7 @@ import spinaJura from "@/assets/hypermatt/spina-jura.jpg";
 import h55Annapurna from "@/assets/hypermatt/55-annapurna.jpg";
 import h55NangaParbat from "@/assets/hypermatt/55-nanga-parbat.jpg";
 import h55Himalaya from "@/assets/hypermatt/55-himalaya.jpg";
+import h55Kilimangiaro from "@/assets/hypermatt/55-kilimangiaro.jpg";
 import h55CerroTorre from "@/assets/hypermatt/55-cerro-torre.jpg";
 import h55Atlante from "@/assets/hypermatt/55-atlante.jpg";
 import h55Dolomiti from "@/assets/hypermatt/55-dolomiti.jpg";
@@ -50,7 +51,7 @@ export interface HypermattCollection {
 }
 
 // === HYPERMATT XL ===
-const xlWood: HypermattProduct[] = [
+export const xlWood: HypermattProduct[] = [
   { id: "xl-cordillera", name: "Cordillera", image: xlCordillera, subcategory: "wood" },
   { id: "xl-rocky", name: "Rocky", image: xlRocky, subcategory: "wood" },
   { id: "xl-ararat", name: "Ararat", image: xlArarat, subcategory: "wood" },
@@ -60,7 +61,7 @@ const xlWood: HypermattProduct[] = [
   { id: "xl-caucaso", name: "Caucaso", image: xlCaucaso, subcategory: "wood" },
 ];
 
-const xlTile: HypermattProduct[] = [
+export const xlTile: HypermattProduct[] = [
   { id: "xl-ambrym", name: "Ambrym", image: xlAmbrym, subcategory: "tile" },
   { id: "xl-aso", name: "Aso", image: xlAso, subcategory: "tile" },
   { id: "xl-vesuvio", name: "Vesuvio", image: xlVesuvio, subcategory: "tile" },
@@ -69,22 +70,23 @@ const xlTile: HypermattProduct[] = [
 ];
 
 // === HYPERMATT SPINA ===
-const spinaItaliana: HypermattProduct[] = [
+export const spinaItaliana: HypermattProduct[] = [
   { id: "spina-karu", name: "Karu", image: spinaKaru, subcategory: "italiana" },
   { id: "spina-zagros", name: "Zagros", image: spinaZagros, subcategory: "italiana" },
   { id: "spina-ural", name: "Ural", image: spinaUral, subcategory: "italiana" },
 ];
 
-const spinaFrancese: HypermattProduct[] = [
+export const spinaFrancese: HypermattProduct[] = [
   { id: "spina-taurus", name: "Taurus", image: spinaTaurus, subcategory: "francese" },
   { id: "spina-jura", name: "Jura", image: spinaJura, subcategory: "francese" },
 ];
 
 // === HYPERMATT 55 ===
-const h55Wood: HypermattProduct[] = [
+export const h55Wood: HypermattProduct[] = [
   { id: "55-annapurna", name: "Annapurna", image: h55Annapurna, subcategory: "wood" },
   { id: "55-nanga-parbat", name: "Nanga Parbat", image: h55NangaParbat, subcategory: "wood" },
   { id: "55-himalaya", name: "Himalaya", image: h55Himalaya, subcategory: "wood" },
+  { id: "55-kilimangiaro", name: "Kilimangiaro", image: h55Kilimangiaro, subcategory: "wood" },
   { id: "55-cerro-torre", name: "Cerro Torre", image: h55CerroTorre, subcategory: "wood" },
   { id: "55-atlante", name: "Atlante", image: h55Atlante, subcategory: "wood" },
   { id: "55-dolomiti", name: "Dolomiti", image: h55Dolomiti, subcategory: "wood" },
@@ -93,7 +95,7 @@ const h55Wood: HypermattProduct[] = [
   { id: "55-everest", name: "Everest", image: h55Everest, subcategory: "wood" },
 ];
 
-const h55Cement: HypermattProduct[] = [
+export const h55Cement: HypermattProduct[] = [
   { id: "55-teide", name: "Teide", image: h55Teide, subcategory: "cement" },
   { id: "55-fuji", name: "Fuji", image: h55Fuji, subcategory: "cement" },
   { id: "55-asama", name: "Asama", image: h55Asama, subcategory: "cement" },

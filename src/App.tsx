@@ -10,6 +10,9 @@ import Indoor from "./pages/Indoor";
 import Outdoor from "./pages/Outdoor";
 import BiomagFloor from "./pages/BiomagFloor";
 import BiocoreFloor from "./pages/BiocoreFloor";
+import HypermattXL from "./pages/HypermattXL";
+import HypermattSpina from "./pages/HypermattSpina";
+import Hypermatt55 from "./pages/Hypermatt55";
 import EdgeLine from "./pages/EdgeLine";
 import Biowall from "./pages/Biowall";
 import Kaleabase from "./pages/Kaleabase";
@@ -153,6 +156,9 @@ const App = () => (
               <Route path="/it/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
               <Route path="/it/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/it/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
+              <Route path="/it/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
+              <Route path="/it/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
               <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
@@ -177,6 +183,9 @@ const App = () => (
               <Route path="/en/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
               <Route path="/en/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/en/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
+              <Route path="/en/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
+              <Route path="/en/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
               <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
@@ -201,6 +210,9 @@ const App = () => (
               <Route path="/de/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
               <Route path="/de/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/de/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
+              <Route path="/de/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
+              <Route path="/de/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
               <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
@@ -225,6 +237,9 @@ const App = () => (
               <Route path="/fr/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
               <Route path="/fr/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/fr/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
+              <Route path="/fr/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
+              <Route path="/fr/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
               <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
               <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
               <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
