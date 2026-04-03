@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useDragScroll } from "@/hooks/useDragScroll";
 import { hypermattXL, hypermattSpina, hypermatt55, type HypermattProduct } from "@/data/hypermattProducts";
+import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
 // Import BIOMAG finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
@@ -52,14 +53,9 @@ const parquetProducts: ProductType[] = [
   { id: 6, name: "Ciliegio", image: finishVelora },
 ];
 
-// Externo finishes
-const externoProducts: ProductType[] = [
-  { id: 1, name: "Teak", image: finishCorteccia },
-  { id: 2, name: "Grigio Ardesia", image: finishSilven },
-  { id: 3, name: "Noce Tropicale", image: finishTerram },
-  { id: 4, name: "Sabbia Marina", image: finishSabbia },
-  { id: 5, name: "Antracite", image: finishVelora },
-];
+// Externo products from data file
+const externoTraditionalProducts: ProductType[] = externoTraditional.products.map(p => ({ id: p.id, name: p.name, image: p.image }));
+const externoSkudoProducts: ProductType[] = externoSkudo.products.map(p => ({ id: p.id, name: p.name, image: p.image }));
 
 const MiniProductCard = ({ product, link }: { product: ProductType; link: string }) => (
   <Link to={link}>
@@ -143,11 +139,18 @@ const DualCarouselSection = () => {
       direction: 'left',
     },
     {
-      title: "Externo",
-      subtitle: "Decking e superfici outdoor",
-      link: `/${language}/outdoor`,
-      products: externoProducts,
+      title: "Externo Traditional",
+      subtitle: "Composito WPC ad alta resistenza",
+      link: `/${language}/kaleadeck`,
+      products: externoTraditionalProducts,
       direction: 'right',
+    },
+    {
+      title: "Externo Skudo",
+      subtitle: "Schermatura coestrusa con protezione UV",
+      link: `/${language}/kaleadeck`,
+      products: externoSkudoProducts,
+      direction: 'left',
     },
   ];
 
