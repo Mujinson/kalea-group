@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
 import AnimatedTitle from "@/components/AnimatedTitle";
