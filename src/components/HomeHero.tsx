@@ -140,11 +140,11 @@ const HomeHero = () => {
                 >
                   <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                  <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-7">
-                    <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2">{card.title}</h3>
-                    <p className="text-sm text-white/85 mb-3">{card.desc}</p>
-                    <span className="inline-flex items-center gap-2 text-white/90 text-sm font-medium group-hover:text-white transition-colors">
-                      Scopri <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                  <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-12">
+                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">{card.title}</h3>
+                    <p className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed">{card.desc}</p>
+                    <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white">
+                      Scopri <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </motion.div>
