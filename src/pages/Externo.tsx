@@ -388,6 +388,20 @@ const Externo = () => {
         </div>
       </section>
     </div>
+
+    <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
+      <DialogContent className="max-w-lg p-0 bg-transparent border-none shadow-none">
+        {selectedProduct && (
+          <div className="relative">
+            <button onClick={() => setSelectedProduct(null)} className="absolute -top-4 -right-4 w-10 h-10 bg-foreground/90 hover:bg-foreground rounded-full flex items-center justify-center z-50 shadow-lg" aria-label="Chiudi">
+              <X className="w-5 h-5 text-background" />
+            </button>
+            <img src={selectedProduct.image} alt={selectedProduct.name} className="w-auto max-w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-lg" />
+            <p className="text-center mt-4 text-lg font-semibold text-foreground uppercase tracking-wider">{selectedProduct.name}</p>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 };
 
