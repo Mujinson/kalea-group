@@ -63,12 +63,6 @@ const Indoor = () => {
       image: cardIndoor,
     },
     {
-      title: "WPC Outdoor",
-      description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno.",
-      link: `/${language}/kaleadeck`,
-      image: productKaleadeck,
-    },
-    {
       title: "Ceramiche da Interni",
       description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia.",
       image: bgApplicationRetail,

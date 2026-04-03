@@ -44,8 +44,8 @@ const Outdoor = () => {
       link: `/${language}/kalea-elements`,
     },
     {
-      name: "KALEADECK®",
-      description: "Pavimentazione outdoor per portici, terrazze e piscine.",
+      name: "WPC OUTDOOR",
+      description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno.",
       image: productKaleadeck,
       link: `/${language}/kaleadeck`,
     },
