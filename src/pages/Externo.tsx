@@ -405,5 +405,6 @@ const Externo = () => {
       </Dialog>
     </>
   );
+};
 
 export default Externo;
