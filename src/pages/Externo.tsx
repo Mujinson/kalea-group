@@ -13,7 +13,7 @@ import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
-const Kaleadeck = () => {
+const Externo = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
   
@@ -376,4 +376,4 @@ const Kaleadeck = () => {
   );
 };
 
-export default Kaleadeck;
+export default Externo;
