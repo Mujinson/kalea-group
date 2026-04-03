@@ -39,32 +39,13 @@ const HomeHero = () => {
             className="w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] h-auto brightness-0 invert drop-shadow-2xl"
           />
 
-          {/* Headline */}
-          <motion.h2
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
-            className="mt-6 text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.15em] text-center drop-shadow-lg"
-          >
-            KALĒA® — SURFACE SYSTEM®
-          </motion.h2>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
-            className="mt-4 text-white/80 text-sm sm:text-base md:text-lg max-w-2xl text-center px-6 font-light tracking-wide leading-relaxed"
-          >
-            Superfici di pregio per interni ed esterni. Soluzioni complete di pavimenti, rivestimenti e accessori.
-          </motion.p>
-          
           {/* Payoff */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
-            className="mt-6 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[0.2em] drop-shadow-lg flex items-center gap-1"
+            transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+            className="mt-4 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[0.2em] drop-shadow-lg flex items-center gap-1"
           >
             {words.map((word, index) => (
               <span key={word} className="flex items-center">
