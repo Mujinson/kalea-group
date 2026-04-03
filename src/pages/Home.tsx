@@ -199,8 +199,8 @@ const Home = () => {
       </section>
 
       {/* Products Section */}
-      <section className="relative min-h-screen bg-background py-10 md:py-16 overflow-hidden">
-        <div className="relative z-10 h-full flex flex-col justify-center px-4 md:px-8 lg:px-12">
+      <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
+        <div className="relative z-10 w-full flex flex-col justify-center px-4 md:px-8 lg:px-12 py-10">
           <div className="text-center">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
