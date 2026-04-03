@@ -124,7 +124,7 @@ const HomeHero = () => {
           </motion.p>
 
           {/* Indoor / Outdoor Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-10">
+          <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 max-w-5xl mx-auto w-full">
             {[
               { title: "Indoor", desc: "Pavimenti di design per interni di alto livello", link: `/${language}/indoor`, image: cardIndoor },
               { title: "Outdoor", desc: "Soluzioni per terrazze, deck e living all'aperto", link: `/${language}/outdoor`, image: cardOutdoor },
@@ -136,7 +136,7 @@ const HomeHero = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
                   whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
-                  className="relative group overflow-hidden rounded-2xl md:rounded-3xl min-h-[280px] md:min-h-[360px] lg:min-h-[400px] cursor-pointer"
+                  className="relative group overflow-hidden rounded-3xl min-h-[220px] sm:min-h-[260px] md:min-h-[300px] cursor-pointer"
                 >
                   <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
