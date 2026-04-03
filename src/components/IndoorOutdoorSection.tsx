@@ -7,8 +7,8 @@ import productBiocore from "@/assets/hero-biomag-floor-new.webp";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardIndoor from "@/assets/card-indoor-new.jpg";
 import cardOutdoor from "@/assets/card-outdoor.jpg";
-import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
-import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
+import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
+import ceramicheEsterni from "@/assets/ceramiche-esterni-hero.jpg";
 
 interface Surface {
   title: string;
@@ -49,13 +49,13 @@ const IndoorOutdoorSection = () => {
     {
       title: "Ceramiche da Interni",
       description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia per progetti residenziali e contract di lusso.",
-      image: bgApplicationRetail,
+      image: ceramicheInterni,
       comingSoon: true,
     },
     {
       title: "Ceramiche da Esterni",
       description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica per una continuità perfetta tra interno ed esterno.",
-      image: bgApplicationHospitality,
+      image: ceramicheEsterni,
       comingSoon: true,
     },
   ];

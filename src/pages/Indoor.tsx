@@ -15,8 +15,8 @@ import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardIndoor from "@/assets/card-indoor-new.jpg";
-import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
-import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
+import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
+import ceramicheEsterni from "@/assets/ceramiche-esterni-hero.jpg";
 
 interface Surface {
   title: string;
@@ -65,13 +65,13 @@ const Indoor = () => {
     {
       title: "Ceramiche da Interni",
       description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia.",
-      image: bgApplicationRetail,
+      image: ceramicheInterni,
       comingSoon: true,
     },
     {
       title: "Ceramiche da Esterni",
       description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica.",
-      image: bgApplicationHospitality,
+      image: ceramicheEsterni,
       comingSoon: true,
     },
   ];
