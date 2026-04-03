@@ -6,7 +6,6 @@ import heroImage from "@/assets/hero-home-new.jpg";
 import logoImage from "@/assets/logo-kalea-cream.png";
 import cardIndoor from "@/assets/card-indoor-new.jpg";
 import cardOutdoor from "@/assets/card-outdoor.jpg";
-import logoImage from "@/assets/logo-kalea-cream.png";
 
 const words = ["Innovate", "Living", "Nature"];
 
