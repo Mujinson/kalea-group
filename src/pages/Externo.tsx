@@ -18,6 +18,7 @@ import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 const Externo = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
+  const [selectedProduct, setSelectedProduct] = useState<ExternoProduct | null>(null);
   
   const heroRef = useRef<HTMLDivElement>(null);
   
