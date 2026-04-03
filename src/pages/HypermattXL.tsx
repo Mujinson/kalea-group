@@ -131,6 +131,26 @@ const HypermattXL = () => {
         </div>
       </section>
 
+      {/* Lifestyle Section */}
+      <section className="relative z-[1] bg-background py-20 md:py-32">
+        <div className="container-custom text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">Vivi il grande formato</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Le doghe XL amplificano lo spazio e creano continuità visiva, regalando ambienti di grande respiro ed eleganza contemporanea.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="overflow-hidden rounded-2xl shadow-xl">
+              <img src={lifestyleLiving} alt="Soggiorno con pavimento Hypermatt XL" className="w-full h-[300px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="overflow-hidden rounded-2xl shadow-xl">
+              <img src={lifestyleKitchen} alt="Cucina con pavimento Hypermatt XL" className="w-full h-[300px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="bg-primary py-16 md:py-24">
         <div className="container-custom text-center">
