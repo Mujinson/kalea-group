@@ -60,7 +60,7 @@ const Indoor = () => {
       title: "Parquet",
       description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
       link: `/${language}/indoor`,
-      image: cardIndoor,
+      image: cardParquetAmbient,
     },
     {
       title: "Ceramiche da Interni",
