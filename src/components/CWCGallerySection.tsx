@@ -84,16 +84,10 @@ const CWCGallerySection = () => {
           transition={{ duration: 0.6 }}
         >
 <h2 className="text-[clamp(1.25rem,5vw,3rem)] font-heading font-bold text-foreground mb-2 md:mb-4 whitespace-nowrap">
-            {language === 'it' ? 'Esplora la Collezione BIOCORE FLOOR®' : 
-             language === 'en' ? 'Explore the BIOCORE FLOOR® Collection' :
-             language === 'de' ? 'Entdecken Sie die BIOCORE FLOOR®-Kollektion' :
-             'Découvrez la Collection BIOCORE FLOOR®'}
+            Esplora la Collezione Hypermatt
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-            {language === 'it' ? 'BIOCORE FLOOR® (pavimento naturale evoluto con fibre di legno e carbonio). Texture, colori e dettagli.' : 
-             language === 'en' ? 'BIOCORE FLOOR® (evolved natural flooring with wood fibers and carbon). Textures, colors and details.' :
-             language === 'de' ? 'BIOCORE FLOOR® (entwickelter Naturboden mit Holzfasern und Kohlenstoff). Texturen, Farben und Details.' :
-             'BIOCORE FLOOR® (sol naturel évolué avec fibres de bois et carbone). Textures, couleurs et détails.'}
+            Collezione SPC Hypermatt con finitura laser ultra-matte. Texture, colori e dettagli.
           </p>
         </motion.div>
       </div>
