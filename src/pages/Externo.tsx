@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
 import AnimatedTitle from "@/components/AnimatedTitle";
-import { Droplets, Sun, Shield, Palette, Settings, CheckCircle, Clock, ChevronDown } from "lucide-react";
+import { Droplets, Sun, Shield, Palette, Settings, CheckCircle, Clock, ChevronDown, Search, X } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import type { ExternoProduct } from "@/data/externoProducts";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -16,6 +18,7 @@ import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 const Externo = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
+  const [selectedProduct, setSelectedProduct] = useState<ExternoProduct | null>(null);
   
   const heroRef = useRef<HTMLDivElement>(null);
   
@@ -73,7 +76,8 @@ const Externo = () => {
   ];
 
   return (
-    <div className="relative bg-background">
+    <>
+      <div className="relative bg-background">
       <SEOHead
         title={language === 'it' ? "EXTERNO® — Decking per Esterni in MgO | Kalēa®" :
                language === 'en' ? "EXTERNO® — Outdoor MgO Decking | Kalēa®" :
@@ -177,10 +181,16 @@ const Externo = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="group text-center"
+                className="group text-center cursor-pointer"
+                onClick={() => setSelectedProduct(product)}
               >
-                <div className="w-28 h-28 md:w-36 md:h-36 mx-auto rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                <div className="relative w-28 h-28 md:w-36 md:h-36 mx-auto">
+                  <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  </div>
+                  <button className="absolute -top-1 -right-1 md:top-0 md:right-0 w-8 h-8 md:w-10 md:h-10 bg-foreground/60 hover:bg-foreground/80 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm shadow-md" aria-label={`Visualizza ${product.name}`}>
+                    <Search className="w-4 h-4 md:w-5 md:h-5 text-background" />
+                  </button>
                 </div>
                 <p className="mt-3 text-sm md:text-base font-medium text-foreground whitespace-nowrap">{product.name}</p>
                 <p className="text-xs text-muted-foreground">{product.finish}</p>
@@ -218,10 +228,16 @@ const Externo = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="group text-center"
+                className="group text-center cursor-pointer"
+                onClick={() => setSelectedProduct(product)}
               >
-                <div className="w-28 h-28 md:w-36 md:h-36 mx-auto rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                <div className="relative w-28 h-28 md:w-36 md:h-36 mx-auto">
+                  <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  </div>
+                  <button className="absolute -top-1 -right-1 md:top-0 md:right-0 w-8 h-8 md:w-10 md:h-10 bg-foreground/60 hover:bg-foreground/80 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-sm shadow-md" aria-label={`Visualizza ${product.name}`}>
+                    <Search className="w-4 h-4 md:w-5 md:h-5 text-background" />
+                  </button>
                 </div>
                 <p className="mt-3 text-sm md:text-base font-medium text-foreground whitespace-nowrap">{product.name}</p>
                 <p className="text-xs text-muted-foreground">{product.finish}</p>
@@ -373,6 +389,21 @@ const Externo = () => {
         </div>
       </section>
     </div>
+
+    <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
+      <DialogContent className="max-w-lg p-0 bg-transparent border-none shadow-none">
+        {selectedProduct && (
+          <div className="relative">
+            <button onClick={() => setSelectedProduct(null)} className="absolute -top-4 -right-4 w-10 h-10 bg-foreground/90 hover:bg-foreground rounded-full flex items-center justify-center z-50 shadow-lg" aria-label="Chiudi">
+              <X className="w-5 h-5 text-background" />
+            </button>
+            <img src={selectedProduct.image} alt={selectedProduct.name} className="w-auto max-w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-lg" />
+            <p className="text-center mt-4 text-lg font-semibold text-foreground uppercase tracking-wider">{selectedProduct.name}</p>
+          </div>
+        )}
+      </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
