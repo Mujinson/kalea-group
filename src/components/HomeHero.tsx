@@ -99,7 +99,7 @@ const HomeHero = () => {
       </section>
 
       {/* Description section below hero */}
-      <section className="bg-[#F7F1E7] py-16 md:py-24">
+      <section className="bg-[#F7F1E7] min-h-screen flex items-center justify-center">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
