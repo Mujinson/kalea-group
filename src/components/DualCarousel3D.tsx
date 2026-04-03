@@ -309,7 +309,7 @@ const DualCarousel3D = () => {
           className="text-center mb-6 md:mb-10"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-            Le Nostre Linee di Pavimenti
+            Le Nostre Collezioni
           </h2>
           <p className="text-foreground/60 text-sm md:text-base font-light max-w-xl mx-auto">
             Due tecnologie innovative, infinite possibilità di design
@@ -321,19 +321,19 @@ const DualCarousel3D = () => {
           {/* BIOMAG Carousel - rotates clockwise */}
           <CarouselWheel 
             planks={biomagPlanks}
-            title="BIOMAG FLOOR®"
+            title="Biomag Floor®"
             link="/biomag-floor"
-            ctaText="Scopri BIOMAG FLOOR®"
+            ctaText="Scopri Biomag Floor®"
             direction={1}
             screenSize={screenSize}
           />
           
-          {/* BIOCORE Carousel - rotates counter-clockwise */}
+          {/* Hypermatt Carousel - rotates counter-clockwise */}
           <CarouselWheel 
             planks={biocorePlanks}
-            title="BIOCORE FLOOR®"
+            title="Hypermatt"
             link="/biocore-floor"
-            ctaText="Scopri BIOCORE FLOOR®"
+            ctaText="Scopri Hypermatt"
             direction={-1}
             screenSize={screenSize}
           />
