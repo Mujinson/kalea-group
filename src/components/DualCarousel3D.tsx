@@ -147,6 +147,22 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
   const radius = Math.max(base.radius, minRadius);
   const { plankWidth, plankHeight } = base;
 
+  const normalizedRotation = ((rotation % 360) + 360) % 360;
+  const activePlank = planks.reduce(
+    (closest, plank, index) => {
+      const angle = (360 / planks.length) * index;
+      const visibleAngle = ((angle + normalizedRotation) % 360 + 360) % 360;
+      const distanceFromFront = Math.min(visibleAngle, 360 - visibleAngle);
+
+      if (distanceFromFront < closest.distance) {
+        return { plank, distance: distanceFromFront };
+      }
+
+      return closest;
+    },
+    { plank: planks[0], distance: Number.POSITIVE_INFINITY }
+  ).plank;
+
   return (
     <div 
       className="flex-1 flex flex-col items-center cursor-grab active:cursor-grabbing select-none pb-8"
@@ -174,7 +190,7 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
         className="relative flex items-center justify-center w-full"
         style={{ 
           perspective: "800px",
-          height: screenSize === 'mobile' ? "300px" : screenSize === 'tablet' ? "380px" : "440px",
+          height: screenSize === 'mobile' ? "340px" : screenSize === 'tablet' ? "420px" : "480px",
           marginTop: screenSize === 'mobile' ? "20px" : "40px"
         }}
       >
@@ -188,11 +204,6 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
         >
           {planks.map((plank, index) => {
             const angle = (360 / planks.length) * index;
-            const visibleAngle = ((angle + rotation) % 360 + 360) % 360;
-            const distanceFromFront = Math.min(visibleAngle, 360 - visibleAngle);
-            const isFrontFacing = distanceFromFront < 32;
-            const labelOpacity = Math.max(0, 1 - distanceFromFront / 42);
-            const labelOffset = screenSize === 'mobile' ? 20 : 26;
 
             return (
               <Link
@@ -240,26 +251,23 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
                       backfaceVisibility: "hidden"
                     }}
                   />
-
-                  <div
-                    className="absolute left-1/2 whitespace-nowrap pt-1 md:pt-2 transition-opacity duration-200"
-                    style={{
-                      top: `${plankHeight + labelOffset}px`,
-                      transform: "translateX(-50%) rotateY(0deg)",
-                      opacity: labelOpacity,
-                      pointerEvents: isFrontFacing ? "auto" : "none"
-                    }}
-                    aria-hidden={!isFrontFacing}
-                  >
-                    <span className="text-foreground/70 text-[10px] md:text-xs font-medium tracking-[0.18em] uppercase group-hover:text-foreground transition-colors whitespace-nowrap">
-                      {plank.name}
-                    </span>
-                  </div>
                 </motion.div>
               </Link>
             );
           })}
         </motion.div>
+
+        <div
+          className="absolute left-1/2 text-center pointer-events-none"
+          style={{
+            top: `calc(50% + ${plankHeight / 2 + (screenSize === 'mobile' ? 34 : 40)}px)`,
+            transform: "translateX(-50%)"
+          }}
+        >
+          <span className="text-foreground/70 text-[10px] md:text-xs font-medium tracking-[0.18em] uppercase whitespace-nowrap">
+            {activePlank.name}
+          </span>
+        </div>
       </div>
 
       {/* CTA Button - positioned at bottom */}
