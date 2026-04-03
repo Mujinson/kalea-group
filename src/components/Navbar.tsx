@@ -387,6 +387,13 @@ const Navbar = () => {
                                   setIsIndoorExpanded(false);
                                 }
                               }}
+                              onClick={() => {
+                                const path = index === 0 ? `/${language}/indoor` : `/${language}/outdoor`;
+                                setIsDropdownOpen(false);
+                                setIsIndoorExpanded(false);
+                                setIsOutdoorExpanded(false);
+                                window.location.href = path;
+                              }}
                               className={`w-full flex items-center justify-between px-4 py-3 text-sm font-medium transition-all duration-200 ${
                                 (index === 0 ? isIndoorExpanded : isOutdoorExpanded)
                                   ? "text-[#1a1a1a] bg-[#EBE2D8]/50"
