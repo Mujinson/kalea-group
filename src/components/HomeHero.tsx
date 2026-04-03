@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import heroImage from "@/assets/hero-home-new.jpg";
 import logoImage from "@/assets/logo-kalea-cream.png";
+import cardIndoor from "@/assets/card-indoor-new.jpg";
+import cardOutdoor from "@/assets/card-outdoor.jpg";
 
 const words = ["Innovate", "Living", "Nature"];
 
@@ -106,7 +109,7 @@ const HomeHero = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-[#4A2A13] text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.12em] mb-6"
+            className="text-[#4A2A13] text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.12em] mb-4"
           >
             KALĒA® — SURFACE SYSTEM®
           </motion.h2>
@@ -115,10 +118,40 @@ const HomeHero = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-            className="text-[#4A2A13]/80 text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide mb-8"
+            className="text-[#4A2A13]/80 text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide mb-10"
           >
             Superfici di pregio per interni ed esterni. Soluzioni complete di pavimenti, rivestimenti e accessori.
           </motion.p>
+
+          {/* Indoor / Outdoor Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-10">
+            {[
+              { title: "Indoor", desc: "Pavimenti di design per interni di alto livello", link: `/${language}/indoor`, image: cardIndoor },
+              { title: "Outdoor", desc: "Soluzioni per terrazze, deck e living all'aperto", link: `/${language}/outdoor`, image: cardOutdoor },
+            ].map((card, i) => (
+              <Link key={card.title} to={card.link} className="block">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
+                  whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
+                  className="relative group overflow-hidden rounded-2xl min-h-[200px] md:min-h-[260px] cursor-pointer"
+                >
+                  <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                  <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-7">
+                    <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2">{card.title}</h3>
+                    <p className="text-sm text-white/85 mb-3">{card.desc}</p>
+                    <span className="inline-flex items-center gap-2 text-white/90 text-sm font-medium group-hover:text-white transition-colors">
+                      Scopri <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
