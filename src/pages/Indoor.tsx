@@ -14,7 +14,7 @@ import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
 import productBiowall from "@/assets/product-biowall.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
-import cardIndoor from "@/assets/card-indoor-new.jpg";
+import cardParquetAmbient from "@/assets/card-parquet-ambient.jpg";
 import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
 import ceramicheEsterni from "@/assets/ceramiche-esterni-hero.jpg";
 
@@ -60,7 +60,7 @@ const Indoor = () => {
       title: "Parquet",
       description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
       link: `/${language}/indoor`,
-      image: cardIndoor,
+      image: cardParquetAmbient,
     },
     {
       title: "Ceramiche da Interni",

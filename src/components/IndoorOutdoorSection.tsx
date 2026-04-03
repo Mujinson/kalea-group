@@ -5,7 +5,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import productBiomag from "@/assets/product-biocore-floor-new.jpg";
 import cardHypermattAmbient from "@/assets/card-hypermatt-ambient.jpg";
 import cardExternoAmbient from "@/assets/card-externo-ambient.jpg";
-import cardIndoor from "@/assets/card-indoor-new.jpg";
+import cardParquetAmbient from "@/assets/card-parquet-ambient.jpg";
 import cardOutdoor from "@/assets/card-outdoor.jpg";
 import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
 import ceramicheEsterni from "@/assets/ceramiche-esterni-hero.jpg";
@@ -38,7 +38,7 @@ const IndoorOutdoorSection = () => {
       title: "Parquet",
       description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
       link: `/${language}/indoor`,
-      image: cardIndoor,
+      image: cardParquetAmbient,
     },
     {
       title: "Externo",
