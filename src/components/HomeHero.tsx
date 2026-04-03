@@ -103,7 +103,7 @@ const HomeHero = () => {
 
       {/* Description section below hero */}
       <section className="bg-[#F7F1E7] min-h-screen flex items-center justify-center">
-        <div className="max-w-3xl mx-auto px-6 text-center">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -124,7 +124,7 @@ const HomeHero = () => {
           </motion.p>
 
           {/* Indoor / Outdoor Cards */}
-          <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 max-w-5xl mx-auto w-full">
+          <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 w-full">
             {[
               { title: "Indoor", desc: "Pavimenti di design per interni di alto livello", link: `/${language}/indoor`, image: cardIndoor },
               { title: "Outdoor", desc: "Soluzioni per terrazze, deck e living all'aperto", link: `/${language}/outdoor`, image: cardOutdoor },
@@ -136,7 +136,7 @@ const HomeHero = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
                   whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
-                  className="relative group overflow-hidden rounded-3xl min-h-[300px] sm:min-h-[350px] md:min-h-[420px] lg:min-h-[480px] cursor-pointer"
+                  className="relative group overflow-hidden rounded-3xl min-h-[250px] sm:min-h-[300px] md:min-h-[350px] cursor-pointer"
                 >
                   <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
