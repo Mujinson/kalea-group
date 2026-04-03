@@ -102,7 +102,8 @@ const Navbar = () => {
           label: t('nav.floors'),
           products: [
             { label: "BIOMAG FLOOR®", path: `/${language}/biomag-floor`, comingSoon: false },
-            { label: "BIOCORE FLOOR®", path: `/${language}/biocore-floor`, comingSoon: false },
+            { label: "HYPERMATT", path: `/${language}/biocore-floor`, comingSoon: false },
+            { label: "PARQUET", path: `/${language}/indoor`, comingSoon: false },
           ]
         },
         {
@@ -115,7 +116,14 @@ const Navbar = () => {
         {
           label: t('nav.wallCladding'),
           products: [
-            { label: "BIOWALL®", path: null, comingSoon: true },
+            { label: "BIOWALL®", path: `/${language}/biowall`, comingSoon: false },
+          ]
+        },
+        {
+          label: "CERAMICHE",
+          products: [
+            { label: "CERAMICHE DA INTERNI", path: null, comingSoon: true },
+            { label: "CERAMICHE DA ESTERNI", path: null, comingSoon: true },
           ]
         },
       ]
@@ -126,25 +134,19 @@ const Navbar = () => {
         {
           label: t('nav.floors'),
           products: [
-            { label: "KALEASTONE DECK®", path: null, comingSoon: true },
+            { label: "WPC OUTDOOR", path: `/${language}/kaleadeck`, comingSoon: false },
           ]
         },
         {
           label: t('nav.accessories'),
           products: [
-            { label: "KALEA ELEMENTS", path: null, comingSoon: true },
-          ]
-        },
-        {
-          label: t('nav.wallCladding'),
-          products: [
-            { label: "KALEACLAD OUT®", path: null, comingSoon: true },
+            { label: "KALEA ELEMENTS", path: `/${language}/kalea-elements`, comingSoon: true },
           ]
         },
         {
           label: t('nav.ceilingSystems'),
           products: [
-            { label: "KALEACEILING OUT®", path: null, comingSoon: true },
+            { label: "KALEACEILING®", path: `/${language}/kaleaceiling`, comingSoon: false },
           ]
         },
       ]
