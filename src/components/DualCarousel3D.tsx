@@ -26,15 +26,13 @@ const biomagPlanks = [
   { id: 7, name: "Velora", image: finishVelora },
 ];
 
-const biocorePlanks = [
-  { id: 1, name: "Nexa", image: biocoreNexa },
-  { id: 2, name: "Orama", image: biocoreOrama },
-  { id: 3, name: "Nuvia", image: biocoreNuvia },
-  { id: 4, name: "Mielea", image: biocoreMielea },
-  { id: 5, name: "Argilla", image: biocoreArgilla },
-  { id: 6, name: "Radice", image: biocoreRadice },
-  { id: 7, name: "Vetra", image: biocoreVetra },
-];
+// Convert Hypermatt data to plank format
+const toPlankFormat = (products: { id: string; name: string; image: string }[]) =>
+  products.map((p, i) => ({ id: i + 1, name: p.name, image: p.image }));
+
+const hypermattXLPlanks = toPlankFormat(hypermattXL.products);
+const hypermattSpinaPlanks = toPlankFormat(hypermattSpina.products);
+const hypermatt55Planks = toPlankFormat(hypermatt55.products);
 
 interface CarouselWheelProps {
   planks: typeof biomagPlanks;
