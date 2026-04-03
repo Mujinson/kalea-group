@@ -16,7 +16,7 @@ import Hypermatt55 from "./pages/Hypermatt55";
 import EdgeLine from "./pages/EdgeLine";
 import Biowall from "./pages/Biowall";
 import Kaleabase from "./pages/Kaleabase";
-import Externo from "./pages/Externo";
+import Externo from "@/pages/Externo";
 import Kaleaceiling from "./pages/Kaleaceiling";
 import AreaTecnica from "./pages/AreaTecnica";
 import ChiSiamo from "./pages/ChiSiamo";
