@@ -194,7 +194,7 @@ const Home = () => {
       <IndoorOutdoorSection />
 
       {/* 3D Dual Carousel Collection - BIOMAG + BIOCORE side by side */}
-      <section className="relative min-h-screen bg-background">
+      <section className="relative min-h-screen bg-background flex items-center">
         <DualCarousel3D />
       </section>
 
