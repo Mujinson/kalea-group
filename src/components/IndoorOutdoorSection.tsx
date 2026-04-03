@@ -43,7 +43,7 @@ const IndoorOutdoorSection = () => {
     {
       title: "WPC Outdoor",
       description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno e manutenzione minima.",
-      link: `/${language}/kaleadeck`,
+      link: `/${language}/outdoor`,
       image: productKaleadeck,
     },
     {
