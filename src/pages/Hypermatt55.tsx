@@ -209,21 +209,14 @@ const Hypermatt55 = () => {
       </div>
 
       {/* Lightbox */}
-      <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
-        <DialogContent className="max-w-lg p-0 bg-transparent border-none shadow-none [&>button]:hidden">
-          {selectedProduct && (
-            <div className="relative flex flex-col items-center">
-              <button onClick={() => setSelectedProduct(null)} className="absolute -top-4 -right-4 w-10 h-10 bg-foreground/90 hover:bg-foreground rounded-full flex items-center justify-center z-50 shadow-lg" aria-label="Chiudi">
-                <X className="w-5 h-5 text-background" />
-              </button>
-              <div className="bg-card/95 backdrop-blur-md rounded-2xl p-6 shadow-2xl">
-                <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-auto max-h-[70vh] object-contain rounded-xl" />
-                <p className="text-center mt-4 text-lg font-semibold text-foreground uppercase tracking-wider">{selectedProduct.name}</p>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <ProductLightbox
+        open={!!selectedProduct}
+        image={selectedProduct?.image}
+        name={selectedProduct?.name}
+        onOpenChange={(open) => {
+          if (!open) setSelectedProduct(null);
+        }}
+      />
     </div>
   );
 };
