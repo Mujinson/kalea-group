@@ -23,7 +23,7 @@ const IndoorOutdoorSection = () => {
 
   const surfaces: Surface[] = [
     {
-      title: "BIOMAG FLOOR®",
+      title: "Biomag Floor®",
       description: "Il cuore del sistema. Pavimento flottante in ossido di magnesio e fibre naturali. Impermeabile, ignifugo, leggero e ad altissima stabilità. Performance tecnica avanzata per interni di alto livello.",
       link: `/${language}/biomag-floor`,
       image: productBiomag,
