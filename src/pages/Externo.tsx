@@ -402,8 +402,8 @@ const Externo = () => {
           </div>
         )}
       </DialogContent>
-    </Dialog>
+      </Dialog>
+    </>
   );
-};
 
 export default Externo;
