@@ -24,14 +24,6 @@ import valueContinuousSystem from "@/assets/value-continuous-system.jpg";
 import valueSeamlessMaterial from "@/assets/value-seamless-material.jpg";
 import valueTimelessAesthetic from "@/assets/value-timeless-aesthetic.jpg";
 import valueSimpleTechnology from "@/assets/value-simple-technology.jpg";
-import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
-import productBiocoreFloor from "@/assets/hero-biomag-floor-new.webp";
-import heroEdgeline from "@/assets/hero-edgeline.jpg";
-import productBiowall from "@/assets/product-biowall-interior.jpg";
-import productKaleaElements from "@/assets/product-kalea-elements.png";
-import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
-import productKaleadeck from "@/assets/product-kaleadeck.jpg";
-import productKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
