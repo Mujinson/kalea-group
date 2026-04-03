@@ -74,14 +74,14 @@ const Indoor = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title={language === 'it' ? "Pavimenti Flottanti per Interni | BIOMAG & BIOCORE | Kalēa®" :
-               language === 'en' ? "Indoor Floating Floors | BIOMAG & BIOCORE | Kalēa®" :
-               language === 'de' ? "Schwimmende Böden für Innenräume | BIOMAG & BIOCORE | Kalēa®" :
-               "Sols Flottants d'Intérieur | BIOMAG & BIOCORE | Kalēa®"}
-        description={language === 'it' ? "Scopri i pavimenti flottanti Kalēa® per interni: BIOMAG FLOOR in MgO e BIOCORE FLOOR in fibra naturale. Installazione click-clack senza colla, ideali per residenze, uffici e hotel." :
-                     language === 'en' ? "Discover Kalēa® indoor floating floors: BIOMAG FLOOR in MgO and BIOCORE FLOOR in natural fiber. Click-clack installation without glue, ideal for homes, offices and hotels." :
-                     language === 'de' ? "Entdecken Sie Kalēa® schwimmende Böden für Innenräume: BIOMAG FLOOR aus MgO und BIOCORE FLOOR aus Naturfaser. Klick-Installation ohne Kleber." :
-                     "Découvrez les sols flottants Kalēa® pour intérieurs : BIOMAG FLOOR en MgO et BIOCORE FLOOR en fibre naturelle. Installation click sans colle."}
+        title={language === 'it' ? "Pavimenti Flottanti per Interni | BIOMAG & Hypermatt | Kalēa®" :
+               language === 'en' ? "Indoor Floating Floors | BIOMAG & Hypermatt | Kalēa®" :
+               language === 'de' ? "Schwimmende Böden für Innenräume | BIOMAG & Hypermatt | Kalēa®" :
+               "Sols Flottants d'Intérieur | BIOMAG & Hypermatt | Kalēa®"}
+        description={language === 'it' ? "Scopri i pavimenti flottanti Kalēa® per interni: Biomag Floor in MgO e Collezione Hypermatt SPC ultra-matte. Installazione click-clack senza colla, ideali per residenze, uffici e hotel." :
+                     language === 'en' ? "Discover Kalēa® indoor floating floors: Biomag Floor in MgO and Hypermatt SPC ultra-matte collection. Click-clack installation without glue." :
+                     language === 'de' ? "Entdecken Sie Kalēa® schwimmende Böden für Innenräume: Biomag Floor aus MgO und Hypermatt SPC Kollektion. Klick-Installation ohne Kleber." :
+                     "Découvrez les sols flottants Kalēa® pour intérieurs : Biomag Floor en MgO et collection Hypermatt SPC ultra-matte. Installation click sans colle."}
         keywords="pavimenti flottanti interni, pavimento flottante indoor, pavimenti click clack, pavimenti senza colla, pavimenti MgO interni, pavimenti fibra naturale, pavimento galleggiante interni, pavimenti per uffici, pavimenti per hotel, pavimenti residenziali"
       />
       <title>Indoor Solutions | Kalēa Surface System</title>
