@@ -308,9 +308,9 @@ const DualCarousel3D = () => {
           </p>
         </motion.header>
 
-        {/* Dual Carousels Container */}
-        <div className={`w-full max-w-7xl flex ${screenSize === 'mobile' ? 'flex-col gap-12' : 'flex-row gap-4 md:gap-8'}`}>
-          {/* BIOMAG Carousel - rotates clockwise */}
+        {/* Dual Carousels Container - 2x2 Grid */}
+        <div className={`w-full max-w-7xl grid ${screenSize === 'mobile' ? 'grid-cols-1 gap-12' : 'grid-cols-2 gap-4 md:gap-8'}`}>
+          {/* BIOMAG Carousel */}
           <CarouselWheel 
             planks={biomagPlanks}
             title="Biomag Floor®"
@@ -320,12 +320,32 @@ const DualCarousel3D = () => {
             screenSize={screenSize}
           />
           
-          {/* Hypermatt Carousel - rotates counter-clockwise */}
+          {/* Hypermatt XL */}
           <CarouselWheel 
-            planks={biocorePlanks}
-            title="Hypermatt"
-            link="/biocore-floor"
-            ctaText="Scopri Hypermatt"
+            planks={hypermattXLPlanks}
+            title="Hypermatt XL"
+            link="/hypermatt-xl"
+            ctaText="Scopri Hypermatt XL"
+            direction={-1}
+            screenSize={screenSize}
+          />
+
+          {/* Hypermatt Spina */}
+          <CarouselWheel 
+            planks={hypermattSpinaPlanks}
+            title="Hypermatt Spina"
+            link="/hypermatt-spina"
+            ctaText="Scopri Hypermatt Spina"
+            direction={1}
+            screenSize={screenSize}
+          />
+
+          {/* Hypermatt 55 */}
+          <CarouselWheel 
+            planks={hypermatt55Planks}
+            title="Hypermatt 55"
+            link="/hypermatt-55"
+            ctaText="Scopri Hypermatt 55"
             direction={-1}
             screenSize={screenSize}
           />
