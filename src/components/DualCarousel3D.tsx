@@ -15,6 +15,7 @@ import finishVelora from "@/assets/finish-velora.jpg";
 
 // Import Hypermatt product data
 import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
+import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
 const biomagPlanks = [
   { id: 1, name: "Aurora", image: finishAurora },
