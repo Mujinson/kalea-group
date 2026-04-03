@@ -136,7 +136,7 @@ const HomeHero = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
                   whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
-                  className="relative group overflow-hidden rounded-2xl min-h-[200px] md:min-h-[260px] cursor-pointer"
+                  className="relative group overflow-hidden rounded-2xl md:rounded-3xl min-h-[280px] md:min-h-[360px] lg:min-h-[400px] cursor-pointer"
                 >
                   <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
