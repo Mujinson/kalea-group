@@ -357,7 +357,7 @@ const Externo = () => {
         </div>
       </section>
 
-      {/* Coming Soon CTA */}
+      {/* CTA Contatti */}
       <section className="relative z-[4] py-20 md:py-32 overflow-hidden bg-background">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -372,15 +372,11 @@ const Externo = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm font-medium px-4 py-2 rounded-full mb-6">
-              <Clock size={16} />
-              COMING SOON
-            </div>
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white">
-              Presto Disponibile
+              Scopri EXTERNO®
             </h2>
             <p className="text-lg mb-8 max-w-2xl mx-auto text-white font-medium">
-              EXTERNO sarà presto disponibile. Contattaci per scoprire la nostra pavimentazione outdoor premium.
+              Contattaci per scoprire la nostra pavimentazione outdoor premium e richiedere un preventivo personalizzato.
             </p>
             <Button asChild size="lg" variant="secondary">
               <Link to={`/${language}/contatti`}>Richiedi Informazioni</Link>
