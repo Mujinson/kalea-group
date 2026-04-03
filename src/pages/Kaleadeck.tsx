@@ -149,6 +149,88 @@ const Kaleadeck = () => {
         </div>
       </section>
 
+      {/* Finiture Traditional Section */}
+      <section className="relative z-[1] bg-background py-20 md:py-32">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+              {externoTraditional.title}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {externoTraditional.subtitle}
+            </p>
+            <p className="text-base text-muted-foreground/80 max-w-3xl mx-auto mt-4">
+              Per non rinunciare alle emozioni che sa offrire la naturalezza del parquet, nasce Externo: la soluzione intelligente ed ecologica per vivere la passione dei pavimenti in legno anche all'esterno.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+            {externoTraditional.products.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                className="group text-center"
+              >
+                <div className="w-28 h-28 md:w-36 md:h-36 mx-auto rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                </div>
+                <p className="mt-3 text-sm md:text-base font-medium text-foreground">{product.name}</p>
+                <p className="text-xs text-muted-foreground">{product.finish}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Finiture Skudo Section */}
+      <section className="relative z-[1] bg-muted/30 py-20 md:py-32">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
+              {externoSkudo.title}
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              {externoSkudo.subtitle}
+            </p>
+            <p className="text-base text-muted-foreground/80 max-w-3xl mx-auto mt-4">
+              L'innovativo sistema di schermatura SKUDO: una copertura coestrusa con doga in polimero arricchito con stabilizzatori UV e antiossidanti, che la incapsula su tutti e quattro i lati.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+            {externoSkudo.products.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                className="group text-center"
+              >
+                <div className="w-28 h-28 md:w-36 md:h-36 mx-auto rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-500 group-hover:scale-105">
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                </div>
+                <p className="mt-3 text-sm md:text-base font-medium text-foreground">{product.name}</p>
+                <p className="text-xs text-muted-foreground">{product.finish}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Perché sceglierlo Section */}
       <section className="relative z-[1] bg-background py-20 md:py-32">
         <div className="container-custom">
