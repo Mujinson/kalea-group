@@ -40,7 +40,7 @@ const ProductLightbox = ({ open, image, name, onOpenChange }: ProductLightboxPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[min(92vw,44rem)] p-0 bg-transparent border-none shadow-none overflow-visible [&>button]:hidden">
+      <DialogContent className="max-w-sm md:max-w-md p-0 bg-transparent border-none shadow-none overflow-visible [&>button]:hidden">
         {image && name && (
           <div className="relative flex flex-col items-center">
             <button
