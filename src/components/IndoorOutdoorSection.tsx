@@ -6,11 +6,22 @@ import productBiomag from "@/assets/product-biocore-floor-new.jpg";
 import productBiocore from "@/assets/hero-biomag-floor-new.webp";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardIndoor from "@/assets/card-indoor-new.jpg";
+import cardOutdoor from "@/assets/card-outdoor.jpg";
+import bgApplicationRetail from "@/assets/bg-application-retail.jpg";
+import bgApplicationHospitality from "@/assets/bg-application-hospitality.jpg";
+
+interface Surface {
+  title: string;
+  description: string;
+  link?: string;
+  image: string;
+  comingSoon?: boolean;
+}
 
 const IndoorOutdoorSection = () => {
   const { language } = useTranslation();
 
-  const surfaces = [
+  const surfaces: Surface[] = [
     {
       title: "BIOMAG FLOOR®",
       description: "Il cuore del sistema. Pavimento flottante in ossido di magnesio e fibre naturali. Impermeabile, ignifugo, leggero e ad altissima stabilità. Performance tecnica avanzata per interni di alto livello.",
@@ -18,13 +29,13 @@ const IndoorOutdoorSection = () => {
       image: productBiomag,
     },
     {
-      title: "Collezione SPC Hypermatt",
+      title: "Hypermatt",
       description: "Ultra-matte al tatto con finitura laser. Realismo estremo del legno e del cemento, resistenza all'acqua e all'usura superiore. Il perfetto equilibrio tra bellezza naturale e performance quotidiana.",
       link: `/${language}/biocore-floor`,
       image: productBiocore,
     },
     {
-      title: "Parquet & Legno Pregiato",
+      title: "Parquet",
       description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
       link: `/${language}/indoor`,
       image: cardIndoor,
@@ -34,6 +45,18 @@ const IndoorOutdoorSection = () => {
       description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno e manutenzione minima.",
       link: `/${language}/kaleadeck`,
       image: productKaleadeck,
+    },
+    {
+      title: "Ceramiche da Interni",
+      description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia per progetti residenziali e contract di lusso.",
+      image: bgApplicationRetail,
+      comingSoon: true,
+    },
+    {
+      title: "Ceramiche da Esterni",
+      description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica per una continuità perfetta tra interno ed esterno.",
+      image: bgApplicationHospitality,
+      comingSoon: true,
     },
   ];
 
@@ -51,51 +74,64 @@ const IndoorOutdoorSection = () => {
           Le Nostre Superfici
         </h2>
         <p className="text-base md:text-lg text-foreground/70 font-light">
-          KALĒA® — SURFACE SYSTEM® offre quattro mondi di eccellenza per interni ed esterni.
+          KALĒA® — SURFACE SYSTEM® offre sei mondi di eccellenza per interni ed esterni.
         </p>
       </motion.div>
 
-      {/* 4 Cards Grid - 2x2 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto w-full">
-        {surfaces.map((surface, index) => (
-          <Link
-            key={surface.title}
-            to={surface.link}
-            className="block"
-          >
+      {/* 6 Cards Grid - 2x3 */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto w-full">
+        {surfaces.map((surface, index) => {
+          const cardContent = (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" }}
-              className="relative group overflow-hidden rounded-2xl min-h-[220px] sm:min-h-[250px] md:min-h-[280px] cursor-pointer"
+              transition={{ duration: 0.6, delay: index * 0.08 }}
+              whileHover={!surface.comingSoon ? { y: -6, boxShadow: "0 16px 48px rgba(0, 0, 0, 0.25)" } : undefined}
+              className={`relative group overflow-hidden rounded-2xl min-h-[220px] sm:min-h-[250px] md:min-h-[280px] ${surface.comingSoon ? 'cursor-default' : 'cursor-pointer'}`}
             >
-              {/* Background Image */}
               <img
                 src={surface.image}
                 alt={surface.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${surface.comingSoon ? 'opacity-50' : 'group-hover:scale-105'}`}
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
 
-              {/* Content */}
-              <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-7">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-heading font-semibold text-white mb-2 tracking-wide">
+              {/* Coming Soon badge */}
+              {surface.comingSoon && (
+                <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-white text-[10px] md:text-xs font-medium px-3 py-1 rounded-full z-20">
+                  Novità in arrivo
+                </div>
+              )}
+
+              <div className="relative z-10 h-full flex flex-col justify-end p-4 md:p-6">
+                <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1.5 tracking-wide">
                   {surface.title}
                 </h3>
-                <p className="text-xs md:text-sm text-white/85 leading-relaxed line-clamp-3 mb-3">
+                <p className="text-[10px] md:text-xs text-white/85 leading-relaxed line-clamp-3 mb-2">
                   {surface.description}
                 </p>
-                <span className="inline-flex items-center gap-2 text-white/90 text-xs md:text-sm font-medium transition-all duration-300 group-hover:text-white">
-                  Scopri
-                  <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
+                {!surface.comingSoon && (
+                  <span className="inline-flex items-center gap-2 text-white/90 text-[10px] md:text-xs font-medium transition-all duration-300 group-hover:text-white">
+                    Scopri
+                    <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                )}
               </div>
             </motion.div>
-          </Link>
-        ))}
+          );
+
+          if (surface.comingSoon) {
+            return <div key={surface.title}>{cardContent}</div>;
+          }
+
+          return (
+            <Link key={surface.title} to={surface.link!} className="block">
+              {cardContent}
+            </Link>
+          );
+        })}
       </div>
 
       {/* Bottom connector text */}
