@@ -304,7 +304,7 @@ const DualCarousel3D = () => {
             Le Nostre Collezioni
           </h2>
           <p className="text-foreground/60 text-sm md:text-base font-light max-w-xl mx-auto">
-            Due tecnologie innovative, infinite possibilità di design
+            Quattro collezioni iconiche, infinite possibilità di design
           </p>
         </motion.header>
 
