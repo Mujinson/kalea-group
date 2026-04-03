@@ -5,7 +5,7 @@ import HomeHero from "@/components/HomeHero";
 import DualCarousel3D from "@/components/DualCarousel3D";
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import SEOHead from "@/components/SEOHead";
-import { Layers, Shield, Sparkles, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart, Leaf, Clock, Wrench } from "lucide-react";
+import { Leaf, Clock, Wrench, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-new.png";
 
