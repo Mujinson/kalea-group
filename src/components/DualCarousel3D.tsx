@@ -35,7 +35,7 @@ const hypermattSpinaPlanks = toPlankFormat(hypermattSpina.products);
 const hypermatt55Planks = toPlankFormat(hypermatt55.products);
 
 interface CarouselWheelProps {
-  planks: typeof biomagPlanks;
+  planks: { id: number; name: string; image: string }[];
   title: string;
   link: string;
   ctaText: string;
@@ -131,14 +131,19 @@ const CarouselWheel = ({ planks, title, link, ctaText, direction, screenSize }: 
     }
   }, [animateInertia]);
 
-  // Smaller dimensions for dual layout
-  const dimensions = {
-    mobile: { radius: 80, plankWidth: 35, plankHeight: 160 },
-    tablet: { radius: 130, plankWidth: 55, plankHeight: 200 },
-    desktop: { radius: 180, plankWidth: 70, plankHeight: 260 }
+  // Dynamic radius based on number of planks to prevent overlap
+  const baseRadii = {
+    mobile: { radius: 80, plankWidth: 30, plankHeight: 140 },
+    tablet: { radius: 120, plankWidth: 45, plankHeight: 180 },
+    desktop: { radius: 160, plankWidth: 55, plankHeight: 220 }
   };
   
-  const { radius, plankWidth, plankHeight } = dimensions[screenSize];
+  const base = baseRadii[screenSize];
+  const count = planks.length;
+  // Ensure minimum spacing: circumference / count >= plankWidth * 1.8
+  const minRadius = Math.ceil((count * base.plankWidth * 1.8) / (2 * Math.PI));
+  const radius = Math.max(base.radius, minRadius);
+  const { plankWidth, plankHeight } = base;
 
   return (
     <div 
