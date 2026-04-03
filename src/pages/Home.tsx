@@ -361,8 +361,8 @@ const Home = () => {
       <DualCarouselSection />
 
       {/* Applicazioni */}
-      <section className="relative h-[100svh] bg-background">
-        <div className="h-full flex flex-col px-6 md:px-12 lg:px-20 py-10 md:py-14">
+      <section className="relative min-h-screen bg-background flex items-center">
+        <div className="w-full flex flex-col px-6 md:px-12 lg:px-20 py-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
