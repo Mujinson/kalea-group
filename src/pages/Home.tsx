@@ -417,8 +417,8 @@ const Home = () => {
       </section>
 
       {/* Sostenibilità */}
-      <section className="relative h-screen bg-background">
-        <div className="h-full flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-6 sm:py-10 md:py-14">
+      <section className="relative min-h-screen bg-background flex items-center">
+        <div className="w-full flex flex-col px-4 sm:px-6 md:px-12 lg:px-20 py-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
