@@ -142,6 +142,7 @@ const HypermattXL = () => {
           </motion.div>
         </div>
       </section>
+      </div>
 
       {/* Lightbox */}
       <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
