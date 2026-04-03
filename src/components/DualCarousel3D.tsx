@@ -35,7 +35,7 @@ const hypermattSpinaPlanks = toPlankFormat(hypermattSpina.products);
 const hypermatt55Planks = toPlankFormat(hypermatt55.products);
 
 interface CarouselWheelProps {
-  planks: typeof biomagPlanks;
+  planks: { id: number; name: string; image: string }[];
   title: string;
   link: string;
   ctaText: string;
