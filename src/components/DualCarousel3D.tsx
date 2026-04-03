@@ -15,6 +15,7 @@ import finishVelora from "@/assets/finish-velora.jpg";
 
 // Import Hypermatt product data
 import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
+import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 
 const biomagPlanks = [
   { id: 1, name: "Aurora", image: finishAurora },
@@ -33,6 +34,7 @@ const toPlankFormat = (products: { id: string; name: string; image: string }[]) 
 const hypermattXLPlanks = toPlankFormat(hypermattXL.products);
 const hypermattSpinaPlanks = toPlankFormat(hypermattSpina.products);
 const hypermatt55Planks = toPlankFormat(hypermatt55.products);
+const externoPlanks = toPlankFormat([...externoTraditional.products, ...externoSkudo.products]);
 
 interface CarouselWheelProps {
   planks: { id: number; name: string; image: string }[];
@@ -309,7 +311,7 @@ const DualCarousel3D = () => {
             Le Nostre Collezioni
           </h2>
           <p className="text-foreground/60 text-sm md:text-base font-light max-w-xl mx-auto">
-            Quattro collezioni iconiche, infinite possibilità di design
+            Cinque collezioni iconiche, infinite possibilità di design
           </p>
         </motion.header>
 
@@ -352,6 +354,16 @@ const DualCarousel3D = () => {
             link="/hypermatt-55"
             ctaText="Scopri Hypermatt 55"
             direction={-1}
+            screenSize={screenSize}
+          />
+
+          {/* Externo */}
+          <CarouselWheel 
+            planks={externoPlanks}
+            title="Externo"
+            link="/externo"
+            ctaText="Scopri Externo"
+            direction={1}
             screenSize={screenSize}
           />
         </div>
