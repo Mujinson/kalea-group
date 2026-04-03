@@ -356,6 +356,16 @@ const DualCarousel3D = () => {
             direction={-1}
             screenSize={screenSize}
           />
+
+          {/* Externo */}
+          <CarouselWheel 
+            planks={externoPlanks}
+            title="Externo"
+            link="/externo"
+            ctaText="Scopri Externo"
+            direction={1}
+            screenSize={screenSize}
+          />
         </div>
       </div>
     </div>
