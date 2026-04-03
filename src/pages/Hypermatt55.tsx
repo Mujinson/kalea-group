@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
-import { ChevronDown, Search, X, Ruler, Layers, Shield, Flame, Volume2, Paintbrush } from "lucide-react";
+import { ChevronDown, Search, X } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,9 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { h55Wood, h55Cement, type HypermattProduct } from "@/data/hypermattProducts";
 import heroImage from "@/assets/hero-biomag-floor-new.webp";
+import icon5G from "@/assets/hypermatt/5g-valinge.png";
+import formatoWood from "@/assets/hypermatt/formato-wood.jpg";
+import formatoGlue from "@/assets/hypermatt/formato-glue.jpg";
 
 const Hypermatt55 = () => {
   const { language } = useTranslation();
@@ -53,10 +56,10 @@ const Hypermatt55 = () => {
       <SEOHead
         title="Hypermatt 55 — Collezione SPC Versatile | Kalēa®"
         description="Hypermatt 55: caldo ed elegante, l'alleato ideale per progetti di interior design. Effetto legno e cemento."
-        keywords="hypermatt 55, spc versatile, pavimento effetto legno, pavimento effetto cemento, flow 55"
+        keywords="hypermatt 55, spc versatile, pavimento effetto legno, pavimento effetto cemento"
       />
 
-      {/* Hero */}
+      {/* Hero — sticky parallax */}
       <section ref={heroRef} className="relative h-screen sticky top-0 z-[0]">
         <motion.div className="absolute inset-0 overflow-hidden origin-center will-change-transform" style={{ scale: heroScale, borderRadius: heroBorderRadius }}>
           <motion.img src={heroImage} alt="Hypermatt 55" className="absolute inset-0 w-full h-full object-cover will-change-transform" style={{ y: heroImageY, scale: 1.1 }}
@@ -81,142 +84,128 @@ const Hypermatt55 = () => {
         </div>
       </section>
 
-      {/* Description */}
-      <section className="relative z-[1] bg-background py-20 md:py-32">
-        <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">Caldo ed elegante allo stesso tempo</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-              Hypermatt 55 unisce estetica, resistenza e semplicità di posa, offrendo un pavimento che interpreta il calore del legno con un realismo sorprendente.
-            </p>
-            <p className="text-base text-muted-foreground/80 leading-relaxed mb-4">
-              Le superfici riproducono venature e dettagli naturali, donando a ogni ambiente una sensazione autentica e accogliente. Il sistema d'incastro <strong>5G</strong> permette una posa flottante rapida e senza colla, ideale anche sopra pavimenti esistenti.
-            </p>
-            <p className="text-base text-muted-foreground/80 leading-relaxed">
-              Grazie al suo spessore ridotto e al materassino integrato, Hypermatt 55 è la soluzione perfetta per ristrutturazioni e nuove installazioni. <strong>Resistente, realistico e confortevole.</strong>
-            </p>
-          </motion.div>
-
-          {renderGallery(
-            "Wood",
-            "Nodi e venature esaltano l'esperienza tattile e visiva del legno. Guarda tutte le finiture Wood di Hypermatt 55.",
-            h55Wood
-          )}
-          {renderGallery(
-            "Cement",
-            "La forza del cemento spicca nella matericità delle trame e nelle sfumature di colore per conferire un gusto contemporaneo agli ambienti.",
-            h55Cement
-          )}
-        </div>
-      </section>
-
-      {/* Specifiche Tecniche */}
-      <section className="relative z-[2] bg-muted/20 py-20 md:py-28">
-        <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Specifiche Tecniche</h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">Prestazioni certificate per ogni ambiente</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* SPC 5G */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="bg-card rounded-2xl p-8 shadow-lg">
-              <h3 className="text-xl font-heading font-bold text-foreground mb-2">Specifiche Tecniche</h3>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-48 h-8 bg-muted rounded" />
-              </div>
-              <p className="text-sm text-muted-foreground mb-6">228,6x1524 mm</p>
-
-              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
-              <div className="space-y-0 divide-y divide-border">
-                {[
-                  { label: "Formato", value: "228,6x1524 mm" },
-                  { label: "Spessore", value: "5,5 mm" },
-                  { label: "Classe D'uso", value: "23/33" },
-                  { label: "Incastro", value: "5G" },
-                  { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
-                  { label: "Materassino", value: "IXPE 1 mm" },
-                  { label: "Strato D'usura", value: "0,55 mm" },
-                ].map(({ label, value }) => (
-                  <div key={label} className="flex justify-between items-center py-3">
-                    <span className="text-sm text-muted-foreground">{label}</span>
-                    <span className="text-sm font-bold text-foreground">{value}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* 5G Icon */}
-              <div className="mt-8 flex items-center gap-3">
-                <div className="w-14 h-14 rounded-lg bg-foreground text-background flex items-center justify-center font-heading font-black text-lg">5G</div>
-              </div>
-
-              <p className="text-sm text-muted-foreground leading-relaxed mt-4">
-                SPC effetto legno, tavole formato <strong>228,6 x 1524 mm</strong> con spessore ridotto <strong>5,5 mm</strong>.
-                Resistente ad acqua e usura. Facilità di installazione con <strong>aggancio a secco 5G</strong> e materassino fonoassorbente incorporato.
-                A questo straordinario livello di realismo si aggiunge l'innovativa <strong>Hypermatt Laser Technology</strong>.
+      {/* All content after hero — relative + z-index to cover the sticky hero */}
+      <div className="relative z-[1]">
+        {/* Description + Galleries */}
+        <section className="bg-background py-20 md:py-32">
+          <div className="container-custom">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">Caldo ed elegante allo stesso tempo</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-4">
+                Hypermatt 55 unisce estetica, resistenza e semplicità di posa, offrendo un pavimento che interpreta il calore del legno con un realismo sorprendente.
+              </p>
+              <p className="text-base text-muted-foreground/80 leading-relaxed mb-4">
+                Le superfici riproducono venature e dettagli naturali, donando a ogni ambiente una sensazione autentica e accogliente. Il sistema d'incastro <strong>5G</strong> permette una posa flottante rapida e senza colla, ideale anche sopra pavimenti esistenti.
+              </p>
+              <p className="text-base text-muted-foreground/80 leading-relaxed">
+                Grazie al suo spessore ridotto e al materassino integrato, Hypermatt 55 è la soluzione perfetta per ristrutturazioni e nuove installazioni. <strong>Resistente, realistico e confortevole.</strong>
               </p>
             </motion.div>
 
-            {/* Glue Down */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="bg-card rounded-2xl p-8 shadow-lg">
-              <h3 className="text-xl font-heading font-bold text-foreground mb-2">Specifiche Tecniche Glue Down</h3>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-48 h-8 bg-muted rounded" />
-              </div>
-              <p className="text-sm text-muted-foreground mb-6">230x1500 mm</p>
+            {renderGallery(
+              "Wood",
+              "Nodi e venature esaltano l'esperienza tattile e visiva del legno.",
+              h55Wood
+            )}
+            {renderGallery(
+              "Cement",
+              "La forza del cemento spicca nella matericità delle trame e nelle sfumature di colore.",
+              h55Cement
+            )}
+          </div>
+        </section>
 
-              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
-              <div className="space-y-0 divide-y divide-border">
-                {[
-                  { label: "Formato", value: "230x1500 mm" },
-                  { label: "Spessore", value: "2,5 mm" },
-                  { label: "Classe D'uso", value: "23/33/42" },
-                  { label: "Incastro", value: "-" },
-                  { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
-                  { label: "Materassino", value: "-" },
-                  { label: "Strato D'usura", value: "0,55 mm" },
-                ].map(({ label, value }) => (
-                  <div key={label} className="flex justify-between items-center py-3">
-                    <span className="text-sm text-muted-foreground">{label}</span>
-                    <span className="text-sm font-bold text-foreground">{value}</span>
-                  </div>
-                ))}
+        {/* Specifiche Tecniche */}
+        <section className="bg-muted/20 py-20 md:py-28">
+          <div className="container-custom">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Specifiche Tecniche</h2>
+              <p className="text-base text-muted-foreground max-w-2xl mx-auto">Prestazioni certificate per ogni ambiente</p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* SPC 5G */}
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="bg-card rounded-2xl p-8 shadow-lg">
+                <h3 className="text-xl font-heading font-bold text-foreground mb-4">SPECIFICHE TECNICHE</h3>
+                <div className="mb-4">
+                  <img src={formatoWood} alt="Formato tavola 228,6x1524 mm" className="max-w-[200px] h-auto" />
+                </div>
+                <p className="text-sm text-muted-foreground mb-6">228,6x1524 mm</p>
+
+                <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
+                <div className="space-y-0 divide-y divide-border">
+                  {[
+                    { label: "Formato", value: "228,6x1524 mm" },
+                    { label: "Spessore", value: "5,5 mm" },
+                    { label: "Classe D'uso", value: "23/33" },
+                    { label: "Incastro", value: "5G" },
+                    { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
+                    { label: "Materassino", value: "IXPE 1 mm" },
+                    { label: "Strato D'usura", value: "0,55 mm" },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="flex justify-between items-center py-3">
+                      <span className="text-sm text-muted-foreground">{label}</span>
+                      <span className="text-sm font-bold text-foreground">{value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 5G Icon */}
+                <div className="mt-8 flex items-center gap-4">
+                  <img src={icon5G} alt="5G Välinge" className="w-12 h-12" />
+                </div>
+
+                <p className="text-sm text-muted-foreground leading-relaxed mt-4">
+                  SPC effetto legno, tavole formato <strong>228,6 x 1524 mm</strong> con spessore ridotto <strong>5,5 mm</strong>.
+                  Resistente ad acqua e usura. Facilità di installazione con <strong>aggancio a secco 5G</strong> e materassino fonoassorbente incorporato.
+                  A questo straordinario livello di realismo si aggiunge l'innovativa <strong>Hypermatt Laser Technology</strong>.
+                </p>
+              </motion.div>
+
+              {/* Glue Down */}
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="bg-card rounded-2xl p-8 shadow-lg">
+                <h3 className="text-xl font-heading font-bold text-foreground mb-4">SPECIFICHE TECNICHE GLUE DOWN</h3>
+                <div className="mb-4">
+                  <img src={formatoGlue} alt="Formato Glue Down 230x1500 mm" className="max-w-[200px] h-auto" />
+                </div>
+                <p className="text-sm text-muted-foreground mb-6">230x1500 mm</p>
+
+                <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
+                <div className="space-y-0 divide-y divide-border">
+                  {[
+                    { label: "Formato", value: "230x1500 mm" },
+                    { label: "Spessore", value: "2,5 mm" },
+                    { label: "Classe D'uso", value: "23/33/42" },
+                    { label: "Incastro", value: "-" },
+                    { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
+                    { label: "Materassino", value: "-" },
+                    { label: "Strato D'usura", value: "0,55 mm" },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="flex justify-between items-center py-3">
+                      <span className="text-sm text-muted-foreground">{label}</span>
+                      <span className="text-sm font-bold text-foreground">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="bg-muted/30 py-16 md:py-24">
+          <div className="container-custom text-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+              <p className="text-lg text-muted-foreground mb-6">Scopri le altre collezioni Hypermatt</p>
+              <div className="flex flex-wrap gap-4 justify-center">
+                <Button asChild variant="outline"><Link to={`/${language}/hypermatt-xl`}>Hypermatt XL</Link></Button>
+                <Button asChild variant="outline"><Link to={`/${language}/hypermatt-spina`}>Hypermatt Spina</Link></Button>
+                <Button asChild><Link to={`/${language}/contatti`}>Richiedi Campionatura</Link></Button>
               </div>
             </motion.div>
           </div>
-
-          {/* Feature Icons */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 mt-12 max-w-5xl mx-auto">
-            {[
-              { icon: Ruler, label: "228,6x1524 mm" },
-              { icon: Layers, label: "5,5 mm spessore" },
-              { icon: Shield, label: "Classe 23/33" },
-              { icon: Flame, label: "Bfl-s1" },
-              { icon: Volume2, label: "IXPE 1 mm" },
-              { icon: Paintbrush, label: "0,55 mm usura" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex flex-col items-center gap-2 p-4 rounded-xl bg-card shadow-sm">
-                <Icon className="w-7 h-7 text-foreground/70" strokeWidth={1.5} />
-                <span className="text-xs font-medium text-muted-foreground text-center">{label}</span>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="relative z-[2] bg-muted/30 py-16 md:py-24">
-        <div className="container-custom text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <p className="text-lg text-muted-foreground mb-6">Scopri le altre collezioni Hypermatt</p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button asChild variant="outline"><Link to={`/${language}/hypermatt-xl`}>Hypermatt XL</Link></Button>
-              <Button asChild variant="outline"><Link to={`/${language}/hypermatt-spina`}>Hypermatt Spina</Link></Button>
-              <Button asChild><Link to={`/${language}/contatti`}>Richiedi Campionatura</Link></Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Lightbox */}
       <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
