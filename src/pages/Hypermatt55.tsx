@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import ProductLightbox from "@/components/ProductLightbox";
+import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { h55Wood, h55Cement, type HypermattProduct } from "@/data/hypermattProducts";
@@ -192,20 +193,7 @@ const Hypermatt55 = () => {
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="bg-primary py-16 md:py-24">
-          <div className="container-custom text-center">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-              <h3 className="text-2xl md:text-3xl font-heading font-bold text-primary-foreground mb-3">Scopri le altre collezioni Hypermatt</h3>
-              <p className="text-primary-foreground/80 mb-8">Trova la soluzione perfetta per il tuo progetto</p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <Button asChild variant="outline" className="border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10"><Link to={`/${language}/hypermatt-xl`}>Hypermatt XL</Link></Button>
-                <Button asChild variant="outline" className="border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10"><Link to={`/${language}/hypermatt-spina`}>Hypermatt Spina</Link></Button>
-                <Button asChild className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"><Link to={`/${language}/contatti`}>Richiedi Campionatura</Link></Button>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        <HypermattCollectionCTA current="55" />
       </div>
 
       {/* Lightbox */}
