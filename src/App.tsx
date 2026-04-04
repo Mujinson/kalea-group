@@ -155,7 +155,7 @@ const App = () => (
               <Route path="/it/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/it/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/it/hypermatt" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/it/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/it/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/it/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/it/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
@@ -182,7 +182,7 @@ const App = () => (
               <Route path="/en/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/en/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/en/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/en/hypermatt" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/en/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/en/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/en/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/en/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
@@ -209,7 +209,7 @@ const App = () => (
               <Route path="/de/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/de/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/de/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/de/hypermatt" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/de/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/de/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/de/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/de/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
@@ -236,7 +236,7 @@ const App = () => (
               <Route path="/fr/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/fr/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/fr/hypermatt" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/fr/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
               <Route path="/fr/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/fr/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/fr/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />

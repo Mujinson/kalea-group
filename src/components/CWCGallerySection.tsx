@@ -14,7 +14,7 @@ interface CWCProductType {
 
 const CWCProductCard = ({ product, language }: { product: CWCProductType; language: string }) => {
   return (
-    <Link to={`/${language}/hypermatt`}>
+    <Link to={`/${language}/biocore-floor`}>
       <motion.div
         className="relative flex-shrink-0 flex flex-col items-center group cursor-pointer"
         whileHover={{ 
@@ -126,7 +126,7 @@ const CWCGallerySection = () => {
             La Collezione SPC Hypermatt è il pavimento ultra-matte con finitura laser di KALĒA®, con texture vellutata e performance tecniche avanzate.
           </p>
           <Link
-            to={`/${language}/hypermatt`}
+            to={`/${language}/biocore-floor`}
             className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all duration-300 group"
           >
             Scopri tutta la collezione Hypermatt

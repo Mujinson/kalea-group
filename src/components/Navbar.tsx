@@ -102,7 +102,7 @@ const Navbar = () => {
           label: t('nav.floors'),
           products: [
             { label: "BIOMAG FLOOR®", path: `/${language}/biomag-floor`, comingSoon: false },
-            { label: "HYPERMATT", path: `/${language}/hypermatt`, comingSoon: false },
+            { label: "HYPERMATT", path: `/${language}/biocore-floor`, comingSoon: false },
             { label: "PARQUET", path: `/${language}/indoor`, comingSoon: false },
           ]
         },
