@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 
-import ctaXlAmbient from "@/assets/cta-xl-ambient.jpg";
-import ctaSpinaAmbient from "@/assets/cta-spina-ambient.jpg";
+import ctaXlAmbient from "@/assets/hero-hypermatt-xl.jpg";
+import ctaSpinaAmbient from "@/assets/hero-hypermatt-spina.jpg";
 import cta55Ambient from "@/assets/hero-hypermatt55.jpg";
 
 interface CollectionLink {
