@@ -8,7 +8,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import heroIndoor from "@/assets/hero-indoor-wood.jpg";
-import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
+import productBiomagFloor from "@/assets/product-hypermatt-new.jpg";
 import cardHypermattAmbient from "@/assets/card-hypermatt-ambient.jpg";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";
 import heroEdgeline from "@/assets/hero-edgeline.jpg";
@@ -53,7 +53,7 @@ const Indoor = () => {
     {
       title: "Hypermatt",
       description: "Ultra-matte al tatto con finitura laser. Realismo estremo del legno e del cemento, resistenza all'acqua e all'usura superiore.",
-      link: `/${language}/biocore-floor`,
+      link: `/${language}/hypermatt`,
       image: cardHypermattAmbient,
     },
     {
