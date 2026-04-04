@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import ProductLightbox from "@/components/ProductLightbox";
+import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, type HypermattProduct } from "@/data/hypermattProducts";
