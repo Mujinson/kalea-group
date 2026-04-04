@@ -13,7 +13,7 @@ import SEOHead from "@/components/SEOHead";
 import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
 import roomXL from "@/assets/hypermatt/room-xl.jpg";
 import roomSpina from "@/assets/hypermatt/room-spina.jpg";
-import room55 from "@/assets/hypermatt/room-55.jpg";
+import room55 from "@/assets/hero-hypermatt55.jpg";
 
 const BiocoreFloor = () => {
   const { language } = useTranslation();
