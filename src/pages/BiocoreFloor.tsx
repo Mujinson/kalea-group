@@ -126,8 +126,34 @@ const BiocoreFloor = () => {
         </div>
       </section>
 
+      {/* Le Collezioni Hypermatt — subito dopo la hero */}
+      <section className="relative z-[1] bg-background py-20 md:py-28">
+        <div className="container-custom">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12 md:mb-16">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto italic">Tre collezioni, molteplici soluzioni di interior design per ambienti straordinari e unici.</p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {[
+              { title: "Hypermatt XL", image: roomXL, link: `/${language}/hypermatt-xl` },
+              { title: "Hypermatt Spina", image: roomSpina, link: `/${language}/hypermatt-spina` },
+              { title: "Hypermatt 55", image: room55, link: `/${language}/hypermatt-55` },
+            ].map(({ title, image, link }, index) => (
+              <motion.div key={title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
+                <Link to={link} className="group block rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img src={image} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <h3 className="absolute bottom-4 left-5 text-lg md:text-xl font-heading font-bold text-white">{title}</h3>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Intro filosofico */}
-      <section className="relative z-[1] bg-background py-20">
+      <section className="relative z-[2] bg-background py-20">
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
