@@ -4,7 +4,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 
 import ctaXlAmbient from "@/assets/cta-xl-ambient.jpg";
 import ctaSpinaAmbient from "@/assets/cta-spina-ambient.jpg";
-import cta55Ambient from "@/assets/cta-55-ambient.jpg";
+import cta55Ambient from "@/assets/hero-hypermatt55.jpg";
 
 interface CollectionLink {
   title: string;
