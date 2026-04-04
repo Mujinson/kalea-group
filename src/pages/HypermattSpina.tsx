@@ -10,7 +10,7 @@ import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, type HypermattProduct } from "@/data/hypermattProducts";
-import heroImage from "@/assets/hero-biomag-floor-new.webp";
+import heroImage from "@/assets/hero-hypermatt-spina.jpg";
 import icon5G from "@/assets/hypermatt/5g-valinge.png";
 import formatoSpina from "@/assets/hypermatt/formato-spina.jpg";
 

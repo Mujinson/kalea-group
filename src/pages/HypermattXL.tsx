@@ -10,7 +10,7 @@ import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { xlWood, xlTile, type HypermattProduct } from "@/data/hypermattProducts";
-import heroImage from "@/assets/hero-biomag-floor-new.webp";
+import heroImage from "@/assets/hero-hypermatt-xl.jpg";
 import lifestyleLiving from "@/assets/hypermatt-xl/lifestyle-living.webp";
 import lifestyleKitchen from "@/assets/hypermatt-xl/lifestyle-kitchen.webp";
 
