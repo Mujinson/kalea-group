@@ -11,8 +11,8 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
-import roomXL from "@/assets/hypermatt/room-xl.jpg";
-import roomSpina from "@/assets/hypermatt/room-spina.jpg";
+import roomXL from "@/assets/hero-hypermatt-xl.jpg";
+import roomSpina from "@/assets/hero-hypermatt-spina.jpg";
 import room55 from "@/assets/hero-hypermatt55.jpg";
 
 const BiocoreFloor = () => {
