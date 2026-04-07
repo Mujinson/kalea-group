@@ -16,6 +16,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import lifestylePool from "@/assets/externo/lifestyle-pool.webp";
 import lifestyleTraditional from "@/assets/externo/lifestyle-traditional.webp";
 import { externoTraditional, externoSkudo } from "@/data/externoProducts";
+import CollectionSwatchCarousel from "@/components/CollectionSwatchCarousel";
 
 const Externo = () => {
   const { language } = useTranslation();
