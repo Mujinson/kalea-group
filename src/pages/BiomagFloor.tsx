@@ -21,7 +21,6 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import CollectionSwatchCarousel from "@/components/CollectionSwatchCarousel";
-import { stonecoreColors } from "@/components/ColorCircleGallery";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
