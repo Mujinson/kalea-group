@@ -105,6 +105,15 @@ const HypermattXL = () => {
       {/* All content after hero */}
       <div className="relative z-[1]">
 
+      {/* Collection Swatch Carousel */}
+      <CollectionSwatchCarousel
+        title="Hypermatt XL"
+        subtitle={hypermattXL.subtitle}
+        products={hypermattXL.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+        link={`/${language}/hypermatt-xl`}
+        buttonLabel="Scopri Hypermatt XL"
+      />
+
       {/* Lifestyle Section */}
       <section className="bg-background py-20 md:py-32">
         <div className="container-custom text-center">

@@ -234,6 +234,15 @@ const BiomagFloor = () => {
         </div>
       </section>
 
+      {/* Collection Swatch Carousel */}
+      <CollectionSwatchCarousel
+        title="Biomag Floor®"
+        subtitle="Tecnologia MgO avanzata"
+        products={stonecoreColors.map(c => ({ id: c.slug, name: c.name, image: c.circleImage }))}
+        link={`/${language}/biomag-floor`}
+        buttonLabel="Scopri Biomag Floor®"
+      />
+
       {/* Finiture Section - Normal scroll */}
       <section ref={finishesRef} className="relative z-[1] bg-background py-20">
         <div className="container-custom">
