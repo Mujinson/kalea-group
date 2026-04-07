@@ -10,7 +10,7 @@ import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, hypermattSpina, type HypermattProduct } from "@/data/hypermattProducts";
-import CollectionSwatchCarousel from "@/components/CollectionSwatchCarousel";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
 import heroImage from "@/assets/hero-hypermatt-spina.jpg";
 import icon5G from "@/assets/hypermatt/5g-valinge.png";
 import formatoSpina from "@/assets/hypermatt/formato-spina.jpg";
@@ -87,13 +87,11 @@ const HypermattSpina = () => {
 
       {/* All content after hero */}
       <div className="relative z-[1]">
-      {/* Collection Swatch Carousel */}
-      <CollectionSwatchCarousel
+      {/* Collection Carousel */}
+      <CollectionCarouselCard
         title="Hypermatt Spina"
         subtitle={hypermattSpina.subtitle}
         products={hypermattSpina.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-        link={`/${language}/hypermatt-spina`}
-        buttonLabel="Scopri Hypermatt Spina"
       />
 
       {/* Description */}

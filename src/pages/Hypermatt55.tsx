@@ -10,7 +10,7 @@ import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { h55Wood, h55Cement, hypermatt55, type HypermattProduct } from "@/data/hypermattProducts";
-import CollectionSwatchCarousel from "@/components/CollectionSwatchCarousel";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
 import heroImage from "@/assets/hero-hypermatt55.jpg";
 import icon5G from "@/assets/hypermatt/5g-valinge.png";
 import formatoWood from "@/assets/hypermatt/formato-wood.jpg";
@@ -88,13 +88,11 @@ const Hypermatt55 = () => {
 
       {/* All content after hero — relative + z-index to cover the sticky hero */}
       <div className="relative z-[1]">
-        {/* Collection Swatch Carousel */}
-        <CollectionSwatchCarousel
+        {/* Collection Carousel */}
+        <CollectionCarouselCard
           title="Hypermatt 55"
           subtitle={hypermatt55.subtitle}
           products={hypermatt55.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-          link={`/${language}/hypermatt-55`}
-          buttonLabel="Scopri Hypermatt 55"
         />
 
         {/* Description + Galleries */}
