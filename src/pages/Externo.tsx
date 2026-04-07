@@ -16,6 +16,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import lifestylePool from "@/assets/externo/lifestyle-pool.webp";
 import lifestyleTraditional from "@/assets/externo/lifestyle-traditional.webp";
 import { externoTraditional, externoSkudo } from "@/data/externoProducts";
+import CollectionSwatchCarousel from "@/components/CollectionSwatchCarousel";
 
 const Externo = () => {
   const { language } = useTranslation();
@@ -154,6 +155,22 @@ const Externo = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Collection Swatch Carousels */}
+      <CollectionSwatchCarousel
+        title="Externo Traditional"
+        subtitle="Composito WPC ad alta resistenza"
+        products={externoTraditional.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+        link={`/${language}/externo`}
+        buttonLabel="Scopri Traditional"
+      />
+      <CollectionSwatchCarousel
+        title="Externo Skudo"
+        subtitle="Schermatura coestrusa con protezione UV"
+        products={externoSkudo.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+        link={`/${language}/externo`}
+        buttonLabel="Scopri Skudo"
+      />
 
       {/* Lifestyle Gallery */}
       <section className="relative z-[1] bg-background py-20 md:py-32">

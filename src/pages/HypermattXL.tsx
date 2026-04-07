@@ -9,7 +9,8 @@ import ProductLightbox from "@/components/ProductLightbox";
 import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { xlWood, xlTile, type HypermattProduct } from "@/data/hypermattProducts";
+import { xlWood, xlTile, hypermattXL, type HypermattProduct } from "@/data/hypermattProducts";
+import CollectionSwatchCarousel from "@/components/CollectionSwatchCarousel";
 import heroImage from "@/assets/hero-hypermatt-xl.jpg";
 import lifestyleLiving from "@/assets/hypermatt-xl/lifestyle-living.webp";
 import lifestyleKitchen from "@/assets/hypermatt-xl/lifestyle-kitchen.webp";
@@ -103,6 +104,15 @@ const HypermattXL = () => {
 
       {/* All content after hero */}
       <div className="relative z-[1]">
+
+      {/* Collection Swatch Carousel */}
+      <CollectionSwatchCarousel
+        title="Hypermatt XL"
+        subtitle={hypermattXL.subtitle}
+        products={hypermattXL.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+        link={`/${language}/hypermatt-xl`}
+        buttonLabel="Scopri Hypermatt XL"
+      />
 
       {/* Lifestyle Section */}
       <section className="bg-background py-20 md:py-32">

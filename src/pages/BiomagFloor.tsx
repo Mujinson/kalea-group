@@ -20,6 +20,7 @@ import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
+import CollectionSwatchCarousel from "@/components/CollectionSwatchCarousel";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -232,6 +233,15 @@ const BiomagFloor = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Collection Swatch Carousel */}
+      <CollectionSwatchCarousel
+        title="Biomag Floor®"
+        subtitle="Tecnologia MgO avanzata"
+        products={stonecoreColors.map(c => ({ id: c.slug, name: c.name, image: c.circleImage }))}
+        link={`/${language}/biomag-floor`}
+        buttonLabel="Scopri Biomag Floor®"
+      />
 
       {/* Finiture Section - Normal scroll */}
       <section ref={finishesRef} className="relative z-[1] bg-background py-20">
