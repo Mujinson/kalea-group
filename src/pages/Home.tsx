@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
-import DualCarouselSection from "@/components/DualCarouselSection";
+
 import HomeHero from "@/components/HomeHero";
 import DualCarousel3D from "@/components/DualCarousel3D";
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
