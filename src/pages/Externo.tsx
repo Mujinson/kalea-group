@@ -441,6 +441,18 @@ const Externo = () => {
           </motion.div>
         </div>
       </section>
+
+      <CollectionCarouselCard
+        title="Tonalità Traditional"
+        subtitle="Finiture della linea Traditional"
+        products={externoTraditional.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+      />
+      <CollectionCarouselCard
+        title="Tonalità Skudo"
+        subtitle="Finiture della linea Skudo"
+        products={externoSkudo.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+        direction="right"
+      />
     </div>
 
     <ProductLightbox

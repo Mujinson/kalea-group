@@ -637,6 +637,12 @@ const BiomagFloor = () => {
         </div>
       </section>
 
+      <CollectionCarouselCard
+        title="Tonalità Biomag Floor®"
+        subtitle="Tutte le finiture della collezione StoneCore MgO"
+        products={stonecoreColors.map(c => ({ id: c.slug, name: c.name, image: c.circleImage }))}
+      />
+
       {/* Certificazioni */}
       <div className="relative z-[7] bg-background">
         <CertificationsSection variant="compact" />
