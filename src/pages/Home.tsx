@@ -5,10 +5,6 @@ import HomeHero from "@/components/HomeHero";
 
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import SEOHead from "@/components/SEOHead";
-import CarouselWheel3D from "@/components/CarouselWheel3D";
-import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
-import { externoTraditional, externoSkudo } from "@/data/externoProducts";
-import { stonecoreColors } from "@/components/ColorCircleGallery";
 import { Leaf, Clock, Wrench, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo-new.png";
@@ -115,54 +111,8 @@ const Home = () => {
       {/* Indoor/Outdoor Section */}
       <IndoorOutdoorSection />
 
-      {/* Le Nostre Collezioni - 3D Carousels */}
-      <section className="relative z-[1] bg-background py-12 md:py-20">
-        <div className="container-custom text-center mb-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground"
-          >
-            {t('home.collectionsTitle') || 'Le Nostre Collezioni'}
-          </motion.h2>
-        </div>
 
-        <CarouselWheel3D
-          title="BIOMAG FLOOR®"
-          planks={stonecoreColors.map(c => ({ id: c.slug, name: c.name, image: c.circleImage }))}
-          link="/biomag-floor"
-        />
-        <CarouselWheel3D
-          title="Hypermatt XL"
-          planks={hypermattXL.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-          link="/hypermatt-xl"
-          direction={-1}
-        />
-        <CarouselWheel3D
-          title="Hypermatt Spina"
-          planks={hypermattSpina.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-          link="/hypermatt-spina"
-        />
-        <CarouselWheel3D
-          title="Hypermatt 55"
-          planks={hypermatt55.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-          link="/hypermatt-55"
-          direction={-1}
-        />
-        <CarouselWheel3D
-          title="Externo® Traditional"
-          planks={externoTraditional.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-          link="/externo"
-        />
-        <CarouselWheel3D
-          title="Externo® Skudo"
-          planks={externoSkudo.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-          link="/externo"
-          direction={-1}
-        />
-      </section>
+
 
 
 
