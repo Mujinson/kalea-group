@@ -10,7 +10,7 @@ import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { xlWood, xlTile, hypermattXL, type HypermattProduct } from "@/data/hypermattProducts";
-import CarouselWheel3D from "@/components/CarouselWheel3D";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
 import heroImage from "@/assets/hero-hypermatt-xl.jpg";
 import lifestyleLiving from "@/assets/hypermatt-xl/lifestyle-living.webp";
 import lifestyleKitchen from "@/assets/hypermatt-xl/lifestyle-kitchen.webp";
@@ -105,12 +105,6 @@ const HypermattXL = () => {
       {/* All content after hero */}
       <div className="relative z-[1]">
 
-      {/* 3D Carousel */}
-      <CarouselWheel3D
-        title="Hypermatt XL"
-        planks={hypermattXL.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-        link="/hypermatt-xl"
-      />
 
       {/* Lifestyle Section */}
       <section className="bg-background py-20 md:py-32">
@@ -160,6 +154,12 @@ const HypermattXL = () => {
           )}
         </div>
       </section>
+
+      <CollectionCarouselCard
+        title="Tonalità Hypermatt XL"
+        subtitle="Tutte le finiture della collezione XL"
+        products={hypermattXL.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+      />
 
       <HypermattCollectionCTA current="xl" />
       </div>
