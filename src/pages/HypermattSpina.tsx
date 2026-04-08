@@ -10,7 +10,7 @@ import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, hypermattSpina, type HypermattProduct } from "@/data/hypermattProducts";
-import CarouselWheel3D from "@/components/CarouselWheel3D";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
 import heroImage from "@/assets/hero-hypermatt-spina.jpg";
 import icon5G from "@/assets/hypermatt/5g-valinge.png";
 import formatoSpina from "@/assets/hypermatt/formato-spina.jpg";
@@ -87,12 +87,7 @@ const HypermattSpina = () => {
 
       {/* All content after hero */}
       <div className="relative z-[1]">
-      {/* 3D Carousel */}
-      <CarouselWheel3D
-        title="Hypermatt Spina"
-        planks={hypermattSpina.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-        link="/hypermatt-spina"
-      />
+
 
       {/* Description */}
       <section className="bg-background py-20 md:py-32">
@@ -168,6 +163,12 @@ const HypermattSpina = () => {
           </div>
         </div>
       </section>
+
+      <CollectionCarouselCard
+        title="Tonalità Hypermatt Spina"
+        subtitle="Tutte le finiture della collezione Spina"
+        products={hypermattSpina.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+      />
 
       <HypermattCollectionCTA current="spina" />
       </div>

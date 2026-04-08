@@ -16,7 +16,7 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import lifestylePool from "@/assets/externo/lifestyle-pool.webp";
 import lifestyleTraditional from "@/assets/externo/lifestyle-traditional.webp";
 import { externoTraditional, externoSkudo } from "@/data/externoProducts";
-import CarouselWheel3D from "@/components/CarouselWheel3D";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
 
 const Externo = () => {
   const { language } = useTranslation();
@@ -156,18 +156,8 @@ const Externo = () => {
         </div>
       </section>
 
-      {/* 3D Carousels */}
-      <CarouselWheel3D
-        title="Externo Traditional"
-        planks={externoTraditional.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-        link="/externo"
-      />
-      <CarouselWheel3D
-        title="Externo Skudo"
-        planks={externoSkudo.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-        link="/externo"
-        direction={-1}
-      />
+
+
 
       {/* Lifestyle Gallery */}
       <section className="relative z-[1] bg-background py-20 md:py-32">
@@ -451,6 +441,18 @@ const Externo = () => {
           </motion.div>
         </div>
       </section>
+
+      <CollectionCarouselCard
+        title="Tonalità Traditional"
+        subtitle="Finiture della linea Traditional"
+        products={externoTraditional.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+      />
+      <CollectionCarouselCard
+        title="Tonalità Skudo"
+        subtitle="Finiture della linea Skudo"
+        products={externoSkudo.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+        direction="right"
+      />
     </div>
 
     <ProductLightbox
