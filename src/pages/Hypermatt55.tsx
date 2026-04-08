@@ -10,7 +10,7 @@ import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { h55Wood, h55Cement, hypermatt55, type HypermattProduct } from "@/data/hypermattProducts";
-import CarouselWheel3D from "@/components/CarouselWheel3D";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
 import heroImage from "@/assets/hero-hypermatt55.jpg";
 import icon5G from "@/assets/hypermatt/5g-valinge.png";
 import formatoWood from "@/assets/hypermatt/formato-wood.jpg";
@@ -88,12 +88,7 @@ const Hypermatt55 = () => {
 
       {/* All content after hero — relative + z-index to cover the sticky hero */}
       <div className="relative z-[1]">
-        {/* 3D Carousel */}
-        <CarouselWheel3D
-          title="Hypermatt 55"
-          planks={hypermatt55.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-          link="/hypermatt-55"
-        />
+
 
         {/* Description + Galleries */}
         <section className="bg-background py-20 md:py-32">
@@ -200,6 +195,12 @@ const Hypermatt55 = () => {
             </div>
           </div>
         </section>
+
+        <CollectionCarouselCard
+          title="Tonalità Hypermatt 55"
+          subtitle="Tutte le finiture della collezione 55"
+          products={hypermatt55.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+        />
 
         <HypermattCollectionCTA current="55" />
       </div>

@@ -20,7 +20,7 @@ import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
-import CarouselWheel3D from "@/components/CarouselWheel3D";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -234,11 +234,8 @@ const BiomagFloor = () => {
         </div>
       </section>
 
-      {/* 3D Carousel */}
-      <CarouselWheel3D
-        title="Biomag Floor®"
-        planks={stonecoreColors.map(c => ({ id: c.slug, name: c.name, image: c.circleImage }))}
-      />
+
+
 
       {/* Finiture Section - Normal scroll */}
       <section ref={finishesRef} className="relative z-[1] bg-background py-20">

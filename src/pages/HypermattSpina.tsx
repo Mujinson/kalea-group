@@ -87,12 +87,7 @@ const HypermattSpina = () => {
 
       {/* All content after hero */}
       <div className="relative z-[1]">
-      {/* 3D Carousel */}
-      <CarouselWheel3D
-        title="Hypermatt Spina"
-        planks={hypermattSpina.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
-        link="/hypermatt-spina"
-      />
+
 
       {/* Description */}
       <section className="bg-background py-20 md:py-32">
@@ -168,6 +163,12 @@ const HypermattSpina = () => {
           </div>
         </div>
       </section>
+
+      <CollectionCarouselCard
+        title="Tonalità Hypermatt Spina"
+        subtitle="Tutte le finiture della collezione Spina"
+        products={hypermattSpina.products.map(p => ({ id: p.id, name: p.name, image: p.image }))}
+      />
 
       <HypermattCollectionCTA current="spina" />
       </div>
