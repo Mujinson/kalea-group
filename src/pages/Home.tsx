@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 
 import HomeHero from "@/components/HomeHero";
-import DualCarousel3D from "@/components/DualCarousel3D";
+
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import SEOHead from "@/components/SEOHead";
 import { Leaf, Clock, Wrench, Home as HomeIcon, Building2, ShoppingBag, Briefcase, Heart, ShoppingCart } from "lucide-react";
@@ -111,10 +111,6 @@ const Home = () => {
       {/* Indoor/Outdoor Section */}
       <IndoorOutdoorSection />
 
-      {/* 3D Dual Carousel Collection */}
-      <section className="relative min-h-screen bg-background flex items-center">
-        <DualCarousel3D />
-      </section>
 
 
 

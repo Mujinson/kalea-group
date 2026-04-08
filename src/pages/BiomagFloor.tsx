@@ -20,7 +20,7 @@ import stonecoreLayers from "@/assets/stonecore-layers.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
-import CollectionCarouselCard from "@/components/CollectionCarouselCard";
+import CarouselWheel3D from "@/components/CarouselWheel3D";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -234,11 +234,10 @@ const BiomagFloor = () => {
         </div>
       </section>
 
-      {/* Collection Carousel */}
-      <CollectionCarouselCard
+      {/* 3D Carousel */}
+      <CarouselWheel3D
         title="Biomag Floor®"
-        subtitle="Tecnologia MgO avanzata"
-        products={stonecoreColors.map(c => ({ id: c.slug, name: c.name, image: c.circleImage }))}
+        planks={stonecoreColors.map(c => ({ id: c.slug, name: c.name, image: c.circleImage }))}
       />
 
       {/* Finiture Section - Normal scroll */}
