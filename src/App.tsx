@@ -18,6 +18,8 @@ import Biowall from "./pages/Biowall";
 import Kaleabase from "./pages/Kaleabase";
 import Externo from "@/pages/Externo";
 import Kaleaceiling from "./pages/Kaleaceiling";
+import CeramicheInterni from "./pages/CeramicheInterni";
+import CeramicheEsterni from "./pages/CeramicheEsterni";
 import AreaTecnica from "./pages/AreaTecnica";
 import ChiSiamo from "./pages/ChiSiamo";
 import Contatti from "./pages/Contatti";
@@ -164,6 +166,8 @@ const App = () => (
               <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
               <Route path="/it/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/it/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/it/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
+              <Route path="/it/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/it/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/it/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -191,6 +195,8 @@ const App = () => (
               <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
               <Route path="/en/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/en/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/en/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
+              <Route path="/en/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/en/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/en/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -218,6 +224,8 @@ const App = () => (
               <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
               <Route path="/de/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/de/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/de/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
+              <Route path="/de/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/de/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/de/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
@@ -245,6 +253,8 @@ const App = () => (
               <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
               <Route path="/fr/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/fr/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
+              <Route path="/fr/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/fr/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/fr/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />

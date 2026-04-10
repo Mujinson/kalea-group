@@ -66,13 +66,13 @@ const Indoor = () => {
       title: "Ceramiche da Interni",
       description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia.",
       image: ceramicheInterni,
-      comingSoon: true,
+      link: `/${language}/ceramiche-interni`,
     },
     {
       title: "Ceramiche da Esterni",
       description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica.",
       image: ceramicheEsterni,
-      comingSoon: true,
+      link: `/${language}/ceramiche-esterni`,
     },
   ];
 
