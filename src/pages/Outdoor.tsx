@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import { ChevronDown, ArrowRight } from "lucide-react";
+import ceramicheEsterni from "@/assets/ceramiche-esterni/hero-esterni.jpg";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -54,6 +55,12 @@ const Outdoor = () => {
       description: "Rivestimenti per soffitti esterni.",
       image: productKaleaceiling,
       link: `/${language}/kaleaceiling`,
+    },
+    {
+      name: "CERAMICHE DA ESTERNI",
+      description: "Gres porcellanato 20mm per terrazze, piscine e giardini. Continuità estetica indoor-outdoor e resistenza eterna.",
+      image: ceramicheEsterni,
+      link: `/${language}/ceramiche-esterni`,
     },
   ];
 
