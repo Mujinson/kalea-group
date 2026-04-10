@@ -18,6 +18,8 @@ import Biowall from "./pages/Biowall";
 import Kaleabase from "./pages/Kaleabase";
 import Externo from "@/pages/Externo";
 import Kaleaceiling from "./pages/Kaleaceiling";
+import CeramicheInterni from "./pages/CeramicheInterni";
+import CeramicheEsterni from "./pages/CeramicheEsterni";
 import AreaTecnica from "./pages/AreaTecnica";
 import ChiSiamo from "./pages/ChiSiamo";
 import Contatti from "./pages/Contatti";
