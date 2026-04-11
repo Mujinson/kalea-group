@@ -8,18 +8,20 @@ import { Loader2 } from 'lucide-react';
 import logoDark from '@/assets/logo-new.png';
 
 const AdminLayout = () => {
-  const { user, isAdmin, loading } = useAdminAuth();
+  const { user, isAdmin, role, loading } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!loading) {
       if (!user) {
         navigate('/admin/login');
+      } else if (role === 'operaio') {
+        navigate('/cantieri-app');
       } else if (!isAdmin) {
         navigate('/admin/login');
       }
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [user, isAdmin, role, loading, navigate]);
 
   if (loading) {
     return (
