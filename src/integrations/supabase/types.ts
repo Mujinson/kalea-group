@@ -1510,6 +1510,85 @@ export type Database = {
           },
         ]
       }
+      site_work_logs: {
+        Row: {
+          created_at: string
+          hours_worked: number
+          id: string
+          materials_used: string[] | null
+          notes: string | null
+          site_id: string
+          updated_at: string
+          work_date: string
+          worker_user_id: string
+        }
+        Insert: {
+          created_at?: string
+          hours_worked?: number
+          id?: string
+          materials_used?: string[] | null
+          notes?: string | null
+          site_id: string
+          updated_at?: string
+          work_date?: string
+          worker_user_id: string
+        }
+        Update: {
+          created_at?: string
+          hours_worked?: number
+          id?: string
+          materials_used?: string[] | null
+          notes?: string | null
+          site_id?: string
+          updated_at?: string
+          work_date?: string
+          worker_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_work_logs_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_work_photos: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          work_log_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          work_log_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          work_log_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_work_photos_work_log_id_fkey"
+            columns: ["work_log_id"]
+            isOneToOne: false
+            referencedRelation: "site_work_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       static_costs: {
         Row: {
           created_at: string
