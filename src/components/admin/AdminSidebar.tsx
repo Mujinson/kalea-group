@@ -271,7 +271,6 @@ const AdminSidebar = () => {
             <div className="text-[11px] text-sidebar-foreground/40 mt-0.5">
               {role === 'admin' ? '👑 Admin' : role === 'commerciale' ? '📊 Commerciale' : '🔧 Operaio'}
             </div>
-            </div>
           )}
         </div>
         <Button
