@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
-export type AppRole = 'admin' | 'commerciale' | null;
+export type AppRole = 'admin' | 'commerciale' | 'operaio' | null;
 
 export const useAdminAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -67,15 +67,29 @@ export const useAdminAuth = () => {
         .maybeSingle();
 
       if (commData) {
-        setIsAdmin(true); // allow access to dashboard
+        setIsAdmin(true);
         setRole('commerciale');
-        // Find linked salesperson
         const { data: spData } = await supabase
           .from('salespeople')
           .select('id')
           .eq('user_id', userId)
           .maybeSingle();
         setSalespersonId(spData?.id || null);
+        setLoading(false);
+        return;
+      }
+
+      // Check operaio
+      const { data: operaioData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('role', 'operaio')
+        .maybeSingle();
+
+      if (operaioData) {
+        setIsAdmin(true);
+        setRole('operaio');
         setLoading(false);
         return;
       }

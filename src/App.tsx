@@ -62,7 +62,8 @@ import AdminMap from "./pages/admin/AdminMap";
 import AdminCantieri from "./pages/admin/AdminCantieri";
 import AdminCantiereDetail from "./pages/admin/AdminCantiereDetail";
 import AdminMedia from "./pages/admin/AdminMedia";
-
+import WorkerApp from "./pages/admin/WorkerApp";
+import AdminWorkLogs from "./pages/admin/AdminWorkLogs";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -109,6 +110,9 @@ const App = () => (
               {/* Redirect /it/admin/* to /admin/* */}
               <Route path="/:lang/admin/*" element={<AdminLangRedirect />} />
 
+              {/* Worker app (standalone, no sidebar) */}
+              <Route path="/cantieri-app" element={<WorkerApp />} />
+
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
@@ -130,6 +134,7 @@ const App = () => (
                 <Route path="cantieri" element={<AdminCantieri />} />
                 <Route path="cantieri/:id" element={<AdminCantiereDetail />} />
                 <Route path="media" element={<AdminMedia />} />
+                <Route path="registro-lavori" element={<AdminWorkLogs />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="import" element={<AdminImport />} />

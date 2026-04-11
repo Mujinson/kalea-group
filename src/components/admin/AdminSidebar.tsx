@@ -38,6 +38,7 @@ import {
   Image,
   Map,
   ListOrdered,
+  ClipboardList,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -99,6 +100,7 @@ const menuStructure: MenuEntry[] = [
       items: [
         { title: 'Lista clienti', url: '/admin/clienti', icon: Users, adminOnly: false },
         { title: 'Cantieri', url: '/admin/cantieri', icon: HardHat, adminOnly: false },
+        { title: 'Registro Lavori', url: '/admin/registro-lavori', icon: ClipboardList, adminOnly: true },
         { title: 'Media', url: '/admin/media', icon: Image, adminOnly: false },
         { title: 'Mappa', url: '/admin/mappa', icon: Map, adminOnly: false },
       ],
@@ -267,7 +269,7 @@ const AdminSidebar = () => {
           </div>
           {role && (
             <div className="text-[11px] text-sidebar-foreground/40 mt-0.5">
-              {isAdminRole ? '👑 Admin' : '📊 Commerciale'}
+              {role === 'admin' ? '👑 Admin' : role === 'commerciale' ? '📊 Commerciale' : '🔧 Operaio'}
             </div>
           )}
         </div>
