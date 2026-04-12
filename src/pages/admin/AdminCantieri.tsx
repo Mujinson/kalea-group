@@ -81,6 +81,7 @@ const AdminCantieri = () => {
       contact_name: site.contact_name || "", contact_surname: site.contact_surname || "",
       contact_email: site.contact_email || "", contact_phone: site.contact_phone || "",
       status: site.status || "attivo",
+      start_date: site.start_date || "", end_date: site.end_date || "",
     });
     setEditId(site.id);
     setCreateOpen(true);
