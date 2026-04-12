@@ -1469,6 +1469,112 @@ export type Database = {
           },
         ]
       }
+      site_expenses: {
+        Row: {
+          added_by: string | null
+          amount: number
+          created_at: string
+          description: string
+          expense_date: string | null
+          expense_type: string
+          id: string
+          is_paid: boolean | null
+          notes: string | null
+          paid_date: string | null
+          receipt_url: string | null
+          site_id: string
+          updated_at: string
+        }
+        Insert: {
+          added_by?: string | null
+          amount?: number
+          created_at?: string
+          description: string
+          expense_date?: string | null
+          expense_type?: string
+          id?: string
+          is_paid?: boolean | null
+          notes?: string | null
+          paid_date?: string | null
+          receipt_url?: string | null
+          site_id: string
+          updated_at?: string
+        }
+        Update: {
+          added_by?: string | null
+          amount?: number
+          created_at?: string
+          description?: string
+          expense_date?: string | null
+          expense_type?: string
+          id?: string
+          is_paid?: boolean | null
+          notes?: string | null
+          paid_date?: string | null
+          receipt_url?: string | null
+          site_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_expenses_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_materials: {
+        Row: {
+          added_by: string | null
+          created_at: string
+          id: string
+          material_name: string
+          notes: string | null
+          quantity: number
+          site_id: string
+          total_cost: number | null
+          unit: string | null
+          unit_cost: number | null
+          usage_date: string | null
+        }
+        Insert: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          material_name: string
+          notes?: string | null
+          quantity?: number
+          site_id: string
+          total_cost?: number | null
+          unit?: string | null
+          unit_cost?: number | null
+          usage_date?: string | null
+        }
+        Update: {
+          added_by?: string | null
+          created_at?: string
+          id?: string
+          material_name?: string
+          notes?: string | null
+          quantity?: number
+          site_id?: string
+          total_cost?: number | null
+          unit?: string | null
+          unit_cost?: number | null
+          usage_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_materials_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       site_media: {
         Row: {
           created_at: string
@@ -1585,6 +1691,53 @@ export type Database = {
             columns: ["work_log_id"]
             isOneToOne: false
             referencedRelation: "site_work_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_workers: {
+        Row: {
+          created_at: string
+          end_date: string | null
+          id: string
+          is_active: boolean | null
+          notes: string | null
+          site_id: string
+          start_date: string | null
+          updated_at: string
+          worker_role: string | null
+          worker_user_id: string
+        }
+        Insert: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          site_id: string
+          start_date?: string | null
+          updated_at?: string
+          worker_role?: string | null
+          worker_user_id: string
+        }
+        Update: {
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          site_id?: string
+          start_date?: string | null
+          updated_at?: string
+          worker_role?: string | null
+          worker_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_workers_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
             referencedColumns: ["id"]
           },
         ]
