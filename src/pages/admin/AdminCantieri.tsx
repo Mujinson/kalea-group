@@ -65,6 +65,7 @@ const AdminCantieri = () => {
       region: "", postal_code: "", country: "Italia", tipologia: "",
       product_model: "", notes: "", contact_name: "", contact_surname: "",
       contact_email: "", contact_phone: "", status: "attivo",
+      start_date: "", end_date: "",
     });
     setEditId(null);
     setPendingFiles([]);
