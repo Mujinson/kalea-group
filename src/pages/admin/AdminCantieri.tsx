@@ -103,14 +103,20 @@ const AdminCantieri = () => {
 
   const handleSave = async () => {
     if (!form.title) { toast.error("Il titolo è obbligatorio"); return; }
+    
+    const payload = {
+      ...form,
+      start_date: form.start_date || null,
+      end_date: form.end_date || null,
+    };
 
     if (editId) {
-      const { error } = await supabase.from("construction_sites").update(form).eq("id", editId);
+      const { error } = await supabase.from("construction_sites").update(payload).eq("id", editId);
       if (error) { toast.error("Errore nel salvataggio"); return; }
       if (pendingFiles.length > 0) await uploadFilesForSite(editId);
       toast.success("Cantiere aggiornato");
     } else {
-      const { data, error } = await supabase.from("construction_sites").insert(form).select("id").single();
+      const { data, error } = await supabase.from("construction_sites").insert(payload).select("id").single();
       if (error || !data) { toast.error("Errore nella creazione"); return; }
       if (pendingFiles.length > 0) await uploadFilesForSite(data.id);
       toast.success("Cantiere creato");
