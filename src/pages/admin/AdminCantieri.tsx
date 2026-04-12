@@ -292,6 +292,17 @@ const AdminCantieri = () => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label>Data inizio</Label>
+                  <Input type="date" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Data fine</Label>
+                  <Input type="date" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
+                </div>
+              </div>
+
               {/* File upload */}
               <div className="border-t pt-4 mt-4">
                 <h3 className="font-semibold text-sm mb-2">Allegati</h3>
