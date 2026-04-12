@@ -31,6 +31,7 @@ const AdminCantieri = () => {
     region: "", postal_code: "", country: "Italia", tipologia: "",
     product_model: "", notes: "", contact_name: "", contact_surname: "",
     contact_email: "", contact_phone: "", status: "attivo",
+    start_date: "", end_date: "",
   });
 
   const { data: sites, isLoading } = useQuery({
@@ -64,6 +65,7 @@ const AdminCantieri = () => {
       region: "", postal_code: "", country: "Italia", tipologia: "",
       product_model: "", notes: "", contact_name: "", contact_surname: "",
       contact_email: "", contact_phone: "", status: "attivo",
+      start_date: "", end_date: "",
     });
     setEditId(null);
     setPendingFiles([]);
@@ -79,6 +81,7 @@ const AdminCantieri = () => {
       contact_name: site.contact_name || "", contact_surname: site.contact_surname || "",
       contact_email: site.contact_email || "", contact_phone: site.contact_phone || "",
       status: site.status || "attivo",
+      start_date: site.start_date || "", end_date: site.end_date || "",
     });
     setEditId(site.id);
     setCreateOpen(true);
@@ -100,14 +103,20 @@ const AdminCantieri = () => {
 
   const handleSave = async () => {
     if (!form.title) { toast.error("Il titolo è obbligatorio"); return; }
+    
+    const payload = {
+      ...form,
+      start_date: form.start_date || null,
+      end_date: form.end_date || null,
+    };
 
     if (editId) {
-      const { error } = await supabase.from("construction_sites").update(form).eq("id", editId);
+      const { error } = await supabase.from("construction_sites").update(payload).eq("id", editId);
       if (error) { toast.error("Errore nel salvataggio"); return; }
       if (pendingFiles.length > 0) await uploadFilesForSite(editId);
       toast.success("Cantiere aggiornato");
     } else {
-      const { data, error } = await supabase.from("construction_sites").insert(form).select("id").single();
+      const { data, error } = await supabase.from("construction_sites").insert(payload).select("id").single();
       if (error || !data) { toast.error("Errore nella creazione"); return; }
       if (pendingFiles.length > 0) await uploadFilesForSite(data.id);
       toast.success("Cantiere creato");
@@ -286,6 +295,17 @@ const AdminCantieri = () => {
                 <div className="space-y-2">
                   <Label>Modello posato</Label>
                   <Input value={form.product_model} onChange={(e) => setForm({ ...form, product_model: e.target.value })} placeholder="Es: Biomag Oak Natural" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label>Data inizio</Label>
+                  <Input type="date" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Data fine</Label>
+                  <Input type="date" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
                 </div>
               </div>
 
