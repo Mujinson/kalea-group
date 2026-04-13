@@ -138,6 +138,11 @@ const App = () => (
                 <Route path="mappa" element={<AdminMap />} />
                 <Route path="cantieri" element={<AdminCantieri />} />
                 <Route path="cantieri/:id" element={<AdminCantiereDetail />} />
+                <Route path="cantieri-dashboard" element={<CantieriDashboard />} />
+                <Route path="cantieri-operai" element={<CantieriOperaiOre />} />
+                <Route path="cantieri-materiali" element={<CantieriMateriali />} />
+                <Route path="cantieri-budget" element={<CantieriBudget />} />
+                <Route path="cantieri-report" element={<CantieriReport />} />
                 <Route path="media" element={<AdminMedia />} />
                 <Route path="registro-lavori" element={<AdminWorkLogs />} />
                 <Route path="costi" element={<AdminCosts />} />
