@@ -64,6 +64,11 @@ import AdminCantiereDetail from "./pages/admin/AdminCantiereDetail";
 import AdminMedia from "./pages/admin/AdminMedia";
 import WorkerApp from "./pages/admin/WorkerApp";
 import AdminWorkLogs from "./pages/admin/AdminWorkLogs";
+import CantieriDashboard from "./pages/admin/cantieri/CantieriDashboard";
+import CantieriOperaiOre from "./pages/admin/cantieri/CantieriOperaiOre";
+import CantieriMateriali from "./pages/admin/cantieri/CantieriMateriali";
+import CantieriBudget from "./pages/admin/cantieri/CantieriBudget";
+import CantieriReport from "./pages/admin/cantieri/CantieriReport";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags

@@ -99,10 +99,24 @@ const menuStructure: MenuEntry[] = [
       adminOnly: false,
       items: [
         { title: 'Lista clienti', url: '/admin/clienti', icon: Users, adminOnly: false },
-        { title: 'Cantieri', url: '/admin/cantieri', icon: HardHat, adminOnly: false },
-        { title: 'Registro Lavori', url: '/admin/registro-lavori', icon: ClipboardList, adminOnly: true },
         { title: 'Media', url: '/admin/media', icon: Image, adminOnly: false },
         { title: 'Mappa', url: '/admin/mappa', icon: Map, adminOnly: false },
+      ],
+    },
+  },
+  {
+    type: 'group',
+    group: {
+      label: 'Cantieri',
+      icon: HardHat,
+      adminOnly: false,
+      items: [
+        { title: 'Dashboard', url: '/admin/cantieri-dashboard', icon: LayoutDashboard, adminOnly: true },
+        { title: 'Lista cantieri', url: '/admin/cantieri', icon: HardHat, adminOnly: false },
+        { title: 'Operai & Ore', url: '/admin/cantieri-operai', icon: Users, adminOnly: true },
+        { title: 'Materiali', url: '/admin/cantieri-materiali', icon: ListOrdered, adminOnly: true },
+        { title: 'Budget vs Consuntivo', url: '/admin/cantieri-budget', icon: DollarSign, adminOnly: true },
+        { title: 'Report', url: '/admin/cantieri-report', icon: BarChart3, adminOnly: true },
       ],
     },
   },
