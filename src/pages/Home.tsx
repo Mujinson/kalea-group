@@ -431,7 +431,7 @@ const Home = () => {
       </section>
 
       {/* CTA Finale */}
-      <section className="relative min-h-screen bg-background">
+      <section className="relative bg-background">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${bgCtaCollabora})` }}
@@ -443,7 +443,7 @@ const Home = () => {
           }}
         />
         
-        <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="relative z-10 py-20 md:py-28 flex items-center justify-center">
           <div className="container-custom text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
