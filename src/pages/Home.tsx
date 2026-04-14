@@ -289,7 +289,7 @@ const Home = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="space-y-6 text-base md:text-lg text-foreground/70 font-light leading-relaxed max-w-2xl mx-auto"
+              className="space-y-6 text-base md:text-lg text-foreground/70 font-normal leading-relaxed max-w-2xl mx-auto"
             >
               <p>
                 {t('hero.manifesto.problem1')}<br />
@@ -302,7 +302,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="inline-block italic text-foreground/90 text-lg md:text-xl mt-2"
+                  className="inline-block text-foreground/90 text-lg md:text-xl mt-2"
                 >
                   {t('hero.manifesto.question2')}
                 </motion.span>
@@ -344,7 +344,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="text-base md:text-lg text-foreground/70 font-light leading-relaxed"
+                  className="text-base md:text-lg text-foreground/70 font-normal leading-relaxed"
                 >
                   {line}
                 </motion.p>
@@ -394,7 +394,7 @@ const Home = () => {
               transition={{ duration: 1, delay: 0.3 }}
               className="text-center space-y-6"
             >
-              <div className="space-y-2 text-base md:text-lg text-foreground/70 font-light">
+              <div className="space-y-2 text-base md:text-lg text-foreground/70 font-normal">
                 <p>{t('hero.manifesto.conclusion1')}</p>
                 <motion.p
                   initial={{ opacity: 0 }}
