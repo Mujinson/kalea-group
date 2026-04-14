@@ -39,7 +39,7 @@ const SustainabilityDurability = () => {
       />
 
       {/* Main Content */}
-      <section className="section-spacing bg-background">
+      <section className="relative z-10 section-spacing bg-background">
         <div className="container-custom max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

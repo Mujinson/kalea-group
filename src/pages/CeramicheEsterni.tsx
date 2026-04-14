@@ -218,7 +218,7 @@ const CeramicheEsterni = () => {
       </section>
 
       {/* Collections */}
-      <section className="relative z-[1] bg-muted/30 py-20 md:py-28">
+      <section className="relative z-[1] bg-background py-20 md:py-28">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
