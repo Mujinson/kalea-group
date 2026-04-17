@@ -132,6 +132,7 @@ const collections: Collection[] = [
   },
   {
     name: "Rocks",
+    slug: "rocks",
     subtitle: "La forza primordiale della roccia",
     description: "Texture rocciose e vibranti che portano la forza della natura negli interni più esigenti. Una collezione selezionata per la sua capacità di creare ambienti dal forte impatto visivo.",
     image: imgRocks,
