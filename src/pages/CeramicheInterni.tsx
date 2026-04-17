@@ -31,6 +31,7 @@ import imgWoodside from "@/assets/ceramiche-interni/woodside.jpg";
 
 interface Collection {
   name: string;
+  slug?: string;
   subtitle: string;
   description: string;
   image: string;
