@@ -316,16 +316,10 @@ const CeramicheInterni = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {collections.map((collection, index) => (
-              <motion.div
-                key={collection.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.06 }}
-                className="group"
-              >
-                <div className="relative overflow-hidden rounded-2xl bg-background shadow-sm hover:shadow-xl transition-shadow duration-500">
+            {collections.map((collection, index) => {
+              const hasPage = collection.slug && COLLECTION_SLUGS_WITH_PAGE.has(collection.slug);
+              const cardInner = (
+                <div className="relative overflow-hidden rounded-2xl bg-background shadow-sm hover:shadow-xl transition-shadow duration-500 h-full">
                   {/* Image */}
                   <div className="relative h-[240px] md:h-[280px] overflow-hidden">
                     <img
@@ -335,10 +329,16 @@ const CeramicheInterni = () => {
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
+                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                       <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium">
                         {collection.effect}
                       </span>
+                      {hasPage && (
+                        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-white/90 font-medium bg-white/10 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                          Scopri
+                          <ArrowUpRight className="w-3 h-3" />
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -357,11 +357,36 @@ const CeramicheInterni = () => {
                       <span className="text-[10px] md:text-xs text-foreground/50 font-mono">
                         {collection.formats}
                       </span>
+                      {hasPage && (
+                        <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
+                          Esplora
+                          <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+              );
+
+              return (
+                <motion.div
+                  key={collection.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.06 }}
+                  className="group"
+                >
+                  {hasPage ? (
+                    <Link to={`/${language}/ceramiche/${collection.slug}`} className="block h-full">
+                      {cardInner}
+                    </Link>
+                  ) : (
+                    cardInner
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
