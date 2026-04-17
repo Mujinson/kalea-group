@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
-import { ChevronDown, ArrowRight, Droplets, Flame, Shield, Maximize } from "lucide-react";
+import { ChevronDown, ArrowRight, ArrowUpRight, Droplets, Flame, Shield, Maximize } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
+import { ceramicheCollections } from "@/data/ceramicheCollections";
+
+// Slugs that have a dedicated detail page
+const COLLECTION_SLUGS_WITH_PAGE = new Set(Object.keys(ceramicheCollections));
 
 import heroInterni from "@/assets/ceramiche-interni/hero-interni.jpg";
 import imgPrimaMateria from "@/assets/ceramiche-interni/prima-materia.jpg";
