@@ -27,6 +27,7 @@ import DiventaPartner from "./pages/DiventaPartner";
 import Privacy from "./pages/Privacy";
 import Termini from "./pages/Termini";
 import NotFound from "./pages/NotFound";
+import CeramicaCollectionDetail from "./pages/CeramicaCollectionDetail";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
@@ -282,6 +283,12 @@ const App = () => (
               <Route path="/fr/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/fr/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
               <Route path="/fr/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
+
+              {/* Ceramiche collection detail (all languages) */}
+              <Route path="/it/ceramiche/:slug" element={<><SEOHandler /><Layout><CeramicaCollectionDetail /></Layout></>} />
+              <Route path="/en/ceramiche/:slug" element={<><SEOHandler /><Layout><CeramicaCollectionDetail /></Layout></>} />
+              <Route path="/de/ceramiche/:slug" element={<><SEOHandler /><Layout><CeramicaCollectionDetail /></Layout></>} />
+              <Route path="/fr/ceramiche/:slug" element={<><SEOHandler /><Layout><CeramicaCollectionDetail /></Layout></>} />
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
