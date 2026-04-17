@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
-import { ChevronDown, ArrowRight, Droplets, Flame, Shield, Maximize } from "lucide-react";
+import { ChevronDown, ArrowRight, ArrowUpRight, Droplets, Flame, Shield, Maximize } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
+import { ceramicheCollections } from "@/data/ceramicheCollections";
+
+// Slugs that have a dedicated detail page
+const COLLECTION_SLUGS_WITH_PAGE = new Set(Object.keys(ceramicheCollections));
 
 import heroInterni from "@/assets/ceramiche-interni/hero-interni.jpg";
 import imgPrimaMateria from "@/assets/ceramiche-interni/prima-materia.jpg";
@@ -27,6 +31,7 @@ import imgWoodside from "@/assets/ceramiche-interni/woodside.jpg";
 
 interface Collection {
   name: string;
+  slug?: string;
   subtitle: string;
   description: string;
   image: string;
@@ -85,6 +90,7 @@ const collections: Collection[] = [
   },
   {
     name: "Prima Materia",
+    slug: "prima-materia",
     subtitle: "L'essenza del cemento industriale reinterpretata",
     description: "Sviluppa le suggestioni materiche della superficie cemento per soluzioni differenziate e creative. Interni e outdoor, pubblico e residenziale — una collezione versatile che definisce lo standard del gres effetto cemento.",
     image: imgPrimaMateria,
@@ -93,6 +99,7 @@ const collections: Collection[] = [
   },
   {
     name: "Carrière",
+    slug: "carriere",
     subtitle: "Pietre antiche, fascino eterno",
     description: "Superfici che evocano il fascino delle antiche cave di pietra europee. Texture profonde, tonalità scure e finiture materiche per ambienti che richiedono personalità e raffinatezza senza compromessi.",
     image: imgCarriere,
@@ -125,6 +132,7 @@ const collections: Collection[] = [
   },
   {
     name: "Rocks",
+    slug: "rocks",
     subtitle: "La forza primordiale della roccia",
     description: "Texture rocciose e vibranti che portano la forza della natura negli interni più esigenti. Una collezione selezionata per la sua capacità di creare ambienti dal forte impatto visivo.",
     image: imgRocks,
@@ -308,16 +316,10 @@ const CeramicheInterni = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {collections.map((collection, index) => (
-              <motion.div
-                key={collection.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.06 }}
-                className="group"
-              >
-                <div className="relative overflow-hidden rounded-2xl bg-background shadow-sm hover:shadow-xl transition-shadow duration-500">
+            {collections.map((collection, index) => {
+              const hasPage = collection.slug && COLLECTION_SLUGS_WITH_PAGE.has(collection.slug);
+              const cardInner = (
+                <div className="relative overflow-hidden rounded-2xl bg-background shadow-sm hover:shadow-xl transition-shadow duration-500 h-full">
                   {/* Image */}
                   <div className="relative h-[240px] md:h-[280px] overflow-hidden">
                     <img
@@ -327,10 +329,16 @@ const CeramicheInterni = () => {
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
+                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
                       <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium">
                         {collection.effect}
                       </span>
+                      {hasPage && (
+                        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-white/90 font-medium bg-white/10 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                          Scopri
+                          <ArrowUpRight className="w-3 h-3" />
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -349,11 +357,36 @@ const CeramicheInterni = () => {
                       <span className="text-[10px] md:text-xs text-foreground/50 font-mono">
                         {collection.formats}
                       </span>
+                      {hasPage && (
+                        <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
+                          Esplora
+                          <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+              );
+
+              return (
+                <motion.div
+                  key={collection.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.06 }}
+                  className="group"
+                >
+                  {hasPage ? (
+                    <Link to={`/${language}/ceramiche/${collection.slug}`} className="block h-full">
+                      {cardInner}
+                    </Link>
+                  ) : (
+                    cardInner
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

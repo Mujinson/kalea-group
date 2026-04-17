@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
-import { ChevronDown, ArrowRight, Snowflake, Sun, Droplets, Shield, Layers, Wind } from "lucide-react";
+import { ChevronDown, ArrowRight, ArrowUpRight, Snowflake, Sun, Droplets, Shield, Layers, Wind } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
+import { ceramicheCollections } from "@/data/ceramicheCollections";
+
+const COLLECTION_SLUGS_WITH_PAGE = new Set(Object.keys(ceramicheCollections));
 
 import heroEsterni from "@/assets/ceramiche-esterni/hero-esterni.jpg";
 import imgSke from "@/assets/ceramiche-esterni/ske-2-0.jpg";
@@ -18,6 +21,7 @@ import imgMaxi from "@/assets/ceramiche-esterni/maxi.jpg";
 
 interface OutdoorCollection {
   name: string;
+  slug?: string;
   subtitle: string;
   description: string;
   image: string;
@@ -29,6 +33,7 @@ interface OutdoorCollection {
 const outdoorCollections: OutdoorCollection[] = [
   {
     name: "Ske 2.0",
+    slug: "ske-2-0",
     subtitle: "Continuità estetica tra indoor e outdoor",
     description: "La collezione che raccoglie tutte le superfici in gres porcellanato con spessore 20mm, disponibili in finiture effetto legno, pietra e cemento. Pensata per garantire standard elevati negli spazi outdoor, consente di creare una continuità visiva perfetta tra interno ed esterno grazie a finiture coordinate.",
     image: imgSke,
@@ -275,7 +280,7 @@ const CeramicheEsterni = () => {
                     <p className="text-sm text-foreground/80 mt-1">{collection.finishes}</p>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {collection.applications.map((app) => (
                       <span
                         key={app}
@@ -285,6 +290,16 @@ const CeramicheEsterni = () => {
                       </span>
                     ))}
                   </div>
+
+                  {collection.slug && COLLECTION_SLUGS_WITH_PAGE.has(collection.slug) && (
+                    <Link
+                      to={`/${language}/ceramiche/${collection.slug}`}
+                      className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
+                    >
+                      Esplora la collezione
+                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             ))}
