@@ -280,7 +280,7 @@ const CeramicheEsterni = () => {
                     <p className="text-sm text-foreground/80 mt-1">{collection.finishes}</p>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {collection.applications.map((app) => (
                       <span
                         key={app}
@@ -290,6 +290,16 @@ const CeramicheEsterni = () => {
                       </span>
                     ))}
                   </div>
+
+                  {collection.slug && COLLECTION_SLUGS_WITH_PAGE.has(collection.slug) && (
+                    <Link
+                      to={`/${language}/ceramiche/${collection.slug}`}
+                      className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
+                    >
+                      Esplora la collezione
+                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             ))}
