@@ -90,6 +90,7 @@ const collections: Collection[] = [
   },
   {
     name: "Prima Materia",
+    slug: "prima-materia",
     subtitle: "L'essenza del cemento industriale reinterpretata",
     description: "Sviluppa le suggestioni materiche della superficie cemento per soluzioni differenziate e creative. Interni e outdoor, pubblico e residenziale — una collezione versatile che definisce lo standard del gres effetto cemento.",
     image: imgPrimaMateria,
@@ -98,6 +99,7 @@ const collections: Collection[] = [
   },
   {
     name: "Carrière",
+    slug: "carriere",
     subtitle: "Pietre antiche, fascino eterno",
     description: "Superfici che evocano il fascino delle antiche cave di pietra europee. Texture profonde, tonalità scure e finiture materiche per ambienti che richiedono personalità e raffinatezza senza compromessi.",
     image: imgCarriere,
