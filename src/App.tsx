@@ -293,8 +293,8 @@ const App = () => (
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </I18nProvider>
+          </I18nProvider>
+        </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
   </MotionConfig>
