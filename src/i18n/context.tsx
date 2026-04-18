@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Language, translations } from './translations';
 
 interface I18nContextType {
@@ -48,8 +49,19 @@ interface I18nProviderProps {
   children: ReactNode;
 }
 
+const getLangFromPath = (pathname: string): Language | null => {
+  const match = pathname.match(/^\/(it|en|de|fr)(\/|$)/);
+  return match ? (match[1] as Language) : null;
+};
+
 export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [language, setLanguageState] = useState<Language>(() => {
+    // 1. URL prefix wins (so /en/... always renders English)
+    const fromUrl = getLangFromPath(window.location.pathname);
+    if (fromUrl) return fromUrl;
     // Check localStorage first
     const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (saved && ['it', 'en', 'de', 'fr'].includes(saved)) {
@@ -61,11 +73,27 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
 
   const [initialized, setInitialized] = useState(false);
 
+  // Keep language in sync with URL on every navigation
+  useEffect(() => {
+    const fromUrl = getLangFromPath(location.pathname);
+    if (fromUrl && fromUrl !== language) {
+      setLanguageState(fromUrl);
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, fromUrl);
+    }
+  }, [location.pathname, language]);
+
   // Detect language from IP on first visit
   useEffect(() => {
     const detectAndSetLanguage = async () => {
       const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
       const alreadyDetected = localStorage.getItem(IP_LANGUAGE_DETECTED_KEY);
+      const fromUrl = getLangFromPath(window.location.pathname);
+
+      // If URL already has a language, skip IP detection
+      if (fromUrl) {
+        setInitialized(true);
+        return;
+      }
       
       // Only auto-detect if never saved and never detected from IP before
       if (!saved && !alreadyDetected) {
@@ -77,12 +105,13 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
         const currentPath = window.location.pathname;
         const pathWithoutLang = currentPath.replace(/^\/(it|en|de|fr)/, '');
         const newPath = `/${detectedLang}${pathWithoutLang || '/'}`;
-        window.history.replaceState({}, '', newPath);
+        navigate(newPath, { replace: true });
       }
       setInitialized(true);
     };
     
     detectAndSetLanguage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setLanguage = (lang: Language) => {
@@ -93,7 +122,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
     const currentPath = window.location.pathname;
     const pathWithoutLang = currentPath.replace(/^\/(it|en|de|fr)/, '');
     const newPath = `/${lang}${pathWithoutLang || '/'}`;
-    window.history.pushState({}, '', newPath);
+    navigate(newPath);
   };
 
   const t = (key: string): string => {
@@ -115,8 +144,9 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
     const currentPath = window.location.pathname;
     if (!currentPath.match(/^\/(it|en|de|fr)/)) {
       const newPath = `/${language}${currentPath}`;
-      window.history.replaceState({}, '', newPath);
+      navigate(newPath, { replace: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialized, language]);
 
   return (
