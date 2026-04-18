@@ -107,10 +107,10 @@ const App = () => (
   <MotionConfig reducedMotion="never">
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <I18nProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <I18nProvider>
             <ScrollToTop />
             <Routes>
               {/* Redirect /it/admin/* to /admin/* */}
