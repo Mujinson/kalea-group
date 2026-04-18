@@ -107,10 +107,10 @@ const App = () => (
   <MotionConfig reducedMotion="never">
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <I18nProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <I18nProvider>
             <ScrollToTop />
             <Routes>
               {/* Redirect /it/admin/* to /admin/* */}
@@ -293,8 +293,8 @@ const App = () => (
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </I18nProvider>
+          </I18nProvider>
+        </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
   </MotionConfig>
