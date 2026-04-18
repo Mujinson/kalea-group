@@ -43,6 +43,7 @@ const outdoorCollections: OutdoorCollection[] = [
   },
   {
     name: "Block",
+    slug: "block",
     subtitle: "Massima resistenza per ogni sfida",
     description: "Superfici in gres porcellanato ad altissima resistenza meccanica, progettate per sopportare carichi elevati e traffico intenso. La soluzione ideale per pavimentazioni esterne che richiedono prestazioni estreme senza rinunciare all'estetica.",
     image: imgBlock,

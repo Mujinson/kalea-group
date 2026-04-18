@@ -42,6 +42,7 @@ interface Collection {
 const collections: Collection[] = [
   {
     name: "Materia",
+    slug: "materia",
     subtitle: "L'eleganza del cemento contemporaneo",
     description: "Superfici in gres porcellanato effetto metallo dal design contemporaneo. Un progetto sensoriale, vivo, materico, coinvolgente — selezionato da Kalēa® per la sua capacità di trasformare ogni ambiente in un'esperienza tattile.",
     image: imgMateria,
@@ -50,6 +51,7 @@ const collections: Collection[] = [
   },
   {
     name: "Pierre Vive",
+    slug: "pierre-vive",
     subtitle: "L'anima viva della pietra naturale",
     description: "Una collezione che cattura l'essenza della pietra naturale francese con una profondità materica straordinaria. Finiture naturale e grip per interni di alto profilo e continuità verso l'esterno.",
     image: imgPierreVive,
@@ -58,6 +60,7 @@ const collections: Collection[] = [
   },
   {
     name: "Nativa",
+    slug: "nativa",
     subtitle: "Il fascino caldo e delicato del travertino",
     description: "Dal dialogo fra l'universo naturale e la dimensione umana nasce Nativa: un materiale senza tempo che abita con essenziale eleganza gli spazi contemporanei. Selezionata per la resa cromatica e la profondità delle venature.",
     image: imgNativa,
@@ -66,6 +69,7 @@ const collections: Collection[] = [
   },
   {
     name: "Piasentina Stone",
+    slug: "piasentina-stone",
     subtitle: "La nobiltà della pietra Piasentina",
     description: "Reinterpretazione in gres porcellanato di una delle pietre più ricercate dell'architettura italiana. Texture stratificate e tonalità profonde per ambienti che richiedono carattere e autenticità.",
     image: imgPiasentina,
@@ -74,6 +78,7 @@ const collections: Collection[] = [
   },
   {
     name: "Essence",
+    slug: "essence",
     subtitle: "L'eleganza senza tempo del legno Rovere",
     description: "Il calore autentico del legno trasferito su gres porcellanato di altissima qualità. Finiture che replicano fedelmente le venature naturali del rovere per pavimenti che uniscono estetica e resistenza superiore.",
     image: imgEssence,
@@ -82,6 +87,7 @@ const collections: Collection[] = [
   },
   {
     name: "Le Reverse",
+    slug: "le-reverse",
     subtitle: "La duplice anima della pietra",
     description: "Nasce dallo studio dell'elemento naturale con l'obiettivo di scoprire la duplice anima della pietra: dall'aspetto primordiale e antico a quello più intimo e nascosto. Un progetto di ricerca selezionato per la sua unicità.",
     image: imgLeReverse,
@@ -108,6 +114,7 @@ const collections: Collection[] = [
   },
   {
     name: "Metallique",
+    slug: "metallique",
     subtitle: "La materia metallica al servizio del design",
     description: "Gres porcellanato effetto metallo con riflessi cangianti e texture industriali. Ideale per progetti di interior design contemporaneo dove il dettaglio materico fa la differenza.",
     image: imgMetallique,
@@ -116,6 +123,7 @@ const collections: Collection[] = [
   },
   {
     name: "Terra Crea",
+    slug: "terra-crea",
     subtitle: "L'autenticità della terra plasmata",
     description: "Una collezione ispirata alla terra argillosa lavorata a mano. Superfici calde e avvolgenti che portano negli interni contemporanei il fascino primordiale dei materiali naturali.",
     image: imgTerraCrea,
@@ -124,6 +132,7 @@ const collections: Collection[] = [
   },
   {
     name: "Talco",
+    slug: "talco",
     subtitle: "La purezza del bianco assoluto",
     description: "Superfici candide e luminose per rivestimenti che esaltano la luce naturale. Finiture delicate e minimaliste, selezionate per progetti dove la purezza estetica è il valore primario.",
     image: imgTalco,
@@ -141,6 +150,7 @@ const collections: Collection[] = [
   },
   {
     name: "Les Bois",
+    slug: "les-bois",
     subtitle: "L'eleganza del legno in gres porcellanato",
     description: "Il fascino del legno naturale tradotto in gres con una fedeltà sorprendente. Pavimenti che uniscono il calore del legno alla resistenza e praticità del gres porcellanato.",
     image: imgLesBois,
@@ -149,6 +159,7 @@ const collections: Collection[] = [
   },
   {
     name: "Evolution",
+    slug: "evolution",
     subtitle: "L'evoluzione della pietra contemporanea",
     description: "Una visione moderna della pietra naturale che evolve in superfici minimaliste e sofisticate. Tonalità neutre e texture raffinate per architetture di alto profilo.",
     image: imgEvolution,
@@ -157,6 +168,7 @@ const collections: Collection[] = [
   },
   {
     name: "Woodside",
+    slug: "woodside",
     subtitle: "Il lato più autentico del legno",
     description: "Un'interpretazione del legno che ne esalta le imperfezioni naturali e il carattere autentico. Formato listoncino ideale per pavimenti residenziali e commerciali di alta gamma.",
     image: imgWoodside,
