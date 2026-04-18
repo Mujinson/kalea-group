@@ -43,7 +43,7 @@ const CeramicaCollectionDetail = () => {
       />
 
       {/* Hero */}
-      <div ref={heroRef} className="fixed inset-0 z-[0]">
+      <section ref={heroRef} className="relative h-screen overflow-hidden">
         <motion.div
           className="absolute inset-0 overflow-hidden origin-center will-change-transform"
           style={{ scale: heroScale, borderRadius: heroBorderRadius }}
@@ -98,10 +98,7 @@ const CeramicaCollectionDetail = () => {
             </div>
           </motion.div>
         </div>
-      </div>
-
-      {/* Spacer */}
-      <div className="h-screen" />
+      </section>
 
       {/* Intro */}
       <section className="relative z-10 bg-background py-20 md:py-28">
