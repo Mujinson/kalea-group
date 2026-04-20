@@ -19,42 +19,42 @@ interface Surface {
 }
 
 const IndoorOutdoorSection = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
 
   const surfaces: Surface[] = [
     {
-      title: "Biomag Floor®",
-      description: "Il cuore del sistema. Pavimento flottante in ossido di magnesio e fibre naturali. Impermeabile, ignifugo, leggero e ad altissima stabilità. Performance tecnica avanzata per interni di alto livello.",
+      title: t('surfaces.biomag.title'),
+      description: t('surfaces.biomag.description'),
       link: `/${language}/biomag-floor`,
       image: productBiomag,
     },
     {
-      title: "Hypermatt",
-      description: "Ultra-matte al tatto con finitura laser. Realismo estremo del legno e del cemento, resistenza all'acqua e all'usura superiore. Il perfetto equilibrio tra bellezza naturale e performance quotidiana.",
+      title: t('surfaces.hypermatt.title'),
+      description: t('surfaces.hypermatt.description'),
       link: `/${language}/biocore-floor`,
       image: cardHypermattAmbient,
     },
     {
-      title: "Parquet",
-      description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
+      title: t('surfaces.parquet.title'),
+      description: t('surfaces.parquet.description'),
       link: `/${language}/indoor`,
       image: cardParquetAmbient,
     },
     {
-      title: "Externo",
-      description: "Soluzioni per terrazze, deck e living all'aperto. Resistenza eterna agli agenti atmosferici, design continuo tra interno ed esterno e manutenzione minima.",
+      title: t('surfaces.externo.title'),
+      description: t('surfaces.externo.description'),
       link: `/${language}/outdoor`,
       image: cardExternoAmbient,
     },
     {
-      title: "Ceramiche da Interni",
-      description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia per progetti residenziali e contract di lusso.",
+      title: t('surfaces.ceramicheInterni.title'),
+      description: t('surfaces.ceramicheInterni.description'),
       image: ceramicheInterni,
       comingSoon: true,
     },
     {
-      title: "Ceramiche da Esterni",
-      description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica per una continuità perfetta tra interno ed esterno.",
+      title: t('surfaces.ceramicheEsterni.title'),
+      description: t('surfaces.ceramicheEsterni.description'),
       image: ceramicheEsterni,
       comingSoon: true,
     },
@@ -71,10 +71,10 @@ const IndoorOutdoorSection = () => {
         className="text-center mb-8 md:mb-12 max-w-3xl mx-auto"
       >
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-          Le Nostre Superfici
+          {t('surfaces.sectionTitle')}
         </h2>
         <p className="text-base md:text-lg text-foreground/70 font-light">
-          KALĒA® — SURFACE SYSTEM® offre sei mondi di eccellenza per interni ed esterni.
+          {t('surfaces.sectionSubtitle')}
         </p>
       </motion.div>
 
@@ -101,7 +101,7 @@ const IndoorOutdoorSection = () => {
               {/* Coming Soon badge */}
               {surface.comingSoon && (
                 <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-white text-[10px] md:text-xs font-medium px-3 py-1 rounded-full z-20">
-                  Novità in arrivo
+                  {t('surfaces.comingSoon')}
                 </div>
               )}
 
@@ -114,7 +114,7 @@ const IndoorOutdoorSection = () => {
                 </p>
                 {!surface.comingSoon && (
                   <span className="inline-flex items-center gap-2 text-white/90 text-[10px] md:text-xs font-medium transition-all duration-300 group-hover:text-white">
-                    Scopri
+                    {t('surfaces.discover')}
                     <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
                 )}
@@ -142,7 +142,7 @@ const IndoorOutdoorSection = () => {
         transition={{ duration: 0.7, delay: 0.3 }}
         className="text-center text-sm md:text-base text-foreground/60 font-light max-w-2xl mx-auto mt-8 md:mt-12 leading-relaxed"
       >
-        Tutto completato con pezzi speciali per scale, battiscopa, profili e accessori coordinati. Showroom mobile direttamente nel tuo cantiere per una consulenza sul posto.
+        {t('surfaces.bottomText')}
       </motion.p>
     </section>
   );
