@@ -7,15 +7,15 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import ColorCircleGallery from "@/components/ColorCircleGallery";
-import { getCollectionBySlug } from "@/data/ceramicheCollections";
+import { getLocalizedCollectionBySlug } from "@/data/ceramicheCollectionsI18n";
 
 const CeramicaCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const heroRef = useRef<HTMLDivElement>(null);
 
-  const collection = slug ? getCollectionBySlug(slug) : undefined;
+  const collection = slug ? getLocalizedCollectionBySlug(slug, language) : undefined;
 
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
@@ -33,6 +33,18 @@ const CeramicaCollectionDetail = () => {
   }
 
   const backRoute = `/${language}/${collection.parentRoute}`;
+  const backLabel = collection.category === "interni"
+    ? t('ceramicaDetail.backInterni')
+    : t('ceramicaDetail.backEsterni');
+  // Translate applications via dictionary (fallback to original string)
+  const localizedApps = collection.applications.map((app) => {
+    const key = `ceramicaApplications.${app}`;
+    const translated = t(key);
+    return translated === key ? app : translated;
+  });
+  const variantsSubtitle = t('ceramicaDetail.variantsSubtitle').replace('{count}', String(collection.variants.length));
+  const specsSubtitle = t('ceramicaDetail.specsSubtitle').replace('{name}', collection.name);
+  const ctaText = t('ceramicaDetail.ctaText').replace('{name}', collection.name);
 
   return (
     <div className="relative bg-background">
@@ -71,7 +83,7 @@ const CeramicaCollectionDetail = () => {
                 className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm uppercase tracking-widest mb-6 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                {collection.category === "interni" ? "Ceramiche da Interni" : "Ceramiche da Esterni"}
+                {backLabel}
               </Link>
               <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-white/70 mb-3 font-medium">
                 {collection.effect}
@@ -110,10 +122,10 @@ const CeramicaCollectionDetail = () => {
             transition={{ duration: 0.7 }}
           >
             <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-primary/60 mb-4 font-medium">
-              Kalēa® Surface System®
+              {t('ceramicaDetail.introEyebrow')}
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-6">
-              Una collezione, infinite possibilità
+              {t('ceramicaDetail.introTitle')}
             </h2>
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
               {collection.longDescription}
@@ -138,7 +150,7 @@ const CeramicaCollectionDetail = () => {
                 >
                   <img
                     src={img}
-                    alt={`${collection.name} - ambientazione ${i + 1}`}
+                    alt={`${collection.name} - ${i + 1}`}
                     className="w-full h-[280px] md:h-[400px] object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
@@ -153,8 +165,8 @@ const CeramicaCollectionDetail = () => {
       <section className="relative z-10 bg-background py-20 md:py-28">
         <div className="container-custom">
           <ColorCircleGallery
-            title="Esplora le varianti"
-            subtitle={`${collection.variants.length} declinazioni cromatiche selezionate per il Kalēa® Surface System®.`}
+            title={t('ceramicaDetail.variantsTitle')}
+            subtitle={variantsSubtitle}
             colors={collection.variants}
           />
         </div>
@@ -171,34 +183,34 @@ const CeramicaCollectionDetail = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-3">
-              Specifiche tecniche
+              {t('ceramicaDetail.specsTitle')}
             </h2>
             <p className="text-base text-muted-foreground">
-              Caratteristiche del gres porcellanato {collection.name}.
+              {specsSubtitle}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
             <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">Spessori</p>
+              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">{t('ceramicaDetail.thickness')}</p>
               <p className="text-foreground font-semibold text-lg">{collection.thickness}</p>
             </div>
             <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">Formati</p>
+              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">{t('ceramicaDetail.formats')}</p>
               <p className="text-foreground font-semibold text-lg">{collection.formats.join(" · ")}</p>
             </div>
             <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">Effetto</p>
+              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">{t('ceramicaDetail.effect')}</p>
               <p className="text-foreground font-semibold text-lg">{collection.effect}</p>
             </div>
           </div>
 
           <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm mt-4 md:mt-6">
-            <p className="text-xs uppercase tracking-widest text-primary/60 mb-3 font-medium">Applicazioni consigliate</p>
+            <p className="text-xs uppercase tracking-widest text-primary/60 mb-3 font-medium">{t('ceramicaDetail.applications')}</p>
             <div className="flex flex-wrap gap-2">
-              {collection.applications.map((app) => (
+              {localizedApps.map((app, i) => (
                 <span
-                  key={app}
+                  key={i}
                   className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium"
                 >
                   {app}
@@ -219,16 +231,16 @@ const CeramicaCollectionDetail = () => {
             transition={{ duration: 0.7 }}
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-foreground mb-6">
-              Richiedi un sopralluogo
+              {t('ceramicaDetail.ctaTitle')}
             </h2>
             <p className="text-base md:text-lg text-primary-foreground/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-              Il team Kalēa® ti accompagna nella scelta della finitura {collection.name} più adatta al tuo progetto, con consulenza dedicata e campionature reali.
+              {ctaText}
             </p>
             <Link
               to={`/${language}/contatti`}
               className="inline-flex items-center gap-2 bg-background text-foreground px-8 py-3.5 rounded-full font-medium hover:bg-background/90 transition-colors"
             >
-              Richiedi consulenza
+              {t('ceramicaDetail.ctaButton')}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
@@ -239,3 +251,4 @@ const CeramicaCollectionDetail = () => {
 };
 
 export default CeramicaCollectionDetail;
+

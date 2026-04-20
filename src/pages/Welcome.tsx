@@ -13,31 +13,31 @@ interface WelcomeCard {
 }
 
 const Welcome = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
 
   const cards: WelcomeCard[] = [
     {
       icon: Home,
-      title: "Scopri Kalēa®",
-      description: "Esplora il nostro sistema integrato per superfici contemporanee",
+      title: t('welcome.cards.discover.title'),
+      description: t('welcome.cards.discover.description'),
       link: `/${language}`,
     },
     {
       icon: FileText,
-      title: "Area Tecnica",
-      description: "Schede tecniche, certificazioni e documentazione",
+      title: t('welcome.cards.technical.title'),
+      description: t('welcome.cards.technical.description'),
       link: `/${language}/area-tecnica`,
     },
     {
       icon: Users,
-      title: "Diventa Partner",
-      description: "Collabora con noi come rivenditore o professionista",
+      title: t('welcome.cards.partner.title'),
+      description: t('welcome.cards.partner.description'),
       link: `/${language}/diventa-partner`,
     },
     {
       icon: Mail,
-      title: "Contattaci",
-      description: "Richiedi informazioni o preventivi personalizzati",
+      title: t('welcome.cards.contact.title'),
+      description: t('welcome.cards.contact.description'),
       link: `/${language}/contatti`,
     },
   ];
@@ -78,10 +78,10 @@ const Welcome = () => {
           className="text-center mb-12"
         >
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-4 drop-shadow-lg">
-            Benvenuto in Kalēa®
+            {t('welcome.title')}
           </h1>
           <p className="text-white/90 text-lg md:text-xl max-w-md mx-auto drop-shadow-md">
-            Surface System® — Superfici contemporanee per interni ed esterni
+            {t('welcome.subtitle')}
           </p>
         </motion.div>
 
@@ -109,7 +109,7 @@ const Welcome = () => {
                 </p>
                 
                 <div className="flex items-center gap-2 text-white/70 group-hover:text-white transition-colors">
-                  <span className="text-sm font-medium">Vai</span>
+                  <span className="text-sm font-medium">{t('welcome.go')}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>
