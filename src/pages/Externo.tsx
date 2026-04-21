@@ -156,10 +156,10 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Vivi l'esterno con stile
+              {t("externo.lifestyleTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Per non rinunciare alle emozioni che sa offrire la naturalezza del parquet, nasce Externo: la soluzione intelligente ed ecologica per vivere la passione dei pavimenti in legno anche all'esterno.
+              {t("externo.lifestyleDesc")}
             </p>
           </motion.div>
 
@@ -191,7 +191,7 @@ const Externo = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-base text-muted-foreground/80 max-w-4xl mx-auto mt-10 text-center leading-relaxed"
           >
-            Una linea high-tech dalle performance meccaniche d'eccellenza, un pavimento in composito ideale per il decking, perfetto per arredare gli spazi esterni con alto impatto estetico ed estrema robustezza. Le doghe sono resistenti alle radiazioni UV, alle alte e basse temperature, non invecchiano e non marciscono.
+            {t("externo.lifestyleFooter")}
           </motion.p>
         </div>
       </section>
@@ -207,13 +207,13 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-              {externoTraditional.title}
+              {t("externo.traditionalTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {externoTraditional.subtitle}
+              {t("externo.traditionalSubtitle")}
             </p>
             <p className="text-base text-muted-foreground/80 max-w-3xl mx-auto mt-4">
-              Per non rinunciare alle emozioni che sa offrire la naturalezza del parquet, nasce Externo: la soluzione intelligente ed ecologica per vivere la passione dei pavimenti in legno anche all'esterno.
+              {t("externo.traditionalDesc")}
             </p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
@@ -254,13 +254,13 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-              {externoSkudo.title}
+              {t("externo.skudoTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {externoSkudo.subtitle}
+              {t("externo.skudoSubtitle")}
             </p>
             <p className="text-base text-muted-foreground/80 max-w-3xl mx-auto mt-4">
-              L'innovativo sistema di schermatura SKUDO: una copertura coestrusa con doga in polimero arricchito con stabilizzatori UV e antiossidanti, che la incapsula su tutti e quattro i lati.
+              {t("externo.skudoDesc")}
             </p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
@@ -301,10 +301,10 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Perché scegliere EXTERNO
+              {t("externo.whyTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              La pavimentazione outdoor premium per i tuoi spazi esterni più belli.
+              {t("externo.whySubtitle")}
             </p>
           </motion.div>
 
