@@ -16,7 +16,7 @@ import lifestyleLiving from "@/assets/hypermatt-xl/lifestyle-living.webp";
 import lifestyleKitchen from "@/assets/hypermatt-xl/lifestyle-kitchen.webp";
 
 const HypermattXL = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const [selectedProduct, setSelectedProduct] = useState<HypermattProduct | null>(null);
 
@@ -90,7 +90,7 @@ const HypermattXL = () => {
             <div className="max-w-4xl mx-auto">
               <AnimatedTitle text="Hypermatt XL" className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight" />
               <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }} className="text-lg md:text-xl lg:text-2xl text-white/90 font-light mb-8 max-w-2xl mx-auto">
-                Formato grande, impatto straordinario
+                {t("hypermattXL.heroSubtitle")}
               </motion.p>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} style={{ opacity: heroContentOpacity }}>
                 <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} className="flex justify-center">
@@ -116,9 +116,9 @@ const HypermattXL = () => {
       <section className="bg-background py-20 md:py-32">
         <div className="container-custom text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">Vivi il grande formato</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">{t("hypermattXL.lifestyleTitle")}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Le doghe XL amplificano lo spazio e creano continuità visiva, regalando ambienti di grande respiro ed eleganza contemporanea.
+              {t("hypermattXL.lifestyleDesc")}
             </p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
@@ -136,26 +136,22 @@ const HypermattXL = () => {
       <section className="bg-background py-20 md:py-32">
         <div className="container-custom">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">La collezione che amplifica lo spazio</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">{t("hypermattXL.descTitle")}</h2>
             <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-              Le doghe di grande formato creano continuità visiva e una sensazione di ampiezza che valorizza ogni interno.
+              {t("hypermattXL.desc1")}
             </p>
-            <p className="text-base text-muted-foreground/80 leading-relaxed mb-4">
-              La variante <strong>Wood</strong> esalta le venature naturali del legno con una finitura opaca e tridimensionale, mentre <strong>Tile</strong> reinterpreta la raffinatezza della pietra in chiave contemporanea, ideale per ambienti essenziali e sofisticati.
-            </p>
-            <p className="text-base text-muted-foreground/80 leading-relaxed">
-              Tutte le superfici Hypermatt XL sono trattate con <strong>Hypermatt Laser Technology</strong>, la tecnologia laser esclusiva che rende la superficie ultra-opaca, vellutata e resistente. Formato: <strong>228,6 x 1800 mm</strong>, spessore <strong>6,5 mm</strong>, incastro <strong>5G</strong>.
-            </p>
+            <p className="text-base text-muted-foreground/80 leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: t("hypermattXL.desc2") }} />
+            <p className="text-base text-muted-foreground/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: t("hypermattXL.desc3") }} />
           </motion.div>
 
           {renderGallery(
-            "Wood",
-            "Nodi e venature esaltano la matericità del legno e la profondità della sua texture. La finitura Hypermatt Laser Technology amplifica il realismo visivo e la morbidezza al tatto.",
+            t("hypermattXL.woodTitle"),
+            t("hypermattXL.woodDesc"),
             xlWood
           )}
           {renderGallery(
-            "Tile",
-            "La forza della pietra si traduce in una superficie ampia, materica e dal fascino senza tempo, perfetto per ambienti minimalisti o industriali.",
+            t("hypermattXL.tileTitle"),
+            t("hypermattXL.tileDesc"),
             xlTile
           )}
         </div>
