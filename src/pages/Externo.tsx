@@ -19,7 +19,7 @@ import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 
 const Externo = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const [selectedProduct, setSelectedProduct] = useState<ExternoProduct | null>(null);
   
@@ -37,45 +37,21 @@ const Externo = () => {
   const heroImageY = useTransform(heroProgress, [0, 1], ["0%", isMobile ? "8%" : "15%"]);
 
   const advantages = [
-    {
-      icon: Droplets,
-      title: "Resistenza all'acqua",
-      description: "Perfetto per bordi piscina e aree soggette a umidità costante.",
-    },
-    {
-      icon: Sun,
-      title: "Antiscivolo certificato",
-      description: "Superficie sicura anche quando bagnata, ideale per zone piscina.",
-    },
-    {
-      icon: Shield,
-      title: "Durabilità estrema",
-      description: "Resiste agli agenti atmosferici, UV e variazioni termiche.",
-    },
-    {
-      icon: Palette,
-      title: "Design elegante",
-      description: "Finiture estetiche che valorizzano ogni ambiente outdoor.",
-    },
-    {
-      icon: Settings,
-      title: "Manutenzione minima",
-      description: "Facile da pulire e non richiede trattamenti periodici.",
-    },
-    {
-      icon: CheckCircle,
-      title: "Comfort termico",
-      description: "Non si surriscalda al sole, confortevole a piedi nudi.",
-    },
+    { icon: Droplets, title: t("externo.adv1Title"), description: t("externo.adv1Desc") },
+    { icon: Sun, title: t("externo.adv2Title"), description: t("externo.adv2Desc") },
+    { icon: Shield, title: t("externo.adv3Title"), description: t("externo.adv3Desc") },
+    { icon: Palette, title: t("externo.adv4Title"), description: t("externo.adv4Desc") },
+    { icon: Settings, title: t("externo.adv5Title"), description: t("externo.adv5Desc") },
+    { icon: CheckCircle, title: t("externo.adv6Title"), description: t("externo.adv6Desc") },
   ];
 
   const applications = [
-    "Bordi piscina",
-    "Terrazze panoramiche",
-    "Portici e logge",
-    "Spa e wellness",
-    "Beach club",
-    "Aree relax esterne",
+    t("externo.app1"),
+    t("externo.app2"),
+    t("externo.app3"),
+    t("externo.app4"),
+    t("externo.app5"),
+    t("externo.app6"),
   ];
 
   return (
@@ -134,7 +110,7 @@ const Externo = () => {
                 transition={{ duration: 0.7, delay: 0.4 }}
                 className="text-lg md:text-xl lg:text-2xl text-white/90 font-light mb-8 max-w-2xl mx-auto"
               >
-                Pavimentazione outdoor per portici, terrazze e piscine
+                {t("externo.heroSubtitle")}
               </motion.p>
 
               <motion.div
