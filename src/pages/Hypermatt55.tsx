@@ -17,7 +17,7 @@ import formatoWood from "@/assets/hypermatt/formato-wood.jpg";
 import formatoGlue from "@/assets/hypermatt/formato-glue.jpg";
 
 const Hypermatt55 = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const [selectedProduct, setSelectedProduct] = useState<HypermattProduct | null>(null);
 
