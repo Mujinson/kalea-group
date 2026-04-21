@@ -24,7 +24,7 @@ interface Props {
 }
 
 const HypermattCollectionCTA = ({ current }: Props) => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const others = Object.entries(allCollections).filter(([key]) => key !== current);
 
   return (
@@ -38,10 +38,10 @@ const HypermattCollectionCTA = ({ current }: Props) => {
           className="text-center mb-12"
         >
           <h3 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-3">
-            Scopri le altre collezioni Hypermatt
+            {t("hypermattCTA.title")}
           </h3>
           <p className="text-muted-foreground">
-            Trova la soluzione perfetta per il tuo progetto
+            {t("hypermattCTA.subtitle")}
           </p>
         </motion.div>
 

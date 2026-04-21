@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface Message {
   role: "user" | "assistant";
@@ -13,11 +14,12 @@ interface Message {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chatbot`;
 
 const ChatbotWidget = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Ciao! 👋 Sono l'assistente Kalea®. Stai cercando un pavimento per il tuo progetto? Raccontami di cosa hai bisogno!",
+      content: t("chatbot.greeting"),
     },
   ]);
   const [input, setInput] = useState("");
@@ -72,15 +74,15 @@ const ChatbotWidget = () => {
       } else {
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "Scusa, puoi ripetere? 😊" },
+          { role: "assistant", content: t("chatbot.repeatPrompt") },
         ]);
       }
     } catch (e: any) {
       clearTimeout(timeout);
       console.error("Chatbot error:", e);
       const fallback = e?.name === "AbortError"
-        ? "Scusa, sto avendo qualche difficoltà tecnica. Riprova! 😊"
-        : "Mi scuso, c'è stato un errore. Riprova tra un momento.";
+        ? t("chatbot.timeoutError")
+        : t("chatbot.genericError");
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: fallback },
@@ -101,7 +103,7 @@ const ChatbotWidget = () => {
             ? "bg-foreground text-background"
             : "bg-accent-warm text-background backdrop-blur-sm hover:bg-foreground"
         )}
-        aria-label={isOpen ? "Chiudi chat" : "Apri chat"}
+        aria-label={isOpen ? t("chatbot.closeLabel") : t("chatbot.openLabel")}
       >
         {isOpen ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
       </button>
@@ -115,8 +117,8 @@ const ChatbotWidget = () => {
               <Bot className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h3 className="font-semibold text-sm">Kalea® Assistant</h3>
-              <p className="text-xs opacity-70">Online • Rispondiamo subito</p>
+              <h3 className="font-semibold text-sm">{t("chatbot.assistantName")}</h3>
+              <p className="text-xs opacity-70">{t("chatbot.onlineStatus")}</p>
             </div>
           </div>
 
@@ -169,7 +171,7 @@ const ChatbotWidget = () => {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Scrivi un messaggio..."
+                placeholder={t("chatbot.placeholder")}
                 className="flex-1 rounded-xl border-muted bg-muted/50 text-sm"
                 disabled={isLoading}
               />

@@ -100,12 +100,12 @@ const MiniCarousel = ({ products, link, direction }: { products: ProductType[]; 
 };
 
 const DualCarouselSection = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
 
   const collections: CollectionCard[] = [
     {
       title: "Biomag Floor®",
-      subtitle: "Tecnologia MgO avanzata",
+      subtitle: t("dualCarousel.biomagSubtitle"),
       link: `/${language}/biomag-floor`,
       products: biomagProducts,
       direction: 'left',
@@ -132,22 +132,22 @@ const DualCarouselSection = () => {
       direction: 'right',
     },
     {
-      title: "Parquet",
-      subtitle: "Legni pregiati e finiture artigianali",
+      title: t("dualCarousel.parquetTitle"),
+      subtitle: t("dualCarousel.parquetSubtitle"),
       link: `/${language}/indoor`,
       products: parquetProducts,
       direction: 'left',
     },
     {
-      title: "Externo Traditional",
-      subtitle: "Composito WPC ad alta resistenza",
+      title: t("dualCarousel.externoTraditionalTitle"),
+      subtitle: t("dualCarousel.externoTraditionalSubtitle"),
       link: `/${language}/externo`,
       products: externoTraditionalProducts,
       direction: 'right',
     },
     {
-      title: "Externo Skudo",
-      subtitle: "Schermatura coestrusa con protezione UV",
+      title: t("dualCarousel.externoSkudoTitle"),
+      subtitle: t("dualCarousel.externoSkudoSubtitle"),
       link: `/${language}/externo`,
       products: externoSkudoProducts,
       direction: 'left',
@@ -165,10 +165,10 @@ const DualCarouselSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-foreground mb-3">
-            Le Nostre Collezioni
+            {t("dualCarousel.title")}
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-foreground/70 max-w-2xl mx-auto">
-            Sei mondi di finiture, infinite possibilità di design
+            {t("dualCarousel.subtitle")}
           </p>
         </motion.div>
       </div>
@@ -216,7 +216,7 @@ const DualCarouselSection = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-sm md:text-base text-foreground/60"
         >
-          Trascina per esplorare le collezioni
+          {t("dualCarousel.dragHint")}
         </motion.p>
       </div>
     </section>
