@@ -327,7 +327,7 @@ const Externo = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Specifiche Tecniche
+              {t("externo.specsTitle")}
             </h2>
           </motion.div>
 
@@ -340,26 +340,12 @@ const Externo = () => {
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
             <ul className="space-y-4 text-white font-medium">
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Spessore: 20-25 mm</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Classe antiscivolo: R11 / R12</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Resistenza UV: classe 5 (massima)</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Resistenza al gelo: cicli illimitati</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Carico di rottura: &gt; 2000 N</span>
-              </li>
+              {[t("externo.spec1"), t("externo.spec2"), t("externo.spec3"), t("externo.spec4"), t("externo.spec5")].map((spec) => (
+                <li key={spec} className="flex items-start gap-3">
+                  <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                  <span>{spec}</span>
+                </li>
+              ))}
             </ul>
           </motion.div>
         </div>
@@ -376,10 +362,10 @@ const Externo = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Applicazioni
+              {t("externo.appsTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Perfetto per ogni ambiente esterno di prestigio.
+              {t("externo.appsSubtitle")}
             </p>
           </motion.div>
 
@@ -416,13 +402,13 @@ const Externo = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white">
-              Scopri EXTERNO®
+              {t("externo.ctaTitle")}
             </h2>
             <p className="text-lg mb-8 max-w-2xl mx-auto text-white font-medium">
-              Contattaci per scoprire la nostra pavimentazione outdoor premium e richiedere un preventivo personalizzato.
+              {t("externo.ctaDesc")}
             </p>
             <Button asChild size="lg" variant="secondary">
-              <Link to={`/${language}/contatti`}>Richiedi Informazioni</Link>
+              <Link to={`/${language}/contatti`}>{t("externo.ctaButton")}</Link>
             </Button>
           </motion.div>
         </div>
