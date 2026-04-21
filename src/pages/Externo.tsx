@@ -19,7 +19,7 @@ import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 
 const Externo = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const [selectedProduct, setSelectedProduct] = useState<ExternoProduct | null>(null);
   
@@ -37,45 +37,21 @@ const Externo = () => {
   const heroImageY = useTransform(heroProgress, [0, 1], ["0%", isMobile ? "8%" : "15%"]);
 
   const advantages = [
-    {
-      icon: Droplets,
-      title: "Resistenza all'acqua",
-      description: "Perfetto per bordi piscina e aree soggette a umidità costante.",
-    },
-    {
-      icon: Sun,
-      title: "Antiscivolo certificato",
-      description: "Superficie sicura anche quando bagnata, ideale per zone piscina.",
-    },
-    {
-      icon: Shield,
-      title: "Durabilità estrema",
-      description: "Resiste agli agenti atmosferici, UV e variazioni termiche.",
-    },
-    {
-      icon: Palette,
-      title: "Design elegante",
-      description: "Finiture estetiche che valorizzano ogni ambiente outdoor.",
-    },
-    {
-      icon: Settings,
-      title: "Manutenzione minima",
-      description: "Facile da pulire e non richiede trattamenti periodici.",
-    },
-    {
-      icon: CheckCircle,
-      title: "Comfort termico",
-      description: "Non si surriscalda al sole, confortevole a piedi nudi.",
-    },
+    { icon: Droplets, title: t("externo.adv1Title"), description: t("externo.adv1Desc") },
+    { icon: Sun, title: t("externo.adv2Title"), description: t("externo.adv2Desc") },
+    { icon: Shield, title: t("externo.adv3Title"), description: t("externo.adv3Desc") },
+    { icon: Palette, title: t("externo.adv4Title"), description: t("externo.adv4Desc") },
+    { icon: Settings, title: t("externo.adv5Title"), description: t("externo.adv5Desc") },
+    { icon: CheckCircle, title: t("externo.adv6Title"), description: t("externo.adv6Desc") },
   ];
 
   const applications = [
-    "Bordi piscina",
-    "Terrazze panoramiche",
-    "Portici e logge",
-    "Spa e wellness",
-    "Beach club",
-    "Aree relax esterne",
+    t("externo.app1"),
+    t("externo.app2"),
+    t("externo.app3"),
+    t("externo.app4"),
+    t("externo.app5"),
+    t("externo.app6"),
   ];
 
   return (
@@ -134,7 +110,7 @@ const Externo = () => {
                 transition={{ duration: 0.7, delay: 0.4 }}
                 className="text-lg md:text-xl lg:text-2xl text-white/90 font-light mb-8 max-w-2xl mx-auto"
               >
-                Pavimentazione outdoor per portici, terrazze e piscine
+                {t("externo.heroSubtitle")}
               </motion.p>
 
               <motion.div
@@ -180,10 +156,10 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Vivi l'esterno con stile
+              {t("externo.lifestyleTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Per non rinunciare alle emozioni che sa offrire la naturalezza del parquet, nasce Externo: la soluzione intelligente ed ecologica per vivere la passione dei pavimenti in legno anche all'esterno.
+              {t("externo.lifestyleDesc")}
             </p>
           </motion.div>
 
@@ -215,7 +191,7 @@ const Externo = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-base text-muted-foreground/80 max-w-4xl mx-auto mt-10 text-center leading-relaxed"
           >
-            Una linea high-tech dalle performance meccaniche d'eccellenza, un pavimento in composito ideale per il decking, perfetto per arredare gli spazi esterni con alto impatto estetico ed estrema robustezza. Le doghe sono resistenti alle radiazioni UV, alle alte e basse temperature, non invecchiano e non marciscono.
+            {t("externo.lifestyleFooter")}
           </motion.p>
         </div>
       </section>
@@ -231,13 +207,13 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-              {externoTraditional.title}
+              {t("externo.traditionalTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {externoTraditional.subtitle}
+              {t("externo.traditionalSubtitle")}
             </p>
             <p className="text-base text-muted-foreground/80 max-w-3xl mx-auto mt-4">
-              Per non rinunciare alle emozioni che sa offrire la naturalezza del parquet, nasce Externo: la soluzione intelligente ed ecologica per vivere la passione dei pavimenti in legno anche all'esterno.
+              {t("externo.traditionalDesc")}
             </p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
@@ -278,13 +254,13 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-3">
-              {externoSkudo.title}
+              {t("externo.skudoTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {externoSkudo.subtitle}
+              {t("externo.skudoSubtitle")}
             </p>
             <p className="text-base text-muted-foreground/80 max-w-3xl mx-auto mt-4">
-              L'innovativo sistema di schermatura SKUDO: una copertura coestrusa con doga in polimero arricchito con stabilizzatori UV e antiossidanti, che la incapsula su tutti e quattro i lati.
+              {t("externo.skudoDesc")}
             </p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
@@ -325,10 +301,10 @@ const Externo = () => {
             className="text-center mb-12 md:mb-16"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Perché scegliere EXTERNO
+              {t("externo.whyTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              La pavimentazione outdoor premium per i tuoi spazi esterni più belli.
+              {t("externo.whySubtitle")}
             </p>
           </motion.div>
 
@@ -351,7 +327,7 @@ const Externo = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Specifiche Tecniche
+              {t("externo.specsTitle")}
             </h2>
           </motion.div>
 
@@ -364,26 +340,12 @@ const Externo = () => {
             style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
           >
             <ul className="space-y-4 text-white font-medium">
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Spessore: 20-25 mm</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Classe antiscivolo: R11 / R12</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Resistenza UV: classe 5 (massima)</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Resistenza al gelo: cicli illimitati</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                <span>Carico di rottura: &gt; 2000 N</span>
-              </li>
+              {[t("externo.spec1"), t("externo.spec2"), t("externo.spec3"), t("externo.spec4"), t("externo.spec5")].map((spec) => (
+                <li key={spec} className="flex items-start gap-3">
+                  <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
+                  <span>{spec}</span>
+                </li>
+              ))}
             </ul>
           </motion.div>
         </div>
@@ -400,10 +362,10 @@ const Externo = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              Applicazioni
+              {t("externo.appsTitle")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Perfetto per ogni ambiente esterno di prestigio.
+              {t("externo.appsSubtitle")}
             </p>
           </motion.div>
 
@@ -440,13 +402,13 @@ const Externo = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6 text-white">
-              Scopri EXTERNO®
+              {t("externo.ctaTitle")}
             </h2>
             <p className="text-lg mb-8 max-w-2xl mx-auto text-white font-medium">
-              Contattaci per scoprire la nostra pavimentazione outdoor premium e richiedere un preventivo personalizzato.
+              {t("externo.ctaDesc")}
             </p>
             <Button asChild size="lg" variant="secondary">
-              <Link to={`/${language}/contatti`}>Richiedi Informazioni</Link>
+              <Link to={`/${language}/contatti`}>{t("externo.ctaButton")}</Link>
             </Button>
           </motion.div>
         </div>
