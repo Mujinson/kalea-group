@@ -73,7 +73,7 @@ const HypermattSpina = () => {
             <div className="max-w-4xl mx-auto">
               <AnimatedTitle text="Hypermatt Spina" className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-white font-bold mb-4 tracking-tight" />
               <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }} className="text-lg md:text-xl lg:text-2xl text-white/90 font-light mb-8 max-w-2xl mx-auto">
-                L'eleganza delle geometrie, l'innovazione del dettaglio
+                {t("hypermattSpina.heroSubtitle")}
               </motion.p>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} style={{ opacity: heroContentOpacity }}>
                 <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} className="flex justify-center">
@@ -98,23 +98,19 @@ const HypermattSpina = () => {
       <section className="bg-background py-20 md:py-32">
         <div className="container-custom">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">Il fascino dei pavimenti a spina</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-              Hypermatt Spina reinterpreta il fascino dei pavimenti a spina in chiave contemporanea: le due varianti, <strong>Italiana</strong> e <strong>Francese</strong>, amplificano la percezione di movimento e profondità, trasformando ogni interno in uno spazio armonioso e raffinato.
-            </p>
-            <p className="text-base text-muted-foreground/80 leading-relaxed">
-              Trattata con <strong>Hypermatt Laser Technology</strong>, la tecnologia laser esclusiva che rende la superficie ultra-opaca e vellutata, Hypermatt Spina restituisce un effetto iperrealistico e naturale. Il sistema d'incastro <strong>5G</strong> garantisce una posa flottante, solida e senza colla.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">{t("hypermattSpina.descTitle")}</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: t("hypermattSpina.desc1") }} />
+            <p className="text-base text-muted-foreground/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: t("hypermattSpina.desc2") }} />
           </motion.div>
 
           {renderGallery(
-            "Spina Italiana",
-            "Linee equilibrate e proporzioni perfette disegnano la Spina Italiana dal carattere raffinato e senza tempo.",
+            t("hypermattSpina.italianaTitle"),
+            t("hypermattSpina.italianaDesc"),
             spinaItaliana
           )}
           {renderGallery(
-            "Spina Francese",
-            "Geometrie inclinate e ritmo regolare danno vita a una spina elegante, dinamica e luminosa.",
+            t("hypermattSpina.franceseTitle"),
+            t("hypermattSpina.franceseDesc"),
             spinaFrancese
           )}
         </div>
@@ -124,28 +120,28 @@ const HypermattSpina = () => {
       <section className="bg-muted py-20 md:py-28">
         <div className="container-custom">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">Specifiche Tecniche</h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">Prestazioni certificate per ogni ambiente</p>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t("hypermattSpina.specsTitle")}</h2>
+            <p className="text-base text-muted-foreground max-w-2xl mx-auto">{t("hypermattSpina.specsSubtitle")}</p>
           </motion.div>
 
           <div className="max-w-2xl mx-auto">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="bg-card rounded-2xl p-8 shadow-lg">
-              <h3 className="text-xl font-heading font-bold text-foreground mb-4">SPECIFICHE TECNICHE</h3>
+              <h3 className="text-xl font-heading font-bold text-foreground mb-4">{t("hypermattSpina.specsHeader")}</h3>
               <div className="mb-4">
                 <img src={formatoSpina} alt="Formato spina 128x640 mm" className="max-w-[200px] h-auto" />
               </div>
               <p className="text-sm text-muted-foreground mb-6">128x640 mm</p>
 
-              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Specifiche tecniche</h4>
+              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">{t("hypermattSpina.specsSubheader")}</h4>
               <div className="space-y-0 divide-y divide-border">
                 {[
-                  { label: "Formato", value: "128x640 mm" },
-                  { label: "Spessore Totale", value: "6,5 mm" },
-                  { label: "Classe D'uso", value: "23/33" },
-                  { label: "Incastro", value: "5G" },
-                  { label: "Resistenza Al Fuoco", value: "Bfl-s1" },
-                  { label: "Materassino", value: "IXPE 1 mm" },
-                  { label: "Strato D'usura", value: "0,55 mm" },
+                  { label: t("hypermattSpina.specFormat"), value: "128x640 mm" },
+                  { label: t("hypermattSpina.specThickness"), value: "6,5 mm" },
+                  { label: t("hypermattSpina.specClass"), value: "23/33" },
+                  { label: t("hypermattSpina.specClick"), value: "5G" },
+                  { label: t("hypermattSpina.specFire"), value: "Bfl-s1" },
+                  { label: t("hypermattSpina.specPad"), value: "IXPE 1 mm" },
+                  { label: t("hypermattSpina.specWear"), value: "0,55 mm" },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex justify-between items-center py-3">
                     <span className="text-sm text-muted-foreground">{label}</span>
@@ -159,11 +155,7 @@ const HypermattSpina = () => {
                 <img src={icon5G} alt="5G Välinge" className="w-12 h-12" />
               </div>
 
-              <p className="text-sm text-muted-foreground leading-relaxed mt-4">
-                SPC effetto legno, listelli formato <strong>128 x 640 mm</strong> con spessore <strong>6,5 mm</strong>.
-                Finitura ultra realistica e vellutata grazie all'esclusiva tecnologia al laser <strong>Hypermatt</strong>. Resistente ad acqua e usura.
-                Facilità di installazione con <strong>aggancio a secco 5G</strong> e materassino fonoassorbente incorporato.
-              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed mt-4" dangerouslySetInnerHTML={{ __html: t("hypermattSpina.specsFooter") }} />
             </motion.div>
           </div>
         </div>
