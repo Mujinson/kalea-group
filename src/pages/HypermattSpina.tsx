@@ -16,7 +16,7 @@ import icon5G from "@/assets/hypermatt/5g-valinge.png";
 import formatoSpina from "@/assets/hypermatt/formato-spina.jpg";
 
 const HypermattSpina = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const [selectedProduct, setSelectedProduct] = useState<HypermattProduct | null>(null);
 
