@@ -16,11 +16,8 @@ const CeramicheInterni = () => {
   const isMobile = useIsMobile();
   const collections = getCollectionsByCategory("interni");
 
-const CeramicheInterni = () => {
-  const { language } = useTranslation();
-  const isMobile = useIsMobile();
-
   const heroRef = useRef<HTMLDivElement>(null);
+
 
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
