@@ -3173,6 +3173,17 @@ export const translations: Record<Language, Translations> = {
       "Esterni residenziali": "Wohnbereich Außen",
       "Esterni commerciali": "Gewerbebereich Außen",
     },
+    homeHero: {
+      title: "KALĒA® — SURFACE SYSTEM®",
+      subtitle: "Hochwertige Oberflächen für Innen- und Außenbereiche. Komplettlösungen für Böden, Verkleidungen und Zubehör.",
+      indoorTitle: "Indoor",
+      indoorDesc: "Designböden für hochwertige Innenräume",
+      outdoorTitle: "Outdoor",
+      outdoorDesc: "Lösungen für Terrassen, Decks und Outdoor-Living",
+      discover: "Entdecken",
+      bottomText1: "Von Biomag Floor® bis zu den SPC Hypermatt Kollektionen, edlem Parkett und WPC-Lösungen für den Außenbereich.",
+      bottomText2: "Ein integriertes System ausgewählter Oberflächen für hochwertige Wohn- und Contract-Projekte, mit Beratung, Verlegung und mobilem Showroom direkt auf der Baustelle.",
+    },
     hypermattCTA: {
       title: "Entdecken Sie die anderen Hypermatt-Kollektionen",
       subtitle: "Finden Sie die perfekte Lösung für Ihr Projekt",
