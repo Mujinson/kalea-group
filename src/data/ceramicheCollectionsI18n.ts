@@ -202,6 +202,6 @@ export function getLocalizedCollectionsByCategory(
   language: Language
 ): CeramicaCollection[] {
   return Object.values(ceramicheCollections)
-    .filter((c) => c.category === category)
+    .filter((c) => c.category === category || c.category === "both")
     .map((c) => localizeCollection(c, language));
 }
