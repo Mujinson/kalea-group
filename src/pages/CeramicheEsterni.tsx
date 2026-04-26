@@ -50,6 +50,7 @@ const advantages = [
 const CeramicheEsterni = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
+  const outdoorCollections = getCollectionsByCategory("esterni");
 
   const heroRef = useRef<HTMLDivElement>(null);
 
