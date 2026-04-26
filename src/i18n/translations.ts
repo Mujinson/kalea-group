@@ -2079,6 +2079,17 @@ export const translations: Record<Language, Translations> = {
       "Esterni residenziali": "Residential outdoor",
       "Esterni commerciali": "Commercial outdoor",
     },
+    homeHero: {
+      title: "KALĒA® — SURFACE SYSTEM®",
+      subtitle: "Premium surfaces for interiors and exteriors. Complete solutions of flooring, coverings and accessories.",
+      indoorTitle: "Indoor",
+      indoorDesc: "Designer flooring for high-end interiors",
+      outdoorTitle: "Outdoor",
+      outdoorDesc: "Solutions for terraces, decks and outdoor living",
+      discover: "Discover",
+      bottomText1: "From Biomag Floor® to the SPC Hypermatt collections, premium parquet and WPC solutions for outdoor.",
+      bottomText2: "An integrated system of selected surfaces for high-end residential and contract projects, with consulting, installation and a mobile showroom directly on site.",
+    },
     hypermattCTA: {
       title: "Discover the other Hypermatt collections",
       subtitle: "Find the perfect solution for your project",
