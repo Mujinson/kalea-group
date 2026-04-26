@@ -111,7 +111,7 @@ const HomeHero = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-[#4A2A13] text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.12em] mb-4"
           >
-            KALĒA® — SURFACE SYSTEM®
+            {t('homeHero.title')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -120,14 +120,14 @@ const HomeHero = () => {
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
             className="text-[#4A2A13]/80 text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide mb-10"
           >
-            Superfici di pregio per interni ed esterni. Soluzioni complete di pavimenti, rivestimenti e accessori.
+            {t('homeHero.subtitle')}
           </motion.p>
 
           {/* Indoor / Outdoor Cards */}
           <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 w-full">
             {[
-              { title: "Indoor", desc: "Pavimenti di design per interni di alto livello", link: `/${language}/indoor`, image: cardIndoor },
-              { title: "Outdoor", desc: "Soluzioni per terrazze, deck e living all'aperto", link: `/${language}/outdoor`, image: cardOutdoor },
+              { title: t('homeHero.indoorTitle'), desc: t('homeHero.indoorDesc'), link: `/${language}/indoor`, image: cardIndoor },
+              { title: t('homeHero.outdoorTitle'), desc: t('homeHero.outdoorDesc'), link: `/${language}/outdoor`, image: cardOutdoor },
             ].map((card, i) => (
               <Link key={card.title} to={card.link} className="block">
                 <motion.div
@@ -144,7 +144,7 @@ const HomeHero = () => {
                     <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">{card.title}</h3>
                     <p className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed">{card.desc}</p>
                     <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white w-fit">
-                      Scopri <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                      {t('homeHero.discover')} <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </motion.div>
@@ -159,7 +159,7 @@ const HomeHero = () => {
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             className="text-[#4A2A13] text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide"
           >
-            Da Biomag Floor® alle collezioni SPC Hypermatt, parquet pregiato e soluzioni WPC per l'outdoor.
+            {t('homeHero.bottomText1')}
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -168,7 +168,7 @@ const HomeHero = () => {
             transition={{ duration: 0.8, delay: 0.45, ease: "easeOut" }}
             className="mt-6 text-[#4A2A13]/75 text-sm sm:text-base md:text-lg leading-relaxed font-light tracking-wide"
           >
-            Un sistema integrato di superfici selezionate per progetti residenziali e contract di alto livello, con consulenza, posa e showroom mobile direttamente in cantiere.
+            {t('homeHero.bottomText2')}
           </motion.p>
         </div>
       </section>
