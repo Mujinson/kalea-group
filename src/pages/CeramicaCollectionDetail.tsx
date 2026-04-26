@@ -183,6 +183,7 @@ const CeramicaCollectionDetail = () => {
             id: c.slug,
             name: c.name,
             image: c.hero,
+            link: `/${language}/ceramiche/${c.slug}`,
           }));
         if (sisters.length === 0) return null;
         return (
