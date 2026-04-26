@@ -197,7 +197,7 @@ const CeramicheEsterni = () => {
           <div className="space-y-12 md:space-y-16">
             {outdoorCollections.map((collection, index) => (
               <motion.div
-                key={collection.name}
+                key={collection.slug}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -207,7 +207,7 @@ const CeramicheEsterni = () => {
                 {/* Image */}
                 <div className="w-full md:w-1/2 overflow-hidden rounded-2xl">
                   <img
-                    src={collection.image}
+                    src={collection.hero}
                     alt={collection.name}
                     className="w-full h-[280px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700"
                     loading="lazy"
@@ -223,15 +223,15 @@ const CeramicheEsterni = () => {
                     {collection.name}
                   </h3>
                   <p className="text-sm md:text-base text-primary/70 font-medium italic mb-4">
-                    {collection.subtitle}
+                    {collection.tagline}
                   </p>
                   <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
                     {collection.description}
                   </p>
 
                   <div className="mb-4">
-                    <span className="text-xs uppercase tracking-widest text-foreground/50 font-medium">Finiture</span>
-                    <p className="text-sm text-foreground/80 mt-1">{collection.finishes}</p>
+                    <span className="text-xs uppercase tracking-widest text-foreground/50 font-medium">Effetto</span>
+                    <p className="text-sm text-foreground/80 mt-1">{collection.effect}</p>
                   </div>
 
                   <div className="flex flex-wrap gap-2 mb-6">
@@ -245,15 +245,13 @@ const CeramicheEsterni = () => {
                     ))}
                   </div>
 
-                  {collection.slug && COLLECTION_SLUGS_WITH_PAGE.has(collection.slug) && (
-                    <Link
-                      to={`/${language}/ceramiche/${collection.slug}`}
-                      className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
-                    >
-                      Esplora la collezione
-                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </Link>
-                  )}
+                  <Link
+                    to={`/${language}/ceramiche/${collection.slug}`}
+                    className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
+                  >
+                    Esplora la collezione
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </Link>
                 </div>
               </motion.div>
             ))}
