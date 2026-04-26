@@ -7,7 +7,9 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import ColorCircleGallery from "@/components/ColorCircleGallery";
-import { getLocalizedCollectionBySlug } from "@/data/ceramicheCollectionsI18n";
+import CollectionCarouselCard from "@/components/CollectionCarouselCard";
+import { getLocalizedCollectionBySlug, getLocalizedCollectionsByCategory } from "@/data/ceramicheCollectionsI18n";
+
 
 const CeramicaCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -171,6 +173,27 @@ const CeramicaCollectionDetail = () => {
           />
         </div>
       </section>
+
+      {/* Sister collections carousel */}
+      {(() => {
+        const sisterCategory = collection.category === "esterni" ? "esterni" : "interni";
+        const sisters = getLocalizedCollectionsByCategory(sisterCategory, language)
+          .filter((c) => c.slug !== collection.slug)
+          .map((c) => ({
+            id: c.slug,
+            name: c.name,
+            image: c.hero,
+            link: `/${language}/ceramiche/${c.slug}`,
+          }));
+        if (sisters.length === 0) return null;
+        return (
+          <CollectionCarouselCard
+            title={t('ceramicaDetail.sistersTitle') !== 'ceramicaDetail.sistersTitle' ? t('ceramicaDetail.sistersTitle') : 'Altre collezioni'}
+            subtitle={t('ceramicaDetail.sistersSubtitle') !== 'ceramicaDetail.sistersSubtitle' ? t('ceramicaDetail.sistersSubtitle') : 'Esplora la selezione Kalēa®'}
+            products={sisters}
+          />
+        );
+      })()}
 
       {/* Specs */}
       <section className="relative z-10 bg-muted/40 py-20 md:py-28">

@@ -7,181 +7,17 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
-import { ceramicheCollections } from "@/data/ceramicheCollections";
-
-// Slugs that have a dedicated detail page
-const COLLECTION_SLUGS_WITH_PAGE = new Set(Object.keys(ceramicheCollections));
+import { getCollectionsByCategory } from "@/data/ceramicheCollections";
 
 import heroInterni from "@/assets/ceramiche-interni/hero-interni.jpg";
-import imgPrimaMateria from "@/assets/ceramiche-interni/prima-materia.jpg";
-import imgLeReverse from "@/assets/ceramiche-interni/le-reverse.jpg";
-import imgCarriere from "@/assets/ceramiche-interni/carriere.jpg";
-import imgMetallique from "@/assets/ceramiche-interni/metallique.jpg";
-import imgNativa from "@/assets/ceramiche-interni/nativa.jpg";
-import imgPiasentina from "@/assets/ceramiche-interni/piasentina-stone.jpg";
-import imgEssence from "@/assets/ceramiche-interni/essence.jpg";
-import imgTerraCrea from "@/assets/ceramiche-interni/terra-crea.jpg";
-import imgRocks from "@/assets/ceramiche-interni/rocks.jpg";
-import imgTalco from "@/assets/ceramiche-interni/talco.jpg";
-import imgLesBois from "@/assets/ceramiche-interni/les-bois.jpg";
-import imgMateria from "@/assets/ceramiche-interni/materia.jpg";
-import imgPierreVive from "@/assets/ceramiche-interni/pierre-vive.jpg";
-import imgEvolution from "@/assets/ceramiche-interni/evolution.jpg";
-import imgWoodside from "@/assets/ceramiche-interni/woodside.jpg";
-
-interface Collection {
-  name: string;
-  slug?: string;
-  subtitle: string;
-  description: string;
-  image: string;
-  effect: string;
-  formats: string;
-}
-
-const collections: Collection[] = [
-  {
-    name: "Materia",
-    slug: "materia",
-    subtitle: "L'eleganza del cemento contemporaneo",
-    description: "Superfici in gres porcellanato effetto metallo dal design contemporaneo. Un progetto sensoriale, vivo, materico, coinvolgente — selezionato da Kalēa® per la sua capacità di trasformare ogni ambiente in un'esperienza tattile.",
-    image: imgMateria,
-    effect: "Effetto metallo / cemento",
-    formats: "60x60 · 60x120 · 120x120 · 120x280",
-  },
-  {
-    name: "Pierre Vive",
-    slug: "pierre-vive",
-    subtitle: "L'anima viva della pietra naturale",
-    description: "Una collezione che cattura l'essenza della pietra naturale francese con una profondità materica straordinaria. Finiture naturale e grip per interni di alto profilo e continuità verso l'esterno.",
-    image: imgPierreVive,
-    effect: "Effetto pietra naturale",
-    formats: "60x60 · 60x120 · 120x120 · 120x280",
-  },
-  {
-    name: "Nativa",
-    slug: "nativa",
-    subtitle: "Il fascino caldo e delicato del travertino",
-    description: "Dal dialogo fra l'universo naturale e la dimensione umana nasce Nativa: un materiale senza tempo che abita con essenziale eleganza gli spazi contemporanei. Selezionata per la resa cromatica e la profondità delle venature.",
-    image: imgNativa,
-    effect: "Effetto travertino",
-    formats: "60x60 · 60x120 · 120x120 · 120x280",
-  },
-  {
-    name: "Piasentina Stone",
-    slug: "piasentina-stone",
-    subtitle: "La nobiltà della pietra Piasentina",
-    description: "Reinterpretazione in gres porcellanato di una delle pietre più ricercate dell'architettura italiana. Texture stratificate e tonalità profonde per ambienti che richiedono carattere e autenticità.",
-    image: imgPiasentina,
-    effect: "Effetto pietra",
-    formats: "60x60 · 60x120 · 120x120",
-  },
-  {
-    name: "Essence",
-    slug: "essence",
-    subtitle: "L'eleganza senza tempo del legno Rovere",
-    description: "Il calore autentico del legno trasferito su gres porcellanato di altissima qualità. Finiture che replicano fedelmente le venature naturali del rovere per pavimenti che uniscono estetica e resistenza superiore.",
-    image: imgEssence,
-    effect: "Effetto legno rovere",
-    formats: "20x120 · 26x160",
-  },
-  {
-    name: "Le Reverse",
-    slug: "le-reverse",
-    subtitle: "La duplice anima della pietra",
-    description: "Nasce dallo studio dell'elemento naturale con l'obiettivo di scoprire la duplice anima della pietra: dall'aspetto primordiale e antico a quello più intimo e nascosto. Un progetto di ricerca selezionato per la sua unicità.",
-    image: imgLeReverse,
-    effect: "Effetto pietra antica",
-    formats: "60x60 · 60x120 · 120x120 · 120x280",
-  },
-  {
-    name: "Prima Materia",
-    slug: "prima-materia",
-    subtitle: "L'essenza del cemento industriale reinterpretata",
-    description: "Sviluppa le suggestioni materiche della superficie cemento per soluzioni differenziate e creative. Interni e outdoor, pubblico e residenziale — una collezione versatile che definisce lo standard del gres effetto cemento.",
-    image: imgPrimaMateria,
-    effect: "Effetto cemento",
-    formats: "60x60 · 60x120 · 80x80 · 120x120",
-  },
-  {
-    name: "Carrière",
-    slug: "carriere",
-    subtitle: "Pietre antiche, fascino eterno",
-    description: "Superfici che evocano il fascino delle antiche cave di pietra europee. Texture profonde, tonalità scure e finiture materiche per ambienti che richiedono personalità e raffinatezza senza compromessi.",
-    image: imgCarriere,
-    effect: "Effetto pietra anticata",
-    formats: "60x60 · 60x120 · 80x80",
-  },
-  {
-    name: "Metallique",
-    slug: "metallique",
-    subtitle: "La materia metallica al servizio del design",
-    description: "Gres porcellanato effetto metallo con riflessi cangianti e texture industriali. Ideale per progetti di interior design contemporaneo dove il dettaglio materico fa la differenza.",
-    image: imgMetallique,
-    effect: "Effetto metallo",
-    formats: "30x60 · 60x120 · 80x80",
-  },
-  {
-    name: "Terra Crea",
-    slug: "terra-crea",
-    subtitle: "L'autenticità della terra plasmata",
-    description: "Una collezione ispirata alla terra argillosa lavorata a mano. Superfici calde e avvolgenti che portano negli interni contemporanei il fascino primordiale dei materiali naturali.",
-    image: imgTerraCrea,
-    effect: "Effetto argilla / cotto",
-    formats: "60x60 · 60x120 · 120x120",
-  },
-  {
-    name: "Talco",
-    slug: "talco",
-    subtitle: "La purezza del bianco assoluto",
-    description: "Superfici candide e luminose per rivestimenti che esaltano la luce naturale. Finiture delicate e minimaliste, selezionate per progetti dove la purezza estetica è il valore primario.",
-    image: imgTalco,
-    effect: "Effetto bianco materico",
-    formats: "30x60 · 60x60 · 60x120",
-  },
-  {
-    name: "Rocks",
-    slug: "rocks",
-    subtitle: "La forza primordiale della roccia",
-    description: "Texture rocciose e vibranti che portano la forza della natura negli interni più esigenti. Una collezione selezionata per la sua capacità di creare ambienti dal forte impatto visivo.",
-    image: imgRocks,
-    effect: "Effetto roccia",
-    formats: "30x60 · 60x60 · 60x120",
-  },
-  {
-    name: "Les Bois",
-    slug: "les-bois",
-    subtitle: "L'eleganza del legno in gres porcellanato",
-    description: "Il fascino del legno naturale tradotto in gres con una fedeltà sorprendente. Pavimenti che uniscono il calore del legno alla resistenza e praticità del gres porcellanato.",
-    image: imgLesBois,
-    effect: "Effetto legno",
-    formats: "20x120 · 26x180",
-  },
-  {
-    name: "Evolution",
-    slug: "evolution",
-    subtitle: "L'evoluzione della pietra contemporanea",
-    description: "Una visione moderna della pietra naturale che evolve in superfici minimaliste e sofisticate. Tonalità neutre e texture raffinate per architetture di alto profilo.",
-    image: imgEvolution,
-    effect: "Effetto pietra contemporanea",
-    formats: "60x60 · 60x120 · 120x120",
-  },
-  {
-    name: "Woodside",
-    slug: "woodside",
-    subtitle: "Il lato più autentico del legno",
-    description: "Un'interpretazione del legno che ne esalta le imperfezioni naturali e il carattere autentico. Formato listoncino ideale per pavimenti residenziali e commerciali di alta gamma.",
-    image: imgWoodside,
-    effect: "Effetto legno naturale",
-    formats: "15x90 · 20x120",
-  },
-];
 
 const CeramicheInterni = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
+  const collections = getCollectionsByCategory("interni");
 
   const heroRef = useRef<HTMLDivElement>(null);
+
 
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
@@ -329,13 +165,12 @@ const CeramicheInterni = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {collections.map((collection, index) => {
-              const hasPage = collection.slug && COLLECTION_SLUGS_WITH_PAGE.has(collection.slug);
               const cardInner = (
                 <div className="relative overflow-hidden rounded-2xl bg-background shadow-sm hover:shadow-xl transition-shadow duration-500 h-full">
                   {/* Image */}
                   <div className="relative h-[240px] md:h-[280px] overflow-hidden">
                     <img
-                      src={collection.image}
+                      src={collection.hero}
                       alt={collection.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       loading="lazy"
@@ -345,12 +180,10 @@ const CeramicheInterni = () => {
                       <span className="text-[10px] md:text-xs uppercase tracking-widest text-white/70 font-medium">
                         {collection.effect}
                       </span>
-                      {hasPage && (
-                        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-white/90 font-medium bg-white/10 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                          Scopri
-                          <ArrowUpRight className="w-3 h-3" />
-                        </span>
-                      )}
+                      <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-white/90 font-medium bg-white/10 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                        Scopri
+                        <ArrowUpRight className="w-3 h-3" />
+                      </span>
                     </div>
                   </div>
 
@@ -360,21 +193,19 @@ const CeramicheInterni = () => {
                       {collection.name}
                     </h3>
                     <p className="text-xs md:text-sm text-primary/70 font-medium mb-3 italic">
-                      {collection.subtitle}
+                      {collection.tagline}
                     </p>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-3">
                       {collection.description}
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] md:text-xs text-foreground/50 font-mono">
-                        {collection.formats}
+                        {collection.formats.join(" · ")}
                       </span>
-                      {hasPage && (
-                        <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
-                          Esplora
-                          <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-                        </span>
-                      )}
+                      <span className="inline-flex items-center gap-1 text-xs text-primary font-medium">
+                        Esplora
+                        <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -382,20 +213,16 @@ const CeramicheInterni = () => {
 
               return (
                 <motion.div
-                  key={collection.name}
+                  key={collection.slug}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.06 }}
                   className="group"
                 >
-                  {hasPage ? (
-                    <Link to={`/${language}/ceramiche/${collection.slug}`} className="block h-full">
-                      {cardInner}
-                    </Link>
-                  ) : (
-                    cardInner
-                  )}
+                  <Link to={`/${language}/ceramiche/${collection.slug}`} className="block h-full">
+                    {cardInner}
+                  </Link>
                 </motion.div>
               );
             })}

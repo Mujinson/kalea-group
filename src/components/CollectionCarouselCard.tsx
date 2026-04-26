@@ -6,6 +6,7 @@ interface ProductType {
   id: number | string;
   name: string;
   image: string;
+  link?: string;
 }
 
 interface Props {
@@ -46,25 +47,35 @@ const CollectionCarouselCard = ({ title, subtitle, products, direction = 'left' 
               {...handlers}
               className={`flex gap-3 sm:gap-4 py-2 overflow-x-auto scrollbar-hide h-full items-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             >
-              {extendedProducts.map((product, index) => (
-                <motion.div
-                  key={`${product.id}-${index}`}
-                  className="relative flex-shrink-0 flex flex-col items-center group cursor-pointer"
-                  whileHover={{ scale: 1.05, transition: { duration: 0.3, ease: "easeOut" } }}
-                >
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-500">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
-                    />
+              {extendedProducts.map((product, index) => {
+                const inner = (
+                  <motion.div
+                    className="relative flex-shrink-0 flex flex-col items-center group cursor-pointer"
+                    whileHover={{ scale: 1.05, transition: { duration: 0.3, ease: "easeOut" } }}
+                  >
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-500">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                    </div>
+                    <p className="text-[10px] sm:text-xs font-medium text-foreground mt-2 text-center whitespace-nowrap">
+                      {product.name}
+                    </p>
+                  </motion.div>
+                );
+                return product.link ? (
+                  <Link key={`${product.id}-${index}`} to={product.link} className="flex-shrink-0">
+                    {inner}
+                  </Link>
+                ) : (
+                  <div key={`${product.id}-${index}`} className="flex-shrink-0">
+                    {inner}
                   </div>
-                  <p className="text-[10px] sm:text-xs font-medium text-foreground mt-2 text-center whitespace-nowrap">
-                    {product.name}
-                  </p>
-                </motion.div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </motion.div>

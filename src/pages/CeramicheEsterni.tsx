@@ -7,60 +7,12 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
-import { ceramicheCollections } from "@/data/ceramicheCollections";
-
-const COLLECTION_SLUGS_WITH_PAGE = new Set(Object.keys(ceramicheCollections));
+import { getCollectionsByCategory } from "@/data/ceramicheCollections";
 
 import heroEsterni from "@/assets/ceramiche-esterni/hero-esterni.jpg";
-import imgSke from "@/assets/ceramiche-esterni/ske-2-0.jpg";
-import imgBlock from "@/assets/ceramiche-esterni/block.jpg";
 import imgPiscine from "@/assets/ceramiche-esterni/piscine.jpg";
 import imgGiardini from "@/assets/ceramiche-esterni/giardini.jpg";
 import imgTerrazze from "@/assets/ceramiche-esterni/terrazze.jpg";
-import imgMaxi from "@/assets/ceramiche-esterni/maxi.jpg";
-
-interface OutdoorCollection {
-  name: string;
-  slug?: string;
-  subtitle: string;
-  description: string;
-  image: string;
-  thickness: string;
-  finishes: string;
-  applications: string[];
-}
-
-const outdoorCollections: OutdoorCollection[] = [
-  {
-    name: "Ske 2.0",
-    slug: "ske-2-0",
-    subtitle: "Continuità estetica tra indoor e outdoor",
-    description: "La collezione che raccoglie tutte le superfici in gres porcellanato con spessore 20mm, disponibili in finiture effetto legno, pietra e cemento. Pensata per garantire standard elevati negli spazi outdoor, consente di creare una continuità visiva perfetta tra interno ed esterno grazie a finiture coordinate.",
-    image: imgSke,
-    thickness: "20mm",
-    finishes: "Effetto legno · Effetto pietra · Effetto cemento",
-    applications: ["Terrazze", "Bordi piscina", "Giardini", "Camminamenti"],
-  },
-  {
-    name: "Block",
-    slug: "block",
-    subtitle: "Massima resistenza per ogni sfida",
-    description: "Superfici in gres porcellanato ad altissima resistenza meccanica, progettate per sopportare carichi elevati e traffico intenso. La soluzione ideale per pavimentazioni esterne che richiedono prestazioni estreme senza rinunciare all'estetica.",
-    image: imgBlock,
-    thickness: "20mm",
-    finishes: "Effetto pietra · Effetto cemento",
-    applications: ["Carrabili", "Zone commerciali", "Aree industriali", "Spazi pubblici"],
-  },
-  {
-    name: "Maxi",
-    subtitle: "Grandi formati per grandi visioni",
-    description: "Lastre in gres porcellanato di grande formato che esaltano la continuità delle superfici esterne. Effetto cemento e pietra in dimensioni che riducono le fughe e amplificano la percezione dello spazio.",
-    image: imgMaxi,
-    thickness: "20mm",
-    finishes: "Effetto cemento · Effetto pietra",
-    applications: ["Terrazze panoramiche", "Dehors", "Facciate ventilate", "Piscine"],
-  },
-];
 
 interface ApplicationArea {
   title: string;
@@ -98,6 +50,7 @@ const advantages = [
 const CeramicheEsterni = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
+  const outdoorCollections = getCollectionsByCategory("esterni");
 
   const heroRef = useRef<HTMLDivElement>(null);
 
@@ -244,7 +197,7 @@ const CeramicheEsterni = () => {
           <div className="space-y-12 md:space-y-16">
             {outdoorCollections.map((collection, index) => (
               <motion.div
-                key={collection.name}
+                key={collection.slug}
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -254,7 +207,7 @@ const CeramicheEsterni = () => {
                 {/* Image */}
                 <div className="w-full md:w-1/2 overflow-hidden rounded-2xl">
                   <img
-                    src={collection.image}
+                    src={collection.hero}
                     alt={collection.name}
                     className="w-full h-[280px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700"
                     loading="lazy"
@@ -270,15 +223,15 @@ const CeramicheEsterni = () => {
                     {collection.name}
                   </h3>
                   <p className="text-sm md:text-base text-primary/70 font-medium italic mb-4">
-                    {collection.subtitle}
+                    {collection.tagline}
                   </p>
                   <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
                     {collection.description}
                   </p>
 
                   <div className="mb-4">
-                    <span className="text-xs uppercase tracking-widest text-foreground/50 font-medium">Finiture</span>
-                    <p className="text-sm text-foreground/80 mt-1">{collection.finishes}</p>
+                    <span className="text-xs uppercase tracking-widest text-foreground/50 font-medium">Effetto</span>
+                    <p className="text-sm text-foreground/80 mt-1">{collection.effect}</p>
                   </div>
 
                   <div className="flex flex-wrap gap-2 mb-6">
@@ -292,15 +245,13 @@ const CeramicheEsterni = () => {
                     ))}
                   </div>
 
-                  {collection.slug && COLLECTION_SLUGS_WITH_PAGE.has(collection.slug) && (
-                    <Link
-                      to={`/${language}/ceramiche/${collection.slug}`}
-                      className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
-                    >
-                      Esplora la collezione
-                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </Link>
-                  )}
+                  <Link
+                    to={`/${language}/ceramiche/${collection.slug}`}
+                    className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
+                  >
+                    Esplora la collezione
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </Link>
                 </div>
               </motion.div>
             ))}

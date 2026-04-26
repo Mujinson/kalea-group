@@ -164,7 +164,7 @@ import blFlamed from "@/assets/ceramiche-collections/block/variant-flamed.jpg";
 export interface CeramicaCollection {
   slug: string;
   name: string;
-  category: "interni" | "esterni";
+  category: "interni" | "esterni" | "both";
   effect: string;
   tagline: string;
   description: string;
@@ -189,7 +189,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "prima-materia": {
     slug: "prima-materia",
     name: "Prima Materia",
-    category: "interni",
+    category: "both",
     effect: "Effetto cemento",
     tagline: "L'essenza del cemento industriale reinterpretata",
     description:
@@ -211,7 +211,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "carriere": {
     slug: "carriere",
     name: "Carrière",
-    category: "interni",
+    category: "both",
     effect: "Effetto pietra anticata",
     tagline: "Pietre antiche, fascino eterno",
     description:
@@ -236,7 +236,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "rocks": {
     slug: "rocks",
     name: "Rocks",
-    category: "interni",
+    category: "both",
     effect: "Effetto roccia",
     tagline: "La forza primordiale della roccia",
     description:
@@ -257,7 +257,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "materia": {
     slug: "materia",
     name: "Materia",
-    category: "interni",
+    category: "both",
     effect: "Effetto cemento materico",
     tagline: "Sensoriale, vivo, materico, coinvolgente",
     description:
@@ -285,7 +285,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "pierre-vive": {
     slug: "pierre-vive",
     name: "Pierre Vive",
-    category: "interni",
+    category: "both",
     effect: "Effetto pietra naturale",
     tagline: "L'anima viva della pietra naturale",
     description:
@@ -312,7 +312,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "nativa": {
     slug: "nativa",
     name: "Nativa",
-    category: "interni",
+    category: "both",
     effect: "Effetto travertino",
     tagline: "Il fascino caldo e delicato del travertino",
     description:
@@ -338,7 +338,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "piasentina-stone": {
     slug: "piasentina-stone",
     name: "Piasentina Stone",
-    category: "interni",
+    category: "both",
     effect: "Effetto pietra Piasentina",
     tagline: "La nobiltà della pietra Piasentina",
     description:
@@ -360,7 +360,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "essence": {
     slug: "essence",
     name: "Essence",
-    category: "interni",
+    category: "both",
     effect: "Effetto legno rovere",
     tagline: "L'eleganza senza tempo del legno Rovere",
     description:
@@ -385,7 +385,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "le-reverse": {
     slug: "le-reverse",
     name: "Le Reverse",
-    category: "interni",
+    category: "both",
     effect: "Effetto pietra antica",
     tagline: "La duplice anima della pietra",
     description:
@@ -441,7 +441,7 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   "terra-crea": {
     slug: "terra-crea",
     name: "Terra Crea",
-    category: "interni",
+    category: "both",
     effect: "Effetto argilla / cotto",
     tagline: "L'autenticità della terra plasmata",
     description:
@@ -609,4 +609,6 @@ export const getCollectionBySlug = (slug: string): CeramicaCollection | undefine
   ceramicheCollections[slug];
 
 export const getCollectionsByCategory = (category: "interni" | "esterni"): CeramicaCollection[] =>
-  Object.values(ceramicheCollections).filter((c) => c.category === category);
+  Object.values(ceramicheCollections).filter(
+    (c) => c.category === category || c.category === "both"
+  );
