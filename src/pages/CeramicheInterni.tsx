@@ -14,6 +14,11 @@ import heroInterni from "@/assets/ceramiche-interni/hero-interni.jpg";
 const CeramicheInterni = () => {
   const { language } = useTranslation();
   const isMobile = useIsMobile();
+  const collections = getCollectionsByCategory("interni");
+
+const CeramicheInterni = () => {
+  const { language } = useTranslation();
+  const isMobile = useIsMobile();
 
   const heroRef = useRef<HTMLDivElement>(null);
 
