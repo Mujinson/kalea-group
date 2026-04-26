@@ -7,60 +7,12 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
-import { ceramicheCollections } from "@/data/ceramicheCollections";
-
-const COLLECTION_SLUGS_WITH_PAGE = new Set(Object.keys(ceramicheCollections));
+import { getCollectionsByCategory } from "@/data/ceramicheCollections";
 
 import heroEsterni from "@/assets/ceramiche-esterni/hero-esterni.jpg";
-import imgSke from "@/assets/ceramiche-esterni/ske-2-0.jpg";
-import imgBlock from "@/assets/ceramiche-esterni/block.jpg";
 import imgPiscine from "@/assets/ceramiche-esterni/piscine.jpg";
 import imgGiardini from "@/assets/ceramiche-esterni/giardini.jpg";
 import imgTerrazze from "@/assets/ceramiche-esterni/terrazze.jpg";
-import imgMaxi from "@/assets/ceramiche-esterni/maxi.jpg";
-
-interface OutdoorCollection {
-  name: string;
-  slug?: string;
-  subtitle: string;
-  description: string;
-  image: string;
-  thickness: string;
-  finishes: string;
-  applications: string[];
-}
-
-const outdoorCollections: OutdoorCollection[] = [
-  {
-    name: "Ske 2.0",
-    slug: "ske-2-0",
-    subtitle: "Continuità estetica tra indoor e outdoor",
-    description: "La collezione che raccoglie tutte le superfici in gres porcellanato con spessore 20mm, disponibili in finiture effetto legno, pietra e cemento. Pensata per garantire standard elevati negli spazi outdoor, consente di creare una continuità visiva perfetta tra interno ed esterno grazie a finiture coordinate.",
-    image: imgSke,
-    thickness: "20mm",
-    finishes: "Effetto legno · Effetto pietra · Effetto cemento",
-    applications: ["Terrazze", "Bordi piscina", "Giardini", "Camminamenti"],
-  },
-  {
-    name: "Block",
-    slug: "block",
-    subtitle: "Massima resistenza per ogni sfida",
-    description: "Superfici in gres porcellanato ad altissima resistenza meccanica, progettate per sopportare carichi elevati e traffico intenso. La soluzione ideale per pavimentazioni esterne che richiedono prestazioni estreme senza rinunciare all'estetica.",
-    image: imgBlock,
-    thickness: "20mm",
-    finishes: "Effetto pietra · Effetto cemento",
-    applications: ["Carrabili", "Zone commerciali", "Aree industriali", "Spazi pubblici"],
-  },
-  {
-    name: "Maxi",
-    subtitle: "Grandi formati per grandi visioni",
-    description: "Lastre in gres porcellanato di grande formato che esaltano la continuità delle superfici esterne. Effetto cemento e pietra in dimensioni che riducono le fughe e amplificano la percezione dello spazio.",
-    image: imgMaxi,
-    thickness: "20mm",
-    finishes: "Effetto cemento · Effetto pietra",
-    applications: ["Terrazze panoramiche", "Dehors", "Facciate ventilate", "Piscine"],
-  },
-];
 
 interface ApplicationArea {
   title: string;
