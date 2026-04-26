@@ -193,12 +193,12 @@ const Home = () => {
 
           {/* Cards - mobile: stacked squares that always fit; md+: original 3 columns */}
           <div className="flex-1 min-h-0 md:flex md:items-center md:justify-center">
-            <div className="h-full grid grid-rows-3 gap-4 max-w-6xl mx-auto w-full md:h-auto md:grid-rows-1 md:grid-cols-3 md:gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 gap-4 max-w-6xl mx-auto w-full md:grid-cols-3 md:gap-6 lg:gap-8">
               {sustainability.map((item, index) => (
                 <Link
                   key={item.title}
                   to={item.link}
-                  className="h-full flex items-center justify-center md:block md:h-auto"
+                  className="block"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -209,7 +209,7 @@ const Home = () => {
                       y: -6,
                       boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
                     }}
-                    className="relative h-full aspect-square rounded-2xl overflow-hidden group md:aspect-[4/5] md:h-auto md:w-full md:rounded-3xl"
+                    className="relative aspect-[16/10] sm:aspect-[3/2] md:aspect-[4/5] w-full rounded-2xl overflow-hidden group md:rounded-3xl"
                   >
                     {item.video ? (
                       <div className="absolute inset-[-10%] overflow-hidden">
