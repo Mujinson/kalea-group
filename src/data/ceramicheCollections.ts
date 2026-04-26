@@ -164,7 +164,7 @@ import blFlamed from "@/assets/ceramiche-collections/block/variant-flamed.jpg";
 export interface CeramicaCollection {
   slug: string;
   name: string;
-  category: "interni" | "esterni";
+  category: "interni" | "esterni" | "both";
   effect: string;
   tagline: string;
   description: string;
@@ -609,4 +609,6 @@ export const getCollectionBySlug = (slug: string): CeramicaCollection | undefine
   ceramicheCollections[slug];
 
 export const getCollectionsByCategory = (category: "interni" | "esterni"): CeramicaCollection[] =>
-  Object.values(ceramicheCollections).filter((c) => c.category === category);
+  Object.values(ceramicheCollections).filter(
+    (c) => c.category === category || c.category === "both"
+  );
