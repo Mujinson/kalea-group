@@ -9,7 +9,7 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import { getCollectionsByCategory } from "@/data/ceramicheCollections";
 
-import heroInterni from "@/assets/ceramiche-interni/hero-interni.jpg";
+import heroInterni from "@/assets/ceramiche-interni-hero.jpg";
 
 const CeramicheInterni = () => {
   const { language } = useTranslation();
