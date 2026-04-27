@@ -193,7 +193,7 @@ export function getLocalizedCollectionBySlug(
   slug: string,
   language: Language
 ): CeramicaCollection | undefined {
-  const c = ceramicheCollections[slug];
+  const c = getCollectionBySlug(slug);
   return c ? localizeCollection(c, language) : undefined;
 }
 
@@ -201,7 +201,5 @@ export function getLocalizedCollectionsByCategory(
   category: "interni" | "esterni",
   language: Language
 ): CeramicaCollection[] {
-  return Object.values(ceramicheCollections)
-    .filter((c) => c.category === category || c.category === "both")
-    .map((c) => localizeCollection(c, language));
+  return getCollectionsByCategory(category).map((c) => localizeCollection(c, language));
 }
