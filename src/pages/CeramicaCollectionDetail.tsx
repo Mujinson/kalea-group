@@ -35,9 +35,9 @@ const CeramicaCollectionDetail = () => {
   }
 
   const backRoute = `/${language}/${collection.parentRoute}`;
-  const backLabel = collection.category === "interni"
-    ? t('ceramicaDetail.backInterni')
-    : t('ceramicaDetail.backEsterni');
+  const backLabel = collection.parentRoute === "ceramiche-esterni"
+    ? t('ceramicaDetail.backEsterni')
+    : t('ceramicaDetail.backInterni');
   // Translate applications via dictionary (fallback to original string)
   const localizedApps = collection.applications.map((app) => {
     const key = `ceramicaApplications.${app}`;
