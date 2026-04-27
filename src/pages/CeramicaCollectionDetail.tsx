@@ -176,7 +176,7 @@ const CeramicaCollectionDetail = () => {
 
       {/* Sister collections carousel */}
       {(() => {
-        const sisterCategory = collection.category === "esterni" ? "esterni" : "interni";
+        const sisterCategory: "interni" | "esterni" = collection.parentRoute === "ceramiche-esterni" ? "esterni" : "interni";
         const sisters = getLocalizedCollectionsByCategory(sisterCategory, language)
           .filter((c) => c.slug !== collection.slug)
           .map((c) => ({
