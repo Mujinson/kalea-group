@@ -132,6 +132,32 @@ const Externo = () => {
         </div>
       </section>
 
+      {/* Le Collezioni Externo - subito sotto hero */}
+      <section className="relative z-[1] bg-background py-20 md:py-28">
+        <div className="container-custom">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t("externo.collectionsTitle") || "Le Collezioni Externo"}</h2>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto italic">{t("externo.collectionsSubtitle") || "Due linee, infinite possibilità per il tuo spazio outdoor."}</p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+            {[
+              { title: "Externo Traditional", image: lifestyleTraditional, anchor: "#traditional" },
+              { title: "Externo Skudo", image: lifestylePool, anchor: "#skudo" },
+            ].map(({ title, image, anchor }, index) => (
+              <motion.div key={title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}>
+                <a href={anchor} className="group block rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img src={image} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <h3 className="absolute bottom-4 left-5 text-lg md:text-xl font-heading font-bold text-white">{title}</h3>
+                  </div>
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 3D Carousels */}
       <CarouselWheel3D
         title="Externo Traditional"
