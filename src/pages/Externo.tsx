@@ -223,7 +223,7 @@ const Externo = () => {
       </section>
 
       {/* Finiture Traditional Section */}
-      <section className="relative z-[1] bg-background py-20 md:py-32">
+      <section id="traditional" className="relative z-[1] bg-background py-20 md:py-32 scroll-mt-24">
         <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
