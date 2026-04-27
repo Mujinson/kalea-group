@@ -7,7 +7,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
-import heroIndoor from "@/assets/hero-indoor-wood.jpg";
+import heroIndoor from "@/assets/card-parquet-ambient.jpg";
 import productBiomagFloor from "@/assets/product-biocore-floor-new.jpg";
 import cardHypermattAmbient from "@/assets/card-hypermatt-ambient.jpg";
 import productKaleabase from "@/assets/product-kaleabase-underlays.jpg";

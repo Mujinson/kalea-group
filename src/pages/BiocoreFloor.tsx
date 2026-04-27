@@ -5,7 +5,7 @@ import CertificationsSection from "@/components/CertificationsSection";
 import { Check, ChevronDown, Droplets, Shield, Layers, Sparkles, Ruler, Wind, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-biomag-floor-new.webp";
+import heroImage from "@/assets/card-hypermatt-ambient.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
