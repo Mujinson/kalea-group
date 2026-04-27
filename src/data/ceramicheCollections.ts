@@ -605,10 +605,53 @@ export const ceramicheCollections: Record<string, CeramicaCollection> = {
   },
 };
 
-export const getCollectionBySlug = (slug: string): CeramicaCollection | undefined =>
-  ceramicheCollections[slug];
+// Resolve a slug that might carry an indoor/outdoor variant suffix.
+// Strips `-9mm` / `-20mm` to find the base collection.
+const stripVariantSuffix = (slug: string): { base: string; variant: "9mm" | "20mm" | null } => {
+  if (slug.endsWith("-9mm")) return { base: slug.slice(0, -4), variant: "9mm" };
+  if (slug.endsWith("-20mm")) return { base: slug.slice(0, -5), variant: "20mm" };
+  return { base: slug, variant: null };
+};
+
+// Adapt a `both` collection into a category-specific virtual entry.
+const adaptBothForCategory = (
+  c: CeramicaCollection,
+  category: "interni" | "esterni"
+): CeramicaCollection => {
+  if (c.category !== "both") return c;
+  if (category === "interni") {
+    return {
+      ...c,
+      slug: `${c.slug}-9mm`,
+      thickness: "9 mm",
+      applications: c.applications.filter(
+        (a) => !/outdoor|esterni|terrazz|carrabili|piscina|giardin|camminament|pavimentazion/i.test(a)
+      ),
+      parentRoute: "ceramiche-interni",
+    };
+  }
+  // esterni
+  return {
+    ...c,
+    slug: `${c.slug}-20mm`,
+    thickness: "20 mm",
+    effect: `Outdoor 20 mm · ${c.effect}`,
+    applications: ["Outdoor", "Terrazze", "Bordi piscina", "Giardini", "Camminamenti"],
+    parentRoute: "ceramiche-esterni",
+  };
+};
+
+export const getCollectionBySlug = (slug: string): CeramicaCollection | undefined => {
+  const direct = ceramicheCollections[slug];
+  if (direct) return direct;
+  const { base, variant } = stripVariantSuffix(slug);
+  const c = ceramicheCollections[base];
+  if (!c || c.category !== "both" || !variant) return undefined;
+  return adaptBothForCategory(c, variant === "9mm" ? "interni" : "esterni");
+};
 
 export const getCollectionsByCategory = (category: "interni" | "esterni"): CeramicaCollection[] =>
-  Object.values(ceramicheCollections).filter(
-    (c) => c.category === category || c.category === "both"
-  );
+  Object.values(ceramicheCollections)
+    .filter((c) => c.category === category || c.category === "both")
+    .map((c) => adaptBothForCategory(c, category));
+

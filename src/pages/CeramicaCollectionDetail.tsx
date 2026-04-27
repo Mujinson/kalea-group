@@ -35,9 +35,9 @@ const CeramicaCollectionDetail = () => {
   }
 
   const backRoute = `/${language}/${collection.parentRoute}`;
-  const backLabel = collection.category === "interni"
-    ? t('ceramicaDetail.backInterni')
-    : t('ceramicaDetail.backEsterni');
+  const backLabel = collection.parentRoute === "ceramiche-esterni"
+    ? t('ceramicaDetail.backEsterni')
+    : t('ceramicaDetail.backInterni');
   // Translate applications via dictionary (fallback to original string)
   const localizedApps = collection.applications.map((app) => {
     const key = `ceramicaApplications.${app}`;
@@ -176,7 +176,7 @@ const CeramicaCollectionDetail = () => {
 
       {/* Sister collections carousel */}
       {(() => {
-        const sisterCategory = collection.category === "esterni" ? "esterni" : "interni";
+        const sisterCategory: "interni" | "esterni" = collection.parentRoute === "ceramiche-esterni" ? "esterni" : "interni";
         const sisters = getLocalizedCollectionsByCategory(sisterCategory, language)
           .filter((c) => c.slug !== collection.slug)
           .map((c) => ({
