@@ -8,7 +8,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
-import heroOutdoor from "@/assets/hero-outdoor.jpg";
+import heroOutdoor from "@/assets/card-externo-ambient.jpg";
 import productKaleaElements from "@/assets/product-kalea-elements.png";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import productKaleaceiling from "@/assets/product-kaleaceiling.jpg";
