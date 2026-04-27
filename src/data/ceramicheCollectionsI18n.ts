@@ -3,7 +3,7 @@
 // DE and FR currently fall back to IT — to be properly translated later.
 
 import type { Language } from "@/i18n/translations";
-import { ceramicheCollections, type CeramicaCollection } from "./ceramicheCollections";
+import { ceramicheCollections, getCollectionBySlug, getCollectionsByCategory, type CeramicaCollection } from "./ceramicheCollections";
 
 export interface CeramicaText {
   effect: string;
