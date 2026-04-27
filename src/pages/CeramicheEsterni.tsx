@@ -131,6 +131,83 @@ const CeramicheEsterni = () => {
       {/* Spacer */}
       <div className="h-screen" />
 
+      {/* Collections - subito dopo hero */}
+      <section className="relative z-[1] bg-background py-20 md:py-28">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-14 md:mb-20"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
+              Le Collezioni Outdoor
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Gres porcellanato spessore 20mm per prestazioni estreme e design senza tempo.
+            </p>
+          </motion.div>
+
+          <div className="space-y-12 md:space-y-16">
+            {outdoorCollections.map((collection, index) => (
+              <motion.div
+                key={collection.slug}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-6 md:gap-10 items-center`}
+              >
+                <div className="w-full md:w-1/2 overflow-hidden rounded-2xl">
+                  <img
+                    src={collection.hero}
+                    alt={collection.name}
+                    className="w-full h-[280px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="w-full md:w-1/2">
+                  <span className="text-xs uppercase tracking-[0.2em] text-primary/60 font-medium">
+                    Spessore {collection.thickness}
+                  </span>
+                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mt-2 mb-2">
+                    {collection.name}
+                  </h3>
+                  <p className="text-sm md:text-base text-primary/70 font-medium italic mb-4">
+                    {collection.tagline}
+                  </p>
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
+                    {collection.description}
+                  </p>
+                  <div className="mb-4">
+                    <span className="text-xs uppercase tracking-widest text-foreground/50 font-medium">Effetto</span>
+                    <p className="text-sm text-foreground/80 mt-1">{collection.effect}</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {collection.applications.map((app) => (
+                      <span
+                        key={app}
+                        className="text-[10px] md:text-xs px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium"
+                      >
+                        {app}
+                      </span>
+                    ))}
+                  </div>
+                  <Link
+                    to={`/${language}/ceramiche/${collection.slug}`}
+                    className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
+                  >
+                    Esplora la collezione
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Intro Section */}
       <section className="relative z-[1] bg-background py-20 md:py-28">
         <div className="container-custom">
@@ -175,90 +252,6 @@ const CeramicheEsterni = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Collections */}
-      <section className="relative z-[1] bg-background py-20 md:py-28">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-14 md:mb-20"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Le Collezioni Outdoor
-            </h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Gres porcellanato spessore 20mm per prestazioni estreme e design senza tempo.
-            </p>
-          </motion.div>
-
-          <div className="space-y-12 md:space-y-16">
-            {outdoorCollections.map((collection, index) => (
-              <motion.div
-                key={collection.slug}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-6 md:gap-10 items-center`}
-              >
-                {/* Image */}
-                <div className="w-full md:w-1/2 overflow-hidden rounded-2xl">
-                  <img
-                    src={collection.hero}
-                    alt={collection.name}
-                    className="w-full h-[280px] md:h-[400px] object-cover hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                </div>
-
-                {/* Content */}
-                <div className="w-full md:w-1/2">
-                  <span className="text-xs uppercase tracking-[0.2em] text-primary/60 font-medium">
-                    Spessore {collection.thickness}
-                  </span>
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-foreground mt-2 mb-2">
-                    {collection.name}
-                  </h3>
-                  <p className="text-sm md:text-base text-primary/70 font-medium italic mb-4">
-                    {collection.tagline}
-                  </p>
-                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
-                    {collection.description}
-                  </p>
-
-                  <div className="mb-4">
-                    <span className="text-xs uppercase tracking-widest text-foreground/50 font-medium">Effetto</span>
-                    <p className="text-sm text-foreground/80 mt-1">{collection.effect}</p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {collection.applications.map((app) => (
-                      <span
-                        key={app}
-                        className="text-[10px] md:text-xs px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium"
-                      >
-                        {app}
-                      </span>
-                    ))}
-                  </div>
-
-                  <Link
-                    to={`/${language}/ceramiche/${collection.slug}`}
-                    className="inline-flex items-center gap-2 text-foreground font-medium hover:gap-3 transition-all group"
-                  >
-                    Esplora la collezione
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Application Areas */}
       <section className="relative z-[1] bg-background py-20 md:py-28">
         <div className="container-custom">
