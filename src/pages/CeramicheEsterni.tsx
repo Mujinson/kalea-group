@@ -9,7 +9,7 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import { getCollectionsByCategory } from "@/data/ceramicheCollections";
 
-import heroEsterni from "@/assets/ceramiche-esterni/hero-esterni.jpg";
+import heroEsterni from "@/assets/ceramiche-esterni-hero.jpg";
 import imgPiscine from "@/assets/ceramiche-esterni/piscine.jpg";
 import imgGiardini from "@/assets/ceramiche-esterni/giardini.jpg";
 import imgTerrazze from "@/assets/ceramiche-esterni/terrazze.jpg";
