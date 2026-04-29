@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { ArrowRight, Phone, Mail, MapPin, Building2, Thermometer, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const PIPELINE_STAGES = [
   { value: "cold", label: "Cold", color: "bg-blue-50 border-blue-200", badgeColor: "bg-blue-100 text-blue-700", icon: "❄️" },
@@ -31,12 +32,12 @@ const AdminPipeline = () => {
   const { data: leads } = useQuery({
     queryKey: ["pipeline-leads"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("leads")
-        .select("*")
-        .order("updated_at", { ascending: false });
-      if (error) throw error;
-      return data;
+      return fetchAllRows(
+        supabase
+          .from("leads")
+          .select("*")
+          .order("updated_at", { ascending: false })
+      );
     },
   });
 
