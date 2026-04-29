@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Navigation, Loader2, MapPin, Users, UserPlus, HardHat, RefreshCw } from 'lucide-react';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 // Fix Leaflet default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -137,16 +138,14 @@ const AdminMap = () => {
   const { data: leads } = useQuery({
     queryKey: ['map-leads'],
     queryFn: async () => {
-      const { data } = await supabase.from('leads').select('id, name, company_name, address, city, province, region, pipeline_stage');
-      return data || [];
+      return fetchAllRows(supabase.from('leads').select('id, name, company_name, address, city, province, region, pipeline_stage'));
     },
   });
 
   const { data: customers } = useQuery({
     queryKey: ['map-customers'],
     queryFn: async () => {
-      const { data } = await supabase.from('customers').select('id, first_name, last_name, company_name, address, city, province, region, customer_type');
-      return data || [];
+      return fetchAllRows(supabase.from('customers').select('id, first_name, last_name, company_name, address, city, province, region, customer_type'));
     },
   });
 
