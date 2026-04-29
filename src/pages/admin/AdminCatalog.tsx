@@ -311,7 +311,7 @@ const AdminCatalog = () => {
           </TableHeader>
           <TableBody>
             {filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={11} className="text-center py-8" style={{ color: "#8A7060" }}>Nessun prodotto trovato</TableCell></TableRow>
+              <TableRow><TableCell colSpan={13} className="text-center py-8" style={{ color: "#8A7060" }}>Nessun prodotto trovato</TableCell></TableRow>
             ) : filtered.map((p: any) => {
               const margin = computeMargin(p);
               const lowMargin = margin < p.min_margin_percentage;
@@ -323,6 +323,8 @@ const AdminCatalog = () => {
                     <div className="font-medium">{p.name}</div>
                     {p.product_categories?.name && <div className="text-xs" style={{ color: "#8A7060" }}>{p.product_categories.name}</div>}
                   </TableCell>
+                  <TableCell className="text-sm whitespace-nowrap">{p.format || "—"}</TableCell>
+                  <TableCell className="text-right text-sm">{p.thickness_mm ? `${p.thickness_mm}mm` : "—"}</TableCell>
                   <TableCell className="text-sm">{p.product_suppliers?.name || "—"}</TableCell>
                   <TableCell className="text-right">€{Number(p.list_price).toFixed(2)}</TableCell>
                   <TableCell className="text-right">{Number(p.supplier_discount_percentage).toFixed(1)}%</TableCell>
