@@ -199,27 +199,40 @@ const AdminSidebar = () => {
     items.filter((i) => isAdminRole || !i.adminOnly);
 
   return (
-    <Sidebar className="border-r border-sidebar-border">
-      <SidebarContent className="pt-2 overflow-y-auto">
+    <Sidebar className="border-r" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
+      <SidebarContent className="pt-4 overflow-y-auto" style={{ background: '#FFFFFF' }}>
+        {/* Brand wordmark, no box */}
+        <div className="px-5 pb-4 mb-2">
+          <span
+            className="font-heading font-semibold text-[20px] tracking-tight"
+            style={{ color: '#3B2314' }}
+          >
+            Kalēa<span className="text-[14px] align-top">®</span>
+          </span>
+        </div>
+
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-0.5 px-2">
+            <SidebarMenu className="space-y-0 px-2">
               {menuStructure.map((entry) => {
                 if (entry.type === 'single') {
                   const item = entry.item;
                   if (!isAdminRole && item.adminOnly) return null;
+                  const active = isActive(item.url);
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         onClick={() => handleNavigate(item.url)}
-                        className={`rounded-xl h-10 px-3 transition-all duration-150 ${
-                          isActive(item.url)
-                            ? 'bg-foreground text-background font-medium shadow-sm'
-                            : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground'
-                        }`}
+                        className="h-10 px-5 rounded-none transition-colors duration-150"
+                        style={{
+                          borderLeft: active ? '3px solid #C8A96E' : '3px solid transparent',
+                          background: active ? 'rgba(200,169,110,0.10)' : 'transparent',
+                          color: active ? '#3B2314' : '#8A7060',
+                          fontWeight: active ? 600 : 400,
+                        }}
                       >
-                        <item.icon className={`w-[18px] h-[18px] mr-3 shrink-0 ${isActive(item.url) ? '' : 'opacity-60'}`} />
-                        <span className="text-[13px]">{item.title}</span>
+                        <item.icon className="w-4 h-4 mr-3 shrink-0" style={{ color: active ? '#3B2314' : '#8A7060' }} />
+                        <span className="text-[14px]">{item.title}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
@@ -232,39 +245,48 @@ const AdminSidebar = () => {
                 const groupActive = isGroupActive(visibleItems);
 
                 return (
-                  <Collapsible key={group.label} defaultOpen={groupActive}>
+                  <Collapsible key={group.label} defaultOpen={groupActive} className="group/collapsible">
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton
-                          className={`rounded-xl h-10 px-3 w-full justify-between transition-all duration-150 ${
-                            groupActive
-                              ? 'text-sidebar-foreground font-medium'
-                              : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground'
-                          }`}
+                          className="h-10 px-5 rounded-none w-full justify-between transition-colors duration-150"
+                          style={{
+                            borderLeft: groupActive ? '3px solid #C8A96E' : '3px solid transparent',
+                            color: groupActive ? '#3B2314' : '#8A7060',
+                            fontWeight: groupActive ? 600 : 400,
+                          }}
                         >
                           <span className="flex items-center">
-                            <group.icon className={`w-[18px] h-[18px] mr-3 shrink-0 ${groupActive ? '' : 'opacity-60'}`} />
-                            <span className="text-[13px]">{group.label}</span>
+                            <group.icon className="w-4 h-4 mr-3 shrink-0" style={{ color: groupActive ? '#3B2314' : '#8A7060' }} />
+                            <span className="text-[14px]">{group.label}</span>
                           </span>
-                          <ChevronDown className="w-4 h-4 shrink-0 opacity-50 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
+                          <ChevronDown
+                            className="w-4 h-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180"
+                            style={{ color: '#B0998A' }}
+                          />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
-                      <CollapsibleContent className="pl-5 mt-0.5 border-l border-sidebar-border/40 ml-[21px]">
-                        <SidebarMenu className="space-y-0.5">
-                          {visibleItems.map((sub) => (
-                            <SidebarMenuItem key={sub.title}>
-                              <SidebarMenuButton
-                                onClick={() => handleNavigate(sub.url)}
-                                className={`rounded-xl h-9 px-3 transition-all duration-150 ${
-                                  isActive(sub.url)
-                                    ? 'bg-foreground text-background font-medium shadow-sm'
-                                    : 'text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground'
-                                }`}
-                              >
-                                <span className="text-[13px]">{sub.title}</span>
-                              </SidebarMenuButton>
-                            </SidebarMenuItem>
-                          ))}
+                      <CollapsibleContent>
+                        <SidebarMenu className="space-y-0">
+                          {visibleItems.map((sub) => {
+                            const subActive = isActive(sub.url);
+                            return (
+                              <SidebarMenuItem key={sub.title}>
+                                <SidebarMenuButton
+                                  onClick={() => handleNavigate(sub.url)}
+                                  className="h-9 pl-12 pr-5 rounded-none transition-colors duration-150"
+                                  style={{
+                                    borderLeft: subActive ? '3px solid #C8A96E' : '3px solid transparent',
+                                    background: subActive ? 'rgba(200,169,110,0.10)' : 'transparent',
+                                    color: subActive ? '#3B2314' : '#8A7060',
+                                    fontWeight: subActive ? 600 : 400,
+                                  }}
+                                >
+                                  <span className="text-[13px]">{sub.title}</span>
+                                </SidebarMenuButton>
+                              </SidebarMenuItem>
+                            );
+                          })}
                         </SidebarMenu>
                       </CollapsibleContent>
                     </SidebarMenuItem>
@@ -276,26 +298,30 @@ const AdminSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-3 border-t border-sidebar-border">
-        <div className="rounded-xl bg-sidebar-accent/60 p-3 mb-2">
-          <div className="text-xs font-medium text-sidebar-foreground/70 truncate">
+      <SidebarFooter className="p-4" style={{ borderTop: '1px solid rgba(59,35,20,0.10)', background: '#FFFFFF' }}>
+        <div className="px-1 mb-3">
+          <div className="text-[12px] truncate" style={{ color: '#1A1008' }}>
             {user?.email}
           </div>
           {role && (
-            <div className="text-[11px] text-sidebar-foreground/40 mt-0.5">
-              {role === 'admin' ? '👑 Admin' : role === 'commerciale' ? '📊 Commerciale' : '🔧 Operaio'}
+            <div
+              className="text-[10px] mt-1 uppercase"
+              style={{ color: '#B0998A', letterSpacing: '0.12em' }}
+            >
+              {role === 'admin' ? 'Admin' : role === 'commerciale' ? 'Commerciale' : 'Operaio'}
             </div>
           )}
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full rounded-xl border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent"
+        <button
           onClick={handleSignOut}
+          className="flex items-center gap-2 px-1 py-1 text-[13px] transition-colors duration-150"
+          style={{ color: '#8A7060', background: 'transparent', border: 'none' }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#3B2314')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '#8A7060')}
         >
-          <LogOut className="w-4 h-4 mr-2" />
+          <LogOut className="w-4 h-4" />
           Esci
-        </Button>
+        </button>
       </SidebarFooter>
     </Sidebar>
   );
