@@ -8,6 +8,7 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import ColorCircleGallery from "@/components/ColorCircleGallery";
 import CollectionCarouselCard from "@/components/CollectionCarouselCard";
+import TechSpecBar from "@/components/TechSpecBar";
 import { getLocalizedCollectionBySlug, getLocalizedCollectionsByCategory } from "@/data/ceramicheCollectionsI18n";
 
 
@@ -195,54 +196,19 @@ const CeramicaCollectionDetail = () => {
         );
       })()}
 
-      {/* Specs */}
-      <section className="relative z-10 bg-muted/40 py-20 md:py-28">
-        <div className="container-custom max-w-5xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-3">
-              {t('ceramicaDetail.specsTitle')}
-            </h2>
-            <p className="text-base text-muted-foreground">
-              {specsSubtitle}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">{t('ceramicaDetail.thickness')}</p>
-              <p className="text-foreground font-semibold text-lg">{collection.thickness}</p>
-            </div>
-            <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">{t('ceramicaDetail.formats')}</p>
-              <p className="text-foreground font-semibold text-lg">{collection.formats.join(" · ")}</p>
-            </div>
-            <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm">
-              <p className="text-xs uppercase tracking-widest text-primary/60 mb-2 font-medium">{t('ceramicaDetail.effect')}</p>
-              <p className="text-foreground font-semibold text-lg">{collection.effect}</p>
-            </div>
-          </div>
-
-          <div className="bg-background rounded-2xl p-6 md:p-8 shadow-sm mt-4 md:mt-6">
-            <p className="text-xs uppercase tracking-widest text-primary/60 mb-3 font-medium">{t('ceramicaDetail.applications')}</p>
-            <div className="flex flex-wrap gap-2">
-              {localizedApps.map((app, i) => (
-                <span
-                  key={i}
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium"
-                >
-                  {app}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Specs — editorial dark bar */}
+      <TechSpecBar
+        title={t('ceramicaDetail.specsTitle')}
+        subtitle={specsSubtitle}
+        specs={[
+          { label: t('ceramicaDetail.thickness'), value: collection.thickness },
+          { label: t('ceramicaDetail.formats'), value: collection.formats.join(" · ") },
+          { label: t('ceramicaDetail.effect'), value: collection.effect },
+        ]}
+        applicationsLabel={t('ceramicaDetail.applications')}
+        applications={localizedApps}
+        fullSheetLabel={t('ceramicaDetail.fullSheet')}
+      />
 
       {/* CTA */}
       <section className="relative z-10 bg-primary py-20 md:py-28">

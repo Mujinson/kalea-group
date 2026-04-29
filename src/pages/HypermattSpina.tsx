@@ -12,8 +12,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, hypermattSpina, type HypermattProduct } from "@/data/hypermattProducts";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 import heroImage from "@/assets/hero-hypermatt-spina.jpg";
-import icon5G from "@/assets/hypermatt/5g-valinge.png";
-import formatoSpina from "@/assets/hypermatt/formato-spina.jpg";
+import TechSpecBar from "@/components/TechSpecBar";
 
 const HypermattSpina = () => {
   const { language, t } = useTranslation();
@@ -116,50 +115,19 @@ const HypermattSpina = () => {
         </div>
       </section>
 
-      {/* Specifiche Tecniche */}
-      <section className="bg-muted py-20 md:py-28">
-        <div className="container-custom">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t("hypermattSpina.specsTitle")}</h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">{t("hypermattSpina.specsSubtitle")}</p>
-          </motion.div>
-
-          <div className="max-w-2xl mx-auto">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="bg-card rounded-2xl p-8 shadow-lg">
-              <h3 className="text-xl font-heading font-bold text-foreground mb-4">{t("hypermattSpina.specsHeader")}</h3>
-              <div className="mb-4">
-                <img src={formatoSpina} alt="Formato spina 128x640 mm" className="max-w-[200px] h-auto" />
-              </div>
-              <p className="text-sm text-muted-foreground mb-6">128x640 mm</p>
-
-              <h4 className="text-lg font-heading font-semibold text-foreground mb-4">{t("hypermattSpina.specsSubheader")}</h4>
-              <div className="space-y-0 divide-y divide-border">
-                {[
-                  { label: t("hypermattSpina.specFormat"), value: "128x640 mm" },
-                  { label: t("hypermattSpina.specThickness"), value: "6,5 mm" },
-                  { label: t("hypermattSpina.specClass"), value: "23/33" },
-                  { label: t("hypermattSpina.specClick"), value: "5G" },
-                  { label: t("hypermattSpina.specFire"), value: "Bfl-s1" },
-                  { label: t("hypermattSpina.specPad"), value: "IXPE 1 mm" },
-                  { label: t("hypermattSpina.specWear"), value: "0,55 mm" },
-                ].map(({ label, value }) => (
-                  <div key={label} className="flex justify-between items-center py-3">
-                    <span className="text-sm text-muted-foreground">{label}</span>
-                    <span className="text-sm font-bold text-foreground">{value}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* 5G Icon */}
-              <div className="mt-8 flex items-center gap-4">
-                <img src={icon5G} alt="5G Välinge" className="w-12 h-12" />
-              </div>
-
-              <p className="text-sm text-muted-foreground leading-relaxed mt-4" dangerouslySetInnerHTML={{ __html: t("hypermattSpina.specsFooter") }} />
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/* Specifiche Tecniche — editorial dark bar */}
+      <TechSpecBar
+        title={t("hypermattSpina.specsTitle")}
+        subtitle={t("hypermattSpina.specsSubtitle")}
+        specs={[
+          { label: t("hypermattSpina.specFormat"), value: "128×640 mm" },
+          { label: t("hypermattSpina.specThickness"), value: "6,5 mm" },
+          { label: t("hypermattSpina.specClass"), value: "23/33" },
+          { label: t("hypermattSpina.specClick"), value: "Välinge 5G" },
+        ]}
+        applicationsLabel={t("hypermattSpina.specFire") + " · " + t("hypermattSpina.specPad") + " · " + t("hypermattSpina.specWear")}
+        applications={["Bfl-s1", "IXPE 1 mm", "0,55 mm"]}
+      />
 
       <HypermattCollectionCTA current="spina" />
       </div>
