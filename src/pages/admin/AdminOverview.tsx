@@ -226,30 +226,16 @@ const AdminOverview = () => {
     return format(new Date(dateStr), 'dd MMM HH:mm', { locale: it });
   };
 
-  // Icon background color mapping
-  const getIconBg = (color: string) => {
-    if (color.includes('orange')) return 'bg-orange-100';
-    if (color.includes('blue')) return 'bg-blue-100';
-    if (color.includes('green')) return 'bg-green-100';
-    if (color.includes('emerald')) return 'bg-emerald-100';
-    if (color.includes('red')) return 'bg-red-100';
-    if (color.includes('purple')) return 'bg-purple-100';
-    if (color.includes('amber')) return 'bg-amber-100';
-    return 'bg-muted';
-  };
-
-  // Modern KPI card with prominent icon
-  const KPICard = ({ 
-    title, 
-    value, 
+  // KPI card — editorial luxury style: white surface, gold icon, gold left accent on label
+  const KPICard = ({
+    title,
+    value,
     subtitle,
     icon: Icon,
-    iconColor = 'text-primary',
     onClick,
     badge,
-    badgeVariant = 'secondary'
-  }: { 
-    title: string; 
+  }: {
+    title: string;
     value: string | number;
     subtitle?: string;
     icon: any;
@@ -258,36 +244,60 @@ const AdminOverview = () => {
     badge?: string | number;
     badgeVariant?: 'default' | 'secondary' | 'destructive' | 'outline';
   }) => (
-    <div 
-      className={`group relative rounded-2xl border border-border/60 bg-white p-5 transition-all duration-200 ${onClick ? 'cursor-pointer hover:shadow-lg hover:border-border hover:-translate-y-0.5' : ''}`}
+    <div
+      className={`group relative bg-white p-5 transition-all duration-200 ${onClick ? 'cursor-pointer' : ''}`}
+      style={{
+        border: '1px solid rgba(59,35,20,0.10)',
+        borderRadius: '8px',
+      }}
       onClick={onClick}
+      onMouseEnter={(e) => {
+        if (!onClick) return;
+        e.currentTarget.style.borderColor = '#C8A96E';
+        e.currentTarget.style.boxShadow = '0 2px 12px rgba(200,169,110,0.15)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'rgba(59,35,20,0.10)';
+        e.currentTarget.style.boxShadow = 'none';
+      }}
     >
-      {/* Badge alert */}
       {badge !== undefined && (
-        <div className="absolute -top-2 -right-2 z-10">
-          <Badge variant={badgeVariant} className="rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm">
+        <div className="absolute top-3 right-3">
+          <span
+            className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold"
+            style={{
+              border: `1px solid ${'#C0392B'}`,
+              color: '#C0392B',
+              borderRadius: '4px',
+              background: 'transparent',
+            }}
+          >
             {badge}
-          </Badge>
+          </span>
         </div>
       )}
 
-      <div className="flex items-start gap-4">
-        {/* Icon circle */}
-        <div className={`shrink-0 w-11 h-11 rounded-xl ${getIconBg(iconColor)} flex items-center justify-center transition-transform duration-200 group-hover:scale-110`}>
-          <Icon className={`w-5 h-5 ${iconColor}`} />
-        </div>
+      <div className="flex items-start gap-3">
+        {/* Plain gold icon, no circle */}
+        <Icon className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#C8A96E' }} />
 
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1">{title}</p>
-          <p className="text-xl font-bold text-foreground leading-tight truncate">{value}</p>
-          {subtitle && <p className="text-[11px] text-muted-foreground mt-1 truncate">{subtitle}</p>}
+          <p
+            className="text-[11px] font-semibold mb-1.5"
+            style={{ color: '#B0998A', letterSpacing: '0.12em', textTransform: 'uppercase' }}
+          >
+            {title}
+          </p>
+          <p className="text-[28px] font-bold leading-none truncate" style={{ color: '#1A1008' }}>
+            {value}
+          </p>
+          {subtitle && (
+            <p className="text-[12px] mt-2 truncate" style={{ color: '#8A7060' }}>
+              {subtitle}
+            </p>
+          )}
         </div>
       </div>
-
-      {/* Hover arrow indicator */}
-      {onClick && (
-        <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/0 group-hover:text-muted-foreground/50 transition-all duration-200" />
-      )}
     </div>
   );
 
