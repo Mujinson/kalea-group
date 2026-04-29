@@ -232,6 +232,7 @@ const AdminOverview = () => {
     value,
     subtitle,
     icon: Icon,
+    iconColor,
     onClick,
     badge,
   }: {
@@ -278,8 +279,8 @@ const AdminOverview = () => {
       )}
 
       <div className="flex items-start gap-3">
-        {/* Plain gold icon, no circle */}
-        <Icon className="w-5 h-5 shrink-0 mt-0.5" style={{ color: '#C8A96E' }} />
+        {/* Colored icon (Tailwind class via iconColor) */}
+        <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${iconColor || 'text-primary'}`} />
 
         <div className="flex-1 min-w-0">
           <p
