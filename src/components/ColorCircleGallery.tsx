@@ -72,7 +72,7 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
         )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12">
+      <div className="flex flex-wrap justify-center gap-8 md:gap-12">
         {colors.map((color, index) => (
           <motion.div
             key={color.slug}
