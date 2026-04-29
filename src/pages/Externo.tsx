@@ -17,6 +17,7 @@ import lifestylePool from "@/assets/externo/lifestyle-pool.webp";
 import lifestyleTraditional from "@/assets/externo/lifestyle-traditional.webp";
 import { externoTraditional, externoSkudo } from "@/data/externoProducts";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
+import TechSpecBar from "@/components/TechSpecBar";
 
 const Externo = () => {
   const { language, t } = useTranslation();
@@ -342,75 +343,30 @@ const Externo = () => {
         </div>
       </section>
 
-      {/* Technical Section */}
-      <section className="relative z-[2] bg-background py-20 md:py-32">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t("externo.specsTitle")}
-            </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="max-w-3xl mx-auto rounded-2xl p-8 bg-card-surface"
-            style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-          >
-            <ul className="space-y-4 text-white font-medium">
-              {[t("externo.spec1"), t("externo.spec2"), t("externo.spec3"), t("externo.spec4"), t("externo.spec5")].map((spec) => (
-                <li key={spec} className="flex items-start gap-3">
-                  <span className="w-2 h-2 rounded-full bg-white/60 mt-2 flex-shrink-0" />
-                  <span>{spec}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Applications Section */}
-      <section className="relative z-[3] bg-background py-20 md:py-32">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
-              {t("externo.appsTitle")}
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t("externo.appsSubtitle")}
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {applications.map((app, index) => (
-              <motion.div
-                key={app}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="bg-foreground/5 rounded-xl p-4 text-center"
-              >
-                <span className="text-foreground/80 font-medium">{app}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Technical + Applications — editorial dark bar */}
+      {(() => {
+        const rawSpecs = [
+          t("externo.spec1"),
+          t("externo.spec2"),
+          t("externo.spec3"),
+          t("externo.spec4"),
+          t("externo.spec5"),
+        ];
+        const specs = rawSpecs.map((s) => {
+          const idx = s.indexOf(":");
+          if (idx === -1) return { label: "", value: s };
+          return { label: s.slice(0, idx).trim(), value: s.slice(idx + 1).trim() };
+        });
+        return (
+          <TechSpecBar
+            title={t("externo.specsTitle")}
+            subtitle={t("externo.appsSubtitle")}
+            specs={specs.slice(0, 4)}
+            applicationsLabel={t("externo.appsTitle")}
+            applications={applications}
+          />
+        );
+      })()}
 
       {/* CTA Contatti */}
       <section className="relative z-[4] py-20 md:py-32 overflow-hidden bg-background">
