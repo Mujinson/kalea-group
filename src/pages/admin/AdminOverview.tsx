@@ -94,7 +94,7 @@ const AdminOverview = () => {
   const fetchDashboardData = async () => {
     try {
       const [
-        { data: customers },
+        customers,
         { data: sales },
         { data: inventory },
         { data: quotes },
