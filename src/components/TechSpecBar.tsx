@@ -1,5 +1,7 @@
-import { motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export interface TechSpec {
   label: string;
@@ -17,10 +19,81 @@ interface TechSpecBarProps {
   className?: string;
 }
 
-/**
- * Editorial dark spec bar — luxury flooring style (Porcelanosa / Mutina).
- * Used across product pages to present technical specifications.
- */
+/* ------------------------------------------------------------------ */
+/* Brand palette (locked to spec — intentionally not theme tokens)     */
+/* ------------------------------------------------------------------ */
+const CREAM = "#F5F0EA";
+const GOLD = "#C8A96E";
+const DARK = "#3B2314";
+const MUTED = "#8C7B6B";
+
+/* ------------------------------------------------------------------ */
+/* Helpers                                                             */
+/* ------------------------------------------------------------------ */
+const FORMAT_KEY = /(format|formati|formate|formats)/i;
+const APPLICATION_KEY = /(applic|anwend|applica)/i;
+
+/** Parse a value string into [numeric, suffix]. Returns null if no numeric prefix. */
+function parseNumeric(value: string): { num: number; suffix: string } | null {
+  const match = value.match(/^\s*(\d+(?:[.,]\d+)?)\s*(.*)$/);
+  if (!match) return null;
+  const num = parseFloat(match[1].replace(",", "."));
+  if (Number.isNaN(num)) return null;
+  return { num, suffix: match[2].trim() };
+}
+
+/** Animated counter — runs once when the element enters the viewport */
+function AnimatedNumber({ value, duration = 1400 }: { value: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [display, setDisplay] = useState<string>(() => {
+    const p = parseNumeric(value);
+    return p ? `0${p.suffix ? " " + p.suffix : ""}` : value;
+  });
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    const parsed = parseNumeric(value);
+    if (!parsed) {
+      setDisplay(value);
+      return;
+    }
+    const node = ref.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || startedRef.current) return;
+          startedRef.current = true;
+          const startTs = performance.now();
+          const isInt = Number.isInteger(parsed.num);
+          const tick = (now: number) => {
+            const t = Math.min(1, (now - startTs) / duration);
+            // ease-out cubic
+            const eased = 1 - Math.pow(1 - t, 3);
+            const current = parsed.num * eased;
+            const formatted = isInt
+              ? Math.round(current).toString()
+              : current.toFixed(1).replace(".", ",");
+            setDisplay(`${formatted}${parsed.suffix ? " " + parsed.suffix : ""}`);
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+          observer.disconnect();
+        });
+      },
+      { threshold: 0.4 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [value, duration]);
+
+  return <span ref={ref}>{display}</span>;
+}
+
+/* ------------------------------------------------------------------ */
+/* Main component                                                      */
+/* ------------------------------------------------------------------ */
 const TechSpecBar = ({
   title,
   subtitle,
@@ -31,111 +104,459 @@ const TechSpecBar = ({
   fullSheetLabel,
   className = "",
 }: TechSpecBarProps) => {
+  const { t } = useTranslation();
+
+  /* ---------- derive tabbed content from generic specs[] ---------- */
+  const formatSpec = useMemo(
+    () => specs.find((s) => FORMAT_KEY.test(s.label)),
+    [specs]
+  );
+  const formats = useMemo(() => {
+    if (!formatSpec) return [];
+    return formatSpec.value
+      .split(/·|\/|,|\|/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }, [formatSpec]);
+
+  const effectSpecs = useMemo(
+    () =>
+      specs.filter(
+        (s) => !FORMAT_KEY.test(s.label) && !APPLICATION_KEY.test(s.label)
+      ),
+    [specs]
+  );
+
+  /* ---------- counter cards (top of section) ---------- */
+  const counterCards = specs.slice(0, 4);
+
+  /* ---------- tab state ---------- */
+  type TabKey = "formats" | "effect" | "applications";
+  const availableTabs: { key: TabKey; label: string }[] = [];
+  if (formats.length > 0)
+    availableTabs.push({ key: "formats", label: t("techSpec.tabFormats") });
+  if (effectSpecs.length > 0)
+    availableTabs.push({ key: "effect", label: t("techSpec.tabEffect") });
+  if (applications && applications.length > 0)
+    availableTabs.push({ key: "applications", label: t("techSpec.tabApplications") });
+
+  const [activeTab, setActiveTab] = useState<TabKey>(
+    availableTabs[0]?.key ?? "formats"
+  );
+  const [selectedFormatIdx, setSelectedFormatIdx] = useState(0);
+  const [selectedEffectIdx, setSelectedEffectIdx] = useState(0);
+  const [selectedAppIdx, setSelectedAppIdx] = useState<number | null>(0);
+
+  /* ---------- compute surface area for selected format ---------- */
+  const selectedSurface = useMemo(() => {
+    const fmt = formats[selectedFormatIdx];
+    if (!fmt) return null;
+    // try to extract two numbers (cm or mm). Examples: "60×60", "228,6×1524 mm"
+    const nums = fmt
+      .replace(/mm|cm/gi, "")
+      .split(/[×x]/i)
+      .map((n) => parseFloat(n.replace(",", ".").trim()))
+      .filter((n) => !Number.isNaN(n));
+    if (nums.length < 2) return null;
+    const isMillimeters = /mm/i.test(fmt) || nums[0] > 200;
+    const divisor = isMillimeters ? 1_000_000 : 10_000; // mm² or cm² → m²
+    const area = (nums[0] * nums[1]) / divisor;
+    return area.toFixed(area < 1 ? 3 : 2).replace(".", ",");
+  }, [formats, selectedFormatIdx]);
+
+  /* ---------- effect swatch palettes (purely decorative) ---------- */
+  const effectSwatches = useMemo(
+    () =>
+      effectSpecs.slice(0, 3).map((s, i) => ({
+        label: s.value,
+        gradient: [
+          "linear-gradient(135deg,#D9C7A7 0%,#A88B5C 100%)",
+          "linear-gradient(135deg,#5D5851 0%,#2E2A26 100%)",
+          "linear-gradient(135deg,#7B5A3A 0%,#3B2314 100%)",
+        ][i] ?? "linear-gradient(135deg,#A88B5C 0%,#3B2314 100%)",
+      })),
+    [effectSpecs]
+  );
+
   return (
     <section
-      className={`relative bg-kalea-dark text-white overflow-hidden ${className}`}
+      className={`relative ${className}`}
+      style={{ backgroundColor: CREAM, color: DARK }}
     >
-      {/* Bottom fade to transparent for seamless blend with the next section */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent to-background/40" />
+      {/* Thin top divider */}
+      <div className="container-custom pt-14 md:pt-20">
+        <div
+          aria-hidden
+          className="h-px w-full"
+          style={{ backgroundColor: `${DARK}1A` }}
+        />
+      </div>
 
-      <div className="container-custom py-14 md:py-[56px]">
-        {/* Heading — left aligned with sidebar accent line */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex items-start gap-4 mb-10 md:mb-14"
-        >
+      <div className="container-custom py-12 md:py-16">
+        {/* ─── Heading ─────────────────────────────────────── */}
+        <div className="flex items-stretch gap-4 mb-12 md:mb-16">
           <span
             aria-hidden
-            className="mt-2 md:mt-3 block h-[2px] w-10 md:w-14 bg-kalea-tan flex-shrink-0"
+            className="block w-[2px] flex-shrink-0"
+            style={{ backgroundColor: GOLD }}
           />
           <div>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-semibold tracking-tight text-white">
+            <h2
+              className="font-heading font-semibold tracking-tight text-2xl md:text-3xl lg:text-[34px] leading-tight"
+              style={{ color: DARK }}
+            >
               {title}
             </h2>
             {subtitle && (
-              <p className="mt-2 text-sm md:text-base text-white/60 max-w-2xl">
+              <p
+                className="mt-2 text-sm md:text-base max-w-2xl"
+                style={{ color: MUTED }}
+              >
                 {subtitle}
               </p>
             )}
           </div>
-        </motion.div>
-
-        {/* Spec columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0 md:divide-x md:divide-white/30">
-          {specs.map((spec, i) => (
-            <motion.div
-              key={`${spec.label}-${i}`}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.07 }}
-              className="px-0 md:px-6 lg:px-8 first:md:pl-0"
-            >
-              <p
-                className="uppercase text-white/60 font-medium"
-                style={{ fontSize: "11px", letterSpacing: "0.15em" }}
-              >
-                {spec.label}
-              </p>
-              <p className="mt-3 text-white font-semibold leading-tight text-[22px] md:text-[24px] lg:text-[26px]">
-                {spec.value}
-              </p>
-            </motion.div>
-          ))}
         </div>
 
-        {/* Applications row */}
-        {applications && applications.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-10 md:mt-14 pt-8 md:pt-10 border-t border-white/15"
+        {/* ─── PART 1 — Animated stat counter cards ─────────── */}
+        {counterCards.length > 0 && (
+          <div
+            className="grid grid-cols-2 md:grid-cols-4 mb-14 md:mb-20"
+            style={{ ["--gold" as never]: GOLD } as React.CSSProperties}
           >
-            {applicationsLabel && (
-              <p
-                className="uppercase text-white/60 font-medium mb-4"
-                style={{ fontSize: "11px", letterSpacing: "0.15em" }}
+            {counterCards.map((card, i) => (
+              <motion.div
+                key={`${card.label}-${i}`}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
+                className={`group relative px-4 md:px-6 py-6 md:py-8 transition-all duration-200 ease-out cursor-default
+                  ${i > 0 ? "md:border-l md:border-dotted" : ""}
+                  ${i === 2 ? "border-t border-dotted md:border-t-0" : ""}
+                  ${i === 3 ? "border-t border-dotted md:border-t-0" : ""}
+                  ${i === 1 ? "border-l border-dotted md:border-l" : ""}
+                  hover:-translate-y-1`}
+                style={{
+                  borderColor: `${DARK}33`,
+                }}
               >
-                {applicationsLabel}
-              </p>
-            )}
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-3">
-              {applications.map((app, i) => (
-                <span key={`${app}-${i}`} className="flex items-center gap-x-2">
-                  <span
-                    className="inline-block px-3.5 py-1.5 text-xs md:text-sm border border-white/40 text-white rounded-full transition-colors duration-200 hover:bg-white hover:text-kalea-dark cursor-default"
+                {/* hover lift shadow */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  style={{
+                    boxShadow: `0 18px 40px -22px ${DARK}55`,
+                    borderRadius: 4,
+                  }}
+                />
+
+                {/* thin overline */}
+                <span
+                  aria-hidden
+                  className="block h-px w-10 mb-5"
+                  style={{ backgroundColor: `${DARK}33` }}
+                />
+
+                {/* number + animated gold underline accent */}
+                <div className="relative inline-block">
+                  <p
+                    className="font-heading font-bold leading-none tracking-tight text-[44px] md:text-[56px] lg:text-[64px]"
+                    style={{ color: DARK }}
                   >
-                    {app}
-                  </span>
-                  {i < applications.length - 1 && (
-                    <span className="text-white/30 select-none" aria-hidden>
-                      ·
-                    </span>
-                  )}
-                </span>
-              ))}
+                    <AnimatedNumber value={card.value} />
+                  </p>
+                  <span
+                    aria-hidden
+                    className="absolute -bottom-1.5 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-300 ease-out"
+                    style={{ backgroundColor: GOLD }}
+                  />
+                </div>
+
+                {/* small caps label */}
+                <p
+                  className="mt-5 uppercase font-medium"
+                  style={{
+                    color: MUTED,
+                    fontSize: 12,
+                    letterSpacing: "0.12em",
+                  }}
+                >
+                  {card.label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* ─── PART 2 — Tabs ──────────────────────────────────── */}
+        {availableTabs.length > 0 && (
+          <div>
+            {/* Tab triggers */}
+            <div
+              className="flex flex-wrap"
+              role="tablist"
+              style={{ borderBottom: `1px solid ${DARK}1A` }}
+            >
+              {availableTabs.map((tab) => {
+                const isActive = tab.key === activeTab;
+                return (
+                  <button
+                    key={tab.key}
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActiveTab(tab.key)}
+                    className="relative px-5 md:px-7 py-3.5 text-sm md:text-[15px] font-medium uppercase tracking-[0.12em] transition-colors duration-150 ease-out outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                    style={{
+                      backgroundColor: isActive ? DARK : "transparent",
+                      color: isActive ? CREAM : DARK,
+                      borderRadius: 0,
+                      ["--tw-ring-color" as never]: GOLD,
+                      ["--tw-ring-offset-color" as never]: CREAM,
+                    }}
+                  >
+                    {tab.label}
+                    {!isActive && (
+                      <span
+                        aria-hidden
+                        className="absolute left-0 right-0 -bottom-px h-px"
+                        style={{ backgroundColor: `${DARK}1A` }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </div>
-          </motion.div>
+
+            {/* Tab panels */}
+            <div className="pt-10 md:pt-12 min-h-[220px]">
+              <AnimatePresence mode="wait">
+                {/* ===== FORMATI ===== */}
+                {activeTab === "formats" && (
+                  <motion.div
+                    key="formats"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    role="tabpanel"
+                  >
+                    <div className="flex flex-wrap gap-4 md:gap-5">
+                      {formats.map((fmt, i) => {
+                        const active = i === selectedFormatIdx;
+                        return (
+                          <button
+                            key={`${fmt}-${i}`}
+                            onClick={() => setSelectedFormatIdx(i)}
+                            className="relative aspect-square w-[124px] md:w-[148px] flex items-center justify-center text-center transition-all duration-150 ease-out outline-none focus-visible:ring-2"
+                            style={{
+                              backgroundColor: active ? DARK : "transparent",
+                              color: active ? CREAM : DARK,
+                              border: `1px solid ${active ? DARK : DARK + "33"}`,
+                              borderRadius: 4,
+                              boxShadow: active
+                                ? `inset 0 0 0 2px ${GOLD}`
+                                : "none",
+                              ["--tw-ring-color" as never]: GOLD,
+                            }}
+                          >
+                            <span
+                              className="font-heading font-semibold leading-tight px-2"
+                              style={{
+                                fontSize:
+                                  fmt.length > 12
+                                    ? 16
+                                    : fmt.length > 8
+                                    ? 20
+                                    : 26,
+                              }}
+                            >
+                              {fmt}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {selectedSurface && (
+                      <motion.p
+                        key={selectedFormatIdx}
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="mt-8 text-sm md:text-base"
+                        style={{ color: MUTED }}
+                      >
+                        <span
+                          className="uppercase tracking-[0.12em] mr-2"
+                          style={{ fontSize: 11, color: MUTED }}
+                        >
+                          {t("techSpec.surfaceLabel")}:
+                        </span>
+                        <span className="font-semibold" style={{ color: DARK }}>
+                          {selectedSurface} m²
+                        </span>
+                      </motion.p>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* ===== EFFETTO ===== */}
+                {activeTab === "effect" && (
+                  <motion.div
+                    key="effect"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    role="tabpanel"
+                  >
+                    <h3
+                      className="font-heading font-semibold text-2xl md:text-[28px] tracking-tight mb-8"
+                      style={{ color: DARK }}
+                    >
+                      {effectSpecs[selectedEffectIdx]?.value ??
+                        t("techSpec.effectHeading")}
+                    </h3>
+                    <div className="flex flex-wrap gap-6 md:gap-8">
+                      {effectSwatches.map((sw, i) => {
+                        const active = i === selectedEffectIdx;
+                        return (
+                          <button
+                            key={`${sw.label}-${i}`}
+                            onClick={() => setSelectedEffectIdx(i)}
+                            className="group flex flex-col items-center gap-3 outline-none transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:ring-2"
+                            style={{ ["--tw-ring-color" as never]: GOLD }}
+                          >
+                            <span
+                              className="block w-[88px] h-[88px] md:w-[110px] md:h-[110px] transition-all duration-150 ease-out"
+                              style={{
+                                background: sw.gradient,
+                                border: `2px solid ${active ? GOLD : "transparent"}`,
+                                borderRadius: 4,
+                                boxShadow: active
+                                  ? `0 12px 28px -16px ${DARK}88`
+                                  : `0 6px 18px -14px ${DARK}66`,
+                              }}
+                            />
+                            <span
+                              className="uppercase font-medium"
+                              style={{
+                                color: active ? DARK : MUTED,
+                                fontSize: 11,
+                                letterSpacing: "0.12em",
+                              }}
+                            >
+                              {effectSpecs[i]?.label ?? sw.label}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* ===== APPLICAZIONI ===== */}
+                {activeTab === "applications" && applications && (
+                  <motion.div
+                    key="apps"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    role="tabpanel"
+                  >
+                    {applicationsLabel && (
+                      <p
+                        className="uppercase font-medium mb-6"
+                        style={{
+                          color: MUTED,
+                          fontSize: 11,
+                          letterSpacing: "0.12em",
+                        }}
+                      >
+                        {applicationsLabel}
+                      </p>
+                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+                      {applications.map((app, i) => {
+                        const active = i === selectedAppIdx;
+                        return (
+                          <button
+                            key={`${app}-${i}`}
+                            onClick={() =>
+                              setSelectedAppIdx(active ? null : i)
+                            }
+                            className="text-left p-6 md:p-7 transition-all duration-200 ease-out outline-none focus-visible:ring-2"
+                            style={{
+                              backgroundColor: "transparent",
+                              border: `1px solid ${active ? GOLD : DARK + "26"}`,
+                              borderRadius: 4,
+                              opacity: selectedAppIdx === null ? 1 : active ? 1 : 0.5,
+                              boxShadow: active
+                                ? `0 14px 32px -20px ${DARK}77`
+                                : "none",
+                              ["--tw-ring-color" as never]: GOLD,
+                            }}
+                          >
+                            <p
+                              className="font-heading font-semibold text-lg md:text-xl tracking-tight"
+                              style={{ color: DARK }}
+                            >
+                              {app}
+                            </p>
+                            <AnimatePresence initial={false}>
+                              {active && (
+                                <motion.p
+                                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                  animate={{
+                                    opacity: 1,
+                                    height: "auto",
+                                    marginTop: 12,
+                                  }}
+                                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                  transition={{ duration: 0.18, ease: "easeOut" }}
+                                  className="text-sm md:text-[15px] leading-relaxed overflow-hidden"
+                                  style={{ color: MUTED }}
+                                >
+                                  {app}
+                                </motion.p>
+                              )}
+                            </AnimatePresence>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
         )}
 
         {/* Optional full sheet link */}
         {fullSheetHref && (
-          <div className="mt-8 flex justify-end">
+          <div className="mt-10 flex justify-end">
             <a
               href={fullSheetHref}
               target={fullSheetHref.startsWith("http") ? "_blank" : undefined}
-              rel={fullSheetHref.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="group inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors"
+              rel={
+                fullSheetHref.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              className="group inline-flex items-center gap-2 text-sm transition-colors duration-150"
+              style={{ color: DARK }}
             >
-              <span className="border-b border-white/30 group-hover:border-white pb-0.5">
+              <span
+                className="pb-0.5 border-b"
+                style={{ borderColor: `${DARK}55` }}
+              >
                 {fullSheetLabel || "Scheda tecnica completa"}
               </span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight
+                className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                style={{ color: GOLD }}
+              />
             </a>
           </div>
         )}
