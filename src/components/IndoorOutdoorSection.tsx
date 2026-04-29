@@ -49,14 +49,14 @@ const IndoorOutdoorSection = () => {
     {
       title: t('surfaces.ceramicheInterni.title'),
       description: t('surfaces.ceramicheInterni.description'),
+      link: `/${language}/ceramiche-interni`,
       image: ceramicheInterni,
-      comingSoon: true,
     },
     {
       title: t('surfaces.ceramicheEsterni.title'),
       description: t('surfaces.ceramicheEsterni.description'),
+      link: `/${language}/ceramiche-esterni`,
       image: ceramicheEsterni,
-      comingSoon: true,
     },
   ];
 
