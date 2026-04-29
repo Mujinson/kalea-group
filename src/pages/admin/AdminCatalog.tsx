@@ -295,6 +295,7 @@ const AdminCatalog = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Codice</TableHead>
+              <TableHead>Brand</TableHead>
               <TableHead>Nome</TableHead>
               <TableHead>Formato</TableHead>
               <TableHead className="text-right">Sp.</TableHead>
