@@ -152,7 +152,7 @@ const AdminLeads = () => {
   const { data: leads, isLoading } = useQuery({
     queryKey: ["leads", salespersonId, isAdmin],
     queryFn: async () => {
-      let query = supabase.from("leads").select("*").order("created_at", { ascending: false });
+      let query = supabase.from("leads").select("*").order("created_at", { ascending: false }).range(0, 999999);
       
       // Commerciali see only leads assigned to them
       if (!isAdmin && salespersonId) {

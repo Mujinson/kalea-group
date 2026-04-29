@@ -113,7 +113,8 @@ const AdminCustomers = () => {
       const { data, error } = await supabase
         .from('customers')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .range(0, 999999);
 
       if (error) throw error;
       setCustomers(data || []);
