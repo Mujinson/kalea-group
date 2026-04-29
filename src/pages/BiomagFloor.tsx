@@ -21,6 +21,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
+import TechSpecBar from "@/components/TechSpecBar";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -355,41 +356,19 @@ const BiomagFloor = () => {
               </TabsList>
 
               <TabsContent value="caratteristiche" className="mt-8">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="rounded-2xl p-8 bg-card-surface"
-                  style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
-                >
-                  <h3 className="text-xl font-heading font-semibold text-white mb-6">Specifiche tecniche</h3>
-                  <ul className="space-y-3 text-white font-medium">
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Spessore plancia: 8,5 mm</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Dimensioni plancia: 1220 x 180 mm</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Classe di reazione al fuoco: A2-s1, d0</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Resistenza all'acqua: IP68</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Resistenza all'abrasione: AC5</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-white mt-2 flex-shrink-0" />
-                      <span>Riduzione acustica: 19 dB</span>
-                    </li>
-                  </ul>
-                </motion.div>
+                <TechSpecBar
+                  className="rounded-2xl"
+                  title={t('stonecore.specsTitle')}
+                  subtitle={t('stonecore.specsSubtitle')}
+                  specs={[
+                    { label: t('stonecore.specThickness'), value: "8,5 mm" },
+                    { label: t('stonecore.specDimensions'), value: "1220 × 180 mm" },
+                    { label: t('stonecore.specFire'), value: "A2-s1, d0" },
+                    { label: t('stonecore.specWater'), value: "IP68" },
+                  ]}
+                  applicationsLabel={`${t('stonecore.specAbrasion')} · ${t('stonecore.specAcoustic')}`}
+                  applications={["AC5", "19 dB"]}
+                />
               </TabsContent>
 
               <TabsContent value="posa" className="mt-8">
