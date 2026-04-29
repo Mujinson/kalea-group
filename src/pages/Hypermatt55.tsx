@@ -12,9 +12,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { h55Wood, h55Cement, hypermatt55, type HypermattProduct } from "@/data/hypermattProducts";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 import heroImage from "@/assets/hero-hypermatt55.jpg";
-import icon5G from "@/assets/hypermatt/5g-valinge.png";
-import formatoWood from "@/assets/hypermatt/formato-wood.jpg";
-import formatoGlue from "@/assets/hypermatt/formato-glue.jpg";
 import TechSpecBar from "@/components/TechSpecBar";
 
 const Hypermatt55 = () => {

@@ -12,8 +12,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { spinaItaliana, spinaFrancese, hypermattSpina, type HypermattProduct } from "@/data/hypermattProducts";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 import heroImage from "@/assets/hero-hypermatt-spina.jpg";
-import icon5G from "@/assets/hypermatt/5g-valinge.png";
-import formatoSpina from "@/assets/hypermatt/formato-spina.jpg";
 import TechSpecBar from "@/components/TechSpecBar";
 
 const HypermattSpina = () => {
