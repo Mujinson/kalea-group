@@ -316,11 +316,8 @@ const AdminOverview = () => {
 
       {/* CLIENTI Section */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-            <Users className="w-4 h-4 text-blue-500" />
-          </div>
-          <h3 className="text-sm font-semibold text-foreground">Clienti</h3>
+        <div className="mb-4">
+          <h3 className="crm-section-title">Clienti</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <KPICard
@@ -360,11 +357,8 @@ const AdminOverview = () => {
 
       {/* VENDITE Section */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-            <BarChart3 className="w-4 h-4 text-green-500" />
-          </div>
-          <h3 className="text-sm font-semibold text-foreground">Vendite</h3>
+        <div className="mb-4">
+          <h3 className="crm-section-title">Vendite</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <KPICard
@@ -406,11 +400,8 @@ const AdminOverview = () => {
 
       {/* ATTIVITÀ Section */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-            <Calendar className="w-4 h-4 text-purple-500" />
-          </div>
-          <h3 className="text-sm font-semibold text-foreground">Attività</h3>
+        <div className="mb-4">
+          <h3 className="crm-section-title">Attività</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <KPICard
@@ -454,11 +445,8 @@ const AdminOverview = () => {
 
       {/* MAGAZZINO & FINANZE Section */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
-            <Package className="w-4 h-4 text-amber-600" />
-          </div>
-          <h3 className="text-sm font-semibold text-foreground">Magazzino & Finanze</h3>
+        <div className="mb-4">
+          <h3 className="crm-section-title">Magazzino &amp; Finanze</h3>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <KPICard
@@ -516,11 +504,8 @@ const AdminOverview = () => {
 
       {/* Recent Activity */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
-            <Clock className="w-4 h-4 text-muted-foreground" />
-          </div>
-          <h3 className="text-sm font-semibold text-foreground">Attività Recente</h3>
+        <div className="mb-4">
+          <h3 className="crm-section-title">Attività Recente</h3>
         </div>
         <div className="rounded-2xl border border-border/60 bg-white overflow-hidden">
           <div className="p-4">
