@@ -13,6 +13,7 @@ import {
 import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { AutoFitText } from '@/components/admin/AutoFitText';
 
 interface DashboardData {
   // Customers by status
