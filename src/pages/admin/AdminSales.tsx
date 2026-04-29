@@ -16,6 +16,7 @@ import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X, Eye
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 // Constants
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
@@ -225,12 +226,13 @@ const AdminSales = () => {
 
   const fetchCustomers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('customers')
-        .select('id, customer_type, first_name, last_name, company_name, email, phone')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      setCustomers(data || []);
+      const data = await fetchAllRows<Customer>(
+        supabase
+          .from('customers')
+          .select('id, customer_type, first_name, last_name, company_name, email, phone')
+          .order('created_at', { ascending: false })
+      );
+      setCustomers(data);
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
