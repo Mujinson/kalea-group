@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { ArrowLeft, Save, X, Search, Plus, Trash2, Package } from 'lucide-react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { PRODUCT_CATALOG, CatalogProduct } from '@/data/quoteProducts';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const QUOTE_STATUSES = [
   { value: 'draft', label: 'Bozza' },
@@ -187,14 +188,14 @@ const AdminQuoteCreate = () => {
 
   const fetchInitialData = async () => {
     const [custRes, spRes, leadRes] = await Promise.all([
-      supabase.from('customers').select('id, company_name, first_name, last_name, address, city, province, postal_code, region, country, email, phone').order('company_name'),
+      fetchAllRows(supabase.from('customers').select('id, company_name, first_name, last_name, address, city, province, postal_code, region, country, email, phone').order('company_name')),
       supabase.from('salespeople').select('*').eq('is_active', true).order('first_name'),
-      supabase.from('leads').select('*').order('company_name'),
+      fetchAllRows(supabase.from('leads').select('*').order('company_name')),
     ]);
-    const custList = custRes.data || [];
+    const custList = custRes || [];
     setCustomers(custList);
     setSalespeople(spRes.data || []);
-    const leadList = (leadRes.data || []) as LeadInfo[];
+    const leadList = (leadRes || []) as LeadInfo[];
     setAllLeads(leadList);
 
     const custId = preselectedCustomerId;
