@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export interface TechSpec {
   label: string;
@@ -104,7 +104,7 @@ const TechSpecBar = ({
   fullSheetLabel,
   className = "",
 }: TechSpecBarProps) => {
-  const { t } = useLanguage();
+  const { t } = useTranslation();
 
   /* ---------- derive tabbed content from generic specs[] ---------- */
   const formatSpec = useMemo(
