@@ -20,6 +20,7 @@ import { Search, Download, Plus, MoreVertical, Pencil, Eye, FileText } from "luc
 import { toast } from "sonner";
 import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const LEAD_STATUSES = [
   { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
@@ -152,16 +153,14 @@ const AdminLeads = () => {
   const { data: leads, isLoading } = useQuery({
     queryKey: ["leads", salespersonId, isAdmin],
     queryFn: async () => {
-      let query = supabase.from("leads").select("*").order("created_at", { ascending: false }).range(0, 999999);
+      let query = supabase.from("leads").select("*").order("created_at", { ascending: false });
       
       // Commerciali see only leads assigned to them
       if (!isAdmin && salespersonId) {
         query = query.eq("assigned_salesperson_id", salespersonId);
       }
       
-      const { data, error } = await query;
-      if (error) throw error;
-      return data as Lead[];
+      return fetchAllRows<Lead>(query);
     },
   });
 
