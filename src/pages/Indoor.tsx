@@ -68,12 +68,6 @@ const Indoor = () => {
       image: ceramicheInterni,
       link: `/${language}/ceramiche-interni`,
     },
-    {
-      title: "Ceramiche da Esterni",
-      description: "Soluzioni ceramiche resistenti agli agenti atmosferici per esterni, terrazze e bordi piscina. Alta qualità estetica e tecnica.",
-      image: ceramicheEsterni,
-      link: `/${language}/ceramiche-esterni`,
-    },
   ];
 
   const systemProducts = [
