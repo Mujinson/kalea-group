@@ -9,6 +9,7 @@ import { TrendingUp, TrendingDown, DollarSign, Users, Package, Calendar } from '
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4'];
 
@@ -78,15 +79,14 @@ const AdminAnalytics = () => {
     try {
       const [salesRes, customersRes, costsRes] = await Promise.all([
         supabase.from('sales').select('*').order('sale_date', { ascending: false }),
-        supabase.from('customers').select('id, customer_type, company_name, first_name, last_name'),
+        fetchAllRows(supabase.from('customers').select('id, customer_type, company_name, first_name, last_name')),
         supabase.from('static_costs').select('*'),
       ]);
 
       if (salesRes.error) throw salesRes.error;
-      if (customersRes.error) throw customersRes.error;
 
       setSales(salesRes.data || []);
-      setCustomers(customersRes.data || []);
+      setCustomers(customersRes || []);
       setCosts(costsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);

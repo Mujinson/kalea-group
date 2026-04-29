@@ -18,6 +18,7 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC-01', 'CWC-02', 'CWC-03', 'CWC-04', 'CWC-05', 'CWC-06', 'CWC-07'];
@@ -100,12 +101,12 @@ const AdminQuotes = () => {
     try {
       const [quotesRes, customersRes, costsRes] = await Promise.all([
         supabase.from('quotes').select('*, customer:customers(company_name, first_name, last_name)').order('created_at', { ascending: false }),
-        supabase.from('customers').select('id, company_name, first_name, last_name').order('company_name'),
+        fetchAllRows(supabase.from('customers').select('id, company_name, first_name, last_name').order('company_name')),
         supabase.from('static_costs').select('*'),
       ]);
 
       setQuotes((quotesRes.data || []) as any);
-      setCustomers(customersRes.data || []);
+      setCustomers(customersRes || []);
       setStaticCosts(costsRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);

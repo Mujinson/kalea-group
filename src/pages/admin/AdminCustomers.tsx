@@ -14,6 +14,7 @@ import { it } from 'date-fns/locale';
 import CustomerDetailSheet from '@/components/admin/CustomerDetailSheet';
 import { ITALIAN_REGIONS, getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const CUSTOMER_TYPES = [
   { value: 'cliente_privato', label: 'Cliente privato' },
@@ -110,14 +111,14 @@ const AdminCustomers = () => {
 
   const fetchCustomers = async () => {
     try {
-      const { data, error } = await supabase
-        .from('customers')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .range(0, 999999);
+      const data = await fetchAllRows<Customer>(
+        supabase
+          .from('customers')
+          .select('*')
+          .order('created_at', { ascending: false })
+      );
 
-      if (error) throw error;
-      setCustomers(data || []);
+      setCustomers(data);
     } catch (error) {
       console.error('Error fetching customers:', error);
       toast.error('Errore nel caricamento clienti');
