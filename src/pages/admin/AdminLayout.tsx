@@ -37,18 +37,19 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full admin-theme" style={{ background: 'hsl(220 14% 96%)' }}>
+      <div className="min-h-screen flex w-full admin-theme" style={{ background: '#F5F0EA' }}>
         <AdminSidebar />
         <main className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 border-b" style={{ background: '#ffffff', borderColor: 'hsl(220 13% 91%)' }}><div className="h-full flex items-center px-3 md:px-4 gap-3">
-            <SidebarTrigger className="text-foreground hover:bg-muted" />
-            <img src={logoDark} alt="Kalēa" className="h-7" />
-            <span className="text-muted-foreground text-sm font-light">Dashboard</span>
-            <div className="flex-1" />
-            <NotificationCenter />
-          </div>
+          <header className="h-14 border-b" style={{ background: '#FFFFFF', borderColor: 'rgba(59,35,20,0.10)' }}>
+            <div className="h-full flex items-center px-3 md:px-4 gap-3">
+              <SidebarTrigger className="text-[#8A7060] hover:bg-[rgba(200,169,110,0.08)]" />
+              <img src={logoDark} alt="Kalēa" className="h-7" />
+              <span className="text-[13px] tracking-wide" style={{ color: '#8A7060' }}>/ Dashboard</span>
+              <div className="flex-1" />
+              <NotificationCenter />
+            </div>
           </header>
-          <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: 'hsl(220 14% 96%)' }}>
+          <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: '#F5F0EA' }}>
             <Outlet />
           </div>
         </main>
