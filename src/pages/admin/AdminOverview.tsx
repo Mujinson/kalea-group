@@ -289,7 +289,11 @@ const AdminOverview = () => {
           >
             {title}
           </p>
-          <p className="text-[28px] font-bold leading-none truncate" style={{ color: '#1A1008' }}>
+          <p
+            className="font-bold leading-none truncate text-[clamp(16px,4.2vw,28px)]"
+            style={{ color: '#1A1008' }}
+            title={String(value)}
+          >
             {value}
           </p>
           {subtitle && (
