@@ -66,7 +66,7 @@ const AdminCatalog = () => {
   const { data: products = [] } = useQuery({
     queryKey: ["catalog-products"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("catalog_products").select("*, product_suppliers(name), product_categories(name)").order("name");
+      const { data, error } = await supabase.from("catalog_products").select("*, product_suppliers(name), product_categories(name)").order("name").range(0, 999999);
       if (error) throw error;
       return data || [];
     },
