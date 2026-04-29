@@ -132,6 +132,7 @@ const App = () => (
                 <Route path="preventivi/modifica" element={<AdminQuoteCreate />} />
                 <Route path="clienti" element={<AdminCustomers />} />
                 <Route path="magazzino" element={<AdminInventory />} />
+                <Route path="catalogo" element={<AdminCatalog />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
