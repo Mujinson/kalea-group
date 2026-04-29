@@ -218,76 +218,142 @@ const TechSpecBar = ({
           </div>
         </div>
 
-        {/* ─── PART 1 — Animated stat counter cards ─────────── */}
-        {counterCards.length > 0 && (
-          <div
-            className="grid grid-cols-2 md:grid-cols-4 mb-14 md:mb-20"
-            style={{ ["--gold" as never]: GOLD } as React.CSSProperties}
-          >
-            {counterCards.map((card, i) => (
-              <motion.div
-                key={`${card.label}-${i}`}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
-                className={`group relative px-4 md:px-6 py-6 md:py-8 transition-all duration-200 ease-out cursor-default
-                  ${i > 0 ? "md:border-l md:border-dotted" : ""}
-                  ${i === 2 ? "border-t border-dotted md:border-t-0" : ""}
-                  ${i === 3 ? "border-t border-dotted md:border-t-0" : ""}
-                  ${i === 1 ? "border-l border-dotted md:border-l" : ""}
-                  hover:-translate-y-1`}
-                style={{
-                  borderColor: `${DARK}33`,
-                }}
-              >
-                {/* hover lift shadow */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                  style={{
-                    boxShadow: `0 18px 40px -22px ${DARK}55`,
-                    borderRadius: 4,
-                  }}
-                />
+        {/* ─── PART 1 — Top stat row (3 columns, no cards) ───── */}
+        {(() => {
+          const nonFmt = specs.filter(
+            (s) => !FORMAT_KEY.test(s.label) && !APPLICATION_KEY.test(s.label)
+          );
+          const spessoreSpec = nonFmt[0];
+          const effettoSpec = nonFmt.find((s) => s !== spessoreSpec) ?? null;
 
-                {/* thin overline */}
-                <span
-                  aria-hidden
-                  className="block h-px w-10 mb-5"
-                  style={{ backgroundColor: `${DARK}33` }}
-                />
+          const cols: { label: string; render: () => React.ReactNode }[] = [];
 
-                {/* number + animated gold underline accent */}
-                <div className="relative inline-block">
-                  <p
-                    className="font-heading font-bold leading-none tracking-tight text-[44px] md:text-[56px] lg:text-[64px]"
-                    style={{ color: DARK }}
-                  >
-                    <AnimatedNumber value={card.value} />
-                  </p>
-                  <span
-                    aria-hidden
-                    className="absolute -bottom-1.5 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-300 ease-out"
-                    style={{ backgroundColor: GOLD }}
-                  />
-                </div>
-
-                {/* small caps label */}
+          if (spessoreSpec) {
+            cols.push({
+              label: spessoreSpec.label,
+              render: () => (
                 <p
-                  className="mt-5 uppercase font-medium"
+                  className="font-heading font-bold leading-none tracking-tight"
+                  style={{ color: DARK, fontSize: 52 }}
+                >
+                  {spessoreSpec.value}
+                </p>
+              ),
+            });
+          }
+
+          if (formats.length > 0 && formatSpec) {
+            cols.push({
+              label: formatSpec.label,
+              render: () => (
+                <p
+                  className="font-heading font-bold leading-snug tracking-tight"
+                  style={{ color: DARK, fontSize: 22 }}
+                >
+                  {formats.map((f, i) => (
+                    <span key={`${f}-${i}`}>
+                      <span className="whitespace-nowrap">{f}</span>
+                      {i < formats.length - 1 && (
+                        <span
+                          aria-hidden
+                          className="mx-2 md:mx-3"
+                          style={{ color: `${DARK}55` }}
+                        >
+                          ·
+                        </span>
+                      )}
+                    </span>
+                  ))}
+                </p>
+              ),
+            });
+          }
+
+          if (effettoSpec) {
+            cols.push({
+              label: effettoSpec.label,
+              render: () => (
+                <div className="flex flex-col gap-3">
+                  <p
+                    className="font-heading font-bold leading-tight tracking-tight"
+                    style={{ color: DARK, fontSize: 28 }}
+                  >
+                    {effettoSpec.value}
+                  </p>
+                  <div className="flex items-center gap-1.5">
+                    {["#D4C4B0", "#A89880", "#6B5A4E"].map((c) => (
+                      <span
+                        key={c}
+                        aria-hidden
+                        style={{
+                          backgroundColor: c,
+                          width: 40,
+                          height: 24,
+                          borderRadius: 2,
+                          display: "block",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ),
+            });
+          }
+
+          if (cols.length === 0) return null;
+
+          const divider = "rgba(59,35,20,0.15)";
+
+          return (
+            <div
+              className="tsb-toprow grid grid-cols-1 md:grid-cols-3 mb-14 md:mb-20"
+              style={{ paddingTop: 0, paddingBottom: 0 }}
+            >
+              {cols.map((col, i) => (
+                <motion.div
+                  key={`${col.label}-${i}`}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
+                  className="tsb-col flex flex-col items-start px-0 md:px-8 py-6 md:py-0"
                   style={{
-                    color: MUTED,
-                    fontSize: 12,
-                    letterSpacing: "0.12em",
+                    minHeight: 180,
+                    borderTop: i > 0 ? `1px solid ${divider}` : undefined,
                   }}
                 >
-                  {card.label}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        )}
+                  <p
+                    className="uppercase font-medium"
+                    style={{
+                      color: MUTED,
+                      fontSize: 11,
+                      letterSpacing: "0.15em",
+                    }}
+                  >
+                    {col.label}
+                  </p>
+                  <div style={{ marginTop: 8 }}>{col.render()}</div>
+                  <span
+                    aria-hidden
+                    className="block"
+                    style={{
+                      backgroundColor: GOLD,
+                      height: 2,
+                      width: 32,
+                      marginTop: "auto",
+                    }}
+                  />
+                </motion.div>
+              ))}
+              <style>{`
+                @media (min-width: 768px) {
+                  .tsb-toprow > .tsb-col { border-top: 0 !important; }
+                  .tsb-toprow > .tsb-col + .tsb-col { border-left: 1px solid ${divider}; }
+                }
+              `}</style>
+            </div>
+          );
+        })()}
 
         {/* ─── PART 2 — Tabs ──────────────────────────────────── */}
         {availableTabs.length > 0 && (
