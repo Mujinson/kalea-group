@@ -14,6 +14,7 @@ import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { AutoFitText } from '@/components/admin/AutoFitText';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 interface DashboardData {
   // Customers by status
@@ -103,7 +104,7 @@ const AdminOverview = () => {
         { data: reminders },
         { count: leadsCount }
       ] = await Promise.all([
-        supabase.from('customers').select('*'),
+        fetchAllRows(supabase.from('customers').select('*')),
         supabase.from('sales').select('*').order('created_at', { ascending: false }),
         supabase.from('inventory').select('*'),
         supabase.from('quotes').select('*').order('created_at', { ascending: false }),
