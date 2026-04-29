@@ -169,63 +169,242 @@ All colors MUST be HSL.
   }
 }
 
-/* Admin/CRM theme: clean white with black text */
+/* ==========================================================================
+   Admin / CRM Theme — Editorial luxury palette
+   Cream background, white cards, warm brown text, gold accents.
+   Scoped to .admin-theme so the public site is unaffected.
+   ========================================================================== */
 .admin-theme,
 .admin-theme [data-radix-popper-content-wrapper] *,
 body:has(.admin-theme) [role="dialog"] {
-  --foreground: 0 0% 10%;
+  /* Crm tokens (raw values for arbitrary use) */
+  --crm-bg-main: #F5F0EA;
+  --crm-bg-card: #FFFFFF;
+  --crm-border: rgba(59, 35, 20, 0.10);
+  --crm-border-strong: rgba(59, 35, 20, 0.18);
+  --crm-text-primary: #1A1008;
+  --crm-text-secondary: #8A7060;
+  --crm-text-label: #B0998A;
+  --crm-accent-gold: #C8A96E;
+  --crm-accent-gold-soft: rgba(200, 169, 110, 0.10);
+  --crm-accent-gold-hover: rgba(200, 169, 110, 0.05);
+  --crm-accent-brown: #3B2314;
+  --crm-accent-brown-hover: #2A1A0E;
+  --crm-danger: #C0392B;
+  --crm-success: #2E7D5A;
+  --crm-warning: #C8860A;
+
+  /* Override shadcn HSL tokens to match the warm palette */
+  --background: 36 35% 94%;          /* #F5F0EA */
+  --foreground: 25 50% 6%;            /* #1A1008 */
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 10%;
+  --card-foreground: 25 50% 6%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 10%;
-  --muted: 220 14% 96%;
-  --muted-foreground: 0 0% 40%;
-  --border: 220 13% 91%;
-  --input: 220 13% 91%;
-  --ring: 220 13% 70%;
-  --background: 0 0% 100%;
-  --sidebar-foreground: 0 0% 10%;
-  --sidebar-accent-foreground: 0 0% 10%;
-  color: hsl(0 0% 10%);
+  --popover-foreground: 25 50% 6%;
+  --muted: 36 35% 94%;
+  --muted-foreground: 26 17% 46%;     /* #8A7060 */
+  --border: 25 35% 18% / 0.10;        /* warm brown 10% */
+  --input: 25 30% 85%;
+  --ring: 36 47% 60%;                 /* gold */
+  --primary: 25 53% 16%;              /* brown */
+  --primary-foreground: 0 0% 100%;
+  --accent: 36 47% 92%;
+  --accent-foreground: 25 53% 16%;
+  --secondary: 36 35% 92%;
+  --secondary-foreground: 25 53% 16%;
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 26 17% 46%;
+  --sidebar-accent: 36 47% 95%;
+  --sidebar-accent-foreground: 25 53% 16%;
+  --sidebar-border: 25 35% 18% / 0.10;
+  --sidebar-ring: 36 47% 60%;
+  color: var(--crm-text-primary);
 }
 
-/* Admin page background stays gray */
+/* Page surface */
 .admin-theme {
-  --background: 220 14% 96%;
+  --background: 36 35% 94%;
+  background: var(--crm-bg-main);
 }
 
-.admin-theme .rounded-2xl {
-  border-color: hsl(220 13% 91%);
+/* Typography refinements inside admin */
+.admin-theme h1,
+.admin-theme h2 {
+  color: var(--crm-text-primary);
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+.admin-theme h3 {
+  color: var(--crm-text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
 }
 
-/* Admin dialog styling */
+/* Cards: white surface, subtle warm border, soft radius, gold hover */
+.admin-theme .rounded-2xl,
+.admin-theme .rounded-xl {
+  border-radius: 8px !important;
+}
+.admin-theme [data-card],
+.admin-theme .rounded-2xl,
+.admin-theme .rounded-xl,
+.admin-theme [class*="bg-white"] {
+  border-color: var(--crm-border);
+}
+
+/* Buttons — kill pill rounded-full, restrict radius */
+.admin-theme button,
+.admin-theme [role="button"],
+.admin-theme a.button,
+.admin-theme .btn {
+  border-radius: 6px;
+}
+.admin-theme button.rounded-full,
+.admin-theme [role="button"].rounded-full {
+  border-radius: 6px !important;
+}
+
+/* Primary action buttons (shadcn default variant) */
+.admin-theme button[class*="bg-primary"]:not([class*="bg-primary/"]) {
+  background: var(--crm-accent-brown);
+  color: #fff;
+}
+.admin-theme button[class*="bg-primary"]:not([class*="bg-primary/"]):hover {
+  background: var(--crm-accent-brown-hover);
+}
+
+/* Inputs — warm border, gold focus ring (no blue) */
+.admin-theme input,
+.admin-theme textarea,
+.admin-theme select,
+.admin-theme [data-radix-select-trigger] {
+  border-radius: 6px;
+  border-color: var(--crm-border-strong);
+  background: #fff;
+  color: var(--crm-text-primary);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.admin-theme input::placeholder,
+.admin-theme textarea::placeholder {
+  color: var(--crm-text-label);
+}
+.admin-theme input:focus,
+.admin-theme input:focus-visible,
+.admin-theme textarea:focus,
+.admin-theme textarea:focus-visible,
+.admin-theme select:focus,
+.admin-theme [data-radix-select-trigger]:focus,
+.admin-theme [data-radix-select-trigger]:focus-visible {
+  border-color: var(--crm-accent-gold) !important;
+  box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.15) !important;
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-shadow: 0 0 0 transparent !important;
+}
+
+/* Override Tailwind ring utilities globally inside admin */
+.admin-theme *:focus-visible {
+  outline: none;
+  --tw-ring-color: rgba(200, 169, 110, 0.35) !important;
+}
+
+/* Tables */
+.admin-theme table thead tr,
+.admin-theme table thead th {
+  background: var(--crm-bg-main);
+  color: var(--crm-text-label);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-color: var(--crm-border);
+}
+.admin-theme table tbody tr {
+  background: #fff;
+  border-bottom: 1px solid var(--crm-border);
+  transition: background-color 0.15s ease;
+}
+.admin-theme table tbody tr:hover {
+  background: var(--crm-accent-gold-hover);
+}
+.admin-theme table tbody tr[data-state="selected"] {
+  background: var(--crm-accent-gold-soft);
+  box-shadow: inset 3px 0 0 0 var(--crm-accent-gold);
+}
+
+/* Badges — outlined editorial style instead of filled pills */
+.admin-theme [class*="bg-green-100"],
+.admin-theme [class*="bg-blue-100"],
+.admin-theme [class*="bg-orange-100"],
+.admin-theme [class*="bg-amber-100"],
+.admin-theme [class*="bg-red-100"],
+.admin-theme [class*="bg-purple-100"],
+.admin-theme [class*="bg-emerald-100"],
+.admin-theme [class*="bg-pink-100"],
+.admin-theme [class*="bg-indigo-100"] {
+  /* Soften legacy pastel chips: keep subtle wash */
+  background: rgba(200, 169, 110, 0.06) !important;
+  color: var(--crm-text-secondary) !important;
+}
+
+/* Section/page background */
+.admin-theme .bg-muted\/30,
+.admin-theme .bg-muted\/40,
+.admin-theme .bg-muted\/50 {
+  background: var(--crm-bg-main) !important;
+}
+
+/* Sidebar shell */
+.admin-theme [data-sidebar="sidebar"] {
+  background: #FFFFFF !important;
+  border-right: 1px solid var(--crm-border) !important;
+}
+.admin-theme [data-sidebar="footer"] {
+  border-top: 1px solid var(--crm-border) !important;
+  background: #FFFFFF;
+}
+
+/* ----- Dialog styling, kept warm ----- */
 body:has(.admin-theme) [role="dialog"] {
   --background: 0 0% 100%;
-  border-radius: 1rem;
-  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  border-color: var(--crm-border);
+  box-shadow: 0 25px 60px -12px rgba(59, 35, 20, 0.18);
 }
-
 body:has(.admin-theme) [role="dialog"] input,
 body:has(.admin-theme) [role="dialog"] textarea,
 body:has(.admin-theme) [role="dialog"] [data-radix-select-trigger] {
-  border-radius: 0.625rem;
-  border-color: hsl(220 13% 91%);
-  background: hsl(220 14% 98%);
+  border-radius: 6px;
+  border-color: var(--crm-border-strong);
+  background: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 body:has(.admin-theme) [role="dialog"] input:focus,
 body:has(.admin-theme) [role="dialog"] textarea:focus,
 body:has(.admin-theme) [role="dialog"] [data-radix-select-trigger]:focus {
-  border-color: hsl(220 13% 70%);
-  box-shadow: 0 0 0 3px hsl(220 13% 70% / 0.12);
+  border-color: var(--crm-accent-gold);
+  box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.15);
 }
-
 body:has(.admin-theme) [data-radix-select-content] {
   --background: 0 0% 100%;
   --popover: 0 0% 100%;
-  border-radius: 0.625rem;
-  border-color: hsl(220 13% 91%);
+  border-radius: 8px;
+  border-color: var(--crm-border);
+}
+
+/* Section title with gold left-accent — opt-in via .crm-section-title */
+.admin-theme .crm-section-title {
+  display: inline-block;
+  padding-left: 10px;
+  border-left: 2px solid var(--crm-accent-gold);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--crm-text-label);
+  font-weight: 600;
 }
 
 @layer base {
