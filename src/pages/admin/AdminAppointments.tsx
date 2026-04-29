@@ -15,6 +15,7 @@ import { it } from "date-fns/locale";
 import { CalendarClock, Plus, Phone, Video, MapPin, Check, X, ChevronLeft, ChevronRight, Users } from "lucide-react";
 import { toast } from "sonner";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const APPOINTMENT_TYPES = [
   { value: "chiamata", label: "Chiamata", icon: Phone },
@@ -59,8 +60,7 @@ const AdminAppointments = () => {
   const { data: leads } = useQuery({
     queryKey: ["leads-for-appointments"],
     queryFn: async () => {
-      const { data } = await supabase.from("leads").select("id, name, company_name").order("name");
-      return data || [];
+      return fetchAllRows(supabase.from("leads").select("id, name, company_name").order("name"));
     },
   });
 
