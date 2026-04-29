@@ -16,7 +16,7 @@ import productBiowall from "@/assets/product-biowall.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardParquetAmbient from "@/assets/card-parquet-ambient.jpg";
 import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
-import ceramicheEsterni from "@/assets/ceramiche-esterni-hero.jpg";
+
 
 interface Surface {
   title: string;
