@@ -90,6 +90,182 @@ export type Database = {
           },
         ]
       }
+      catalog_price_history: {
+        Row: {
+          change_reason: string | null
+          changed_at: string
+          changed_by: string | null
+          changed_field: string
+          id: string
+          new_value: number | null
+          old_value: number | null
+          product_id: string
+        }
+        Insert: {
+          change_reason?: string | null
+          changed_at?: string
+          changed_by?: string | null
+          changed_field: string
+          id?: string
+          new_value?: number | null
+          old_value?: number | null
+          product_id: string
+        }
+        Update: {
+          change_reason?: string | null
+          changed_at?: string
+          changed_by?: string | null
+          changed_field?: string
+          id?: string
+          new_value?: number | null
+          old_value?: number | null
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_price_history_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_products: {
+        Row: {
+          available_stock: number | null
+          brand: string | null
+          category_id: string | null
+          certifications: string[] | null
+          collection: string | null
+          color: string | null
+          created_at: string
+          description: string | null
+          finish: string | null
+          format: string | null
+          id: string
+          is_active: boolean | null
+          list_price: number
+          low_stock_threshold: number | null
+          markup_percentage: number
+          max_customer_discount_percentage: number
+          min_margin_percentage: number
+          min_order_quantity: number | null
+          name: string
+          net_cost: number | null
+          notes: string | null
+          pack_per_pallet: number | null
+          pallet_weight_kg: number | null
+          pieces_per_pack: number | null
+          product_code: string
+          product_type: string
+          sale_price: number | null
+          supplier_code: string | null
+          supplier_discount_percentage: number
+          supplier_id: string | null
+          technical_sheet_url: string | null
+          thickness_mm: number | null
+          unit_of_measure: string
+          updated_at: string
+          vat_percentage: number
+          warehouse_location: string | null
+          weight_per_unit: number | null
+        }
+        Insert: {
+          available_stock?: number | null
+          brand?: string | null
+          category_id?: string | null
+          certifications?: string[] | null
+          collection?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          finish?: string | null
+          format?: string | null
+          id?: string
+          is_active?: boolean | null
+          list_price?: number
+          low_stock_threshold?: number | null
+          markup_percentage?: number
+          max_customer_discount_percentage?: number
+          min_margin_percentage?: number
+          min_order_quantity?: number | null
+          name: string
+          net_cost?: number | null
+          notes?: string | null
+          pack_per_pallet?: number | null
+          pallet_weight_kg?: number | null
+          pieces_per_pack?: number | null
+          product_code: string
+          product_type?: string
+          sale_price?: number | null
+          supplier_code?: string | null
+          supplier_discount_percentage?: number
+          supplier_id?: string | null
+          technical_sheet_url?: string | null
+          thickness_mm?: number | null
+          unit_of_measure?: string
+          updated_at?: string
+          vat_percentage?: number
+          warehouse_location?: string | null
+          weight_per_unit?: number | null
+        }
+        Update: {
+          available_stock?: number | null
+          brand?: string | null
+          category_id?: string | null
+          certifications?: string[] | null
+          collection?: string | null
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          finish?: string | null
+          format?: string | null
+          id?: string
+          is_active?: boolean | null
+          list_price?: number
+          low_stock_threshold?: number | null
+          markup_percentage?: number
+          max_customer_discount_percentage?: number
+          min_margin_percentage?: number
+          min_order_quantity?: number | null
+          name?: string
+          net_cost?: number | null
+          notes?: string | null
+          pack_per_pallet?: number | null
+          pallet_weight_kg?: number | null
+          pieces_per_pack?: number | null
+          product_code?: string
+          product_type?: string
+          sale_price?: number | null
+          supplier_code?: string | null
+          supplier_discount_percentage?: number
+          supplier_id?: string | null
+          technical_sheet_url?: string | null
+          thickness_mm?: number | null
+          unit_of_measure?: string
+          updated_at?: string
+          vat_percentage?: number
+          warehouse_location?: string | null
+          weight_per_unit?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_products_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "product_suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chatbot_conversations: {
         Row: {
           channel: string
@@ -1026,6 +1202,44 @@ export type Database = {
           },
         ]
       }
+      product_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          name: string
+          parent_id: string | null
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          name: string
+          parent_id?: string | null
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          name?: string
+          parent_id?: string | null
+          slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_images: {
         Row: {
           alt_text: string | null
@@ -1052,6 +1266,54 @@ export type Database = {
           id?: string
           image_url?: string
           product_slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      product_suppliers: {
+        Row: {
+          contact_person: string | null
+          country: string | null
+          created_at: string
+          default_discount_percentage: number | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          lead_time_days: number | null
+          name: string
+          notes: string | null
+          payment_terms: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string
+          default_discount_percentage?: number | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          lead_time_days?: number | null
+          name: string
+          notes?: string | null
+          payment_terms?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          contact_person?: string | null
+          country?: string | null
+          created_at?: string
+          default_discount_percentage?: number | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          lead_time_days?: number | null
+          name?: string
+          notes?: string | null
+          payment_terms?: string | null
+          phone?: string | null
           updated_at?: string
         }
         Relationships: []

@@ -127,6 +127,7 @@ const menuStructure: MenuEntry[] = [
       icon: Package,
       adminOnly: true,
       items: [
+        { title: 'Catalogo prodotti', url: '/admin/catalogo', icon: Package, adminOnly: true },
         { title: 'Lista articoli', url: '/admin/magazzino', icon: ListOrdered, adminOnly: true },
       ],
     },

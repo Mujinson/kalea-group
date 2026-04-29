@@ -70,6 +70,7 @@ import CantieriOperaiOre from "./pages/admin/cantieri/CantieriOperaiOre";
 import CantieriMateriali from "./pages/admin/cantieri/CantieriMateriali";
 import CantieriBudget from "./pages/admin/cantieri/CantieriBudget";
 import CantieriReport from "./pages/admin/cantieri/CantieriReport";
+import AdminCatalog from "./pages/admin/AdminCatalog";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -131,6 +132,7 @@ const App = () => (
                 <Route path="preventivi/modifica" element={<AdminQuoteCreate />} />
                 <Route path="clienti" element={<AdminCustomers />} />
                 <Route path="magazzino" element={<AdminInventory />} />
+                <Route path="catalogo" element={<AdminCatalog />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
