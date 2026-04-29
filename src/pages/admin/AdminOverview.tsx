@@ -232,6 +232,7 @@ const AdminOverview = () => {
     value,
     subtitle,
     icon: Icon,
+    iconColor,
     onClick,
     badge,
   }: {
