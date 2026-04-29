@@ -218,142 +218,152 @@ const TechSpecBar = ({
           </div>
         </div>
 
-        {/* ─── PART 1 — Top stat row (3 columns, no cards) ───── */}
+        {/* ─── PART 1 — Top stat row (Spessore+Effetto, then Formati) ─── */}
         {(() => {
           const nonFmt = specs.filter(
             (s) => !FORMAT_KEY.test(s.label) && !APPLICATION_KEY.test(s.label)
           );
-          const spessoreSpec = nonFmt[0];
+          const spessoreSpec = nonFmt[0] ?? null;
           const effettoSpec = nonFmt.find((s) => s !== spessoreSpec) ?? null;
-
-          const cols: { label: string; render: () => React.ReactNode }[] = [];
-
-          if (spessoreSpec) {
-            cols.push({
-              label: spessoreSpec.label,
-              render: () => (
-                <p
-                  className="font-heading font-bold leading-none tracking-tight"
-                  style={{ color: DARK, fontSize: 52 }}
-                >
-                  {spessoreSpec.value}
-                </p>
-              ),
-            });
-          }
-
-          if (formats.length > 0 && formatSpec) {
-            cols.push({
-              label: formatSpec.label,
-              render: () => (
-                <p
-                  className="font-heading font-bold leading-snug tracking-tight"
-                  style={{ color: DARK, fontSize: 22 }}
-                >
-                  {formats.map((f, i) => (
-                    <span key={`${f}-${i}`}>
-                      <span className="whitespace-nowrap">{f}</span>
-                      {i < formats.length - 1 && (
-                        <span
-                          aria-hidden
-                          className="mx-2 md:mx-3"
-                          style={{ color: `${DARK}55` }}
-                        >
-                          ·
-                        </span>
-                      )}
-                    </span>
-                  ))}
-                </p>
-              ),
-            });
-          }
-
-          if (effettoSpec) {
-            cols.push({
-              label: effettoSpec.label,
-              render: () => (
-                <div className="flex flex-col gap-3">
-                  <p
-                    className="font-heading font-bold leading-tight tracking-tight"
-                    style={{ color: DARK, fontSize: 28 }}
-                  >
-                    {effettoSpec.value}
-                  </p>
-                  <div className="flex items-center gap-1.5">
-                    {["#D4C4B0", "#A89880", "#6B5A4E"].map((c) => (
-                      <span
-                        key={c}
-                        aria-hidden
-                        style={{
-                          backgroundColor: c,
-                          width: 40,
-                          height: 24,
-                          borderRadius: 2,
-                          display: "block",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ),
-            });
-          }
-
-          if (cols.length === 0) return null;
-
           const divider = "rgba(59,35,20,0.15)";
 
-          return (
-            <div
-              className="tsb-toprow grid grid-cols-1 md:grid-cols-3 mb-14 md:mb-20"
-              style={{ paddingTop: 0, paddingBottom: 0 }}
+          if (!spessoreSpec && !effettoSpec && formats.length === 0) return null;
+
+          const GoldUnderline = () => (
+            <span
+              aria-hidden
+              className="block mt-5"
+              style={{ backgroundColor: GOLD, height: 2, width: 32 }}
+            />
+          );
+          const Label = ({ children }: { children: React.ReactNode }) => (
+            <p
+              className="uppercase font-medium"
+              style={{
+                color: MUTED,
+                fontSize: 11,
+                letterSpacing: "0.15em",
+              }}
             >
-              {cols.map((col, i) => (
+              {children}
+            </p>
+          );
+
+          return (
+            <div className="mb-14 md:mb-20">
+              {/* ROW 1 — Spessore + Effetto */}
+              {(spessoreSpec || effettoSpec) && (
+                <div
+                  className="tsb-row1 grid grid-cols-1 sm:grid-cols-2"
+                  style={{ overflow: "hidden" }}
+                >
+                  {spessoreSpec && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      className="tsb-cell flex flex-col items-start min-w-0 px-0 sm:pr-8 md:pr-10 py-2 sm:py-0"
+                      style={{ overflow: "hidden" }}
+                    >
+                      <Label>{spessoreSpec.label}</Label>
+                      <p
+                        className="font-heading font-bold leading-none tracking-tight mt-2 break-words"
+                        style={{ color: DARK, fontSize: 52, maxWidth: "100%" }}
+                      >
+                        {spessoreSpec.value}
+                      </p>
+                      <GoldUnderline />
+                    </motion.div>
+                  )}
+                  {effettoSpec && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.5, delay: 0.08, ease: "easeOut" }}
+                      className="tsb-cell tsb-cell-right flex flex-col items-start min-w-0 px-0 sm:pl-8 md:pl-10 py-2 sm:py-0"
+                      style={{ overflow: "hidden" }}
+                    >
+                      <Label>{effettoSpec.label}</Label>
+                      <p
+                        className="font-heading font-bold leading-tight tracking-tight mt-2 break-words"
+                        style={{ color: DARK, fontSize: 28, maxWidth: "100%" }}
+                      >
+                        {effettoSpec.value}
+                      </p>
+                      <div className="flex items-center gap-2 mt-3">
+                        {["#D4C4B0", "#A89880", "#6B5A4E"].map((c) => (
+                          <span
+                            key={c}
+                            aria-hidden
+                            style={{
+                              backgroundColor: c,
+                              width: 48,
+                              height: 28,
+                              borderRadius: 2,
+                              display: "block",
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <GoldUnderline />
+                    </motion.div>
+                  )}
+                  <style>{`
+                    .tsb-row1 > .tsb-cell + .tsb-cell {
+                      border-top: 1px solid ${divider};
+                      padding-top: 1.5rem;
+                      margin-top: 1.5rem;
+                    }
+                    @media (min-width: 640px) {
+                      .tsb-row1 > .tsb-cell + .tsb-cell {
+                        border-top: 0;
+                        border-left: 1px solid ${divider};
+                        padding-top: 0;
+                        margin-top: 0;
+                      }
+                    }
+                  `}</style>
+                </div>
+              )}
+
+              {/* ROW 2 — Formati (full width, pill tags) */}
+              {formats.length > 0 && formatSpec && (
                 <motion.div
-                  key={`${col.label}-${i}`}
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
-                  className="tsb-col flex flex-col items-start px-0 md:px-8 py-6 md:py-0"
-                  style={{
-                    minHeight: 180,
-                    borderTop: i > 0 ? `1px solid ${divider}` : undefined,
-                  }}
+                  transition={{ duration: 0.5, delay: 0.16, ease: "easeOut" }}
+                  className="mt-8 md:mt-10 pt-6 md:pt-8"
+                  style={{ borderTop: `1px solid ${divider}`, overflow: "hidden" }}
                 >
-                  <p
-                    className="uppercase font-medium"
-                    style={{
-                      color: MUTED,
-                      fontSize: 11,
-                      letterSpacing: "0.15em",
-                    }}
-                  >
-                    {col.label}
-                  </p>
-                  <div style={{ marginTop: 8 }}>{col.render()}</div>
-                  <span
-                    aria-hidden
-                    className="block"
-                    style={{
-                      backgroundColor: GOLD,
-                      height: 2,
-                      width: 32,
-                      marginTop: "auto",
-                    }}
-                  />
+                  <Label>{formatSpec.label}</Label>
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {formats.map((f, i) => (
+                      <span
+                        key={`${f}-${i}`}
+                        className="font-heading font-bold whitespace-nowrap"
+                        style={{
+                          color: DARK,
+                          fontSize: 15,
+                          padding: "6px 16px",
+                          border: `1px solid rgba(59,35,20,0.3)`,
+                          borderRadius: 4,
+                          backgroundColor: "transparent",
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {f}
+                      </span>
+                    ))}
+                  </div>
                 </motion.div>
-              ))}
-              <style>{`
-                @media (min-width: 768px) {
-                  .tsb-toprow > .tsb-col { border-top: 0 !important; }
-                  .tsb-toprow > .tsb-col + .tsb-col { border-left: 1px solid ${divider}; }
-                }
-              `}</style>
+              )}
             </div>
           );
         })()}
+
 
         {/* ─── PART 2 — Tabs ──────────────────────────────────── */}
         {availableTabs.length > 0 && (
