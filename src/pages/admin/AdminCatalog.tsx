@@ -295,6 +295,7 @@ const AdminCatalog = () => {
           <TableHeader>
             <TableRow>
               <TableHead>Codice</TableHead>
+              <TableHead>Brand</TableHead>
               <TableHead>Nome</TableHead>
               <TableHead>Formato</TableHead>
               <TableHead className="text-right">Sp.</TableHead>
@@ -311,7 +312,7 @@ const AdminCatalog = () => {
           </TableHeader>
           <TableBody>
             {filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={13} className="text-center py-8" style={{ color: "#8A7060" }}>Nessun prodotto trovato</TableCell></TableRow>
+              <TableRow><TableCell colSpan={14} className="text-center py-8" style={{ color: "#8A7060" }}>Nessun prodotto trovato</TableCell></TableRow>
             ) : filtered.map((p: any) => {
               const margin = computeMargin(p);
               const lowMargin = margin < p.min_margin_percentage;
@@ -319,6 +320,7 @@ const AdminCatalog = () => {
               return (
                 <TableRow key={p.id}>
                   <TableCell className="font-mono text-xs">{p.product_code}</TableCell>
+                  <TableCell className="text-sm whitespace-nowrap font-medium" style={{ color: "#8C7B6B" }}>{p.brand || "—"}</TableCell>
                   <TableCell>
                     <div className="font-medium">{p.name}</div>
                     {p.product_categories?.name && <div className="text-xs" style={{ color: "#8A7060" }}>{p.product_categories.name}</div>}
