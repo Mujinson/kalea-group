@@ -13,6 +13,7 @@ import {
 import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { AutoFitText } from '@/components/admin/AutoFitText';
 
 interface DashboardData {
   // Customers by status
@@ -278,30 +279,26 @@ const AdminOverview = () => {
         </div>
       )}
 
-      <div className="flex items-start gap-3">
-        {/* Colored icon (Tailwind class via iconColor) */}
-        <Icon className={`w-5 h-5 shrink-0 mt-0.5 ${iconColor || 'text-primary'}`} />
-
-        <div className="flex-1 min-w-0">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-2">
           <p
-            className="text-[11px] font-semibold mb-1.5"
+            className="text-[10px] sm:text-[11px] font-semibold truncate"
             style={{ color: '#B0998A', letterSpacing: '0.12em', textTransform: 'uppercase' }}
           >
             {title}
           </p>
-          <p
-            className="font-bold leading-none truncate text-[clamp(16px,4.2vw,28px)]"
-            style={{ color: '#1A1008' }}
-            title={String(value)}
-          >
-            {value}
-          </p>
-          {subtitle && (
-            <p className="text-[12px] mt-2 truncate" style={{ color: '#8A7060' }}>
-              {subtitle}
-            </p>
-          )}
+          <Icon className={`w-5 h-5 shrink-0 ${iconColor || 'text-primary'}`} />
         </div>
+
+        <AutoFitText max={32} min={14} style={{ color: '#1A1008' }} title={String(value)}>
+          {value}
+        </AutoFitText>
+
+        {subtitle && (
+          <p className="text-[11px] sm:text-[12px] truncate" style={{ color: '#8A7060' }}>
+            {subtitle}
+          </p>
+        )}
       </div>
     </div>
   );
