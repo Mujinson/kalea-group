@@ -96,24 +96,36 @@ const IndoorOutdoorSection = () => {
                 className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${surface.comingSoon ? 'opacity-50' : 'group-hover:scale-105'}`}
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
+              <div
+                className="absolute inset-0"
+                style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%)" }}
+              />
 
               {/* Coming Soon badge */}
               {surface.comingSoon && (
-                <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-white text-[10px] md:text-xs font-medium px-3 py-1 rounded-full z-20">
+                <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm text-[10px] md:text-xs font-medium px-3 py-1 rounded-full z-20" style={{ color: "#ffffff" }}>
                   {t('surfaces.comingSoon')}
                 </div>
               )}
 
               <div className="relative z-10 h-full flex flex-col justify-end p-4 md:p-6">
-                <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1.5 tracking-wide">
+                <h3
+                  className="text-base md:text-lg lg:text-xl font-heading font-semibold mb-1.5 tracking-wide"
+                  style={{ color: "#ffffff", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+                >
                   {surface.title}
                 </h3>
-                <p className="text-[10px] md:text-xs text-white/85 leading-relaxed line-clamp-3 mb-2">
+                <p
+                  className="text-[10px] md:text-xs leading-relaxed line-clamp-3 mb-2"
+                  style={{ color: "#ffffff", textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}
+                >
                   {surface.description}
                 </p>
                 {!surface.comingSoon && (
-                  <span className="inline-flex items-center gap-2 text-white/90 text-[10px] md:text-xs font-medium transition-all duration-300 group-hover:text-white">
+                  <span
+                    className="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium transition-all duration-300"
+                    style={{ color: "#ffffff", textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}
+                  >
                     {t('surfaces.discover')}
                     <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
