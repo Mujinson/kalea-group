@@ -141,15 +141,15 @@ export const HomeDescription = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
                 whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
-                className="relative group overflow-hidden rounded-3xl min-h-[250px] sm:min-h-[300px] md:min-h-[350px] cursor-pointer"
+                className="relative group overflow-hidden rounded-2xl min-h-[220px] sm:min-h-[250px] md:min-h-[280px] cursor-pointer"
               >
                 <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-12">
-                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">{card.title}</h3>
-                  <p className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed">{card.desc}</p>
-                  <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white w-fit">
-                    {t('homeHero.discover')} <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%)" }} />
+                <div className="relative z-10 h-full flex flex-col justify-end p-4 md:p-6">
+                  <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1.5 tracking-wide" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{card.title}</h3>
+                  <p className="text-[11px] md:text-sm text-white/90 leading-relaxed line-clamp-3 mb-2 font-medium" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>{card.desc}</p>
+                  <span className="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium text-white" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}>
+                    {t('homeHero.discover')} <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
                 </div>
               </motion.div>
