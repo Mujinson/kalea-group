@@ -314,24 +314,10 @@ const Home = () => {
 
       {/* Manifesto Part 2 — Vision & System */}
       <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
-        {/* Subtle background accent */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 0.03 }}
-          viewport={{ once: true }}
-          transition={{ duration: 2 }}
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: `url(${bgManifesto})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        
         <div className="relative w-full py-16 md:py-24 px-6 md:px-12 lg:px-16">
           <div className="max-w-4xl mx-auto">
             {/* Reflection lines — horizontal scroll-reveal */}
-            <div className="space-y-4 md:space-y-5 text-center mb-12 md:mb-16">
+            <div className="space-y-6 md:space-y-8 text-center mb-12 md:mb-16">
               {[
                 t('hero.manifesto.reflection1'),
                 t('hero.manifesto.reflection2'),
@@ -344,7 +330,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{ duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="text-base md:text-lg text-foreground/70 font-normal leading-relaxed"
+                  className="font-body text-2xl md:text-2xl lg:text-2xl text-foreground/90 font-normal tracking-wide leading-relaxed"
                 >
                   {line}
                 </motion.p>
