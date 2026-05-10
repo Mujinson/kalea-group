@@ -100,79 +100,83 @@ const HomeHero = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Description section below hero */}
-      <section className="bg-[#F7F1E7] min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-[#4A2A13] text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.12em] mb-4"
-          >
-            {t('homeHero.title')}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-            className="text-[#4A2A13]/80 text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide mb-10"
-          >
-            {t('homeHero.subtitle')}
-          </motion.p>
-
-          {/* Indoor / Outdoor Cards */}
-          <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 w-full">
-            {[
-              { title: t('homeHero.indoorTitle'), desc: t('homeHero.indoorDesc'), link: `/${language}/indoor`, image: cardIndoor },
-              { title: t('homeHero.outdoorTitle'), desc: t('homeHero.outdoorDesc'), link: `/${language}/outdoor`, image: cardOutdoor },
-            ].map((card, i) => (
-              <Link key={card.title} to={card.link} className="block">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
-                  whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
-                  className="relative group overflow-hidden rounded-3xl min-h-[250px] sm:min-h-[300px] md:min-h-[350px] cursor-pointer"
-                >
-                  <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                  <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-12">
-                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">{card.title}</h3>
-                    <p className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed">{card.desc}</p>
-                    <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white w-fit">
-                      {t('homeHero.discover')} <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </span>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="text-[#4A2A13] text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide"
-          >
-            {t('homeHero.bottomText1')}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.8, delay: 0.45, ease: "easeOut" }}
-            className="mt-6 text-[#4A2A13]/75 text-sm sm:text-base md:text-lg leading-relaxed font-light tracking-wide"
-          >
-            {t('homeHero.bottomText2')}
-          </motion.p>
-        </div>
-      </section>
     </>
+  );
+};
+
+export const HomeDescription = () => {
+  const { t, language } = useTranslation();
+  return (
+    <section className="bg-[#F7F1E7] min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12 text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-[#4A2A13] text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.12em] mb-4"
+        >
+          {t('homeHero.title')}
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+          className="text-[#4A2A13]/80 text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide mb-10"
+        >
+          {t('homeHero.subtitle')}
+        </motion.p>
+
+        {/* Indoor / Outdoor Cards */}
+        <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 w-full">
+          {[
+            { title: t('homeHero.indoorTitle'), desc: t('homeHero.indoorDesc'), link: `/${language}/indoor`, image: cardIndoor },
+            { title: t('homeHero.outdoorTitle'), desc: t('homeHero.outdoorDesc'), link: `/${language}/outdoor`, image: cardOutdoor },
+          ].map((card, i) => (
+            <Link key={card.title} to={card.link} className="block">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
+                whileHover={{ y: -6, boxShadow: "0 16px 48px rgba(0,0,0,0.2)" }}
+                className="relative group overflow-hidden rounded-3xl min-h-[250px] sm:min-h-[300px] md:min-h-[350px] cursor-pointer"
+              >
+                <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                <div className="relative z-10 h-full flex flex-col justify-end p-6 md:p-10 lg:p-12">
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white mb-3">{card.title}</h3>
+                  <p className="text-sm md:text-base text-white/90 mb-5 max-w-md leading-relaxed">{card.desc}</p>
+                  <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm border border-white/30 rounded-full text-white text-sm font-medium transition-all duration-300 group-hover:bg-white group-hover:text-[#3F3B33] group-hover:border-white w-fit">
+                    {t('homeHero.discover')} <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
+          ))}
+        </div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          className="text-[#4A2A13] text-base sm:text-lg md:text-xl leading-relaxed font-light tracking-wide"
+        >
+          {t('homeHero.bottomText1')}
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8, delay: 0.45, ease: "easeOut" }}
+          className="mt-6 text-[#4A2A13]/75 text-sm sm:text-base md:text-lg leading-relaxed font-light tracking-wide"
+        >
+          {t('homeHero.bottomText2')}
+        </motion.p>
+      </div>
+    </section>
   );
 };
 

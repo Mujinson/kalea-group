@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 
-import HomeHero from "@/components/HomeHero";
+import HomeHero, { HomeDescription } from "@/components/HomeHero";
 import ChiSiamoManifesto from "@/components/ChiSiamoManifesto";
 
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
@@ -114,6 +114,9 @@ const Home = () => {
       <ChiSiamoManifesto language={language} nextSectionId="chi-siamo-next" />
 
       <div id="chi-siamo-next" className="scroll-mt-20" />
+
+      {/* Description (Surface System + Indoor/Outdoor cards) */}
+      <HomeDescription />
 
       {/* Indoor/Outdoor Section */}
       <IndoorOutdoorSection />
