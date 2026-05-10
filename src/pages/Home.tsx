@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 
 import HomeHero from "@/components/HomeHero";
+import ChiSiamoManifesto from "@/components/ChiSiamoManifesto";
 
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import SEOHead from "@/components/SEOHead";
