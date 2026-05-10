@@ -116,8 +116,8 @@ const IndoorOutdoorSection = () => {
                   {surface.title}
                 </h3>
                 <p
-                  className="text-[10px] md:text-xs leading-relaxed line-clamp-3 mb-2"
-                  style={{ color: "#ffffff", textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}
+                  className="text-[11px] md:text-sm leading-relaxed line-clamp-3 mb-2 font-medium"
+                  style={{ color: "#ffffff", textShadow: "0 1px 4px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.6)" }}
                 >
                   {surface.description}
                 </p>
