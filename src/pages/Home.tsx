@@ -362,7 +362,7 @@ const Home = () => {
           }}
         />
         
-        <div className="relative z-10 pt-40 md:pt-56 pb-12 md:pb-16 flex items-end justify-center min-h-[60vh]">
+        <div className="relative z-10 pt-12 md:pt-16 pb-40 md:pb-56 flex items-start justify-center min-h-[60vh]">
           <div className="container-custom text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
