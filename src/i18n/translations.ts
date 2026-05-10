@@ -2050,8 +2050,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     surfaces: {
-      sectionTitle: "Our Surfaces",
-      sectionSubtitle: "KALĒA® — SURFACE SYSTEM® offers six worlds of excellence for indoor and outdoor.",
+      sectionTitle: "Premium surfaces. One signature: Kalēa®.",
+      sectionSubtitle: "Selected materials for projects built to last. Supply, consulting and installation managed by a single partner.",
       comingSoon: "Coming soon",
       discover: "Discover",
       bottomText: "Everything completed with special pieces for stairs, baseboards, profiles and coordinated accessories. Mobile showroom directly at your construction site for on-site consultation.",
