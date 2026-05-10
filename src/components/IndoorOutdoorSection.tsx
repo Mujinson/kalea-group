@@ -108,7 +108,7 @@ const IndoorOutdoorSection = () => {
                 </div>
               )}
 
-              <div className="relative z-10 h-full flex flex-col justify-between p-4 md:p-6">
+              <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 md:p-6">
                 <div>
                   <h3
                     className="text-base md:text-lg lg:text-xl font-heading font-semibold mb-1.5 tracking-wide"
