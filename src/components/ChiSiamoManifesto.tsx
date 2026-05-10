@@ -126,7 +126,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
                     delay: i * 0.35,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="text-base md:text-lg lg:text-xl font-heading font-light leading-snug text-foreground"
+                  className="text-base md:text-lg lg:text-xl font-heading font-light leading-snug text-white"
                   style={{ letterSpacing: "0.005em" }}
                 >
                   {line}
@@ -140,7 +140,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
               whileInView={{ scaleX: 1, opacity: 1 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="my-6 md:my-8 mx-auto h-px w-20 origin-left bg-foreground/30"
+              className="my-6 md:my-8 mx-auto h-px w-20 origin-left bg-white/40"
             />
 
             {/* Descriptive paragraph */}
@@ -149,7 +149,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="text-xs md:text-sm text-foreground/65 font-light leading-relaxed max-w-2xl mx-auto text-center italic"
+              className="text-xs md:text-sm text-white/85 font-light leading-relaxed max-w-2xl mx-auto text-center italic"
             >
               {t.paragraph}
             </motion.p>
@@ -169,19 +169,19 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
                     .getElementById(nextSectionId)
                     ?.scrollIntoView({ behavior: "smooth", block: "start" })
                 }
-                className="group relative inline-flex items-center gap-3 text-xs md:text-sm tracking-[0.3em] uppercase text-foreground/70 hover:text-foreground transition-colors"
+                className="group relative inline-flex items-center gap-3 text-xs md:text-sm tracking-[0.3em] uppercase text-white/80 hover:text-white transition-colors"
               >
                 <span className="relative pb-1">
                   {t.cta}
-                  <span className="absolute left-0 bottom-0 h-px w-full bg-foreground/30 origin-left scale-x-100 transition-transform duration-500" />
-                  <span className="absolute left-0 bottom-0 h-px w-full bg-foreground origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+                  <span className="absolute left-0 bottom-0 h-px w-full bg-white/40 origin-left scale-x-100 transition-transform duration-500" />
+                  <span className="absolute left-0 bottom-0 h-px w-full bg-white origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                 </span>
                 <motion.span
                   aria-hidden
                   initial={{ y: 0 }}
                   animate={{ y: [0, 4, 0] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                  className="text-foreground/50 group-hover:text-foreground"
+                  className="text-white/60 group-hover:text-white"
                 >
                   ↓
                 </motion.span>
