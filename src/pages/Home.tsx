@@ -362,7 +362,7 @@ const Home = () => {
           }}
         />
         
-        <div className="relative z-10 pt-12 md:pt-16 pb-40 md:pb-56 flex items-start justify-center min-h-[60vh]">
+        <div className="relative z-10 py-12 md:py-16 flex flex-col items-center justify-between min-h-[80vh] gap-10">
           <div className="container-custom text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -388,27 +388,33 @@ const Home = () => {
                 <span>{t('home.ctaTitleAfter')}</span>
               </h2>
               <p 
-                className="text-base mb-10 max-w-2xl mx-auto text-white/90"
+                className="text-base max-w-2xl mx-auto text-white/90"
                 style={{ textShadow: '0px 4px 16px rgba(0, 0, 0, 0.55)' }}
               >
                 {t('home.ctaSubtitle')}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link 
-                  to={`/${language}/contatti`}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
-                >
-                  {t('home.ctaButton1')}
-                </Link>
-                <Link 
-                  to={`/${language}/diventa-partner`}
-                  className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
-                >
-                  {t('home.ctaButton2')}
-                </Link>
-              </div>
             </motion.div>
           </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="container-custom flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Link 
+              to={`/${language}/contatti`}
+              className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+            >
+              {t('home.ctaButton1')}
+            </Link>
+            <Link 
+              to={`/${language}/diventa-partner`}
+              className="inline-flex items-center justify-center gap-2 bg-white text-[#111] text-button rounded-xl px-10 py-3.5 hover:bg-[#F3F3F3] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+            >
+              {t('home.ctaButton2')}
+            </Link>
+          </motion.div>
         </div>
       </section>
     </div>
