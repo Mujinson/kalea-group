@@ -108,19 +108,21 @@ const IndoorOutdoorSection = () => {
                 </div>
               )}
 
-              <div className="relative z-10 h-full flex flex-col justify-end p-4 md:p-6">
-                <h3
-                  className="text-base md:text-lg lg:text-xl font-heading font-semibold mb-1.5 tracking-wide"
-                  style={{ color: "#ffffff", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-                >
-                  {surface.title}
-                </h3>
-                <p
-                  className="text-[11px] md:text-sm leading-relaxed line-clamp-3 mb-2 font-medium"
-                  style={{ color: "#ffffff", textShadow: "0 1px 4px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.6)" }}
-                >
-                  {surface.description}
-                </p>
+              <div className="relative z-10 h-full flex flex-col justify-between p-4 md:p-6">
+                <div>
+                  <h3
+                    className="text-base md:text-lg lg:text-xl font-heading font-semibold mb-1.5 tracking-wide"
+                    style={{ color: "#ffffff", textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+                  >
+                    {surface.title}
+                  </h3>
+                  <p
+                    className="text-[11px] md:text-sm leading-relaxed line-clamp-3 font-medium"
+                    style={{ color: "#ffffff", textShadow: "0 1px 4px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.6)" }}
+                  >
+                    {surface.description}
+                  </p>
+                </div>
                 {!surface.comingSoon && (
                   <span
                     className="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium transition-all duration-300"
