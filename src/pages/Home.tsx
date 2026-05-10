@@ -289,7 +289,7 @@ const Home = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="space-y-6 text-base md:text-lg text-foreground/70 font-normal leading-relaxed max-w-2xl mx-auto"
+              className="space-y-6 font-body text-base md:text-base text-foreground/70 font-normal leading-relaxed max-w-2xl mx-auto"
             >
               <p>
                 {t('hero.manifesto.problem1')}<br />
@@ -302,7 +302,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="inline-block text-foreground/90 text-lg md:text-xl mt-2"
+                  className="inline-block text-foreground/70 mt-2"
                 >
                   {t('hero.manifesto.question2')}
                 </motion.span>
