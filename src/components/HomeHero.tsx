@@ -129,7 +129,7 @@ export const HomeDescription = () => {
         </motion.p>
 
         {/* Indoor / Outdoor Cards */}
-        <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 w-full">
+        <div className="grid grid-cols-2 gap-4 md:gap-6 mb-10 w-full max-w-2xl mx-auto">
           {[
             { title: t('homeHero.indoorTitle'), desc: t('homeHero.indoorDesc'), link: `/${language}/indoor`, image: cardIndoor },
             { title: t('homeHero.outdoorTitle'), desc: t('homeHero.outdoorDesc'), link: `/${language}/outdoor`, image: cardOutdoor },
@@ -145,7 +145,7 @@ export const HomeDescription = () => {
               >
                 <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%)" }} />
-                <div className="relative z-10 h-full flex flex-col justify-end p-4 md:p-6">
+                <div className="relative z-10 h-full flex flex-col items-center justify-end text-center p-4 md:p-6">
                   <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1.5 tracking-wide" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{card.title}</h3>
                   <p className="text-[11px] md:text-sm text-white/90 leading-relaxed line-clamp-3 mb-2 font-medium" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>{card.desc}</p>
                   <span className="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium text-white" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}>
