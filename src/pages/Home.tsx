@@ -248,28 +248,26 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Manifesto Part 1 — Philosophy */}
-      <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
-        <div className="w-full py-16 md:py-24 px-6 md:px-12 lg:px-16">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Staggered italic lines — each reveals on scroll */}
-            <div className="space-y-6 md:space-y-8">
+      {/* Manifesto — Philosophy & System */}
+      <section className="relative bg-background overflow-hidden">
+        <div className="w-full py-20 md:py-28 px-6 md:px-12 lg:px-16">
+          <div className="max-w-3xl mx-auto">
+            {/* Flowing prose paragraphs */}
+            <div className="space-y-8 md:space-y-10">
               {[
-                t('hero.manifesto.line1'),
-                t('hero.manifesto.line2'),
-                t('hero.manifesto.line3'),
-                t('hero.manifesto.line4'),
-                t('hero.manifesto.line5'),
-              ].map((line, i) => (
+                t('hero.manifesto.para1'),
+                t('hero.manifesto.para2'),
+                t('hero.manifesto.para3'),
+              ].map((para, i) => (
                 <motion.p
                   key={i}
-                  initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
-                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.8, delay: i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="font-body text-2xl md:text-2xl lg:text-2xl text-foreground/90 font-normal tracking-wide leading-relaxed"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.7, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="font-body text-lg md:text-xl text-foreground/85 font-normal leading-relaxed"
                 >
-                  {line}
+                  {para}
                 </motion.p>
               ))}
             </div>
@@ -279,79 +277,28 @@ const Home = () => {
               initial={{ scaleX: 0 }}
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-              className="h-px w-24 mx-auto bg-foreground/30 my-10 md:my-14 origin-center"
+              transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+              className="h-px w-24 mx-auto bg-foreground/30 my-14 md:my-20 origin-center"
             />
 
-            {/* Problem & Question — fade in as blocks */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="space-y-6 font-body text-base md:text-base text-foreground/70 font-normal leading-relaxed max-w-2xl mx-auto"
-            >
-              <p>
-                {t('hero.manifesto.problem1')}<br />
-                {t('hero.manifesto.problem2')}
-              </p>
-              <p>
-                {t('hero.manifesto.question1')}<br />
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  className="inline-block text-foreground/70 mt-2"
-                >
-                  {t('hero.manifesto.question2')}
-                </motion.span>
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Manifesto Part 2 — Vision & System */}
-      <section className="relative min-h-screen bg-background flex items-center overflow-hidden">
-        <div className="relative w-full py-16 md:py-24 px-6 md:px-12 lg:px-16">
-          <div className="max-w-4xl mx-auto">
-            {/* Reflection lines — horizontal scroll-reveal */}
-            <div className="space-y-6 md:space-y-8 text-center mb-12 md:mb-16">
-              {[
-                t('hero.manifesto.reflection1'),
-                t('hero.manifesto.reflection2'),
-                t('hero.manifesto.reflection3'),
-                t('hero.manifesto.reflection4'),
-              ].map((line, i) => (
-                <motion.p
-                  key={i}
-                  initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.7, delay: i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="font-body text-2xl md:text-2xl lg:text-2xl text-foreground/90 font-normal tracking-wide leading-relaxed"
-                >
-                  {line}
-                </motion.p>
-              ))}
-            </div>
-
-            {/* Value propositions — card-like reveals with background images */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
+            {/* Value propositions — 5 cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-14 md:mb-20">
               {[
                 { text: t('hero.manifesto.value1'), image: valueContinuousSystem },
                 { text: t('hero.manifesto.value2'), image: valueSeamlessMaterial },
                 { text: t('hero.manifesto.value3'), image: valueTimelessAesthetic },
                 { text: t('hero.manifesto.value4'), image: valueSimpleTechnology },
-              ].map((item, i) => (
+                { text: t('hero.manifesto.value5'), image: bgManifesto },
+              ].map((item, i, arr) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 30, scale: 0.97 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: "-30px" }}
-                  transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
-                  className="group relative overflow-hidden rounded-2xl min-h-[200px] md:min-h-[220px] cursor-default"
+                  transition={{ duration: 0.6, delay: i * 0.08, ease: "easeOut" }}
+                  className={`group relative overflow-hidden rounded-2xl min-h-[200px] md:min-h-[220px] cursor-default ${
+                    arr.length % 2 === 1 && i === arr.length - 1 ? "md:col-span-2" : ""
+                  }`}
                 >
                   <img
                     src={item.image}
@@ -364,7 +311,7 @@ const Home = () => {
                     <div className="text-white/30 text-4xl font-heading font-bold mb-2">
                       {String(i + 1).padStart(2, '0')}
                     </div>
-                    <p className="text-sm md:text-base text-white font-medium leading-relaxed">
+                    <p className="text-base md:text-lg text-white font-medium leading-relaxed">
                       {item.text}
                     </p>
                   </div>
@@ -374,32 +321,17 @@ const Home = () => {
 
             {/* Conclusion + Brand signature */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="text-center space-y-6"
+              transition={{ duration: 0.9, delay: 0.2 }}
+              className="text-center space-y-10"
             >
-              <div className="space-y-6 font-body text-base md:text-base text-foreground/70 font-normal leading-relaxed">
-                <p>{t('hero.manifesto.conclusion1')}</p>
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                  className="text-foreground/70"
-                >
-                  {t('hero.manifesto.conclusion2')}
-                </motion.p>
-              </div>
+              <p className="font-body text-lg md:text-xl text-foreground/85 font-normal leading-relaxed">
+                {t('hero.manifesto.conclusion')}
+              </p>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="pt-8 md:pt-12 space-y-3"
-              >
+              <div className="space-y-3 pt-4">
                 <p className="text-sm md:text-base lg:text-lg tracking-[0.3em] text-foreground font-medium uppercase">
                   KALĒA® — SURFACE SYSTEM®
                 </p>
@@ -410,7 +342,7 @@ const Home = () => {
                 <p className="text-sm md:text-base text-foreground/60 font-light">
                   {t('hero.manifesto.brandStatement2')}
                 </p>
-              </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
