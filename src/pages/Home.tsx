@@ -110,13 +110,13 @@ const Home = () => {
       {/* Hero Section */}
       <HomeHero />
 
-      {/* Indoor/Outdoor Section */}
-      <IndoorOutdoorSection />
-
       {/* Chi Siamo — Manifesto del brand (paper-write reveal) */}
       <ChiSiamoManifesto language={language} nextSectionId="chi-siamo-next" />
 
       <div id="chi-siamo-next" className="scroll-mt-20" />
+
+      {/* Indoor/Outdoor Section */}
+      <IndoorOutdoorSection />
 
       {/* Applicazioni */}
       <section className="relative min-h-screen bg-background flex items-center">

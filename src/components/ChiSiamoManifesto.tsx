@@ -89,15 +89,20 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
   return (
     <section
       ref={sectionRef}
-      className="relative bg-background overflow-hidden py-20 md:py-32"
+      className="relative overflow-hidden py-20 md:py-32"
+      style={{
+        backgroundColor: "#FBF6EC",
+        backgroundImage:
+          "repeating-linear-gradient(0deg, rgba(140,123,107,0.04) 0px, rgba(140,123,107,0.04) 1px, transparent 1px, transparent 6px), radial-gradient(circle at 15% 8%, rgba(140,123,107,0.07), transparent 55%), radial-gradient(circle at 85% 92%, rgba(140,123,107,0.06), transparent 55%)",
+      }}
     >
       {/* Ambient warm vignette */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60"
+        className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(140,123,107,0.08) 0%, rgba(247,241,231,0) 60%)",
+            "radial-gradient(ellipse at center, rgba(140,123,107,0.10) 0%, rgba(247,241,231,0) 70%)",
         }}
       />
 
@@ -106,17 +111,8 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
           style={{ y: sheetY, rotate: sheetRotate }}
           className="relative max-w-3xl mx-auto"
         >
-          {/* Paper sheet */}
-          <div
-            className="relative rounded-[2px] px-8 sm:px-12 md:px-20 py-16 md:py-24"
-            style={{
-              backgroundColor: "#FBF6EC",
-              backgroundImage:
-                "repeating-linear-gradient(0deg, rgba(140,123,107,0.04) 0px, rgba(140,123,107,0.04) 1px, transparent 1px, transparent 6px), radial-gradient(circle at 20% 10%, rgba(140,123,107,0.06), transparent 60%), radial-gradient(circle at 80% 90%, rgba(140,123,107,0.05), transparent 55%)",
-              boxShadow:
-                "0 1px 0 rgba(140,123,107,0.10), 0 30px 60px -30px rgba(60,45,30,0.18), 0 8px 24px -12px rgba(60,45,30,0.10)",
-            }}
-          >
+          {/* Inner content area (transparent, paper is the section bg) */}
+          <div className="relative px-2 sm:px-6 md:px-10 py-6 md:py-10">
             {/* Eyebrow */}
             <motion.p
               initial={{ opacity: 0, y: 8 }}
