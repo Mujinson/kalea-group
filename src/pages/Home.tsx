@@ -253,7 +253,7 @@ const Home = () => {
         <div className="w-full py-20 md:py-28 px-6 md:px-12 lg:px-16">
           <div className="max-w-3xl mx-auto">
             {/* Flowing prose paragraphs */}
-            <div className="space-y-8 md:space-y-10">
+            <div className="space-y-8 md:space-y-10 text-center">
               {[
                 t('hero.manifesto.para1'),
                 t('hero.manifesto.para2'),
