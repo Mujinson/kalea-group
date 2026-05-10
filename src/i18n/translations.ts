@@ -3174,8 +3174,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     surfaces: {
-      sectionTitle: "Unsere Oberflächen",
-      sectionSubtitle: "KALĒA® — SURFACE SYSTEM® bietet sechs Welten der Exzellenz für Innen- und Außenbereiche.",
+      sectionTitle: "Premium-Oberflächen. Eine Signatur: Kalēa®.",
+      sectionSubtitle: "Ausgewählte Materialien für Projekte, die Bestand haben. Lieferung, Beratung und Verlegung aus einer Hand.",
       comingSoon: "Demnächst verfügbar",
       discover: "Entdecken",
       bottomText: "Alles ergänzt mit Sonderteilen für Treppen, Sockelleisten, Profile und koordinierte Zubehörteile. Mobiler Showroom direkt auf Ihrer Baustelle für eine Beratung vor Ort.",
