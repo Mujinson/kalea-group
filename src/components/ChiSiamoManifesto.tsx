@@ -89,7 +89,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-20 md:py-32"
+      className="relative overflow-hidden h-screen flex items-center justify-center"
       style={{
         backgroundColor: "#FBF6EC",
         backgroundImage:
@@ -111,11 +111,10 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
           style={{ y: sheetY, rotate: sheetRotate }}
           className="relative max-w-3xl mx-auto"
         >
-          {/* Inner content area (transparent, paper is the section bg) */}
-          <div className="relative px-2 sm:px-6 md:px-10 py-6 md:py-10">
+          <div className="relative px-2 sm:px-6 md:px-10 py-4">
 
-            {/* Manifesto lines — sequential reveal like ink appearing on paper */}
-            <div className="space-y-6 md:space-y-8 text-center">
+            {/* Manifesto lines */}
+            <div className="space-y-3 md:space-y-4 text-center">
               {phrases.map((line, i) => (
                 <motion.p
                   key={`${lang}-${i}`}
@@ -127,7 +126,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
                     delay: i * 0.35,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="text-xl md:text-2xl lg:text-3xl font-heading font-light leading-snug text-foreground"
+                  className="text-base md:text-lg lg:text-xl font-heading font-light leading-snug text-foreground"
                   style={{ letterSpacing: "0.005em" }}
                 >
                   {line}
@@ -135,13 +134,13 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
               ))}
             </div>
 
-            {/* Animated divider — draws like a pen line */}
+            {/* Animated divider */}
             <motion.div
               initial={{ scaleX: 0, opacity: 0 }}
               whileInView={{ scaleX: 1, opacity: 1 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="my-12 md:my-16 mx-auto h-px w-24 origin-left bg-foreground/30"
+              className="my-6 md:my-8 mx-auto h-px w-20 origin-left bg-foreground/30"
             />
 
             {/* Descriptive paragraph */}
@@ -150,7 +149,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="text-sm md:text-base text-foreground/65 font-light leading-relaxed max-w-2xl mx-auto text-center italic"
+              className="text-xs md:text-sm text-foreground/65 font-light leading-relaxed max-w-2xl mx-auto text-center italic"
             >
               {t.paragraph}
             </motion.p>
@@ -161,7 +160,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-12 md:mt-16 text-center"
+              className="mt-6 md:mt-8 text-center"
             >
               <button
                 type="button"
