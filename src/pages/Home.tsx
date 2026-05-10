@@ -109,8 +109,80 @@ const Home = () => {
       {/* Hero Section */}
       <HomeHero />
 
+      {/* Chi Siamo — Manifesto del brand */}
+      <section className="relative bg-background overflow-hidden">
+        <div className="w-full py-20 md:py-28 px-6 md:px-12 lg:px-16">
+          <div className="max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center"
+            >
+              <p className="text-xs md:text-sm font-heading tracking-[0.3em] uppercase text-foreground/50 mb-8">
+                {language === 'it' ? 'Chi siamo' : language === 'en' ? 'About us' : language === 'de' ? 'Über uns' : 'À propos'}
+              </p>
+              <div className="space-y-5 md:space-y-6 text-lg md:text-2xl lg:text-3xl font-heading font-light leading-tight text-foreground">
+                {(language === 'it' ? [
+                  <>Siamo <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span>.</>,
+                  <>Selezioniamo, integriamo e installiamo superfici di prima qualità.</>,
+                  <>Pavimenti. Ceramiche. Parquet. Outdoor.</>,
+                  <>Ogni superficie è una scelta di qualità, durata e design.</>,
+                  <>Una continuità che parla la lingua dell'architettura.</>,
+                ] : language === 'en' ? [
+                  <>We are <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span>.</>,
+                  <>We select, integrate and install premium surfaces.</>,
+                  <>Floors. Ceramics. Parquet. Outdoor.</>,
+                  <>Every surface is a choice of quality, durability and design.</>,
+                  <>A continuity that speaks the language of architecture.</>,
+                ] : language === 'de' ? [
+                  <>Wir sind <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span>.</>,
+                  <>Wir wählen, integrieren und verlegen erstklassige Oberflächen.</>,
+                  <>Böden. Keramik. Parkett. Outdoor.</>,
+                  <>Jede Oberfläche ist eine Entscheidung für Qualität, Langlebigkeit und Design.</>,
+                  <>Eine Kontinuität, die die Sprache der Architektur spricht.</>,
+                ] : [
+                  <>Nous sommes <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span>.</>,
+                  <>Nous sélectionnons, intégrons et posons des surfaces de premier choix.</>,
+                  <>Sols. Céramiques. Parquet. Outdoor.</>,
+                  <>Chaque surface est un choix de qualité, durabilité et design.</>,
+                  <>Une continuité qui parle le langage de l'architecture.</>,
+                ]).map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+
+              <div className="my-10 md:my-12 mx-auto w-12 h-px bg-foreground/20" />
+
+              <p className="text-sm md:text-base text-foreground/65 font-light leading-relaxed max-w-2xl mx-auto">
+                {language === 'it'
+                  ? "Kalēa® porta nel progetto una nuova idea di superficie: selezione curata, posa precisa, accompagnamento dall'idea al cantiere. Un partner unico per chi non scende a compromessi sull'estetica e sulla durata."
+                  : language === 'en'
+                  ? "Kalēa® brings a new idea of surface into every project: curated selection, precise installation, support from concept to site. A single partner for those who do not compromise on aesthetics or durability."
+                  : language === 'de'
+                  ? "Kalēa® steht für eine neue Idee von Oberfläche im Projekt: kuratierte Auswahl, präzise Verlegung, Begleitung von der Idee bis zur Baustelle. Ein einziger Partner für alle, die bei Ästhetik und Haltbarkeit keine Kompromisse eingehen."
+                  : "Kalēa® apporte une nouvelle idée de la surface dans chaque projet : sélection soignée, pose précise, accompagnement de l'idée au chantier. Un partenaire unique pour ceux qui ne transigent ni sur l'esthétique ni sur la durabilité."}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => {
+                  document.getElementById('chi-siamo-next')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+                className="inline-flex items-center gap-2 mt-10 text-sm tracking-wider uppercase text-foreground/70 hover:text-foreground border-b border-foreground/30 hover:border-foreground pb-1 transition-colors"
+              >
+                {language === 'it' ? 'Scopri Kalēa®' : language === 'en' ? 'Discover Kalēa®' : language === 'de' ? 'Kalēa® entdecken' : 'Découvrir Kalēa®'}
+              </button>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Indoor/Outdoor Section */}
-      <IndoorOutdoorSection />
+      <div id="chi-siamo-next" className="scroll-mt-20">
+        <IndoorOutdoorSection />
+      </div>
 
 
 
@@ -169,77 +241,6 @@ const Home = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Chi Siamo — Manifesto evoluzione del brand */}
-      <section className="relative bg-background overflow-hidden">
-        <div className="w-full py-20 md:py-28 px-6 md:px-12 lg:px-16">
-          <div className="max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center"
-            >
-              <p className="text-xs md:text-sm font-heading tracking-[0.3em] uppercase text-foreground/50 mb-8">
-                {language === 'it' ? 'Chi siamo' : language === 'en' ? 'About us' : language === 'de' ? 'Über uns' : 'À propos'}
-              </p>
-              <div className="space-y-5 md:space-y-6 text-lg md:text-2xl lg:text-3xl font-heading font-light leading-tight text-foreground">
-                {(language === 'it' ? [
-                  <>Il brand <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span> si è evoluto.</>,
-                  <>Non siamo più solo MgO.</>,
-                  <>Siamo chi sceglie, integra e installa superfici di prima qualità.</>,
-                  <>Pavimenti. Ceramiche. Parquet. Outdoor.</>,
-                  <>Ogni superficie è una scelta di qualità, durata e design.</>,
-                  <>Una continuità che parla la lingua dell'architettura.</>,
-                ] : language === 'en' ? [
-                  <>The <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span> brand has evolved.</>,
-                  <>We are no longer only MgO.</>,
-                  <>We are those who select, integrate and install premium surfaces.</>,
-                  <>Floors. Ceramics. Parquet. Outdoor.</>,
-                  <>Every surface is a choice of quality, durability and design.</>,
-                  <>A continuity that speaks the language of architecture.</>,
-                ] : language === 'de' ? [
-                  <>Die Marke <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span> hat sich weiterentwickelt.</>,
-                  <>Wir sind nicht mehr nur MgO.</>,
-                  <>Wir wählen, integrieren und verlegen erstklassige Oberflächen.</>,
-                  <>Böden. Keramik. Parkett. Outdoor.</>,
-                  <>Jede Oberfläche ist eine Entscheidung für Qualität, Langlebigkeit und Design.</>,
-                  <>Eine Kontinuität, die die Sprache der Architektur spricht.</>,
-                ] : [
-                  <>La marque <span className="whitespace-nowrap">Kalēa<sup className="text-[0.5em] align-super">®</sup></span> a évolué.</>,
-                  <>Nous ne sommes plus seulement MgO.</>,
-                  <>Nous sélectionnons, intégrons et posons des surfaces de premier choix.</>,
-                  <>Sols. Céramiques. Parquet. Outdoor.</>,
-                  <>Chaque surface est un choix de qualité, durabilité et design.</>,
-                  <>Une continuité qui parle le langage de l'architecture.</>,
-                ]).map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-              </div>
-
-              <div className="my-10 md:my-12 mx-auto w-12 h-px bg-foreground/20" />
-
-              <p className="text-sm md:text-base text-foreground/65 font-light leading-relaxed max-w-2xl mx-auto">
-                {language === 'it'
-                  ? "Kalēa® nasce per portare nel progetto una nuova idea di superficie: selezione curata, posa precisa, accompagnamento dall'idea al cantiere. Un partner unico per chi non scende a compromessi sull'estetica e sulla durata."
-                  : language === 'en'
-                  ? "Kalēa® was born to bring a new idea of surface into every project: curated selection, precise installation, support from concept to site. A single partner for those who do not compromise on aesthetics or durability."
-                  : language === 'de'
-                  ? "Kalēa® steht für eine neue Idee von Oberfläche im Projekt: kuratierte Auswahl, präzise Verlegung, Begleitung von der Idee bis zur Baustelle. Ein einziger Partner für alle, die bei Ästhetik und Haltbarkeit keine Kompromisse eingehen."
-                  : "Kalēa® est née pour apporter une nouvelle idée de la surface dans chaque projet : sélection soignée, pose précise, accompagnement de l'idée au chantier. Un partenaire unique pour ceux qui ne transigent ni sur l'esthétique ni sur la durabilité."}
-              </p>
-
-              <Link
-                to={`/${language}/chi-siamo`}
-                className="inline-flex items-center gap-2 mt-10 text-sm tracking-wider uppercase text-foreground/70 hover:text-foreground border-b border-foreground/30 hover:border-foreground pb-1 transition-colors"
-              >
-                {language === 'it' ? 'Scopri Kalēa®' : language === 'en' ? 'Discover Kalēa®' : language === 'de' ? 'Kalēa® entdecken' : 'Découvrir Kalēa®'}
-              </Link>
-            </motion.div>
           </div>
         </div>
       </section>
