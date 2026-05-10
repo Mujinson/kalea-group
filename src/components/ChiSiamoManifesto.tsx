@@ -181,7 +181,7 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
                   initial={{ y: 0 }}
                   animate={{ y: [0, 4, 0] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                  className="text-foreground/50 group-hover:text-white"
+                  className="text-white/60 group-hover:text-white"
                 >
                   ↓
                 </motion.span>
