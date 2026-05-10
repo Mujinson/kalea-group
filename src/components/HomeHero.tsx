@@ -145,9 +145,11 @@ export const HomeDescription = () => {
               >
                 <img src={card.image} alt={card.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
                 <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.65) 100%)" }} />
-                <div className="relative z-10 h-full flex flex-col items-center justify-end text-center p-4 md:p-6">
-                  <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1.5 tracking-wide" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{card.title}</h3>
-                  <p className="text-[11px] md:text-sm text-white/90 leading-relaxed line-clamp-3 mb-2 font-medium" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>{card.desc}</p>
+                <div className="relative z-10 h-full flex flex-col justify-between p-4 md:p-6">
+                  <div>
+                    <h3 className="text-base md:text-lg lg:text-xl font-heading font-semibold text-white mb-1.5 tracking-wide" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}>{card.title}</h3>
+                    <p className="text-[11px] md:text-sm text-white/90 leading-relaxed line-clamp-3 font-medium" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>{card.desc}</p>
+                  </div>
                   <span className="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium text-white" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}>
                     {t('homeHero.discover')} <ArrowRight size={12} className="transition-transform duration-300 group-hover:translate-x-1" />
                   </span>
