@@ -289,7 +289,7 @@ const Home = () => {
                 { text: t('hero.manifesto.value2'), image: valueSeamlessMaterial },
                 { text: t('hero.manifesto.value3'), image: valueTimelessAesthetic },
                 { text: t('hero.manifesto.value4'), image: valueSimpleTechnology },
-                { text: t('hero.manifesto.value5'), image: bgManifesto },
+                { text: t('hero.manifesto.value5'), image: valueServiceInstallation },
               ].map((item, i, arr) => (
                 <motion.div
                   key={i}
