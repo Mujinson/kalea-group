@@ -908,8 +908,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     surfaces: {
-      sectionTitle: "Le Nostre Superfici",
-      sectionSubtitle: "KALĒA® — SURFACE SYSTEM® offre sei mondi di eccellenza per interni ed esterni.",
+      sectionTitle: "Superfici premium. Una sola firma: Kalēa®.",
+      sectionSubtitle: "Materiali selezionati per progetti che durano. Fornitura, consulenza e posa gestite con un unico interlocutore.",
       comingSoon: "Novità in arrivo",
       discover: "Scopri",
       bottomText: "Tutto completato con pezzi speciali per scale, battiscopa, profili e accessori coordinati. Showroom mobile direttamente nel tuo cantiere per una consulenza sul posto.",
