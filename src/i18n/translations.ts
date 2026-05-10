@@ -908,8 +908,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     surfaces: {
-      sectionTitle: "Le Nostre Superfici",
-      sectionSubtitle: "KALĒA® — SURFACE SYSTEM® offre sei mondi di eccellenza per interni ed esterni.",
+      sectionTitle: "Superfici premium. Una sola firma: Kalēa®.",
+      sectionSubtitle: "Materiali selezionati per progetti che durano. Fornitura, consulenza e posa gestite con un unico interlocutore.",
       comingSoon: "Novità in arrivo",
       discover: "Scopri",
       bottomText: "Tutto completato con pezzi speciali per scale, battiscopa, profili e accessori coordinati. Showroom mobile direttamente nel tuo cantiere per una consulenza sul posto.",
@@ -2050,8 +2050,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     surfaces: {
-      sectionTitle: "Our Surfaces",
-      sectionSubtitle: "KALĒA® — SURFACE SYSTEM® offers six worlds of excellence for indoor and outdoor.",
+      sectionTitle: "Premium surfaces. One signature: Kalēa®.",
+      sectionSubtitle: "Selected materials for projects built to last. Supply, consulting and installation managed by a single partner.",
       comingSoon: "Coming soon",
       discover: "Discover",
       bottomText: "Everything completed with special pieces for stairs, baseboards, profiles and coordinated accessories. Mobile showroom directly at your construction site for on-site consultation.",
@@ -3174,8 +3174,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     surfaces: {
-      sectionTitle: "Unsere Oberflächen",
-      sectionSubtitle: "KALĒA® — SURFACE SYSTEM® bietet sechs Welten der Exzellenz für Innen- und Außenbereiche.",
+      sectionTitle: "Premium-Oberflächen. Eine Signatur: Kalēa®.",
+      sectionSubtitle: "Ausgewählte Materialien für Projekte, die Bestand haben. Lieferung, Beratung und Verlegung aus einer Hand.",
       comingSoon: "Demnächst verfügbar",
       discover: "Entdecken",
       bottomText: "Alles ergänzt mit Sonderteilen für Treppen, Sockelleisten, Profile und koordinierte Zubehörteile. Mobiler Showroom direkt auf Ihrer Baustelle für eine Beratung vor Ort.",
@@ -4304,8 +4304,8 @@ export const translations: Record<Language, Translations> = {
       },
     },
     surfaces: {
-      sectionTitle: "Nos Surfaces",
-      sectionSubtitle: "KALĒA® — SURFACE SYSTEM® offre six mondes d'excellence pour intérieur et extérieur.",
+      sectionTitle: "Surfaces premium. Une seule signature : Kalēa®.",
+      sectionSubtitle: "Matériaux sélectionnés pour des projets qui durent. Fourniture, conseil et pose gérés par un interlocuteur unique.",
       comingSoon: "Bientôt disponible",
       discover: "Découvrir",
       bottomText: "Tout est complété par des pièces spéciales pour escaliers, plinthes, profilés et accessoires coordonnés. Showroom mobile directement sur votre chantier pour une consultation sur place.",
