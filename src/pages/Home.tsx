@@ -380,14 +380,14 @@ const Home = () => {
               transition={{ duration: 1, delay: 0.3 }}
               className="text-center space-y-6"
             >
-              <div className="space-y-2 text-base md:text-lg text-foreground/70 font-normal">
+              <div className="space-y-6 font-body text-base md:text-base text-foreground/70 font-normal leading-relaxed">
                 <p>{t('hero.manifesto.conclusion1')}</p>
                 <motion.p
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.5 }}
-                  className="text-lg md:text-xl text-foreground/90 font-normal"
+                  className="text-foreground/70"
                 >
                   {t('hero.manifesto.conclusion2')}
                 </motion.p>
