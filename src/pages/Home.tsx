@@ -210,7 +210,7 @@ const Home = () => {
                       y: -6,
                       boxShadow: "0 20px 60px rgba(0, 0, 0, 0.25)",
                     }}
-                    className="relative aspect-[16/10] sm:aspect-[3/2] md:aspect-[4/5] w-full rounded-2xl overflow-hidden group md:rounded-3xl"
+                    className="relative w-full rounded-2xl overflow-hidden group md:rounded-3xl min-h-[180px] sm:min-h-[220px] md:min-h-[250px] md:aspect-square"
                   >
                     {item.video ? (
                       <div className="absolute inset-[-10%] overflow-hidden">
