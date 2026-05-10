@@ -91,9 +91,9 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
       ref={sectionRef}
       className="relative overflow-hidden h-screen flex items-center justify-center"
       style={{
-        backgroundColor: "#FBF6EC",
+        backgroundColor: "hsl(34 32% 68%)",
         backgroundImage:
-          "repeating-linear-gradient(0deg, rgba(140,123,107,0.04) 0px, rgba(140,123,107,0.04) 1px, transparent 1px, transparent 6px), radial-gradient(circle at 15% 8%, rgba(140,123,107,0.07), transparent 55%), radial-gradient(circle at 85% 92%, rgba(140,123,107,0.06), transparent 55%)",
+          "repeating-linear-gradient(0deg, rgba(74,42,19,0.10) 0px, rgba(74,42,19,0.10) 1px, transparent 1px, transparent 6px), radial-gradient(circle at 15% 8%, rgba(74,42,19,0.10), transparent 55%), radial-gradient(circle at 85% 92%, rgba(74,42,19,0.08), transparent 55%)",
       }}
     >
       {/* Ambient warm vignette */}
