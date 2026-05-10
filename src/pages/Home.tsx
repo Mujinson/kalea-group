@@ -24,6 +24,7 @@ import valueContinuousSystem from "@/assets/value-continuous-system.jpg";
 import valueSeamlessMaterial from "@/assets/value-seamless-material.jpg";
 import valueTimelessAesthetic from "@/assets/value-timeless-aesthetic.jpg";
 import valueSimpleTechnology from "@/assets/value-simple-technology.jpg";
+import valueServiceInstallation from "@/assets/value-service-installation.jpg";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const Home = () => {
