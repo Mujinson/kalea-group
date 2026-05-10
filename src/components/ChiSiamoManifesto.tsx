@@ -113,16 +113,6 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
         >
           {/* Inner content area (transparent, paper is the section bg) */}
           <div className="relative px-2 sm:px-6 md:px-10 py-6 md:py-10">
-            {/* Eyebrow */}
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6 }}
-              className="text-[10px] md:text-xs font-heading tracking-[0.4em] uppercase text-foreground/50 text-center mb-10 md:mb-14"
-            >
-              — {t.eyebrow} —
-            </motion.p>
 
             {/* Manifesto lines — sequential reveal like ink appearing on paper */}
             <div className="space-y-6 md:space-y-8 text-center">
