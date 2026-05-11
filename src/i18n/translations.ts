@@ -4261,9 +4261,9 @@ export const translations: Record<Language, Translations> = {
     },
     partner: {
       hero: {
-        title: "Devenir Partenaire Kalēa",
-        subtitle: "Rejoignez le réseau sélect de professionnels proposant le système de surfaces le plus avancé d'Italie.",
-        cta: "Demander à devenir Partenaire",
+        title: "Collaborer avec Kalēa®",
+        subtitle: "Architectes, architectes d'intérieur, géomètres, entreprises de construction, revendeurs et particuliers : choisissez le système de surfaces le plus évolué et construisez avec nous des projets qui durent.",
+        cta: "Démarrer la collaboration",
       },
       why: {
         title: "Pourquoi collaborer avec Kalēa",
