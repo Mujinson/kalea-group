@@ -960,7 +960,7 @@ export const translations: Record<Language, Translations> = {
     techSpec: {
       tabFormats: "Formati",
       tabEffect: "Effetto",
-      tabApplications: "Applicazioni",
+      tabApplications: "Caratteristiche",
       surfaceLabel: "Superficie",
       effectHeading: "Finitura e materia",
       noFormats: "Formato unico",
@@ -2090,7 +2090,7 @@ export const translations: Record<Language, Translations> = {
     techSpec: {
       tabFormats: "Formats",
       tabEffect: "Finish",
-      tabApplications: "Applications",
+      tabApplications: "Performance",
       surfaceLabel: "Surface",
       effectHeading: "Finish and material",
       noFormats: "Single format",
@@ -3220,7 +3220,7 @@ export const translations: Record<Language, Translations> = {
     techSpec: {
       tabFormats: "Formate",
       tabEffect: "Oberfläche",
-      tabApplications: "Anwendungen",
+      tabApplications: "Eigenschaften",
       surfaceLabel: "Fläche",
       effectHeading: "Oberfläche und Material",
       noFormats: "Einheitsformat",
@@ -4356,7 +4356,7 @@ export const translations: Record<Language, Translations> = {
     techSpec: {
       tabFormats: "Formats",
       tabEffect: "Finition",
-      tabApplications: "Applications",
+      tabApplications: "Caractéristiques",
       surfaceLabel: "Surface",
       effectHeading: "Finition et matière",
       noFormats: "Format unique",
