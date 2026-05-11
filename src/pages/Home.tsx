@@ -253,8 +253,25 @@ const Home = () => {
       </section>
 
       {/* Manifesto — Philosophy & System */}
-      <section className="relative bg-background overflow-hidden">
-        <div className="w-full py-20 md:py-28 px-6 md:px-12 lg:px-16">
+      <section
+        id="surface-system"
+        className="relative overflow-hidden scroll-mt-20"
+        style={{
+          backgroundColor: "hsl(34 32% 68%)",
+          backgroundImage:
+            "repeating-linear-gradient(0deg, rgba(74,42,19,0.10) 0px, rgba(74,42,19,0.10) 1px, transparent 1px, transparent 6px), radial-gradient(circle at 15% 8%, rgba(74,42,19,0.10), transparent 55%), radial-gradient(circle at 85% 92%, rgba(74,42,19,0.08), transparent 55%)",
+        }}
+      >
+        {/* Ambient warm vignette */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(140,123,107,0.10) 0%, rgba(247,241,231,0) 70%)",
+          }}
+        />
+        <div className="relative w-full py-20 md:py-28 px-6 md:px-12 lg:px-16">
           <div className="max-w-3xl mx-auto">
             {/* Flowing prose paragraphs */}
             <div className="space-y-8 md:space-y-10 text-center">
@@ -269,7 +286,8 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{ duration: 0.7, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="font-body text-lg md:text-xl text-foreground/85 font-normal leading-relaxed"
+                  className="font-heading font-light text-lg md:text-xl lg:text-2xl text-white leading-snug"
+                  style={{ letterSpacing: "0.005em" }}
                 >
                   {para}
                 </motion.p>
@@ -282,7 +300,7 @@ const Home = () => {
               whileInView={{ scaleX: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-              className="h-px w-24 mx-auto bg-foreground/30 my-14 md:my-20 origin-center"
+              className="h-px w-24 mx-auto bg-white/40 my-14 md:my-20 origin-center"
             />
 
             {/* Value propositions — 5 cards */}
