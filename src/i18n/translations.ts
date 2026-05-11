@@ -1136,6 +1136,22 @@ export const translations: Record<Language, Translations> = {
       ctaDesc: "Contattaci per scoprire la nostra pavimentazione outdoor premium e richiedere un preventivo personalizzato.",
       ctaButton: "Richiedi Informazioni",
     },
+    productSpecs: {
+      title: "Specifiche Tecniche",
+      subtitle: "Prestazioni certificate per ogni ambiente.",
+      format: "Formato",
+      thickness: "Spessore",
+      useClass: "Classe d'uso",
+      fire: "Reazione al fuoco",
+      wear: "Strato d'usura",
+      click: "Sistema di posa",
+      material: "Materiale",
+      finish: "Finitura",
+      surface: "Superficie",
+      edge: "Bordo",
+      slip: "Antiscivolo",
+      installation: "Installazione",
+    },
   },
   en: {
     nav: {
