@@ -3103,9 +3103,9 @@ export const translations: Record<Language, Translations> = {
     },
     partner: {
       hero: {
-        title: "Kalēa Partner werden",
-        subtitle: "Treten Sie dem ausgewählten Netzwerk von Fachleuten bei, die das fortschrittlichste Oberflächensystem Italiens anbieten.",
-        cta: "Partner werden beantragen",
+        title: "Mit Kalēa® zusammenarbeiten",
+        subtitle: "Architekten, Innenarchitekten, Vermesser, Bauunternehmen, Händler und Privatkunden: Wählen Sie das fortschrittlichste Oberflächensystem und realisieren Sie mit uns Projekte, die Bestand haben.",
+        cta: "Zusammenarbeit starten",
       },
       why: {
         title: "Warum mit Kalēa zusammenarbeiten",
@@ -3127,13 +3127,16 @@ export const translations: Record<Language, Translations> = {
         },
       },
       ideal: {
-        title: "Wer ist unser idealer Partner",
-        description: "Wir arbeiten mit Fachleuten zusammen, die das Kalēa-System mit Kompetenz und Vision vertreten können.",
-        reseller: "Oberflächen-Händler",
-        showroom: "Innenausstattungs-Showrooms",
-        architect: "Architekten und Designstudios",
+        title: "Mit wem wir arbeiten",
+        description: "Architekten, Innenarchitekten, Vermesser, Bauunternehmen, Händler und Privatkunden, die Premium-Oberflächen suchen. Eine maßgeschneiderte Zusammenarbeit für jedes Profil.",
+        architect: "Architekten",
+        designer: "Innenarchitekten",
+        geometra: "Vermesser",
         contractor: "Bauunternehmen",
-        installer: "Professionelle Verleger",
+        private: "Privatkunden",
+        reseller: "Händler",
+        showroom: "Showrooms",
+        installer: "Verleger",
       },
       benefits: {
         title: "Was wir Partnern bieten",
