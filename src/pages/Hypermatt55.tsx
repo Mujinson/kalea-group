@@ -118,7 +118,7 @@ const Hypermatt55 = () => {
 
         {/* Specifiche Tecniche — editorial dark bars */}
         <TechSpecBar
-          title={`${t("hypermatt55.specsTitle")} — ${t("hypermatt55.specsHeader1")}`}
+          title={t("hypermatt55.specsHeader1")}
           subtitle={t("hypermatt55.specsSubtitle")}
           specs={[
             { label: t("hypermatt55.specFormat"), value: "228,6×1524 mm" },
