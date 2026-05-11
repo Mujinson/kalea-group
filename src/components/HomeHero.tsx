@@ -92,7 +92,7 @@ const HomeHero = () => {
               {t('hero.home.ctaInfo')}
             </Link>
             <Link 
-              to={`/${language}/indoor`}
+              to={`/${language}#surface-system`}
               className="inline-flex items-center justify-center gap-2 border border-white/30 text-white text-sm font-medium rounded-xl px-8 py-3.5 hover:bg-white/10 transition-all duration-150 backdrop-blur-sm"
             >
               {t('hero.home.ctaProducts')}
