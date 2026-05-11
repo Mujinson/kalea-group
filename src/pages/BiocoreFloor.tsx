@@ -17,7 +17,7 @@ import roomSpina from "@/assets/hero-hypermatt-spina.jpg";
 import room55 from "@/assets/hero-hypermatt55.jpg";
 
 const BiocoreFloor = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   
   const heroRef = useRef<HTMLDivElement>(null);

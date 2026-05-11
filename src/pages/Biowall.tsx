@@ -284,6 +284,18 @@ const Biowall = () => {
         </div>
       </section>
 
+      <TechSpecBar
+        title={t('productSpecs.title')}
+        subtitle={t('productSpecs.subtitle')}
+        specs={[
+          { label: t('productSpecs.material'), value: "MgO + fibra naturale" },
+          { label: t('productSpecs.thickness'), value: "6 · 9 mm" },
+          { label: t('productSpecs.format'), value: "600×2400 mm · 1200×2400 mm" },
+          { label: t('productSpecs.finish'), value: "Hypermatt" },
+          { label: t('productSpecs.fire'), value: "A1 (incombustibile)" },
+        ]}
+      />
+
       {/* CTA finale */}
       <section className="section-spacing relative overflow-hidden bg-background">
         {/* Background Image */}

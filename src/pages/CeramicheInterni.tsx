@@ -227,6 +227,19 @@ const CeramicheInterni = () => {
           </motion.div>
         </div>
       </section>
+      <TechSpecBar
+        title={t('productSpecs.title')}
+        subtitle={t('productSpecs.subtitle')}
+        specs={[
+          { label: t('productSpecs.material'), value: "Gres porcellanato" },
+          { label: t('productSpecs.thickness'), value: "6 · 9 mm" },
+          { label: t('productSpecs.format'), value: "60×60 · 60×120 · 80×80 · 120×120 · 120×280 cm" },
+          { label: t('productSpecs.finish'), value: "Naturale · Lappato · Grip" },
+          { label: t('productSpecs.edge'), value: "Rettificato" },
+          { label: t('productSpecs.slip'), value: "R10" },
+        ]}
+      />
+
       {/* CTA Section */}
       <section className="relative z-[1] bg-primary py-20 md:py-28">
         <div className="container-custom text-center">

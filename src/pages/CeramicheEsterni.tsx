@@ -302,6 +302,21 @@ const CeramicheEsterni = () => {
         </div>
       </section>
 
+      <TechSpecBar
+        title={t('productSpecs.title')}
+        subtitle={t('productSpecs.subtitle')}
+        specs={[
+          { label: t('productSpecs.material'), value: "Gres porcellanato 2 cm" },
+          { label: t('productSpecs.thickness'), value: "20 mm" },
+          { label: t('productSpecs.format'), value: "60×60 · 60×120 · 80×80 · 100×100 cm" },
+          { label: t('productSpecs.finish'), value: "Strutturata" },
+          { label: t('productSpecs.edge'), value: "Rettificato" },
+          { label: t('productSpecs.slip'), value: "R11 A+B+C" },
+        ]}
+        applicationsLabel={t('productSpecs.installation')}
+        applications={["Posa a secco su erba/ghiaia", "Posa su sabbia", "Posa su supporti", "Posa incollata"]}
+      />
+
       {/* CTA Section */}
       <section className="relative z-[1] bg-primary py-20 md:py-28">
         <div className="container-custom text-center">

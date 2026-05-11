@@ -259,6 +259,20 @@ const Kaleaceiling = () => {
         </div>
       </section>
 
+      <TechSpecBar
+        title={t('productSpecs.title')}
+        subtitle={t('productSpecs.subtitle')}
+        specs={[
+          { label: t('productSpecs.material'), value: "MgO + fibra naturale" },
+          { label: t('productSpecs.thickness'), value: "9 mm" },
+          { label: t('productSpecs.format'), value: "600×2400 mm" },
+          { label: t('productSpecs.finish'), value: "Hypermatt Outdoor" },
+          { label: t('productSpecs.fire'), value: "A1 (incombustibile)" },
+        ]}
+        applicationsLabel={t('productSpecs.installation')}
+        applications={["Soffitti esterni", "Porticati", "Logge", "Pensiline"]}
+      />
+
       {/* Coming Soon CTA */}
       <section className="relative z-[4] py-20 md:py-32 overflow-hidden bg-background">
         <div 
