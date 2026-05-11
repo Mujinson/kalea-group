@@ -157,7 +157,7 @@ const configuratorQuestions = [
 ];
 
 const Kaleabase = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [configuratorAnswers, setConfiguratorAnswers] = useState<Record<string, string>>({});

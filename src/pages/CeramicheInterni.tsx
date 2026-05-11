@@ -13,7 +13,7 @@ import { getCollectionsByCategory } from "@/data/ceramicheCollections";
 import heroInterni from "@/assets/ceramiche-interni-hero.jpg";
 
 const CeramicheInterni = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const collections = getCollectionsByCategory("interni");
 
