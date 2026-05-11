@@ -113,8 +113,9 @@ const TechSpecBar = ({
   );
   const formats = useMemo(() => {
     if (!formatSpec) return [];
+    // Split only on explicit separators (· / |). Do NOT split on "," — it is a decimal separator in IT/DE/FR.
     return formatSpec.value
-      .split(/·|\/|,|\|/)
+      .split(/·|\/|\|/)
       .map((s) => s.trim())
       .filter(Boolean);
   }, [formatSpec]);
