@@ -15,6 +15,7 @@ import giuntoImage from "@/assets/edgeline-giunto.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
+import TechSpecBar from "@/components/TechSpecBar";
 
 const EdgeLine = () => {
   const { t, language } = useTranslation();
@@ -186,6 +187,19 @@ const EdgeLine = () => {
           </div>
         </div>
       </section>
+
+      <TechSpecBar
+        title={t('productSpecs.title')}
+        subtitle={t('productSpecs.subtitle')}
+        specs={[
+          { label: t('productSpecs.material'), value: "Alluminio anodizzato · PVC" },
+          { label: t('productSpecs.thickness'), value: "8 · 10 · 12 · 15 mm" },
+          { label: t('productSpecs.format'), value: "L 2700 mm · L 2500 mm" },
+          { label: t('productSpecs.finish'), value: "Naturale · Argento · Bronzo · Oro" },
+        ]}
+        applicationsLabel={t('productSpecs.installation')}
+        applications={["Battiscopa", "Profilo terminale", "Giunto di dilatazione", "Profilo di espansione"]}
+      />
 
       {/* CTA finale */}
       <section className="section-spacing relative z-10 overflow-hidden bg-background">

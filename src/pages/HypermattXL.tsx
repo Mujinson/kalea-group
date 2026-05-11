@@ -7,6 +7,7 @@ import AnimatedTitle from "@/components/AnimatedTitle";
 import SEOHead from "@/components/SEOHead";
 import ProductLightbox from "@/components/ProductLightbox";
 import HypermattCollectionCTA from "@/components/HypermattCollectionCTA";
+import TechSpecBar from "@/components/TechSpecBar";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { xlWood, xlTile, hypermattXL, type HypermattProduct } from "@/data/hypermattProducts";
@@ -156,6 +157,20 @@ const HypermattXL = () => {
           )}
         </div>
       </section>
+
+      <TechSpecBar
+        title={t('productSpecs.title')}
+        subtitle={t('productSpecs.subtitle')}
+        specs={[
+          { label: t('productSpecs.thickness'), value: "5,5 mm" },
+          { label: t('productSpecs.finish'), value: "Hypermatt Laser" },
+          { label: t('productSpecs.format'), value: "228×1845 mm · 228×1524 mm" },
+          { label: t('productSpecs.useClass'), value: "23/33" },
+          { label: t('productSpecs.wear'), value: "0,55 mm" },
+          { label: t('productSpecs.click'), value: "Välinge 5G" },
+          { label: t('productSpecs.fire'), value: "Bfl-s1" },
+        ]}
+      />
 
       <HypermattCollectionCTA current="xl" />
       </div>

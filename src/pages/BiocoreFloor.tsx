@@ -10,13 +10,14 @@ import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
+import TechSpecBar from "@/components/TechSpecBar";
 import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProducts";
 import roomXL from "@/assets/hero-hypermatt-xl.jpg";
 import roomSpina from "@/assets/hero-hypermatt-spina.jpg";
 import room55 from "@/assets/hero-hypermatt55.jpg";
 
 const BiocoreFloor = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   
   const heroRef = useRef<HTMLDivElement>(null);

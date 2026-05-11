@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import TechSpecBar from "@/components/TechSpecBar";
 import { 
   Volume2, 
   Droplets, 
@@ -607,6 +608,20 @@ const Kaleabase = () => {
           </div>
         </div>
       </section>
+
+      <TechSpecBar
+        title={t('productSpecs.title')}
+        subtitle={t('productSpecs.subtitle')}
+        specs={[
+          { label: t('productSpecs.material'), value: "Ossido di magnesio + fibra" },
+          { label: t('productSpecs.thickness'), value: "9 · 12 · 15 mm" },
+          { label: t('productSpecs.format'), value: "600×1200 mm · 1200×2400 mm" },
+          { label: t('productSpecs.fire'), value: "A1 (incombustibile)" },
+          { label: t('productSpecs.surface'), value: "Liscia · Pronta posa" },
+        ]}
+        applicationsLabel={t('productSpecs.installation')}
+        applications={["Sottofondo strutturale", "Controsoffitto", "Pareti interne", "Massetto a secco"]}
+      />
 
       {/* CTA Section */}
       <section className="relative z-[5] py-20 md:py-32 overflow-hidden bg-background">
