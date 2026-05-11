@@ -133,13 +133,13 @@ const Hypermatt55 = () => {
         <TechSpecBar
           title={t("hypermatt55.specsHeader2")}
           specs={[
-            { label: t("hypermatt55.specFormat"), value: "230×1500 mm" },
-            { label: t("hypermatt55.specThickness"), value: "2,5 mm" },
-            { label: t("hypermatt55.specClass"), value: "23/33/42" },
-            { label: t("hypermatt55.specWear"), value: "0,55 mm" },
+            { label: t("hypermatt55.specFormat"), value: "460×920 mm" },
+            { label: t("hypermatt55.specThickness"), value: "6,5 mm" },
+            { label: t("hypermatt55.specClass"), value: "23/33" },
+            { label: t("hypermatt55.specClick"), value: "Välinge 5G" },
           ]}
-          applicationsLabel={t("hypermatt55.specFire")}
-          applications={["Bfl-s1"]}
+          applicationsLabel={t("hypermatt55.specFire") + " · " + t("hypermatt55.specPad") + " · " + t("hypermatt55.specWear")}
+          applications={["Bfl-s1", "IXPE 1 mm", "0,55 mm"]}
         />
 
         <HypermattCollectionCTA current="55" />

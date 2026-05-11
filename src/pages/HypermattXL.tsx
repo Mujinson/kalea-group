@@ -162,9 +162,9 @@ const HypermattXL = () => {
         title={t('productSpecs.title')}
         subtitle={t('productSpecs.subtitle')}
         specs={[
-          { label: t('productSpecs.thickness'), value: "5,5 mm" },
+          { label: t('productSpecs.thickness'), value: "6,5 mm" },
           { label: t('productSpecs.finish'), value: "Hypermatt Laser" },
-          { label: t('productSpecs.format'), value: "228×1845 mm · 228×1524 mm" },
+          { label: t('productSpecs.format'), value: "228,6×1800 mm (Wood) · 600×1200 mm (Tile)" },
           { label: t('productSpecs.useClass'), value: "23/33" },
           { label: t('productSpecs.wear'), value: "0,55 mm" },
           { label: t('productSpecs.click'), value: "Välinge 5G" },
