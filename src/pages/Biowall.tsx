@@ -11,6 +11,7 @@ import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
+import TechSpecBar from "@/components/TechSpecBar";
 
 const Biowall = () => {
   const { t, language } = useTranslation();

@@ -15,6 +15,7 @@ import giuntoImage from "@/assets/edgeline-giunto.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
+import TechSpecBar from "@/components/TechSpecBar";
 
 const EdgeLine = () => {
   const { t, language } = useTranslation();
