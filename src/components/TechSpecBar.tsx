@@ -293,21 +293,6 @@ const TechSpecBar = ({
                       >
                         {effettoSpec.value}
                       </p>
-                      <div className="flex items-center gap-2 mt-3">
-                        {["#D4C4B0", "#A89880", "#6B5A4E"].map((c) => (
-                          <span
-                            key={c}
-                            aria-hidden
-                            style={{
-                              backgroundColor: c,
-                              width: 48,
-                              height: 28,
-                              borderRadius: 2,
-                              display: "block",
-                            }}
-                          />
-                        ))}
-                      </div>
                       <GoldUnderline />
                     </motion.div>
                   )}
