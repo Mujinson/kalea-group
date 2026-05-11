@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import TechSpecBar from "@/components/TechSpecBar";
 import { 
   Volume2, 
   Droplets, 

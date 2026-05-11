@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { useScroll, useTransform } from "framer-motion";
 import FeatureCard from "@/components/FeatureCard";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import TechSpecBar from "@/components/TechSpecBar";
 import { Droplets, Sun, Shield, Palette, AudioWaveform, CheckCircle, Clock, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
