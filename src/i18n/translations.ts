@@ -4356,7 +4356,7 @@ export const translations: Record<Language, Translations> = {
     techSpec: {
       tabFormats: "Formats",
       tabEffect: "Finition",
-      tabApplications: "Performance",
+      tabApplications: "Caractéristiques",
       surfaceLabel: "Surface",
       effectHeading: "Finition et matière",
       noFormats: "Format unique",
