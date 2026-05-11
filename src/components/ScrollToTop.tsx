@@ -2,23 +2,37 @@ import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   // Use useLayoutEffect to scroll before paint, preventing flash of wrong position
   useLayoutEffect(() => {
-    // Immediate scroll
+    if (hash) return; // let hash effect handle it
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, [pathname]);
+  }, [pathname, hash]);
 
-  // Fallback with useEffect for cases where layoutEffect isn't enough
+  // Hash-aware scroll: scroll to anchor if hash present, else top
   useEffect(() => {
-    // Small delay to handle any async content loading
+    if (hash) {
+      const id = hash.replace(/^#/, "");
+      // Try a few times to wait for DOM (sections animate in)
+      let attempts = 0;
+      const tryScroll = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else if (attempts < 20) {
+          attempts++;
+          setTimeout(tryScroll, 100);
+        }
+      };
+      tryScroll();
+      return;
+    }
     const timeoutId = setTimeout(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     }, 0);
-
     return () => clearTimeout(timeoutId);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 };
