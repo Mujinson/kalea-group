@@ -14,7 +14,7 @@ import heroKaleaceiling from "@/assets/product-kaleaceiling-new.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 
 const Kaleaceiling = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   
   const heroRef = useRef<HTMLDivElement>(null);

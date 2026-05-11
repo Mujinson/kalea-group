@@ -49,7 +49,7 @@ const advantages = [
 ];
 
 const CeramicheEsterni = () => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isMobile = useIsMobile();
   const outdoorCollections = getCollectionsByCategory("esterni");
 
