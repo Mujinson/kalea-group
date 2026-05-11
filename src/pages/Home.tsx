@@ -349,19 +349,19 @@ const Home = () => {
               transition={{ duration: 0.9, delay: 0.2 }}
               className="text-center space-y-10"
             >
-              <p className="font-body text-lg md:text-xl text-foreground/85 font-normal leading-relaxed">
+              <p className="font-heading font-light text-lg md:text-xl lg:text-2xl text-white leading-snug">
                 {t('hero.manifesto.conclusion')}
               </p>
 
               <div className="space-y-3 pt-4">
-                <p className="text-sm md:text-base lg:text-lg tracking-[0.3em] text-foreground font-medium uppercase">
+                <p className="text-sm md:text-base lg:text-lg tracking-[0.3em] text-white font-medium uppercase">
                   KALĒA® — SURFACE SYSTEM®
                 </p>
-                <div className="h-px w-12 mx-auto bg-foreground/20" />
-                <p className="text-sm md:text-base text-foreground/60 font-light">
+                <div className="h-px w-12 mx-auto bg-white/40" />
+                <p className="text-sm md:text-base text-white/85 font-light italic">
                   {t('hero.manifesto.brandStatement')}
                 </p>
-                <p className="text-sm md:text-base text-foreground/60 font-light">
+                <p className="text-sm md:text-base text-white/85 font-light italic">
                   {t('hero.manifesto.brandStatement2')}
                 </p>
               </div>
