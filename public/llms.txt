@@ -1,0 +1,40 @@
+# Kalēa®
+
+> Kalēa® is an Italian general contractor and luxury supply hub for designed floors, walls, ceilings and outdoor surfaces — featuring magnesium-oxide BIOMAG FLOOR®, natural-fiber BIOCORE FLOOR®, SPC Hypermatt, Externo decking and exclusive ceramic selections.
+
+Kalēa® combines proprietary product lines with a curated supply of luxury surfaces for architects, interior designers, surveyors, construction companies and private clients. All products are waterproof, click-installed (Välinge 5G) and Designed in Italy.
+
+## Pages
+
+- [Home](/it): Overview of the Kalēa® universe and product lines.
+- [Indoor surfaces](/it/indoor): Indoor floors, walls and ceilings.
+- [Outdoor surfaces](/it/outdoor): Outdoor decking and ceramic floors.
+- [BIOMAG FLOOR®](/it/biomag-floor): Magnesium-oxide flooring — waterproof, fireproof, click-clack.
+- [BIOCORE FLOOR®](/it/biocore-floor): Natural-fiber floating floor, biodegradable.
+- [Hypermatt XL](/it/hypermatt-xl): Ultra-matte SPC large-format planks.
+- [Hypermatt Spina](/it/hypermatt-spina): Ultra-matte SPC herringbone.
+- [Hypermatt 55](/it/hypermatt-55): Ultra-matte SPC 55 collection.
+- [Externo](/it/externo): Outdoor decking system.
+- [Ceramiche Interni](/it/ceramiche-interni): Curated indoor ceramic selection.
+- [Ceramiche Esterni](/it/ceramiche-esterni): Curated outdoor ceramic selection.
+- [BIOWALL®](/it/biowall): Wall cladding system.
+- [Kaleaceiling](/it/kaleaceiling): Ceiling system.
+- [KALEABASE®](/it/kaleabase): Base / sub-floor system.
+- [EDGELINE®](/it/edgeline): Profiles and finishing edges.
+- [Realizzazioni](/it/realizzazioni): Project gallery.
+- [Area Tecnica](/it/area-tecnica): Technical documents and downloads.
+- [Normative](/it/normative): Standards and certifications.
+- [Chi Siamo](/it/chi-siamo): Company and founder story.
+- [Contatti](/it/contatti): Contact form for samples, quotes, info.
+- [Diventa Partner](/it/diventa-partner): Partnership program for professionals.
+
+## Sustainability
+
+- [Environmental impact](/it/sostenibilita/impatto-ambientale): Mineral materials, low emissions.
+- [Long-lasting](/it/sostenibilita/lunga-durata): Dimensional stability and durability.
+- [Maintenance](/it/sostenibilita/manutenzione): Easy cleaning and care.
+
+## Optional
+
+- [Privacy](/it/privacy): Privacy policy.
+- [Termini](/it/termini): Terms of use.

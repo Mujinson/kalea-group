@@ -1,6 +1,7 @@
 import { useTranslation } from "@/i18n/useTranslation";
 import { useEffect } from "react";
 import { FileText, AlertCircle, Scale, UserCheck, Ban, Gavel } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 const Termini = () => {
   const { t } = useTranslation();
@@ -12,6 +13,11 @@ const Termini = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Termini e Condizioni — Kalēa®"
+        description="Termini e condizioni di utilizzo del sito Kalēa®: limiti di responsabilità, proprietà intellettuale, foro competente e regole del servizio."
+        keywords="termini condizioni Kalēa, condizioni d'uso, terms of service"
+      />
       {/* Hero */}
       <section className="py-16 md:py-24 bg-secondary/10">
         <div className="container-custom">
