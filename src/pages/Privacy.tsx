@@ -1,6 +1,7 @@
 import { useTranslation } from "@/i18n/useTranslation";
 import { useEffect } from "react";
 import { Shield, Mail, FileText, Lock, Eye, Cookie } from "lucide-react";
+import SEOHead from "@/components/SEOHead";
 
 const Privacy = () => {
   const { t } = useTranslation();
@@ -12,6 +13,11 @@ const Privacy = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEOHead
+        title="Privacy Policy — Kalēa®"
+        description="Informativa sulla privacy di Kalēa®: trattamento dei dati personali, cookie, diritti degli utenti e modalità di contatto del titolare."
+        keywords="privacy policy Kalēa, trattamento dati, cookie policy, GDPR"
+      />
       {/* Hero */}
       <section className="py-16 md:py-24 bg-secondary/10">
         <div className="container-custom">
