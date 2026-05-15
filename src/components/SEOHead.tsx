@@ -8,9 +8,10 @@ interface SEOHeadProps {
   ogImage?: string;
   ogType?: string;
   canonicalPath?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const BASE_URL = "https://www.kalea.space";
+const BASE_URL = "https://kalea.space";
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 
 const SEOHead = ({
@@ -20,6 +21,7 @@ const SEOHead = ({
   ogImage = DEFAULT_OG_IMAGE,
   ogType = "website",
   canonicalPath,
+  structuredData,
 }: SEOHeadProps) => {
   const location = useLocation();
   
