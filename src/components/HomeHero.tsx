@@ -20,6 +20,10 @@ const HomeHero = () => {
           <img 
             src={heroImage} 
             alt="Kalēa® Surface System®" 
+            width={1920}
+            height={1080}
+            fetchPriority="high"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
