@@ -67,7 +67,7 @@ All colors MUST be HSL.
     --secondary-foreground: 22 59% 18%;
 
     --muted: 39 30% 88%;
-    --muted-foreground: 22 20% 44%;
+    --muted-foreground: 22 22% 36%;
 
     --accent: 30 25% 68%;
     --accent-foreground: 22 59% 18%;
@@ -202,7 +202,7 @@ body:has(.admin-theme) [role="dialog"] {
   --popover: 0 0% 100%;
   --popover-foreground: 25 50% 6%;
   --muted: 36 35% 94%;
-  --muted-foreground: 26 17% 46%;     /* #8A7060 */
+  --muted-foreground: 26 18% 36%;     /* AA contrast on cream bg */
   --border: 25 35% 18% / 0.10;        /* warm brown 10% */
   --input: 25 30% 85%;
   --ring: 36 47% 60%;                 /* gold */
