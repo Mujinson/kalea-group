@@ -75,10 +75,10 @@ const ChiSiamo = () => {
   return (
     <div className="min-h-screen">
       <SEOHead
-        title={language === 'it' ? "Chi Siamo — La Storia di Kalēa® | Pavimenti Flottanti Innovativi" :
-               language === 'en' ? "About Us — The Kalēa® Story | Innovative Floating Floors" :
-               language === 'de' ? "Über Uns — Die Geschichte von Kalēa® | Innovative Schwimmböden" :
-               "À Propos — L'Histoire de Kalēa® | Sols Flottants Innovants"}
+        title={language === 'it' ? "Chi Siamo — La Storia di Kalēa®" :
+               language === 'en' ? "About Us — The Kalēa® Story" :
+               language === 'de' ? "Über Uns — Kalēa®" :
+               "À Propos — Kalēa®"}
         description={language === 'it' ? "Scopri Kalēa®: azienda italiana specializzata in pavimenti flottanti innovativi in MgO e fibra naturale. Design, sostenibilità e tecnologia al servizio dell'architettura." :
                      language === 'en' ? "Discover Kalēa®: Italian company specializing in innovative MgO and natural fiber floating floors. Design, sustainability and technology." :
                      language === 'de' ? "Entdecken Sie Kalēa®: italienisches Unternehmen für innovative MgO- und Naturfaser-Schwimmböden." :

@@ -51,14 +51,14 @@ const Home = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title={language === 'it' ? "Pavimenti Flottanti in MgO e Fibra Naturale | Kalēa® Surface System" :
-               language === 'en' ? "Floating Floors in MgO & Natural Fiber | Kalēa® Surface System" :
-               language === 'de' ? "Schwimmende Böden aus MgO & Naturfaser | Kalēa® Surface System" :
-               "Sols Flottants en MgO & Fibre Naturelle | Kalēa® Surface System"}
-        description={language === 'it' ? "Pavimenti flottanti di nuova generazione in ossido di magnesio e fibra naturale. Waterproof, ignifughi, click-clack senza colla. Ideali per ristrutturazioni, abitazioni e spazi commerciali. Progettati in Italia." :
-                     language === 'en' ? "Next-generation floating floors in magnesium oxide and natural fiber. Waterproof, fireproof, click-lock installation. Ideal for renovations, homes and commercial spaces. Designed in Italy." :
-                     language === 'de' ? "Schwimmende Böden der neuen Generation aus Magnesiumoxid und Naturfaser. Wasserdicht, feuerfest, Klick-Verlegung. Ideal für Renovierungen, Wohnungen und Gewerbeflächen. In Italien entworfen." :
-                     "Sols flottants de nouvelle génération en oxyde de magnésium et fibre naturelle. Étanches, ignifuges, pose clipsable. Idéaux pour rénovations, habitations et espaces commerciaux. Conçus en Italie."}
+        title={language === 'it' ? "Pavimenti Flottanti MgO e Fibra Naturale | Kalēa®" :
+               language === 'en' ? "MgO & Natural Fiber Floating Floors | Kalēa®" :
+               language === 'de' ? "MgO & Naturfaser Schwimmböden | Kalēa®" :
+               "Sols Flottants MgO & Fibre Naturelle | Kalēa®"}
+        description={language === 'it' ? "Pavimenti flottanti in MgO e fibra naturale: waterproof, ignifughi, click-clack senza colla. Designed in Italy." :
+                     language === 'en' ? "Next-gen floating floors in MgO and natural fiber. Waterproof, fireproof, click-lock. Designed in Italy." :
+                     language === 'de' ? "Schwimmböden aus MgO und Naturfaser. Wasserdicht, feuerfest, Klick-Verlegung. Designed in Italy." :
+                     "Sols flottants en MgO et fibre naturelle. Étanches, ignifuges, pose clipsable. Designed in Italy."}
         keywords={language === 'it' ? "pavimenti flottanti, pavimento flottante, pavimenti in MgO, pavimenti click clack, pavimento senza colla, pavimenti waterproof, pavimenti ignifughi, pavimento galleggiante, pavimento sopraelevato, pavimento flottante prezzi, ristrutturazione pavimenti, pavimento per ristrutturazione, pavimenti innovativi, pavimenti di design, pavimenti sostenibili, pavimento ecologico, parquet flottante, laminato flottante, SPC pavimento, LVT pavimento" :
                   language === 'en' ? "floating floors, floating floor, MgO flooring, click-lock flooring, glueless flooring, waterproof flooring, fireproof flooring, raised flooring, innovative flooring, sustainable flooring, eco-friendly floor, design flooring" :
                   language === 'de' ? "schwimmender Boden, Klickboden, MgO Boden, wasserdichter Boden, feuerfester Boden, nachhaltiger Bodenbelag, Design Bodenbelag, ökologischer Boden" :

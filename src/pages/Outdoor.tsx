@@ -67,20 +67,15 @@ const Outdoor = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title={language === 'it' ? "Pavimenti e Rivestimenti per Esterni | KALEADECK & KALEACEILING | Kalēa®" :
-               language === 'en' ? "Outdoor Flooring & Cladding | KALEADECK & KALEACEILING | Kalēa®" :
-               language === 'de' ? "Außenböden & Verkleidungen | KALEADECK & KALEACEILING | Kalēa®" :
-               "Revêtements Extérieurs | KALEADECK & KALEACEILING | Kalēa®"}
+        title={language === 'it' ? "Pavimenti e Rivestimenti per Esterni | Kalēa®" :
+               language === 'en' ? "Outdoor Flooring & Cladding | Kalēa®" :
+               language === 'de' ? "Außenböden & Verkleidungen | Kalēa®" :
+               "Revêtements Extérieurs | Kalēa®"}
         description={language === 'it' ? "Soluzioni Kalēa® per esterni: KALEADECK decking in MgO resistente a umidità, raggi UV e agenti atmosferici. KALEACEILING controsoffitti per pergole e porticati." :
                      language === 'en' ? "Kalēa® outdoor solutions: KALEADECK MgO decking resistant to moisture, UV and weather. KALEACEILING ceiling panels for pergolas and porches." :
                      language === 'de' ? "Kalēa® Außenlösungen: KALEADECK MgO-Terrassendielen, feuchtigkeits- und UV-beständig. KALEACEILING Deckenverkleidungen." :
                      "Solutions Kalēa® pour extérieurs : KALEADECK terrasse en MgO résistant à l'humidité et aux UV. KALEACEILING plafonds."}
         keywords="pavimenti per esterni, decking MgO, pavimento esterno resistente, decking senza manutenzione, controsoffitto esterno, pavimento terrazza, decking impermeabile, rivestimento esterno minerale"
-      />
-      <title>Outdoor Solutions | Kalēa® Surface System®</title>
-      <meta
-        name="description"
-        content="Materiali progettati per resistere all'esterno, senza compromessi. Design, durata e funzionalità per ogni ambiente outdoor."
       />
 
       {/* Hero Section */}
