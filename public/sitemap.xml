@@ -98,14 +98,74 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Kaleadeck -->
+  <!-- Externo -->
   <url>
-    <loc>https://kalea.space/it/kaleadeck</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/kaleadeck"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/kaleadeck"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/kaleadeck"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/kaleadeck"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/kaleadeck"/>
+    <loc>https://kalea.space/it/externo</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/externo"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/externo"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/externo"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/externo"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/externo"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Hypermatt XL -->
+  <url>
+    <loc>https://kalea.space/it/hypermatt-xl</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/hypermatt-xl"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Hypermatt Spina -->
+  <url>
+    <loc>https://kalea.space/it/hypermatt-spina</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/hypermatt-spina"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Hypermatt 55 -->
+  <url>
+    <loc>https://kalea.space/it/hypermatt-55</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/hypermatt-55"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Ceramiche Interni -->
+  <url>
+    <loc>https://kalea.space/it/ceramiche-interni</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/ceramiche-interni"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Ceramiche Esterni -->
+  <url>
+    <loc>https://kalea.space/it/ceramiche-esterni</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/ceramiche-esterni"/>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
