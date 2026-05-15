@@ -117,13 +117,19 @@ const Contatti = () => {
   return (
     <div className="min-h-screen font-heading font-light text-white" style={tanBgStyle}>
       <SEOHead
-        title={
-          t("contact.seoTitle") !== "contact.seoTitle"
-            ? t("contact.seoTitle")
-            : "Contatti — Collabora con Kalēa® | Architetti, Designer, Imprese, Privati"
-        }
+        title="Contatti — Kalēa® | Architetti, Designer, Imprese"
         description="Architetti, interior designer, geometri, imprese edili, rivenditori e privati: contatta Kalēa® per informazioni, campioni, preventivi e collaborazioni."
         keywords="contatti Kalēa, diventa partner, architetti, interior designer, geometri, imprese edili, privati, preventivo pavimenti"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "Kalēa",
+          url: "https://kalea.space",
+          telephone: "+39 352 035 1738",
+          email: "info@kalea.space",
+          image: "https://kalea.space/favicon-k-512.png",
+          areaServed: ["IT", "EU"],
+        }}
       />
 
       {/* HERO */}
