@@ -97,9 +97,21 @@ const SEOHead = ({
     xDefault.hreflang = "x-default";
     xDefault.href = `${BASE_URL}/en${pathWithoutLang}`;
     document.head.appendChild(xDefault);
-    
-  }, [title, description, keywords, ogImage, ogType, canonicalPath, location.pathname]);
-  
+
+    // Structured data (JSON-LD) — managed by SEOHead
+    document.querySelectorAll('script[data-seohead-jsonld]').forEach(el => el.remove());
+    if (structuredData) {
+      const blocks = Array.isArray(structuredData) ? structuredData : [structuredData];
+      blocks.forEach(block => {
+        const script = document.createElement("script");
+        script.type = "application/ld+json";
+        script.setAttribute("data-seohead-jsonld", "true");
+        script.text = JSON.stringify(block);
+        document.head.appendChild(script);
+      });
+    }
+  }, [title, description, keywords, ogImage, ogType, canonicalPath, location.pathname, structuredData]);
+
   return null;
 };
 
