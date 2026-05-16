@@ -44,12 +44,12 @@ const BiocoreFloor = () => {
   const heroImageY = useTransform(heroProgress, [0, 1], ["0%", isMobile ? "8%" : "15%"]);
 
   const features = [
-    { icon: Sparkles, title: "Hypermatt Laser Technology", description: "Finitura esclusiva che modifica la superficie a livello microscopico. Ultra-opaca, protetta da impronte e usura quotidiana." },
-    { icon: Droplets, title: "Impermeabile al 100%", description: "Struttura SPC in polvere di pietra per massima stabilità e impermeabilità totale." },
-    { icon: Ruler, title: "Spessore ridotto 6,5 mm", description: "Per interventi rapidi e leggeri, ideale per ristrutturazioni su pavimenti esistenti." },
-    { icon: Layers, title: "Sistema 5G brevettato", description: "Incastro brevettato per una posa flottante precisa e veloce, senza colla." },
-    { icon: Shield, title: "Resistenza MSR-B1", description: "Resistenza elevata ai micrograffi per ambienti ad alto traffico." },
-    { icon: Wind, title: "Emissioni VOC A+", description: "Privo di ftalati, emissioni molto basse. Sicuro per famiglie e animali domestici." },
+    { icon: Sparkles, image: featLaser, title: "Hypermatt Laser Technology", description: "Finitura esclusiva che modifica la superficie a livello microscopico. Ultra-opaca, protetta da impronte e usura quotidiana." },
+    { icon: Droplets, image: featImpermeabile, title: "Impermeabile al 100%", description: "Struttura SPC in polvere di pietra per massima stabilità e impermeabilità totale." },
+    { icon: Ruler, image: featSpessore, title: "Spessore ridotto 6,5 mm", description: "Per interventi rapidi e leggeri, ideale per ristrutturazioni su pavimenti esistenti." },
+    { icon: Layers, image: feat5g, title: "Sistema 5G brevettato", description: "Incastro brevettato per una posa flottante precisa e veloce, senza colla." },
+    { icon: Shield, image: featMsr, title: "Resistenza MSR-B1", description: "Resistenza elevata ai micrograffi per ambienti ad alto traffico." },
+    { icon: Wind, image: featVoc, title: "Emissioni VOC A+", description: "Privo di ftalati, emissioni molto basse. Sicuro per famiglie e animali domestici." },
   ];
 
   const formats = [
