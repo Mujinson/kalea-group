@@ -15,6 +15,10 @@ import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProduc
 import roomXL from "@/assets/hero-hypermatt-xl.jpg";
 import roomSpina from "@/assets/hero-hypermatt-spina.jpg";
 import room55 from "@/assets/hero-hypermatt55.jpg";
+import fmtXlWood from "@/assets/hypermatt/xl-vesuvio.jpg";
+import fmtXlTile from "@/assets/hypermatt/55-asama.jpg";
+import fmtSpinaIt from "@/assets/hypermatt/spina-jura.jpg";
+import fmtSpinaFr from "@/assets/hypermatt/spina-karu.jpg";
 
 const BiocoreFloor = () => {
   const { language, t } = useTranslation();
@@ -43,10 +47,10 @@ const BiocoreFloor = () => {
   ];
 
   const formats = [
-    "XL Wood — formato largo effetto legno",
-    "XL Tile — formato piastrella effetto cemento",
-    "Spina Italiana — posa classica italiana",
-    "Spina Francese — posa elegante francese",
+    { title: "XL Wood", subtitle: "Formato largo effetto legno", image: fmtXlWood },
+    { title: "XL Tile", subtitle: "Formato piastrella effetto cemento", image: fmtXlTile },
+    { title: "Spina Italiana", subtitle: "Posa classica italiana", image: fmtSpinaIt },
+    { title: "Spina Francese", subtitle: "Posa elegante francese", image: fmtSpinaFr },
   ];
 
   return (
@@ -238,19 +242,33 @@ const BiocoreFloor = () => {
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {formats.map((format, index) => (
               <motion.div
-                key={format}
+                key={format.title}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex items-center gap-3 p-5 rounded-2xl bg-card-surface"
+                className="group relative overflow-hidden rounded-2xl bg-card-surface"
                 style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
               >
-                <Check className="w-5 h-5 text-white flex-shrink-0" />
-                <span className="text-white font-medium">{format}</span>
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={format.image}
+                    alt={`${format.title} — ${format.subtitle}`}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-5 flex items-end gap-3">
+                  <Check className="w-5 h-5 text-white flex-shrink-0 mb-1" />
+                  <div>
+                    <h3 className="text-white font-heading font-bold text-lg md:text-xl leading-tight">{format.title}</h3>
+                    <p className="text-white/85 text-sm font-light">{format.subtitle}</p>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
