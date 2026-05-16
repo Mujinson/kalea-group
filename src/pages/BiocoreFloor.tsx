@@ -221,12 +221,23 @@ const BiocoreFloor = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="p-6 rounded-2xl bg-card-surface"
+                className="group relative overflow-hidden rounded-2xl bg-card-surface"
                 style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
               >
-                <feature.icon className="w-8 h-8 text-white mb-4" strokeWidth={1.5} />
-                <h3 className="font-heading font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-sm text-white/80 font-medium leading-relaxed">{feature.description}</p>
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-black/10" />
+                  <feature.icon className="absolute top-4 left-4 w-7 h-7 text-white drop-shadow-md" strokeWidth={1.5} />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-heading font-semibold text-white mb-2">{feature.title}</h3>
+                  <p className="text-sm text-white/80 font-medium leading-relaxed">{feature.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
