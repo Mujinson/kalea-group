@@ -19,6 +19,12 @@ import fmtXlWood from "@/assets/hypermatt/xl-rocky.jpg";
 import fmtXlTile from "@/assets/hypermatt/55-asama.jpg";
 import fmtSpinaIt from "@/assets/hypermatt/spina-jura.jpg";
 import fmtSpinaFr from "@/assets/hypermatt/spina-karu.jpg";
+import featLaser from "@/assets/flow/feat-laser.jpg";
+import featImpermeabile from "@/assets/flow/feat-impermeabile.jpg";
+import featSpessore from "@/assets/flow/feat-spessore.jpg";
+import feat5g from "@/assets/flow/feat-5g.jpg";
+import featMsr from "@/assets/flow/feat-msr.jpg";
+import featVoc from "@/assets/flow/feat-voc.jpg";
 
 const BiocoreFloor = () => {
   const { language, t } = useTranslation();
@@ -38,12 +44,12 @@ const BiocoreFloor = () => {
   const heroImageY = useTransform(heroProgress, [0, 1], ["0%", isMobile ? "8%" : "15%"]);
 
   const features = [
-    { icon: Sparkles, title: "Hypermatt Laser Technology", description: "Finitura esclusiva che modifica la superficie a livello microscopico. Ultra-opaca, protetta da impronte e usura quotidiana." },
-    { icon: Droplets, title: "Impermeabile al 100%", description: "Struttura SPC in polvere di pietra per massima stabilità e impermeabilità totale." },
-    { icon: Ruler, title: "Spessore ridotto 6,5 mm", description: "Per interventi rapidi e leggeri, ideale per ristrutturazioni su pavimenti esistenti." },
-    { icon: Layers, title: "Sistema 5G brevettato", description: "Incastro brevettato per una posa flottante precisa e veloce, senza colla." },
-    { icon: Shield, title: "Resistenza MSR-B1", description: "Resistenza elevata ai micrograffi per ambienti ad alto traffico." },
-    { icon: Wind, title: "Emissioni VOC A+", description: "Privo di ftalati, emissioni molto basse. Sicuro per famiglie e animali domestici." },
+    { icon: Sparkles, image: featLaser, title: "Hypermatt Laser Technology", description: "Finitura esclusiva che modifica la superficie a livello microscopico. Ultra-opaca, protetta da impronte e usura quotidiana." },
+    { icon: Droplets, image: featImpermeabile, title: "Impermeabile al 100%", description: "Struttura SPC in polvere di pietra per massima stabilità e impermeabilità totale." },
+    { icon: Ruler, image: featSpessore, title: "Spessore ridotto 6,5 mm", description: "Per interventi rapidi e leggeri, ideale per ristrutturazioni su pavimenti esistenti." },
+    { icon: Layers, image: feat5g, title: "Sistema 5G brevettato", description: "Incastro brevettato per una posa flottante precisa e veloce, senza colla." },
+    { icon: Shield, image: featMsr, title: "Resistenza MSR-B1", description: "Resistenza elevata ai micrograffi per ambienti ad alto traffico." },
+    { icon: Wind, image: featVoc, title: "Emissioni VOC A+", description: "Privo di ftalati, emissioni molto basse. Sicuro per famiglie e animali domestici." },
   ];
 
   const formats = [
@@ -215,12 +221,23 @@ const BiocoreFloor = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="p-6 rounded-2xl bg-card-surface"
+                className="group relative overflow-hidden rounded-2xl bg-card-surface"
                 style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.18)' }}
               >
-                <feature.icon className="w-8 h-8 text-white mb-4" strokeWidth={1.5} />
-                <h3 className="font-heading font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-sm text-white/80 font-medium leading-relaxed">{feature.description}</p>
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-black/10" />
+                  <feature.icon className="absolute top-4 left-4 w-7 h-7 text-white drop-shadow-md" strokeWidth={1.5} />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-heading font-semibold text-white mb-2">{feature.title}</h3>
+                  <p className="text-sm text-white/80 font-medium leading-relaxed">{feature.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
