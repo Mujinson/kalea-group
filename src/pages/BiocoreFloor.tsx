@@ -15,7 +15,7 @@ import { hypermattXL, hypermattSpina, hypermatt55 } from "@/data/hypermattProduc
 import roomXL from "@/assets/hero-hypermatt-xl.jpg";
 import roomSpina from "@/assets/hero-hypermatt-spina.jpg";
 import room55 from "@/assets/hero-hypermatt55.jpg";
-import fmtXlWood from "@/assets/hypermatt/xl-vesuvio.jpg";
+import fmtXlWood from "@/assets/hypermatt/xl-rocky.jpg";
 import fmtXlTile from "@/assets/hypermatt/55-asama.jpg";
 import fmtSpinaIt from "@/assets/hypermatt/spina-jura.jpg";
 import fmtSpinaFr from "@/assets/hypermatt/spina-karu.jpg";
