@@ -18,7 +18,12 @@ import room55 from "@/assets/hero-hypermatt55.jpg";
 import fmtXlWood from "@/assets/hypermatt/xl-rocky.jpg";
 import fmtXlTile from "@/assets/hypermatt/55-asama.jpg";
 import fmtSpinaIt from "@/assets/hypermatt/spina-jura.jpg";
-import fmtSpinaFr from "@/assets/hypermatt/spina-karu.jpg";
+import featLaser from "@/assets/flow/feat-laser.jpg";
+import featImpermeabile from "@/assets/flow/feat-impermeabile.jpg";
+import featSpessore from "@/assets/flow/feat-spessore.jpg";
+import feat5g from "@/assets/flow/feat-5g.jpg";
+import featMsr from "@/assets/flow/feat-msr.jpg";
+import featVoc from "@/assets/flow/feat-voc.jpg";
 
 const BiocoreFloor = () => {
   const { language, t } = useTranslation();
