@@ -59,7 +59,7 @@ const Indoor = () => {
     {
       title: "Parquet",
       description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
-      link: `/${language}/indoor`,
+      link: `/${language}/parquet`,
       image: cardParquetAmbient,
     },
     {
