@@ -28,6 +28,8 @@ import Privacy from "./pages/Privacy";
 import Termini from "./pages/Termini";
 import NotFound from "./pages/NotFound";
 import CeramicaCollectionDetail from "./pages/CeramicaCollectionDetail";
+import Parquet from "./pages/Parquet";
+import ParquetCollectionDetail from "./pages/ParquetCollectionDetail";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
@@ -291,6 +293,17 @@ const App = () => (
               <Route path="/en/ceramiche/:slug" element={<><SEOHandler /><Layout><CeramicaCollectionDetail /></Layout></>} />
               <Route path="/de/ceramiche/:slug" element={<><SEOHandler /><Layout><CeramicaCollectionDetail /></Layout></>} />
               <Route path="/fr/ceramiche/:slug" element={<><SEOHandler /><Layout><CeramicaCollectionDetail /></Layout></>} />
+
+              {/* Parquet hub + collection detail (all languages) */}
+              <Route path="/it/parquet" element={<><SEOHandler /><Layout><Parquet /></Layout></>} />
+              <Route path="/en/parquet" element={<><SEOHandler /><Layout><Parquet /></Layout></>} />
+              <Route path="/de/parquet" element={<><SEOHandler /><Layout><Parquet /></Layout></>} />
+              <Route path="/fr/parquet" element={<><SEOHandler /><Layout><Parquet /></Layout></>} />
+              <Route path="/it/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
+              <Route path="/en/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
+              <Route path="/de/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
+              <Route path="/fr/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
+
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
