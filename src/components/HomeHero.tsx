@@ -47,12 +47,12 @@ const HomeHero = () => {
           />
 
 
-          {/* Payoff */}
+          {/* Payoff - aligned to logo width */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="mt-4 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium tracking-[0.2em] drop-shadow-lg flex items-center gap-1"
+            className="mt-4 w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] text-white font-medium tracking-[0.15em] drop-shadow-lg flex items-center justify-center gap-1 text-[0.65rem] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap"
           >
             {words.map((word, index) => (
               <span key={word} className="flex items-center">
@@ -74,7 +74,7 @@ const HomeHero = () => {
                   {word}
                 </motion.span>
                 {index < words.length - 1 && (
-                  <span className="mx-2 sm:mx-3">|</span>
+                  <span className="mx-1.5 sm:mx-2">|</span>
                 )}
               </span>
             ))}
