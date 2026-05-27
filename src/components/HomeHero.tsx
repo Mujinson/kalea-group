@@ -52,13 +52,13 @@ const HomeHero = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-            className="mt-4 w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] text-white font-medium tracking-[0.15em] drop-shadow-lg flex items-center justify-center gap-1 text-[0.65rem] sm:text-xs md:text-sm lg:text-base xl:text-lg whitespace-nowrap"
+            className="mt-3 sm:mt-4 w-48 sm:w-64 md:w-80 lg:w-96 xl:w-[28rem] text-white font-medium tracking-[0.1em] drop-shadow-lg flex items-center justify-center gap-1 text-[0.55rem] sm:text-[0.65rem] md:text-xs lg:text-sm xl:text-base whitespace-nowrap"
           >
             {words.map((word, index) => (
               <span key={word} className="flex items-center">
                 <motion.span
                   animate={{
-                    scale: [1, 1.15, 1.15, 1],
+                    scale: [1, 1.08, 1.08, 1],
                     color: ["#FFFFFF", "#1a1a1a", "#1a1a1a", "#FFFFFF"],
                   }}
                   transition={{
@@ -74,7 +74,7 @@ const HomeHero = () => {
                   {word}
                 </motion.span>
                 {index < words.length - 1 && (
-                  <span className="mx-1.5 sm:mx-2">|</span>
+                  <span className="mx-1 sm:mx-1.5">|</span>
                 )}
               </span>
             ))}
