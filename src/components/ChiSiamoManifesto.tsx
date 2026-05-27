@@ -89,20 +89,26 @@ const ChiSiamoManifesto = ({ language, nextSectionId }: Props) => {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden h-screen flex items-center justify-center"
-      style={{
-        backgroundColor: "hsl(34 32% 68%)",
-        backgroundImage:
-          "repeating-linear-gradient(0deg, rgba(74,42,19,0.10) 0px, rgba(74,42,19,0.10) 1px, transparent 1px, transparent 6px), radial-gradient(circle at 15% 8%, rgba(74,42,19,0.10), transparent 55%), radial-gradient(circle at 85% 92%, rgba(74,42,19,0.08), transparent 55%)",
-      }}
+      className="relative overflow-hidden h-screen flex items-center justify-center bg-black"
     >
-      {/* Ambient warm vignette */}
+      {/* Background video */}
+      <video
+        src="/videos/chi-siamo-bg.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      {/* Dark overlay for text legibility */}
+      <div aria-hidden className="absolute inset-0 bg-black/50" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(140,123,107,0.10) 0%, rgba(247,241,231,0) 70%)",
+            "radial-gradient(ellipse at center, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 70%)",
         }}
       />
 
