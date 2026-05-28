@@ -50,7 +50,7 @@ const labels: Record<string, { eyebrow: string; cta: string; paragraph: string }
     eyebrow: "Chi siamo",
     cta: "Scopri Kalēa®",
     paragraph:
-      "Kalēa® porta nel progetto una nuova idea di superficie: selezione curata, posa precisa, accompagnamento dall'idea al cantiere. Un partner unico per chi non scende a compromessi sull'estetica e sulla durata.",
+      "Kalēa® porta nel tuo progetto una nuova idea di superficie: selezione curata, posa precisa, accompagnamento dall'idea al cantiere. Un partner unico per chi non scende a compromessi sull'estetica e sulla durata.",
   },
   en: {
     eyebrow: "About us",
