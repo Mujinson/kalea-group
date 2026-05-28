@@ -129,7 +129,7 @@ const IndoorOutdoorSection = () => {
                     style={{ color: "#ffffff", textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}
                   >
                     {t('surfaces.discover')}
-                    <ArrowRight size={12} className="animate-nudge-x transition-transform duration-300 group-hover:translate-x-1" />
+                    <ArrowRight size={12} className="transition-transform duration-500 ease-out group-hover:translate-x-1" />
                   </span>
                 )}
               </div>

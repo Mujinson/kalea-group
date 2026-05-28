@@ -99,13 +99,13 @@ export default {
         },
         "nudge-x": {
           "0%, 100%": { transform: "translateX(0)" },
-          "50%": { transform: "translateX(6px)" },
+          "50%": { transform: "translateX(3px)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "nudge-x": "nudge-x 8s cubic-bezier(0.45, 0, 0.25, 1) infinite",
+        "nudge-x": "nudge-x 4.5s ease-in-out infinite",
       },
     },
   },
