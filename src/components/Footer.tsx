@@ -3,7 +3,6 @@ import { Mail, Phone, Linkedin, Facebook, Instagram } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import logoFooter from "@/assets/logo-kalea-k-cream.png";
 
-// Social icons
 
 const Footer = () => {
   const { t, language } = useTranslation();
