@@ -105,7 +105,7 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "nudge-x": "nudge-x 3.6s cubic-bezier(0.45, 0, 0.25, 1) infinite",
+        "nudge-x": "nudge-x 8s cubic-bezier(0.45, 0, 0.25, 1) infinite",
       },
     },
   },
