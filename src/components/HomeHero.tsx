@@ -155,7 +155,7 @@ export const HomeDescription = () => {
                     <p className="text-[11px] md:text-sm text-white/90 leading-relaxed line-clamp-3 font-medium" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.85)" }}>{card.desc}</p>
                   </div>
                   <span className="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium text-white" style={{ textShadow: "0 1px 3px rgba(0,0,0,0.55)" }}>
-                    {t('homeHero.discover')} <ArrowRight size={12} className="animate-nudge-x transition-transform duration-300 group-hover:translate-x-1" />
+                    {t('homeHero.discover')} <ArrowRight size={12} className="transition-transform duration-500 ease-out group-hover:translate-x-1" />
                   </span>
                 </div>
               </motion.div>
