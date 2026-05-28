@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, Linkedin, Facebook, Instagram } from "lucide-react";
-import { SiPinterest } from "react-icons/si";
 import { useTranslation } from "@/i18n/useTranslation";
 import logoFooter from "@/assets/logo-kalea-k-cream.png";
 
