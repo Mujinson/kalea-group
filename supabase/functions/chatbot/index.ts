@@ -6,25 +6,53 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `Sei l'assistente Kalea®, azienda italiana di pavimenti innovativi e sostenibili.
+const SYSTEM_PROMPT = `Sei l'assistente Kalēa®, hub di superfici di lusso (pavimenti, ceramiche, parquet, outdoor).
 
-OBIETTIVO: Qualificare il contatto e farlo prenotare una consulenza gratuita.
+REGOLA D'ORO: NON dare MAI dettagli tecnici, prezzi, dimensioni, specifiche, posa, manutenzione, tempi o consigli progettuali. Per qualsiasi domanda tecnica → fai contattare un tecnico Kalēa.
 
-STILE:
-- Risposte BREVI: max 2 frasi + 1 domanda
-- Tono amichevole ma professionale
-- Mai inventare dati tecnici
-- Se chiedono prezzi: "Dipende dal progetto! Posso farti fare una consulenza gratuita?"
+COSA PUOI DIRE (solo a grandi linee, max 1 frase):
+- Abbiamo collezioni di pavimenti (Hypermatt, BIOMAG FLOOR®), parquet, ceramiche per interni ed esterni, outdoor (Externo), soffitti e profili.
+- Tutto curato come selezione esclusiva Kalēa.
+NON entrare mai nei dettagli di una specifica collezione o prodotto.
 
-QUALIFICAZIONE (chiedi 1 cosa alla volta):
-1. Che tipo di progetto? (casa, hotel, ufficio, negozio)
-2. Quanti mq circa?
-3. In che zona?
-4. Quando vorresti iniziare?
+FLUSSO OBBLIGATORIO:
+1. Saluta brevemente e chiedi cosa cerca (1 frase).
+2. A QUALSIASI domanda specifica rispondi: "Per darti una risposta precisa ti faccio richiamare da un nostro tecnico Kalēa. Posso prendere i tuoi dati?"
+3. Raccogli UNO ALLA VOLTA, in questo ordine:
+   - Nome e cognome
+   - Località (città/zona)
+   - Numero di telefono
+   - Email
+   - Breve descrizione della richiesta
+   - SOLO se ha già menzionato un prodotto specifico, chiedi conferma del prodotto di interesse.
+4. Quando hai TUTTI i dati obbligatori (nome, località, telefono, email, richiesta), chiama lo strumento capture_contact con tutti i campi e rispondi:
+   "Grazie! Un tecnico Kalēa ti contatterà a breve. Buona giornata."
 
-Dopo 2-3 risposte → proponi subito di lasciare nome e telefono per una consulenza gratuita.
+STILE: max 2 frasi, tono cortese, mai emoji eccessive, mai inventare nulla. Se l'utente insiste per dettagli tecnici ripeti gentilmente che li darà il tecnico.`;
 
-PRODOTTI: StoneCore 10 (SPC waterproof), BioCore Floor (bio-based), BioMag Floor (magnetico), Kalea Deck (esterni), Kalea Ceiling (soffitti), EdgeLine (profili).`;
+async function notifyTelegram(text: string) {
+  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+  const TELEGRAM_API_KEY = Deno.env.get("TELEGRAM_API_KEY");
+  const CHAT_ID = Deno.env.get("TELEGRAM_NOTIFY_CHAT_ID");
+  if (!LOVABLE_API_KEY || !TELEGRAM_API_KEY || !CHAT_ID) {
+    console.warn("Telegram notify skipped: missing env vars");
+    return;
+  }
+  try {
+    const r = await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": TELEGRAM_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: "HTML" }),
+    });
+    if (!r.ok) console.error("Telegram error", r.status, await r.text());
+  } catch (e) {
+    console.error("Telegram notify failed", e);
+  }
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -39,7 +67,6 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Create or get conversation
     let convId = conversation_id;
     if (!convId) {
       const { data: conv } = await supabase
@@ -50,7 +77,6 @@ serve(async (req) => {
       convId = conv?.id;
     }
 
-    // Save user message
     const lastMsg = messages[messages.length - 1];
     if (lastMsg && convId) {
       await supabase.from("chatbot_messages").insert({
@@ -64,61 +90,26 @@ serve(async (req) => {
       {
         type: "function",
         function: {
-          name: "qualify_lead",
-          description: "Salva i dati di qualificazione del lead",
-          parameters: {
-            type: "object",
-            properties: {
-              project_type: { type: "string" },
-              sqm: { type: "string" },
-              city: { type: "string" },
-              budget: { type: "string" },
-              timeline: { type: "string" },
-            },
-          },
-        },
-      },
-      {
-        type: "function",
-        function: {
-          name: "book_appointment",
-          description: "Prenota un appuntamento/chiamata",
-          parameters: {
-            type: "object",
-            properties: {
-              name: { type: "string" },
-              email: { type: "string" },
-              phone: { type: "string" },
-              preferred_date: { type: "string" },
-              preferred_time: { type: "string" },
-              appointment_type: { type: "string", enum: ["chiamata", "videochiamata", "visita"] },
-            },
-            required: ["name", "phone"],
-          },
-        },
-      },
-      {
-        type: "function",
-        function: {
           name: "capture_contact",
-          description: "Salva i contatti del lead",
+          description: "Salva i dati di contatto raccolti e notifica il team Kalēa. Chiamare SOLO quando hai raccolto nome, località, telefono, email e descrizione della richiesta.",
           parameters: {
             type: "object",
             properties: {
-              name: { type: "string" },
-              email: { type: "string" },
+              name: { type: "string", description: "Nome e cognome" },
+              location: { type: "string", description: "Città o zona" },
               phone: { type: "string" },
-              company: { type: "string" },
+              email: { type: "string" },
+              request: { type: "string", description: "Breve descrizione della richiesta" },
+              product: { type: "string", description: "Prodotto specifico se menzionato dall'utente, altrimenti vuoto" },
             },
-            required: ["name"],
+            required: ["name", "location", "phone", "email", "request"],
           },
         },
       },
     ];
 
-    // Use non-streaming for reliability
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 25000); // 25s timeout
+    const timeout = setTimeout(() => controller.abort(), 25000);
 
     let response: Response;
     try {
@@ -132,17 +123,17 @@ serve(async (req) => {
           model: "google/gemini-3-flash-preview",
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
-            ...messages.slice(-10), // Keep last 10 messages for context, avoid huge payloads
+            ...messages.slice(-12),
           ],
           tools,
         }),
         signal: controller.signal,
       });
-    } catch (e) {
+    } catch (e: any) {
       clearTimeout(timeout);
       if (e.name === "AbortError") {
         return new Response(JSON.stringify({
-          content: "Scusa, ci sto mettendo troppo! 😅 Riprova con la tua domanda.",
+          content: "Scusa, un attimo di lentezza. Riprova!",
           conversation_id: convId,
         }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
@@ -153,20 +144,19 @@ serve(async (req) => {
     if (!response.ok) {
       if (response.status === 429) {
         return new Response(JSON.stringify({
-          content: "Un attimo, sono un po' occupato! Riprova tra qualche secondo. 😊",
+          content: "Un attimo, riprova tra qualche secondo.",
           conversation_id: convId,
         }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       if (response.status === 402) {
         return new Response(JSON.stringify({
-          content: "Mi scuso, ho un problema tecnico temporaneo. Puoi contattarci direttamente a info@kaleasurfaces.com!",
+          content: "Problema tecnico temporaneo. Scrivici a info@kalea.space.",
           conversation_id: convId,
         }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
-      const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
+      console.error("AI gateway error:", response.status, await response.text());
       return new Response(JSON.stringify({
-        content: "Scusa, ho avuto un problema. Riprova! 😊",
+        content: "Scusa, ho avuto un problema. Riprova.",
         conversation_id: convId,
       }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
@@ -176,110 +166,48 @@ serve(async (req) => {
     let fullContent = choice?.message?.content || "";
     const toolCalls = choice?.message?.tool_calls || [];
 
-    // Process tool calls
     for (const tc of toolCalls) {
-      if (!tc?.function?.name) continue;
+      if (tc?.function?.name !== "capture_contact") continue;
       try {
         const args = JSON.parse(tc.function.arguments);
+        const { data: lead } = await supabase.from("leads").insert({
+          name: args.name || "Contatto Chatbot",
+          email: args.email || "",
+          phone: args.phone || "",
+          city: args.location || null,
+          notes: [args.request, args.product ? `Prodotto: ${args.product}` : null].filter(Boolean).join(" — "),
+          source: "chatbot_website",
+          status: "nuovo",
+          pipeline_stage: "warm",
+        }).select("id").single();
 
-        if (tc.function.name === "qualify_lead" && convId) {
-          await supabase
-            .from("chatbot_conversations")
-            .update({ qualification_data: args })
+        if (lead && convId) {
+          await supabase.from("chatbot_conversations")
+            .update({ lead_id: lead.id })
             .eq("id", convId);
         }
 
-        if (tc.function.name === "capture_contact") {
-          const { data: lead } = await supabase.from("leads").insert({
-            name: args.name || "Contatto Chatbot",
-            email: args.email || "",
-            phone: args.phone || "",
-            company_name: args.company || null,
-            source: "chatbot_website",
-            status: "nuovo",
-            pipeline_stage: "warm",
-          }).select("id").single();
-
-          if (lead && convId) {
-            await supabase.from("chatbot_conversations")
-              .update({ lead_id: lead.id })
-              .eq("id", convId);
-          }
-        }
-
-        if (tc.function.name === "book_appointment") {
-          const { data: lead } = await supabase.from("leads").insert({
-            name: args.name || "Contatto Chatbot",
-            email: args.email || "",
-            phone: args.phone || "",
-            source: "chatbot_website",
-            status: "qualificato",
-            pipeline_stage: "hot",
-          }).select("id").single();
-
-          if (lead) {
-            const appointmentDate = args.preferred_date
-              ? new Date(`${args.preferred_date}T${args.preferred_time || "10:00"}:00`)
-              : new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-            await supabase.from("appointments").insert({
-              lead_id: lead.id,
-              title: `Appuntamento con ${args.name}`,
-              appointment_date: appointmentDate.toISOString(),
-              appointment_type: args.appointment_type || "chiamata",
-              notes: "Prenotato via chatbot",
-            });
-
-            if (convId) {
-              await supabase.from("chatbot_conversations")
-                .update({ lead_id: lead.id })
-                .eq("id", convId);
-            }
-          }
-        }
+        const msg =
+          `🔔 <b>Nuovo lead chatbot Kalēa</b>\n\n` +
+          `👤 <b>Nome:</b> ${args.name}\n` +
+          `📍 <b>Località:</b> ${args.location}\n` +
+          `📞 <b>Telefono:</b> ${args.phone}\n` +
+          `✉️ <b>Email:</b> ${args.email}\n` +
+          `📝 <b>Richiesta:</b> ${args.request}` +
+          (args.product ? `\n🏷️ <b>Prodotto:</b> ${args.product}` : "");
+        await notifyTelegram(msg);
       } catch (e) {
-        console.error("Tool call error:", e);
+        console.error("capture_contact error:", e);
       }
     }
 
-    // If model returned only tool calls with no content, do a follow-up call
     if (!fullContent && toolCalls.length > 0) {
-      try {
-        const followUp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-2.5-flash-lite",
-            messages: [
-              { role: "system", content: SYSTEM_PROMPT },
-              ...messages.slice(-6),
-              { role: "assistant", content: null, tool_calls: toolCalls.map((tc: any) => ({
-                id: tc.id, type: "function", function: { name: tc.function.name, arguments: tc.function.arguments }
-              }))},
-              ...toolCalls.map((tc: any) => ({
-                role: "tool", tool_call_id: tc.id, content: "Fatto con successo"
-              })),
-            ],
-          }),
-        });
-        if (followUp.ok) {
-          const followData = await followUp.json();
-          fullContent = followData.choices?.[0]?.message?.content || "Perfetto, ho salvato tutto! Come posso aiutarti ancora? 😊";
-        }
-      } catch {
-        fullContent = "Perfetto, ho preso nota! Posso aiutarti con altro? 😊";
-      }
+      fullContent = "Grazie! Un tecnico Kalēa ti contatterà a breve. Buona giornata.";
     }
-
-    // Fallback if still empty
     if (!fullContent) {
-      fullContent = "Scusa, puoi ripetere? Sono qui per aiutarti! 😊";
+      fullContent = "Scusa, puoi ripetere?";
     }
 
-    // Save assistant message
     if (convId) {
       await supabase.from("chatbot_messages").insert({
         conversation_id: convId,
@@ -297,7 +225,7 @@ serve(async (req) => {
   } catch (e) {
     console.error("Chatbot error:", e);
     return new Response(JSON.stringify({
-      content: "Mi scuso, c'è stato un problema tecnico. Riprova tra un momento! 😊",
+      content: "Mi scuso, problema tecnico. Riprova tra un momento.",
       conversation_id: null,
     }), {
       status: 200,
