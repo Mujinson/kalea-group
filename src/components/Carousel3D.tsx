@@ -12,6 +12,7 @@ import finishSabbia from "@/assets/finish-sabbia.jpg";
 import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
+import finishCenere from "@/assets/finish-cenere.jpg";
 
 const planks = [
   { id: 1, name: "Aurora", slug: "aurora", image: finishAurora },
@@ -21,7 +22,7 @@ const planks = [
   { id: 5, name: "Silven", slug: "silven", image: finishSilven },
   { id: 6, name: "Terram", slug: "terram", image: finishTerram },
   { id: 7, name: "Velora", slug: "velora", image: finishVelora },
-  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia },
+  { id: 8, name: "Cenere", slug: "cenere", image: finishCenere },
 ];
 
 const Carousel3D = () => {

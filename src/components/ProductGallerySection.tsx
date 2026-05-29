@@ -9,6 +9,7 @@ import { useDragScroll } from "@/hooks/useDragScroll";
 // Import finish images as fallbacks
 import finishAurora from "@/assets/finish-aurora.jpg";
 import finishCorteccia from "@/assets/finish-corteccia.jpg";
+import finishCenere from "@/assets/finish-cenere.jpg";
 import finishPerla from "@/assets/finish-perla.jpg";
 import finishSabbia from "@/assets/finish-sabbia.jpg";
 import finishSilven from "@/assets/finish-silven.jpg";
@@ -24,7 +25,7 @@ const fallbackImages: Record<string, string> = {
   velora: finishVelora,
   perla: finishPerla,
   silven: finishSilven,
-  cenere: finishCorteccia,
+  cenere: finishCenere,
 };
 
 // Map legacy paths to imported images

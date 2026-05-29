@@ -6,6 +6,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 // Import BIOMAG FLOOR finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
 import finishCorteccia from "@/assets/finish-corteccia.jpg";
+import finishCenere from "@/assets/finish-cenere.jpg";
 import finishPerla from "@/assets/finish-perla.jpg";
 import finishSabbia from "@/assets/finish-sabbia.jpg";
 import finishSilven from "@/assets/finish-silven.jpg";
@@ -183,7 +184,7 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
 export const stonecoreColors: ColorItem[] = [
   { name: "Aurora", slug: "aurora", circleImage: finishAurora, plankImage: finishAurora },
   { name: "Corteccia", slug: "corteccia", circleImage: finishCorteccia, plankImage: finishCorteccia },
-  { name: "Cenere", slug: "cenere", circleImage: finishCorteccia, plankImage: finishCorteccia },
+  { name: "Cenere", slug: "cenere", circleImage: finishCenere, plankImage: finishCenere },
   { name: "Sabbia", slug: "sabbia", circleImage: finishSabbia, plankImage: finishSabbia },
   { name: "Silven", slug: "silven", circleImage: finishSilven, plankImage: finishSilven },
   { name: "Terram", slug: "terram", circleImage: finishTerram, plankImage: finishTerram },
