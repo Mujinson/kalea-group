@@ -107,37 +107,13 @@ const BiomagFloor = () => {
   const ctaScale = useTransform(ctaProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
   const ctaBorderRadius = useTransform(ctaProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
 
-  const advantages = [
-    {
-      icon: Droplets,
-      title: t('stonecore.advantages.waterproof.title'),
-      description: t('stonecore.advantages.waterproof.description'),
-    },
-    {
-      icon: Flame,
-      title: t('stonecore.advantages.fireproof.title'),
-      description: t('stonecore.advantages.fireproof.description'),
-    },
-    {
-      icon: ShieldOff,
-      title: t('stonecore.advantages.antimold.title'),
-      description: t('stonecore.advantages.antimold.description'),
-    },
-    {
-      icon: AudioWaveform,
-      title: t('stonecore.advantages.acoustic.title'),
-      description: t('stonecore.advantages.acoustic.description'),
-    },
-    {
-      icon: FloatingFloorIcon,
-      title: t('stonecore.advantages.floating.title'),
-      description: t('stonecore.advantages.floating.description'),
-    },
-    {
-      icon: Layers,
-      title: t('stonecore.advantages.stability.title'),
-      description: t('stonecore.advantages.stability.description'),
-    },
+  const advantageCards = [
+    { src: cardImpermeabile, alt: "Impermeabile — Biomag Floor®" },
+    { src: cardIgnifugo, alt: "Ignifugo — Biomag Floor®" },
+    { src: cardAntimuffa, alt: "Anti muffa — Biomag Floor®" },
+    { src: cardAcustico, alt: "Comfort acustico — Biomag Floor®" },
+    { src: cardPosa, alt: "Posa flottante — Biomag Floor®" },
+    { src: cardStabilita, alt: "Stabilità dimensionale — Biomag Floor®" },
   ];
 
 
