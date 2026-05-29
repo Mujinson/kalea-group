@@ -183,7 +183,7 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
 export const stonecoreColors: ColorItem[] = [
   { name: "Aurora", slug: "aurora", circleImage: finishAurora, plankImage: finishAurora },
   { name: "Corteccia", slug: "corteccia", circleImage: finishCorteccia, plankImage: finishCorteccia },
-  { name: "Cenere", slug: "cenere", circleImage: finishCorteccia, plankImage: finishCorteccia },
+  { name: "Cenere", slug: "cenere", circleImage: finishCenere, plankImage: finishCenere },
   { name: "Sabbia", slug: "sabbia", circleImage: finishSabbia, plankImage: finishSabbia },
   { name: "Silven", slug: "silven", circleImage: finishSilven, plankImage: finishSilven },
   { name: "Terram", slug: "terram", circleImage: finishTerram, plankImage: finishTerram },
