@@ -22,6 +22,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 import TechSpecBar from "@/components/TechSpecBar";
+import cardAcustico from "@/assets/biomag-card-acustico.png";
+import cardAntimuffa from "@/assets/biomag-card-antimuffa.png";
+import cardPosa from "@/assets/biomag-card-posa.png";
+import cardStabilita from "@/assets/biomag-card-stabilita.png";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -280,9 +284,23 @@ const BiomagFloor = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {advantages.map((advantage, index) => (
-              <FeatureCard key={advantage.title} {...advantage} index={index} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            {[
+              { src: cardAntimuffa, alt: "Anti muffa — Biomag Floor®" },
+              { src: cardAcustico, alt: "Comfort acustico — Biomag Floor®" },
+              { src: cardPosa, alt: "Posa flottante — Biomag Floor®" },
+              { src: cardStabilita, alt: "Stabilità dimensionale — Biomag Floor®" },
+            ].map((card, index) => (
+              <motion.div
+                key={card.alt}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
+                className="overflow-hidden rounded-2xl shadow-lg"
+              >
+                <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
+              </motion.div>
             ))}
           </div>
         </div>
