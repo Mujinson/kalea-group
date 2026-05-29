@@ -1,6 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import FeatureCard from "@/components/FeatureCard";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import ColorCircleGallery, { stonecoreColors } from "@/components/ColorCircleGallery";
 import LayerDiagram from "@/components/LayerDiagram";
@@ -8,8 +7,7 @@ import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import CertificationsSection from "@/components/CertificationsSection";
 
 
-import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
-import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
+import { ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -26,6 +24,8 @@ import cardAcustico from "@/assets/biomag-card-acustico.png";
 import cardAntimuffa from "@/assets/biomag-card-antimuffa.png";
 import cardPosa from "@/assets/biomag-card-posa.png";
 import cardStabilita from "@/assets/biomag-card-stabilita.png";
+import cardImpermeabile from "@/assets/biomag-card-impermeabile.png";
+import cardIgnifugo from "@/assets/biomag-card-ignifugo.png";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
