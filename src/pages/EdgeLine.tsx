@@ -83,7 +83,7 @@ const EdgeLine = () => {
         title={t('hero.edgeline.title')}
         subtitle={t('hero.edgeline.subtitle')}
         ctaPrimary={{ text: t('hero.edgeline.ctaPrimary'), link: `/${language}/contatti` }}
-        ctaSecondary={{ text: t('hero.edgeline.ctaSecondary'), link: `/${language}/biocore` }}
+        ctaSecondary={{ text: t('hero.edgeline.ctaSecondary'), link: `/${language}/hypermatt` }}
         backgroundImage={heroImage}
       />
 

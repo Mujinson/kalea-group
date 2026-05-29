@@ -27,7 +27,7 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       home: {
-        title: "Sistema di superfici BIOMAG FLOOR® e BIOCORE FLOOR®",
+        title: "Sistema di superfici BIOMAG FLOOR® e HYPERMATT",
         subtitle: "Pavimenti, profili e pannelli. Architettura degli interni, progettata in Italia.",
         ctaPrimary: "Scopri il sistema",
         ctaSecondary: "Diventa Partner",
@@ -67,7 +67,7 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa® EdgeLine",
         subtitle: "Profili architettonici in alluminio. La finitura che completa ogni superficie.",
         ctaPrimary: "Richiedi catalogo",
-        ctaSecondary: "Scopri BIOCORE®",
+        ctaSecondary: "Scopri HYPERMATT",
       },
       onewall: {
         title: "Kalēa® BIOWALL®",
@@ -84,7 +84,7 @@ export const translations: Record<Language, Translations> = {
         description: "Superfici tecniche BIOMAG FLOOR® con texture wood. Posa flottante, continuità visiva, prestazioni certificate.",
       },
       biocore: {
-        title: "BIOCORE FLOOR®",
+        title: "HYPERMATT",
         description: "Pavimento naturale evoluto con fibre di legno e carbonio. Eco-sostenibile, atossico, biodegradabile.",
       },
       edgeline: {
@@ -215,14 +215,14 @@ export const translations: Record<Language, Translations> = {
       kaleaIntro: {
         description: "Un sistema integrato per la progettazione degli interni contemporanei.",
         descriptionLine2: "Superficie orizzontale. Superficie verticale. Dettaglio.",
-        stonecoreDesc: "Pavimenti tecnici BIOCORE® con texture wood",
+        stonecoreDesc: "Pavimenti tecnici HYPERMATT con texture wood",
         edgelineDesc: "Profili e battiscopa architettonici",
         onewallDesc: "Pannelli evoluzione del cartongesso tradizionale",
         closing: "Continuità visiva. Calma estetica.",
         closingLine2: "Materiali contemporanei e precisione architettonica.",
         visionTitle: "La nostra visione",
         vision: {
-          materials: "Materiali BIOMAG FLOOR® e BIOWOOD FLOOR®",
+          materials: "Materiali BIOMAG FLOOR® e BIOMAG FLOOR®",
           materialsDesc: "Nuova generazione di superfici",
           energy: "Fino a 1/10 dell'energia produttiva",
           energyDesc: "Minori emissioni, minori rifiuti, maggiore sostenibilità",
@@ -368,7 +368,7 @@ export const translations: Record<Language, Translations> = {
         },
         baseboard: {
           title: "Battiscopa",
-          description: "Coordinato con le superfici BIOCORE®",
+          description: "Coordinato con le superfici HYPERMATT",
         },
         step: {
           title: "Profilo scalino",
@@ -376,7 +376,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Finiture disponibili",
-      finishesSubtitle: "Coordinati con le superfici BIOCORE®",
+      finishesSubtitle: "Coordinati con le superfici HYPERMATT",
       finishes: {
         natural: "Alluminio naturale",
         bronze: "Bronzo satinato",
@@ -464,7 +464,7 @@ export const translations: Record<Language, Translations> = {
     },
     aboutUs: {
       title: "Chi Siamo",
-      intro1: "Kalēa® nasce dalla ricerca sui materiali e dalla visione di un'architettura degli interni più evoluta. Sviluppiamo superfici tecniche BIOCORE® e BIOWOOD® che ridefiniscono prestazioni, estetica e durata.",
+      intro1: "Kalēa® nasce dalla ricerca sui materiali e dalla visione di un'architettura degli interni più evoluta. Sviluppiamo superfici tecniche HYPERMATT e BIOMAG FLOOR® che ridefiniscono prestazioni, estetica e durata.",
       intro2: "Ogni prodotto è progettato in Italia per semplificare la posa, garantire continuità visiva e offrire soluzioni all'avanguardia per architetti, progettisti e imprese.",
       historyTitle: "La nostra storia",
       historyIntro: "Kalēa® non nasce in un laboratorio, né in un ufficio tecnico.\nNasce da uno sguardo diverso sulle cose.",
@@ -475,7 +475,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "La risposta è arrivata dall'ossido di magnesio e dai compositi naturali.\nMateriali conosciuti nel settore tecnico, ma mai sfruttati al loro massimo potenziale.\nAndrea e Gabriel hanno trovato un modo per riscrivere le regole del settore.",
       historyJourney: "Il percorso non è stato immediato.\nAnni di test, confronti, campioni, errori.\nMa ogni limite trovato diventava una nuova variabile da analizzare, da correggere, da migliorare.",
       historyResult: "Il risultato di questa visione è un ecosistema unico:",
-      historyProducts: "BIOCORE® – superfici orizzontali ad alte prestazioni\n\nBIOWOOD® – pavimenti naturali evoluti\n\nKALEABASE® – sottopavimenti tecnici per comfort e isolamento\n\nEdgeLine – profili architettonici continui e coordinati\n\nBIOWALL® – rivestimenti verticali che completano un sistema",
+      historyProducts: "HYPERMATT – superfici orizzontali ad alte prestazioni\n\nBIOMAG FLOOR® – pavimenti naturali evoluti\n\nKALEABASE® – sottopavimenti tecnici per comfort e isolamento\n\nEdgeLine – profili architettonici continui e coordinati\n\nBIOWALL® – rivestimenti verticali che completano un sistema",
       historySystem: "Non un prodotto, ma un linguaggio tecnico integrato, dove ogni componente nasce per dialogare con l'altro.",
       historyToday: "Oggi Kalēa® è diventata una realtà che unisce:",
       historyValues: "• una filosofia orientata alla performance reale, misurabile, tangibile\n• competenza tecnica\n• un'estetica naturale e contemporanea",
@@ -547,7 +547,7 @@ export const translations: Record<Language, Translations> = {
       interests: "Interessi",
       interestsList: {
         biomag: "BIOMAG FLOOR®",
-        biocore: "BIOCORE FLOOR®",
+        biocore: "HYPERMATT",
         hypermatt: "Hypermatt",
         externo: "Externo",
         ceramicheInterni: "Ceramiche da Interni",
@@ -610,7 +610,7 @@ export const translations: Record<Language, Translations> = {
       privacyLink: "Privacy Policy",
     },
     footer: {
-      tagline: "Sistema di superfici BIOCORE® e BIOWOOD®. Pavimenti, profili e pannelli progettati in Italia per l'architettura degli interni.",
+      tagline: "Sistema di superfici HYPERMATT e BIOMAG FLOOR®. Pavimenti, profili e pannelli progettati in Italia per l'architettura degli interni.",
       quickLinks: "Link Rapidi",
       contactsTitle: "Contatti",
       followUs: "Seguici",
@@ -700,7 +700,7 @@ export const translations: Record<Language, Translations> = {
       section2: {
         title: "2. Descrizione dei Servizi",
         content1: "Kalēa offre attraverso il proprio sito web:",
-        list1: "Informazioni su superfici tecniche BIOCORE® e BIOWOOD® per pavimenti, pareti e soffitti",
+        list1: "Informazioni su superfici tecniche HYPERMATT e BIOMAG FLOOR® per pavimenti, pareti e soffitti",
         list2: "Richiesta di campioni e documentazione tecnica",
         list3: "Assistenza commerciale e tecnica per professionisti",
       },
@@ -796,7 +796,7 @@ export const translations: Record<Language, Translations> = {
         title: "Perché collaborare con Kalēa",
         tech: {
           title: "Tecnologia esclusiva",
-          description: "Superfici BIOCORE® con sistema di aggancio Välinge 5G. Precisione e stabilità di ultima generazione.",
+          description: "Superfici HYPERMATT con sistema di aggancio Välinge 5G. Precisione e stabilità di ultima generazione.",
         },
         margins: {
           title: "Condizioni riservate",
@@ -864,7 +864,7 @@ export const translations: Record<Language, Translations> = {
         interestsHelper: "Seleziona una o più linee a cui sei interessato",
         interestsList: {
           biomag: "BIOMAG FLOOR®",
-          biocore: "BIOCORE FLOOR®",
+          biocore: "HYPERMATT",
           hypermatt: "Hypermatt",
           externo: "Externo",
           ceramicheInterni: "Ceramiche da Interni",
@@ -1204,7 +1204,7 @@ export const translations: Record<Language, Translations> = {
     },
     hero: {
       home: {
-        title: "BIOCORE® and BIOWOOD® Surface System",
+        title: "HYPERMATT and BIOMAG FLOOR® Surface System",
         subtitle: "Floors, profiles and panels. Interior architecture, designed in Italy.",
         ctaPrimary: "Discover the system",
         ctaSecondary: "Become Partner",
@@ -1212,7 +1212,7 @@ export const translations: Record<Language, Translations> = {
         newStandard: "The New Standard in Surface Systems.",
         tagline: "Italian Surface Design — Designed in Italy.",
         systemDescription: "KALĒA® is an integrated system of architectural surfaces, designed to offer complete and coordinated solutions to design and architecture professionals.",
-        stonecoreHero: "BIOCORE® floors with wood texture for residential and commercial environments.",
+        stonecoreHero: "HYPERMATT floors with wood texture for residential and commercial environments.",
         edgelineHero: "Architectural aluminum profiles and baseboards for premium finishes.",
         onewallHero: "Vertical design panels for contemporary walls and boiserie.",
         ctaInfo: "Request information",
@@ -1235,8 +1235,8 @@ export const translations: Record<Language, Translations> = {
         brandTagline: "Italian Surface Design.",
       },
       stonecore: {
-        title: "BIOCORE® Floors",
-        subtitle: "BIOCORE® (mineral flooring with magnesium oxide core). Professional performance, natural aesthetics, fast installation.",
+        title: "HYPERMATT Floors",
+        subtitle: "HYPERMATT (mineral flooring with magnesium oxide core). Professional performance, natural aesthetics, fast installation.",
         ctaPrimary: "Request samples",
         ctaSecondary: "Download datasheet",
       },
@@ -1244,7 +1244,7 @@ export const translations: Record<Language, Translations> = {
         title: "Kalēa® EdgeLine",
         subtitle: "Architectural aluminum profiles. The finish that completes every surface.",
         ctaPrimary: "Request catalog",
-        ctaSecondary: "Discover BIOCORE®",
+        ctaSecondary: "Discover HYPERMATT",
       },
       onewall: {
         title: "Kalēa® BIOWALL®",
@@ -1261,7 +1261,7 @@ export const translations: Record<Language, Translations> = {
         description: "Technical BIOMAG FLOOR® surfaces with wood texture. Floating installation, visual continuity, certified performance.",
       },
       biowood: {
-        title: "BIOWOOD FLOOR®",
+        title: "BIOMAG FLOOR®",
         description: "Advanced natural flooring with wood and carbon fibers. Eco-friendly, non-toxic, biodegradable.",
       },
       edgeline: {
@@ -1293,8 +1293,8 @@ export const translations: Record<Language, Translations> = {
         indoor: "Indoor",
         outdoor: "Outdoor",
       },
-      mgoTitle: "Why BIOCORE®",
-      mgoDescription: "BIOCORE® is the KALEA mineral flooring with structural magnesium oxide (MgO) core, designed to offer stability, healthiness and superior performance.",
+      mgoTitle: "Why HYPERMATT",
+      mgoDescription: "HYPERMATT is the KALEA mineral flooring with structural magnesium oxide (MgO) core, designed to offer stability, healthiness and superior performance.",
       mgoAdvantages: {
         fireproof: "Fireproof",
         waterproof: "Waterproof",
@@ -1392,14 +1392,14 @@ export const translations: Record<Language, Translations> = {
       kaleaIntro: {
         description: "An integrated system for contemporary interior design.",
         descriptionLine2: "Horizontal surface. Vertical surface. Detail.",
-        stonecoreDesc: "Technical BIOCORE® flooring with wood texture",
+        stonecoreDesc: "Technical HYPERMATT flooring with wood texture",
         edgelineDesc: "Architectural profiles and baseboards",
         onewallDesc: "Panels, evolution of traditional drywall",
         closing: "Visual continuity. Aesthetic calm.",
         closingLine2: "Contemporary materials and architectural precision.",
         visionTitle: "Our vision",
         vision: {
-          materials: "BIOCORE® and BIOWOOD® materials",
+          materials: "HYPERMATT and BIOMAG FLOOR® materials",
           materialsDesc: "New generation of surfaces",
           energy: "Up to 1/10 of production energy",
           energyDesc: "Lower emissions, less waste, greater sustainability",
@@ -1432,9 +1432,9 @@ export const translations: Record<Language, Translations> = {
       cta: "Discover the full collection",
     },
     gallery: {
-      title: "Explore the BIOCORE® Collection",
-      subtitle: "BIOCORE® (mineral flooring with magnesium oxide core). Textures, colors and details of our mineral flooring.",
-      description: "BIOCORE® flooring combines advanced technology, superior resistance and a natural design inspired by authentic wood. Discover all finishes available for showrooms, retailers and professionals.",
+      title: "Explore the HYPERMATT Collection",
+      subtitle: "HYPERMATT (mineral flooring with magnesium oxide core). Textures, colors and details of our mineral flooring.",
+      description: "HYPERMATT flooring combines advanced technology, superior resistance and a natural design inspired by authentic wood. Discover all finishes available for showrooms, retailers and professionals.",
       cta: "Discover all finishes",
     },
     colors: {
@@ -1453,7 +1453,7 @@ export const translations: Record<Language, Translations> = {
       layers: {
         decorative: "Decorative layer",
         wear: "Wear layer",
-        core: "BIOCORE® Core",
+        core: "HYPERMATT Core",
         mat: "Mat",
       },
       advantagesTitle: "Exclusive advantages",
@@ -1485,7 +1485,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Available finishes",
-      finishesSubtitle: "Eight BIOCORE® wood textures for every design vision",
+      finishesSubtitle: "Eight HYPERMATT wood textures for every design vision",
       finishes: {
         corteccia: "Corteccia",
         cenere: "Cenere",
@@ -1545,7 +1545,7 @@ export const translations: Record<Language, Translations> = {
         },
         baseboard: {
           title: "Baseboard",
-          description: "Coordinated with BIOCORE® surfaces",
+          description: "Coordinated with HYPERMATT surfaces",
         },
         step: {
           title: "Step profile",
@@ -1553,7 +1553,7 @@ export const translations: Record<Language, Translations> = {
         },
       },
       finishesTitle: "Available finishes",
-      finishesSubtitle: "Coordinated with Kalēa BIOCORE® surfaces",
+      finishesSubtitle: "Coordinated with Kalēa HYPERMATT surfaces",
       finishes: {
         natural: "Natural aluminum",
         bronze: "Satin bronze",
@@ -1652,7 +1652,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "The answer came from magnesium oxide.\nA material known in the technical sector, but never exploited to its full potential.\nAndrea and Gabriel found a way to rewrite the rules of the sector.",
       historyJourney: "The journey was not immediate.\nYears of tests, comparisons, samples, errors.\nBut every limit found became a new variable to analyze, to correct, to improve.",
       historyResult: "The result of this vision is a unique ecosystem:",
-      historyProducts: "BIOCORE® – high-performance horizontal surfaces\n\nBIOWOOD® – evolved natural flooring\n\nKALEABASE® – technical underlays for comfort and insulation\n\nEdgeLine – continuous and coordinated architectural profiles\n\nBIOWALL® – vertical claddings that complete a system",
+      historyProducts: "HYPERMATT – high-performance horizontal surfaces\n\nBIOMAG FLOOR® – evolved natural flooring\n\nKALEABASE® – technical underlays for comfort and insulation\n\nEdgeLine – continuous and coordinated architectural profiles\n\nBIOWALL® – vertical claddings that complete a system",
       historySystem: "Not a product, but an integrated technical language, where every component is born to dialogue with the other.",
       historyToday: "Today Kalēa® has become a reality that combines:",
       historyValues: "• a philosophy oriented towards real, measurable, tangible performance\n• technical expertise\n• a natural and contemporary aesthetic",
@@ -1724,7 +1724,7 @@ export const translations: Record<Language, Translations> = {
       interests: "Interests",
       interestsList: {
         biomag: "BIOMAG FLOOR®",
-        biocore: "BIOCORE FLOOR®",
+        biocore: "HYPERMATT",
         hypermatt: "Hypermatt",
         externo: "Externo",
         ceramicheInterni: "Indoor Ceramics",
@@ -1973,7 +1973,7 @@ export const translations: Record<Language, Translations> = {
         title: "Why collaborate with Kalēa",
         tech: {
           title: "Exclusive technology",
-          description: "BIOCORE® surfaces with Välinge 5G locking system. Next-generation precision and stability.",
+          description: "HYPERMATT surfaces with Välinge 5G locking system. Next-generation precision and stability.",
         },
         margins: {
           title: "Reserved conditions",
@@ -2041,7 +2041,7 @@ export const translations: Record<Language, Translations> = {
         interestsHelper: "Select one or more lines you're interested in",
         interestsList: {
           biomag: "BIOMAG FLOOR®",
-          biocore: "BIOCORE FLOOR®",
+          biocore: "HYPERMATT",
           hypermatt: "Hypermatt",
           externo: "Externo",
           ceramicheInterni: "Indoor Ceramics",
@@ -2420,7 +2420,7 @@ export const translations: Record<Language, Translations> = {
         description: "Technische Oberflächen BIOMAG FLOOR® mit Holztextur. Schwimmende Verlegung, visuelle Kontinuität, zertifizierte Leistung.",
       },
       biowood: {
-        title: "BIOWOOD FLOOR®",
+        title: "BIOMAG FLOOR®",
         description: "Fortschrittlicher Naturboden mit Holz- und Kohlefasern. Umweltfreundlich, ungiftig, biologisch abbaubar.",
       },
       edgeline: {
@@ -2811,7 +2811,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "Die Antwort kam vom Magnesiumoxid.\nEin Material, das im technischen Bereich bekannt war, aber nie sein volles Potenzial ausgeschöpft hatte.\nAndrea und Gabriel fanden einen Weg, die Regeln der Branche neu zu schreiben.",
       historyJourney: "Der Weg war nicht sofort.\nJahre von Tests, Vergleichen, Mustern, Fehlern.\nAber jede gefundene Grenze wurde zu einer neuen Variable zum Analysieren, Korrigieren, Verbessern.",
       historyResult: "Das Ergebnis dieser Vision ist ein einzigartiges Ökosystem:",
-      historyProducts: "BIOCORE® – horizontale Hochleistungsoberflächen\n\nBIOWOOD® – Weiterentwickelte Naturböden\n\nKALEABASE® – technische Unterlagen für Komfort und Isolierung\n\nEdgeLine – durchgehende und koordinierte architektonische Profile\n\nBIOWALL® – vertikale Verkleidungen, die ein System vervollständigen",
+      historyProducts: "HYPERMATT – horizontale Hochleistungsoberflächen\n\nBIOMAG FLOOR® – Weiterentwickelte Naturböden\n\nKALEABASE® – technische Unterlagen für Komfort und Isolierung\n\nEdgeLine – durchgehende und koordinierte architektonische Profile\n\nBIOWALL® – vertikale Verkleidungen, die ein System vervollständigen",
       historySystem: "Kein Produkt, sondern eine integrierte technische Sprache, bei der jede Komponente für den Dialog mit der anderen geboren wird.",
       historyToday: "Heute ist Kalēa® zu einer Realität geworden, die vereint:",
       historyValues: "• eine Philosophie, die auf echte, messbare, greifbare Leistung ausgerichtet ist\n• technische Kompetenz\n• eine natürliche und zeitgenössische Ästhetik",
@@ -2883,7 +2883,7 @@ export const translations: Record<Language, Translations> = {
       interests: "Interessen",
       interestsList: {
         biomag: "BIOMAG FLOOR®",
-        biocore: "BIOCORE FLOOR®",
+        biocore: "HYPERMATT",
         hypermatt: "Hypermatt",
         externo: "Externo",
         ceramicheInterni: "Innenkeramik",
@@ -3132,7 +3132,7 @@ export const translations: Record<Language, Translations> = {
         title: "Warum mit Kalēa zusammenarbeiten",
         tech: {
           title: "Exklusive Technologie",
-          description: "BIOCORE®-Oberflächen mit Välinge 5G-Verriegelungssystem. Präzision und Stabilität der neuesten Generation.",
+          description: "HYPERMATT-Oberflächen mit Välinge 5G-Verriegelungssystem. Präzision und Stabilität der neuesten Generation.",
         },
         margins: {
           title: "Reservierte Konditionen",
@@ -3200,7 +3200,7 @@ export const translations: Record<Language, Translations> = {
         interestsHelper: "Wählen Sie eine oder mehrere Linien aus, die Sie interessieren",
         interestsList: {
           biomag: "BIOMAG FLOOR®",
-          biocore: "BIOCORE FLOOR®",
+          biocore: "HYPERMATT",
           hypermatt: "Hypermatt",
           externo: "Externo",
           ceramicheInterni: "Innenkeramik",
@@ -3579,7 +3579,7 @@ export const translations: Record<Language, Translations> = {
         description: "Surfaces techniques BIOMAG FLOOR® avec texture bois. Pose flottante, continuité visuelle, performance certifiée.",
       },
       biowood: {
-        title: "BIOWOOD FLOOR®",
+        title: "BIOMAG FLOOR®",
         description: "Revêtement de sol naturel avancé avec fibres de bois et de carbone. Écologique, non toxique, biodégradable.",
       },
       edgeline: {
@@ -3976,7 +3976,7 @@ export const translations: Record<Language, Translations> = {
       historyMgo: "La réponse est venue de l'oxyde de magnésium.\nUn matériau connu dans le secteur technique, mais jamais exploité à son plein potentiel.\nAndrea et Gabriel ont trouvé un moyen de réécrire les règles du secteur.",
       historyJourney: "Le parcours n'a pas été immédiat.\nDes années de tests, comparaisons, échantillons, erreurs.\nMais chaque limite trouvée devenait une nouvelle variable à analyser, à corriger, à améliorer.",
       historyResult: "Le résultat de cette vision est un écosystème unique :",
-      historyProducts: "BIOCORE® – surfaces horizontales haute performance\n\nBIOWOOD® – sols naturels évolués\n\nKALEABASE® – sous-couches techniques pour confort et isolation\n\nEdgeLine – profilés architecturaux continus et coordonnés\n\nBIOWALL® – revêtements verticaux qui complètent un système",
+      historyProducts: "HYPERMATT – surfaces horizontales haute performance\n\nBIOMAG FLOOR® – sols naturels évolués\n\nKALEABASE® – sous-couches techniques pour confort et isolation\n\nEdgeLine – profilés architecturaux continus et coordonnés\n\nBIOWALL® – revêtements verticaux qui complètent un système",
       historySystem: "Pas un produit, mais un langage technique intégré, où chaque composant naît pour dialoguer avec l'autre.",
       historyToday: "Aujourd'hui, Kalēa® est devenue une réalité qui unit :",
       historyValues: "• une philosophie orientée vers la performance réelle, mesurable, tangible\n• compétence technique\n• une esthétique naturelle et contemporaine",
@@ -4048,7 +4048,7 @@ export const translations: Record<Language, Translations> = {
       interests: "Intérêts",
       interestsList: {
         biomag: "BIOMAG FLOOR®",
-        biocore: "BIOCORE FLOOR®",
+        biocore: "HYPERMATT",
         hypermatt: "Hypermatt",
         externo: "Externo",
         ceramicheInterni: "Céramiques d'Intérieur",
@@ -4297,7 +4297,7 @@ export const translations: Record<Language, Translations> = {
         title: "Pourquoi collaborer avec Kalēa",
         tech: {
           title: "Technologie exclusive",
-          description: "Surfaces BIOCORE® avec système de verrouillage Välinge 5G. Précision et stabilité de dernière génération.",
+          description: "Surfaces HYPERMATT avec système de verrouillage Välinge 5G. Précision et stabilité de dernière génération.",
         },
         margins: {
           title: "Conditions réservées",
@@ -4365,7 +4365,7 @@ export const translations: Record<Language, Translations> = {
         interestsHelper: "Sélectionnez une ou plusieurs lignes qui vous intéressent",
         interestsList: {
           biomag: "BIOMAG FLOOR®",
-          biocore: "BIOCORE FLOOR®",
+          biocore: "HYPERMATT",
           hypermatt: "Hypermatt",
           externo: "Externo",
           ceramicheInterni: "Céramiques d'Intérieur",

@@ -72,7 +72,7 @@ const BiocoreFloor = () => {
           brand: { "@type": "Brand", name: "Kalēa" },
           category: "Flooring",
           description: "Pavimento SPC ultra-matte con finitura laser, impermeabile, click-clack 5G.",
-          url: "https://kalea.space/it/biocore-floor",
+          url: "https://kalea.space/it/hypermatt",
         }}
       />
 
