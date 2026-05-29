@@ -1,6 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import FeatureCard from "@/components/FeatureCard";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import ColorCircleGallery, { stonecoreColors } from "@/components/ColorCircleGallery";
 import LayerDiagram from "@/components/LayerDiagram";
@@ -8,8 +7,7 @@ import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import CertificationsSection from "@/components/CertificationsSection";
 
 
-import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
-import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
+import { ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -26,6 +24,8 @@ import cardAcustico from "@/assets/biomag-card-acustico.png";
 import cardAntimuffa from "@/assets/biomag-card-antimuffa.png";
 import cardPosa from "@/assets/biomag-card-posa.png";
 import cardStabilita from "@/assets/biomag-card-stabilita.png";
+import cardImpermeabile from "@/assets/biomag-card-impermeabile.png";
+import cardIgnifugo from "@/assets/biomag-card-ignifugo.png";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -107,37 +107,13 @@ const BiomagFloor = () => {
   const ctaScale = useTransform(ctaProgress, [0, 0.3, 0.7, 1], isMobile ? [0.98, 1, 1, 0.98] : [0.94, 1, 1, 0.92]);
   const ctaBorderRadius = useTransform(ctaProgress, [0, 0.2, 0.8, 1], ["20px", "0px", "0px", "24px"]);
 
-  const advantages = [
-    {
-      icon: Droplets,
-      title: t('stonecore.advantages.waterproof.title'),
-      description: t('stonecore.advantages.waterproof.description'),
-    },
-    {
-      icon: Flame,
-      title: t('stonecore.advantages.fireproof.title'),
-      description: t('stonecore.advantages.fireproof.description'),
-    },
-    {
-      icon: ShieldOff,
-      title: t('stonecore.advantages.antimold.title'),
-      description: t('stonecore.advantages.antimold.description'),
-    },
-    {
-      icon: AudioWaveform,
-      title: t('stonecore.advantages.acoustic.title'),
-      description: t('stonecore.advantages.acoustic.description'),
-    },
-    {
-      icon: FloatingFloorIcon,
-      title: t('stonecore.advantages.floating.title'),
-      description: t('stonecore.advantages.floating.description'),
-    },
-    {
-      icon: Layers,
-      title: t('stonecore.advantages.stability.title'),
-      description: t('stonecore.advantages.stability.description'),
-    },
+  const advantageCards = [
+    { src: cardImpermeabile, alt: "Impermeabile — Biomag Floor®" },
+    { src: cardIgnifugo, alt: "Ignifugo — Biomag Floor®" },
+    { src: cardAntimuffa, alt: "Anti muffa — Biomag Floor®" },
+    { src: cardAcustico, alt: "Comfort acustico — Biomag Floor®" },
+    { src: cardPosa, alt: "Posa flottante — Biomag Floor®" },
+    { src: cardStabilita, alt: "Stabilità dimensionale — Biomag Floor®" },
   ];
 
 
@@ -284,20 +260,15 @@ const BiomagFloor = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            {[
-              { src: cardAntimuffa, alt: "Anti muffa — Biomag Floor®" },
-              { src: cardAcustico, alt: "Comfort acustico — Biomag Floor®" },
-              { src: cardPosa, alt: "Posa flottante — Biomag Floor®" },
-              { src: cardStabilita, alt: "Stabilità dimensionale — Biomag Floor®" },
-            ].map((card, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+            {advantageCards.map((card, index) => (
               <motion.div
                 key={card.alt}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-                className="overflow-hidden rounded-2xl shadow-lg"
+                className="overflow-hidden rounded-2xl shadow-lg xl:col-span-1"
               >
                 <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
               </motion.div>
