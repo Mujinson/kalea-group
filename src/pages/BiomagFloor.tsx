@@ -166,7 +166,7 @@ const BiomagFloor = () => {
             animate={{ filter: "blur(0px)", scale: 1.1 }}
             transition={{ duration: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/40" />
         </motion.div>
 
         {/* Hero Content - positioned at bottom to avoid logo overlap */}
