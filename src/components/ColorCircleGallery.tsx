@@ -6,6 +6,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 // Import BIOMAG FLOOR finish images
 import finishAurora from "@/assets/finish-aurora.jpg";
 import finishCorteccia from "@/assets/finish-corteccia.jpg";
+import finishCenere from "@/assets/finish-cenere.jpg";
 import finishPerla from "@/assets/finish-perla.jpg";
 import finishSabbia from "@/assets/finish-sabbia.jpg";
 import finishSilven from "@/assets/finish-silven.jpg";
