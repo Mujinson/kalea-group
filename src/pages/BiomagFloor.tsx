@@ -11,7 +11,7 @@ import { ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Ti
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/product-biocore-floor-new.jpg";
+import heroImage from "@/assets/biomag-hero-new.jpg";
 import bgStoneCore from "@/assets/bg-stonecore.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import stonecoreLayers from "@/assets/stonecore-layers.png";
