@@ -267,7 +267,8 @@ const App = () => (
               <Route path="/fr/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/fr/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/fr/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/fr/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/fr/hypermatt" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/fr/biocore-floor" element={<Navigate to="/fr/hypermatt" replace />} />
               <Route path="/fr/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/fr/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/fr/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
