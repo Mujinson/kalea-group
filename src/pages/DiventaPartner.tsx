@@ -49,7 +49,7 @@ const tanBgStyle: React.CSSProperties = {
 
 const interestKeys = [
   "biomag",
-  "biocore",
+  
   "hypermatt",
   "externo",
   "ceramicheInterni",
