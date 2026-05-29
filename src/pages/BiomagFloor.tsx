@@ -9,8 +9,6 @@ import CertificationsSection from "@/components/CertificationsSection";
 
 import { ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/product-biocore-floor-new.jpg";
@@ -266,24 +264,32 @@ const BiomagFloor = () => {
             </p>
           </motion.div>
 
-          <Carousel
-            opts={{ align: "start", loop: true }}
-            plugins={[Autoplay({ delay: 3500, stopOnInteraction: false, stopOnMouseEnter: true })]}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-4 lg:-ml-6">
-              {advantageCards.map((card) => (
-                <CarouselItem
-                  key={card.alt}
-                  className="pl-4 lg:pl-6 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+          <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+            <div className="flex gap-6 lg:gap-8 w-max animate-marquee hover:[animation-play-state:paused]">
+              {[...advantageCards, ...advantageCards].map((card, i) => (
+                <div
+                  key={`${card.alt}-${i}`}
+                  className="overflow-hidden rounded-2xl shadow-lg shrink-0 w-[78vw] sm:w-[44vw] lg:w-[30vw] xl:w-[22vw] max-w-[420px]"
                 >
-                  <div className="overflow-hidden rounded-2xl shadow-lg">
-                    <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
-                  </div>
-                </CarouselItem>
+                  <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
+                </div>
               ))}
-            </CarouselContent>
-          </Carousel>
+            </div>
+          </div>
+
+          {/* Scroll hint */}
+          <div className="mt-8 flex flex-col items-center gap-3 text-foreground/60">
+            <div className="flex items-center gap-3 text-xs tracking-[0.25em] uppercase">
+              <span className="h-px w-10 bg-foreground/30" />
+              <span>Scorri per scoprire tutti i vantaggi</span>
+              <span className="h-px w-10 bg-foreground/30" />
+            </div>
+            <div className="flex items-center gap-2 text-foreground/40 animate-pulse">
+              <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 6h18M14 1l5 5-5 5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </section>
 
