@@ -26,6 +26,8 @@ import cardPosa from "@/assets/biomag-card-posa.png";
 import cardStabilita from "@/assets/biomag-card-stabilita.png";
 import cardImpermeabile from "@/assets/biomag-card-impermeabile.png";
 import cardIgnifugo from "@/assets/biomag-card-ignifugo.png";
+import cardRiscaldamento from "@/assets/biomag-card-riscaldamento.png";
+import cardVocFree from "@/assets/biomag-card-voc-free.png";
 
 const BiomagFloor = () => {
   const { t, language } = useTranslation();
@@ -114,6 +116,8 @@ const BiomagFloor = () => {
     { src: cardAcustico, alt: "Comfort acustico — Biomag Floor®" },
     { src: cardPosa, alt: "Posa flottante — Biomag Floor®" },
     { src: cardStabilita, alt: "Stabilità dimensionale — Biomag Floor®" },
+    { src: cardRiscaldamento, alt: "Adatto a riscaldamento a pavimento — Biomag Floor®" },
+    { src: cardVocFree, alt: "Sicuro, naturale, VOC free — Biomag Floor®" },
   ];
 
 
