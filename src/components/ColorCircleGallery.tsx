@@ -85,8 +85,14 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
           >
             {/* Circle container */}
             <div className="relative group">
-              {/* Circle image or color */}
-              <div className="w-32 h-32 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-full overflow-hidden shadow-lg transition-transform duration-300 group-hover:scale-105">
+              {/* 3D Circle image or color */}
+              <div
+                className="relative w-32 h-32 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-full overflow-hidden transition-transform duration-300 group-hover:scale-105"
+                style={{
+                  boxShadow:
+                    '0 18px 28px -10px rgba(60,40,20,0.35), 0 6px 12px -4px rgba(60,40,20,0.25), inset 0 0 0 1px rgba(255,255,255,0.08)',
+                }}
+              >
                 {color.circleImage ? (
                   <img
                     src={color.circleImage}
@@ -94,15 +100,40 @@ const ColorCircleGallery = ({ title, subtitle, colors }: ColorCircleGalleryProps
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div 
+                  <div
                     className="w-full h-full"
-                    style={{ 
-                      background: color.colorHex 
+                    style={{
+                      background: color.colorHex
                         ? `linear-gradient(135deg, ${color.colorHex} 0%, ${adjustColor(color.colorHex, -20)} 100%)`
-                        : '#888'
+                        : '#888',
                     }}
                   />
                 )}
+                {/* Specular highlight (top-left) */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-full"
+                  style={{
+                    background:
+                      'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.15) 22%, rgba(255,255,255,0) 45%)',
+                    mixBlendMode: 'screen',
+                  }}
+                />
+                {/* Inner shadow / vignette for sphere volume */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-full"
+                  style={{
+                    background:
+                      'radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.18) 80%, rgba(0,0,0,0.45) 100%)',
+                  }}
+                />
+                {/* Rim light */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-full"
+                  style={{
+                    boxShadow:
+                      'inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -8px 18px rgba(0,0,0,0.25)',
+                  }}
+                />
               </div>
 
               {/* Search icon button - only show if we have plank image or colorHex */}
