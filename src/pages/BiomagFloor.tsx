@@ -261,10 +261,6 @@ const BiomagFloor = () => {
         </div>
       </section>
 
-      {/* Gallery Carousel Section */}
-      <section className="relative z-[1] h-screen bg-background">
-        <ProductGallerySection />
-      </section>
 
       {/* Vantaggi Section - Normal scroll */}
       <section ref={advantagesRef} className="relative z-[2] bg-background py-20">
