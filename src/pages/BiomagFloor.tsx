@@ -37,6 +37,7 @@ const BiomagFloor = () => {
   // Refs for scroll tracking
   const heroRef = useRef<HTMLDivElement>(null);
   const advantagesRef = useRef<HTMLDivElement>(null);
+  const { containerRef: advantagesScrollRef, isDragging: advantagesDragging, handlers: advantagesHandlers } = useDragScroll({ autoScrollSpeed: 0.6, direction: 'left' });
   const finishesRef = useRef<HTMLDivElement>(null);
   const structureRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLDivElement>(null);
