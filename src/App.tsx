@@ -177,7 +177,8 @@ const App = () => (
               <Route path="/it/indoor" element={<><SEOHandler /><Layout><Indoor /></Layout></>} />
               <Route path="/it/outdoor" element={<><SEOHandler /><Layout><Outdoor /></Layout></>} />
               <Route path="/it/biomag-floor" element={<><SEOHandler /><Layout><BiomagFloor /></Layout></>} />
-              <Route path="/it/biocore-floor" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/it/hypermatt" element={<><SEOHandler /><Layout><BiocoreFloor /></Layout></>} />
+              <Route path="/it/biocore-floor" element={<Navigate to="/it/hypermatt" replace />} />
               <Route path="/it/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/it/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/it/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
