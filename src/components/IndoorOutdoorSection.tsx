@@ -31,7 +31,7 @@ const IndoorOutdoorSection = () => {
     {
       title: t('surfaces.hypermatt.title'),
       description: t('surfaces.hypermatt.description'),
-      link: `/${language}/biocore-floor`,
+      link: `/${language}/hypermatt`,
       image: cardHypermattAmbient,
     },
     {
