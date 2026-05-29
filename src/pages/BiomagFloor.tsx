@@ -20,6 +20,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 import TechSpecBar from "@/components/TechSpecBar";
+import { useDragScroll } from "@/hooks/useDragScroll";
 import cardAcustico from "@/assets/biomag-card-acustico.png";
 import cardAntimuffa from "@/assets/biomag-card-antimuffa.png";
 import cardPosa from "@/assets/biomag-card-posa.png";
