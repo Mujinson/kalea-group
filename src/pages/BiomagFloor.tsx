@@ -7,7 +7,7 @@ import LayerDiagram from "@/components/LayerDiagram";
 import MaterialPerformanceCard from "@/components/MaterialPerformanceCard";
 import CertificationsSection from "@/components/CertificationsSection";
 
-import ProductGallerySection from "@/components/ProductGallerySection";
+
 import { Droplets, Flame, ShieldOff, AudioWaveform, Layers, ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
 import FloatingFloorIcon from "@/components/icons/FloatingFloorIcon";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
