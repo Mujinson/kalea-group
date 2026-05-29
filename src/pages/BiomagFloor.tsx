@@ -20,6 +20,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import SEOHead from "@/components/SEOHead";
 import CarouselWheel3D from "@/components/CarouselWheel3D";
 import TechSpecBar from "@/components/TechSpecBar";
+import { useDragScroll } from "@/hooks/useDragScroll";
 import cardAcustico from "@/assets/biomag-card-acustico.png";
 import cardAntimuffa from "@/assets/biomag-card-antimuffa.png";
 import cardPosa from "@/assets/biomag-card-posa.png";
@@ -36,6 +37,7 @@ const BiomagFloor = () => {
   // Refs for scroll tracking
   const heroRef = useRef<HTMLDivElement>(null);
   const advantagesRef = useRef<HTMLDivElement>(null);
+  const { containerRef: advantagesScrollRef, isDragging: advantagesDragging, handlers: advantagesHandlers } = useDragScroll({ autoScrollSpeed: 0.6, direction: 'left' });
   const finishesRef = useRef<HTMLDivElement>(null);
   const structureRef = useRef<HTMLDivElement>(null);
   const techRef = useRef<HTMLDivElement>(null);
@@ -264,14 +266,19 @@ const BiomagFloor = () => {
             </p>
           </motion.div>
 
-          <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-            <div className="flex gap-6 lg:gap-8 w-max animate-marquee hover:[animation-play-state:paused]">
+          <div className="relative [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+            <div
+              ref={advantagesScrollRef}
+              {...advantagesHandlers}
+              className={`flex gap-6 lg:gap-8 overflow-x-auto scrollbar-hide select-none ${advantagesDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {[...advantageCards, ...advantageCards].map((card, i) => (
                 <div
                   key={`${card.alt}-${i}`}
                   className="overflow-hidden rounded-2xl shadow-lg shrink-0 w-[78vw] sm:w-[44vw] lg:w-[30vw] xl:w-[22vw] max-w-[420px]"
                 >
-                  <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
+                  <img src={card.src} alt={card.alt} loading="lazy" draggable={false} className="w-full h-auto block pointer-events-none" />
                 </div>
               ))}
             </div>
