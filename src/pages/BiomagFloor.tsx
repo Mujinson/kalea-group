@@ -266,14 +266,19 @@ const BiomagFloor = () => {
             </p>
           </motion.div>
 
-          <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-            <div className="flex gap-6 lg:gap-8 w-max animate-marquee hover:[animation-play-state:paused]">
+          <div className="relative [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
+            <div
+              ref={advantagesScrollRef}
+              {...advantagesHandlers}
+              className={`flex gap-6 lg:gap-8 overflow-x-auto scrollbar-hide select-none ${advantagesDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
               {[...advantageCards, ...advantageCards].map((card, i) => (
                 <div
                   key={`${card.alt}-${i}`}
                   className="overflow-hidden rounded-2xl shadow-lg shrink-0 w-[78vw] sm:w-[44vw] lg:w-[30vw] xl:w-[22vw] max-w-[420px]"
                 >
-                  <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
+                  <img src={card.src} alt={card.alt} loading="lazy" draggable={false} className="w-full h-auto block pointer-events-none" />
                 </div>
               ))}
             </div>
