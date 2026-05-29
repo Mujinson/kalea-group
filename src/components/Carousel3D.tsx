@@ -22,7 +22,7 @@ const planks = [
   { id: 5, name: "Silven", slug: "silven", image: finishSilven },
   { id: 6, name: "Terram", slug: "terram", image: finishTerram },
   { id: 7, name: "Velora", slug: "velora", image: finishVelora },
-  { id: 8, name: "Cenere", slug: "cenere", image: finishCorteccia },
+  { id: 8, name: "Cenere", slug: "cenere", image: finishCenere },
 ];
 
 const Carousel3D = () => {
