@@ -12,6 +12,7 @@ import finishSabbia from "@/assets/finish-sabbia.jpg";
 import finishSilven from "@/assets/finish-silven.jpg";
 import finishTerram from "@/assets/finish-terram.jpg";
 import finishVelora from "@/assets/finish-velora.jpg";
+import finishCenere from "@/assets/finish-cenere.jpg";
 
 const planks = [
   { id: 1, name: "Aurora", slug: "aurora", image: finishAurora },
