@@ -9,6 +9,8 @@ import CertificationsSection from "@/components/CertificationsSection";
 
 import { ThermometerSun, Check, ChevronDown, Baby, PawPrint, Recycle, Shield, Timer } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/product-biocore-floor-new.jpg";
@@ -264,20 +266,24 @@ const BiomagFloor = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
-            {advantageCards.map((card, index) => (
-              <motion.div
-                key={card.alt}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-                className="overflow-hidden rounded-2xl shadow-lg xl:col-span-1"
-              >
-                <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
-              </motion.div>
-            ))}
-          </div>
+          <Carousel
+            opts={{ align: "start", loop: true }}
+            plugins={[Autoplay({ delay: 3500, stopOnInteraction: false, stopOnMouseEnter: true })]}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4 lg:-ml-6">
+              {advantageCards.map((card) => (
+                <CarouselItem
+                  key={card.alt}
+                  className="pl-4 lg:pl-6 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                >
+                  <div className="overflow-hidden rounded-2xl shadow-lg">
+                    <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
       </section>
 
