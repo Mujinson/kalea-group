@@ -12,12 +12,11 @@ export interface CatalogProduct {
 
 export const PRODUCT_CATALOG: CatalogProduct[] = [
   // --- ARTICOLI (Pavimenti / Rivestimenti) ---
-  { code: 'BM-PAV', name: 'BioMag Floor', description: 'Pavimento magnetico minerale', category: 'article', defaultPrice: 48.00, defaultUnit: 'Metro quadro', hasColor: true },
-  { code: 'BC-PAV', name: 'BioCore Floor', description: 'Pavimento flottante organico', category: 'article', defaultPrice: 55.00, defaultUnit: 'Metro quadro', hasColor: true },
-  { code: 'BW-PAR', name: 'BioWall', description: 'Rivestimento parete minerale', category: 'article', defaultPrice: 42.00, defaultUnit: 'Metro quadro', hasColor: true },
-  { code: 'KC-CEIL', name: 'KaleaCeiling', description: 'Pannello soffitto minerale', category: 'article', defaultPrice: 50.00, defaultUnit: 'Metro quadro', hasColor: true },
-  { code: 'KD-DECK', name: 'KaleaDeck', description: 'Pavimento outdoor composito', category: 'article', defaultPrice: 65.00, defaultUnit: 'Metro quadro', hasColor: true },
-  { code: 'OW-PAR', name: 'OneWall', description: 'Pannello parete grande formato', category: 'article', defaultPrice: 58.00, defaultUnit: 'Metro quadro', hasColor: true },
+  { code: 'BM-PAV', name: 'BIOMAG FLOOR®', description: 'Pavimento in ossido di magnesio e fibre naturali', category: 'article', defaultPrice: 48.00, defaultUnit: 'Metro quadro', hasColor: true },
+  { code: 'HM-PAV', name: 'Hypermatt SPC', description: 'Pavimento SPC ultra-matte finitura laser', category: 'article', defaultPrice: 55.00, defaultUnit: 'Metro quadro', hasColor: true },
+  { code: 'BW-PAR', name: 'BIOWALL®', description: 'Rivestimento parete minerale', category: 'article', defaultPrice: 42.00, defaultUnit: 'Metro quadro', hasColor: true },
+  { code: 'KC-CEIL', name: 'Kaleaceiling', description: 'Pannello soffitto minerale', category: 'article', defaultPrice: 50.00, defaultUnit: 'Metro quadro', hasColor: true },
+  { code: 'EX-DECK', name: 'Externo', description: 'Sistema decking outdoor', category: 'article', defaultPrice: 65.00, defaultUnit: 'Metro quadro', hasColor: true },
 
   // --- ACCESSORI ---
   { code: 'EL-BATT', name: 'EdgeLine Battiscopa', description: 'Battiscopa coordinato', category: 'accessory', defaultPrice: 12.00, defaultUnit: 'Metro lineare', hasColor: true },
