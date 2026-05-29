@@ -260,20 +260,15 @@ const BiomagFloor = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            {[
-              { src: cardAntimuffa, alt: "Anti muffa — Biomag Floor®" },
-              { src: cardAcustico, alt: "Comfort acustico — Biomag Floor®" },
-              { src: cardPosa, alt: "Posa flottante — Biomag Floor®" },
-              { src: cardStabilita, alt: "Stabilità dimensionale — Biomag Floor®" },
-            ].map((card, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8">
+            {advantageCards.map((card, index) => (
               <motion.div
                 key={card.alt}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
-                className="overflow-hidden rounded-2xl shadow-lg"
+                className="overflow-hidden rounded-2xl shadow-lg xl:col-span-1"
               >
                 <img src={card.src} alt={card.alt} loading="lazy" className="w-full h-auto block" />
               </motion.div>
