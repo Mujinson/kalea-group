@@ -25,7 +25,7 @@ const fallbackImages: Record<string, string> = {
   velora: finishVelora,
   perla: finishPerla,
   silven: finishSilven,
-  cenere: finishCorteccia,
+  cenere: finishCenere,
 };
 
 // Map legacy paths to imported images
