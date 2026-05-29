@@ -1,30 +1,26 @@
-## Attivazione Google Search Console su Lovable
+## Obiettivo
+Rendere tutti gli 8 swatch colore di BIOMAG FLOOR® come cerchi 3D uniformi nello stile del poster (sfera lucida con ombra, highlight e drop shadow), usando:
+- La nuova texture Aurora appena caricata (rovere chiaro) come sorgente
+- Le 7 immagini attuali in `src/assets/finish-*.jpg` come sorgenti per gli altri colori
 
-Collego Google Search Console al progetto tramite il connector ufficiale, così possiamo gestire indicizzazione, sitemap e analytics di ricerca direttamente da qui.
+## Passi
+1. Copiare `user-uploads://ChatGPT_Image_May_29_2026_03_54_29_PM.png` come sorgente Aurora in `/tmp/`.
+2. Per ognuno degli 8 colori (Aurora, Corteccia, Cenere, Sabbia, Silven, Terram, Perla, Velora):
+   - Campionare la texture al centro dell'immagine sorgente per ottenere un tile pulito.
+   - Applicare lo stesso trattamento 3D uniforme via Python/Pillow (no AI, deterministico, qualità identica):
+     - Canvas 800×800 trasparente
+     - Maschera circolare con texture tilata/ridimensionata
+     - Inner shadow morbida sui bordi (effetto sfera)
+     - Radial highlight in alto-sinistra (~30%, soft)
+     - Drop shadow esterna morbida
+     - Bordo sottile
+   - Salvare come `src/assets/finish-{nome}.jpg` (800×800, <200kb, qualità 85).
+3. Nessuna modifica al codice — `ColorCircleGallery` continua a usare gli stessi path.
 
-### Passi
+## Note tecniche
+- Uso Pillow (PIL) in `code--exec` per garantire uniformità pixel-perfect tra tutti gli 8 cerchi (stessa illuminazione/ombra/diametro), cosa non possibile con generazione AI.
+- Aurora userà la texture appena caricata; gli altri 7 useranno la texture estratta dal cerchio attuale già presente in `src/assets/`.
+- QA: genero un'anteprima 4×2 di tutti i cerchi affiancati per verificare uniformità prima di consegnare.
 
-1. **Connessione del connector** Google Search Console (richiede login Google con l'account che gestirà il dominio `kalea.space`).
-2. **Verifica della proprietà del dominio** `https://kalea.space/` tramite metodo META:
-   - Genero un token di verifica via API.
-   - Inserisco il `<meta name="google-site-verification" content="...">` nell'`<head>` di `index.html`.
-   - Pubblichi il sito (necessario perché Google deve leggere il tag sul dominio live).
-   - Lancio la verifica.
-3. **Registrazione del sito** in Search Console (aggiunta come property).
-4. **Submit della sitemap** `https://kalea.space/sitemap.xml`.
-5. **Richiesta di re-indicizzazione** delle pagine con cache stale:
-   - `/it/biomag-floor`, `/en/biomag-floor`, `/fr/biomag-floor`, `/de/biomag-floor`
-   - `/it/hypermatt` (+ EN/DE/FR)
-   - `/it/ceramiche-esterni` (+ EN/DE/FR)
-
-### Note
-
-- **Google Business Profile** è separato: non c'è un connector Lovable, va creato manualmente su [business.google.com](https://business.google.com). Posso prepararti una checklist dei dati da inserire (nome, indirizzo, categoria, orari, foto, descrizione multilingua) ma l'iscrizione la fai tu lato Google. Lo facciamo in un secondo momento o adesso?
-- Per la verifica META serve **pubblicare** dopo aver inserito il tag, altrimenti Google non lo trova.
-
-### Cosa farò in codice
-
-- Modifica di `index.html`: aggiunta del meta tag di verifica Google (1 riga nell'`<head>`).
-- Nessun'altra modifica al codice.
-
-Confermi che procedo con la connessione Google Search Console?
+## Rischio
+Le attuali `finish-*.jpg` sono già renderizzate come cerchi su sfondo: campionerò la zona texture interna evitando bordi/ombre esistenti. Se una sorgente risulta troppo piccola o rumorosa per il tile, lo segnalo invece di consegnare un risultato sfocato.
