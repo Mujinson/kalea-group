@@ -91,8 +91,8 @@ export const laminatiCollections: LaminatoCollection[] = [
     description:
       "Effetti materici pietra, cemento e graniglia in formato tiles per un design moderno e industriale. Massima classe di resistenza all'abrasione AC6, protezione Hydro dai ristagni d'acqua e incastro tecnologico per una posa rapida, stabile e precisa.",
     image: visionOxid,
-    formats: ["Tiles", "Formato grande"],
-    finishes: ["AC6 antiabrasione", "Hydro", "Materico"],
+    formats: ["644×644 mm", "Spessore 8 mm"],
+    finishes: ["Cemento", "Pietra", "Graniglia"],
     applicazioni: ["Contract", "Retail", "Uffici", "Ambienti industriali"],
   },
 ];
