@@ -8,12 +8,14 @@ export interface TechSpec {
   value: string;
 }
 
+export type TechApplication = string | { label: string; description?: string };
+
 interface TechSpecBarProps {
   title: string;
   subtitle?: string;
   specs: TechSpec[];
   applicationsLabel?: string;
-  applications?: string[];
+  applications?: TechApplication[];
   effectStory?: string;
   effectStoryTitle?: string;
   fullSheetHref?: string;
