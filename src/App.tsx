@@ -34,6 +34,7 @@ import IndoorSpc from "./pages/IndoorSpc";
 import SpcCollectionDetail from "./pages/SpcCollectionDetail";
 import IndoorLaminati from "./pages/IndoorLaminati";
 import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
+import BiowallCollectionDetail from "./pages/BiowallCollectionDetail";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
