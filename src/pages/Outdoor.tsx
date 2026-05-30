@@ -63,6 +63,12 @@ const Outdoor = () => {
       image: ceramicheEsterni,
       link: `/${language}/ceramiche-esterni`,
     },
+    {
+      name: "OUTDOOR SELECTION",
+      description: "Selezione esclusiva Kalēa® di decking e pavimenti per esterni: Compact, Pacto e Real. Alternativa tecnica a Externo per terrazze, piscine e living all'aperto.",
+      image: productOutdoorSelection,
+      link: `/${language}/outdoor/selection`,
+    },
   ];
 
   return (
