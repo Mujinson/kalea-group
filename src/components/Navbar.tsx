@@ -106,7 +106,7 @@ const Navbar = () => {
             { label: "PARQUET", path: `/${language}/parquet`, comingSoon: false },
             { label: "SPC SELECTION", path: `/${language}/indoor/spc`, comingSoon: false },
             { label: "LAMINATI TECNICI", path: `/${language}/indoor/laminati`, comingSoon: false },
-            { label: "SOPRAELEVATI", path: null, comingSoon: true },
+            { label: "SOPRAELEVATI", path: `/${language}/sopraelevati`, comingSoon: false },
           ]
         },
         {
