@@ -54,11 +54,14 @@ const SpcCollectionDetail = () => {
 
       {/* Tech spec bar */}
       <TechSpecBar
-        items={[
-          { label: "Formato", value: collection.formats[0] ?? "—" },
-          { label: "Finitura", value: collection.finishes[0] ?? "—" },
-          { label: "Applicazioni", value: collection.applicazioni[0] ?? "—" },
+        title={collection.name}
+        subtitle={collection.tagline}
+        specs={[
+          { label: "Spessore", value: "Standard SPC" },
+          { label: "Effetto", value: collection.finishes[0] ?? "—" },
+          { label: "Formati", value: collection.formats.join(" · ") },
         ]}
+        applications={collection.applicazioni}
       />
 
       {/* Description */}
