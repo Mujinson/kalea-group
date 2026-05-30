@@ -8,6 +8,7 @@ import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
 import { getBiowallCollection, biowallCollections } from "@/data/biowallCollections";
 import RelatedCollections from "@/components/RelatedCollections";
+import { effettoFromFiniture } from "@/lib/effetto";
 
 const BiowallCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
