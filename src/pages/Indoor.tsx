@@ -17,6 +17,8 @@ import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardParquetAmbient from "@/assets/card-parquet-ambient.jpg";
 import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
 import spcHero from "@/assets/spc/hero.webp";
+import laminatiHero from "@/assets/laminati/hero.webp";
+
 
 
 
@@ -70,6 +72,18 @@ const Indoor = () => {
       description: "Selezione esclusiva Kalēa® di pavimenti e rivestimenti SPC: doghe effetto legno, spina di pesce, lastre marmo, tiles industrial. Waterproof e posa rapida.",
       link: `/${language}/indoor/spc`,
       image: spcHero,
+    },
+    {
+      title: "SPC Selection",
+      description: "Selezione esclusiva Kalēa® di pavimenti e rivestimenti SPC: doghe effetto legno, spina di pesce, lastre marmo, tiles industrial. Waterproof e posa rapida.",
+      link: `/${language}/indoor/spc`,
+      image: spcHero,
+    },
+    {
+      title: "Laminati Tecnici",
+      description: "Selezione esclusiva Kalēa® di laminati tecnici: maxi doghe, spina di pesce, tiles materici. Sincroporo, Hydro e altissima resistenza all'abrasione.",
+      link: `/${language}/indoor/laminati`,
+      image: laminatiHero,
     },
     {
       title: "Ceramiche da Interni",

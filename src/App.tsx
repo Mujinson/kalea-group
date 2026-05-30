@@ -32,6 +32,8 @@ import Parquet from "./pages/Parquet";
 import ParquetCollectionDetail from "./pages/ParquetCollectionDetail";
 import IndoorSpc from "./pages/IndoorSpc";
 import SpcCollectionDetail from "./pages/SpcCollectionDetail";
+import IndoorLaminati from "./pages/IndoorLaminati";
+import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
@@ -319,6 +321,18 @@ const App = () => (
               <Route path="/en/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
               <Route path="/de/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
               <Route path="/fr/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
+
+              {/* Laminati hub + collection detail (all languages) */}
+              <Route path="/it/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/en/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/de/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/fr/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/it/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+              <Route path="/en/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+              <Route path="/de/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+              <Route path="/fr/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+
+
 
 
 
