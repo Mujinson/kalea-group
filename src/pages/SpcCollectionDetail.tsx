@@ -62,7 +62,7 @@ const SpcCollectionDetail = () => {
         subtitle={collection.tagline}
         specs={[
           { label: "Spessore", value: "Standard SPC" },
-          { label: "Effetto", value: collection.finishes[0] ?? "—" },
+          { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name) },
           { label: "Formati", value: collection.formats.join(" · ") },
         ]}
         applications={collection.applicazioni}
