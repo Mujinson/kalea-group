@@ -8,7 +8,7 @@ import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
 import { getLaminatoCollection, laminatiCollections } from "@/data/laminatiCollections";
 import RelatedCollections from "@/components/RelatedCollections";
-import { effettoFromFiniture } from "@/lib/effetto";
+import { effettoFromFiniture, spessoreFromFormats, formatiFromFormats } from "@/lib/effetto";
 
 const LaminatoCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
