@@ -117,5 +117,67 @@ export const parquetCollections: ParquetCollection[] = [
   },
 ];
 
+  {
+    slug: "yles",
+    name: "Yles",
+    tagline: "Plancia contemporanea, finitura essenziale",
+    description:
+      "Parquet in rovere a plancia, dal segno pulito e dalle tonalità essenziali. Yles unisce sensibilità contemporanea e qualità della selezione, ideale per progetti architettonici dal linguaggio rigoroso.",
+    image: yles,
+    formats: ["Plancia 190×1900 mm", "Spessore 14 mm"],
+    finishes: ["Spazzolato", "Verniciato opaco", "Oliato"],
+  },
+  {
+    slug: "palladio",
+    name: "Palladio",
+    tagline: "Tradizione italiana, plancia nobile",
+    description:
+      "Una collezione che reinterpreta la tradizione del parquet italiano: plance nobili, finiture artigianali e cromie calibrate per ambienti di alta rappresentanza.",
+    image: palladio,
+    formats: ["Plancia 190×1900 mm", "Plancia 220×2200 mm"],
+    finishes: ["Spazzolato", "Oliato naturale", "Verniciato opaco"],
+  },
+  {
+    slug: "villa",
+    name: "Villa",
+    tagline: "Eleganza residenziale di gran formato",
+    description:
+      "Plance di grande formato per residenze di pregio. Villa esalta la naturalità del rovere con superfici materiche e finiture morbide, pensate per spazi ampi e luminosi.",
+    image: villa,
+    formats: ["Plancia 240×2400 mm", "Spessore 14 mm"],
+    finishes: ["Spazzolato", "Piallato", "Oliato"],
+  },
+  {
+    slug: "lumbertech-205",
+    name: "Lumbertech 205",
+    tagline: "Plancia tecnica a doga media",
+    description:
+      "Parquet tecnico a tre strati con plancia 205 mm di larghezza. Stabilità dimensionale superiore e ampia gamma di finiture, ideale per il residenziale di livello e il contract leggero.",
+    image: lumbertech205,
+    formats: ["Plancia 205 mm", "Spessore 14 mm"],
+    finishes: ["Spazzolato", "Verniciato opaco", "Oliato"],
+  },
+  {
+    slug: "lumbertech-270",
+    name: "Lumbertech 270",
+    tagline: "Plancia larga, comfort visivo",
+    description:
+      "Plancia tecnica larga 270 mm che amplifica la percezione dello spazio. Selezione rovere di pregio con finiture sensoriali e cromie naturali, pronta per i grandi progetti residenziali.",
+    image: lumbertech270,
+    formats: ["Plancia 270 mm", "Spessore 14 mm"],
+    finishes: ["Spazzolato", "Oliato", "Verniciato extra-opaco"],
+  },
+  {
+    slug: "lumbertech-s700",
+    name: "Lumbertech S700",
+    tagline: "Maxi plancia, prestazioni contract",
+    description:
+      "La maxi plancia della linea tecnica: dimensioni generose, supporto stabile e finiture pensate per il contract di alta gamma. Calore del legno autentico unito a prestazioni costanti nel tempo.",
+    image: lumbertechS700,
+    formats: ["Plancia maxi", "Spessore 14 mm"],
+    finishes: ["Spazzolato", "Oliato pigmentato", "Verniciato opaco"],
+  },
+];
+
 export const getParquetCollection = (slug: string) =>
   parquetCollections.find((c) => c.slug === slug);
