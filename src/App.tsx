@@ -310,6 +310,18 @@ const App = () => (
               <Route path="/de/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
               <Route path="/fr/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
 
+              {/* SPC hub + collection detail (all languages) */}
+              <Route path="/it/indoor/spc" element={<><SEOHandler /><Layout><IndoorSpc /></Layout></>} />
+              <Route path="/en/indoor/spc" element={<><SEOHandler /><Layout><IndoorSpc /></Layout></>} />
+              <Route path="/de/indoor/spc" element={<><SEOHandler /><Layout><IndoorSpc /></Layout></>} />
+              <Route path="/fr/indoor/spc" element={<><SEOHandler /><Layout><IndoorSpc /></Layout></>} />
+              <Route path="/it/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
+              <Route path="/en/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
+              <Route path="/de/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
+              <Route path="/fr/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
+
+
+
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
