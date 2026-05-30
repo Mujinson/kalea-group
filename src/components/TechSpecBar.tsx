@@ -14,6 +14,8 @@ interface TechSpecBarProps {
   specs: TechSpec[];
   applicationsLabel?: string;
   applications?: string[];
+  effectStory?: string;
+  effectStoryTitle?: string;
   fullSheetHref?: string;
   fullSheetLabel?: string;
   className?: string;
@@ -100,6 +102,8 @@ const TechSpecBar = ({
   specs,
   applicationsLabel,
   applications,
+  effectStory,
+  effectStoryTitle,
   fullSheetHref,
   fullSheetLabel,
   className = "",
@@ -472,50 +476,84 @@ const TechSpecBar = ({
                     transition={{ duration: 0.15, ease: "easeOut" }}
                     role="tabpanel"
                   >
-                    <h3
-                      className="font-heading font-semibold text-2xl md:text-[28px] tracking-tight mb-8"
-                      style={{ color: DARK }}
-                    >
-                      {effectSpecs[selectedEffectIdx]?.value ??
-                        t("techSpec.effectHeading")}
-                    </h3>
-                    <div className="flex flex-wrap gap-6 md:gap-8">
-                      {effectSwatches.map((sw, i) => {
-                        const active = i === selectedEffectIdx;
-                        return (
-                          <button
-                            key={`${sw.label}-${i}`}
-                            onClick={() => setSelectedEffectIdx(i)}
-                            className="group flex flex-col items-center gap-3 outline-none transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:ring-2"
-                            style={{ ["--tw-ring-color" as never]: GOLD }}
+                    {effectStory ? (
+                      <div className="max-w-3xl">
+                        <h3
+                          className="font-heading font-semibold text-2xl md:text-[28px] tracking-tight mb-6"
+                          style={{ color: DARK }}
+                        >
+                          {effectStoryTitle ??
+                            effectSpecs[0]?.value ??
+                            t("techSpec.effectHeading")}
+                        </h3>
+                        <span
+                          aria-hidden
+                          className="block mb-6"
+                          style={{ backgroundColor: GOLD, height: 2, width: 40 }}
+                        />
+                        {effectStory.split(/\n\n+/).map((para, i) => (
+                          <p
+                            key={i}
+                            className="text-base md:text-[17px] leading-relaxed font-light"
+                            style={{
+                              color: DARK,
+                              marginTop: i === 0 ? 0 : "1.1rem",
+                            }}
                           >
-                            <span
-                              className="block w-[88px] h-[88px] md:w-[110px] md:h-[110px] transition-all duration-150 ease-out"
-                              style={{
-                                background: sw.gradient,
-                                border: `2px solid ${active ? GOLD : "transparent"}`,
-                                borderRadius: 4,
-                                boxShadow: active
-                                  ? `0 12px 28px -16px ${DARK}88`
-                                  : `0 6px 18px -14px ${DARK}66`,
-                              }}
-                            />
-                            <span
-                              className="uppercase font-medium"
-                              style={{
-                                color: active ? DARK : MUTED,
-                                fontSize: 11,
-                                letterSpacing: "0.12em",
-                              }}
-                            >
-                              {effectSpecs[i]?.label ?? sw.label}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
+                            {para}
+                          </p>
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        <h3
+                          className="font-heading font-semibold text-2xl md:text-[28px] tracking-tight mb-8"
+                          style={{ color: DARK }}
+                        >
+                          {effectSpecs[selectedEffectIdx]?.value ??
+                            t("techSpec.effectHeading")}
+                        </h3>
+                        <div className="flex flex-wrap gap-6 md:gap-8">
+                          {effectSwatches.map((sw, i) => {
+                            const active = i === selectedEffectIdx;
+                            return (
+                              <button
+                                key={`${sw.label}-${i}`}
+                                onClick={() => setSelectedEffectIdx(i)}
+                                className="group flex flex-col items-center gap-3 outline-none transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:ring-2"
+                                style={{ ["--tw-ring-color" as never]: GOLD }}
+                              >
+                                <span
+                                  className="block w-[88px] h-[88px] md:w-[110px] md:h-[110px] transition-all duration-150 ease-out"
+                                  style={{
+                                    background: sw.gradient,
+                                    border: `2px solid ${active ? GOLD : "transparent"}`,
+                                    borderRadius: 4,
+                                    boxShadow: active
+                                      ? `0 12px 28px -16px ${DARK}88`
+                                      : `0 6px 18px -14px ${DARK}66`,
+                                  }}
+                                />
+                                <span
+                                  className="uppercase font-medium"
+                                  style={{
+                                    color: active ? DARK : MUTED,
+                                    fontSize: 11,
+                                    letterSpacing: "0.12em",
+                                  }}
+                                >
+                                  {effectSpecs[i]?.label ?? sw.label}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
                   </motion.div>
                 )}
+
+
 
                 {/* ===== APPLICAZIONI ===== */}
                 {activeTab === "applications" && applications && (
