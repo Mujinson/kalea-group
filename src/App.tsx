@@ -34,6 +34,7 @@ import IndoorSpc from "./pages/IndoorSpc";
 import SpcCollectionDetail from "./pages/SpcCollectionDetail";
 import IndoorLaminati from "./pages/IndoorLaminati";
 import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
+import BiowallCollectionDetail from "./pages/BiowallCollectionDetail";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
@@ -331,6 +332,12 @@ const App = () => (
               <Route path="/en/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
               <Route path="/de/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
               <Route path="/fr/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+
+              {/* BIOWALL collection detail (all languages) */}
+              <Route path="/it/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+              <Route path="/en/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+              <Route path="/de/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+              <Route path="/fr/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
 
 
 
