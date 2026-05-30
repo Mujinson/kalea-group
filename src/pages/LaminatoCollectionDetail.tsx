@@ -55,9 +55,9 @@ const LaminatoCollectionDetail = () => {
         title={collection.name}
         subtitle={collection.tagline}
         specs={[
-          { label: "Tipologia", value: "Laminato tecnico" },
-          { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name) },
-          { label: "Formati", value: collection.formats.join(" · ") },
+          { label: "Spessore", value: spessoreFromFormats(collection.formats, "Laminato") },
+          { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name, "Legno") },
+          { label: "Formato", value: formatiFromFormats(collection.formats) },
         ]}
         applications={collection.applicazioni}
       />
