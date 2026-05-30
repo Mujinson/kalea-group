@@ -59,11 +59,13 @@ const BiowallCollectionDetail = () => {
         title={collection.name}
         subtitle={collection.tagline}
         specs={[
-          { label: "Linea", value: "Tech Wall" },
-          { label: "Spessori", value: collection.spessori.join(" · ") },
+          { label: "Spessore", value: collection.spessori.join(" · ") },
           { label: "Effetto", value: effettoFromFiniture(collection.finiture, collection.name) },
+          { label: "Formato", value: "Pannello a parete" },
         ]}
-        applications={collection.applicazioni}
+        applications={collection.caratteristiche ?? collection.applicazioni}
+        effectStory={collection.effectStory}
+        effectStoryTitle={collection.effectStoryTitle}
       />
 
       <section className="relative z-[1] bg-background py-20 md:py-28 px-4 md:px-8 lg:px-12">

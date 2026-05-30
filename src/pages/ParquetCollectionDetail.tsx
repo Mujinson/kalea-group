@@ -5,6 +5,8 @@ import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
+import TechSpecBar from "@/components/TechSpecBar";
+import { effettoFromFiniture, spessoreFromFormats, formatiFromFormats } from "@/lib/effetto";
 import {
   getParquetCollection,
   parquetCollections,
@@ -67,6 +69,19 @@ const ParquetCollectionDetail = () => {
       </section>
 
       <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
+
+      <TechSpecBar
+        title={collection.name}
+        subtitle={collection.tagline}
+        specs={[
+          { label: "Spessore", value: spessoreFromFormats(collection.formats, "14 mm") },
+          { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name, "Legno") },
+          { label: "Formato", value: formatiFromFormats(collection.formats) },
+        ]}
+        applications={collection.caratteristiche ?? collection.applicazioni ?? []}
+        effectStory={collection.effectStory}
+        effectStoryTitle={collection.effectStoryTitle}
+      />
 
       {/* Description + specs */}
       <section className="py-20 md:py-28 px-4 md:px-8 lg:px-12">
