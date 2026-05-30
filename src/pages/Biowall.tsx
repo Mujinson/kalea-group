@@ -304,7 +304,7 @@ const Biowall = () => {
       </div>
 
       {/* CTA finale */}
-      <section className="section-spacing relative overflow-hidden bg-background">
+      <section className="relative z-[6] section-spacing overflow-hidden bg-background">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
