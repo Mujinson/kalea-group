@@ -106,6 +106,7 @@ const Navbar = () => {
             { label: "PARQUET", path: `/${language}/parquet`, comingSoon: false },
             { label: "SPC SELECTION", path: `/${language}/indoor/spc`, comingSoon: false },
             { label: "LAMINATI TECNICI", path: `/${language}/indoor/laminati`, comingSoon: false },
+            { label: "SOPRAELEVATI", path: null, comingSoon: true },
           ]
         },
         {
@@ -119,6 +120,7 @@ const Navbar = () => {
           label: t('nav.wallCladding'),
           products: [
             { label: "BIOWALL®", path: `/${language}/biowall`, comingSoon: false },
+            { label: "FONOASSORBENTI", path: `/${language}/fonoassorbenti`, comingSoon: false },
           ]
         },
         {
@@ -137,6 +139,7 @@ const Navbar = () => {
           label: t('nav.floors'),
           products: [
             { label: "EXTERNO", path: `/${language}/externo`, comingSoon: false },
+            { label: "OUTDOOR SELECTION", path: `/${language}/outdoor/selection`, comingSoon: false },
           ]
         },
         {
