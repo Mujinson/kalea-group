@@ -59,7 +59,9 @@ const LaminatoCollectionDetail = () => {
           { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name, "Legno") },
           { label: "Formato", value: formatiFromFormats(collection.formats) },
         ]}
-        applications={collection.applicazioni}
+        applications={collection.caratteristiche ?? collection.applicazioni}
+        effectStory={collection.effectStory}
+        effectStoryTitle={collection.effectStoryTitle}
       />
 
       <section className="py-20 md:py-28 px-4 md:px-8 lg:px-12">
