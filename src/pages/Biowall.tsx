@@ -67,28 +67,6 @@ const Biowall = () => {
     },
   ];
 
-  const finishes = [
-    { 
-      name: t('onewall.finishes.wood.title'), 
-      description: t('onewall.finishes.wood.description')
-    },
-    { 
-      name: t('onewall.finishes.marble.title'), 
-      description: t('onewall.finishes.marble.description')
-    },
-    { 
-      name: t('onewall.finishes.concrete.title'), 
-      description: t('onewall.finishes.concrete.description')
-    },
-    { 
-      name: t('onewall.finishes.wallpaper.title'), 
-      description: t('onewall.finishes.wallpaper.description')
-    },
-    { 
-      name: t('onewall.finishes.decorative.title'), 
-      description: t('onewall.finishes.decorative.description')
-    },
-  ];
 
   return (
     <div>
