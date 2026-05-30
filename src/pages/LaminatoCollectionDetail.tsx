@@ -106,7 +106,7 @@ const LaminatoCollectionDetail = () => {
       <RelatedCollections
         items={laminatiCollections}
         currentSlug={collection.slug}
-        basePath="/indoor/laminati"
+        basePath="/laminati"
       />
     </div>
   );
