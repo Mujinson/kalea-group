@@ -139,6 +139,7 @@ const Navbar = () => {
           label: t('nav.floors'),
           products: [
             { label: "EXTERNO", path: `/${language}/externo`, comingSoon: false },
+            { label: "OUTDOOR SELECTION", path: `/${language}/outdoor/selection`, comingSoon: false },
           ]
         },
         {
