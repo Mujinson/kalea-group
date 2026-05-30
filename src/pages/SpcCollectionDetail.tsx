@@ -67,6 +67,8 @@ const SpcCollectionDetail = () => {
           { label: "Formato", value: formatiFromFormats(collection.formats) },
         ]}
         applications={collection.applicazioni}
+        effectStory={collection.effectStory}
+        effectStoryTitle={collection.effectStoryTitle}
       />
 
       {/* Description */}
