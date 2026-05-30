@@ -582,9 +582,13 @@ const TechSpecBar = ({
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
                       {applications.map((app, i) => {
                         const active = i === selectedAppIdx;
+                        const appLabel =
+                          typeof app === "string" ? app : app.label;
+                        const appDesc =
+                          typeof app === "string" ? app : app.description ?? "";
                         return (
                           <button
-                            key={`${app}-${i}`}
+                            key={`${appLabel}-${i}`}
                             onClick={() =>
                               setSelectedAppIdx(active ? null : i)
                             }
@@ -604,10 +608,10 @@ const TechSpecBar = ({
                               className="font-heading font-semibold text-lg md:text-xl tracking-tight"
                               style={{ color: DARK }}
                             >
-                              {app}
+                              {appLabel}
                             </p>
                             <AnimatePresence initial={false}>
-                              {active && (
+                              {active && appDesc && (
                                 <motion.p
                                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                                   animate={{
@@ -620,7 +624,7 @@ const TechSpecBar = ({
                                   className="text-sm md:text-[15px] leading-relaxed overflow-hidden"
                                   style={{ color: MUTED }}
                                 >
-                                  {app}
+                                  {appDesc}
                                 </motion.p>
                               )}
                             </AnimatePresence>
