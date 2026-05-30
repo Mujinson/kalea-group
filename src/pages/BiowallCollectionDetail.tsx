@@ -108,6 +108,12 @@ const BiowallCollectionDetail = () => {
           ))}
         </div>
       </section>
+
+      <RelatedCollections
+        items={biowallCollections}
+        currentSlug={collection.slug}
+        basePath="/biowall"
+      />
     </div>
   );
 };
