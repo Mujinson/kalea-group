@@ -83,36 +83,6 @@ const SpcCollectionDetail = () => {
         </div>
       </section>
 
-      {/* Specs grid */}
-      <section className="pb-20 md:pb-28 px-4 md:px-8 lg:px-12">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {[
-            { title: "Formati", items: collection.formats },
-            { title: "Finiture", items: collection.finishes },
-            { title: "Applicazioni", items: collection.applicazioni },
-          ].map((block, i) => (
-            <motion.div
-              key={block.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-card rounded-2xl p-6 md:p-7 border border-border/40"
-            >
-              <h3 className="text-xs uppercase tracking-widest text-foreground/50 mb-3">
-                {block.title}
-              </h3>
-              <ul className="space-y-1.5">
-                {block.items.map((it) => (
-                  <li key={it} className="text-base text-foreground/85 font-light">
-                    {it}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
-      </section>
 
       <RelatedCollections
         items={spcCollections}
