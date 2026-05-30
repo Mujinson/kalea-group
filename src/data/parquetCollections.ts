@@ -115,7 +115,6 @@ export const parquetCollections: ParquetCollection[] = [
     formats: ["Plancia 190×1900 mm", "Plancia 220×2200 mm"],
     finishes: ["Tinto torba", "Spazzolato profondo", "Oliato"],
   },
-];
 
   {
     slug: "yles",
