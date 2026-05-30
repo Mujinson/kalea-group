@@ -8,7 +8,7 @@ import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
 import { getLaminatoCollection, laminatiCollections } from "@/data/laminatiCollections";
 import RelatedCollections from "@/components/RelatedCollections";
-import { effettoFromFiniture } from "@/lib/effetto";
+import { effettoFromFiniture, spessoreFromFormats, formatiFromFormats } from "@/lib/effetto";
 
 const LaminatoCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -55,9 +55,9 @@ const LaminatoCollectionDetail = () => {
         title={collection.name}
         subtitle={collection.tagline}
         specs={[
-          { label: "Tipologia", value: "Laminato tecnico" },
-          { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name) },
-          { label: "Formati", value: collection.formats.join(" · ") },
+          { label: "Spessore", value: spessoreFromFormats(collection.formats, "Laminato") },
+          { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name, "Legno") },
+          { label: "Formato", value: formatiFromFormats(collection.formats) },
         ]}
         applications={collection.applicazioni}
       />
