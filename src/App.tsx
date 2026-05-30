@@ -37,6 +37,7 @@ import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
 import BiowallCollectionDetail from "./pages/BiowallCollectionDetail";
 import OutdoorSelection from "./pages/OutdoorSelection";
 import Fonoassorbenti from "./pages/Fonoassorbenti";
+import Sopraelevati from "./pages/Sopraelevati";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
@@ -352,6 +353,11 @@ const App = () => (
               <Route path="/en/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
               <Route path="/de/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
               <Route path="/fr/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
+
+              <Route path="/it/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
+              <Route path="/en/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
+              <Route path="/de/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
+              <Route path="/fr/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
 
 
 
