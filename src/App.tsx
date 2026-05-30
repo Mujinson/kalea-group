@@ -341,6 +341,18 @@ const App = () => (
               <Route path="/de/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
               <Route path="/fr/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
 
+              {/* Outdoor Selection (Skema alternative to Externo) */}
+              <Route path="/it/outdoor/selection" element={<><SEOHandler /><Layout><OutdoorSelection /></Layout></>} />
+              <Route path="/en/outdoor/selection" element={<><SEOHandler /><Layout><OutdoorSelection /></Layout></>} />
+              <Route path="/de/outdoor/selection" element={<><SEOHandler /><Layout><OutdoorSelection /></Layout></>} />
+              <Route path="/fr/outdoor/selection" element={<><SEOHandler /><Layout><OutdoorSelection /></Layout></>} />
+
+              {/* Fonoassorbenti */}
+              <Route path="/it/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
+              <Route path="/en/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
+              <Route path="/de/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
+              <Route path="/fr/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
+
 
 
 
