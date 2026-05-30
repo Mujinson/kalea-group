@@ -7,6 +7,12 @@ import kalika from "@/assets/woodco/kalika.webp";
 import sense from "@/assets/woodco/sense.webp";
 import signature from "@/assets/woodco/signature.webp";
 import star from "@/assets/woodco/star.webp";
+import yles from "@/assets/parquet-extra/yles.webp";
+import palladio from "@/assets/parquet-extra/palladio.webp";
+import villa from "@/assets/parquet-extra/villa.webp";
+import lumbertech205 from "@/assets/parquet-extra/lumbertech-205.webp";
+import lumbertech270 from "@/assets/parquet-extra/lumbertech-270.webp";
+import lumbertechS700 from "@/assets/parquet-extra/lumbertech-s700.webp";
 
 export interface ParquetCollection {
   slug: string;
