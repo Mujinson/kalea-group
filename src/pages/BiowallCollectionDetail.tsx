@@ -107,8 +107,6 @@ const BiowallCollectionDetail = () => {
           ))}
         </div>
       </section>
-
-      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
     </div>
   );
 };
