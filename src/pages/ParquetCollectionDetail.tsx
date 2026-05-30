@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import CollectionColorsSection from "@/components/CollectionColorsSection";
 import {
   getParquetCollection,
   parquetCollections,
@@ -157,6 +158,8 @@ const ParquetCollectionDetail = () => {
           </div>
         </div>
       </section>
+
+      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
     </div>
   );
 };
