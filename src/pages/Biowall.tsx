@@ -1,17 +1,17 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
-import ProductCard from "@/components/ProductCard";
-import { Zap, Shield, Palette, Droplets, Flame, Clock, Grid3x3, Layers, Sparkles } from "lucide-react";
+import { Zap, Shield, Palette, Droplets, Flame, Clock, Grid3x3, Layers, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-onewall.jpg";
+import heroImage from "@/assets/biowall/hero.webp";
 import bgOneWall from "@/assets/bg-onewall.jpg";
 import bgOneWallApplications from "@/assets/bg-onewall-applications.jpg";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import TechSpecBar from "@/components/TechSpecBar";
+import { biowallCollections } from "@/data/biowallCollections";
 
 const Biowall = () => {
   const { t, language } = useTranslation();
