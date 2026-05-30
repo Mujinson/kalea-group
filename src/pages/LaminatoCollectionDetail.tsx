@@ -6,7 +6,8 @@ import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
-import { getLaminatoCollection } from "@/data/laminatiCollections";
+import { getLaminatoCollection, laminatiCollections } from "@/data/laminatiCollections";
+import RelatedCollections from "@/components/RelatedCollections";
 
 const LaminatoCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -101,6 +102,12 @@ const LaminatoCollectionDetail = () => {
           ))}
         </div>
       </section>
+
+      <RelatedCollections
+        items={laminatiCollections}
+        currentSlug={collection.slug}
+        basePath="/laminati"
+      />
     </div>
   );
 };

@@ -6,7 +6,8 @@ import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
-import { getBiowallCollection } from "@/data/biowallCollections";
+import { getBiowallCollection, biowallCollections } from "@/data/biowallCollections";
+import RelatedCollections from "@/components/RelatedCollections";
 
 const BiowallCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -107,6 +108,12 @@ const BiowallCollectionDetail = () => {
           ))}
         </div>
       </section>
+
+      <RelatedCollections
+        items={biowallCollections}
+        currentSlug={collection.slug}
+        basePath="/biowall"
+      />
     </div>
   );
 };
