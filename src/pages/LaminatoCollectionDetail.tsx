@@ -47,6 +47,8 @@ const LaminatoCollectionDetail = () => {
         </div>
       </section>
 
+      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
+
       <TechSpecBar
         title={collection.name}
         subtitle={collection.tagline}
@@ -99,8 +101,6 @@ const LaminatoCollectionDetail = () => {
           ))}
         </div>
       </section>
-
-      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
     </div>
   );
 };

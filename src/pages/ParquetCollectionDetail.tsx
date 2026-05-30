@@ -66,6 +66,8 @@ const ParquetCollectionDetail = () => {
         </div>
       </section>
 
+      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
+
       {/* Description + specs */}
       <section className="py-20 md:py-28 px-4 md:px-8 lg:px-12">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16">
@@ -158,8 +160,6 @@ const ParquetCollectionDetail = () => {
           </div>
         </div>
       </section>
-
-      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
     </div>
   );
 };

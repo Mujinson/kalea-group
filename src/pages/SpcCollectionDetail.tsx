@@ -53,6 +53,8 @@ const SpcCollectionDetail = () => {
         </div>
       </section>
 
+      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
+
       {/* Tech spec bar */}
       <TechSpecBar
         title={collection.name}
@@ -111,7 +113,6 @@ const SpcCollectionDetail = () => {
         </div>
       </section>
 
-      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
     </div>
   );
 };
