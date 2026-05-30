@@ -35,6 +35,8 @@ import SpcCollectionDetail from "./pages/SpcCollectionDetail";
 import IndoorLaminati from "./pages/IndoorLaminati";
 import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
 import BiowallCollectionDetail from "./pages/BiowallCollectionDetail";
+import OutdoorSelection from "./pages/OutdoorSelection";
+import Fonoassorbenti from "./pages/Fonoassorbenti";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
