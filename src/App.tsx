@@ -30,6 +30,8 @@ import NotFound from "./pages/NotFound";
 import CeramicaCollectionDetail from "./pages/CeramicaCollectionDetail";
 import Parquet from "./pages/Parquet";
 import ParquetCollectionDetail from "./pages/ParquetCollectionDetail";
+import IndoorSpc from "./pages/IndoorSpc";
+import SpcCollectionDetail from "./pages/SpcCollectionDetail";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
 import SustainabilityDurability from "./pages/SustainabilityDurability";
