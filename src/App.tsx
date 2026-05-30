@@ -322,6 +322,18 @@ const App = () => (
               <Route path="/de/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
               <Route path="/fr/spc/:slug" element={<><SEOHandler /><Layout><SpcCollectionDetail /></Layout></>} />
 
+              {/* Laminati hub + collection detail (all languages) */}
+              <Route path="/it/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/en/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/de/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/fr/indoor/laminati" element={<><SEOHandler /><Layout><IndoorLaminati /></Layout></>} />
+              <Route path="/it/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+              <Route path="/en/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+              <Route path="/de/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+              <Route path="/fr/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
+
+
+
 
 
 
