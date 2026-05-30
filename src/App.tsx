@@ -333,6 +333,12 @@ const App = () => (
               <Route path="/de/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
               <Route path="/fr/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
 
+              {/* BIOWALL collection detail (all languages) */}
+              <Route path="/it/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+              <Route path="/en/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+              <Route path="/de/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+              <Route path="/fr/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+
 
 
 
