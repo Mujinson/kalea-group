@@ -14,6 +14,8 @@ interface TechSpecBarProps {
   specs: TechSpec[];
   applicationsLabel?: string;
   applications?: string[];
+  effectStory?: string;
+  effectStoryTitle?: string;
   fullSheetHref?: string;
   fullSheetLabel?: string;
   className?: string;
