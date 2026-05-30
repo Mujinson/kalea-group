@@ -80,8 +80,8 @@ export const laminatiCollections: LaminatoCollection[] = [
     description:
       "Collezione pensata per i settori allestitivo, contract e office: laminati con decori effetto acciaio o pietra nel formato tiles. Superficie rapida da posare, molto resistente all'abrasione e al calpestio, sicura e con elevata reazione al fuoco.",
     image: visionTechnic,
-    formats: ["Tiles", "Spessore tecnico"],
-    finishes: ["Acciaio", "Pietra", "Alta resistenza"],
+    formats: ["327×655 mm", "Spessore 8 mm"],
+    finishes: ["Metallo", "Pietra"],
     applicazioni: ["Allestimenti", "Contract", "Uffici", "Negozi"],
   },
   {
