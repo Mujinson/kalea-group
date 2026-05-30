@@ -8,6 +8,7 @@ import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
 import { getSpcCollection, spcCollections } from "@/data/spcCollections";
 import RelatedCollections from "@/components/RelatedCollections";
+import { effettoFromFiniture } from "@/lib/effetto";
 
 const SpcCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -62,7 +63,7 @@ const SpcCollectionDetail = () => {
         subtitle={collection.tagline}
         specs={[
           { label: "Spessore", value: "Standard SPC" },
-          { label: "Effetto", value: collection.finishes[0] ?? "—" },
+          { label: "Effetto", value: effettoFromFiniture(collection.finishes, collection.name) },
           { label: "Formati", value: collection.formats.join(" · ") },
         ]}
         applications={collection.applicazioni}

@@ -8,6 +8,7 @@ import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
 import { getBiowallCollection, biowallCollections } from "@/data/biowallCollections";
 import RelatedCollections from "@/components/RelatedCollections";
+import { effettoFromFiniture } from "@/lib/effetto";
 
 const BiowallCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -60,7 +61,7 @@ const BiowallCollectionDetail = () => {
         specs={[
           { label: "Linea", value: "Tech Wall" },
           { label: "Spessori", value: collection.spessori.join(" · ") },
-          { label: "Effetto", value: collection.finiture[0] ?? "—" },
+          { label: "Effetto", value: effettoFromFiniture(collection.finiture, collection.name) },
         ]}
         applications={collection.applicazioni}
       />
