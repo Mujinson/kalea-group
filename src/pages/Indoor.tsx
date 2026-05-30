@@ -16,6 +16,9 @@ import productBiowall from "@/assets/product-biowall.jpg";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import cardParquetAmbient from "@/assets/card-parquet-ambient.jpg";
 import ceramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
+import spcHero from "@/assets/spc/hero.webp";
+
+
 
 
 interface Surface {
@@ -61,6 +64,12 @@ const Indoor = () => {
       description: "Legni selezionati e finiture artigianali per ambienti dove il calore e l'autenticità del materiale naturale diventano protagonisti.",
       link: `/${language}/parquet`,
       image: cardParquetAmbient,
+    },
+    {
+      title: "SPC Selection",
+      description: "Selezione esclusiva Kalēa® di pavimenti e rivestimenti SPC: doghe effetto legno, spina di pesce, lastre marmo, tiles industrial. Waterproof e posa rapida.",
+      link: `/${language}/indoor/spc`,
+      image: spcHero,
     },
     {
       title: "Ceramiche da Interni",
