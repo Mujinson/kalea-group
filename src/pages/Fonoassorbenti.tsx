@@ -3,6 +3,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TechSpecBar from "@/components/TechSpecBar";
+import CollectionColorsSection from "@/components/CollectionColorsSection";
 import hero from "@/assets/fonoassorbenti/hero.webp";
 import decor from "@/assets/fonoassorbenti/decor-akustika.webp";
 import mikro from "@/assets/fonoassorbenti/mikro.webp";
@@ -131,6 +132,16 @@ const Fonoassorbenti = () => {
           </div>
         </div>
       </section>
+
+      {/* Color palettes per collection */}
+      {collections.map((c) => (
+        <CollectionColorsSection
+          key={`colors-${c.slug}`}
+          slug={c.slug}
+          collectionName={c.name}
+          className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-background border-t border-border/30"
+        />
+      ))}
 
       <div className="relative z-[3] bg-background">
         <TechSpecBar

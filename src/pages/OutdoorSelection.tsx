@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
+import CollectionColorsSection from "@/components/CollectionColorsSection";
 import heroOut from "@/assets/outdoor-extra/hero.webp";
 import compact from "@/assets/outdoor-extra/compact.webp";
 import pacto from "@/assets/outdoor-extra/pacto.webp";
@@ -162,6 +163,16 @@ const OutdoorSelection = () => {
           ))}
         </div>
       </section>
+
+      {/* Color palettes per collection */}
+      {collections.map((c) => (
+        <CollectionColorsSection
+          key={`colors-${c.slug}`}
+          slug={c.slug}
+          collectionName={c.name}
+          className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-background border-t border-border/30"
+        />
+      ))}
     </div>
   );
 };

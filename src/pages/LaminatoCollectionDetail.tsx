@@ -5,6 +5,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TechSpecBar from "@/components/TechSpecBar";
+import CollectionColorsSection from "@/components/CollectionColorsSection";
 import { getLaminatoCollection } from "@/data/laminatiCollections";
 
 const LaminatoCollectionDetail = () => {
@@ -98,6 +99,8 @@ const LaminatoCollectionDetail = () => {
           ))}
         </div>
       </section>
+
+      <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
     </div>
   );
 };
