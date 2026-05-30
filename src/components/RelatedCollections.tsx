@@ -32,7 +32,7 @@ const RelatedCollections = ({
   eyebrow,
   limit = 4,
 }: RelatedCollectionsProps) => {
-  const { language } = useLanguage();
+  const { language } = useTranslation();
 
   const others = items.filter((i) => i.slug !== currentSlug).slice(0, limit);
   if (others.length === 0) return null;
