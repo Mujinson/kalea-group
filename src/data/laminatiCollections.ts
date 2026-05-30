@@ -58,8 +58,8 @@ export const laminatiCollections: LaminatoCollection[] = [
     description:
       "Pavimento che unisce l'eleganza della posa a spina di pesce — classica italiana o ungherese — con la robustezza del laminato di ultima generazione. Massima resistenza all'abrasione (classe AC6), reazione al fuoco Bfl-s1, sistemi di incastro PLS e TLS.PF per una posa rapida e stabile.",
     image: syncroParquet,
-    formats: ["Spina italiana", "Spina ungherese"],
-    finishes: ["AC6 antiabrasione", "Bfl-s1", "Sincroporo"],
+    formats: ["120×600 mm", "Spina italiana / ungherese", "Spessore 10 mm"],
+    finishes: ["Legno", "AC6 antiabrasione", "Bfl-s1"],
     applicazioni: ["Residenziale design", "Boutique", "Hospitality", "Contract"],
   },
   {
@@ -80,8 +80,8 @@ export const laminatiCollections: LaminatoCollection[] = [
     description:
       "Collezione pensata per i settori allestitivo, contract e office: laminati con decori effetto acciaio o pietra nel formato tiles. Superficie rapida da posare, molto resistente all'abrasione e al calpestio, sicura e con elevata reazione al fuoco.",
     image: visionTechnic,
-    formats: ["Tiles", "Spessore tecnico"],
-    finishes: ["Acciaio", "Pietra", "Alta resistenza"],
+    formats: ["327×655 mm", "Spessore 8 mm"],
+    finishes: ["Metallo", "Pietra"],
     applicazioni: ["Allestimenti", "Contract", "Uffici", "Negozi"],
   },
   {
@@ -91,8 +91,8 @@ export const laminatiCollections: LaminatoCollection[] = [
     description:
       "Effetti materici pietra, cemento e graniglia in formato tiles per un design moderno e industriale. Massima classe di resistenza all'abrasione AC6, protezione Hydro dai ristagni d'acqua e incastro tecnologico per una posa rapida, stabile e precisa.",
     image: visionOxid,
-    formats: ["Tiles", "Formato grande"],
-    finishes: ["AC6 antiabrasione", "Hydro", "Materico"],
+    formats: ["644×644 mm", "Spessore 8 mm"],
+    finishes: ["Cemento", "Pietra", "Graniglia"],
     applicazioni: ["Contract", "Retail", "Uffici", "Ambienti industriali"],
   },
 ];
