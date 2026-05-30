@@ -66,6 +66,12 @@ const Indoor = () => {
       image: cardParquetAmbient,
     },
     {
+      title: "SPC Selection",
+      description: "Selezione esclusiva Kalēa® di pavimenti e rivestimenti SPC: doghe effetto legno, spina di pesce, lastre marmo, tiles industrial. Waterproof e posa rapida.",
+      link: `/${language}/indoor/spc`,
+      image: spcHero,
+    },
+    {
       title: "Ceramiche da Interni",
       description: "Piastrelle di altissimo pregio per pavimenti e rivestimenti interni. Materiali esclusivi, finiture raffinate e design di nicchia.",
       image: ceramicheInterni,
