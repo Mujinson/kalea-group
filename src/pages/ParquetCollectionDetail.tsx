@@ -9,7 +9,6 @@ import {
   getParquetCollection,
   parquetCollections,
 } from "@/data/parquetCollections";
-import RelatedCollections from "@/components/RelatedCollections";
 
 const ParquetCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
