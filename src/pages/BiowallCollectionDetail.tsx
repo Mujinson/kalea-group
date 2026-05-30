@@ -60,7 +60,7 @@ const BiowallCollectionDetail = () => {
         specs={[
           { label: "Linea", value: "Tech Wall" },
           { label: "Spessori", value: collection.spessori.join(" · ") },
-          { label: "Effetto", value: collection.finiture[0] ?? "—" },
+          { label: "Effetto", value: effettoFromFiniture(collection.finiture, collection.name) },
         ]}
         applications={collection.applicazioni}
       />
