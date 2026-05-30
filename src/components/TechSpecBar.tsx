@@ -102,6 +102,8 @@ const TechSpecBar = ({
   specs,
   applicationsLabel,
   applications,
+  effectStory,
+  effectStoryTitle,
   fullSheetHref,
   fullSheetLabel,
   className = "",
