@@ -22,9 +22,8 @@ const CollectionColorsSection = ({
   const items: ColorItem[] = swatches.map((c) => ({
     name: c.name,
     slug: `${slug}-${c.name.toLowerCase().replace(/\s+/g, "-")}`,
-    circleImage: "",
-    plankImage: "",
-    colorHex: c.hex,
+    circleImage: c.image,
+    plankImage: c.image,
   }));
 
   return (
@@ -34,7 +33,7 @@ const CollectionColorsSection = ({
           title={title ?? `Colori ${collectionName}`}
           subtitle={
             subtitle ??
-            `Palette completa della collezione. Tutte le tonalità disponibili — campionario fisico su richiesta.`
+            `Palette ufficiale della collezione. Campionario fisico su richiesta.`
           }
           colors={items}
         />

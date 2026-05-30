@@ -1,268 +1,298 @@
-// Color palettes per collection slug. Used by CollectionColorsSection to render
-// circle swatches via ColorCircleGallery. Hex values are realistic approximations
-// of the manufacturer's color cards; can be swapped with real photos later.
+// AUTO-GENERATED from Skema product catalog scrape.
+// Real product swatch images stored in src/assets/colors/.
+// To refresh: re-run /tmp/scrape_skema2.py + /tmp/build_colors.py.
 
-export interface SwatchColor {
-  name: string;
-  hex: string;
-}
+import star_k_tarragona from "@/assets/colors/star-k-tarragona.jpg";
+import star_k_anversa from "@/assets/colors/star-k-anversa.jpg";
+import star_k_valencia from "@/assets/colors/star-k-valencia.jpg";
+import star_k_barcellona from "@/assets/colors/star-k-barcellona.jpg";
+import star_k_malta from "@/assets/colors/star-k-malta.jpg";
+import star_k_cortina from "@/assets/colors/star-k-cortina.jpg";
+import star_k_bilbao from "@/assets/colors/star-k-bilbao.jpg";
+import star_k_roma from "@/assets/colors/star-k-roma.jpg";
+import star_k_r_rovere_autentico from "@/assets/colors/star-k-r-rovere-autentico.jpg";
+import star_k_r_rovere_terranova from "@/assets/colors/star-k-r-rovere-terranova.jpg";
+import star_k_r_quercia_francese from "@/assets/colors/star-k-r-quercia-francese.jpg";
+import star_k_r_faggio_crudo from "@/assets/colors/star-k-r-faggio-crudo.jpg";
+import star_k_r_teak_medio from "@/assets/colors/star-k-r-teak-medio.jpg";
+import star_k_r_rovere_alcalino from "@/assets/colors/star-k-r-rovere-alcalino.jpg";
+import star_k_r_rovere_ossidato from "@/assets/colors/star-k-r-rovere-ossidato.jpg";
+import star_k_c_leira from "@/assets/colors/star-k-c-leira.jpg";
+import star_k_c_faro from "@/assets/colors/star-k-c-faro.jpg";
+import star_k_c_braga from "@/assets/colors/star-k-c-braga.jpg";
+import star_k_c_porto from "@/assets/colors/star-k-c-porto.jpg";
+import star_k_c_coimbra from "@/assets/colors/star-k-c-coimbra.jpg";
+import star_k_s_nantes from "@/assets/colors/star-k-s-nantes.jpg";
+import star_k_s_marsiglia from "@/assets/colors/star-k-s-marsiglia.jpg";
+import star_k_d_bruges from "@/assets/colors/star-k-d-bruges.jpg";
+import star_k_d_cardiff from "@/assets/colors/star-k-d-cardiff.jpg";
+import star_k_d_liegi from "@/assets/colors/star-k-d-liegi.jpg";
+import star_k_d_resina from "@/assets/colors/star-k-d-resina.jpg";
+import star_k_d_kw_barry from "@/assets/colors/star-k-d-kw-barry.jpg";
+import star_k_d_newport from "@/assets/colors/star-k-d-newport.jpg";
+import star_k_d_corten from "@/assets/colors/star-k-d-corten.jpg";
+import star_k_w_cardiff from "@/assets/colors/star-k-w-cardiff.jpg";
+import star_k_w_liegi from "@/assets/colors/star-k-w-liegi.jpg";
+import star_k_w_kw_barry from "@/assets/colors/star-k-w-kw-barry.jpg";
+import star_k_w_newport from "@/assets/colors/star-k-w-newport.jpg";
+import star_k_w_maxi_graniglia_tundra from "@/assets/colors/star-k-w-maxi-graniglia-tundra.jpg";
+import star_k_w_maxi_graniglia_cotton from "@/assets/colors/star-k-w-maxi-graniglia-cotton.jpg";
+import star_k_w_maxi_marmo_orobico from "@/assets/colors/star-k-w-maxi-marmo-orobico.jpg";
+import star_k_w_maxi_marmo_carrara from "@/assets/colors/star-k-w-maxi-marmo-carrara.jpg";
+import star_k_w_maxi_graniglia_cloud from "@/assets/colors/star-k-w-maxi-graniglia-cloud.jpg";
+import star_k_w_maxi_graniglia_cashmere from "@/assets/colors/star-k-w-maxi-graniglia-cashmere.jpg";
+import star_k_w_maxi_marmo_calacatta from "@/assets/colors/star-k-w-maxi-marmo-calacatta.jpg";
+import connex_rovere_crudo from "@/assets/colors/connex-rovere-crudo.jpg";
+import connex_rovere_canadese from "@/assets/colors/connex-rovere-canadese.jpg";
+import connex_baltic_oak from "@/assets/colors/connex-baltic-oak.jpg";
+import connex_rovere_congo from "@/assets/colors/connex-rovere-congo.jpg";
+import connex_rovere_britannico from "@/assets/colors/connex-rovere-britannico.jpg";
+import connex_rovere_nordico from "@/assets/colors/connex-rovere-nordico.jpg";
+import k_uno_rovere_indiana from "@/assets/colors/k-uno-rovere-indiana.jpg";
+import k_uno_rovere_latino from "@/assets/colors/k-uno-rovere-latino.jpg";
+import k_uno_rovere_texas from "@/assets/colors/k-uno-rovere-texas.jpg";
+import k_uno_rovere_arizona from "@/assets/colors/k-uno-rovere-arizona.jpg";
+import k_uno_rovere_colorado from "@/assets/colors/k-uno-rovere-colorado.jpg";
+import k_uno_rovere_mexico from "@/assets/colors/k-uno-rovere-mexico.jpg";
+import k_uno_rovere_yosemite from "@/assets/colors/k-uno-rovere-yosemite.jpg";
+import k_uno_rovere_kansas from "@/assets/colors/k-uno-rovere-kansas.jpg";
+import k_uno_rovere_california_new from "@/assets/colors/k-uno-rovere-california-new.jpg";
+import prestige_l_grey_oak from "@/assets/colors/prestige-l-grey-oak.jpg";
+import prestige_l_noce_autentico from "@/assets/colors/prestige-l-noce-autentico.jpg";
+import prestige_l_apple_oak from "@/assets/colors/prestige-l-apple-oak.jpg";
+import prestige_l_rovere_senese from "@/assets/colors/prestige-l-rovere-senese.jpg";
+import prestige_l_alpaca_oak from "@/assets/colors/prestige-l-alpaca-oak.jpg";
+import prestige_l_eagle_oak from "@/assets/colors/prestige-l-eagle-oak.jpg";
+import prestige_l_pepper_oak from "@/assets/colors/prestige-l-pepper-oak.jpg";
+import prestige_gold_rovere_sole from "@/assets/colors/prestige-gold-rovere-sole.jpg";
+import prestige_gold_rovere_giapponese from "@/assets/colors/prestige-gold-rovere-giapponese.jpg";
+import prestige_gold_rovere_trentino from "@/assets/colors/prestige-gold-rovere-trentino.jpg";
+import prestige_gold_quercia_montana from "@/assets/colors/prestige-gold-quercia-montana.jpg";
+import prestige_gold_rovere_carbon from "@/assets/colors/prestige-gold-rovere-carbon.jpg";
+import prestige_gold_rovere_comfort from "@/assets/colors/prestige-gold-rovere-comfort.jpg";
+import prestige_gold_quercia_naturale from "@/assets/colors/prestige-gold-quercia-naturale.jpg";
+import prestige_gold_rovere_positano from "@/assets/colors/prestige-gold-rovere-positano.jpg";
+import prestige_gold_rovere_francese from "@/assets/colors/prestige-gold-rovere-francese.jpg";
+import prestige_gold_rovere_ischia_new from "@/assets/colors/prestige-gold-rovere-ischia-new.jpg";
+import prestige_gold_rovere_linosa_new from "@/assets/colors/prestige-gold-rovere-linosa-new.jpg";
+import prestige_gold_hop_oak from "@/assets/colors/prestige-gold-hop-oak.jpg";
+import prestige_gold_rovere_zephir from "@/assets/colors/prestige-gold-rovere-zephir.jpg";
+import prestige_gold_rovere_ponza from "@/assets/colors/prestige-gold-rovere-ponza.jpg";
+import prestige_gold_sesame_oak from "@/assets/colors/prestige-gold-sesame-oak.jpg";
+import prestige_gold_pepper_oak from "@/assets/colors/prestige-gold-pepper-oak.jpg";
+import syncro_parquet_classica_naturale from "@/assets/colors/syncro-parquet-classica-naturale.jpg";
+import syncro_parquet_parquet_ungherese_naturale from "@/assets/colors/syncro-parquet-parquet-ungherese-naturale.jpg";
+import syncro_parquet_chateau_rovere_naturale from "@/assets/colors/syncro-parquet-chateau-rovere-naturale.jpg";
+import facile_rovere_superior from "@/assets/colors/facile-rovere-superior.jpg";
+import facile_rovere_sunny from "@/assets/colors/facile-rovere-sunny.jpg";
+import facile_rovere_crystal from "@/assets/colors/facile-rovere-crystal.jpg";
+import facile_greyb_oak from "@/assets/colors/facile-greyb-oak.jpg";
+import facile_rovere_luna from "@/assets/colors/facile-rovere-luna.jpg";
+import facile_rovere_umbro from "@/assets/colors/facile-rovere-umbro.jpg";
+import facile_rovere_loira from "@/assets/colors/facile-rovere-loira.jpg";
+import facile_rovere_fiammingo from "@/assets/colors/facile-rovere-fiammingo.jpg";
+import facile_rovere_di_fiume from "@/assets/colors/facile-rovere-di-fiume.jpg";
+import facile_rovere_tuscania from "@/assets/colors/facile-rovere-tuscania.jpg";
+import facile_grey_canyon from "@/assets/colors/facile-grey-canyon.jpg";
+import facile_black_canyon from "@/assets/colors/facile-black-canyon.jpg";
+import facile_rovere_senese from "@/assets/colors/facile-rovere-senese.jpg";
+import facile_hop_oak from "@/assets/colors/facile-hop-oak.jpg";
+import facile_coffee_oak from "@/assets/colors/facile-coffee-oak.jpg";
+import vision_technic_acciaio_brunito from "@/assets/colors/vision-technic-acciaio-brunito.jpg";
+import vision_technic_pietra_portoghese from "@/assets/colors/vision-technic-pietra-portoghese.jpg";
+import vision_technic_pietra_carnica from "@/assets/colors/vision-technic-pietra-carnica.jpg";
+import vision_technic_pietra_distria from "@/assets/colors/vision-technic-pietra-distria.jpg";
+import vision_oxid_warm_gray from "@/assets/colors/vision-oxid-warm-gray.jpg";
+import vision_oxid_cemento_spatolato from "@/assets/colors/vision-oxid-cemento-spatolato.jpg";
+import vision_oxid_cemento_grezzo from "@/assets/colors/vision-oxid-cemento-grezzo.jpg";
+import vision_oxid_graniglia_bardiglio from "@/assets/colors/vision-oxid-graniglia-bardiglio.jpg";
+import vision_oxid_graniglia_carrara from "@/assets/colors/vision-oxid-graniglia-carrara.jpg";
+import vision_oxid_graniglia_marquina from "@/assets/colors/vision-oxid-graniglia-marquina.jpg";
+import palladio_rovere_mira from "@/assets/colors/palladio-rovere-mira.jpg";
+import palladio_rovere_padova from "@/assets/colors/palladio-rovere-padova.jpg";
+import palladio_rovere_maser from "@/assets/colors/palladio-rovere-maser.jpg";
+import palladio_rovere_trissino from "@/assets/colors/palladio-rovere-trissino.jpg";
+import palladio_rovere_venezia from "@/assets/colors/palladio-rovere-venezia.jpg";
+import palladio_rovere_vicenza from "@/assets/colors/palladio-rovere-vicenza.jpg";
+import lumbertech_205_varnish_1452_rovere_ontario from "@/assets/colors/lumbertech-205-varnish-1452-rovere-ontario.jpg";
+import lumbertech_205_varnish_1453_rovere_arches from "@/assets/colors/lumbertech-205-varnish-1453-rovere-arches.jpg";
+import lumbertech_270_oil_1430_rovere_adamello from "@/assets/colors/lumbertech-270-oil-1430-rovere-adamello.jpg";
+import lumbertech_270_oil_1431_rovere_gran_paradiso from "@/assets/colors/lumbertech-270-oil-1431-rovere-gran-paradiso.jpg";
+import lumbertech_270_oil_1434_rovere_circeo from "@/assets/colors/lumbertech-270-oil-1434-rovere-circeo.jpg";
+import lumbertech_270_oil_1437_rovere_arenal from "@/assets/colors/lumbertech-270-oil-1437-rovere-arenal.jpg";
+import lumbertech_270_varnish_1439_rovere_caspio from "@/assets/colors/lumbertech-270-varnish-1439-rovere-caspio.jpg";
+import lumbertech_270_varnish_1442_rovere_pollino from "@/assets/colors/lumbertech-270-varnish-1442-rovere-pollino.jpg";
+import lumbertech_270_varnish_1451_rovere_brenta from "@/assets/colors/lumbertech-270-varnish-1451-rovere-brenta.jpg";
+import lumbertech_s700_1445_rovere_arches_spina from "@/assets/colors/lumbertech-s700-1445-rovere-arches-spina.jpg";
+import lumbertech_s700_1446_rovere_ontario_spina from "@/assets/colors/lumbertech-s700-1446-rovere-ontario-spina.jpg";
+import lumbertech_s700_1448_rovere_conero_spina from "@/assets/colors/lumbertech-s700-1448-rovere-conero-spina.jpg";
+import lumbertech_s700_1449_rovere_valsesia_spina from "@/assets/colors/lumbertech-s700-1449-rovere-valsesia-spina.jpg";
+
+export interface SwatchColor { name: string; image: string; }
 
 export const collectionColors: Record<string, SwatchColor[]> = {
-  // ============ SPC SELECTION ============
   "star-k": [
-    { name: "Rovere Naturale", hex: "#c9a577" },
-    { name: "Rovere Miele", hex: "#b6864c" },
-    { name: "Rovere Sbiancato", hex: "#e3d4bc" },
-    { name: "Rovere Fumé", hex: "#7a5a40" },
-    { name: "Rovere Cenere", hex: "#a59786" },
-    { name: "Rovere Tabacco", hex: "#8b5a36" },
+    { name: "Tarragona", image: star_k_tarragona },
+    { name: "Anversa", image: star_k_anversa },
+    { name: "Valencia", image: star_k_valencia },
+    { name: "Barcellona", image: star_k_barcellona },
+    { name: "Malta", image: star_k_malta },
+    { name: "Cortina", image: star_k_cortina },
+    { name: "Bilbao", image: star_k_bilbao },
+    { name: "Roma", image: star_k_roma },
   ],
   "star-k-r": [
-    { name: "Quercia Alba", hex: "#dcc6a4" },
-    { name: "Quercia Sabbia", hex: "#c9a87b" },
-    { name: "Quercia Terra", hex: "#9c7a4f" },
-    { name: "Quercia Smoke", hex: "#6b5440" },
-    { name: "Quercia Carbon", hex: "#3e342a" },
-    { name: "Quercia Avorio", hex: "#e6d8bf" },
+    { name: "Rovere Autentico", image: star_k_r_rovere_autentico },
+    { name: "Rovere Terranova", image: star_k_r_rovere_terranova },
+    { name: "Quercia Francese", image: star_k_r_quercia_francese },
+    { name: "Faggio Crudo", image: star_k_r_faggio_crudo },
+    { name: "Teak Medio", image: star_k_r_teak_medio },
+    { name: "Rovere Alcalino", image: star_k_r_rovere_alcalino },
+    { name: "Rovere Ossidato", image: star_k_r_rovere_ossidato },
   ],
   "star-k-c": [
-    { name: "Sughero Natural", hex: "#b88e5c" },
-    { name: "Sughero Caramel", hex: "#a07347" },
-    { name: "Sughero Espresso", hex: "#5d3c24" },
-    { name: "Sughero Sand", hex: "#cba373" },
+    { name: "Leira", image: star_k_c_leira },
+    { name: "Faro", image: star_k_c_faro },
+    { name: "Braga", image: star_k_c_braga },
+    { name: "Porto", image: star_k_c_porto },
+    { name: "Coimbra", image: star_k_c_coimbra },
   ],
   "star-k-s": [
-    { name: "Pietra Bianca", hex: "#d9d3c8" },
-    { name: "Pietra Sabbia", hex: "#bca987" },
-    { name: "Pietra Grigia", hex: "#7d7873" },
-    { name: "Pietra Antracite", hex: "#3a3936" },
-    { name: "Pietra Cemento", hex: "#9a9590" },
+    { name: "Nantes", image: star_k_s_nantes },
+    { name: "Marsiglia", image: star_k_s_marsiglia },
   ],
   "star-k-d": [
-    { name: "Marmo Calacatta", hex: "#e8e3da" },
-    { name: "Marmo Statuario", hex: "#dcd6cb" },
-    { name: "Marmo Pietra Serena", hex: "#9da19a" },
-    { name: "Marmo Nero", hex: "#2a2826" },
+    { name: "Bruges", image: star_k_d_bruges },
+    { name: "Cardiff", image: star_k_d_cardiff },
+    { name: "Liegi", image: star_k_d_liegi },
+    { name: "Resina", image: star_k_d_resina },
+    { name: "Kw Barry", image: star_k_d_kw_barry },
+    { name: "Newport", image: star_k_d_newport },
+    { name: "Corten", image: star_k_d_corten },
   ],
   "star-k-w": [
-    { name: "Wide Oak", hex: "#c8a574" },
-    { name: "Wide Walnut", hex: "#6a4630" },
-    { name: "Wide Smoke", hex: "#7d6651" },
-    { name: "Wide Ash", hex: "#b3a797" },
-    { name: "Wide Sand", hex: "#d6bf99" },
+    { name: "Cardiff", image: star_k_w_cardiff },
+    { name: "Liegi", image: star_k_w_liegi },
+    { name: "Kw Barry", image: star_k_w_kw_barry },
+    { name: "Newport", image: star_k_w_newport },
   ],
   "star-k-w-maxi": [
-    { name: "Maxi Bianco", hex: "#e9dec6" },
-    { name: "Maxi Naturale", hex: "#c19c70" },
-    { name: "Maxi Tabacco", hex: "#8a5d3a" },
-    { name: "Maxi Fumé", hex: "#6b5544" },
-    { name: "Maxi Antracite", hex: "#3f3b35" },
+    { name: "Graniglia Tundra", image: star_k_w_maxi_graniglia_tundra },
+    { name: "Graniglia Cotton", image: star_k_w_maxi_graniglia_cotton },
+    { name: "Marmo Orobico", image: star_k_w_maxi_marmo_orobico },
+    { name: "Marmo Carrara", image: star_k_w_maxi_marmo_carrara },
+    { name: "Graniglia Cloud", image: star_k_w_maxi_graniglia_cloud },
+    { name: "Graniglia Cashmere", image: star_k_w_maxi_graniglia_cashmere },
+    { name: "Marmo Calacatta", image: star_k_w_maxi_marmo_calacatta },
   ],
-  "k-wood": [
-    { name: "K-Wood Natural", hex: "#b88b58" },
-    { name: "K-Wood Caramel", hex: "#9a6c40" },
-    { name: "K-Wood Smoke", hex: "#6d5238" },
-    { name: "K-Wood Sand", hex: "#d5b88a" },
-    { name: "K-Wood Greige", hex: "#a89886" },
-    { name: "K-Wood Carbon", hex: "#3a3128" },
+  "connex": [
+    { name: "Rovere Crudo", image: connex_rovere_crudo },
+    { name: "Rovere Canadese", image: connex_rovere_canadese },
+    { name: "Baltic Oak", image: connex_baltic_oak },
+    { name: "Rovere Congo", image: connex_rovere_congo },
+    { name: "Rovere Britannico", image: connex_rovere_britannico },
+    { name: "Rovere Nordico", image: connex_rovere_nordico },
   ],
-  "k-wood-spina": [
-    { name: "Spina Rovere", hex: "#c1986a" },
-    { name: "Spina Noce", hex: "#6e4a30" },
-    { name: "Spina Sbiancato", hex: "#e1d2b6" },
-    { name: "Spina Fumé", hex: "#5d4836" },
-  ],
-  connex: [
-    { name: "Connex Ice", hex: "#e7e1d4" },
-    { name: "Connex Sand", hex: "#c8b18b" },
-    { name: "Connex Oak", hex: "#a4814f" },
-    { name: "Connex Walnut", hex: "#6a4730" },
-    { name: "Connex Slate", hex: "#5a5751" },
-    { name: "Connex Coal", hex: "#2d2a26" },
-  ],
-
-  // ============ LAMINATI TECNICI ============
   "k-uno": [
-    { name: "Rovere Sciara", hex: "#a07a4b" },
-    { name: "Rovere Patmos", hex: "#c7a273" },
-    { name: "Rovere Mykonos", hex: "#e2cca7" },
-    { name: "Rovere Stromboli", hex: "#5b4330" },
-    { name: "Rovere Lipari", hex: "#8a6a48" },
-    { name: "Rovere Salina", hex: "#bca085" },
+    { name: "Rovere Indiana", image: k_uno_rovere_indiana },
+    { name: "Rovere Latino", image: k_uno_rovere_latino },
+    { name: "Rovere Texas", image: k_uno_rovere_texas },
+    { name: "Rovere Arizona", image: k_uno_rovere_arizona },
+    { name: "Rovere Colorado", image: k_uno_rovere_colorado },
+    { name: "Rovere Mexico", image: k_uno_rovere_mexico },
+    { name: "Rovere Yosemite", image: k_uno_rovere_yosemite },
+    { name: "Rovere Kansas", image: k_uno_rovere_kansas },
+    { name: "Rovere California New", image: k_uno_rovere_california_new },
   ],
   "prestige-l": [
-    { name: "Quercia Naturale", hex: "#bf9866" },
-    { name: "Quercia Miele", hex: "#a6783f" },
-    { name: "Quercia Sbiancata", hex: "#e0cfb2" },
-    { name: "Quercia Tabacco", hex: "#7d5436" },
-    { name: "Quercia Cenere", hex: "#a89c8a" },
-    { name: "Quercia Carbone", hex: "#3c3530" },
+    { name: "Grey Oak", image: prestige_l_grey_oak },
+    { name: "Noce Autentico", image: prestige_l_noce_autentico },
+    { name: "Apple Oak", image: prestige_l_apple_oak },
+    { name: "Rovere Senese", image: prestige_l_rovere_senese },
+    { name: "Alpaca Oak", image: prestige_l_alpaca_oak },
+    { name: "Eagle Oak", image: prestige_l_eagle_oak },
+    { name: "Pepper Oak", image: prestige_l_pepper_oak },
   ],
   "prestige-gold": [
-    { name: "Gold Honey", hex: "#c69654" },
-    { name: "Gold Champagne", hex: "#dcc294" },
-    { name: "Gold Amber", hex: "#9d6c34" },
-    { name: "Gold Bronze", hex: "#7a5530" },
-    { name: "Gold Smoke", hex: "#5e4936" },
+    { name: "Rovere Sole", image: prestige_gold_rovere_sole },
+    { name: "Rovere Giapponese", image: prestige_gold_rovere_giapponese },
+    { name: "Rovere Trentino", image: prestige_gold_rovere_trentino },
+    { name: "Quercia Montana", image: prestige_gold_quercia_montana },
+    { name: "Rovere Carbon", image: prestige_gold_rovere_carbon },
+    { name: "Rovere Comfort", image: prestige_gold_rovere_comfort },
+    { name: "Quercia Naturale", image: prestige_gold_quercia_naturale },
+    { name: "Rovere Positano", image: prestige_gold_rovere_positano },
+    { name: "Rovere Francese", image: prestige_gold_rovere_francese },
+    { name: "Rovere Ischia New", image: prestige_gold_rovere_ischia_new },
+    { name: "Rovere Linosa New", image: prestige_gold_rovere_linosa_new },
+    { name: "Hop Oak", image: prestige_gold_hop_oak },
+    { name: "Rovere Zephir", image: prestige_gold_rovere_zephir },
+    { name: "Rovere Ponza", image: prestige_gold_rovere_ponza },
+    { name: "Sesame Oak", image: prestige_gold_sesame_oak },
+    { name: "Pepper Oak", image: prestige_gold_pepper_oak },
   ],
   "syncro-parquet": [
-    { name: "Syncro Natural", hex: "#b58a5a" },
-    { name: "Syncro Caramel", hex: "#8e6238" },
-    { name: "Syncro Espresso", hex: "#4f3623" },
-    { name: "Syncro Sand", hex: "#cdb088" },
-    { name: "Syncro Greige", hex: "#a4978a" },
+    { name: "Classica Naturale", image: syncro_parquet_classica_naturale },
+    { name: "Parquet Ungherese Naturale", image: syncro_parquet_parquet_ungherese_naturale },
+    { name: "Chateau Rovere Naturale", image: syncro_parquet_chateau_rovere_naturale },
   ],
-  facile: [
-    { name: "Facile Bianco", hex: "#e8dec8" },
-    { name: "Facile Naturale", hex: "#bf9b6e" },
-    { name: "Facile Caramello", hex: "#9b6c40" },
-    { name: "Facile Wengé", hex: "#3f2f24" },
+  "facile": [
+    { name: "Rovere Superior", image: facile_rovere_superior },
+    { name: "Rovere Sunny", image: facile_rovere_sunny },
+    { name: "Rovere Crystal", image: facile_rovere_crystal },
+    { name: "Greyb Oak", image: facile_greyb_oak },
+    { name: "Rovere Luna", image: facile_rovere_luna },
+    { name: "Rovere Umbro", image: facile_rovere_umbro },
+    { name: "Rovere Loira", image: facile_rovere_loira },
+    { name: "Rovere Fiammingo", image: facile_rovere_fiammingo },
+    { name: "Rovere Di Fiume", image: facile_rovere_di_fiume },
+    { name: "Rovere Tuscania", image: facile_rovere_tuscania },
+    { name: "Grey Canyon", image: facile_grey_canyon },
+    { name: "Black Canyon", image: facile_black_canyon },
+    { name: "Rovere Senese", image: facile_rovere_senese },
+    { name: "Hop Oak", image: facile_hop_oak },
+    { name: "Coffee Oak", image: facile_coffee_oak },
   ],
   "vision-technic": [
-    { name: "Technic Ice", hex: "#dcd6cb" },
-    { name: "Technic Sand", hex: "#c2a981" },
-    { name: "Technic Oak", hex: "#9d7a4d" },
-    { name: "Technic Walnut", hex: "#6b4a32" },
-    { name: "Technic Coal", hex: "#312c26" },
+    { name: "Acciaio Brunito", image: vision_technic_acciaio_brunito },
+    { name: "Pietra Portoghese", image: vision_technic_pietra_portoghese },
+    { name: "Pietra Carnica", image: vision_technic_pietra_carnica },
+    { name: "Pietra Distria", image: vision_technic_pietra_distria },
   ],
   "vision-oxid": [
-    { name: "Oxid Pearl", hex: "#cdc7be" },
-    { name: "Oxid Bronze", hex: "#8a6c4a" },
-    { name: "Oxid Copper", hex: "#a06a44" },
-    { name: "Oxid Iron", hex: "#5a544c" },
-    { name: "Oxid Black", hex: "#2a2724" },
+    { name: "Warm Gray", image: vision_oxid_warm_gray },
+    { name: "Cemento Spatolato", image: vision_oxid_cemento_spatolato },
+    { name: "Cemento Grezzo", image: vision_oxid_cemento_grezzo },
+    { name: "Graniglia Bardiglio", image: vision_oxid_graniglia_bardiglio },
+    { name: "Graniglia Carrara", image: vision_oxid_graniglia_carrara },
+    { name: "Graniglia Marquina", image: vision_oxid_graniglia_marquina },
   ],
-
-  // ============ BIOWALL ============
-  "raw-oak": [
-    { name: "Rovere Crudo", hex: "#b48a5b" },
-    { name: "Rovere Tabacco", hex: "#825536" },
-    { name: "Rovere Cenere", hex: "#9c8c78" },
-    { name: "Rovere Cotto", hex: "#a0613a" },
-    { name: "Rovere Fumé", hex: "#5d4734" },
-    { name: "Rovere Sbiancato", hex: "#dcc8ad" },
-  ],
-  timber: [
-    { name: "Timber Honey", hex: "#bb8a55" },
-    { name: "Timber Caramel", hex: "#a06a40" },
-    { name: "Timber Walnut", hex: "#6a4630" },
-    { name: "Timber Smoke", hex: "#5b483a" },
-    { name: "Timber Sand", hex: "#d4b687" },
-  ],
-  nux: [
-    { name: "Nux Naturale", hex: "#8a5e3c" },
-    { name: "Nux Scuro", hex: "#5d3d28" },
-    { name: "Nux Miele", hex: "#a37544" },
-    { name: "Nux Tortora", hex: "#a59686" },
-  ],
-  pattern: [
-    { name: "Pattern Sand", hex: "#cab193" },
-    { name: "Pattern Greige", hex: "#a39685" },
-    { name: "Pattern Carbon", hex: "#3a3530" },
-    { name: "Pattern Bronze", hex: "#876a45" },
-    { name: "Pattern Pearl", hex: "#dcd2c2" },
-  ],
-  paint: [
-    { name: "Paint Bianco", hex: "#ece5d4" },
-    { name: "Paint Avorio", hex: "#e0d2b6" },
-    { name: "Paint Tortora", hex: "#a89a87" },
-    { name: "Paint Salvia", hex: "#8a9b85" },
-    { name: "Paint Argilla", hex: "#b0856a" },
-    { name: "Paint Carbone", hex: "#3c3833" },
-  ],
-
-  // ============ PARQUET (nuove collezioni Skema) ============
-  yles: [
-    { name: "Yles Naturale", hex: "#bd9362" },
-    { name: "Yles Miele", hex: "#a07440" },
-    { name: "Yles Sbiancato", hex: "#dccfb6" },
-    { name: "Yles Tabacco", hex: "#7a5236" },
-    { name: "Yles Fumé", hex: "#5c4838" },
-  ],
-  palladio: [
-    { name: "Palladio Veneziano", hex: "#b88553" },
-    { name: "Palladio Sabbia", hex: "#cfa979" },
-    { name: "Palladio Antico", hex: "#8a6238" },
-    { name: "Palladio Bruno", hex: "#5e3f28" },
-  ],
-  villa: [
-    { name: "Villa Classica", hex: "#a87a4a" },
-    { name: "Villa Toscana", hex: "#8d5d33" },
-    { name: "Villa Patinato", hex: "#705438" },
-    { name: "Villa Bianca", hex: "#e1cfae" },
-    { name: "Villa Cenere", hex: "#a09484" },
+  "palladio": [
+    { name: "Rovere Mira", image: palladio_rovere_mira },
+    { name: "Rovere Padova", image: palladio_rovere_padova },
+    { name: "Rovere Maser", image: palladio_rovere_maser },
+    { name: "Rovere Trissino", image: palladio_rovere_trissino },
+    { name: "Rovere Venezia", image: palladio_rovere_venezia },
+    { name: "Rovere Vicenza", image: palladio_rovere_vicenza },
   ],
   "lumbertech-205": [
-    { name: "L205 Sand", hex: "#c4a275" },
-    { name: "L205 Oak", hex: "#9a7548" },
-    { name: "L205 Smoke", hex: "#6c5238" },
-    { name: "L205 Carbon", hex: "#3b342c" },
+    { name: "Varnish 1452 Rovere Ontario", image: lumbertech_205_varnish_1452_rovere_ontario },
+    { name: "Varnish 1453 Rovere Arches", image: lumbertech_205_varnish_1453_rovere_arches },
   ],
   "lumbertech-270": [
-    { name: "L270 Pearl", hex: "#dcd1bb" },
-    { name: "L270 Honey", hex: "#b48852" },
-    { name: "L270 Caramel", hex: "#8c5d34" },
-    { name: "L270 Walnut", hex: "#5e3e28" },
-    { name: "L270 Greige", hex: "#a0938a" },
+    { name: "Oil 1430 Rovere Adamello", image: lumbertech_270_oil_1430_rovere_adamello },
+    { name: "Oil 1431 Rovere Gran Paradiso", image: lumbertech_270_oil_1431_rovere_gran_paradiso },
+    { name: "Oil 1434 Rovere Circeo", image: lumbertech_270_oil_1434_rovere_circeo },
+    { name: "Oil 1437 Rovere Arenal", image: lumbertech_270_oil_1437_rovere_arenal },
+    { name: "Varnish 1439 Rovere Caspio", image: lumbertech_270_varnish_1439_rovere_caspio },
+    { name: "Varnish 1442 Rovere Pollino", image: lumbertech_270_varnish_1442_rovere_pollino },
+    { name: "Varnish 1451 Rovere Brenta", image: lumbertech_270_varnish_1451_rovere_brenta },
   ],
   "lumbertech-s700": [
-    { name: "S700 Ice", hex: "#e2d8c2" },
-    { name: "S700 Natural", hex: "#bd9263" },
-    { name: "S700 Bronze", hex: "#876444" },
-    { name: "S700 Espresso", hex: "#4e3624" },
-    { name: "S700 Coal", hex: "#2d2823" },
-  ],
-
-  // ============ OUTDOOR SELECTION ============
-  compact: [
-    { name: "Pietra Bianca", hex: "#d6cdbc" },
-    { name: "Pietra Beige", hex: "#b6a07e" },
-    { name: "Pietra Grigia", hex: "#7c7872" },
-    { name: "Pietra Antracite", hex: "#383530" },
-  ],
-  pacto: [
-    { name: "Lipari", hex: "#7a5b40" },
-    { name: "Linosa", hex: "#b08358" },
-    { name: "Panarea", hex: "#5a4836" },
-    { name: "Salina", hex: "#a89784" },
-  ],
-  real: [
-    { name: "Teak Naturale", hex: "#a87648" },
-    { name: "Teak Ossidato", hex: "#7d6e5c" },
-    { name: "Ipe Lapacho", hex: "#5e3a24" },
-  ],
-
-  // ============ FONOASSORBENTI ============
-  "decor-akustika": [
-    { name: "Neve", hex: "#ece5d4" },
-    { name: "Noce Aurora", hex: "#9a6c40" },
-    { name: "Noce Dogale", hex: "#6a4630" },
-    { name: "Rovere Ambrato", hex: "#b6864c" },
-    { name: "Tortora", hex: "#a89a87" },
-    { name: "Carbone", hex: "#3a3530" },
-  ],
-  mikro: [
-    { name: "Bianco Microforato", hex: "#ece5d4" },
-    { name: "Grigio Microforato", hex: "#8b8780" },
-    { name: "Rovere Microforato", hex: "#b88a5b" },
-    { name: "Antracite Microforato", hex: "#363330" },
-  ],
-
-  // ============ SOPRAELEVATI ============
-  access: [
-    { name: "HPL Bianco", hex: "#e5dccb" },
-    { name: "HPL Tortora", hex: "#a89986" },
-    { name: "HPL Rovere", hex: "#b88a5b" },
-    { name: "HPL Antracite", hex: "#3a3631" },
-    { name: "Vinilico Sand", hex: "#c8b08a" },
-  ],
-  tech: [
-    { name: "Gres Bianco", hex: "#dcd3c2" },
-    { name: "Gres Beige", hex: "#b9a380" },
-    { name: "Gres Pietra", hex: "#7c7972" },
-    { name: "Gres Antracite", hex: "#383532" },
-    { name: "Gres Rovere", hex: "#a07744" },
-    { name: "Gres Cotto", hex: "#9d6240" },
+    { name: "1445 Rovere Arches Spina", image: lumbertech_s700_1445_rovere_arches_spina },
+    { name: "1446 Rovere Ontario Spina", image: lumbertech_s700_1446_rovere_ontario_spina },
+    { name: "1448 Rovere Conero Spina", image: lumbertech_s700_1448_rovere_conero_spina },
+    { name: "1449 Rovere Valsesia Spina", image: lumbertech_s700_1449_rovere_valsesia_spina },
   ],
 };
 
