@@ -12,6 +12,7 @@ import heroOutdoor from "@/assets/card-externo-ambient.jpg";
 import productKaleaElements from "@/assets/product-kalea-elements.png";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import productKaleaceiling from "@/assets/product-kaleaceiling.jpg";
+import productOutdoorSelection from "@/assets/outdoor-extra/hero.webp";
 
 interface Product {
   name: string;
@@ -61,6 +62,12 @@ const Outdoor = () => {
       description: "Gres porcellanato 20mm per terrazze, piscine e giardini. Continuità estetica indoor-outdoor e resistenza eterna.",
       image: ceramicheEsterni,
       link: `/${language}/ceramiche-esterni`,
+    },
+    {
+      name: "OUTDOOR SELECTION",
+      description: "Selezione esclusiva Kalēa® di decking e pavimenti per esterni: Compact, Pacto e Real. Alternativa tecnica a Externo per terrazze, piscine e living all'aperto.",
+      image: productOutdoorSelection,
+      link: `/${language}/outdoor/selection`,
     },
   ];
 
