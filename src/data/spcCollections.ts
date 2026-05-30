@@ -28,8 +28,8 @@ export const spcCollections: SpcCollection[] = [
     description:
       "Pavimento SPC con decoro legno in doghe di grande formato. Eccellente stabilità dimensionale e resistenza all'usura, ideale per ambienti ad alta frequentazione. Totalmente waterproof e antiscivolo, posabile anche in bagni, spa e palestre.",
     image: stark,
-    formats: ["Doghe XL 1205 mm", "Spessore ridotto"],
-    finishes: ["Decoro legno", "Antiscivolo", "Waterproof"],
+    formats: ["228,6×1524 mm", "Spessore 6,5 mm"],
+    finishes: ["Legno", "Antiscivolo", "Waterproof"],
     applicazioni: ["Residenziale", "Hotel", "Wellness", "Retail"],
   },
   {
@@ -39,8 +39,8 @@ export const spcCollections: SpcCollection[] = [
     description:
       "Tecnologia a registro applicata in superficie per un effetto legno di realismo assoluto. Finitura ultra matt, cromatismi precisi e venature senza nodi. Prestazioni SPC complete: waterproof, sottopavimento acustico preaccoppiato, antiscivolo.",
     image: starkR,
-    formats: ["Doghe sincronizzate"],
-    finishes: ["Ultra matt", "Registro superficie", "Antiscivolo"],
+    formats: ["228,6×1524 mm", "Spessore 6,5 mm"],
+    finishes: ["Legno", "Ultra matt", "Registro superficie"],
     applicazioni: ["Residenziale alto", "Hospitality", "Contract"],
   },
   {
@@ -50,8 +50,8 @@ export const spcCollections: SpcCollection[] = [
     description:
       "SPC con sottofondo in sughero che unisce design, stabilità, isolamento acustico e calore al tatto. Ideale per ristrutturazioni rapide con miglioramento del comfort termoacustico, mantenendo un effetto legno realistico e dettagliato.",
     image: starkC,
-    formats: ["Doghe legno"],
-    finishes: ["Sottofondo sughero", "Effetto legno"],
+    formats: ["228,6×1524 mm", "Spessore 7 mm"],
+    finishes: ["Legno", "Sottofondo sughero"],
     applicazioni: ["Residenziale", "Uffici", "Ristrutturazioni"],
   },
   {
@@ -61,8 +61,8 @@ export const spcCollections: SpcCollection[] = [
     description:
       "SPC con disegno a spina francese, micro-bisello sui quattro lati e tecnologia end-less che sincronizza il disegno tra le doghe. Posa semplificata, effetto continuo, alta resistenza al fuoco e all'acqua.",
     image: starkS,
-    formats: ["Spina francese"],
-    finishes: ["Micro-bisello 4 lati", "End-less design"],
+    formats: ["152,4×609,6 mm", "Spina francese", "Spessore 6 mm"],
+    finishes: ["Legno", "Micro-bisello 4 lati"],
     applicazioni: ["Spazi pubblici", "Boutique", "Residenziale design"],
   },
   {
@@ -72,7 +72,7 @@ export const spcCollections: SpcCollection[] = [
     description:
       "Pavimento in formato tiles ispirato all'industrial design, con estetiche pietra, cemento e metallo. Comfort tipico dell'SPC, waterproof e perfetto per bagni total look senza fughe, coordinabile con i rivestimenti Star K-W.",
     image: starkD,
-    formats: ["Tiles 1209 mm"],
+    formats: ["457,2×457,2 mm", "Spessore 6 mm"],
     finishes: ["Pietra", "Cemento", "Metallo"],
     applicazioni: ["Uffici", "Bagni", "Retail", "Wellness"],
   },
@@ -83,7 +83,7 @@ export const spcCollections: SpcCollection[] = [
     description:
       "Rivestimento a parete in SPC a basso spessore con decorativi effetto pietra e cemento in formato tiles, coordinati con i pavimenti Star K-D. Ideale per pareti di bagni e docce con stile contemporaneo, total look e senza fughe.",
     image: starkW,
-    formats: ["Tiles parete"],
+    formats: ["457,2×457,2 mm", "Spessore 4 mm"],
     finishes: ["Pietra", "Cemento"],
     applicazioni: ["Bagni", "Docce", "Spa", "Hall"],
   },
@@ -94,8 +94,8 @@ export const spcCollections: SpcCollection[] = [
     description:
       "Grandi lastre SPC per rivestimenti a tutta altezza con decori effetto marmo. Eleganza classica unita a praticità: resistente all'acqua, igienico, posabile anche su pareti esistenti. Ideale per bagni, hall hotel, aree di rappresentanza.",
     image: starkWMaxi,
-    formats: ["Lastre maxi"],
-    finishes: ["Effetto marmo"],
+    formats: ["1220×2800 mm", "Spessore 4 mm"],
+    finishes: ["Marmo"],
     applicazioni: ["Bagni", "Hall hotel", "Spa", "Ingressi"],
   },
   {
@@ -105,7 +105,7 @@ export const spcCollections: SpcCollection[] = [
     description:
       "Vero pavimento in legno con caratteristiche tecniche dell'SPC. Superficie in legno autentico su supporto rigido, sottile per posa su pavimenti esistenti, resistente all'acqua, con sottofondo in sughero per comfort acustico ottimale.",
     image: starkWood,
-    formats: ["Doghe 1605 mm"],
+    formats: ["190×1860 mm", "Spessore 8 mm"],
     finishes: ["Legno autentico", "Sottofondo sughero"],
     applicazioni: ["Residenziale", "Cucine", "Bagni"],
   },
@@ -116,7 +116,7 @@ export const spcCollections: SpcCollection[] = [
     description:
       "Eleganza della spina di pesce classica con taglio a 90°, arricchita dai vantaggi del supporto SPC. La bellezza senza tempo del pattern a spina diventa posabile ovunque: residenziale, hotel, ristoranti, retail.",
     image: starkWoodSpina,
-    formats: ["Spina italiana 90°"],
+    formats: ["120×600 mm", "Spina italiana 90°", "Spessore 8 mm"],
     finishes: ["Legno autentico", "Sottofondo sughero"],
     applicazioni: ["Residenziale", "Hotel", "Retail"],
   },
@@ -127,8 +127,8 @@ export const spcCollections: SpcCollection[] = [
     description:
       "L'SPC più sottile della gamma con spessore 5,5 mm. Reso silenzioso dal sottopavimento preaccoppiato e ultra resistente grazie all'overlay trasparente rinforzato. Pensato per ambienti commerciali ad elevato traffico, facile da pulire.",
     image: connex,
-    formats: ["Spessore 5,5 mm"],
-    finishes: ["Overlay rinforzato", "Sottopavimento integrato"],
+    formats: ["180×1220 mm", "Spessore 5,5 mm"],
+    finishes: ["Legno", "Overlay rinforzato"],
     applicazioni: ["Commerciale", "Uffici", "Negozi"],
   },
 ];
