@@ -134,6 +134,17 @@ const Sopraelevati = () => {
         </div>
       </section>
 
+      {/* Color palettes per collection */}
+      {collections.map((c) => (
+        <CollectionColorsSection
+          key={`colors-${c.slug}`}
+          slug={c.slug}
+          collectionName={c.name}
+          className="py-16 md:py-20 px-4 md:px-8 lg:px-12 bg-background border-t border-border/30"
+        />
+      ))}
+
+
       <div className="relative z-[3] bg-background">
         <TechSpecBar
           title="Sistemi sopraelevati"
