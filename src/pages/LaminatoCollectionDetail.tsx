@@ -102,6 +102,12 @@ const LaminatoCollectionDetail = () => {
           ))}
         </div>
       </section>
+
+      <RelatedCollections
+        items={laminatiCollections}
+        currentSlug={collection.slug}
+        basePath="/indoor/laminati"
+      />
     </div>
   );
 };
