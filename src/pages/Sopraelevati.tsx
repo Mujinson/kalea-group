@@ -3,6 +3,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import TechSpecBar from "@/components/TechSpecBar";
+import CollectionColorsSection from "@/components/CollectionColorsSection";
 import hero from "@/assets/sopraelevati/hero.webp";
 import access from "@/assets/sopraelevati/access-floor.webp";
 import tech from "@/assets/sopraelevati/tech-floor.webp";
