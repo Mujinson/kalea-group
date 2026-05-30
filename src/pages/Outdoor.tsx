@@ -12,6 +12,7 @@ import heroOutdoor from "@/assets/card-externo-ambient.jpg";
 import productKaleaElements from "@/assets/product-kalea-elements.png";
 import productKaleadeck from "@/assets/product-kaleadeck.jpg";
 import productKaleaceiling from "@/assets/product-kaleaceiling.jpg";
+import productOutdoorSelection from "@/assets/outdoor-extra/hero.webp";
 
 interface Product {
   name: string;
