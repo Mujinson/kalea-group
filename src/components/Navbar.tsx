@@ -105,6 +105,7 @@ const Navbar = () => {
             { label: "HYPERMATT", path: `/${language}/hypermatt`, comingSoon: false },
             { label: "PARQUET", path: `/${language}/parquet`, comingSoon: false },
             { label: "SPC SELECTION", path: `/${language}/indoor/spc`, comingSoon: false },
+            { label: "LAMINATI TECNICI", path: `/${language}/indoor/laminati`, comingSoon: false },
           ]
         },
         {
