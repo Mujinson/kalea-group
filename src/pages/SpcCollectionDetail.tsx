@@ -114,6 +114,11 @@ const SpcCollectionDetail = () => {
         </div>
       </section>
 
+      <RelatedCollections
+        items={spcCollections}
+        currentSlug={collection.slug}
+        basePath="/indoor/spc"
+      />
     </div>
   );
 };
