@@ -8,7 +8,7 @@ import TechSpecBar from "@/components/TechSpecBar";
 import CollectionColorsSection from "@/components/CollectionColorsSection";
 import { getSpcCollection, spcCollections } from "@/data/spcCollections";
 import RelatedCollections from "@/components/RelatedCollections";
-import { effettoFromFiniture } from "@/lib/effetto";
+import { effettoFromFiniture, spessoreFromFormats, formatiFromFormats } from "@/lib/effetto";
 
 const SpcCollectionDetail = () => {
   const { slug } = useParams<{ slug: string }>();
