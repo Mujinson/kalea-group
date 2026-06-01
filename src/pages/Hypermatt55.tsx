@@ -121,25 +121,33 @@ const Hypermatt55 = () => {
           title={t("hypermatt55.specsHeader1")}
           subtitle={t("hypermatt55.specsSubtitle")}
           specs={[
-            { label: t("hypermatt55.specFormat"), value: "228,6×1524 mm" },
             { label: t("hypermatt55.specThickness"), value: "5,5 mm" },
-            { label: t("hypermatt55.specClass"), value: "23/33" },
-            { label: t("hypermatt55.specClick"), value: "Välinge 5G" },
+            { label: "Effetto", value: "Legno · Cemento" },
+            { label: t("hypermatt55.specFormat"), value: "228,6×1524 mm" },
           ]}
-          applicationsLabel={t("hypermatt55.specFire") + " · " + t("hypermatt55.specPad") + " · " + t("hypermatt55.specWear")}
-          applications={["Bfl-s1", "IXPE 1 mm", "0,55 mm"]}
+          effectStoryTitle="Caldo, elegante, sorprendentemente reale"
+          effectStory={`Hypermatt 55 unisce estetica, resistenza e semplicità di posa, offrendo un pavimento che interpreta il calore del legno con un realismo sorprendente. Le superfici riproducono venature e dettagli naturali, donando a ogni ambiente una sensazione autentica e accogliente.\n\nLa variante Wood reinterpreta le essenze più nobili — dal rovere alle querce di montagna — mentre Cement porta in casa la materia urbana, con superfici minerali e tonalità neutre perfette per progetti contemporanei.\n\nGrazie allo spessore ridotto e al materassino integrato, è la soluzione ideale per ristrutturazioni e nuove installazioni, anche sopra pavimenti esistenti.`}
+          applications={[
+            { label: "Spessore ridotto 5,5 mm", description: "Ideale per ristrutturazioni: si posa anche sopra pavimenti esistenti senza interventi invasivi, mantenendo livelli e soglie." },
+            { label: "Materassino IXPE integrato", description: "Strato fonoassorbente IXPE 1 mm preincollato che migliora il comfort acustico e la sensazione al passo. Strato d'usura 0,55 mm, classe 23/33." },
+            { label: "Sistema Välinge 5G", description: "Posa flottante a secco, rapida e senza colla. Resistenza al fuoco Bfl-s1, totale stabilità dimensionale anche in presenza di umidità." },
+          ]}
         />
 
         <TechSpecBar
           title={t("hypermatt55.specsHeader2")}
           specs={[
-            { label: t("hypermatt55.specFormat"), value: "460×920 mm" },
             { label: t("hypermatt55.specThickness"), value: "6,5 mm" },
-            { label: t("hypermatt55.specClass"), value: "23/33" },
-            { label: t("hypermatt55.specClick"), value: "Välinge 5G" },
+            { label: "Effetto", value: "Pietra · Cemento" },
+            { label: t("hypermatt55.specFormat"), value: "460×920 mm" },
           ]}
-          applicationsLabel={t("hypermatt55.specFire") + " · " + t("hypermatt55.specPad") + " · " + t("hypermatt55.specWear")}
-          applications={["Bfl-s1", "IXPE 1 mm", "0,55 mm"]}
+          effectStoryTitle="La materia minerale, in grande formato"
+          effectStory={`La declinazione tile di Hypermatt 55 traduce la pietra e il cemento in lastre di grande formato 460×920 mm, pensate per ambienti contemporanei in cui la superficie diventa parte integrante del progetto architettonico.\n\nLe texture vulcaniche e cementizie restituiscono profondità e matericità, con tonalità che spaziano dai grigi tecnici ai neutri caldi, sempre con la finitura ultra-opaca Hypermatt.\n\nUn formato pensato per dilatare visivamente lo spazio, con meno fughe e maggiore continuità percettiva.`}
+          applications={[
+            { label: "Lastra 460×920 mm", description: "Grande formato che amplifica la percezione dello spazio e riduce il numero di fughe, con un effetto continuo e sofisticato." },
+            { label: "Hypermatt Laser Technology", description: "Finitura ultra-opaca che esalta la matericità minerale, resistente a micrograffi, impronte e umidità." },
+            { label: "Posa 5G, spessore 6,5 mm", description: "Sistema Välinge 5G con materassino IXPE 1 mm integrato, strato d'usura 0,55 mm, classe 23/33, reazione al fuoco Bfl-s1." },
+          ]}
         />
 
         <HypermattCollectionCTA current="55" />
