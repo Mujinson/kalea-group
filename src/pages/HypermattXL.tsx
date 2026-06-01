@@ -163,12 +163,15 @@ const HypermattXL = () => {
         subtitle={t('productSpecs.subtitle')}
         specs={[
           { label: t('productSpecs.thickness'), value: "6,5 mm" },
-          { label: t('productSpecs.finish'), value: "Hypermatt Laser" },
-          { label: t('productSpecs.format'), value: "228,6×1800 mm (Wood) · 600×1200 mm (Tile)" },
-          { label: t('productSpecs.useClass'), value: "23/33" },
-          { label: t('productSpecs.wear'), value: "0,55 mm" },
-          { label: t('productSpecs.click'), value: "Välinge 5G" },
-          { label: t('productSpecs.fire'), value: "Bfl-s1" },
+          { label: t('productSpecs.finish'), value: "Legno · Pietra" },
+          { label: t('productSpecs.format'), value: "228,6×1800 mm · 600×1200 mm" },
+        ]}
+        effectStoryTitle="Materia amplificata, su scala maggiore"
+        effectStory={`Hypermatt XL è la collezione che amplifica lo spazio e porta la materia a una nuova scala di eleganza. Le doghe di grande formato creano continuità visiva e una sensazione di ampiezza che valorizza ogni interno.\n\nLa variante Wood esalta nodi e venature naturali del legno con una finitura opaca e tridimensionale, mentre Tile reinterpreta la raffinatezza della pietra in chiave contemporanea, ideale per ambienti essenziali e sofisticati.\n\nTutte le superfici sono trattate con Hypermatt Laser Technology, la tecnologia laser esclusiva che rende la superficie ultra-opaca, vellutata e resistente, elevando il realismo materico a nuovi livelli.`}
+        applications={[
+          { label: "Hypermatt Laser Technology", description: "Finitura ultra-opaca ottenuta tramite tecnologia laser esclusiva: modifica la microstruttura superficiale per un aspetto vellutato, naturale e resistente a micrograffi, impronte e usura." },
+          { label: "Grande formato XL", description: "Doghe 228,6×1800 mm (Wood) e lastre 600×1200 mm (Tile) per una posa continua, con meno fughe e maggiore impatto visivo." },
+          { label: "Sistema 5G Välinge", description: "Incastro a secco, posa flottante rapida e senza colla. Spessore totale 6,5 mm con materassino IXPE 1 mm integrato, strato d'usura 0,55 mm, classe 23/33, reazione al fuoco Bfl-s1." },
         ]}
       />
 

@@ -120,13 +120,17 @@ const HypermattSpina = () => {
         title={t("hypermattSpina.specsTitle")}
         subtitle={t("hypermattSpina.specsSubtitle")}
         specs={[
-          { label: t("hypermattSpina.specFormat"), value: "128×640 mm" },
           { label: t("hypermattSpina.specThickness"), value: "6,5 mm" },
-          { label: t("hypermattSpina.specClass"), value: "23/33" },
-          { label: t("hypermattSpina.specClick"), value: "Välinge 5G" },
+          { label: "Effetto", value: "Legno · Spina" },
+          { label: t("hypermattSpina.specFormat"), value: "128×640 mm" },
         ]}
-        applicationsLabel={t("hypermattSpina.specFire") + " · " + t("hypermattSpina.specPad") + " · " + t("hypermattSpina.specWear")}
-        applications={["Bfl-s1", "IXPE 1 mm", "0,55 mm"]}
+        effectStoryTitle="L'eleganza delle geometrie, il dettaglio dell'incastro"
+        effectStory={`Hypermatt Spina reinterpreta il fascino dei pavimenti a spina in chiave contemporanea: le due varianti — Italiana e Francese — amplificano la percezione di movimento e profondità, trasformando ogni interno in uno spazio armonioso e raffinato.\n\nLa Spina Italiana disegna linee equilibrate e proporzioni perfette, dal carattere raffinato e senza tempo. La Spina Francese aggiunge un taglio diagonale che crea geometrie fluide e dinamiche, capaci di dilatare visivamente l'ambiente.\n\nTrattata con Hypermatt Laser Technology, la superficie risulta ultra-opaca, vellutata e iperrealistica al tatto, restituendo tutta la naturalezza del legno.`}
+        applications={[
+          { label: "Doppia geometria di posa", description: "Spina Italiana e Spina Francese disponibili nello stesso formato listello 128×640 mm: due grammatiche estetiche per due caratteri progettuali differenti." },
+          { label: "Hypermatt Laser Technology", description: "Finitura ultra-opaca e vellutata grazie alla tecnologia laser esclusiva: protegge da micrograffi, impronte e usura mantenendo un aspetto naturale e contemporaneo." },
+          { label: "Posa flottante 5G", description: "Sistema d'incastro Välinge 5G senza colla. Spessore 6,5 mm, materassino IXPE 1 mm integrato, strato d'usura 0,55 mm, classe 23/33, reazione al fuoco Bfl-s1." },
+        ]}
       />
 
       <HypermattCollectionCTA current="spina" />
