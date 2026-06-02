@@ -1,63 +1,96 @@
 
-# Fase A – Completamento SPC + Parquet con nomi originali
+# Redesign CRM Kalea + Gestione Operai
 
-## Cambio di rotta sui nomi
-Mantengo i nomi originali delle collezioni (Star K, K-Uno, K-Wood, Connex, Yles, Palladio, Villa, Lumbertech, ecc.) senza rebranding. Il posizionamento resta "Selezione Esclusiva Kalēa" — i nomi dei prodotti sono nomi di collezione, non marchi concorrenti, quindi possono essere mantenuti come nomenclatura tecnica della selezione.
+Lavoro grande: lo divido in **2 fasi consegnabili**. Fase 1 = nuova Gestione Operai completa (CRUD + ore + assegnazioni + dashboard). Fase 2 = redesign trasversale UX/UI del CRM.
 
-## 1. Aggiornare `src/data/spcCollections.ts`
-Riscrivere le 10 entry con i nomi reali:
-- Star K, Star K-R, Star K-C, Star K-S, Star K-D
-- Star K-W, Star K-W Maxi
-- K-Wood, K-Wood Spina
-- Connex
+Confermami se procedo con **Fase 1 subito** o vuoi che parta dalla Fase 2.
 
-Mantenere slug semplici (`star-k`, `star-k-r`, `k-wood`, ecc.), descrizioni, formati, finiture e applicazioni già definite.
+---
 
-## 2. Routing in `src/App.tsx`
-Aggiungere:
+## FASE 1 — Gestione Operai (priorità)
+
+### 1.1 Database
+Nuova tabella `workers` (anagrafica reale operai, separata da `site_workers` che resta come tabella di assegnazione):
+
+```text
+workers
+- id, first_name, last_name, email, phone
+- fiscal_code, role (mansione), hourly_cost
+- hire_date, status (attivo|ferie|sospeso|non_attivo)
+- photo_url, notes
+- deleted_at (soft delete), created_at, updated_at
 ```
-/indoor/spc          → IndoorSpc
-/spc/:slug           → SpcCollectionDetail
-```
-Lazy import coerente con il pattern esistente.
 
-## 3. Hub Indoor (`src/pages/Indoor.tsx`)
-Aggiungere card "SPC – Selezione Esclusiva" che linka a `/indoor/spc`. Stesso stile delle card esistenti.
+Estensioni:
+- `site_workers.worker_id` → FK a `workers` (oltre a `worker_user_id` esistente, opzionale)
+- `site_work_logs`: aggiungo `worker_id`, `start_time`, `end_time`, `break_minutes` (calcolo ore automatico)
+- Tabella `worker_documents` (contratti, patenti, certificazioni) → bucket esistente `customer-documents` o nuovo `worker-documents`
 
-## 4. Navbar (`src/components/Navbar.tsx`)
-Dropdown Indoor: aggiungere voce "SPC" → `/indoor/spc`. Tradurre in IT/EN/DE/FR.
+RLS: admin full; commerciali/operai read limitato.
 
-## 5. Parquet – estendere `src/data/parquetCollections.ts`
-Aggiungere 6 nuove collezioni con nomi originali:
-- Yles
-- Palladio
-- Villa
-- Lumbertech 205
-- Lumbertech 270
-- Lumbertech S700
+### 1.2 Schermate
 
-Usare le immagini già scaricate in `src/assets/parquet-extra/`. Mantenere la struttura dati esistente del file (stessi campi delle collezioni Parquet attuali).
+**`/admin/cantieri/operai`** — Dashboard rinnovata
+- 6 KPI cards: Attivi · Assegnati · Ore oggi · Ore mese · Costo manodopera mese · Costo medio/cantiere
+- Tabs: **Operai** (cards) · **Registro Ore** (tabella) · **Calendario** · **Assegnazioni**
+- Pulsante "+ Nuovo Operaio" e "+ Registra Ore" sempre visibili
 
-## 6. Localizzazione
-Aggiungere chiavi i18n minime per:
-- Titolo/sottotitolo pagina SPC
-- Card hub Indoor "SPC"
-- Voce navbar "SPC"
-- Etichette tecniche generiche già non presenti
+**Cards Operai**
+- Foto, nome, mansione, cantiere attuale, ore mese, costo mese, badge stato
+- Azioni: Visualizza · Modifica · Registra ore · Elimina (conferma)
 
-In IT, EN, DE, FR.
+**Drawer "Nuovo/Modifica Operaio"** (sheet laterale)
+- Tutti i campi richiesti + upload foto
 
-## 7. QA
-- Verificare build
-- Verificare che `/indoor/spc`, `/spc/star-k`, `/spc/k-wood`, ecc. carichino correttamente
-- Verificare che le nuove card Parquet appaiano in `/parquet`
-- Controllo visivo viewport desktop + mobile
+**Drawer "Registra Ore"**
+- Operaio, cantiere, data, ora inizio/fine, pausa min, note
+- Calcolo live: `ore = (fine-inizio) - pausa/60`, `costo = ore * hourly_cost`
 
-## Fuori scope (Fase B successiva)
-Laminati, Sopraelevati, alternativa Externo, Biowall rivestimenti, Fonoassorbenti — verranno trattati in fasi successive come da piano iniziale.
+**Registro Ore** — tabella pro
+- Sorting, filtri (operaio/cantiere/data range), ricerca, edit inline, delete
+- Export CSV/Excel (xlsx) e PDF (jsPDF)
 
-## Dettagli tecnici
-- Nessuna modifica a `src/integrations/supabase/*`
-- Nessuna nuova dipendenza
-- Asset già presenti, nessun download aggiuntivo in questa fase
-- Memoria di progetto: aggiornare la nota sulla nomenclatura prodotti per riflettere che le collezioni della selezione esclusiva mantengono i nomi originali del produttore
+**Calendario** (react-day-picker già presente, vista mese; settimana/giorno custom semplice)
+- Eventi = ore registrate, colore per operaio
+
+**Assegnazioni Cantieri**
+- Vista 2 colonne: Operai disponibili ↔ Cantieri, multi-select + bottone "Assegna"
+
+**Scheda Operaio** `/admin/cantieri/operai/:id`
+- Tabs: Anagrafica · Ore · Cantieri · Costi · Documenti
+
+### 1.3 Componenti riusabili nuovi
+`WorkerCard`, `WorkerFormDrawer`, `WorkLogFormDrawer`, `WorkLogsTable`, `WorkersKpiGrid`, `AssignmentBoard`, `WorkerCalendar`, `ExportMenu` (csv/xlsx/pdf).
+
+---
+
+## FASE 2 — Redesign trasversale CRM
+
+- **Sidebar**: collapse, icone Lucide pulite, ricerca menu (Cmd+K), gruppi
+- **Dashboard `/admin`**: widget con grafici Recharts (lead trend, fatturato, margine, ore, costi materiali/manodopera)
+- **Tabelle globali**: wrapper `DataTable` con sorting/filtri/ricerca/colonne toggle/export
+- **UX system**: skeleton loaders, empty states illustrati, toast (sonner), bulk actions, optimistic updates con React Query
+- **Mobile**: sidebar offcanvas, cards responsive
+- **Dark mode**: già presenti i token, attivo toggle in header
+- **Design tokens**: rifinisco palette su `index.css` (bianco, cream, dark text — coerente con memoria CRM)
+
+---
+
+## Tecnico
+
+- Stack: React + Vite + shadcn + TanStack Query + Supabase (Cloud)
+- Nuove dipendenze: `xlsx` (export Excel), `jspdf` + `jspdf-autotable` (PDF), `@dnd-kit/core` (drag&drop assegnazioni)
+- File principali nuovi:
+  - `src/pages/admin/cantieri/CantieriOperaiOre.tsx` (riscritto)
+  - `src/pages/admin/cantieri/WorkerDetail.tsx`
+  - `src/components/admin/workers/*` (WorkerCard, WorkerFormDrawer, WorkLogFormDrawer, WorkLogsTable, AssignmentBoard, WorkerCalendar, WorkersKpiGrid)
+  - `src/lib/exports.ts` (csv/xlsx/pdf helpers)
+- Migration: tabella `workers`, `worker_documents`, alter `site_work_logs` + `site_workers`, RLS, GRANTs
+
+---
+
+## Domande prima di partire
+
+1. **Procedo subito con Fase 1 (Operai completa) + base del redesign sidebar/dashboard**, e Fase 2 piena la facciamo dopo? Oppure vuoi tutto insieme (richiederà più iterazioni)?
+2. Gli **operai devono avere login** all'app `/cantieri-app` (collegati a `auth.users` via `worker_user_id`) o sono solo anagrafica gestita dall'admin? Attualmente esiste già il flusso operaio loggato — mantengo entrambi: `workers` come anagrafica + collegamento opzionale a un utente auth.
+3. **Costo orario**: prendo dal campo nuovo `workers.hourly_cost` (sostituisce il `COSTO_ORARIO_DEFAULT = 25` hardcoded). OK?

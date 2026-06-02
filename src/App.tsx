@@ -81,6 +81,7 @@ import CantieriMateriali from "./pages/admin/cantieri/CantieriMateriali";
 import CantieriBudget from "./pages/admin/cantieri/CantieriBudget";
 import CantieriReport from "./pages/admin/cantieri/CantieriReport";
 import AdminCatalog from "./pages/admin/AdminCatalog";
+import WorkerDetail from "./pages/admin/cantieri/WorkerDetail";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -153,6 +154,7 @@ const App = () => (
                 <Route path="cantieri/:id" element={<AdminCantiereDetail />} />
                 <Route path="cantieri-dashboard" element={<CantieriDashboard />} />
                 <Route path="cantieri-operai" element={<CantieriOperaiOre />} />
+                <Route path="cantieri-operai/:id" element={<WorkerDetail />} />
                 <Route path="cantieri-materiali" element={<CantieriMateriali />} />
                 <Route path="cantieri-budget" element={<CantieriBudget />} />
                 <Route path="cantieri-report" element={<CantieriReport />} />
