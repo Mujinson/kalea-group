@@ -154,6 +154,7 @@ const App = () => (
                 <Route path="cantieri/:id" element={<AdminCantiereDetail />} />
                 <Route path="cantieri-dashboard" element={<CantieriDashboard />} />
                 <Route path="cantieri-operai" element={<CantieriOperaiOre />} />
+                <Route path="cantieri-operai/:id" element={<WorkerDetail />} />
                 <Route path="cantieri-materiali" element={<CantieriMateriali />} />
                 <Route path="cantieri-budget" element={<CantieriBudget />} />
                 <Route path="cantieri-report" element={<CantieriReport />} />
