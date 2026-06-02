@@ -1880,37 +1880,52 @@ export type Database = {
       }
       site_work_logs: {
         Row: {
+          break_minutes: number
           created_at: string
+          end_time: string | null
+          hourly_cost: number | null
           hours_worked: number
           id: string
           materials_used: string[] | null
           notes: string | null
           site_id: string
+          start_time: string | null
           updated_at: string
           work_date: string
-          worker_user_id: string
+          worker_id: string | null
+          worker_user_id: string | null
         }
         Insert: {
+          break_minutes?: number
           created_at?: string
+          end_time?: string | null
+          hourly_cost?: number | null
           hours_worked?: number
           id?: string
           materials_used?: string[] | null
           notes?: string | null
           site_id: string
+          start_time?: string | null
           updated_at?: string
           work_date?: string
-          worker_user_id: string
+          worker_id?: string | null
+          worker_user_id?: string | null
         }
         Update: {
+          break_minutes?: number
           created_at?: string
+          end_time?: string | null
+          hourly_cost?: number | null
           hours_worked?: number
           id?: string
           materials_used?: string[] | null
           notes?: string | null
           site_id?: string
+          start_time?: string | null
           updated_at?: string
           work_date?: string
-          worker_user_id?: string
+          worker_id?: string | null
+          worker_user_id?: string | null
         }
         Relationships: [
           {
@@ -1918,6 +1933,13 @@ export type Database = {
             columns: ["site_id"]
             isOneToOne: false
             referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "site_work_logs_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
             referencedColumns: ["id"]
           },
         ]
@@ -1967,8 +1989,9 @@ export type Database = {
           site_id: string
           start_date: string | null
           updated_at: string
+          worker_id: string | null
           worker_role: string | null
-          worker_user_id: string
+          worker_user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -1979,8 +2002,9 @@ export type Database = {
           site_id: string
           start_date?: string | null
           updated_at?: string
+          worker_id?: string | null
           worker_role?: string | null
-          worker_user_id: string
+          worker_user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -1991,8 +2015,9 @@ export type Database = {
           site_id?: string
           start_date?: string | null
           updated_at?: string
+          worker_id?: string | null
           worker_role?: string | null
-          worker_user_id?: string
+          worker_user_id?: string | null
         }
         Relationships: [
           {
@@ -2000,6 +2025,13 @@ export type Database = {
             columns: ["site_id"]
             isOneToOne: false
             referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "site_workers_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
             referencedColumns: ["id"]
           },
         ]
@@ -2235,6 +2267,104 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      worker_documents: {
+        Row: {
+          created_at: string
+          document_type: string
+          file_url: string | null
+          id: string
+          notes: string | null
+          title: string
+          updated_at: string
+          worker_id: string
+        }
+        Insert: {
+          created_at?: string
+          document_type?: string
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          title: string
+          updated_at?: string
+          worker_id: string
+        }
+        Update: {
+          created_at?: string
+          document_type?: string
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          title?: string
+          updated_at?: string
+          worker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "worker_documents_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workers: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          email: string | null
+          first_name: string
+          fiscal_code: string | null
+          hire_date: string | null
+          hourly_cost: number
+          id: string
+          last_name: string
+          notes: string | null
+          phone: string | null
+          photo_url: string | null
+          role: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          email?: string | null
+          first_name: string
+          fiscal_code?: string | null
+          hire_date?: string | null
+          hourly_cost?: number
+          id?: string
+          last_name: string
+          notes?: string | null
+          phone?: string | null
+          photo_url?: string | null
+          role?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          email?: string | null
+          first_name?: string
+          fiscal_code?: string | null
+          hire_date?: string | null
+          hourly_cost?: number
+          id?: string
+          last_name?: string
+          notes?: string | null
+          phone?: string | null
+          photo_url?: string | null
+          role?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
