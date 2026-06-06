@@ -302,7 +302,7 @@ const AdminSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter className="p-4" style={{ borderTop: '1px solid rgba(59,35,20,0.10)', background: '#FFFFFF' }}>
-        <div className="px-1 mb-3">
+        <div className="px-1 mb-3 group-data-[collapsible=icon]:hidden">
           <div className="text-[12px] truncate" style={{ color: '#1A1008' }}>
             {user?.email}
           </div>
@@ -317,13 +317,14 @@ const AdminSidebar = () => {
         </div>
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-2 px-1 py-1 text-[13px] transition-colors duration-150"
+          title="Esci"
+          className="flex items-center gap-2 px-1 py-1 text-[13px] transition-colors duration-150 group-data-[collapsible=icon]:justify-center"
           style={{ color: '#8A7060', background: 'transparent', border: 'none' }}
           onMouseEnter={(e) => (e.currentTarget.style.color = '#3B2314')}
           onMouseLeave={(e) => (e.currentTarget.style.color = '#8A7060')}
         >
           <LogOut className="w-4 h-4" />
-          Esci
+          <span className="group-data-[collapsible=icon]:hidden">Esci</span>
         </button>
       </SidebarFooter>
     </Sidebar>

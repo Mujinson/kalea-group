@@ -4,7 +4,8 @@ import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import NotificationCenter from '@/components/admin/NotificationCenter';
-import { Loader2 } from 'lucide-react';
+import CommandPalette from '@/components/admin/CommandPalette';
+import { Loader2, Search } from 'lucide-react';
 import logoDark from '@/assets/logo-new.png';
 
 const AdminLayout = () => {
