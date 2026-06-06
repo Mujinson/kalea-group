@@ -4,7 +4,8 @@ import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import NotificationCenter from '@/components/admin/NotificationCenter';
-import { Loader2 } from 'lucide-react';
+import CommandPalette from '@/components/admin/CommandPalette';
+import { Loader2, Search } from 'lucide-react';
 import logoDark from '@/assets/logo-new.png';
 
 const AdminLayout = () => {
@@ -46,9 +47,23 @@ const AdminLayout = () => {
               <img src={logoDark} alt="Kalēa" className="h-7" />
               <span className="text-[13px] tracking-wide" style={{ color: '#8A7060' }}>/ Dashboard</span>
               <div className="flex-1" />
+              <button
+                onClick={() => {
+                  const ev = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+                  window.dispatchEvent(ev);
+                }}
+                className="hidden md:inline-flex items-center gap-2 px-3 h-9 rounded-md border text-[12px] text-[#8A7060] hover:bg-[rgba(200,169,110,0.08)] transition-colors"
+                style={{ borderColor: 'rgba(59,35,20,0.12)' }}
+                title="Cerca (⌘K)"
+              >
+                <Search className="w-3.5 h-3.5" />
+                <span>Cerca…</span>
+                <kbd className="ml-2 px-1.5 py-0.5 text-[10px] rounded bg-[rgba(59,35,20,0.06)] text-[#8A7060]">⌘K</kbd>
+              </button>
               <NotificationCenter />
             </div>
           </header>
+          <CommandPalette />
           <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: '#F5F0EA' }}>
             <Outlet />
           </div>

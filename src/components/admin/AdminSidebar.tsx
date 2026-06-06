@@ -200,10 +200,10 @@ const AdminSidebar = () => {
     items.filter((i) => isAdminRole || !i.adminOnly);
 
   return (
-    <Sidebar className="border-r" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
+    <Sidebar collapsible="icon" className="border-r" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
       <SidebarContent className="pt-4 overflow-y-auto" style={{ background: '#FFFFFF' }}>
-        {/* Brand wordmark, no box */}
-        <div className="px-5 pb-4 mb-2">
+        {/* Brand wordmark, no box — hidden when collapsed */}
+        <div className="px-5 pb-4 mb-2 group-data-[collapsible=icon]:hidden">
           <span
             className="font-heading font-semibold text-[20px] tracking-tight"
             style={{ color: '#3B2314' }}
@@ -224,6 +224,7 @@ const AdminSidebar = () => {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         onClick={() => handleNavigate(item.url)}
+                        tooltip={item.title}
                         className="h-10 px-5 rounded-none transition-colors duration-150"
                         style={{
                           borderLeft: active ? '3px solid #C8A96E' : '3px solid transparent',
@@ -250,6 +251,7 @@ const AdminSidebar = () => {
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton
+                          tooltip={group.label}
                           className="h-10 px-5 rounded-none w-full justify-between transition-colors duration-150"
                           style={{
                             borderLeft: groupActive ? '3px solid #C8A96E' : '3px solid transparent',
@@ -267,7 +269,7 @@ const AdminSidebar = () => {
                           />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
-                      <CollapsibleContent>
+                      <CollapsibleContent className="group-data-[collapsible=icon]:hidden">
                         <SidebarMenu className="space-y-0">
                           {visibleItems.map((sub) => {
                             const subActive = isActive(sub.url);
@@ -300,7 +302,7 @@ const AdminSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter className="p-4" style={{ borderTop: '1px solid rgba(59,35,20,0.10)', background: '#FFFFFF' }}>
-        <div className="px-1 mb-3">
+        <div className="px-1 mb-3 group-data-[collapsible=icon]:hidden">
           <div className="text-[12px] truncate" style={{ color: '#1A1008' }}>
             {user?.email}
           </div>
@@ -315,13 +317,14 @@ const AdminSidebar = () => {
         </div>
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-2 px-1 py-1 text-[13px] transition-colors duration-150"
+          title="Esci"
+          className="flex items-center gap-2 px-1 py-1 text-[13px] transition-colors duration-150 group-data-[collapsible=icon]:justify-center"
           style={{ color: '#8A7060', background: 'transparent', border: 'none' }}
           onMouseEnter={(e) => (e.currentTarget.style.color = '#3B2314')}
           onMouseLeave={(e) => (e.currentTarget.style.color = '#8A7060')}
         >
           <LogOut className="w-4 h-4" />
-          Esci
+          <span className="group-data-[collapsible=icon]:hidden">Esci</span>
         </button>
       </SidebarFooter>
     </Sidebar>
