@@ -15,6 +15,7 @@ import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { AutoFitText } from '@/components/admin/AutoFitText';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import SalesTrendChart from '@/components/admin/SalesTrendChart';
 
 interface DashboardData {
   // Customers by status
@@ -400,6 +401,9 @@ const AdminOverview = () => {
           />
         </div>
       </div>
+
+      {/* TREND CHART */}
+      <SalesTrendChart />
 
       {/* ATTIVITÀ Section */}
       <div>
