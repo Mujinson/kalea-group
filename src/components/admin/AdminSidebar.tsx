@@ -200,7 +200,7 @@ const AdminSidebar = () => {
     items.filter((i) => isAdminRole || !i.adminOnly);
 
   return (
-    <Sidebar className="border-r" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
+    <Sidebar collapsible="icon" className="border-r" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
       <SidebarContent className="pt-4 overflow-y-auto" style={{ background: '#FFFFFF' }}>
         {/* Brand wordmark, no box */}
         <div className="px-5 pb-4 mb-2">
