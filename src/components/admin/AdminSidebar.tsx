@@ -202,8 +202,8 @@ const AdminSidebar = () => {
   return (
     <Sidebar collapsible="icon" className="border-r" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
       <SidebarContent className="pt-4 overflow-y-auto" style={{ background: '#FFFFFF' }}>
-        {/* Brand wordmark, no box */}
-        <div className="px-5 pb-4 mb-2">
+        {/* Brand wordmark, no box — hidden when collapsed */}
+        <div className="px-5 pb-4 mb-2 group-data-[collapsible=icon]:hidden">
           <span
             className="font-heading font-semibold text-[20px] tracking-tight"
             style={{ color: '#3B2314' }}
@@ -224,6 +224,7 @@ const AdminSidebar = () => {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         onClick={() => handleNavigate(item.url)}
+                        tooltip={item.title}
                         className="h-10 px-5 rounded-none transition-colors duration-150"
                         style={{
                           borderLeft: active ? '3px solid #C8A96E' : '3px solid transparent',
@@ -250,6 +251,7 @@ const AdminSidebar = () => {
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton
+                          tooltip={group.label}
                           className="h-10 px-5 rounded-none w-full justify-between transition-colors duration-150"
                           style={{
                             borderLeft: groupActive ? '3px solid #C8A96E' : '3px solid transparent',
@@ -267,7 +269,7 @@ const AdminSidebar = () => {
                           />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
-                      <CollapsibleContent>
+                      <CollapsibleContent className="group-data-[collapsible=icon]:hidden">
                         <SidebarMenu className="space-y-0">
                           {visibleItems.map((sub) => {
                             const subActive = isActive(sub.url);
