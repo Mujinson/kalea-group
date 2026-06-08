@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, DataTableColumn } from '@/components/admin/DataTable';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Plus, Send, FileText, CheckCircle2, X, Trash2, Eye, Edit, Search, MoreVertical, Download } from 'lucide-react';
 import { format } from 'date-fns';
@@ -468,91 +468,97 @@ const AdminQuotes = () => {
       </Card>
 
       {/* Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Codice</TableHead>
-                <TableHead>Cliente</TableHead>
-                <TableHead>Stato</TableHead>
-                <TableHead>Responsabile</TableHead>
-                <TableHead>Data</TableHead>
-                <TableHead className="text-right">Totale</TableHead>
-                <TableHead className="w-10"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow><TableCell colSpan={7} className="text-center py-8">Caricamento...</TableCell></TableRow>
-              ) : filteredQuotes.length > 0 ? (
-                filteredQuotes.map(quote => (
-                  <TableRow
-                    key={quote.id}
-                    className="cursor-pointer hover:bg-muted/50"
-                    onClick={() => navigate(`/admin/preventivi/modifica?edit=${quote.id}`)}
-                  >
-                    <TableCell className="font-mono text-xs text-primary">
-                      {quote.quote_number || `#${quote.id.slice(0,8)}`}
-                    </TableCell>
-                    <TableCell className="font-medium">{getCustomerName(quote)}</TableCell>
-                    <TableCell>{getStatusBadge(quote.status)}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{quote.created_by || '-'}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {format(new Date(quote.created_at), 'dd MMM yyyy', { locale: it })}
-                    </TableCell>
-                    <TableCell className="text-right font-medium">
-                      €{(quote.total_amount || 0).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={e => { e.stopPropagation(); navigate(`/admin/preventivi/modifica?edit=${quote.id}`); }}>
-                            <Eye className="w-4 h-4 mr-2" />Apri
-                          </DropdownMenuItem>
-                          {quote.status === 'draft' && (
-                            <DropdownMenuItem onClick={e => { e.stopPropagation(); sendQuoteByEmail(quote); }}>
-                              <Send className="w-4 h-4 mr-2" />Invia
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          {QUOTE_STATUSES.filter(s => s.value !== quote.status).map(s => (
-                            <DropdownMenuItem key={s.value} onClick={e => {
-                              e.stopPropagation();
-                              if (s.value === 'converted') {
-                                convertToSale(quote);
-                              } else {
-                                updateQuoteStatus(quote.id, s.value);
-                              }
-                            }}>
-                              Segna come: {s.label}
-                            </DropdownMenuItem>
-                          ))}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive" onClick={e => { e.stopPropagation(); handleDeleteQuote(quote); }}>
-                            <Trash2 className="w-4 h-4 mr-2" />Elimina
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                    {searchTerm || statusFilter !== 'all' ? 'Nessun preventivo trovato' : 'Nessun preventivo'}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <DataTable
+        data={filteredQuotes}
+        loading={loading}
+        searchable={false}
+        emptyTitle={searchTerm || statusFilter !== 'all' ? 'Nessun preventivo trovato' : 'Nessun preventivo'}
+        emptyDescription="Crea un nuovo preventivo per iniziare."
+        onRowClick={(q) => navigate(`/admin/preventivi/modifica?edit=${q.id}`)}
+        columns={[
+          {
+            key: 'quote_number',
+            header: 'Codice',
+            sortable: true,
+            cell: (q) => (
+              <span className="font-mono text-xs text-primary">{q.quote_number || `#${q.id.slice(0, 8)}`}</span>
+            ),
+          },
+          {
+            key: 'customer',
+            header: 'Cliente',
+            sortable: true,
+            accessor: (q) => getCustomerName(q),
+            cell: (q) => <span className="font-medium">{getCustomerName(q)}</span>,
+          },
+          { key: 'status', header: 'Stato', sortable: true, cell: (q) => getStatusBadge(q.status) },
+          {
+            key: 'created_by',
+            header: 'Responsabile',
+            cell: (q) => <span className="text-sm text-muted-foreground">{q.created_by || '—'}</span>,
+          },
+          {
+            key: 'created_at',
+            header: 'Data',
+            sortable: true,
+            accessor: (q) => new Date(q.created_at).getTime(),
+            cell: (q) => (
+              <span className="text-sm text-muted-foreground">
+                {format(new Date(q.created_at), 'dd MMM yyyy', { locale: it })}
+              </span>
+            ),
+          },
+          {
+            key: 'total_amount',
+            header: 'Totale',
+            sortable: true,
+            className: 'text-right',
+            accessor: (q) => Number(q.total_amount) || 0,
+            cell: (q) => (
+              <span className="font-medium">
+                €{(q.total_amount || 0).toLocaleString('it-IT', { minimumFractionDigits: 2 })}
+              </span>
+            ),
+          },
+          {
+            key: 'actions',
+            header: '',
+            cell: (quote) => (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); navigate(`/admin/preventivi/modifica?edit=${quote.id}`); }}>
+                    <Eye className="w-4 h-4 mr-2" />Apri
+                  </DropdownMenuItem>
+                  {quote.status === 'draft' && (
+                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); sendQuoteByEmail(quote); }}>
+                      <Send className="w-4 h-4 mr-2" />Invia
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  {QUOTE_STATUSES.filter(s => s.value !== quote.status).map(s => (
+                    <DropdownMenuItem key={s.value} onClick={(e) => {
+                      e.stopPropagation();
+                      if (s.value === 'converted') convertToSale(quote);
+                      else updateQuoteStatus(quote.id, s.value);
+                    }}>
+                      Segna come: {s.label}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="text-destructive" onClick={(e) => { e.stopPropagation(); handleDeleteQuote(quote); }}>
+                    <Trash2 className="w-4 h-4 mr-2" />Elimina
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ),
+          },
+        ] as DataTableColumn<Quote>[]}
+      />
     </div>
   );
 };

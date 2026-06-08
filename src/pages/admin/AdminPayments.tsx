@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, DataTableColumn } from '@/components/admin/DataTable';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
@@ -365,46 +365,56 @@ const AdminPayments = () => {
       </Card>
 
       {/* Payments Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Storico Pagamenti</CardTitle>
-          <CardDescription>{payments.length} pagamenti registrati</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p>Caricamento...</p>
-          ) : payments.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">Nessun pagamento registrato</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Data</TableHead>
-                  <TableHead className="text-right">Importo</TableHead>
-                  <TableHead>Note</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {payments.map((payment) => (
-                  <TableRow key={payment.id}>
-                    <TableCell>{format(new Date(payment.payment_date), 'dd MMM yyyy', { locale: it })}</TableCell>
-                    <TableCell className="text-right font-medium text-green-600">
-                      {formatCurrency(Number(payment.payment_amount))}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{payment.notes || '-'}</TableCell>
-                    <TableCell>
-                      <Button variant="ghost" size="icon" onClick={() => handleDeletePayment(payment.id)}>
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
+      <div>
+        <div className="mb-3">
+          <h3 className="text-lg font-semibold">Storico Pagamenti</h3>
+          <p className="text-sm text-muted-foreground">{payments.length} pagamenti registrati</p>
+        </div>
+        <DataTable
+          data={payments}
+          loading={loading}
+          searchPlaceholder="Cerca per note o importo…"
+          searchKeys={['notes', 'payment_amount']}
+          emptyTitle="Nessun pagamento"
+          emptyDescription="Non ci sono pagamenti registrati."
+          columns={[
+            {
+              key: 'payment_date',
+              header: 'Data',
+              sortable: true,
+              accessor: (p) => new Date(p.payment_date).getTime(),
+              cell: (p) => format(new Date(p.payment_date), 'dd MMM yyyy', { locale: it }),
+            },
+            {
+              key: 'payment_amount',
+              header: 'Importo',
+              sortable: true,
+              className: 'text-right',
+              accessor: (p) => Number(p.payment_amount),
+              cell: (p) => (
+                <span className="font-medium text-green-600">{formatCurrency(Number(p.payment_amount))}</span>
+              ),
+            },
+            { key: 'notes', header: 'Note', cell: (p) => p.notes || '—' },
+            {
+              key: 'actions',
+              header: '',
+              cell: (p) => (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeletePayment(p.id);
+                  }}
+                >
+                  <Trash2 className="w-4 h-4 text-destructive" />
+                </Button>
+              ),
+            },
+          ] as DataTableColumn<Payment>[]}
+        />
+      </div>
     </div>
   );
 };

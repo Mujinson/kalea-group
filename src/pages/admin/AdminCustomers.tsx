@@ -428,64 +428,65 @@ const AdminCustomers = () => {
         )}
       </div>
 
-      {/* Customer List - Mobile Cards / Desktop Table */}
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">{filteredCustomers.length} clienti</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p className="text-center py-8">Caricamento...</p>
-          ) : filteredCustomers.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">Nessun cliente trovato</p>
-          ) : (
-            <div className="space-y-2">
-              {filteredCustomers.map((customer) => {
-                const statusInfo = getStatusInfo(customer.status);
-                return (
-                  <div 
-                    key={customer.id}
-                    className="p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                    onClick={() => { setSelectedCustomerId(customer.id); setDetailOpen(true); }}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium truncate">{getCustomerName(customer)}</span>
-                          <Badge variant="outline" className="text-xs shrink-0">{getTypeLabel(customer.customer_type)}</Badge>
-                          <Badge 
-                            variant="secondary" 
-                            className={`text-xs shrink-0 ${
-                              statusInfo.value === 'opportunity' ? 'bg-yellow-100 text-yellow-800' :
-                              statusInfo.value === 'signed' ? 'bg-green-100 text-green-800' :
-                              'bg-blue-100 text-blue-800'
-                            }`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full mr-1 ${statusInfo.color}`} />
-                            {statusInfo.label}
-                          </Badge>
-                        </div>
-                        <div className="text-sm text-muted-foreground mt-1 flex flex-wrap gap-x-3 gap-y-1">
-                          {customer.email && <span className="truncate">{customer.email}</span>}
-                          {customer.city && <span>{customer.city}</span>}
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0">
-                        {(customer.total_value || 0) > 0 && (
-                          <div className="font-bold">€{customer.total_value?.toLocaleString()}</div>
-                        )}
-                        <div className="text-xs text-muted-foreground">
-                          {format(new Date(customer.created_at), 'dd MMM', { locale: it })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      {/* Customer List */}
+      <div className="mb-2 text-sm text-muted-foreground">{filteredCustomers.length} clienti</div>
+      <DataTable
+        data={filteredCustomers}
+        loading={loading}
+        searchable={false}
+        emptyTitle="Nessun cliente trovato"
+        emptyDescription="Modifica i filtri o crea un nuovo cliente."
+        onRowClick={(c) => { setSelectedCustomerId(c.id); setDetailOpen(true); }}
+        columns={[
+          {
+            key: 'name',
+            header: 'Cliente',
+            sortable: true,
+            accessor: (c) => getCustomerName(c),
+            cell: (c) => <span className="font-medium">{getCustomerName(c)}</span>,
+          },
+          {
+            key: 'customer_type',
+            header: 'Tipo',
+            sortable: true,
+            cell: (c) => <Badge variant="outline" className="text-xs">{getTypeLabel(c.customer_type)}</Badge>,
+          },
+          {
+            key: 'status',
+            header: 'Stato',
+            sortable: true,
+            cell: (c) => {
+              const s = getStatusInfo(c.status);
+              return (
+                <Badge variant="secondary" className={`text-xs ${
+                  s.value === 'opportunity' ? 'bg-yellow-100 text-yellow-800' :
+                  s.value === 'signed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${s.color}`} />
+                  {s.label}
+                </Badge>
+              );
+            },
+          },
+          { key: 'email', header: 'Email', cell: (c) => c.email || '—' },
+          { key: 'city', header: 'Città', sortable: true, cell: (c) => c.city || '—' },
+          {
+            key: 'total_value',
+            header: 'Valore',
+            sortable: true,
+            className: 'text-right',
+            accessor: (c) => Number(c.total_value) || 0,
+            cell: (c) => (c.total_value || 0) > 0 ? <span className="font-semibold">€{c.total_value?.toLocaleString()}</span> : '—',
+          },
+          {
+            key: 'created_at',
+            header: 'Data',
+            sortable: true,
+            accessor: (c) => new Date(c.created_at).getTime(),
+            cell: (c) => <span className="text-xs text-muted-foreground">{format(new Date(c.created_at), 'dd MMM yyyy', { locale: it })}</span>,
+          },
+        ] as DataTableColumn<Customer>[]}
+      />
 
       <CustomerDetailSheet 
         customerId={selectedCustomerId}
