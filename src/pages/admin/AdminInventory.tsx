@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable, DataTableColumn } from '@/components/admin/DataTable';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -491,59 +491,83 @@ const AdminInventory = () => {
         </TabsContent>
 
         <TabsContent value="movimenti">
-          <Card>
-            <CardHeader>
-              <CardTitle>Movimenti Magazzino</CardTitle>
-              <CardDescription>{inventory.length} movimenti registrati</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <p>Caricamento...</p>
-              ) : inventory.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">Nessun movimento registrato</p>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Data</TableHead>
-                      <TableHead>Tipo</TableHead>
-                      <TableHead>Prodotto</TableHead>
-                      <TableHead>Colore</TableHead>
-                      <TableHead className="text-right">Quantità</TableHead>
-                      <TableHead className="text-right">Costo/mq</TableHead>
-                      <TableHead className="text-right">Valore</TableHead>
-                      <TableHead>Note</TableHead>
-                      <TableHead></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {inventory.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell>{format(new Date(item.movement_date), 'dd MMM yyyy', { locale: it })}</TableCell>
-                        <TableCell>
-                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs ${item.movement_type === 'IN' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                            {item.movement_type === 'IN' ? <ArrowUpCircle className="w-3 h-3" /> : <ArrowDownCircle className="w-3 h-3" />}
-                            {item.movement_type}
-                          </span>
-                        </TableCell>
-                        <TableCell>{item.product_type}</TableCell>
-                        <TableCell>{item.color || '-'}</TableCell>
-                        <TableCell className="text-right">{Number(item.quantity_sqm).toFixed(0)} mq</TableCell>
-                        <TableCell className="text-right">{formatCurrency(Number(item.purchase_cost))}</TableCell>
-                        <TableCell className="text-right font-medium">{formatCurrency(Number(item.quantity_sqm) * Number(item.purchase_cost))}</TableCell>
-                        <TableCell className="text-muted-foreground">{item.notes || '-'}</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" size="icon" onClick={() => handleDelete(item.id)}>
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </CardContent>
-          </Card>
+          <div className="mb-3">
+            <h3 className="text-lg font-semibold">Movimenti Magazzino</h3>
+            <p className="text-sm text-muted-foreground">{inventory.length} movimenti registrati</p>
+          </div>
+          <DataTable
+            data={inventory}
+            loading={loading}
+            searchPlaceholder="Cerca per prodotto, colore o note…"
+            searchKeys={['product_type', 'color', 'notes']}
+            emptyTitle="Nessun movimento"
+            emptyDescription="Non sono presenti movimenti di magazzino."
+            columns={[
+              {
+                key: 'movement_date',
+                header: 'Data',
+                sortable: true,
+                accessor: (i) => new Date(i.movement_date).getTime(),
+                cell: (i) => format(new Date(i.movement_date), 'dd MMM yyyy', { locale: it }),
+              },
+              {
+                key: 'movement_type',
+                header: 'Tipo',
+                sortable: true,
+                cell: (i) => (
+                  <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs ${i.movement_type === 'IN' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {i.movement_type === 'IN' ? <ArrowUpCircle className="w-3 h-3" /> : <ArrowDownCircle className="w-3 h-3" />}
+                    {i.movement_type}
+                  </span>
+                ),
+              },
+              { key: 'product_type', header: 'Prodotto', sortable: true },
+              { key: 'color', header: 'Colore', cell: (i) => i.color || '—' },
+              {
+                key: 'quantity_sqm',
+                header: 'Quantità',
+                sortable: true,
+                className: 'text-right',
+                accessor: (i) => Number(i.quantity_sqm),
+                cell: (i) => `${Number(i.quantity_sqm).toFixed(0)} mq`,
+              },
+              {
+                key: 'purchase_cost',
+                header: 'Costo/mq',
+                sortable: true,
+                className: 'text-right',
+                accessor: (i) => Number(i.purchase_cost),
+                cell: (i) => formatCurrency(Number(i.purchase_cost)),
+              },
+              {
+                key: 'value',
+                header: 'Valore',
+                sortable: true,
+                className: 'text-right',
+                accessor: (i) => Number(i.quantity_sqm) * Number(i.purchase_cost),
+                cell: (i) => (
+                  <span className="font-medium">{formatCurrency(Number(i.quantity_sqm) * Number(i.purchase_cost))}</span>
+                ),
+              },
+              { key: 'notes', header: 'Note', cell: (i) => i.notes || '—' },
+              {
+                key: 'actions',
+                header: '',
+                cell: (i) => (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(i.id);
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                  </Button>
+                ),
+              },
+            ] as DataTableColumn<InventoryItem>[]}
+          />
         </TabsContent>
       </Tabs>
     </div>
