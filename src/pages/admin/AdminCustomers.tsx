@@ -12,6 +12,7 @@ import { Plus, Search, Eye, Users, TrendingUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import CustomerDetailSheet from '@/components/admin/CustomerDetailSheet';
+import { DataTable, DataTableColumn } from '@/components/admin/DataTable';
 import { ITALIAN_REGIONS, getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
