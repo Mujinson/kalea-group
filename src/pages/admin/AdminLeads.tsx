@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Search, Download, Plus, MoreVertical, Pencil, Eye, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { DataTable } from "@/components/admin/DataTable";
 import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
 import { fetchAllRows } from "@/lib/fetchAllRows";
@@ -399,64 +400,57 @@ const AdminLeads = () => {
       </Card>
 
       {/* Table */}
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Referente</TableHead>
-                <TableHead>Azienda</TableHead>
-                <TableHead>Tipologia</TableHead>
-                <TableHead>Stato</TableHead>
-                <TableHead>Commerciale</TableHead>
-                <TableHead>Creato il</TableHead>
-                <TableHead className="w-10"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow><TableCell colSpan={7} className="text-center py-8">Caricamento...</TableCell></TableRow>
-              ) : filteredLeads && filteredLeads.length > 0 ? (
-                filteredLeads.map(lead => (
-                  <TableRow key={lead.id} className="cursor-pointer hover:bg-muted/50" onClick={() => setDetailLead(lead)}>
-                    <TableCell className="font-medium">{lead.name}</TableCell>
-                    <TableCell>{lead.company_name || '-'}</TableCell>
-                    <TableCell>{(lead as any).lead_type ? <Badge variant="outline" className="text-xs">{LEAD_TYPES.find(t => t.value === (lead as any).lead_type)?.label || (lead as any).lead_type}</Badge> : '-'}</TableCell>
-                    <TableCell>{getStatusBadge(lead.status)}</TableCell>
-                    <TableCell>{getSalespersonBadge(lead.assigned_salesperson_id)}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">
-                      {format(new Date(lead.created_at), "dd MMM yyyy · HH:mm", { locale: it })}
-                    </TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); openEdit(lead); }}>
-                            <Pencil className="w-4 h-4 mr-2" />Modifica
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setDetailLead(lead); }}>
-                            <Eye className="w-4 h-4 mr-2" />Dettaglio
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                    {searchTerm ? "Nessun lead trovato" : "Nessun lead registrato"}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <DataTable
+        data={filteredLeads || []}
+        loading={isLoading}
+        searchable={false}
+        emptyTitle={searchTerm ? "Nessun lead trovato" : "Nessun lead registrato"}
+        emptyDescription="Modifica i filtri o crea un nuovo lead per iniziare."
+        onRowClick={(lead) => setDetailLead(lead)}
+        columns={[
+          { key: 'name', header: 'Referente', sortable: true, cell: (l) => <span className="font-medium">{l.name}</span> },
+          { key: 'company_name', header: 'Azienda', sortable: true, cell: (l) => l.company_name || '—' },
+          {
+            key: 'lead_type',
+            header: 'Tipologia',
+            cell: (l) => (l as any).lead_type
+              ? <Badge variant="outline" className="text-xs">{LEAD_TYPES.find(t => t.value === (l as any).lead_type)?.label || (l as any).lead_type}</Badge>
+              : '—',
+          },
+          { key: 'status', header: 'Stato', sortable: true, cell: (l) => getStatusBadge(l.status) },
+          { key: 'assigned_salesperson_id', header: 'Commerciale', cell: (l) => getSalespersonBadge(l.assigned_salesperson_id) },
+          {
+            key: 'created_at',
+            header: 'Creato il',
+            sortable: true,
+            accessor: (l) => new Date(l.created_at).getTime(),
+            cell: (l) => <span className="text-[#8A7060] text-sm">{format(new Date(l.created_at), "dd MMM yyyy · HH:mm", { locale: it })}</span>,
+          },
+          {
+            key: 'actions',
+            header: '',
+            className: 'w-10',
+            cell: (lead) => (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); openEdit(lead); }}>
+                    <Pencil className="w-4 h-4 mr-2" />Modifica
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setDetailLead(lead); }}>
+                    <Eye className="w-4 h-4 mr-2" />Dettaglio
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ),
+          },
+        ]}
+      />
+
 
       {/* Lead Form Dialog (shared for create & edit) */}
       {[
