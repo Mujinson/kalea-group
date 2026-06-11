@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { DataTable } from '@/components/admin/DataTable';
 
 // Constants
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
