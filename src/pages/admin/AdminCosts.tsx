@@ -563,32 +563,50 @@ const AdminCosts = () => {
               </DialogContent>
             </Dialog>
           </div>
-          <div className="space-y-2">
-            {variableCosts.length === 0 ? <p className="text-muted-foreground text-center py-8 text-sm">Nessun costo variabile</p> : variableCosts.map((cost) => (
-              <Card key={cost.id}><CardContent className="p-3">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="font-medium text-sm truncate">{cost.description}</h4>
-                      <Badge variant={cost.is_paid ? 'default' : 'destructive'} className="text-xs">{cost.is_paid ? 'Pagato' : 'Da pagare'}</Badge>
-                    </div>
-                    <div className="flex flex-wrap gap-1 mt-1 text-xs text-muted-foreground">
-                      <span>{getCategoryLabel(cost.category, VARIABLE_COST_CATEGORIES)}</span>
-                      <span>•</span>
-                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(cost.cost_date).toLocaleDateString('it-IT')}</span>
-                    </div>
+          <DataTable
+            data={variableCosts}
+            searchPlaceholder="Cerca per descrizione o categoria…"
+            searchKeys={['description', 'category', 'notes']}
+            emptyTitle="Nessun costo variabile"
+            emptyDescription="Aggiungi il primo costo variabile."
+            columns={[
+              { key: 'description', header: 'Descrizione', sortable: true, cell: (c) => <span className="font-medium">{c.description}</span> },
+              { key: 'category', header: 'Categoria', sortable: true, cell: (c) => getCategoryLabel(c.category, VARIABLE_COST_CATEGORIES) },
+              {
+                key: 'cost_date',
+                header: 'Data',
+                sortable: true,
+                accessor: (c) => new Date(c.cost_date).getTime(),
+                cell: (c) => <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(c.cost_date).toLocaleDateString('it-IT')}</span>,
+              },
+              {
+                key: 'is_paid',
+                header: 'Stato',
+                sortable: true,
+                accessor: (c) => (c.is_paid ? 1 : 0),
+                cell: (c) => <Badge variant={c.is_paid ? 'default' : 'destructive'} className="text-xs">{c.is_paid ? 'Pagato' : 'Da pagare'}</Badge>,
+              },
+              {
+                key: 'amount',
+                header: 'Importo',
+                sortable: true,
+                className: 'text-right font-semibold',
+                accessor: (c) => Number(c.amount),
+                cell: (c) => formatCurrency(c.amount),
+              },
+              {
+                key: 'actions',
+                header: '',
+                cell: (c) => (
+                  <div className="flex gap-1 justify-end" onClick={(e) => e.stopPropagation()}>
+                    <Button variant="ghost" size="sm" onClick={() => editVariableCost(c)}><Edit className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="sm" onClick={() => deleteVariableCost(c.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                   </div>
-                  <div className="flex items-center justify-between md:justify-end gap-2">
-                    <span className="font-bold">{formatCurrency(cost.amount)}</span>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => editVariableCost(cost)}><Edit className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" onClick={() => deleteVariableCost(cost.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent></Card>
-            ))}
-          </div>
+                ),
+              },
+            ]}
+          />
+
         </TabsContent>
 
         {/* COGS Tab */}
