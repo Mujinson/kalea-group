@@ -18,6 +18,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Search, Download, Plus, MoreVertical, Pencil, Eye, FileText } from "lucide-react";
 import { toast } from "sonner";
+import { DataTable } from "@/components/admin/DataTable";
 import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
 import { fetchAllRows } from "@/lib/fetchAllRows";
