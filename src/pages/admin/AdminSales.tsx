@@ -946,76 +946,86 @@ const AdminSales = () => {
       </div>
 
       {/* Sales Table */}
-      <Card>
-        <CardHeader><CardTitle>Storico Vendite</CardTitle><CardDescription>{sales.length} vendite registrate</CardDescription></CardHeader>
-        <CardContent className="overflow-x-auto">
-          {loading ? (<p>Caricamento...</p>) : sales.length === 0 ? (<p className="text-muted-foreground text-center py-8">Nessuna vendita registrata</p>) : (
-            <div className="space-y-3 sm:hidden">
-              {sales.map((sale) => (
-                <div key={sale.id} className="p-3 border rounded-lg space-y-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="font-medium">{sale.customer_name || '-'}</div>
-                      <div className="text-sm text-muted-foreground">{format(new Date(sale.sale_date), 'dd MMM yyyy', { locale: it })}</div>
-                    </div>
-                    <Badge variant={sale.is_paid ? "default" : "secondary"}>{sale.is_paid ? 'Pagato' : 'Non pagato'}</Badge>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>{sale.product_type} {sale.color && `(${sale.color})`}</span>
-                    <span>{Number(sale.quantity_sqm).toFixed(0)} mq</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="font-bold">{formatCurrency(Number(sale.quantity_sqm) * Number(sale.sale_price))}</span>
-                    <span className="text-green-600">{formatCurrency(Number(sale.margin_amount) || 0)}</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => viewSaleDetails(sale)}><Eye className="w-4 h-4" /></Button>
-                    <Button size="sm" variant="outline" onClick={() => editSale(sale)}><Pencil className="w-4 h-4" /></Button>
-                    <Button size="sm" variant="outline" onClick={() => togglePaidStatus(sale)}>{sale.is_paid ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />}</Button>
-                    <Button size="sm" variant="ghost" onClick={() => handleDelete(sale.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-          <Table className="hidden sm:table">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Data</TableHead>
-                <TableHead>Prodotto</TableHead>
-                <TableHead>Cliente</TableHead>
-                <TableHead className="text-right">Quantità</TableHead>
-                <TableHead className="text-right">Totale</TableHead>
-                <TableHead className="text-right">Margine</TableHead>
-                <TableHead>Stato</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {sales.map((sale) => (
-                <TableRow key={sale.id}>
-                  <TableCell>{format(new Date(sale.sale_date), 'dd MMM yyyy', { locale: it })}</TableCell>
-                  <TableCell>{sale.product_type}{sale.color && <span className="text-muted-foreground ml-1">({sale.color})</span>}</TableCell>
-                  <TableCell>{sale.customer_name || '-'}</TableCell>
-                  <TableCell className="text-right">{Number(sale.quantity_sqm).toFixed(0)} mq</TableCell>
-                  <TableCell className="text-right font-medium">{formatCurrency(Number(sale.quantity_sqm) * Number(sale.sale_price))}</TableCell>
-                  <TableCell className="text-right text-green-600">{formatCurrency(Number(sale.margin_amount) || 0)}</TableCell>
-                  <TableCell>
-                    <Button variant={sale.is_paid ? "default" : "outline"} size="sm" onClick={() => togglePaidStatus(sale)}>
-                      {sale.is_paid ? <><Check className="w-3 h-3 mr-1" />Pagato</> : 'Non pagato'}
-                    </Button>
-                  </TableCell>
-                  <TableCell className="flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => viewSaleDetails(sale)}><Eye className="w-4 h-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => editSale(sale)}><Pencil className="w-4 h-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(sale.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <DataTable
+        data={sales}
+        loading={loading}
+        searchPlaceholder="Cerca per cliente, prodotto, colore…"
+        searchKeys={['customer_name', 'product_type', 'color']}
+        emptyTitle="Nessuna vendita"
+        emptyDescription="Non sono ancora state registrate vendite."
+        columns={[
+          {
+            key: 'sale_date',
+            header: 'Data',
+            sortable: true,
+            accessor: (s) => new Date(s.sale_date).getTime(),
+            cell: (s) => format(new Date(s.sale_date), 'dd MMM yyyy', { locale: it }),
+          },
+          {
+            key: 'product_type',
+            header: 'Prodotto',
+            sortable: true,
+            cell: (s) => (
+              <span>
+                {s.product_type}
+                {s.color && <span className="text-[#8A7060] ml-1">({s.color})</span>}
+              </span>
+            ),
+          },
+          { key: 'customer_name', header: 'Cliente', sortable: true, cell: (s) => s.customer_name || '—' },
+          {
+            key: 'quantity_sqm',
+            header: 'Quantità',
+            sortable: true,
+            className: 'text-right',
+            accessor: (s) => Number(s.quantity_sqm),
+            cell: (s) => `${Number(s.quantity_sqm).toFixed(0)} mq`,
+          },
+          {
+            key: 'total',
+            header: 'Totale',
+            sortable: true,
+            className: 'text-right font-medium',
+            accessor: (s) => Number(s.quantity_sqm) * Number(s.sale_price),
+            cell: (s) => formatCurrency(Number(s.quantity_sqm) * Number(s.sale_price)),
+          },
+          {
+            key: 'margin_amount',
+            header: 'Margine',
+            sortable: true,
+            className: 'text-right text-green-600',
+            accessor: (s) => Number(s.margin_amount) || 0,
+            cell: (s) => formatCurrency(Number(s.margin_amount) || 0),
+          },
+          {
+            key: 'is_paid',
+            header: 'Stato',
+            sortable: true,
+            accessor: (s) => (s.is_paid ? 1 : 0),
+            cell: (s) => (
+              <Button
+                variant={s.is_paid ? 'default' : 'outline'}
+                size="sm"
+                onClick={(e) => { e.stopPropagation(); togglePaidStatus(s); }}
+              >
+                {s.is_paid ? <><Check className="w-3 h-3 mr-1" />Pagato</> : 'Non pagato'}
+              </Button>
+            ),
+          },
+          {
+            key: 'actions',
+            header: '',
+            cell: (s) => (
+              <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+                <Button variant="ghost" size="icon" onClick={() => viewSaleDetails(s)}><Eye className="w-4 h-4" /></Button>
+                <Button variant="ghost" size="icon" onClick={() => editSale(s)}><Pencil className="w-4 h-4" /></Button>
+                <Button variant="ghost" size="icon" onClick={() => handleDelete(s.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+              </div>
+            ),
+          },
+        ]}
+      />
+
 
       {/* Sale Detail Dialog */}
       <Dialog open={detailDialogOpen} onOpenChange={setDetailDialogOpen}>
