@@ -86,6 +86,10 @@ import CostoOperaio from "./pages/admin/strumenti/CostoOperaio";
 import Sostenibilita from "./pages/admin/strumenti/Sostenibilita";
 import PricingFlow from "./pages/admin/strumenti/PricingFlow";
 import PricingKronos from "./pages/admin/strumenti/PricingKronos";
+import PricingBerryAlloc from "./pages/admin/strumenti/PricingBerryAlloc";
+import PricingParquet from "./pages/admin/strumenti/PricingParquet";
+import PricingSignature from "./pages/admin/strumenti/PricingSignature";
+import PricingExterno from "./pages/admin/strumenti/PricingExterno";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -175,6 +179,10 @@ const App = () => (
                 <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />
                 <Route path="strumenti/pricing-flow" element={<PricingFlow />} />
                 <Route path="strumenti/pricing-kronos" element={<PricingKronos />} />
+                <Route path="strumenti/pricing-berryalloc" element={<PricingBerryAlloc />} />
+                <Route path="strumenti/pricing-parquet" element={<PricingParquet />} />
+                <Route path="strumenti/pricing-signature" element={<PricingSignature />} />
+                <Route path="strumenti/pricing-externo" element={<PricingExterno />} />
 
                 {/* English aliases (keep compatibility) */}
                 <Route path="sales" element={<AdminSales />} />
