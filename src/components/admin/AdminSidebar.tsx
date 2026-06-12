@@ -39,6 +39,11 @@ import {
   Map,
   ListOrdered,
   ClipboardList,
+  Wrench,
+  Calculator,
+  LineChart,
+  Tag,
+  Layers,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -152,6 +157,20 @@ const menuStructure: MenuEntry[] = [
       items: [
         { title: 'Costi', url: '/admin/costi', icon: DollarSign, adminOnly: true },
         { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard, adminOnly: true },
+      ],
+    },
+  },
+  {
+    type: 'group',
+    group: {
+      label: 'Strumenti',
+      icon: Wrench,
+      adminOnly: true,
+      items: [
+        { title: 'Costo Operaio', url: '/admin/strumenti/costo-operaio', icon: Calculator, adminOnly: true },
+        { title: 'Sostenibilità', url: '/admin/strumenti/sostenibilita', icon: LineChart, adminOnly: true },
+        { title: 'Pricing Flow', url: '/admin/strumenti/pricing-flow', icon: Tag, adminOnly: true },
+        { title: 'Pricing Kronos', url: '/admin/strumenti/pricing-kronos', icon: Layers, adminOnly: true },
       ],
     },
   },

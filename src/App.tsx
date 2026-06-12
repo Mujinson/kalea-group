@@ -82,6 +82,10 @@ import CantieriBudget from "./pages/admin/cantieri/CantieriBudget";
 import CantieriReport from "./pages/admin/cantieri/CantieriReport";
 import AdminCatalog from "./pages/admin/AdminCatalog";
 import WorkerDetail from "./pages/admin/cantieri/WorkerDetail";
+import CostoOperaio from "./pages/admin/strumenti/CostoOperaio";
+import Sostenibilita from "./pages/admin/strumenti/Sostenibilita";
+import PricingFlow from "./pages/admin/strumenti/PricingFlow";
+import PricingKronos from "./pages/admin/strumenti/PricingKronos";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -165,6 +169,12 @@ const App = () => (
                 <Route path="import" element={<AdminImport />} />
 
                 <Route path="impostazioni" element={<AdminSettings />} />
+
+                {/* Strumenti */}
+                <Route path="strumenti/costo-operaio" element={<CostoOperaio />} />
+                <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />
+                <Route path="strumenti/pricing-flow" element={<PricingFlow />} />
+                <Route path="strumenti/pricing-kronos" element={<PricingKronos />} />
 
                 {/* English aliases (keep compatibility) */}
                 <Route path="sales" element={<AdminSales />} />
