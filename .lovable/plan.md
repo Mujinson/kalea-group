@@ -1,96 +1,55 @@
+## Obiettivo
+Aggiungere una nuova sezione **"Strumenti"** nella sidebar admin con 4 pagine calcolatore/pricing, con persistenza dei parametri su Lovable Cloud.
 
-# Redesign CRM Kalea + Gestione Operai
+## Struttura sidebar
+Nuovo gruppo in `src/components/admin/AdminSidebar.tsx` (icona `Wrench`/`Calculator`, `adminOnly: true`):
 
-Lavoro grande: lo divido in **2 fasi consegnabili**. Fase 1 = nuova Gestione Operai completa (CRUD + ore + assegnazioni + dashboard). Fase 2 = redesign trasversale UX/UI del CRM.
+- Costo Operaio → `/admin/strumenti/costo-operaio`
+- Sostenibilità → `/admin/strumenti/sostenibilita`
+- Pricing Flow → `/admin/strumenti/pricing-flow`
+- Pricing Kronos → `/admin/strumenti/pricing-kronos`
 
-Confermami se procedo con **Fase 1 subito** o vuoi che parta dalla Fase 2.
+## Pagine (scheletro)
+Creo 4 file in `src/pages/admin/strumenti/`:
 
----
+1. **CostoOperaio.tsx** — slider (netto mensile, giorni lavorativi, pasto, furgone, telepass, trasferta, albergo) → costo mese/anno/giorno/ora + pricing posa €/mq (break-even / target / premium).
+2. **Sostenibilita.tsx** — slider costi fissi (operaio, commercialista, tools, ads, affitto, assicurazioni, varie, soci) + volumi (mq fornitura/posa, markup, prezzo posa) → conto economico mensile, 3 scenari, markup consigliato, accantonamento 15%.
+3. **PricingFlow.tsx** — tabella prodotti Flow 2025 (dataset in attesa). Slider sconto fornitore (default 0,45 = 50+10) e markup Kalēa (default 60%). Per riga: costo, prezzo, margine %, sconto max cliente. Calcolatore preventivo (mq, sfrido, sconto cliente → totale, margine, break-even).
+4. **PricingKronos.tsx** — tabella prodotti Kronos 2026 (dataset in attesa). Slider sconto fornitore (default 0,36 = 50+20+10) e markup (default 70%). Filtri per collezione (Pierre Vive, Materia, Piasentina, Nativa, Metallique, Le Reverse, Les Bois, Outdoor). Calcolatore preventivo con battiscopa incluso.
 
-## FASE 1 — Gestione Operai (priorità)
+Tutte le pagine usano i componenti admin esistenti (`Card`, `Slider`, `DataTable`, palette `#F5F0EA` / `#3B2314` / `#C8A96E`, font New Order) per coerenza visiva.
 
-### 1.1 Database
-Nuova tabella `workers` (anagrafica reale operai, separata da `site_workers` che resta come tabella di assegnazione):
+## Dataset prodotti
+Salvati come file statici in `src/data/strumenti/`:
+- `flowProducts.ts`
+- `kronosProducts.ts`
 
-```text
-workers
-- id, first_name, last_name, email, phone
-- fiscal_code, role (mansione), hourly_cost
-- hire_date, status (attivo|ferie|sospeso|non_attivo)
-- photo_url, notes
-- deleted_at (soft delete), created_at, updated_at
-```
+Inizializzati vuoti / con TODO; popolati appena mandi il JSON nei messaggi successivi.
 
-Estensioni:
-- `site_workers.worker_id` → FK a `workers` (oltre a `worker_user_id` esistente, opzionale)
-- `site_work_logs`: aggiungo `worker_id`, `start_time`, `end_time`, `break_minutes` (calcolo ore automatico)
-- Tabella `worker_documents` (contratti, patenti, certificazioni) → bucket esistente `customer-documents` o nuovo `worker-documents`
+## Persistenza parametri (Lovable Cloud)
+Nuova tabella `public.tool_settings`:
 
-RLS: admin full; commerciali/operai read limitato.
+| campo | tipo |
+|---|---|
+| `id` | uuid PK |
+| `user_id` | uuid (auth.users) |
+| `tool_key` | text (`costo_operaio` \| `sostenibilita` \| `pricing_flow` \| `pricing_kronos`) |
+| `settings` | jsonb (slider values) |
+| `created_at` / `updated_at` | timestamptz |
 
-### 1.2 Schermate
+UNIQUE su `(user_id, tool_key)`. RLS: ogni utente vede/modifica solo i propri record; `service_role` ALL. GRANT a `authenticated` + `service_role`.
 
-**`/admin/cantieri/operai`** — Dashboard rinnovata
-- 6 KPI cards: Attivi · Assegnati · Ore oggi · Ore mese · Costo manodopera mese · Costo medio/cantiere
-- Tabs: **Operai** (cards) · **Registro Ore** (tabella) · **Calendario** · **Assegnazioni**
-- Pulsante "+ Nuovo Operaio" e "+ Registra Ore" sempre visibili
+Hook `useToolSettings(toolKey, defaults)` con upsert debounced (~500ms) su modifica slider.
 
-**Cards Operai**
-- Foto, nome, mansione, cantiere attuale, ore mese, costo mese, badge stato
-- Azioni: Visualizza · Modifica · Registra ore · Elimina (conferma)
+## Routing
+Aggiungo le 4 route figlie sotto `AdminLayout` in `src/App.tsx`.
 
-**Drawer "Nuovo/Modifica Operaio"** (sheet laterale)
-- Tutti i campi richiesti + upload foto
+## Workflow incrementale
+1. Confermi il piano → creo sidebar + 4 pagine scheletro + tabella `tool_settings` + hook persistenza, con UI funzionante ma dataset vuoti per Flow/Kronos.
+2. Mi mandi JSON Flow → popolo `flowProducts.ts`.
+3. Mi mandi JSON Kronos → popolo `kronosProducts.ts`.
+4. Iterazioni HTML per pagina come da tuo workflow.
 
-**Drawer "Registra Ore"**
-- Operaio, cantiere, data, ora inizio/fine, pausa min, note
-- Calcolo live: `ore = (fine-inizio) - pausa/60`, `costo = ore * hourly_cost`
-
-**Registro Ore** — tabella pro
-- Sorting, filtri (operaio/cantiere/data range), ricerca, edit inline, delete
-- Export CSV/Excel (xlsx) e PDF (jsPDF)
-
-**Calendario** (react-day-picker già presente, vista mese; settimana/giorno custom semplice)
-- Eventi = ore registrate, colore per operaio
-
-**Assegnazioni Cantieri**
-- Vista 2 colonne: Operai disponibili ↔ Cantieri, multi-select + bottone "Assegna"
-
-**Scheda Operaio** `/admin/cantieri/operai/:id`
-- Tabs: Anagrafica · Ore · Cantieri · Costi · Documenti
-
-### 1.3 Componenti riusabili nuovi
-`WorkerCard`, `WorkerFormDrawer`, `WorkLogFormDrawer`, `WorkLogsTable`, `WorkersKpiGrid`, `AssignmentBoard`, `WorkerCalendar`, `ExportMenu` (csv/xlsx/pdf).
-
----
-
-## FASE 2 — Redesign trasversale CRM
-
-- **Sidebar**: collapse, icone Lucide pulite, ricerca menu (Cmd+K), gruppi
-- **Dashboard `/admin`**: widget con grafici Recharts (lead trend, fatturato, margine, ore, costi materiali/manodopera)
-- **Tabelle globali**: wrapper `DataTable` con sorting/filtri/ricerca/colonne toggle/export
-- **UX system**: skeleton loaders, empty states illustrati, toast (sonner), bulk actions, optimistic updates con React Query
-- **Mobile**: sidebar offcanvas, cards responsive
-- **Dark mode**: già presenti i token, attivo toggle in header
-- **Design tokens**: rifinisco palette su `index.css` (bianco, cream, dark text — coerente con memoria CRM)
-
----
-
-## Tecnico
-
-- Stack: React + Vite + shadcn + TanStack Query + Supabase (Cloud)
-- Nuove dipendenze: `xlsx` (export Excel), `jspdf` + `jspdf-autotable` (PDF), `@dnd-kit/core` (drag&drop assegnazioni)
-- File principali nuovi:
-  - `src/pages/admin/cantieri/CantieriOperaiOre.tsx` (riscritto)
-  - `src/pages/admin/cantieri/WorkerDetail.tsx`
-  - `src/components/admin/workers/*` (WorkerCard, WorkerFormDrawer, WorkLogFormDrawer, WorkLogsTable, AssignmentBoard, WorkerCalendar, WorkersKpiGrid)
-  - `src/lib/exports.ts` (csv/xlsx/pdf helpers)
-- Migration: tabella `workers`, `worker_documents`, alter `site_work_logs` + `site_workers`, RLS, GRANTs
-
----
-
-## Domande prima di partire
-
-1. **Procedo subito con Fase 1 (Operai completa) + base del redesign sidebar/dashboard**, e Fase 2 piena la facciamo dopo? Oppure vuoi tutto insieme (richiederà più iterazioni)?
-2. Gli **operai devono avere login** all'app `/cantieri-app` (collegati a `auth.users` via `worker_user_id`) o sono solo anagrafica gestita dall'admin? Attualmente esiste già il flusso operaio loggato — mantengo entrambi: `workers` come anagrafica + collegamento opzionale a un utente auth.
-3. **Costo orario**: prendo dal campo nuovo `workers.hourly_cost` (sostituisce il `COSTO_ORARIO_DEFAULT = 25` hardcoded). OK?
+## Domande aperte
+- I parametri devono essere **per utente** (ogni admin il suo set) o **globali** (condivisi tra tutti gli admin)? Default proposto: per utente.
+- Per Sostenibilità i 3 scenari (prudente/realistico/ottimistico) li calcolo con quali moltiplicatori sui volumi? Proposta: −20% / baseline / +20% sui mq venduti. Confermi o mi dai i tuoi?
