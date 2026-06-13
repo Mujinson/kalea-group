@@ -8,5 +8,8 @@ export const CRM_HOSTNAMES = new Set<string>([
 
 export function isCrmHost(): boolean {
   if (typeof window === "undefined") return false;
-  return CRM_HOSTNAMES.has(window.location.hostname);
+  return (
+    CRM_HOSTNAMES.has(window.location.hostname) ||
+    /^\/crm\.kalea\.space(\/|$)/.test(window.location.pathname)
+  );
 }

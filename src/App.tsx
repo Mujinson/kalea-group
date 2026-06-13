@@ -145,7 +145,13 @@ const CrmHostGate = () => {
 
   if (!isCrmHost()) return null;
 
-  const p = location.pathname;
+  const previewCrmPrefix = "/crm.kalea.space";
+  const isPreviewCrmPath =
+    location.pathname === previewCrmPrefix ||
+    location.pathname.startsWith(`${previewCrmPrefix}/`);
+  const p = isPreviewCrmPath
+    ? location.pathname.slice(previewCrmPrefix.length) || "/"
+    : location.pathname;
   const allowed =
     p === "/admin" ||
     p.startsWith("/admin/") ||
