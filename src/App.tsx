@@ -260,9 +260,9 @@ const App = () => (
               <Route path="/it/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/it/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/it/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
-              <Route path="/it/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-              <Route path="/it/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-              <Route path="/it/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/it/edgeline" element={<Navigate to="/it/indoor" replace />} />
+              <Route path="/it/biowall" element={<Navigate to="/it/indoor" replace />} />
+              <Route path="/it/kaleabase" element={<Navigate to="/it/indoor" replace />} />
               <Route path="/it/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/it/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/it/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
@@ -290,9 +290,9 @@ const App = () => (
               <Route path="/en/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/en/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/en/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
-              <Route path="/en/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-              <Route path="/en/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-              <Route path="/en/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/en/edgeline" element={<Navigate to="/en/indoor" replace />} />
+              <Route path="/en/biowall" element={<Navigate to="/en/indoor" replace />} />
+              <Route path="/en/kaleabase" element={<Navigate to="/en/indoor" replace />} />
               <Route path="/en/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/en/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/en/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
@@ -320,9 +320,9 @@ const App = () => (
               <Route path="/de/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/de/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/de/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
-              <Route path="/de/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-              <Route path="/de/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-              <Route path="/de/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/de/edgeline" element={<Navigate to="/de/indoor" replace />} />
+              <Route path="/de/biowall" element={<Navigate to="/de/indoor" replace />} />
+              <Route path="/de/kaleabase" element={<Navigate to="/de/indoor" replace />} />
               <Route path="/de/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/de/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/de/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
@@ -350,9 +350,9 @@ const App = () => (
               <Route path="/fr/hypermatt-xl" element={<><SEOHandler /><Layout><HypermattXL /></Layout></>} />
               <Route path="/fr/hypermatt-spina" element={<><SEOHandler /><Layout><HypermattSpina /></Layout></>} />
               <Route path="/fr/hypermatt-55" element={<><SEOHandler /><Layout><Hypermatt55 /></Layout></>} />
-              <Route path="/fr/edgeline" element={<><SEOHandler /><Layout><EdgeLine /></Layout></>} />
-              <Route path="/fr/biowall" element={<><SEOHandler /><Layout><Biowall /></Layout></>} />
-              <Route path="/fr/kaleabase" element={<><SEOHandler /><Layout><Kaleabase /></Layout></>} />
+              <Route path="/fr/edgeline" element={<Navigate to="/fr/indoor" replace />} />
+              <Route path="/fr/biowall" element={<Navigate to="/fr/indoor" replace />} />
+              <Route path="/fr/kaleabase" element={<Navigate to="/fr/indoor" replace />} />
               <Route path="/fr/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
               <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
               <Route path="/fr/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
@@ -407,10 +407,10 @@ const App = () => (
               <Route path="/fr/laminati/:slug" element={<><SEOHandler /><Layout><LaminatoCollectionDetail /></Layout></>} />
 
               {/* BIOWALL collection detail (all languages) */}
-              <Route path="/it/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
-              <Route path="/en/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
-              <Route path="/de/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
-              <Route path="/fr/biowall/:slug" element={<><SEOHandler /><Layout><BiowallCollectionDetail /></Layout></>} />
+              <Route path="/it/biowall/:slug" element={<Navigate to="/it/indoor" replace />} />
+              <Route path="/en/biowall/:slug" element={<Navigate to="/en/indoor" replace />} />
+              <Route path="/de/biowall/:slug" element={<Navigate to="/de/indoor" replace />} />
+              <Route path="/fr/biowall/:slug" element={<Navigate to="/fr/indoor" replace />} />
 
               {/* Outdoor Selection (Skema alternative to Externo) */}
               <Route path="/it/outdoor/selection" element={<><SEOHandler /><Layout><OutdoorSelection /></Layout></>} />

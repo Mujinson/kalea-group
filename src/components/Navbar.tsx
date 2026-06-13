@@ -110,16 +110,8 @@ const Navbar = () => {
           ]
         },
         {
-          label: t('nav.accessories'),
-          products: [
-            { label: "KALEABASE®", path: `/${language}/kaleabase`, comingSoon: false },
-            { label: "EDGELINE®", path: `/${language}/edgeline`, comingSoon: false },
-          ]
-        },
-        {
           label: t('nav.wallCladding'),
           products: [
-            { label: "BIOWALL®", path: `/${language}/biowall`, comingSoon: false },
             { label: "FONOASSORBENTI", path: `/${language}/fonoassorbenti`, comingSoon: false },
           ]
         },

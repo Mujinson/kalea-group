@@ -58,18 +58,10 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to={`/${language}/edgeline`}
+                  to={`/${language}/hypermatt`}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
-                  EdgeLine
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={`/${language}/onewall`}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  OneWall
+                  Hypermatt
                 </Link>
               </li>
               <li>
