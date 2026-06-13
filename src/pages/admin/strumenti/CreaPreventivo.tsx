@@ -623,87 +623,193 @@ export default function CreaPreventivo() {
             </button>
           </div>
 
+          {/* ANTEPRIMA DOCUMENTO */}
           <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E0DDD8",borderRadius:12,padding:"40px 48px",maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
-            <div style={{display:"flex",justifyContent:"space-between",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
+
+            {/* Testata */}
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
               <div>
-                <div style={{fontSize:24,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>
-                <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em"}}>Innovate | Living | Nature</div>
+                {KALEA_LOGO ? <img src={KALEA_LOGO} alt="Kalēa" style={{height:44,display:"block",marginBottom:4}}/> : <div style={{fontSize:24,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>}
+                <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
+                <div style={{fontSize:12,color:"#6B6860"}}>Superfici · Pavimentazioni · Posa</div>
                 <div style={{fontSize:11,color:"#9A9890",marginTop:2}}>Desenzano del Garda (BS) · info@kalea.space · kalea.space</div>
               </div>
               <div style={{textAlign:"right"}}>
-                <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E"}}>PREVENTIVO</div>
-                <div style={{fontSize:13,color:"#6B6860",marginTop:4}}>N° <strong>{numPrev||"—"}</strong></div>
+                <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>PREVENTIVO</div>
+                <div style={{fontSize:13,color:"#6B6860",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
                 <div style={{fontSize:13,color:"#6B6860"}}>Data: <strong>{dataPrev}</strong></div>
                 <div style={{fontSize:13,color:"#A32D2D"}}>Valido fino al: <strong>{addDays(dataPrev,30)}</strong></div>
               </div>
             </div>
 
+            {/* Cliente */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
               <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",marginBottom:8}}>Cliente</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Cliente</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.indirizzo}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.citta}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.telefono}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.email}</div>
               </div>
-              {cantiere && (
-                <div>
-                  <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",marginBottom:8}}>Cantiere</div>
-                  <div style={{fontSize:13,color:"#6B6860"}}>{cantiere}</div>
-                </div>
-              )}
+              {cantiere && <div>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Oggetto / Cantiere</div>
+                <div style={{fontSize:13,color:"#6B6860"}}>{cantiere}</div>
+              </div>}
             </div>
 
+            {/* Corpo preventivo */}
             <table style={{width:"100%",borderCollapse:"collapse",marginBottom:24}}>
               <thead>
                 <tr style={{background:"#1A1A2E"}}>
                   {["Descrizione","mq","Prezzo unit.","Totale"].map(h=>(
-                    <th key={h} style={{padding:"9px 12px",textAlign:h==="Descrizione"?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase"}}>{h}</th>
+                    <th key={h} style={{padding:"9px 12px",textAlign:h==="Descrizione"?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
+                <tr style={{background:"#F7F6F3"}}>
+                  <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Fornitura materiale</td>
+                </tr>
                 <tr>
                   <td style={{padding:"8px 12px",fontSize:13}}>{prodotto?.nome} — {prodotto?.dims}</td>
                   <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.mqOrd.toFixed(1)}</td>
                   <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.prezzoMatMq)}</td>
                   <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoMatTot)}</td>
                 </tr>
-                {incPosa && (
+                {righeMat.filter((r:any)=>r.desc).map((r:any)=>(
+                  <tr key={r.id}>
+                    <td style={{padding:"8px 12px",fontSize:13}}>{r.desc}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{r.qta} {r.unita}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(r.prezzoUn)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(r.prezzoUn*r.qta)}</td>
+                  </tr>
+                ))}
+                {incPosa && <>
+                  <tr style={{background:"#F7F6F3"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Posa in opera</td>
+                  </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>Posa in opera — {complessita}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(PREZZI_POSA[complessita])}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoPosaTot)}</td>
                   </tr>
-                )}
-                {calc.tappNeeded && (
+                </>}
+                {calc.tappNeeded && <>
+                  <tr style={{background:"#F7F6F3"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Tappetino / Sottofondo</td>
+                  </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>Tappetino/sottofondo</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(PREZZO_TAPPETINO_CLIENTE)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTappTot)}</td>
                   </tr>
+                </>}
+                {incTrasporto && calc.kmExtra>0 && (
+                  <tr>
+                    <td style={{padding:"8px 12px",fontSize:13}}>Trasporto ({calc.kmExtra} km)</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.kmExtra}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(COSTO_KM*MARKUP)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasporto)}</td>
+                  </tr>
+                )}
+                {calc.trasfertaAttiva && (
+                  <tr>
+                    <td style={{padding:"8px 12px",fontSize:13}}>Trasferta posatori</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(SUPPL_TRASFERTA_POSA[complessita])}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasfertaTot)}</td>
+                  </tr>
                 )}
               </tbody>
             </table>
 
+            {/* Totali */}
             <div style={{marginLeft:"auto",width:280}}>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:13}}>
-                <span style={{color:"#6B6860"}}>Subtotale</span><span>{euro(calc.prezzoLordoTot)}</span>
-              </div>
-              {sconto>0 && (
-                <div style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:13}}>
-                  <span style={{color:"#633806"}}>Sconto {sconto}%</span><span>− {euro(calc.scontoAmt)}</span>
+              {[
+                {l:"Subtotale",v:euro(calc.prezzoLordoTot)},
+                sconto>0 && {l:`Sconto ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
+                sconto>0 && {l:"Imponibile scontato",v:euro(calc.prezzoNetto)},
+                {l:"IVA 22%",v:euro(calc.iva)},
+              ].filter(Boolean).map((r:any,i:number)=>(
+                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
+                  <span style={{color:"#6B6860"}}>{r.l}</span>
+                  <span style={{color:r.c||"#1A1A1A"}}>{r.v}</span>
                 </div>
-              )}
-              <div style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:13}}>
-                <span style={{color:"#6B6860"}}>IVA 22%</span><span>{euro(calc.iva)}</span>
+              ))}
+              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4}}>
+                <span>TOTALE DOCUMENTO</span>
+                <span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
               </div>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E"}}>
-                <span>TOTALE</span><span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
+            </div>
+
+            {/* Pagamenti */}
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
+              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di pagamento</div>
+              {pagamenti.map((p:any,i:number)=>(
+                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
+                  <span>{p.label} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"#9A9890",fontSize:12}}> ({p.note})</span>}</span>
+                  <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Note cliente */}
+            {noteCliente && (
+              <div style={{marginTop:20,padding:"12px 16px",background:"#F0EDE8",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Note per il cliente</div>
+                {noteCliente}
               </div>
+            )}
+
+            {/* Termini */}
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8"}}>
+              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>Termini e condizioni</div>
+              <div style={{fontSize:11,color:"#6B6860",lineHeight:1.8,whiteSpace:"pre-line"}}>{`Premesse
+1) La società committente dichiara di essere a conoscenza e di essere informata che la pavimentazione "Kalea" che il fornitore si appresta a fornire e posare con il presente contratto di posa e fornitura è esclusivamente un prodotto estetico, non ha proprietà di isolamento né di impermeabilizzazione e come tale deve essere considerato.
+2) Qualsiasi onere di impermeabilizzazione del fondo è da ritenersi a carico del Committente, pertanto nessuna responsabilità potrà essere addebitata al fornitore qualora si verificassero problematiche di infiltrazioni presso l'immobile o comunque problematiche derivanti da un fondo non conforme sul quale il materiale venga posato.
+3) Sarà esclusiva cura del committente: a) Garantire corrente elettrica 220V e acqua. b) Effettuare l'assistenza con proprio personale per la messa in quota del materiale fornito dal fornitore. c) Garantire il fondo di posa (fondo piano e asciutto) sul quale Kalea effettuerà il posizionamento dei suoi materiali.
+4) A cura del fornitore: a) Fornire il nominativo della squadra di posa che verrà inviata sul cantiere e tutta la documentazione necessaria per la verifica della idoneità tecnico professionale ai sensi del D. Lgs 81/2008, tra cui il DURC. b) Effettuare tutti i lavori commissionati a regola d'arte. c) Garantire che la data d'inizio lavori sia entro il ……………………………, con condizioni climatiche idonee alla posa. d) Che l'attività di posa prosegua in continuità. e) Mantenere pulito il cantiere stoccando i materiali di scarto e rifiuti in appositi luoghi e/o contenitori definiti con la committenza. f) Un tecnico in rappresentanza del fornitore assicurerà visite periodiche in cantiere. g) Durante le lavorazioni sarà possibile che Kalea S.r.l. esegua fotografie o riprese ai fini pubblicitari e di marketing che verranno possibilmente pubblicate sul sito internet o sui social network.
+5) Condizioni Generali di fornitura e posa: a) I prezzi esposti nel presente contratto si intendono IVA esclusa. b) Il presente accordo s'intende a misura e non a corpo. Ai fini del pagamento delle fatture, si precisa che i lavori si intenderanno finiti e dunque l'importo riscuotibile anche qualora sopraggiungano impedimenti esterni e contingenti che determinino l'interruzione o la sospensione della posa in opera per cause indipendenti dalla volontà della scrivente Ditta. In tal caso sarà fatturata solo la metratura effettivamente consegnata ad opera d'arte.
+6) Modalità di misurazione: Per le opere di posa, la pavimentazione verrà calcolata al mq conteggiando il 5% di sfrido di lavorazione. Accessori verranno calcolati al ML conteggiando il 5% di sfrido di lavorazione. Eventuali prestazioni extra richieste dal committente verranno addebitate a parte in economia nella misura di EURO 30,00/ora per persona applicata, più il costo del materiale utilizzato.
+7) Ogni eventuale contestazione che dovesse sorgere tra le parti in ordine alla interpretazione, esecuzione o risoluzione del rapporto di cui al presente contratto sarà devoluta alla competenza esclusiva del Foro di Brescia.
+8) Le parti di comune accordo stabiliscono di voler far prevalere l'obbligazione del fare e che quindi il presente contratto si considera di prestazione di servizi come attività prevalente.
+9) Modalità di Pagamento: Primo acconto alla firma del presente 50% + IVA. Saldo a fine lavori.`}</div>
+            </div>
+
+            {/* Sezione Privacy firma */}
+            <div style={{marginTop:20,padding:"12px 16px",border:"1px solid #E0DDD8",borderRadius:8}}>
+              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679</div>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#6B6860"}}>
+                <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
+                <span>Consento al trattamento dei miei dati personali ai sensi dell'art. 13 del Regolamento UE n. 2016/679</span>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",fontSize:12,color:"#6B6860"}}>
+                <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
+                <span>Autorizzo il trattamento dei dati personali per l'invio di materiale informativo e pubblicitario come indicato nell'Informativa</span>
+              </div>
+            </div>
+
+            {/* Accettazione */}
+            <div style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
+              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>Le parti dichiarano di aver preso visione degli articoli 1,2,3,4,5,6,7,8,9 del presente contratto ai sensi degli artt. 1341 e 1342 c.c. e di approvarne il contenuto.</div>
+              <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>Il/La sottoscritto/a dichiara di accettare il presente preventivo</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
+                <div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>Firma Cliente</div>
+                </div>
+                <div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>Per Kalēa</div>
+                </div>
+              </div>
+              <div style={{marginTop:20,fontSize:12,color:"#6B6860"}}>Luogo e data: _______________________</div>
+            </div>
+
+            {/* Footer */}
+            <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid #E0DDD8",textAlign:"center",fontSize:11,color:"#9A9890"}}>
+              Kalēa · Desenzano del Garda (BS) · info@kalea.space · kalea.space · P.IVA IT_____________
             </div>
           </div>
         </div>
