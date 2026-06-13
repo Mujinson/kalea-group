@@ -362,58 +362,27 @@ const AdminCustomers = () => {
         }
       />
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-            <Users className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Totale Clienti</p>
-            <p className="text-xl font-bold">{customers.length}</p>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-            <span className="text-lg font-bold text-orange-600">{customers.filter(c => c.status === 'opportunity').length + leadsCount}</span>
-          </div>
-          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Opportunity</p>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-green-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Valore Totale</p>
-            <p className="text-lg font-bold">€{totalValue.toLocaleString()}</p>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-emerald-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Margine Totale</p>
-            <p className="text-lg font-bold">€{totalMargin.toLocaleString()}</p>
-          </div>
-        </div>
-      </div>
+      <CrmKpiRow>
+        <CrmKpiTile label="Totale Clienti" value={customers.length} color="blue" icon={<Users className="w-4 h-4" />} />
+        <CrmKpiTile label="Opportunity" value={customers.filter(c => c.status === 'opportunity').length + leadsCount} color="orange" />
+        <CrmKpiTile label="Valore Totale" value={`€${totalValue.toLocaleString()}`} color="green" icon={<TrendingUp className="w-4 h-4" />} />
+        <CrmKpiTile label="Margine Totale" value={`€${totalMargin.toLocaleString()}`} color="emerald" icon={<TrendingUp className="w-4 h-4" />} />
+      </CrmKpiRow>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <CrmFilterBar>
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input placeholder="Cerca..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
+          <Input placeholder="Cerca cliente, email, città…" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F5F0EA]/60" />
         </div>
         <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-full sm:w-40"><SelectValue placeholder="Tipo" /></SelectTrigger>
+          <SelectTrigger className="w-full sm:w-40 border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Tipo" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tutti i tipi</SelectItem>
             {CUSTOMER_TYPES.map(type => (<SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>))}
           </SelectContent>
         </Select>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-full sm:w-32"><SelectValue placeholder="Stato" /></SelectTrigger>
+          <SelectTrigger className="w-full sm:w-32 border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tutti</SelectItem>
             {CUSTOMER_STATUSES.map(s => (<SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>))}
@@ -421,74 +390,76 @@ const AdminCustomers = () => {
         </Select>
         {regions.length > 0 && (
           <Select value={filterRegion} onValueChange={setFilterRegion}>
-            <SelectTrigger className="w-full sm:w-32"><SelectValue placeholder="Regione" /></SelectTrigger>
+            <SelectTrigger className="w-full sm:w-32 border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Regione" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tutte</SelectItem>
               {regions.map(r => (<SelectItem key={r} value={r!}>{r}</SelectItem>))}
             </SelectContent>
           </Select>
         )}
-      </div>
+      </CrmFilterBar>
 
-      {/* Customer List */}
-      <div className="mb-2 text-sm text-muted-foreground">{filteredCustomers.length} clienti</div>
-      <DataTable
-        data={filteredCustomers}
-        loading={loading}
-        searchable={false}
-        emptyTitle="Nessun cliente trovato"
-        emptyDescription="Modifica i filtri o crea un nuovo cliente."
-        onRowClick={(c) => { setSelectedCustomerId(c.id); setDetailOpen(true); }}
-        columns={[
-          {
-            key: 'name',
-            header: 'Cliente',
-            sortable: true,
-            accessor: (c) => getCustomerName(c),
-            cell: (c) => <span className="font-medium">{getCustomerName(c)}</span>,
-          },
-          {
-            key: 'customer_type',
-            header: 'Tipo',
-            sortable: true,
-            cell: (c) => <Badge variant="outline" className="text-xs">{getTypeLabel(c.customer_type)}</Badge>,
-          },
-          {
-            key: 'status',
-            header: 'Stato',
-            sortable: true,
-            cell: (c) => {
-              const s = getStatusInfo(c.status);
-              return (
-                <Badge variant="secondary" className={`text-xs ${
-                  s.value === 'opportunity' ? 'bg-yellow-100 text-yellow-800' :
-                  s.value === 'signed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${s.color}`} />
-                  {s.label}
-                </Badge>
-              );
+      <div className="px-1 text-xs uppercase tracking-wider text-[#8A7060] font-semibold">{filteredCustomers.length} clienti</div>
+      <CrmTableCard>
+        <DataTable
+          data={filteredCustomers}
+          loading={loading}
+          searchable={false}
+          emptyTitle="Nessun cliente trovato"
+          emptyDescription="Modifica i filtri o crea un nuovo cliente."
+          onRowClick={(c) => { setSelectedCustomerId(c.id); setDetailOpen(true); }}
+          columns={[
+            {
+              key: 'name',
+              header: 'Cliente',
+              sortable: true,
+              accessor: (c) => getCustomerName(c),
+              cell: (c) => <span className="font-medium">{getCustomerName(c)}</span>,
             },
-          },
-          { key: 'email', header: 'Email', cell: (c) => c.email || '—' },
-          { key: 'city', header: 'Città', sortable: true, cell: (c) => c.city || '—' },
-          {
-            key: 'total_value',
-            header: 'Valore',
-            sortable: true,
-            className: 'text-right',
-            accessor: (c) => Number(c.total_value) || 0,
-            cell: (c) => (c.total_value || 0) > 0 ? <span className="font-semibold">€{c.total_value?.toLocaleString()}</span> : '—',
-          },
-          {
-            key: 'created_at',
-            header: 'Data',
-            sortable: true,
-            accessor: (c) => new Date(c.created_at).getTime(),
-            cell: (c) => <span className="text-xs text-muted-foreground">{format(new Date(c.created_at), 'dd MMM yyyy', { locale: it })}</span>,
-          },
-        ] as DataTableColumn<Customer>[]}
-      />
+            {
+              key: 'customer_type',
+              header: 'Tipo',
+              sortable: true,
+              cell: (c) => <Badge variant="outline" className="text-xs">{getTypeLabel(c.customer_type)}</Badge>,
+            },
+            {
+              key: 'status',
+              header: 'Stato',
+              sortable: true,
+              cell: (c) => {
+                const s = getStatusInfo(c.status);
+                return (
+                  <Badge variant="secondary" className={`text-xs ${
+                    s.value === 'opportunity' ? 'bg-yellow-100 text-yellow-800' :
+                    s.value === 'signed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+                  }`}>
+                    <span className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${s.color}`} />
+                    {s.label}
+                  </Badge>
+                );
+              },
+            },
+            { key: 'email', header: 'Email', cell: (c) => c.email || '—' },
+            { key: 'city', header: 'Città', sortable: true, cell: (c) => c.city || '—' },
+            {
+              key: 'total_value',
+              header: 'Valore',
+              sortable: true,
+              className: 'text-right',
+              accessor: (c) => Number(c.total_value) || 0,
+              cell: (c) => (c.total_value || 0) > 0 ? <span className="font-semibold">€{c.total_value?.toLocaleString()}</span> : '—',
+            },
+            {
+              key: 'created_at',
+              header: 'Data',
+              sortable: true,
+              accessor: (c) => new Date(c.created_at).getTime(),
+              cell: (c) => <span className="text-xs text-muted-foreground">{format(new Date(c.created_at), 'dd MMM yyyy', { locale: it })}</span>,
+            },
+          ] as DataTableColumn<Customer>[]}
+        />
+      </CrmTableCard>
+
 
       <CustomerDetailSheet 
         customerId={selectedCustomerId}
