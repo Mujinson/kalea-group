@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import CommandPalette from '@/components/admin/CommandPalette';
+import CrmFaqDialog from '@/components/admin/CrmFaqDialog';
 import { Loader2, Search, LayoutGrid, HelpCircle, Settings, LogOut } from 'lucide-react';
 
 const TOPBAR_BG = 'linear-gradient(180deg, #1E1B4B 0%, #2A1F5C 100%)';
@@ -27,6 +28,7 @@ const TopIconButton = ({ children, onClick, title }: { children: React.ReactNode
 const AdminLayout = () => {
   const { user, isAdmin, role, loading, signOut } = useAdminAuth();
   const navigate = useNavigate();
+  const [faqOpen, setFaqOpen] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -96,11 +98,15 @@ const AdminLayout = () => {
           <div className="flex-1" />
 
           {/* Right actions */}
-          <TopIconButton title="App"><LayoutGrid className="w-4 h-4" /></TopIconButton>
+          <TopIconButton title="Dashboard" onClick={() => navigate('/admin')}>
+            <LayoutGrid className="w-4 h-4" />
+          </TopIconButton>
           <div className="text-white/80 [&_button]:text-white/80 [&_button:hover]:text-white">
             <NotificationCenter />
           </div>
-          <TopIconButton title="Aiuto"><HelpCircle className="w-4 h-4" /></TopIconButton>
+          <TopIconButton title="Guida / FAQ" onClick={() => setFaqOpen(true)}>
+            <HelpCircle className="w-4 h-4" />
+          </TopIconButton>
           <TopIconButton title="Impostazioni" onClick={() => navigate('/admin/impostazioni')}>
             <Settings className="w-4 h-4" />
           </TopIconButton>
