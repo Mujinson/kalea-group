@@ -46,17 +46,17 @@ export function CrmPageHeader({ breadcrumb, title, subtitle, actions }: CrmPageH
     >
       <div className="min-w-0">
         {breadcrumb && breadcrumb.length > 0 && (
-          <div className="flex items-center gap-1 text-[11px] uppercase tracking-[0.14em] text-white/55 mb-1">
+          <div className="flex items-center gap-1 text-[11px] uppercase tracking-[0.14em] mb-1" style={{ color: "rgba(255,255,255,0.7)" }}>
             {breadcrumb.map((b, i) => (
-              <span key={i} className="flex items-center gap-1">
+              <span key={i} className="flex items-center gap-1" style={{ color: i === breadcrumb.length - 1 ? "#ffffff" : "rgba(255,255,255,0.7)" }}>
                 {i > 0 && <ChevronRight className="w-3 h-3" />}
-                <span className={i === breadcrumb.length - 1 ? "text-white/80" : ""}>{b}</span>
+                <span>{b}</span>
               </span>
             ))}
           </div>
         )}
-        <h1 className="text-[22px] md:text-2xl font-bold text-white leading-tight">{title}</h1>
-        {subtitle && <p className="text-sm text-white/65 mt-0.5">{subtitle}</p>}
+        <h1 className="text-[22px] md:text-2xl font-bold leading-tight" style={{ color: "#ffffff" }}>{title}</h1>
+        {subtitle && <p className="text-sm mt-0.5" style={{ color: "rgba(255,255,255,0.75)" }}>{subtitle}</p>}
       </div>
       {actions && <div className="flex gap-2 flex-wrap shrink-0">{actions}</div>}
     </div>
