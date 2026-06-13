@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Camera, Package, Search, Calendar, HardHat, User, ChevronDown, ChevronRight } from "lucide-react";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 
