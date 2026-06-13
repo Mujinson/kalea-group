@@ -148,94 +148,101 @@ const AdminCantieri = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs text-muted-foreground">Cantieri › Lista</p>
-          <h1 className="text-2xl font-bold text-foreground">Cantieri</h1>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Cantieri"]}
+        title="Cantieri"
+        subtitle="Gestione progetti, posa e installazioni"
+        actions={
+          <Button onClick={() => { resetForm(); setCreateOpen(true); }} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+            <Plus className="w-4 h-4 mr-2" /> Nuovo Cantiere
+          </Button>
+        }
+      />
+
+      <CrmKpiRow cols={4}>
+        <CrmKpiTile label="Totale" value={sites?.length || 0} color="indigo" icon={<HardHat className="w-4 h-4" />} />
+        <CrmKpiTile label="Attivi" value={sites?.filter(s => s.status === 'attivo').length || 0} color="green" />
+        <CrmKpiTile label="Completati" value={sites?.filter(s => s.status === 'completato').length || 0} color="blue" />
+        <CrmKpiTile label="In pausa" value={sites?.filter(s => s.status !== 'attivo' && s.status !== 'completato').length || 0} color="amber" />
+      </CrmKpiRow>
+
+      <CrmFilterBar>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Cerca per nome, città, modello…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10 border-0 bg-[#F5F0EA]/60"
+          />
         </div>
-        <Button onClick={() => { resetForm(); setCreateOpen(true); }}>
-          <Plus className="w-4 h-4 mr-2" /> Nuovo
-        </Button>
-      </div>
+      </CrmFilterBar>
 
-      <Card className="bg-white">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-3 mb-4 justify-end">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Cerca per nome, città, modello..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 w-72"
-              />
-            </div>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b text-left">
-                  <th className="pb-3 text-sm font-medium text-muted-foreground">Titolo</th>
-                  <th className="pb-3 text-sm font-medium text-muted-foreground">Tipologia</th>
-                  <th className="pb-3 text-sm font-medium text-muted-foreground">Città</th>
-                  <th className="pb-3 text-sm font-medium text-muted-foreground">CAP</th>
-                  <th className="pb-3 text-sm font-medium text-muted-foreground">Modello</th>
-                  <th className="pb-3 text-sm font-medium text-muted-foreground">Stato</th>
-                  <th className="pb-3 text-sm font-medium text-muted-foreground"></th>
+      <CrmTableCard>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-[#F5F0EA]/50 border-b border-[#E7E3DA]">
+              <tr className="text-left">
+                <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">Titolo</th>
+                <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">Tipologia</th>
+                <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">Città</th>
+                <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">CAP</th>
+                <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">Modello</th>
+                <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">Stato</th>
+                <th className="px-4 py-2.5"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered?.map((site) => (
+                <tr key={site.id} className="border-b last:border-0 border-[#F0EBE0] hover:bg-[#FAF6EF] transition-colors cursor-pointer" onClick={() => navigate(`/admin/cantieri/${site.id}`)}>
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-sm">{site.title}</p>
+                    {site.project_name && <p className="text-xs text-muted-foreground">{site.project_name}</p>}
+                  </td>
+                  <td className="px-4 py-3">
+                    {site.tipologia && <Badge variant="outline" className="text-xs">{site.tipologia}</Badge>}
+                  </td>
+                  <td className="px-4 py-3 text-sm">{site.city}</td>
+                  <td className="px-4 py-3 text-sm">{site.postal_code}</td>
+                  <td className="px-4 py-3 text-sm">{site.product_model}</td>
+                  <td className="px-4 py-3">
+                    <Badge variant={site.status === 'attivo' ? 'default' : 'secondary'} className="text-xs">
+                      {site.status}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center gap-1 justify-end" onClick={(e) => e.stopPropagation()}>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => navigate(`/admin/cantieri/${site.id}`)}>
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(site)}>
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => handleDelete(site.id)}>
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {filtered?.map((site) => (
-                  <tr key={site.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
-                    <td className="py-3 pr-4">
-                      <p className="font-medium text-sm">{site.title}</p>
-                      {site.project_name && <p className="text-xs text-muted-foreground">{site.project_name}</p>}
-                    </td>
-                    <td className="py-3 pr-4">
-                      {site.tipologia && <Badge variant="outline" className="text-xs">{site.tipologia}</Badge>}
-                    </td>
-                    <td className="py-3 pr-4 text-sm">{site.city}</td>
-                    <td className="py-3 pr-4 text-sm">{site.postal_code}</td>
-                    <td className="py-3 pr-4 text-sm">{site.product_model}</td>
-                    <td className="py-3 pr-4">
-                      <Badge variant={site.status === 'attivo' ? 'default' : 'secondary'} className="text-xs">
-                        {site.status}
-                      </Badge>
-                    </td>
-                    <td className="py-3 text-right">
-                      <div className="flex items-center gap-1 justify-end">
-                        <Button size="icon" variant="ghost" onClick={() => navigate(`/admin/cantieri/${site.id}`)}>
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost" onClick={() => openEdit(site)}>
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost" onClick={() => handleDelete(site.id)}>
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {(!filtered || filtered.length === 0) && (
-                  <tr>
-                    <td colSpan={7} className="py-8 text-center text-sm text-muted-foreground">
-                      {isLoading ? "Caricamento..." : "Nessun cantiere trovato"}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-          {filtered && filtered.length > 0 && (
-            <p className="text-xs text-muted-foreground mt-3">
-              Mostrato {filtered.length} risultat{filtered.length === 1 ? 'o' : 'i'}
-            </p>
-          )}
-        </CardContent>
-      </Card>
+              ))}
+              {(!filtered || filtered.length === 0) && (
+                <tr>
+                  <td colSpan={7} className="py-10 text-center text-sm text-muted-foreground">
+                    {isLoading ? "Caricamento..." : "Nessun cantiere trovato"}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {filtered && filtered.length > 0 && (
+          <p className="text-[11px] uppercase tracking-wider text-[#8A7060] font-semibold px-4 py-2 border-t border-[#F0EBE0] bg-[#FAF6EF]/40">
+            {filtered.length} risultat{filtered.length === 1 ? 'o' : 'i'}
+          </p>
+        )}
+      </CrmTableCard>
+
 
       {/* Create/Edit Dialog */}
       <Dialog open={createOpen} onOpenChange={(open) => { setCreateOpen(open); if (!open) resetForm(); }}>
