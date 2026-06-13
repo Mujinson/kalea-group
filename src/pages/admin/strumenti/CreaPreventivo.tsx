@@ -1434,8 +1434,8 @@ export default function CreaPreventivo() {
 
             {/* Accettazione */}
             <div style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
-              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>Le parti dichiarano di aver preso visione degli articoli 1,2,3,4,5,6,7,8,9 del presente contratto ai sensi degli artt. 1341 e 1342 c.c. e di approvarne il contenuto.</div>
-              <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>Il/La sottoscritto/a dichiara di accettare il presente preventivo</div>
+              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>{t.parti_dichiarano}</div>
+              <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
                 <div>
                   <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>{t.firma_cliente}</div>
