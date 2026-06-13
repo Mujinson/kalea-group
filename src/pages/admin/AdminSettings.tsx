@@ -211,11 +211,9 @@ const AdminSettings = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Impostazioni</h2>
-        <p className="text-muted-foreground">Gestisci gli utenti admin e le configurazioni</p>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader breadcrumb={["CRM", "Impostazioni"]} title="Impostazioni" subtitle="Utenti admin e configurazioni" />
+
 
       {/* Admin Users */}
       <Card>
