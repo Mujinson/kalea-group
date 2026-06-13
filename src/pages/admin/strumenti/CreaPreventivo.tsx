@@ -330,7 +330,7 @@ const T: any = {
     privacy_titolo: 'PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679',
     privacy_1: 'Consento al trattamento dei miei dati personali ai sensi dell\'art. 13 del Regolamento UE n. 2016/679',
     privacy_2: 'Autorizzo il trattamento dei dati personali per l\'invio di materiale informativo e pubblicitario come indicato nell\'Informativa',
-    parti_dichiarano: '{t.parti_dichiarano}',
+    parti_dichiarano: 'Le parti dichiarano di aver preso visione degli articoli 1,2,3,4,5,6,7,8,9 del presente contratto ai sensi degli artt. 1341 e 1342 c.c. e di approvarne il contenuto.',
     stato_bozza: 'Bozza',
     stato_inviato: 'Inviato',
     stato_accettato: 'Accettato',
@@ -352,7 +352,7 @@ const T: any = {
     trasp_btn: "Transport (2€/km)",
     param_globali: 'Parametri globali — si applicano a tutti i prodotti',
     markup_label: 'Markup Kalēa sui materiali', data: "Data",
-    luogo: "Luogo e data", accetta: "{t.accetta}",
+    luogo: "Luogo e data", accetta: "Il/La sottoscritto/a dichiara di accettare il presente preventivo",
   },
   EN: {
     titolo: "QUOTATION", validita: "Valid until", cliente: "Client",
@@ -1310,9 +1310,9 @@ export default function CreaPreventivo() {
             {/* Corpo preventivo */}
             <table style={{width:"100%",borderCollapse:"collapse",marginBottom:24}}>
               <thead>
-                <tr style={{background:"#1A1A2E"}}>
+                <tr>
                   {[t.desc,t.mq,t.prezzo_unit,t.totale].map((h:string)=>(
-                    <th key={h} style={{padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
+                    <th key={h} style={{background:"#1A1A2E",padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -1434,8 +1434,8 @@ export default function CreaPreventivo() {
 
             {/* Accettazione */}
             <div style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
-              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>Le parti dichiarano di aver preso visione degli articoli 1,2,3,4,5,6,7,8,9 del presente contratto ai sensi degli artt. 1341 e 1342 c.c. e di approvarne il contenuto.</div>
-              <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>Il/La sottoscritto/a dichiara di accettare il presente preventivo</div>
+              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>{t.parti_dichiarano}</div>
+              <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
                 <div>
                   <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>{t.firma_cliente}</div>
