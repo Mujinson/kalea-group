@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, Folder, Image, Film, FileText, ChevronRight } from "lucide-react";
+import { CrmPageHeader } from "@/components/admin/CrmShell";
 import { useNavigate } from "react-router-dom";
 
 const AdminMedia = () => {
