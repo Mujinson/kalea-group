@@ -359,7 +359,8 @@ const AdminCustomers = () => {
             </form>
           </DialogContent>
         </Dialog>
-      </div>
+        }
+      />
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
