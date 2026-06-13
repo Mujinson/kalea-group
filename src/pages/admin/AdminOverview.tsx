@@ -416,7 +416,7 @@ const AdminOverview = () => {
       const valoreChiuso = pInviati.filter(p => ['accettato','fatturato'].includes(p.stato))
         .reduce((s, x) => s + Number(x.importo_totale || 0), 0);
       const conv = lAssegnati > 0 ? (lChiusi / lAssegnati) * 100 : 0;
-      return { id: sp.id, nome: sp.name || sp.full_name || 'N/D', lAssegnati, pInviati: pInviati.length, valoreChiuso, conv };
+      return { id: sp.id, nome: `${sp.first_name || ''} ${sp.last_name || ''}`.trim() || sp.email || 'N/D', lAssegnati, pInviati: pInviati.length, valoreChiuso, conv };
     }).sort((a, b) => b.valoreChiuso - a.valoreChiuso);
   }, [salespeople, leads, preventivi, range]);
 
