@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X, Eye, Pencil, TrendingUp } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
