@@ -264,63 +264,7 @@ const Indoor = () => {
         </div>
       </section>
 
-      {/* System Products Section */}
-      <section className="relative z-[1] bg-background pb-20 md:pb-32 px-4 md:px-8 lg:px-12">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-4">
-              Componenti di Sistema
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Sottopavimenti, profili e rivestimenti per completare ogni progetto.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {systemProducts.map((product, index) => (
-              <motion.div
-                key={product.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Link 
-                  to={product.link}
-                  className="group relative block h-[320px] md:h-[380px] rounded-2xl overflow-hidden"
-                >
-                  <div className="absolute inset-0">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10 transition-all duration-500 group-hover:from-black/90 group-hover:via-black/50" />
-                  <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-                    <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2 tracking-tight">
-                      {product.name}
-                    </h3>
-                    <p className="text-white/80 text-base md:text-lg mb-4">
-                      {product.description}
-                    </p>
-                    <div className="flex items-center gap-2 text-white font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                      <span>Scopri di più</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* System Products Section — hidden: not yet available */}
     </div>
   );
 };
