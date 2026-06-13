@@ -326,51 +326,6 @@ const AdminInventory = () => {
         </Card>
       )}
 
-      {/* Stock Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('mgo')}>
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Stock MgO</p>
-            <p className="text-xl font-bold">{mgoTotalStock.toFixed(0)} mq</p>
-            {criticalAlerts.filter(a => a.product === 'MgO').length > 0 && (
-              <p className="text-[11px] text-red-600">{criticalAlerts.filter(a => a.product === 'MgO').length} colori critici</p>
-            )}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('cwc')}>
-          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-green-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Stock CWC</p>
-            <p className="text-xl font-bold">{cwcTotalStock.toFixed(0)} mq</p>
-            {criticalAlerts.filter(a => a.product === 'CWC').length > 0 && (
-              <p className="text-[11px] text-red-600">{criticalAlerts.filter(a => a.product === 'CWC').length} varianti critiche</p>
-            )}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('tappetino')}>
-          <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-amber-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Tappetino</p>
-            <p className="text-xl font-bold">{tappetino.toFixed(0)} mq</p>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('profili')}>
-          <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-purple-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Profili</p>
-            <p className="text-xl font-bold">{profili.toFixed(0)} mq</p>
-          </div>
-        </div>
-      </div>
 
       {/* Detailed Stock Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
