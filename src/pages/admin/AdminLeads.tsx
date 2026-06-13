@@ -23,6 +23,7 @@ import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
 import { fetchAllRows } from "@/lib/fetchAllRows";
 import LeadPreventivi from "@/components/admin/LeadPreventivi";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from "@/components/admin/CrmShell";
 
 const LEAD_STATUSES = [
   { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
@@ -342,115 +343,103 @@ const AdminLeads = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">Lead &gt; Lista</p>
-          <h1 className="text-2xl font-bold">Lead</h1>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={() => { setQuoteSearchTerm(''); setQuoteSearchOpen(true); }} size="sm" variant="outline">
-            <FileText className="w-4 h-4 mr-2" />Crea Preventivo
-          </Button>
-          <Button onClick={() => { setCreateForm({ ...emptyLeadForm }); setCreateDialogOpen(true); }} size="sm">
-            <Plus className="w-4 h-4 mr-2" />Aggiungi Lead
-          </Button>
-          <Button onClick={exportToCsv} variant="outline" size="sm">
-            <Download className="w-4 h-4 mr-2" />Esporta
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        {[
-          { label: 'Totale', count: statCounts.total, color: 'text-foreground', bg: 'bg-muted' },
-          { label: 'Nuovi', count: statCounts.nuovo, color: 'text-blue-600', bg: 'bg-blue-100' },
-          { label: 'Contattati', count: statCounts.contattato, color: 'text-orange-600', bg: 'bg-orange-100' },
-          { label: 'Qualificati', count: statCounts.qualificato, color: 'text-green-600', bg: 'bg-green-100' },
-          { label: 'Proposta', count: statCounts.proposta, color: 'text-amber-600', bg: 'bg-amber-100' },
-        ].map(s => (
-          <div key={s.label} className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
-              <span className={`text-lg font-bold ${s.color}`}>{s.count}</span>
-            </div>
-            <p className="text-xs font-medium text-muted-foreground">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Filters */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-3 items-end">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Cerca..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
-            </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[160px]"><SelectValue placeholder="Stato" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tutti gli stati</SelectItem>
-                {LEAD_STATUSES.map(s => (
-                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Table */}
-      <DataTable
-        data={filteredLeads || []}
-        loading={isLoading}
-        searchable={false}
-        emptyTitle={searchTerm ? "Nessun lead trovato" : "Nessun lead registrato"}
-        emptyDescription="Modifica i filtri o crea un nuovo lead per iniziare."
-        onRowClick={(lead) => setDetailLead(lead)}
-        columns={[
-          { key: 'name', header: 'Referente', sortable: true, cell: (l) => <span className="font-medium">{l.name}</span> },
-          { key: 'company_name', header: 'Azienda', sortable: true, cell: (l) => l.company_name || '—' },
-          {
-            key: 'lead_type',
-            header: 'Tipologia',
-            cell: (l) => (l as any).lead_type
-              ? <Badge variant="outline" className="text-xs">{LEAD_TYPES.find(t => t.value === (l as any).lead_type)?.label || (l as any).lead_type}</Badge>
-              : '—',
-          },
-          { key: 'status', header: 'Stato', sortable: true, cell: (l) => getStatusBadge(l.status) },
-          { key: 'assigned_salesperson_id', header: 'Commerciale', cell: (l) => getSalespersonBadge(l.assigned_salesperson_id) },
-          {
-            key: 'created_at',
-            header: 'Creato il',
-            sortable: true,
-            accessor: (l) => new Date(l.created_at).getTime(),
-            cell: (l) => <span className="text-[#8A7060] text-sm">{format(new Date(l.created_at), "dd MMM yyyy · HH:mm", { locale: it })}</span>,
-          },
-          {
-            key: 'actions',
-            header: '',
-            className: 'w-10',
-            cell: (lead) => (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <MoreVertical className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); openEdit(lead); }}>
-                    <Pencil className="w-4 h-4 mr-2" />Modifica
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setDetailLead(lead); }}>
-                    <Eye className="w-4 h-4 mr-2" />Dettaglio
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ),
-          },
-        ]}
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Lead"]}
+        title="Lead"
+        subtitle="Gestione pipeline contatti e prospect"
+        actions={
+          <>
+            <Button onClick={() => { setQuoteSearchTerm(''); setQuoteSearchOpen(true); }} size="sm" variant="secondary" className="bg-white/15 hover:bg-white/25 text-white border-0">
+              <FileText className="w-4 h-4 mr-2" />Crea Preventivo
+            </Button>
+            <Button onClick={() => { setCreateForm({ ...emptyLeadForm }); setCreateDialogOpen(true); }} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+              <Plus className="w-4 h-4 mr-2" />Aggiungi Lead
+            </Button>
+            <Button onClick={exportToCsv} variant="secondary" size="sm" className="bg-white/15 hover:bg-white/25 text-white border-0">
+              <Download className="w-4 h-4 mr-2" />Esporta
+            </Button>
+          </>
+        }
       />
+
+      <CrmKpiRow cols={5}>
+        <CrmKpiTile label="Totale" value={statCounts.total} color="indigo" />
+        <CrmKpiTile label="Nuovi" value={statCounts.nuovo} color="blue" />
+        <CrmKpiTile label="Contattati" value={statCounts.contattato} color="orange" />
+        <CrmKpiTile label="Qualificati" value={statCounts.qualificato} color="green" />
+        <CrmKpiTile label="Proposta" value={statCounts.proposta} color="amber" />
+      </CrmKpiRow>
+
+      <CrmFilterBar>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input placeholder="Cerca per nome, azienda, email…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F5F0EA]/60 focus-visible:ring-1" />
+        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[160px] border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tutti gli stati</SelectItem>
+            {LEAD_STATUSES.map(s => (
+              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </CrmFilterBar>
+
+      <CrmTableCard>
+        <DataTable
+          data={filteredLeads || []}
+          loading={isLoading}
+          searchable={false}
+          emptyTitle={searchTerm ? "Nessun lead trovato" : "Nessun lead registrato"}
+          emptyDescription="Modifica i filtri o crea un nuovo lead per iniziare."
+          onRowClick={(lead) => setDetailLead(lead)}
+          columns={[
+            { key: 'name', header: 'Referente', sortable: true, cell: (l) => <span className="font-medium">{l.name}</span> },
+            { key: 'company_name', header: 'Azienda', sortable: true, cell: (l) => l.company_name || '—' },
+            {
+              key: 'lead_type',
+              header: 'Tipologia',
+              cell: (l) => (l as any).lead_type
+                ? <Badge variant="outline" className="text-xs">{LEAD_TYPES.find(t => t.value === (l as any).lead_type)?.label || (l as any).lead_type}</Badge>
+                : '—',
+            },
+            { key: 'status', header: 'Stato', sortable: true, cell: (l) => getStatusBadge(l.status) },
+            { key: 'assigned_salesperson_id', header: 'Commerciale', cell: (l) => getSalespersonBadge(l.assigned_salesperson_id) },
+            {
+              key: 'created_at',
+              header: 'Creato il',
+              sortable: true,
+              accessor: (l) => new Date(l.created_at).getTime(),
+              cell: (l) => <span className="text-[#8A7060] text-sm">{format(new Date(l.created_at), "dd MMM yyyy · HH:mm", { locale: it })}</span>,
+            },
+            {
+              key: 'actions',
+              header: '',
+              className: 'w-10',
+              cell: (lead) => (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <MoreVertical className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); openEdit(lead); }}>
+                      <Pencil className="w-4 h-4 mr-2" />Modifica
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setDetailLead(lead); }}>
+                      <Eye className="w-4 h-4 mr-2" />Dettaglio
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ),
+            },
+          ]}
+        />
+      </CrmTableCard>
+
 
 
       {/* Lead Form Dialog (shared for create & edit) */}

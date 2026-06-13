@@ -19,6 +19,7 @@ import { it } from 'date-fns/locale';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from '@/components/admin/CrmShell';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC-01', 'CWC-02', 'CWC-03', 'CWC-04', 'CWC-05', 'CWC-06', 'CWC-07'];
@@ -416,58 +417,44 @@ const AdminQuotes = () => {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <p className="text-sm text-muted-foreground">Preventivi &gt; Lista</p>
-          <h2 className="text-xl md:text-2xl font-bold">Preventivi</h2>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Preventivi"]}
+        title="Preventivi"
+        subtitle="Pipeline offerte e trattative"
+        actions={
+          <Button onClick={() => navigate('/admin/preventivi/nuovo')} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+            <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
+          </Button>
+        }
+      />
+
+      <CrmKpiRow cols={6}>
+        <CrmKpiTile label="Totale" value={statCounts.total} color="indigo" />
+        <CrmKpiTile label="Nuove" value={statCounts.nuove} color="blue" />
+        <CrmKpiTile label="Inviate" value={statCounts.inviate} color="orange" />
+        <CrmKpiTile label="In trattativa" value={statCounts.in_trattativa} color="amber" />
+        <CrmKpiTile label="Vinte" value={statCounts.vinte} color="emerald" />
+        <CrmKpiTile label="Perse" value={statCounts.perse} color="red" />
+      </CrmKpiRow>
+
+      <CrmFilterBar>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input placeholder="Cerca per cliente o codice…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F5F0EA]/60" />
         </div>
-        <Button onClick={() => navigate('/admin/preventivi/nuovo')}>
-          <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
-        </Button>
-      </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[180px] border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tutti gli stati</SelectItem>
+            {QUOTE_STATUSES.map(s => (
+              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </CrmFilterBar>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-        {[
-          { label: 'Totale', count: statCounts.total, color: 'text-foreground', bg: 'bg-muted' },
-          { label: 'Nuove', count: statCounts.nuove, color: 'text-blue-600', bg: 'bg-blue-100' },
-          { label: 'Inviate', count: statCounts.inviate, color: 'text-orange-600', bg: 'bg-orange-100' },
-          { label: 'In trattativa', count: statCounts.in_trattativa, color: 'text-amber-600', bg: 'bg-amber-100' },
-          { label: 'Vinte', count: statCounts.vinte, color: 'text-emerald-600', bg: 'bg-emerald-100' },
-          { label: 'Perse', count: statCounts.perse, color: 'text-red-600', bg: 'bg-red-100' },
-        ].map(s => (
-          <div key={s.label} className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
-              <span className={`text-lg font-bold ${s.color}`}>{s.count}</span>
-            </div>
-            <p className="text-xs font-medium text-muted-foreground">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Filters */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-3 items-end">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Cerca per cliente o codice..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10" />
-            </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]"><SelectValue placeholder="Stato" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tutti gli stati</SelectItem>
-                {QUOTE_STATUSES.map(s => (
-                  <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Table */}
+      <CrmTableCard>
       <DataTable
         data={filteredQuotes}
         loading={loading}
@@ -559,6 +546,7 @@ const AdminQuotes = () => {
           },
         ] as DataTableColumn<Quote>[]}
       />
+      </CrmTableCard>
     </div>
   );
 };

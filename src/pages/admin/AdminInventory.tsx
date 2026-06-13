@@ -14,6 +14,7 @@ import { Plus, Trash2, ArrowUpCircle, ArrowDownCircle, AlertTriangle, Package } 
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC n.1', 'CWC n.2', 'CWC n.3', 'CWC n.4', 'CWC n.5', 'CWC n.6', 'CWC n.7'];
@@ -211,113 +212,94 @@ const AdminInventory = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Magazzino</h2>
-          <p className="text-muted-foreground">Gestisci l'inventario per prodotto e colore</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Nuovo Movimento
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Registra Movimento</DialogTitle>
-              <DialogDescription>Inserisci i dati del movimento di magazzino</DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Prodotto</Label>
-                  <Select value={formData.product_type} onValueChange={(v) => setFormData({...formData, product_type: v, color: ''})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="MgO">MgO</SelectItem>
-                      <SelectItem value="CWC">CWC</SelectItem>
-                      <SelectItem value="Tappetino">Tappetino</SelectItem>
-                      <SelectItem value="Profili">Profili</SelectItem>
-                    </SelectContent>
-                  </Select>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Magazzino"]}
+        title="Magazzino"
+        subtitle="Inventario per prodotto e colore"
+        actions={
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+                <Plus className="w-4 h-4 mr-2" />
+                Nuovo Movimento
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Registra Movimento</DialogTitle>
+                <DialogDescription>Inserisci i dati del movimento di magazzino</DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Prodotto</Label>
+                    <Select value={formData.product_type} onValueChange={(v) => setFormData({...formData, product_type: v, color: ''})}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MgO">MgO</SelectItem>
+                        <SelectItem value="CWC">CWC</SelectItem>
+                        <SelectItem value="Tappetino">Tappetino</SelectItem>
+                        <SelectItem value="Profili">Profili</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tipo Movimento</Label>
+                    <Select value={formData.movement_type} onValueChange={(v) => setFormData({...formData, movement_type: v})}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="IN">Entrata (IN)</SelectItem>
+                        <SelectItem value="OUT">Uscita (OUT)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                {(formData.product_type === 'MgO' || formData.product_type === 'CWC') && (
+                  <div className="space-y-2">
+                    <Label>Colore / Variante</Label>
+                    <Select value={formData.color} onValueChange={(v) => setFormData({...formData, color: v})}>
+                      <SelectTrigger><SelectValue placeholder="Seleziona..." /></SelectTrigger>
+                      <SelectContent>
+                        {getVariantsList().map(v => (
+                          <SelectItem key={v} value={v}>{v}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Quantità (mq) *</Label>
+                    <Input type="number" step="0.01" value={formData.quantity_sqm} onChange={(e) => setFormData({...formData, quantity_sqm: e.target.value})} placeholder="1000" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Costo Acquisto (€/mq) *</Label>
+                    <Input type="number" step="0.01" value={formData.purchase_cost} onChange={(e) => setFormData({...formData, purchase_cost: e.target.value})} placeholder="15" />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Tipo Movimento</Label>
-                  <Select value={formData.movement_type} onValueChange={(v) => setFormData({...formData, movement_type: v})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="IN">Entrata (IN)</SelectItem>
-                      <SelectItem value="OUT">Uscita (OUT)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label>Data Movimento</Label>
+                  <Input type="date" value={formData.movement_date} onChange={(e) => setFormData({...formData, movement_date: e.target.value})} />
                 </div>
-              </div>
+                <div className="space-y-2">
+                  <Label>Note</Label>
+                  <Input value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} placeholder="Note aggiuntive" />
+                </div>
+                <Button type="submit" className="w-full">Salva Movimento</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+        }
+      />
 
-              {(formData.product_type === 'MgO' || formData.product_type === 'CWC') && (
-                <div className="space-y-2">
-                  <Label>Colore / Variante</Label>
-                  <Select value={formData.color} onValueChange={(v) => setFormData({...formData, color: v})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleziona..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {getVariantsList().map(v => (
-                        <SelectItem key={v} value={v}>{v}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
+      <CrmKpiRow>
+        <CrmKpiTile label="Stock MgO" value={`${mgoTotalStock.toFixed(0)} mq`} color="blue" icon={<Package className="w-4 h-4" />} hint={criticalAlerts.filter(a => a.product === 'MgO').length > 0 ? `${criticalAlerts.filter(a => a.product === 'MgO').length} colori critici` : undefined} onClick={() => setActiveTab('mgo')} />
+        <CrmKpiTile label="Stock CWC" value={`${cwcTotalStock.toFixed(0)} mq`} color="green" icon={<Package className="w-4 h-4" />} hint={criticalAlerts.filter(a => a.product === 'CWC').length > 0 ? `${criticalAlerts.filter(a => a.product === 'CWC').length} varianti critiche` : undefined} onClick={() => setActiveTab('cwc')} />
+        <CrmKpiTile label="Tappetino" value={`${tappetino.toFixed(0)} mq`} color="amber" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('tappetino')} />
+        <CrmKpiTile label="Profili" value={`${profili.toFixed(0)} mq`} color="purple" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('profili')} />
+      </CrmKpiRow>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Quantità (mq) *</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.quantity_sqm}
-                    onChange={(e) => setFormData({...formData, quantity_sqm: e.target.value})}
-                    placeholder="1000"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Costo Acquisto (€/mq) *</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.purchase_cost}
-                    onChange={(e) => setFormData({...formData, purchase_cost: e.target.value})}
-                    placeholder="15"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Data Movimento</Label>
-                <Input
-                  type="date"
-                  value={formData.movement_date}
-                  onChange={(e) => setFormData({...formData, movement_date: e.target.value})}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Note</Label>
-                <Input
-                  value={formData.notes}
-                  onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  placeholder="Note aggiuntive"
-                />
-              </div>
-              <Button type="submit" className="w-full">Salva Movimento</Button>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
 
       {/* Low Stock Alerts */}
       {lowStockAlerts.length > 0 && (
@@ -344,51 +326,6 @@ const AdminInventory = () => {
         </Card>
       )}
 
-      {/* Stock Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('mgo')}>
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Stock MgO</p>
-            <p className="text-xl font-bold">{mgoTotalStock.toFixed(0)} mq</p>
-            {criticalAlerts.filter(a => a.product === 'MgO').length > 0 && (
-              <p className="text-[11px] text-red-600">{criticalAlerts.filter(a => a.product === 'MgO').length} colori critici</p>
-            )}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('cwc')}>
-          <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-green-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Stock CWC</p>
-            <p className="text-xl font-bold">{cwcTotalStock.toFixed(0)} mq</p>
-            {criticalAlerts.filter(a => a.product === 'CWC').length > 0 && (
-              <p className="text-[11px] text-red-600">{criticalAlerts.filter(a => a.product === 'CWC').length} varianti critiche</p>
-            )}
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('tappetino')}>
-          <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-amber-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Tappetino</p>
-            <p className="text-xl font-bold">{tappetino.toFixed(0)} mq</p>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setActiveTab('profili')}>
-          <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
-            <Package className="w-5 h-5 text-purple-600" />
-          </div>
-          <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Profili</p>
-            <p className="text-xl font-bold">{profili.toFixed(0)} mq</p>
-          </div>
-        </div>
-      </div>
 
       {/* Detailed Stock Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
