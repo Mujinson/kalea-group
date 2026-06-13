@@ -228,22 +228,21 @@ const AdminCustomers = () => {
   const totalMargin = customers.reduce((sum, c) => sum + (c.total_margin || 0), 0);
 
   return (
-    <div className="space-y-4 md:space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl md:text-2xl font-bold">Clienti</h2>
-          <p className="text-sm text-muted-foreground">CRM e anagrafica clienti</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Nuovo Cliente</Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Nuovo Cliente</DialogTitle>
-              <DialogDescription>Inserisci i dati del nuovo cliente</DialogDescription>
-            </DialogHeader>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Clienti"]}
+        title="Clienti"
+        subtitle="CRM e anagrafica clienti"
+        actions={
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90"><Plus className="w-4 h-4 mr-2" />Nuovo Cliente</Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Nuovo Cliente</DialogTitle>
+                <DialogDescription>Inserisci i dati del nuovo cliente</DialogDescription>
+              </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label>Tipologia Cliente *</Label>
