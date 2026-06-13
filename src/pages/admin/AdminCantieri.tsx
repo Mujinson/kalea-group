@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { HardHat, Plus, Search, MapPin, Eye, Trash2, Edit, Upload, X, Image, Film, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from "@/components/admin/CrmShell";
 
 const TIPOLOGIE = [
   "Villa privata", "Appartamento", "Condominio", "Hotel", "Ristorante",
