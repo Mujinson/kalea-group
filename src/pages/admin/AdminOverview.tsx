@@ -30,7 +30,7 @@ const eurShort = (v: number) => {
 };
 const pct = (v: number) => `${(v || 0).toFixed(1)}%`;
 
-type PeriodKey = 'month' | 'lastMonth' | 'quarter' | 'ytd' | 'last30';
+type PeriodKey = 'month' | 'lastMonth' | 'quarter' | 'ytd' | 'last30' | 'all';
 type TabKey = 'overview' | 'commerciale' | 'cantieri' | 'finanza' | 'magazzino';
 
 function getPeriodRange(p: PeriodKey) {
@@ -51,6 +51,11 @@ function getPeriodRange(p: PeriodKey) {
     case 'ytd': {
       const s = startOfYear(now), e = endOfYear(now);
       return { start: s, end: e, prevStart: startOfYear(subMonths(s, 12)), prevEnd: endOfYear(subMonths(s, 12)), label: `YTD ${format(s, 'yyyy')}` };
+    }
+    case 'all': {
+      const s = new Date(2000, 0, 1);
+      const e = new Date(2100, 11, 31);
+      return { start: s, end: e, prevStart: s, prevEnd: s, label: 'Tutto il periodo' };
     }
     default: {
       const s = subDays(now, 30);
