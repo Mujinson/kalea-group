@@ -22,6 +22,7 @@ import { DataTable } from "@/components/admin/DataTable";
 import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
 import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
 import { fetchAllRows } from "@/lib/fetchAllRows";
+import LeadPreventivi from "@/components/admin/LeadPreventivi";
 
 const LEAD_STATUSES = [
   { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
@@ -661,6 +662,7 @@ const AdminLeads = () => {
                   <CardContent className="text-sm whitespace-pre-wrap">{detailLead.notes}</CardContent>
                 </Card>
               )}
+              <LeadPreventivi leadId={detailLead.id} />
               <div className="flex gap-2">
                 <Button size="sm" className="flex-1" onClick={() => { openEdit(detailLead); setDetailLead(null); }}>
                   <Pencil className="w-4 h-4 mr-2" />Modifica
