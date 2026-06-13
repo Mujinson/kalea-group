@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const KALEA_LOGO = "";
+const KALEA_LOGO = "data:image/png;base64,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";
 
 // ─── COSTANTI ────────────────────────────────────────────────
 const COSTO_POSA_INTERNO = 9.0;
@@ -623,87 +623,193 @@ export default function CreaPreventivo() {
             </button>
           </div>
 
+          {/* ANTEPRIMA DOCUMENTO */}
           <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E0DDD8",borderRadius:12,padding:"40px 48px",maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
-            <div style={{display:"flex",justifyContent:"space-between",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
+
+            {/* Testata */}
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
               <div>
-                <div style={{fontSize:24,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>
-                <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em"}}>Innovate | Living | Nature</div>
+                {KALEA_LOGO ? <img src={KALEA_LOGO} alt="Kalēa" style={{height:44,display:"block",marginBottom:4}}/> : <div style={{fontSize:24,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>}
+                <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
+                <div style={{fontSize:12,color:"#6B6860"}}>Superfici · Pavimentazioni · Posa</div>
                 <div style={{fontSize:11,color:"#9A9890",marginTop:2}}>Desenzano del Garda (BS) · info@kalea.space · kalea.space</div>
               </div>
               <div style={{textAlign:"right"}}>
-                <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E"}}>PREVENTIVO</div>
-                <div style={{fontSize:13,color:"#6B6860",marginTop:4}}>N° <strong>{numPrev||"—"}</strong></div>
+                <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>PREVENTIVO</div>
+                <div style={{fontSize:13,color:"#6B6860",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
                 <div style={{fontSize:13,color:"#6B6860"}}>Data: <strong>{dataPrev}</strong></div>
                 <div style={{fontSize:13,color:"#A32D2D"}}>Valido fino al: <strong>{addDays(dataPrev,30)}</strong></div>
               </div>
             </div>
 
+            {/* Cliente */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
               <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",marginBottom:8}}>Cliente</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Cliente</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.indirizzo}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.citta}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.telefono}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.email}</div>
               </div>
-              {cantiere && (
-                <div>
-                  <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",marginBottom:8}}>Cantiere</div>
-                  <div style={{fontSize:13,color:"#6B6860"}}>{cantiere}</div>
-                </div>
-              )}
+              {cantiere && <div>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Oggetto / Cantiere</div>
+                <div style={{fontSize:13,color:"#6B6860"}}>{cantiere}</div>
+              </div>}
             </div>
 
+            {/* Corpo preventivo */}
             <table style={{width:"100%",borderCollapse:"collapse",marginBottom:24}}>
               <thead>
                 <tr style={{background:"#1A1A2E"}}>
                   {["Descrizione","mq","Prezzo unit.","Totale"].map(h=>(
-                    <th key={h} style={{padding:"9px 12px",textAlign:h==="Descrizione"?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase"}}>{h}</th>
+                    <th key={h} style={{padding:"9px 12px",textAlign:h==="Descrizione"?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
+                <tr style={{background:"#F7F6F3"}}>
+                  <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Fornitura materiale</td>
+                </tr>
                 <tr>
                   <td style={{padding:"8px 12px",fontSize:13}}>{prodotto?.nome} — {prodotto?.dims}</td>
                   <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.mqOrd.toFixed(1)}</td>
                   <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.prezzoMatMq)}</td>
                   <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoMatTot)}</td>
                 </tr>
-                {incPosa && (
+                {righeMat.filter((r:any)=>r.desc).map((r:any)=>(
+                  <tr key={r.id}>
+                    <td style={{padding:"8px 12px",fontSize:13}}>{r.desc}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{r.qta} {r.unita}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(r.prezzoUn)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(r.prezzoUn*r.qta)}</td>
+                  </tr>
+                ))}
+                {incPosa && <>
+                  <tr style={{background:"#F7F6F3"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Posa in opera</td>
+                  </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>Posa in opera — {complessita}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(PREZZI_POSA[complessita])}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoPosaTot)}</td>
                   </tr>
-                )}
-                {calc.tappNeeded && (
+                </>}
+                {calc.tappNeeded && <>
+                  <tr style={{background:"#F7F6F3"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Tappetino / Sottofondo</td>
+                  </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>Tappetino/sottofondo</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(PREZZO_TAPPETINO_CLIENTE)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTappTot)}</td>
                   </tr>
+                </>}
+                {incTrasporto && calc.kmExtra>0 && (
+                  <tr>
+                    <td style={{padding:"8px 12px",fontSize:13}}>Trasporto ({calc.kmExtra} km)</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.kmExtra}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(COSTO_KM*MARKUP)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasporto)}</td>
+                  </tr>
+                )}
+                {calc.trasfertaAttiva && (
+                  <tr>
+                    <td style={{padding:"8px 12px",fontSize:13}}>Trasferta posatori</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(SUPPL_TRASFERTA_POSA[complessita])}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasfertaTot)}</td>
+                  </tr>
                 )}
               </tbody>
             </table>
 
+            {/* Totali */}
             <div style={{marginLeft:"auto",width:280}}>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:13}}>
-                <span style={{color:"#6B6860"}}>Subtotale</span><span>{euro(calc.prezzoLordoTot)}</span>
-              </div>
-              {sconto>0 && (
-                <div style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:13}}>
-                  <span style={{color:"#633806"}}>Sconto {sconto}%</span><span>− {euro(calc.scontoAmt)}</span>
+              {[
+                {l:"Subtotale",v:euro(calc.prezzoLordoTot)},
+                sconto>0 && {l:`Sconto ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
+                sconto>0 && {l:"Imponibile scontato",v:euro(calc.prezzoNetto)},
+                {l:"IVA 22%",v:euro(calc.iva)},
+              ].filter(Boolean).map((r:any,i:number)=>(
+                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
+                  <span style={{color:"#6B6860"}}>{r.l}</span>
+                  <span style={{color:r.c||"#1A1A1A"}}>{r.v}</span>
                 </div>
-              )}
-              <div style={{display:"flex",justifyContent:"space-between",padding:"5px 0",fontSize:13}}>
-                <span style={{color:"#6B6860"}}>IVA 22%</span><span>{euro(calc.iva)}</span>
+              ))}
+              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4}}>
+                <span>TOTALE DOCUMENTO</span>
+                <span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
               </div>
-              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E"}}>
-                <span>TOTALE</span><span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
+            </div>
+
+            {/* Pagamenti */}
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
+              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di pagamento</div>
+              {pagamenti.map((p:any,i:number)=>(
+                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
+                  <span>{p.label} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"#9A9890",fontSize:12}}> ({p.note})</span>}</span>
+                  <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Note cliente */}
+            {noteCliente && (
+              <div style={{marginTop:20,padding:"12px 16px",background:"#F0EDE8",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Note per il cliente</div>
+                {noteCliente}
               </div>
+            )}
+
+            {/* Termini */}
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8"}}>
+              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>Termini e condizioni</div>
+              <div style={{fontSize:11,color:"#6B6860",lineHeight:1.8,whiteSpace:"pre-line"}}>{`Premesse
+1) La società committente dichiara di essere a conoscenza e di essere informata che la pavimentazione "Kalea" che il fornitore si appresta a fornire e posare con il presente contratto di posa e fornitura è esclusivamente un prodotto estetico, non ha proprietà di isolamento né di impermeabilizzazione e come tale deve essere considerato.
+2) Qualsiasi onere di impermeabilizzazione del fondo è da ritenersi a carico del Committente, pertanto nessuna responsabilità potrà essere addebitata al fornitore qualora si verificassero problematiche di infiltrazioni presso l'immobile o comunque problematiche derivanti da un fondo non conforme sul quale il materiale venga posato.
+3) Sarà esclusiva cura del committente: a) Garantire corrente elettrica 220V e acqua. b) Effettuare l'assistenza con proprio personale per la messa in quota del materiale fornito dal fornitore. c) Garantire il fondo di posa (fondo piano e asciutto) sul quale Kalea effettuerà il posizionamento dei suoi materiali.
+4) A cura del fornitore: a) Fornire il nominativo della squadra di posa che verrà inviata sul cantiere e tutta la documentazione necessaria per la verifica della idoneità tecnico professionale ai sensi del D. Lgs 81/2008, tra cui il DURC. b) Effettuare tutti i lavori commissionati a regola d'arte. c) Garantire che la data d'inizio lavori sia entro il ……………………………, con condizioni climatiche idonee alla posa. d) Che l'attività di posa prosegua in continuità. e) Mantenere pulito il cantiere stoccando i materiali di scarto e rifiuti in appositi luoghi e/o contenitori definiti con la committenza. f) Un tecnico in rappresentanza del fornitore assicurerà visite periodiche in cantiere. g) Durante le lavorazioni sarà possibile che Kalea S.r.l. esegua fotografie o riprese ai fini pubblicitari e di marketing che verranno possibilmente pubblicate sul sito internet o sui social network.
+5) Condizioni Generali di fornitura e posa: a) I prezzi esposti nel presente contratto si intendono IVA esclusa. b) Il presente accordo s'intende a misura e non a corpo. Ai fini del pagamento delle fatture, si precisa che i lavori si intenderanno finiti e dunque l'importo riscuotibile anche qualora sopraggiungano impedimenti esterni e contingenti che determinino l'interruzione o la sospensione della posa in opera per cause indipendenti dalla volontà della scrivente Ditta. In tal caso sarà fatturata solo la metratura effettivamente consegnata ad opera d'arte.
+6) Modalità di misurazione: Per le opere di posa, la pavimentazione verrà calcolata al mq conteggiando il 5% di sfrido di lavorazione. Accessori verranno calcolati al ML conteggiando il 5% di sfrido di lavorazione. Eventuali prestazioni extra richieste dal committente verranno addebitate a parte in economia nella misura di EURO 30,00/ora per persona applicata, più il costo del materiale utilizzato.
+7) Ogni eventuale contestazione che dovesse sorgere tra le parti in ordine alla interpretazione, esecuzione o risoluzione del rapporto di cui al presente contratto sarà devoluta alla competenza esclusiva del Foro di Brescia.
+8) Le parti di comune accordo stabiliscono di voler far prevalere l'obbligazione del fare e che quindi il presente contratto si considera di prestazione di servizi come attività prevalente.
+9) Modalità di Pagamento: Primo acconto alla firma del presente 50% + IVA. Saldo a fine lavori.`}</div>
+            </div>
+
+            {/* Sezione Privacy firma */}
+            <div style={{marginTop:20,padding:"12px 16px",border:"1px solid #E0DDD8",borderRadius:8}}>
+              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679</div>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#6B6860"}}>
+                <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
+                <span>Consento al trattamento dei miei dati personali ai sensi dell'art. 13 del Regolamento UE n. 2016/679</span>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",fontSize:12,color:"#6B6860"}}>
+                <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
+                <span>Autorizzo il trattamento dei dati personali per l'invio di materiale informativo e pubblicitario come indicato nell'Informativa</span>
+              </div>
+            </div>
+
+            {/* Accettazione */}
+            <div style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
+              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>Le parti dichiarano di aver preso visione degli articoli 1,2,3,4,5,6,7,8,9 del presente contratto ai sensi degli artt. 1341 e 1342 c.c. e di approvarne il contenuto.</div>
+              <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>Il/La sottoscritto/a dichiara di accettare il presente preventivo</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
+                <div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>Firma Cliente</div>
+                </div>
+                <div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>Per Kalēa</div>
+                </div>
+              </div>
+              <div style={{marginTop:20,fontSize:12,color:"#6B6860"}}>Luogo e data: _______________________</div>
+            </div>
+
+            {/* Footer */}
+            <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid #E0DDD8",textAlign:"center",fontSize:11,color:"#9A9890"}}>
+              Kalēa · Desenzano del Garda (BS) · info@kalea.space · kalea.space · P.IVA IT_____________
             </div>
           </div>
         </div>
