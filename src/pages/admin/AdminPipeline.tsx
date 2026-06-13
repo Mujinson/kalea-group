@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { ArrowRight, Phone, Mail, MapPin, Building2, Thermometer, Plus } from "lucide-react";
+import { CrmPageHeader } from "@/components/admin/CrmShell";
 import { toast } from "sonner";
 import { fetchAllRows } from "@/lib/fetchAllRows";
 
