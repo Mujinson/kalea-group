@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { Plus, Trash2, Calendar, AlertTriangle } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { format, differenceInDays } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
