@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { UserPlus, Trash2, Shield, Users, AlertTriangle, Key } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
 import CommercialiSection from '@/components/admin/CommercialiSection';
 
