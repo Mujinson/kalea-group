@@ -204,7 +204,7 @@ const Empty = ({ msg = 'Nessun dato per il periodo' }: { msg?: string }) => (
 
 // ─── Main ─────────────────────────────────────────────────────
 const PERIOD_LABELS: Record<PeriodKey, string> = {
-  month: 'Mese', lastMonth: 'Mese scorso', quarter: 'Trimestre', ytd: 'YTD', last30: '30 giorni',
+  month: 'Mese', lastMonth: 'Mese scorso', quarter: 'Trimestre', ytd: 'YTD', all: 'All time', last30: '30 giorni',
 };
 const TAB_LABELS: Record<TabKey, string> = {
   overview: 'Overview', commerciale: 'Commerciale', cantieri: 'Cantieri', finanza: 'Finanza', magazzino: 'Magazzino',
