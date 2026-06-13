@@ -198,8 +198,7 @@ const AdminPayments = () => {
   return (
     <div className="space-y-4">
       <CrmPageHeader breadcrumb={["CRM", "Finanza", "Pagamenti"]} title="Pagamenti Fornitore" subtitle="Accordo di pagamento differito" />
-      <div className="flex items-center justify-end">
-        <div className="hidden">
+      <div className="flex items-center justify-end gap-2">
         <div className="flex gap-2">
           <Dialog open={agreementDialogOpen} onOpenChange={setAgreementDialogOpen}>
             <DialogTrigger asChild>
