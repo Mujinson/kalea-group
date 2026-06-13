@@ -546,6 +546,7 @@ const AdminQuotes = () => {
           },
         ] as DataTableColumn<Quote>[]}
       />
+      </CrmTableCard>
     </div>
   );
 };
