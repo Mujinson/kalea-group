@@ -55,8 +55,8 @@ export function CrmPageHeader({ breadcrumb, title, subtitle, actions }: CrmPageH
             ))}
           </div>
         )}
-        <h1 className="text-[22px] md:text-2xl font-bold text-white leading-tight">{title}</h1>
-        {subtitle && <p className="text-sm text-white/65 mt-0.5">{subtitle}</p>}
+        <h1 className="text-[22px] md:text-2xl font-bold leading-tight" style={{ color: "#ffffff" }}>{title}</h1>
+        {subtitle && <p className="text-sm mt-0.5" style={{ color: "rgba(255,255,255,0.75)" }}>{subtitle}</p>}
       </div>
       {actions && <div className="flex gap-2 flex-wrap shrink-0">{actions}</div>}
     </div>
