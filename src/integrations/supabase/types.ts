@@ -1202,6 +1202,72 @@ export type Database = {
           },
         ]
       }
+      preventivi: {
+        Row: {
+          cantiere: string | null
+          cliente_nome: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          data: string
+          id: string
+          importo_totale: number
+          json_dati: Json
+          lead_id: string | null
+          lingua: string
+          numero_preventivo: string
+          stato: string
+          updated_at: string
+        }
+        Insert: {
+          cantiere?: string | null
+          cliente_nome?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          data?: string
+          id?: string
+          importo_totale?: number
+          json_dati?: Json
+          lead_id?: string | null
+          lingua?: string
+          numero_preventivo: string
+          stato?: string
+          updated_at?: string
+        }
+        Update: {
+          cantiere?: string | null
+          cliente_nome?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          data?: string
+          id?: string
+          importo_totale?: number
+          json_dati?: Json
+          lead_id?: string | null
+          lingua?: string
+          numero_preventivo?: string
+          stato?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "preventivi_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "preventivi_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_categories: {
         Row: {
           created_at: string
