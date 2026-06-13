@@ -130,16 +130,17 @@ const AdminAppointments = () => {
   const upcoming = filteredAppointments.filter((a) => new Date(a.appointment_date) >= today && a.status === "confermato");
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Appuntamenti</h1>
-          <p className="text-muted-foreground text-sm mt-1">Gestisci chiamate, videochiamate e visite</p>
-        </div>
-        <Button onClick={() => setCreateOpen(true)}>
-          <Plus className="w-4 h-4 mr-2" /> Nuovo Appuntamento
-        </Button>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Appuntamenti"]}
+        title="Appuntamenti"
+        subtitle="Chiamate, videochiamate e visite"
+        actions={
+          <Button onClick={() => setCreateOpen(true)} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+            <Plus className="w-4 h-4 mr-2" /> Nuovo Appuntamento
+          </Button>
+        }
+      />
 
       {/* Person filter - only for admins */}
       {isAdmin && salespeople && salespeople.length > 0 && (
@@ -163,53 +164,13 @@ const AdminAppointments = () => {
         </div>
       )}
 
-      {/* KPI */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-              <CalendarClock className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{upcoming.length}</p>
-              <p className="text-xs text-muted-foreground">In programma</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-              <Check className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{filteredAppointments.filter((a) => a.status === "completato").length}</p>
-              <p className="text-xs text-muted-foreground">Completati</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-              <Phone className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{filteredAppointments.filter((a) => a.appointment_type === "chiamata").length}</p>
-              <p className="text-xs text-muted-foreground">Chiamate</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-purple-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{filteredAppointments.filter((a) => a.appointment_type === "visita").length}</p>
-              <p className="text-xs text-muted-foreground">Visite</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <CrmKpiRow>
+        <CrmKpiTile label="In programma" value={upcoming.length} color="green" icon={<CalendarClock className="w-4 h-4" />} />
+        <CrmKpiTile label="Completati" value={filteredAppointments.filter((a) => a.status === "completato").length} color="blue" icon={<Check className="w-4 h-4" />} />
+        <CrmKpiTile label="Chiamate" value={filteredAppointments.filter((a) => a.appointment_type === "chiamata").length} color="amber" icon={<Phone className="w-4 h-4" />} />
+        <CrmKpiTile label="Visite" value={filteredAppointments.filter((a) => a.appointment_type === "visita").length} color="purple" icon={<MapPin className="w-4 h-4" />} />
+      </CrmKpiRow>
+
 
       <Tabs defaultValue="calendar">
         <TabsList>
