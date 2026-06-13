@@ -92,6 +92,7 @@ import PricingSignature from "./pages/admin/strumenti/PricingSignature";
 import PricingExterno from "./pages/admin/strumenti/PricingExterno";
 import Preventivatore from "./pages/admin/strumenti/Preventivatore";
 import SistemaPreventivi from "./pages/admin/strumenti/SistemaPreventivi";
+import CreaPreventivo from "./pages/admin/strumenti/CreaPreventivo";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -179,6 +180,7 @@ const App = () => (
                 {/* Strumenti */}
                 <Route path="strumenti/preventivatore" element={<Preventivatore />} />
                 <Route path="strumenti/sistema-preventivi" element={<SistemaPreventivi />} />
+                <Route path="strumenti/crea-preventivo" element={<CreaPreventivo />} />
                 <Route path="strumenti/costo-operaio" element={<CostoOperaio />} />
                 <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />
                 <Route path="strumenti/pricing-flow" element={<PricingFlow />} />
