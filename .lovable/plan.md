@@ -1,55 +1,62 @@
-## Obiettivo
-Aggiungere una nuova sezione **"Strumenti"** nella sidebar admin con 4 pagine calcolatore/pricing, con persistenza dei parametri su Lovable Cloud.
+# Migrazione CRM su `crm.kalea.space`
 
-## Struttura sidebar
-Nuovo gruppo in `src/components/admin/AdminSidebar.tsx` (icona `Wrench`/`Calculator`, `adminOnly: true`):
+Obiettivo: quando un utente apre `crm.kalea.space`, vede **solo il CRM** (login + dashboard admin/commerciale/operaio), senza poter navigare il sito pubblico Kalēa. Il sito pubblico continua a vivere su `kalea.space`.
 
-- Costo Operaio → `/admin/strumenti/costo-operaio`
-- Sostenibilità → `/admin/strumenti/sostenibilita`
-- Pricing Flow → `/admin/strumenti/pricing-flow`
-- Pricing Kronos → `/admin/strumenti/pricing-kronos`
+## 1. DNS (lato tuo, su registrar)
 
-## Pagine (scheletro)
-Creo 4 file in `src/pages/admin/strumenti/`:
+Aggiungere un record per il sottodominio che punti all'hosting Lovable:
 
-1. **CostoOperaio.tsx** — slider (netto mensile, giorni lavorativi, pasto, furgone, telepass, trasferta, albergo) → costo mese/anno/giorno/ora + pricing posa €/mq (break-even / target / premium).
-2. **Sostenibilita.tsx** — slider costi fissi (operaio, commercialista, tools, ads, affitto, assicurazioni, varie, soci) + volumi (mq fornitura/posa, markup, prezzo posa) → conto economico mensile, 3 scenari, markup consigliato, accantonamento 15%.
-3. **PricingFlow.tsx** — tabella prodotti Flow 2025 (dataset in attesa). Slider sconto fornitore (default 0,45 = 50+10) e markup Kalēa (default 60%). Per riga: costo, prezzo, margine %, sconto max cliente. Calcolatore preventivo (mq, sfrido, sconto cliente → totale, margine, break-even).
-4. **PricingKronos.tsx** — tabella prodotti Kronos 2026 (dataset in attesa). Slider sconto fornitore (default 0,36 = 50+20+10) e markup (default 70%). Filtri per collezione (Pierre Vive, Materia, Piasentina, Nativa, Metallique, Le Reverse, Les Bois, Outdoor). Calcolatore preventivo con battiscopa incluso.
+```text
+Type:  A
+Name:  crm
+Value: 185.158.133.1
+TTL:   Auto
+```
 
-Tutte le pagine usano i componenti admin esistenti (`Card`, `Slider`, `DataTable`, palette `#F5F0EA` / `#3B2314` / `#C8A96E`, font New Order) per coerenza visiva.
+(Se usi Cloudflare in proxy, useremo invece la modalità CNAME proxy nel pannello Lovable.)
 
-## Dataset prodotti
-Salvati come file statici in `src/data/strumenti/`:
-- `flowProducts.ts`
-- `kronosProducts.ts`
+## 2. Collegamento dominio in Lovable
 
-Inizializzati vuoti / con TODO; popolati appena mandi il JSON nei messaggi successivi.
+In **Project Settings → Domains → Connect domain** aggiungere `crm.kalea.space`. Lovable verifica DNS e provisiona automaticamente l'SSL. `kalea.space` e `www.kalea.space` restano collegati come oggi.
 
-## Persistenza parametri (Lovable Cloud)
-Nuova tabella `public.tool_settings`:
+## 3. Routing app: rilevare il sottodominio
 
-| campo | tipo |
-|---|---|
-| `id` | uuid PK |
-| `user_id` | uuid (auth.users) |
-| `tool_key` | text (`costo_operaio` \| `sostenibilita` \| `pricing_flow` \| `pricing_kronos`) |
-| `settings` | jsonb (slider values) |
-| `created_at` / `updated_at` | timestamptz |
+L'app è una SPA con React Router. Aggiungiamo un rilevamento di hostname in `src/App.tsx` (o in un nuovo wrapper `CrmHostGate`) con questa logica:
 
-UNIQUE su `(user_id, tool_key)`. RLS: ogni utente vede/modifica solo i propri record; `service_role` ALL. GRANT a `authenticated` + `service_role`.
+- Se `window.location.hostname === "crm.kalea.space"`:
+  - **Qualsiasi path** viene gestito come se fosse sotto `/admin`.
+  - Path pubblici (`/`, `/it`, `/parquet`, `/chi-siamo`, ecc.) → redirect a `/admin` (o a `/admin/login` se non loggato).
+  - Le route pubbliche **non vengono montate** su questo host: l'utente non può raggiungerle nemmeno digitandole.
+- Altrimenti (host `kalea.space`, `www.kalea.space`, preview Lovable):
+  - Comportamento attuale invariato: sito pubblico + `/admin` raggiungibile come oggi.
 
-Hook `useToolSettings(toolKey, defaults)` con upsert debounced (~500ms) su modifica slider.
+In pratica `App.tsx` espone due alberi di route distinti in base all'host.
 
-## Routing
-Aggiungo le 4 route figlie sotto `AdminLayout` in `src/App.tsx`.
+## 4. Link interni e redirect post-login
 
-## Workflow incrementale
-1. Confermi il piano → creo sidebar + 4 pagine scheletro + tabella `tool_settings` + hook persistenza, con UI funzionante ma dataset vuoti per Flow/Kronos.
-2. Mi mandi JSON Flow → popolo `flowProducts.ts`.
-3. Mi mandi JSON Kronos → popolo `kronosProducts.ts`.
-4. Iterazioni HTML per pagina come da tuo workflow.
+- `useAdminAuth.signUp` usa `${window.location.origin}/admin` come `emailRedirectTo`: continuerà a funzionare, perché su `crm.kalea.space` l'origin è già quello giusto.
+- `AdminLayout`: il bottone "Dashboard" naviga a `/admin` → ok su entrambi gli host.
+- I link nel sito pubblico verso `/admin` (es. footer, navbar admin shortcut, se presenti) restano puntati a `kalea.space/admin`. Opzionale: farli puntare a `https://crm.kalea.space` con un link assoluto. Da confermare se vuoi questa modifica ora o dopo.
 
-## Domande aperte
-- I parametri devono essere **per utente** (ogni admin il suo set) o **globali** (condivisi tra tutti gli admin)? Default proposto: per utente.
-- Per Sostenibilità i 3 scenari (prudente/realistico/ottimistico) li calcolo con quali moltiplicatori sui volumi? Proposta: −20% / baseline / +20% sui mq venduti. Confermi o mi dai i tuoi?
+## 5. SEO
+
+Su `crm.kalea.space` aggiungere `<meta name="robots" content="noindex,nofollow">` e un `robots.txt` virtuale (via meta tag, dato che è SPA) per non indicizzare il CRM. Sitemap pubblica resta solo su `kalea.space`.
+
+## 6. Cosa NON cambia
+
+- Database, edge functions, Supabase auth: nessuna modifica. Le sessioni sono per-origin, quindi un utente loggato su `kalea.space/admin` dovrà rifare login su `crm.kalea.space` la prima volta (origin diverso = storage diverso). Questo è il comportamento standard e atteso.
+- URL interne del CRM (`/admin/leads`, `/admin/cantieri`, ecc.): identiche. Cambia solo l'host.
+
+## Dettagli tecnici (per riferimento)
+
+File toccati:
+- `src/App.tsx` — split routing per hostname (host gate).
+- *(nuovo)* `src/lib/host.ts` — helper `isCrmHost()`.
+- `index.html` — meta `robots` condizionale via piccolo script inline che legge `location.hostname`.
+- `src/pages/admin/AdminLogin.tsx` — nessuna modifica logica; eventualmente titolo "Kalēa CRM".
+
+Nessuna modifica a Supabase, RLS, edge functions o schema DB.
+
+## Domanda prima di procedere
+
+Vuoi che, quando un utente apre `kalea.space/admin` (vecchio URL), venga **redirezionato automaticamente a `crm.kalea.space/admin`**? Oppure preferisci che entrambi gli URL restino funzionanti in parallelo?

@@ -2,8 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
+import { isCrmHost } from "@/lib/host";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Indoor from "./pages/Indoor";
@@ -126,6 +127,37 @@ const SEOHandler = () => {
   return null;
 };
 
+// On crm.kalea.space: force every non-admin path into /admin
+// and inject a noindex meta tag so the CRM isn't crawled.
+const CrmHostGate = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isCrmHost()) return;
+    let tag = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+    if (!tag) {
+      tag = document.createElement("meta");
+      tag.name = "robots";
+      document.head.appendChild(tag);
+    }
+    tag.content = "noindex,nofollow";
+  }, []);
+
+  if (!isCrmHost()) return null;
+
+  const p = location.pathname;
+  const allowed =
+    p === "/admin" ||
+    p.startsWith("/admin/") ||
+    p === "/cantieri-app" ||
+    p.startsWith("/cantieri-app/");
+
+  if (!allowed) {
+    return <Navigate to="/admin" replace />;
+  }
+  return null;
+};
+
 const App = () => (
   <MotionConfig reducedMotion="never">
     <QueryClientProvider client={queryClient}>
@@ -135,9 +167,11 @@ const App = () => (
         <BrowserRouter>
           <I18nProvider>
             <ScrollToTop />
+            <CrmHostGate />
             <Routes>
               {/* Redirect /it/admin/* to /admin/* */}
               <Route path="/:lang/admin/*" element={<AdminLangRedirect />} />
+
 
               {/* Worker app (standalone, no sidebar) */}
               <Route path="/cantieri-app" element={<WorkerApp />} />
