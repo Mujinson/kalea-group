@@ -60,12 +60,9 @@ const AdminMedia = () => {
   });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <p className="text-xs text-muted-foreground">Clienti › Media</p>
-        <h1 className="text-2xl font-bold text-foreground">Media</h1>
-        <p className="text-sm text-muted-foreground mt-1">Cartelle media organizzate per cantiere</p>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader breadcrumb={["CRM", "Clienti", "Media"]} title="Media" subtitle="Cartelle media organizzate per cantiere" />
+
 
       <div className="flex items-center gap-3 justify-end">
         <div className="relative">
