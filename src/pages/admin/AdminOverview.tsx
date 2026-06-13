@@ -7,162 +7,207 @@ import { fetchAllRows } from '@/lib/fetchAllRows';
 import {
   TrendingUp, FileText, HardHat, Target, Users, Wallet,
   AlertTriangle, Package, ChevronRight, ArrowUp, ArrowDown,
+  Calendar as CalIcon, Activity, CreditCard, UserPlus, Briefcase,
 } from 'lucide-react';
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  CartesianGrid, Line, ComposedChart, Cell, Legend,
+  Area, AreaChart, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  CartesianGrid, Legend,
 } from 'recharts';
-import { format, startOfMonth, endOfMonth, startOfYear, endOfYear,
-  startOfQuarter, endOfQuarter, subMonths, subDays, differenceInDays } from 'date-fns';
+import {
+  format, startOfMonth, endOfMonth, startOfYear, endOfYear,
+  startOfQuarter, endOfQuarter, subMonths, subDays, differenceInDays,
+  startOfWeek, addDays, isSameDay,
+} from 'date-fns';
 import { it } from 'date-fns/locale';
 
-// ─────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────
 const eur = (v: number) =>
   new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v || 0);
+const eurShort = (v: number) => {
+  if (Math.abs(v) >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}M`;
+  if (Math.abs(v) >= 1_000) return `€${(v / 1_000).toFixed(0)}k`;
+  return `€${Math.round(v)}`;
+};
 const pct = (v: number) => `${(v || 0).toFixed(1)}%`;
 
 type PeriodKey = 'month' | 'lastMonth' | 'quarter' | 'ytd' | 'last30';
+type TabKey = 'overview' | 'commerciale' | 'cantieri' | 'finanza' | 'magazzino';
 
-function getPeriodRange(p: PeriodKey): { start: Date; end: Date; prevStart: Date; prevEnd: Date; label: string } {
+function getPeriodRange(p: PeriodKey) {
   const now = new Date();
   switch (p) {
     case 'month': {
       const s = startOfMonth(now), e = endOfMonth(now);
-      const ps = startOfMonth(subMonths(now, 1)), pe = endOfMonth(subMonths(now, 1));
-      return { start: s, end: e, prevStart: ps, prevEnd: pe, label: format(s, 'MMMM yyyy', { locale: it }) };
+      return { start: s, end: e, prevStart: startOfMonth(subMonths(now, 1)), prevEnd: endOfMonth(subMonths(now, 1)), label: format(s, 'MMMM yyyy', { locale: it }) };
     }
     case 'lastMonth': {
       const s = startOfMonth(subMonths(now, 1)), e = endOfMonth(subMonths(now, 1));
-      const ps = startOfMonth(subMonths(now, 2)), pe = endOfMonth(subMonths(now, 2));
-      return { start: s, end: e, prevStart: ps, prevEnd: pe, label: format(s, 'MMMM yyyy', { locale: it }) };
+      return { start: s, end: e, prevStart: startOfMonth(subMonths(now, 2)), prevEnd: endOfMonth(subMonths(now, 2)), label: format(s, 'MMMM yyyy', { locale: it }) };
     }
     case 'quarter': {
       const s = startOfQuarter(now), e = endOfQuarter(now);
-      const ps = startOfQuarter(subMonths(s, 3)), pe = endOfQuarter(subMonths(s, 3));
-      return { start: s, end: e, prevStart: ps, prevEnd: pe, label: `Q ${format(s, 'yyyy')}` };
+      return { start: s, end: e, prevStart: startOfQuarter(subMonths(s, 3)), prevEnd: endOfQuarter(subMonths(s, 3)), label: `Q ${format(s, 'yyyy')}` };
     }
     case 'ytd': {
       const s = startOfYear(now), e = endOfYear(now);
-      const ps = startOfYear(subMonths(s, 12)), pe = endOfYear(subMonths(s, 12));
-      return { start: s, end: e, prevStart: ps, prevEnd: pe, label: `YTD ${format(s, 'yyyy')}` };
+      return { start: s, end: e, prevStart: startOfYear(subMonths(s, 12)), prevEnd: endOfYear(subMonths(s, 12)), label: `YTD ${format(s, 'yyyy')}` };
     }
-    case 'last30':
     default: {
-      const s = subDays(now, 30), e = now;
-      const ps = subDays(s, 30), pe = s;
-      return { start: s, end: e, prevStart: ps, prevEnd: pe, label: 'Ultimi 30 giorni' };
+      const s = subDays(now, 30);
+      return { start: s, end: now, prevStart: subDays(s, 30), prevEnd: s, label: 'Ultimi 30 giorni' };
     }
   }
 }
-
-const inRange = (d: string | Date | null | undefined, start: Date, end: Date) => {
+const inRange = (d: any, start: Date, end: Date) => {
   if (!d) return false;
   const t = new Date(d).getTime();
   return t >= start.getTime() && t <= end.getTime();
 };
 
-// ─────────────────────────────────────────────────────────────
-// Animated counter
-// ─────────────────────────────────────────────────────────────
-function useCountUp(value: number, durationMs = 900) {
-  const [display, setDisplay] = useState(0);
+// ─── Count-up ─────────────────────────────────────────────────
+function useCountUp(value: number, durationMs = 1200) {
+  const [v, setV] = useState(0);
   useEffect(() => {
     const start = performance.now();
-    const from = 0, to = value;
     let raf = 0;
     const step = (now: number) => {
       const t = Math.min(1, (now - start) / durationMs);
       const eased = 1 - Math.pow(1 - t, 3);
-      setDisplay(from + (to - from) * eased);
+      setV(value * eased);
       if (t < 1) raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
   }, [value, durationMs]);
-  return display;
+  return v;
 }
 
-// ─────────────────────────────────────────────────────────────
-// KPI Card
-// ─────────────────────────────────────────────────────────────
-interface KPIProps {
-  title: string;
-  value: string;
-  rawNumeric?: number;
-  format?: 'eur' | 'pct' | 'int';
-  subtitle?: string;
-  delta?: number | null;
-  icon: any;
-  iconColor?: string;
-  semaphore?: 'green' | 'amber' | 'red' | null;
-  alert?: boolean;
-  badge?: string | number;
-  onClick?: () => void;
-  period?: string;
-  children?: React.ReactNode;
-}
-function KPICard({ title, value, rawNumeric, format: fmt, subtitle, delta, icon: Icon, iconColor, semaphore, alert, badge, onClick, period, children }: KPIProps) {
-  const animated = useCountUp(rawNumeric ?? 0);
-  const display = rawNumeric !== undefined
-    ? fmt === 'eur' ? eur(animated)
-    : fmt === 'pct' ? pct(animated)
-    : Math.round(animated).toLocaleString('it-IT')
-    : value;
+// ─── Big KPI (dense, big number) ──────────────────────────────
+type Variant = 'light' | 'dark' | 'gold' | 'semaphore' | 'danger';
+function BigKPI({
+  label, value, format: fmt = 'int', sub, delta, icon: Icon, variant = 'light',
+  semaphore, onClick, children,
+}: {
+  label: string; value: number; format?: 'eur' | 'pct' | 'int';
+  sub?: string; delta?: number | null; icon?: any;
+  variant?: Variant; semaphore?: 'green' | 'amber' | 'red';
+  onClick?: () => void; children?: React.ReactNode;
+}) {
+  const animated = useCountUp(value);
+  const display =
+    fmt === 'eur' ? eur(animated) :
+    fmt === 'pct' ? pct(animated) :
+    Math.round(animated).toLocaleString('it-IT');
 
-  const semColor = semaphore === 'green' ? '#16a34a' : semaphore === 'amber' ? '#d97706' : semaphore === 'red' ? '#dc2626' : null;
+  const styles: Record<Variant, React.CSSProperties> = {
+    light: { background: '#FFFFFF', color: '#1A1A2E', border: '1px solid rgba(26,26,46,0.08)' },
+    dark: { background: '#1A1A2E', color: '#FFFFFF', border: '1px solid #1A1A2E' },
+    gold: { background: '#FFFFFF', color: '#1A1A2E', borderLeft: '4px solid #C4A882', border: '1px solid rgba(196,168,130,0.30)', borderLeftWidth: 4 },
+    semaphore: {
+      background: semaphore === 'green' ? '#EAF5EE' : semaphore === 'amber' ? '#FDF4E3' : '#FBEAEA',
+      color: '#1A1A2E',
+      border: `1px solid ${semaphore === 'green' ? '#A8D5B5' : semaphore === 'amber' ? '#E8C97A' : '#E5A5A5'}`,
+    },
+    danger: { background: '#FFF0F0', color: '#1A1A2E', borderLeft: '4px solid #C0392B', border: '1px solid #F5C5C5', borderLeftWidth: 4 },
+  };
+  const labelColor = variant === 'dark' ? '#C8B8A0' : '#9A9890';
+  const subColor = variant === 'dark' ? 'rgba(255,255,255,0.65)' : '#6B6760';
 
   return (
     <div
       onClick={onClick}
-      className={`relative bg-white rounded-xl p-5 transition-all ${onClick ? 'cursor-pointer hover:shadow-md' : ''} ${alert ? 'ring-1 ring-red-400' : ''}`}
-      style={{ border: '1px solid rgba(59,35,20,0.10)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+      className={`relative px-4 py-3 transition-all ${onClick ? 'cursor-pointer hover:translate-y-[-1px]' : ''}`}
+      style={{ ...styles[variant], borderRadius: 4 }}
     >
-      {alert && (
-        <span className="absolute -top-2 -right-2 px-2 py-0.5 text-[10px] font-bold bg-red-600 text-white rounded">URGENTE</span>
-      )}
-      {badge !== undefined && !alert && (
-        <span className="absolute top-3 right-3 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-bold bg-orange-500 text-white rounded-full">{badge}</span>
-      )}
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: '#8A7060' }}>{title}</p>
-        <Icon className={`w-4 h-4 ${iconColor || 'text-[#C8A96E]'}`} />
+      <div className="flex items-center justify-between mb-1">
+        <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, color: labelColor }}>
+          {label}
+        </span>
+        {Icon && <Icon className="w-4 h-4 opacity-60" />}
       </div>
-      <div className="flex items-baseline gap-2">
-        <div className="text-2xl font-semibold tabular-nums" style={{ color: '#1A1008' }}>{display}</div>
-        {semColor && <span className="w-2 h-2 rounded-full" style={{ background: semColor }} />}
+      <div className="flex items-baseline gap-2 leading-none">
+        <span className="tabular-nums" style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-0.02em' }}>{display}</span>
       </div>
-      {delta !== null && delta !== undefined && (
-        <div className={`mt-1 flex items-center gap-1 text-xs ${delta >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-          {delta >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-          {Math.abs(delta).toFixed(1)}%
-        </div>
-      )}
-      {subtitle && <p className="mt-1 text-xs" style={{ color: '#8A7060' }}>{subtitle}</p>}
+      <div className="mt-1.5 flex items-center gap-2 min-h-[16px]">
+        {delta !== null && delta !== undefined && (
+          <span className="inline-flex items-center gap-0.5 text-[13px] font-semibold tabular-nums" style={{ color: delta >= 0 ? '#16a34a' : '#dc2626' }}>
+            {delta >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+            {Math.abs(delta).toFixed(1)}%
+          </span>
+        )}
+        {sub && <span style={{ fontSize: 11, color: subColor }}>{sub}</span>}
+      </div>
       {children}
-      {period && <p className="mt-2 text-[10px] uppercase tracking-wider text-gray-400">{period}</p>}
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Empty state
-// ─────────────────────────────────────────────────────────────
-const Empty = ({ msg = 'Nessun dato per questo periodo' }: { msg?: string }) => (
-  <div className="flex items-center justify-center h-48 text-sm text-gray-400 italic">{msg}</div>
+// ─── Circular gauge ───────────────────────────────────────────
+function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: {
+  value: number; max?: number; label: string; sub?: string; color?: string; size?: number;
+}) {
+  const animated = useCountUp(value);
+  const pctVal = Math.max(0, Math.min(100, (animated / max) * 100));
+  const r = (size - 18) / 2;
+  const c = 2 * Math.PI * r;
+  const offset = c - (pctVal / 100) * c;
+  return (
+    <div className="flex flex-col items-center justify-center">
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg width={size} height={size} className="-rotate-90">
+          <circle cx={size / 2} cy={size / 2} r={r} stroke="#EEEAE2" strokeWidth={10} fill="none" />
+          <circle
+            cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={10} fill="none"
+            strokeLinecap="round"
+            strokeDasharray={c}
+            strokeDashoffset={offset}
+            style={{ transition: 'stroke-dashoffset 0.4s ease-out' }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: '#1A1A2E', lineHeight: 1 }}>
+            {pctVal.toFixed(0)}%
+          </span>
+          {sub && <span className="mt-0.5" style={{ fontSize: 9, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{sub}</span>}
+        </div>
+      </div>
+      <div className="mt-2 text-center" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6760', fontWeight: 600 }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
+// ─── Panel wrapper ────────────────────────────────────────────
+function Panel({ title, right, children, className = '' }: { title?: string; right?: React.ReactNode; children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`bg-white ${className}`} style={{ border: '1px solid rgba(26,26,46,0.08)', borderRadius: 4 }}>
+      {title && (
+        <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: 'rgba(26,26,46,0.06)' }}>
+          <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1A1A2E' }}>{title}</h3>
+          {right}
+        </div>
+      )}
+      <div className="p-4">{children}</div>
+    </div>
+  );
+}
+
+const Empty = ({ msg = 'Nessun dato per il periodo' }: { msg?: string }) => (
+  <div className="flex items-center justify-center h-32 text-xs italic" style={{ color: '#B0998A' }}>{msg}</div>
 );
 
-// ─────────────────────────────────────────────────────────────
-// Main
-// ─────────────────────────────────────────────────────────────
+// ─── Main ─────────────────────────────────────────────────────
 const PERIOD_LABELS: Record<PeriodKey, string> = {
-  month: 'Questo mese', lastMonth: 'Mese scorso', quarter: 'Trimestre', ytd: 'YTD', last30: 'Ultimi 30gg',
+  month: 'Mese', lastMonth: 'Mese scorso', quarter: 'Trimestre', ytd: 'YTD', last30: '30 giorni',
+};
+const TAB_LABELS: Record<TabKey, string> = {
+  overview: 'Overview', commerciale: 'Commerciale', cantieri: 'Cantieri', finanza: 'Finanza', magazzino: 'Magazzino',
 };
 
 const PIPELINE_STAGES = ['nuovo', 'contattato', 'in_trattativa', 'preventivo_inviato', 'cliente', 'perso'];
 const STAGE_LABEL: Record<string, string> = {
-  nuovo: 'Nuovo', contattato: 'Contattato', in_trattativa: 'In trattativa',
+  nuovo: 'Nuovo', contattato: 'Contattato', in_trattativa: 'Trattativa',
   preventivo_inviato: 'Prev. inviato', cliente: 'Cliente', perso: 'Perso',
 };
 const STAGE_COLORS = ['#E5E1DA', '#CFC7BA', '#A89A82', '#8C7B6B', '#5E8A4D', '#C0392B'];
@@ -171,13 +216,14 @@ const AdminOverview = () => {
   const navigate = useNavigate();
   const { role } = useAdminAuth();
   const isAdmin = role === 'admin';
-  const [period, setPeriod] = useState<PeriodKey>('month');
-  const range = useMemo(() => getPeriodRange(period), [period]);
 
+  const [period, setPeriod] = useState<PeriodKey>('month');
+  const [tab, setTab] = useState<TabKey>('overview');
+  const range = useMemo(() => getPeriodRange(period), [period]);
   const [lastSync, setLastSync] = useState(new Date());
   const [loading, setLoading] = useState(true);
 
-  // Raw data
+  // Data
   const [preventivi, setPreventivi] = useState<any[]>([]);
   const [quotes, setQuotes] = useState<any[]>([]);
   const [sales, setSales] = useState<any[]>([]);
@@ -186,11 +232,14 @@ const AdminOverview = () => {
   const [supplierPayments, setSupplierPayments] = useState<any[]>([]);
   const [inventory, setInventory] = useState<any[]>([]);
   const [salespeople, setSalespeople] = useState<any[]>([]);
+  const [paymentSchedules, setPaymentSchedules] = useState<any[]>([]);
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [reminders, setReminders] = useState<any[]>([]);
   const [goal, setGoal] = useState<number>(400000);
 
   const fetchAll = useCallback(async () => {
     try {
-      const [p, q, s, c, l, sp, inv, sps, gs] = await Promise.all([
+      const [p, q, s, c, l, sp, inv, sps, ps, ap, rem, gs] = await Promise.all([
         fetchAllRows(supabase.from('preventivi').select('*')),
         fetchAllRows(supabase.from('quotes').select('*')),
         fetchAllRows(supabase.from('sales').select('*')),
@@ -199,121 +248,107 @@ const AdminOverview = () => {
         fetchAllRows(supabase.from('supplier_payments').select('*')),
         fetchAllRows(supabase.from('inventory').select('*')),
         fetchAllRows(supabase.from('salespeople').select('*')),
+        fetchAllRows(supabase.from('payment_schedules').select('*')),
+        fetchAllRows(supabase.from('appointments').select('*')),
+        fetchAllRows(supabase.from('customer_reminders').select('*')),
         supabase.from('app_settings').select('value').eq('key', 'yearly_revenue_goal').maybeSingle(),
       ]);
       setPreventivi(p || []); setQuotes(q || []); setSales(s || []);
       setSites(c || []); setLeads(l || []); setSupplierPayments(sp || []);
       setInventory(inv || []); setSalespeople(sps || []);
+      setPaymentSchedules(ps || []); setAppointments(ap || []); setReminders(rem || []);
       const goalVal = (gs as any)?.data?.value?.amount;
       if (typeof goalVal === 'number') setGoal(goalVal);
       setLastSync(new Date());
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   }, []);
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useRealtimeSubscription({
-    tables: ['preventivi', 'quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'inventory', 'app_settings'],
+    tables: ['preventivi', 'quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'inventory', 'app_settings', 'payment_schedules', 'appointments'],
     onDataChange: fetchAll,
   });
 
-  // ─── Derived KPIs ──────────────────────────────────────────
-  const revenuePeriod = useMemo(() => {
-    const p = preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && inRange(x.data, range.start, range.end))
-      .reduce((s, x) => s + Number(x.importo_totale || 0), 0);
-    const q = quotes.filter(x => x.status === 'accepted' && inRange(x.accepted_date || x.created_at, range.start, range.end))
-      .reduce((s, x) => s + Number(x.total_amount || 0), 0);
-    return p + q;
-  }, [preventivi, quotes, range]);
+  // ─── Derived ──────────────────────────────────────────────
+  const sumRevenue = (s: Date, e: Date) =>
+    preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && inRange(x.data, s, e))
+      .reduce((a, x) => a + Number(x.importo_totale || 0), 0) +
+    quotes.filter(x => x.status === 'accepted' && inRange(x.accepted_date || x.created_at, s, e))
+      .reduce((a, x) => a + Number(x.total_amount || 0), 0);
 
-  const revenuePrev = useMemo(() => {
-    const p = preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && inRange(x.data, range.prevStart, range.prevEnd))
-      .reduce((s, x) => s + Number(x.importo_totale || 0), 0);
-    const q = quotes.filter(x => x.status === 'accepted' && inRange(x.accepted_date || x.created_at, range.prevStart, range.prevEnd))
-      .reduce((s, x) => s + Number(x.total_amount || 0), 0);
-    return p + q;
-  }, [preventivi, quotes, range]);
-
+  const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [preventivi, quotes, range]);
+  const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [preventivi, quotes, range]);
   const revenueDelta = revenuePrev > 0 ? ((revenuePeriod - revenuePrev) / revenuePrev) * 100 : null;
+  const revenueYTD = useMemo(() => sumRevenue(startOfYear(new Date()), endOfYear(new Date())), [preventivi, quotes]);
+  const goalPct = goal > 0 ? (revenueYTD / goal) * 100 : 0;
 
   const preventiviPeriod = useMemo(() => {
     const all = [
-      ...preventivi.filter(x => inRange(x.data || x.created_at, range.start, range.end))
-        .map(x => ({ stato: x.stato })),
+      ...preventivi.filter(x => inRange(x.data || x.created_at, range.start, range.end)).map(x => x.stato),
       ...quotes.filter(x => inRange(x.created_at, range.start, range.end))
-        .map(x => ({ stato: x.status === 'accepted' ? 'accettato' : x.status === 'rejected' ? 'rifiutato' : x.status === 'sent' ? 'inviato' : x.status === 'draft' ? 'bozza' : x.status })),
+        .map(x => x.status === 'accepted' ? 'accettato' : x.status === 'rejected' ? 'rifiutato' : x.status === 'sent' ? 'inviato' : 'bozza'),
     ];
-    const tot = all.length;
-    const acc = all.filter(x => x.stato === 'accettato' || x.stato === 'fatturato').length;
-    const rif = all.filter(x => x.stato === 'rifiutato').length;
-    const att = all.filter(x => x.stato === 'inviato').length;
-    return { tot, acc, rif, att };
+    return {
+      tot: all.length,
+      acc: all.filter(s => s === 'accettato' || s === 'fatturato').length,
+      rif: all.filter(s => s === 'rifiutato').length,
+      att: all.filter(s => s === 'inviato').length,
+    };
   }, [preventivi, quotes, range]);
+
+  const convRate = useMemo(() => {
+    const totLeads = leads.filter(l => inRange(l.created_at, range.start, range.end)).length || leads.length;
+    const won = leads.filter(l => ['cliente','won','converted'].includes((l.pipeline_stage || l.status || '').toLowerCase())).length;
+    return totLeads > 0 ? (won / totLeads) * 100 : 0;
+  }, [leads, range]);
 
   const cantieriAttivi = useMemo(() => {
     const attivi = sites.filter(s => s.status === 'attivo' || s.status === 'in_corso');
     const today = new Date();
-    const inPartenza = attivi.filter(s => s.start_date && new Date(s.start_date) > today).length;
-    const inRitardo = attivi.filter(s => s.end_date && new Date(s.end_date) < today).length;
-    return { count: attivi.length, inPartenza, inRitardo };
+    return {
+      count: attivi.length,
+      inPartenza: attivi.filter(s => s.start_date && new Date(s.start_date) > today).length,
+      inRitardo: attivi.filter(s => s.end_date && new Date(s.end_date) < today).length,
+    };
   }, [sites]);
 
   const margine = useMemo(() => {
     const completed = sales.filter(s => inRange(s.sale_date, range.start, range.end) && Number(s.margin_percentage) > 0);
     if (!completed.length) return { avg: 0, count: 0 };
-    const avg = completed.reduce((s, x) => s + Number(x.margin_percentage || 0), 0) / completed.length;
-    return { avg, count: completed.length };
+    return { avg: completed.reduce((s, x) => s + Number(x.margin_percentage || 0), 0) / completed.length, count: completed.length };
   }, [sales, range]);
-
-  const margineSemaphore: 'green' | 'amber' | 'red' = margine.avg >= 30 ? 'green' : margine.avg >= 15 ? 'amber' : 'red';
+  const margineSem: 'green' | 'amber' | 'red' = margine.avg >= 30 ? 'green' : margine.avg >= 15 ? 'amber' : 'red';
+  const margineColor = margineSem === 'green' ? '#16a34a' : margineSem === 'amber' ? '#d97706' : '#dc2626';
 
   const leadPipeline = useMemo(() => {
     const counts: Record<string, number> = {};
     PIPELINE_STAGES.forEach(s => counts[s] = 0);
     leads.forEach(l => {
-      const stage = (l.pipeline_stage || l.status || 'nuovo').toLowerCase();
-      const mapped = PIPELINE_STAGES.includes(stage) ? stage :
-        stage === 'cold' ? 'nuovo' :
-        stage === 'warm' ? 'contattato' :
-        stage === 'hot' ? 'in_trattativa' :
-        stage === 'qualified' ? 'preventivo_inviato' :
-        stage === 'won' || stage === 'converted' ? 'cliente' :
-        stage === 'lost' ? 'perso' : 'nuovo';
-      counts[mapped] = (counts[mapped] || 0) + 1;
+      const raw = (l.pipeline_stage || l.status || 'nuovo').toLowerCase();
+      const mapped = PIPELINE_STAGES.includes(raw) ? raw :
+        raw === 'cold' ? 'nuovo' : raw === 'warm' ? 'contattato' :
+        raw === 'hot' ? 'in_trattativa' : raw === 'qualified' ? 'preventivo_inviato' :
+        raw === 'won' || raw === 'converted' ? 'cliente' :
+        raw === 'lost' ? 'perso' : 'nuovo';
+      counts[mapped]++;
     });
-    const total = Object.values(counts).reduce((a, b) => a + b, 0);
-    const won = counts.cliente || 0;
-    const conv = total > 0 ? (won / total) * 100 : 0;
-    return { counts, total, conv };
+    return { counts, total: leads.length };
   }, [leads]);
 
-  const revenueYTD = useMemo(() => {
-    const yStart = startOfYear(new Date());
-    const p = preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && new Date(x.data) >= yStart)
-      .reduce((s, x) => s + Number(x.importo_totale || 0), 0);
-    const q = quotes.filter(x => x.status === 'accepted' && new Date(x.accepted_date || x.created_at) >= yStart)
-      .reduce((s, x) => s + Number(x.total_amount || 0), 0);
-    return p + q;
-  }, [preventivi, quotes]);
-
   const debiti = useMemo(() => {
-    // supplier_payments here represent partial payments TO suppliers. We approximate debt = sum(total_debt - sum(payments_for_supplier))
     const bySupplier: Record<string, { total: number; paid: number; lastDate?: string }> = {};
     supplierPayments.forEach(p => {
       const k = p.supplier_name || 'Fornitore';
-      if (!bySupplier[k]) bySupplier[k] = { total: Number(p.total_debt || 0), paid: 0 };
+      if (!bySupplier[k]) bySupplier[k] = { total: 0, paid: 0 };
       bySupplier[k].paid += Number(p.payment_amount || 0);
       bySupplier[k].total = Math.max(bySupplier[k].total, Number(p.total_debt || 0));
       if (!bySupplier[k].lastDate || p.payment_date > bySupplier[k].lastDate) bySupplier[k].lastDate = p.payment_date;
     });
     const open = Object.entries(bySupplier)
       .map(([name, v]) => ({ name, residuo: Math.max(0, v.total - v.paid), lastDate: v.lastDate }))
-      .filter(x => x.residuo > 0);
-    const total = open.reduce((s, x) => s + x.residuo, 0);
-    return { open, total, scaduti: 0, inScadenza: open.length };
+      .filter(x => x.residuo > 0).sort((a, b) => b.residuo - a.residuo);
+    return { open, total: open.reduce((s, x) => s + x.residuo, 0) };
   }, [supplierPayments]);
 
   const lowStock = useMemo(() => {
@@ -323,35 +358,33 @@ const AdminOverview = () => {
       const q = Number(i.quantity_sqm || 0);
       byProd[k] = (byProd[k] || 0) + (i.movement_type === 'IN' ? q : -q);
     });
-    return Object.values(byProd).filter(v => v > 0 && v < 100).length;
+    return { low: Object.values(byProd).filter(v => v > 0 && v < 100).length, total: Object.values(byProd).reduce((a, b) => a + Math.max(0, b), 0) };
   }, [inventory]);
 
-  // 12 months chart
+  const pagScaduti = useMemo(() => {
+    const today = new Date().toISOString().split('T')[0];
+    return paymentSchedules.filter(p => !p.is_paid && p.due_date < today).length;
+  }, [paymentSchedules]);
+
+  // 12 months area chart data
   const months12 = useMemo(() => {
-    const arr: { month: string; fatturato: number; margine: number; lavori: number }[] = [];
+    const arr: { month: string; fatturato: number; margine: number }[] = [];
     const now = new Date();
     for (let i = 11; i >= 0; i--) {
-      const ms = startOfMonth(subMonths(now, i));
-      const me = endOfMonth(ms);
-      const rev =
-        preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && inRange(x.data, ms, me))
-          .reduce((s, x) => s + Number(x.importo_totale || 0), 0) +
-        quotes.filter(x => x.status === 'accepted' && inRange(x.accepted_date || x.created_at, ms, me))
-          .reduce((s, x) => s + Number(x.total_amount || 0), 0);
-      const monthSales = sales.filter(s => inRange(s.sale_date, ms, me) && Number(s.margin_percentage) > 0);
-      const mgn = monthSales.length ? monthSales.reduce((s, x) => s + Number(x.margin_percentage || 0), 0) / monthSales.length : 0;
-      arr.push({ month: format(ms, 'MMM', { locale: it }), fatturato: rev, margine: Number(mgn.toFixed(1)), lavori: monthSales.length });
+      const ms = startOfMonth(subMonths(now, i)), me = endOfMonth(ms);
+      const rev = sumRevenue(ms, me);
+      const mSales = sales.filter(s => inRange(s.sale_date, ms, me) && Number(s.margin_percentage) > 0);
+      const mgn = mSales.length ? mSales.reduce((s, x) => s + Number(x.margin_percentage || 0), 0) / mSales.length : 0;
+      arr.push({ month: format(ms, 'MMM', { locale: it }), fatturato: rev, margine: Number(mgn.toFixed(1)) });
     }
     return arr;
   }, [preventivi, quotes, sales]);
 
-  // Preventivi stato 6 mesi
   const stato6 = useMemo(() => {
     const arr: { month: string; accettati: number; attesa: number; rifiutati: number }[] = [];
     const now = new Date();
     for (let i = 5; i >= 0; i--) {
-      const ms = startOfMonth(subMonths(now, i));
-      const me = endOfMonth(ms);
+      const ms = startOfMonth(subMonths(now, i)), me = endOfMonth(ms);
       const all = [
         ...preventivi.filter(x => inRange(x.data || x.created_at, ms, me)).map(x => x.stato),
         ...quotes.filter(x => inRange(x.created_at, ms, me)).map(x => x.status === 'accepted' ? 'accettato' : x.status === 'rejected' ? 'rifiutato' : 'inviato'),
@@ -366,407 +399,471 @@ const AdminOverview = () => {
     return arr;
   }, [preventivi, quotes]);
 
-  // Margine per fornitore (raggruppato per product_type)
-  const margineForn = useMemo(() => {
-    const groups: Record<string, { sum: number; n: number }> = {};
-    sales.filter(s => inRange(s.sale_date, range.start, range.end) && Number(s.margin_percentage) > 0).forEach(s => {
-      const k = s.product_type || 'Altro';
-      if (!groups[k]) groups[k] = { sum: 0, n: 0 };
-      groups[k].sum += Number(s.margin_percentage || 0);
-      groups[k].n += 1;
-    });
-    return Object.entries(groups).map(([fornitore, v]) => ({ fornitore, margine: Number((v.sum / v.n).toFixed(1)) }))
-      .sort((a, b) => b.margine - a.margine).slice(0, 8);
-  }, [sales, range]);
+  // Activity feed
+  const activityFeed = useMemo(() => {
+    const items: { type: 'preventivo'|'cantiere'|'pagamento'|'lead'; title: string; sub: string; date: Date; onClick?: () => void }[] = [];
+    preventivi.slice(0, 20).forEach(p => items.push({
+      type: 'preventivo', title: `${p.numero_preventivo} · ${eurShort(Number(p.importo_totale || 0))}`,
+      sub: p.cliente_nome || 'Cliente', date: new Date(p.created_at),
+      onClick: () => navigate(`/admin/strumenti/crea-preventivo?id=${p.id}`),
+    }));
+    sites.slice(0, 20).forEach(c => items.push({
+      type: 'cantiere', title: c.title, sub: c.city || c.status,
+      date: new Date(c.updated_at || c.created_at), onClick: () => navigate(`/admin/cantieri/${c.id}`),
+    }));
+    supplierPayments.slice(0, 10).forEach(p => items.push({
+      type: 'pagamento', title: `${p.supplier_name} · ${eurShort(Number(p.payment_amount || 0))}`,
+      sub: 'Pagamento fornitore', date: new Date(p.payment_date),
+    }));
+    leads.slice(0, 15).forEach(l => items.push({
+      type: 'lead', title: l.name, sub: l.city || l.source || 'Lead',
+      date: new Date(l.created_at), onClick: () => navigate(`/admin/leads`),
+    }));
+    return items.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 10);
+  }, [preventivi, sites, supplierPayments, leads, navigate]);
 
-  // Tables
-  const ultimiPreventivi = useMemo(() => {
-    return [...preventivi]
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-      .slice(0, 5);
-  }, [preventivi]);
+  // Week calendar events
+  const weekDays = useMemo(() => {
+    const start = startOfWeek(new Date(), { weekStartsOn: 1 });
+    return Array.from({ length: 7 }, (_, i) => addDays(start, i));
+  }, []);
 
-  const cantieriInCorso = useMemo(() => {
-    return sites.filter(s => s.status === 'attivo' || s.status === 'in_corso').slice(0, 5).map(s => {
-      const today = new Date();
-      const start = s.start_date ? new Date(s.start_date) : null;
-      const end = s.end_date ? new Date(s.end_date) : null;
-      let pct = 0;
-      if (start && end) {
-        const tot = differenceInDays(end, start);
-        const done = differenceInDays(today, start);
-        pct = tot > 0 ? Math.max(0, Math.min(100, (done / tot) * 100)) : 0;
+  const calendarEvents = useMemo(() => {
+    const byDay: Record<string, { type: 'cantiere'|'pagamento'|'lead'|'appuntamento'; label: string; color: string }[]> = {};
+    const key = (d: Date) => format(d, 'yyyy-MM-dd');
+    weekDays.forEach(d => byDay[key(d)] = []);
+    sites.forEach(c => {
+      if (c.start_date) {
+        const d = new Date(c.start_date);
+        if (byDay[key(d)]) byDay[key(d)].push({ type: 'cantiere', label: `▶ ${c.title}`, color: '#C4A882' });
       }
-      const ritardo = end && end < today;
-      return { ...s, pct, ritardo };
     });
-  }, [sites]);
+    paymentSchedules.forEach(p => {
+      if (!p.is_paid && p.due_date) {
+        const d = new Date(p.due_date);
+        if (byDay[key(d)]) byDay[key(d)].push({ type: 'pagamento', label: `€ ${eurShort(Number(p.amount || 0))}`, color: '#C0392B' });
+      }
+    });
+    appointments.forEach(a => {
+      if (a.appointment_date) {
+        const d = new Date(a.appointment_date);
+        if (byDay[key(d)]) byDay[key(d)].push({ type: 'appuntamento', label: a.title || 'Appuntamento', color: '#3b82f6' });
+      }
+    });
+    reminders.forEach(r => {
+      if (!r.is_completed && r.reminder_date) {
+        const d = new Date(r.reminder_date);
+        if (byDay[key(d)]) byDay[key(d)].push({ type: 'lead', label: r.title || 'Follow-up', color: '#16a34a' });
+      }
+    });
+    return byDay;
+  }, [sites, paymentSchedules, appointments, reminders, weekDays]);
 
-  const debitiInScadenza = useMemo(() => debiti.open.slice(0, 6), [debiti]);
+  // Performance commerciali
+  const performanceAgenti = useMemo(() => salespeople.map(sp => {
+    const lAss = leads.filter(l => l.assigned_salesperson_id === sp.id).length;
+    const lWon = leads.filter(l => l.assigned_salesperson_id === sp.id && ['cliente','won','converted'].includes((l.pipeline_stage || l.status || '').toLowerCase())).length;
+    const pInv = preventivi.filter(p => {
+      const lead = leads.find(l => l.id === p.lead_id);
+      return lead?.assigned_salesperson_id === sp.id && inRange(p.created_at, range.start, range.end);
+    });
+    const val = pInv.filter(p => ['accettato','fatturato'].includes(p.stato)).reduce((s, x) => s + Number(x.importo_totale || 0), 0);
+    return { id: sp.id, nome: `${sp.first_name || ''} ${sp.last_name || ''}`.trim() || 'N/D', lAss, pInv: pInv.length, val, conv: lAss > 0 ? (lWon / lAss) * 100 : 0 };
+  }).sort((a, b) => b.val - a.val), [salespeople, leads, preventivi, range]);
 
-  // Admin-only: performance agenti
-  const performanceAgenti = useMemo(() => {
-    return salespeople.map(sp => {
-      const lAssegnati = leads.filter(l => l.assigned_salesperson_id === sp.id).length;
-      const lChiusi = leads.filter(l => l.assigned_salesperson_id === sp.id && ['cliente','won','converted'].includes((l.pipeline_stage || l.status || '').toLowerCase())).length;
-      const pInviati = preventivi.filter(p => {
-        const lead = leads.find(l => l.id === p.lead_id);
-        return lead?.assigned_salesperson_id === sp.id && inRange(p.created_at, range.start, range.end);
-      });
-      const valoreChiuso = pInviati.filter(p => ['accettato','fatturato'].includes(p.stato))
-        .reduce((s, x) => s + Number(x.importo_totale || 0), 0);
-      const conv = lAssegnati > 0 ? (lChiusi / lAssegnati) * 100 : 0;
-      return { id: sp.id, nome: `${sp.first_name || ''} ${sp.last_name || ''}`.trim() || sp.email || 'N/D', lAssegnati, pInviati: pInviati.length, valoreChiuso, conv };
-    }).sort((a, b) => b.valoreChiuso - a.valoreChiuso);
-  }, [salespeople, leads, preventivi, range]);
+  // ─── Render ───────────────────────────────────────────────
+  if (loading) return <div className="flex items-center justify-center h-64 text-gray-400 text-xs">CARICAMENTO DASHBOARD...</div>;
 
-  // ─────────────────────────────────────────────────────────
-  if (loading) return <div className="flex items-center justify-center h-64 text-gray-400">Caricamento dashboard...</div>;
-
-  const periodLabel = range.label;
+  const showOverview = tab === 'overview';
+  const showCom = tab === 'overview' || tab === 'commerciale';
+  const showCan = tab === 'overview' || tab === 'cantieri';
+  const showFin = tab === 'overview' || tab === 'finanza';
+  const showMag = tab === 'overview' || tab === 'magazzino';
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* Sticky top bar */}
-      <div className="sticky top-0 z-20 -mx-6 px-6 py-3 bg-[#F5F4F1]/95 backdrop-blur border-b border-[rgba(59,35,20,0.08)]">
+    <div className="space-y-3 pb-12" style={{ fontFamily: 'inherit' }}>
+      {/* TOP BAR */}
+      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-[#F5F4F1]/95 backdrop-blur border-b" style={{ borderColor: 'rgba(26,26,46,0.10)' }}>
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-xl font-semibold" style={{ color: '#1A1008' }}>Dashboard Kalēa</h1>
-            <p className="text-xs text-gray-500">Periodo: <span className="font-medium">{periodLabel}</span></p>
+          <div className="flex items-baseline gap-3">
+            <h1 style={{ fontSize: 18, fontWeight: 800, color: '#1A1A2E', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
+            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#9A9890', fontWeight: 600 }}>
+              {range.label}
+            </span>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex rounded-lg overflow-hidden border border-[rgba(59,35,20,0.10)] bg-white">
+          <div className="flex items-center gap-3">
+            <div className="flex" style={{ border: '1px solid rgba(26,26,46,0.10)', borderRadius: 4 }}>
               {(Object.keys(PERIOD_LABELS) as PeriodKey[]).map(k => (
                 <button key={k} onClick={() => setPeriod(k)}
-                  className={`px-3 py-1.5 text-xs transition-colors ${period === k ? 'bg-[#1A1A2E] text-white' : 'text-gray-600 hover:bg-gray-50'}`}>
+                  style={{
+                    padding: '5px 10px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+                    background: period === k ? '#1A1A2E' : '#FFFFFF',
+                    color: period === k ? '#FFFFFF' : '#6B6760',
+                  }}>
                   {PERIOD_LABELS[k]}
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: '#6B6760', fontWeight: 600, letterSpacing: '0.05em' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              Aggiornato {format(lastSync, 'HH:mm:ss')}
+              LIVE · {format(lastSync, 'HH:mm:ss')}
             </div>
           </div>
         </div>
+
+        {/* TAB BAR */}
+        <div className="flex gap-0 mt-2 -mb-2.5">
+          {(Object.keys(TAB_LABELS) as TabKey[]).map(k => (
+            <button key={k} onClick={() => setTab(k)}
+              style={{
+                padding: '8px 14px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em',
+                color: tab === k ? '#1A1A2E' : '#9A9890',
+                borderBottom: tab === k ? '2px solid #C4A882' : '2px solid transparent',
+              }}>
+              {TAB_LABELS[k]}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* SECTION 1 — KPI principali */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard title="Fatturato" rawNumeric={revenuePeriod} format="eur" value=""
-          delta={revenueDelta} subtitle={`vs precedente: ${eur(revenuePrev)}`}
-          icon={TrendingUp} iconColor="text-green-600" period={periodLabel}
-          onClick={() => navigate('/admin/pagamenti')} />
-        <KPICard title="Preventivi" rawNumeric={preventiviPeriod.tot} format="int" value=""
-          subtitle={`Accettati: ${preventiviPeriod.acc} · Rifiutati: ${preventiviPeriod.rif} · Attesa: ${preventiviPeriod.att}`}
-          icon={FileText} iconColor="text-blue-500" period={periodLabel}
-          onClick={() => navigate('/admin/preventivi')} />
-        <KPICard title="Cantieri Attivi" rawNumeric={cantieriAttivi.count} format="int" value=""
-          subtitle={`${cantieriAttivi.inPartenza} in partenza · ${cantieriAttivi.inRitardo} in ritardo`}
-          icon={HardHat} iconColor="text-amber-600" alert={cantieriAttivi.inRitardo > 0}
-          onClick={() => navigate('/admin/cantieri')} />
-        <KPICard title="Margine Medio" rawNumeric={margine.avg} format="pct" value=""
-          subtitle={`Su ${margine.count} vendite del periodo`} semaphore={margineSemaphore}
-          icon={Target} iconColor="text-purple-600" period={periodLabel}
-          onClick={() => navigate('/admin/analytics')} />
+      {/* KPI ROW 1 — main */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        {showCom && (
+          <BigKPI
+            label="Fatturato" value={revenuePeriod} format="eur" variant="dark"
+            delta={revenueDelta} sub={`vs ${eurShort(revenuePrev)}`}
+            icon={TrendingUp} onClick={() => navigate('/admin/pagamenti')}
+          />
+        )}
+        {showCom && (
+          <BigKPI
+            label="Preventivi" value={preventiviPeriod.tot} variant="light"
+            sub={`${preventiviPeriod.acc} acc · ${preventiviPeriod.rif} rif · ${preventiviPeriod.att} att`}
+            icon={FileText} onClick={() => navigate('/admin/preventivi')}
+          />
+        )}
+        {showCan && (
+          <BigKPI
+            label="Cantieri Attivi" value={cantieriAttivi.count} variant="gold"
+            sub={`${cantieriAttivi.inPartenza} in partenza · ${cantieriAttivi.inRitardo} in ritardo`}
+            icon={HardHat} onClick={() => navigate('/admin/cantieri')}
+          />
+        )}
+        {showCom && (
+          <BigKPI
+            label="Margine Medio" value={margine.avg} format="pct" variant="semaphore" semaphore={margineSem}
+            sub={`Su ${margine.count} vendite`} icon={Target}
+            onClick={() => navigate('/admin/analytics')}
+          />
+        )}
       </div>
 
-      {/* SECTION 2 — KPI secondari */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard title="Lead Pipeline" rawNumeric={leadPipeline.total} format="int" value=""
-          subtitle={`Conv. ${pct(leadPipeline.conv)}`}
-          icon={Users} iconColor="text-indigo-500" onClick={() => navigate('/admin/leads')}>
-          <div className="mt-3 flex h-1.5 rounded-full overflow-hidden bg-gray-100">
-            {PIPELINE_STAGES.map((s, i) => {
-              const v = leadPipeline.counts[s] || 0;
-              const w = leadPipeline.total > 0 ? (v / leadPipeline.total) * 100 : 0;
-              if (w === 0) return null;
-              return <div key={s} style={{ width: `${w}%`, background: STAGE_COLORS[i] }} title={`${STAGE_LABEL[s]}: ${v}`} />;
-            })}
-          </div>
-        </KPICard>
-
-        <KPICard title="Fatturato YTD" rawNumeric={revenueYTD} format="eur" value=""
-          subtitle={`Obiettivo ${eur(goal)} · Mancano ${eur(Math.max(0, goal - revenueYTD))}`}
-          icon={TrendingUp} iconColor="text-green-700">
-          <div className="mt-3 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-            <div className="h-full bg-[#C8A96E] transition-all" style={{ width: `${Math.min(100, (revenueYTD / goal) * 100)}%` }} />
-          </div>
-        </KPICard>
-
-        <KPICard title="Debiti Fornitori" rawNumeric={debiti.total} format="eur" value=""
-          subtitle={`${debiti.open.length} aperti`}
-          icon={Wallet} iconColor={debiti.total > 0 ? 'text-red-600' : 'text-gray-400'}
-          alert={debiti.scaduti > 0}
-          onClick={() => navigate('/admin/pagamenti')} />
-
-        <KPICard title="Stock Magazzino" rawNumeric={lowStock} format="int" value=""
-          subtitle={lowStock > 0 ? 'Articoli sotto scorta' : 'Tutto ok'}
-          icon={Package} iconColor={lowStock > 0 ? 'text-orange-500' : 'text-green-500'}
-          badge={lowStock > 0 ? lowStock : undefined}
-          onClick={() => navigate('/admin/magazzino')} />
-      </div>
-
-      {/* SECTION 3 — Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-        <div className="lg:col-span-3 bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-semibold" style={{ color: '#1A1008' }}>Fatturato 12 mesi</h3>
-            <span className="text-[10px] uppercase tracking-wider text-gray-400">vs margine %</span>
-          </div>
+      {/* CHART + GAUGES (above the fold) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+        <Panel title="Fatturato · 12 mesi" right={<span className="text-[10px] tabular-nums" style={{ color: '#9A9890' }}>{eur(months12.reduce((s, x) => s + x.fatturato, 0))} totale</span>} className="lg:col-span-2">
           {months12.some(m => m.fatturato > 0) ? (
-            <ResponsiveContainer width="100%" height={260}>
-              <ComposedChart data={months12}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                <YAxis yAxisId="left" tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
-                <YAxis yAxisId="right" orientation="right" domain={[0, 100]} tick={{ fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
-                <Tooltip formatter={(v: any, n: string) => n === 'margine' ? `${v}%` : eur(v)} />
-                <Bar yAxisId="left" dataKey="fatturato" radius={[4, 4, 0, 0]}>
-                  {months12.map((_, i) => <Cell key={i} fill={i === months12.length - 1 ? '#C8A96E' : '#1A1A2E'} />)}
-                </Bar>
-                <Line yAxisId="right" type="monotone" dataKey="margine" stroke="#16a34a" strokeWidth={2} dot={{ r: 3 }} />
-              </ComposedChart>
+            <ResponsiveContainer width="100%" height={240}>
+              <AreaChart data={months12} margin={{ top: 5, right: 5, bottom: 0, left: -10 }}>
+                <defs>
+                  <linearGradient id="gradFatt" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#C4A882" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#C4A882" stopOpacity={0.05} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="2 4" stroke="#EEEAE2" vertical={false} />
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false}
+                  tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v} />
+                <Tooltip
+                  contentStyle={{ background: '#1A1A2E', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }}
+                  labelStyle={{ color: '#C4A882', fontWeight: 700 }}
+                  formatter={(v: any) => eur(v)}
+                />
+                <Area type="monotone" dataKey="fatturato" stroke="#C4A882" strokeWidth={2} fill="url(#gradFatt)" />
+              </AreaChart>
             </ResponsiveContainer>
           ) : <Empty />}
-        </div>
+        </Panel>
 
-        <div className="lg:col-span-2 bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-semibold" style={{ color: '#1A1008' }}>Pipeline Lead</h3>
-            <span className="text-xs text-gray-500">Conv. {pct(leadPipeline.conv)}</span>
+        <Panel title="Performance">
+          <div className="grid grid-cols-3 gap-2">
+            <Gauge value={convRate} label="Conversione" sub="Lead→Cliente" color="#3b82f6" size={108} />
+            <Gauge value={margine.avg} label="Margine" sub="Medio %" color={margineColor} size={108} />
+            <Gauge value={goalPct} max={100} label="Obiettivo" sub={`/${eurShort(goal)}`} color="#C4A882" size={108} />
           </div>
-          {leadPipeline.total > 0 ? (
-            <div className="space-y-2 mt-3">
+          <div className="mt-3 pt-3 border-t" style={{ borderColor: 'rgba(26,26,46,0.06)' }}>
+            <div className="flex justify-between" style={{ fontSize: 10, color: '#6B6760', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              <span>YTD</span>
+              <span className="tabular-nums" style={{ color: '#1A1A2E', fontWeight: 700 }}>{eur(revenueYTD)}</span>
+            </div>
+            <div className="flex justify-between mt-1" style={{ fontSize: 10, color: '#6B6760', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              <span>Mancano</span>
+              <span className="tabular-nums" style={{ color: '#1A1A2E', fontWeight: 700 }}>{eur(Math.max(0, goal - revenueYTD))}</span>
+            </div>
+          </div>
+        </Panel>
+      </div>
+
+      {/* KPI ROW 2 — secondary */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        {showCom && (
+          <BigKPI label="Lead Pipeline" value={leadPipeline.total} variant="light"
+            sub={`${leadPipeline.counts.in_trattativa || 0} in trattativa`}
+            icon={Users} onClick={() => navigate('/admin/leads')}>
+            <div className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-[#EEEAE2]">
               {PIPELINE_STAGES.map((s, i) => {
                 const v = leadPipeline.counts[s] || 0;
                 const w = leadPipeline.total > 0 ? (v / leadPipeline.total) * 100 : 0;
-                return (
-                  <div key={s}>
-                    <div className="flex justify-between text-xs mb-0.5">
-                      <span style={{ color: '#5A4A3F' }}>{STAGE_LABEL[s]}</span>
-                      <span className="tabular-nums text-gray-500">{v}</span>
+                if (!w) return null;
+                return <div key={s} style={{ width: `${w}%`, background: STAGE_COLORS[i] }} title={`${STAGE_LABEL[s]}: ${v}`} />;
+              })}
+            </div>
+          </BigKPI>
+        )}
+        {showFin && (
+          <BigKPI label="Fatturato YTD" value={revenueYTD} format="eur" variant="light"
+            sub={`${goalPct.toFixed(0)}% obiettivo`} icon={TrendingUp}>
+            <div className="mt-2 h-1.5 rounded-full bg-[#EEEAE2] overflow-hidden">
+              <div className="h-full" style={{ width: `${Math.min(100, goalPct)}%`, background: '#C4A882', transition: 'width 1s ease-out' }} />
+            </div>
+          </BigKPI>
+        )}
+        {showFin && (
+          <BigKPI label="Debiti Fornitori" value={debiti.total} format="eur"
+            variant={debiti.total > 0 ? 'danger' : 'light'}
+            sub={`${debiti.open.length} fornitori aperti`} icon={Wallet}
+            onClick={() => navigate('/admin/pagamenti')} />
+        )}
+        {showMag && (
+          <BigKPI label="Stock Sotto Scorta" value={lowStock.low} variant={lowStock.low > 0 ? 'semaphore' : 'light'}
+            semaphore={lowStock.low > 5 ? 'red' : 'amber'}
+            sub={`Stock totale ${Math.round(lowStock.total)} mq`} icon={Package}
+            onClick={() => navigate('/admin/magazzino')} />
+        )}
+      </div>
+
+      {/* SECONDARY CHARTS */}
+      {(showCom || showOverview) && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          <Panel title="Preventivi · stato 6 mesi">
+            {stato6.some(m => m.accettati + m.attesa + m.rifiutati > 0) ? (
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={stato6} margin={{ top: 5, right: 5, bottom: 0, left: -10 }}>
+                  <CartesianGrid strokeDasharray="2 4" stroke="#EEEAE2" vertical={false} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: '#1A1A2E', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }} />
+                  <Legend wrapperStyle={{ fontSize: 10 }} iconSize={8} />
+                  <Bar dataKey="accettati" stackId="a" fill="#16a34a" />
+                  <Bar dataKey="attesa" stackId="a" fill="#eab308" />
+                  <Bar dataKey="rifiutati" stackId="a" fill="#dc2626" />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : <Empty />}
+          </Panel>
+
+          <Panel title="Pipeline lead">
+            {leadPipeline.total > 0 ? (
+              <div className="space-y-1.5">
+                {PIPELINE_STAGES.map((s, i) => {
+                  const v = leadPipeline.counts[s] || 0;
+                  const w = leadPipeline.total > 0 ? (v / leadPipeline.total) * 100 : 0;
+                  return (
+                    <div key={s} className="flex items-center gap-2">
+                      <span style={{ fontSize: 10, width: 90, color: '#6B6760', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{STAGE_LABEL[s]}</span>
+                      <div className="flex-1 h-5 bg-[#F5F4F1] overflow-hidden" style={{ borderRadius: 2 }}>
+                        <div className="h-full flex items-center justify-end pr-2" style={{ width: `${Math.max(w, 6)}%`, background: STAGE_COLORS[i], transition: 'width 1s ease-out' }}>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: i >= 3 ? '#fff' : '#1A1A2E' }}>{v}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-                      <div className="h-full transition-all" style={{ width: `${w}%`, background: STAGE_COLORS[i] }} />
+                  );
+                })}
+              </div>
+            ) : <Empty />}
+          </Panel>
+        </div>
+      )}
+
+      {/* LIVE TABLES */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+        {showCom && (
+          <Panel title="Ultimi preventivi" right={<button onClick={() => navigate('/admin/preventivi')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#C4A882' }}>Tutti →</button>}>
+            {preventivi.length ? (
+              <div className="divide-y" style={{ borderColor: 'rgba(26,26,46,0.04)' }}>
+                {preventivi.slice(0, 5).map(p => (
+                  <button key={p.id} onClick={() => navigate(`/admin/strumenti/crea-preventivo?id=${p.id}`)}
+                    className="w-full text-left py-2 hover:bg-[#F5F4F1] flex justify-between items-center gap-2 px-1">
+                    <div className="min-w-0">
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{p.numero_preventivo}</div>
+                      <div style={{ fontSize: 10, color: '#9A9890' }} className="truncate">{p.cliente_nome || '—'}</div>
                     </div>
+                    <div className="text-right shrink-0">
+                      <div className="tabular-nums" style={{ fontSize: 12, fontWeight: 700, color: '#1A1A2E' }}>{eurShort(Number(p.importo_totale || 0))}</div>
+                      <StatoBadge stato={p.stato} />
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : <Empty msg="Nessun preventivo" />}
+          </Panel>
+        )}
+
+        {showCan && (
+          <Panel title="Cantieri in corso" right={<button onClick={() => navigate('/admin/cantieri')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#C4A882' }}>Tutti →</button>}>
+            {sites.filter(s => s.status === 'attivo' || s.status === 'in_corso').length ? (
+              <div className="space-y-2.5">
+                {sites.filter(s => s.status === 'attivo' || s.status === 'in_corso').slice(0, 5).map(c => {
+                  const today = new Date();
+                  const start = c.start_date ? new Date(c.start_date) : null;
+                  const end = c.end_date ? new Date(c.end_date) : null;
+                  let p = 0;
+                  if (start && end) {
+                    const tot = differenceInDays(end, start);
+                    const done = differenceInDays(today, start);
+                    p = tot > 0 ? Math.max(0, Math.min(100, (done / tot) * 100)) : 0;
+                  }
+                  const ritardo = end && end < today;
+                  return (
+                    <button key={c.id} onClick={() => navigate(`/admin/cantieri/${c.id}`)} className="w-full text-left">
+                      <div className="flex justify-between mb-1">
+                        <span style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{c.title}</span>
+                        {ritardo && <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', background: '#C0392B', padding: '1px 5px', borderRadius: 2 }}>RITARDO</span>}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-1 bg-[#EEEAE2] overflow-hidden" style={{ borderRadius: 1 }}>
+                          <div className="h-full" style={{ width: `${p}%`, background: ritardo ? '#C0392B' : '#C4A882', transition: 'width 1s ease-out' }} />
+                        </div>
+                        <span className="tabular-nums" style={{ fontSize: 10, color: '#9A9890', width: 28, textAlign: 'right' }}>{Math.round(p)}%</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : <Empty msg="Nessun cantiere attivo" />}
+          </Panel>
+        )}
+
+        {showFin && (
+          <Panel title="Debiti fornitori" right={<button onClick={() => navigate('/admin/pagamenti')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#C0392B' }}>Gestisci →</button>}>
+            {debiti.open.length ? (
+              <div className="divide-y" style={{ borderColor: 'rgba(26,26,46,0.04)' }}>
+                {debiti.open.slice(0, 6).map((d, i) => (
+                  <div key={i} className="flex justify-between items-center py-2 px-1">
+                    <div className="min-w-0">
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{d.name}</div>
+                      {d.lastDate && <div style={{ fontSize: 10, color: '#9A9890' }}>Ultimo: {format(new Date(d.lastDate), 'dd MMM', { locale: it })}</div>}
+                    </div>
+                    <div className="tabular-nums shrink-0" style={{ fontSize: 12, fontWeight: 800, color: '#C0392B' }}>{eurShort(d.residuo)}</div>
                   </div>
+                ))}
+              </div>
+            ) : <Empty msg="Nessun debito aperto" />}
+          </Panel>
+        )}
+      </div>
+
+      {/* ACTIVITY + CALENDAR */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
+        <Panel title="Attività recente" className="lg:col-span-2">
+          {activityFeed.length ? (
+            <div className="space-y-2">
+              {activityFeed.map((a, i) => {
+                const cfg = {
+                  preventivo: { icon: FileText, color: '#3b82f6', bg: '#dbeafe' },
+                  cantiere: { icon: HardHat, color: '#C4A882', bg: '#F5EFE3' },
+                  pagamento: { icon: CreditCard, color: '#C0392B', bg: '#FBEAEA' },
+                  lead: { icon: UserPlus, color: '#16a34a', bg: '#EAF5EE' },
+                }[a.type];
+                const Icon = cfg.icon;
+                return (
+                  <button key={i} onClick={a.onClick} className="w-full text-left flex items-center gap-2.5 py-1 hover:bg-[#F5F4F1] px-1 rounded">
+                    <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: cfg.bg }}>
+                      <Icon className="w-3.5 h-3.5" style={{ color: cfg.color }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{a.title}</div>
+                      <div style={{ fontSize: 10, color: '#9A9890' }} className="truncate">{a.sub}</div>
+                    </div>
+                    <div className="shrink-0 tabular-nums" style={{ fontSize: 9, color: '#B0998A' }}>{format(a.date, 'dd/MM HH:mm')}</div>
+                  </button>
                 );
               })}
             </div>
-          ) : <Empty />}
-        </div>
-      </div>
+          ) : <Empty msg="Nessuna attività" />}
+        </Panel>
 
-      {/* SECTION 4 — Second charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-          <h3 className="text-sm font-semibold mb-2" style={{ color: '#1A1008' }}>Preventivi per stato (6 mesi)</h3>
-          {stato6.some(m => m.accettati + m.attesa + m.rifiutati > 0) ? (
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={stato6}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} />
-                <Tooltip />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="accettati" stackId="a" fill="#16a34a" />
-                <Bar dataKey="attesa" stackId="a" fill="#eab308" />
-                <Bar dataKey="rifiutati" stackId="a" fill="#dc2626" />
-              </BarChart>
-            </ResponsiveContainer>
-          ) : <Empty />}
-        </div>
-
-        <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-          <h3 className="text-sm font-semibold mb-2" style={{ color: '#1A1008' }}>Margine % per categoria prodotto</h3>
-          {margineForn.length ? (
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={margineForn} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-                <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11 }} />
-                <YAxis type="category" dataKey="fornitore" tick={{ fontSize: 11 }} width={100} />
-                <Tooltip formatter={(v: any) => `${v}%`} />
-                <Bar dataKey="margine" fill="#C8A96E" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          ) : <Empty />}
-        </div>
-      </div>
-
-      {/* SECTION 5 — Live tables */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Ultimi preventivi */}
-        <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold" style={{ color: '#1A1008' }}>Ultimi preventivi</h3>
-            <button onClick={() => navigate('/admin/preventivi')} className="text-xs text-[#C8A96E] hover:underline flex items-center gap-0.5">
-              Vedi tutti <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-          {ultimiPreventivi.length ? (
-            <div className="space-y-1">
-              {ultimiPreventivi.map(p => (
-                <button key={p.id}
-                  onClick={() => navigate(`/admin/strumenti/crea-preventivo?id=${p.id}`)}
-                  className="w-full text-left p-2 rounded hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="text-xs font-medium truncate" style={{ color: '#1A1008' }}>{p.numero_preventivo}</div>
-                      <div className="text-[10px] text-gray-500 truncate">{p.cliente_nome || 'Cliente'}</div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="text-xs font-semibold tabular-nums">{eur(Number(p.importo_totale || 0))}</div>
-                      <StatoBadge stato={p.stato} />
-                    </div>
+        <Panel title={`Settimana · ${format(weekDays[0], 'd MMM', { locale: it })} → ${format(weekDays[6], 'd MMM', { locale: it })}`}
+          right={<CalIcon className="w-3.5 h-3.5" style={{ color: '#9A9890' }} />} className="lg:col-span-3">
+          <div className="grid grid-cols-7 gap-1">
+            {weekDays.map(d => {
+              const key = format(d, 'yyyy-MM-dd');
+              const events = calendarEvents[key] || [];
+              const isToday = isSameDay(d, new Date());
+              return (
+                <div key={key} className="flex flex-col" style={{ border: isToday ? '1px solid #C4A882' : '1px solid rgba(26,26,46,0.05)', borderRadius: 2, background: isToday ? '#FBF7EE' : '#fff', minHeight: 130 }}>
+                  <div className="px-1.5 py-1 border-b" style={{ borderColor: 'rgba(26,26,46,0.05)' }}>
+                    <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#9A9890', fontWeight: 600 }}>{format(d, 'EEE', { locale: it })}</div>
+                    <div className="tabular-nums" style={{ fontSize: 14, fontWeight: 800, color: isToday ? '#C4A882' : '#1A1A2E' }}>{format(d, 'd')}</div>
                   </div>
-                </button>
-              ))}
-            </div>
-          ) : <Empty msg="Nessun preventivo" />}
-        </div>
-
-        {/* Cantieri */}
-        <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold" style={{ color: '#1A1008' }}>Cantieri in corso</h3>
-            <button onClick={() => navigate('/admin/cantieri')} className="text-xs text-[#C8A96E] hover:underline flex items-center gap-0.5">
-              Vedi tutti <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-          {cantieriInCorso.length ? (
-            <div className="space-y-3">
-              {cantieriInCorso.map(c => (
-                <button key={c.id} onClick={() => navigate(`/admin/cantieri/${c.id}`)} className="w-full text-left">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <div className="text-xs font-medium truncate" style={{ color: '#1A1008' }}>{c.title}</div>
-                    {c.ritardo && <span className="text-[9px] px-1.5 py-0.5 bg-red-100 text-red-700 rounded font-bold">IN RITARDO</span>}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
-                      <div className={`h-full ${c.ritardo ? 'bg-red-500' : 'bg-[#C8A96E]'}`} style={{ width: `${c.pct}%` }} />
-                    </div>
-                    <span className="text-[10px] text-gray-500 tabular-nums w-8 text-right">{Math.round(c.pct)}%</span>
-                  </div>
-                  {c.end_date && (
-                    <div className="text-[10px] text-gray-400 mt-0.5">Fine: {format(new Date(c.end_date), 'dd MMM yyyy', { locale: it })}</div>
-                  )}
-                </button>
-              ))}
-            </div>
-          ) : <Empty msg="Nessun cantiere attivo" />}
-        </div>
-
-        {/* Debiti */}
-        <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold" style={{ color: '#1A1008' }}>Debiti fornitori</h3>
-            <button onClick={() => navigate('/admin/pagamenti')} className="text-xs text-[#C8A96E] hover:underline flex items-center gap-0.5">
-              Gestisci <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-          {debitiInScadenza.length ? (
-            <div className="space-y-1">
-              {debitiInScadenza.map((d, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded">
-                  <div className="min-w-0">
-                    <div className="text-xs font-medium truncate" style={{ color: '#1A1008' }}>{d.name}</div>
-                    {d.lastDate && <div className="text-[10px] text-gray-400">Ultimo pag.: {format(new Date(d.lastDate), 'dd MMM', { locale: it })}</div>}
-                  </div>
-                  <div className="text-xs font-semibold tabular-nums text-red-700">{eur(d.residuo)}</div>
-                </div>
-              ))}
-            </div>
-          ) : <Empty msg="Nessun debito aperto" />}
-        </div>
-      </div>
-
-      {/* SECTION 6 — Admin only */}
-      {isAdmin && (
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: '#8A7060' }}>Sezione Admin</h2>
-            <div className="flex-1 h-px bg-[rgba(59,35,20,0.10)]" />
-          </div>
-
-          <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-            <h3 className="text-sm font-semibold mb-3" style={{ color: '#1A1008' }}>Performance commerciali — {periodLabel}</h3>
-            {performanceAgenti.length ? (
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="text-left text-gray-500 uppercase text-[10px] tracking-wider">
-                      <th className="py-2 px-2">Nome</th>
-                      <th className="py-2 px-2 text-right">Lead</th>
-                      <th className="py-2 px-2 text-right">Preventivi</th>
-                      <th className="py-2 px-2 text-right">Valore chiuso</th>
-                      <th className="py-2 px-2 text-right">Conv.</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {performanceAgenti.map((a, i) => (
-                      <tr key={a.id} className={`border-t border-gray-100 ${i % 2 ? 'bg-gray-50/50' : ''} hover:bg-[#C8A96E]/5`}>
-                        <td className="py-2 px-2 font-medium">{a.nome}</td>
-                        <td className="py-2 px-2 text-right tabular-nums">{a.lAssegnati}</td>
-                        <td className="py-2 px-2 text-right tabular-nums">{a.pInviati}</td>
-                        <td className="py-2 px-2 text-right tabular-nums font-semibold">{eur(a.valoreChiuso)}</td>
-                        <td className="py-2 px-2 text-right tabular-nums">{pct(a.conv)}</td>
-                      </tr>
+                  <div className="p-1 space-y-0.5 flex-1 overflow-hidden">
+                    {events.slice(0, 4).map((ev, i) => (
+                      <div key={i} className="truncate" style={{ fontSize: 9, padding: '2px 4px', borderLeft: `2px solid ${ev.color}`, background: `${ev.color}10`, color: '#1A1A2E', fontWeight: 600 }} title={ev.label}>
+                        {ev.label}
+                      </div>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : <Empty msg="Nessun commerciale configurato" />}
+                    {events.length > 4 && <div style={{ fontSize: 9, color: '#9A9890' }} className="px-1">+{events.length - 4}</div>}
+                  </div>
+                </div>
+              );
+            })}
           </div>
+        </Panel>
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-              <h3 className="text-sm font-semibold mb-3" style={{ color: '#1A1008' }}>Cashflow previsto 30gg</h3>
-              <CashflowPanel preventivi={preventivi} sites={sites} debiti={debiti.total} />
-            </div>
-            <div className="bg-white rounded-xl p-5" style={{ border: '1px solid rgba(59,35,20,0.10)' }}>
-              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: '#1A1008' }}>
-                <AlertTriangle className="w-4 h-4 text-amber-500" /> Da incassare questa settimana
-              </h3>
-              <Empty msg="Nessun acconto in scadenza" />
-            </div>
-          </div>
-        </div>
+      {/* ADMIN ONLY */}
+      {isAdmin && (
+        <Panel title="Performance commerciali" right={<Briefcase className="w-3.5 h-3.5" style={{ color: '#9A9890' }} />}>
+          {performanceAgenti.length ? (
+            <table className="w-full" style={{ fontSize: 11 }}>
+              <thead>
+                <tr style={{ color: '#9A9890', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 9 }}>
+                  <th className="text-left py-1.5 px-1 font-bold">Nome</th>
+                  <th className="text-right py-1.5 px-1 font-bold">Lead</th>
+                  <th className="text-right py-1.5 px-1 font-bold">Preventivi</th>
+                  <th className="text-right py-1.5 px-1 font-bold">Conv.</th>
+                  <th className="text-right py-1.5 px-1 font-bold">Valore</th>
+                </tr>
+              </thead>
+              <tbody>
+                {performanceAgenti.map((a, i) => (
+                  <tr key={a.id} className={i % 2 ? 'bg-[#FAF9F6]' : ''} style={{ borderTop: '1px solid rgba(26,26,46,0.04)' }}>
+                    <td className="py-1.5 px-1 font-semibold">{a.nome}</td>
+                    <td className="py-1.5 px-1 text-right tabular-nums">{a.lAss}</td>
+                    <td className="py-1.5 px-1 text-right tabular-nums">{a.pInv}</td>
+                    <td className="py-1.5 px-1 text-right tabular-nums">{pct(a.conv)}</td>
+                    <td className="py-1.5 px-1 text-right tabular-nums font-bold">{eur(a.val)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : <Empty msg="Nessun commerciale" />}
+        </Panel>
       )}
     </div>
   );
 };
 
-function CashflowPanel({ preventivi, sites, debiti }: { preventivi: any[]; sites: any[]; debiti: number }) {
-  const now = new Date();
-  const in30 = new Date(now.getTime() + 30 * 86400000);
-  const expectedIn = preventivi
-    .filter(p => p.stato === 'accettato' && p.data && new Date(p.data) >= now && new Date(p.data) <= in30)
-    .reduce((s, p) => s + Number(p.importo_totale || 0), 0);
-  const net = expectedIn - debiti;
-  return (
-    <div className="space-y-2 text-sm">
-      <div className="flex justify-between"><span className="text-gray-500">Entrate previste</span><span className="font-semibold text-green-600 tabular-nums">+{eur(expectedIn)}</span></div>
-      <div className="flex justify-between"><span className="text-gray-500">Uscite previste</span><span className="font-semibold text-red-600 tabular-nums">−{eur(debiti)}</span></div>
-      <div className="h-px bg-gray-100 my-1" />
-      <div className="flex justify-between text-base">
-        <span className="font-medium">Saldo netto</span>
-        <span className={`font-bold tabular-nums ${net >= 0 ? 'text-green-700' : 'text-red-700'}`}>{eur(net)}</span>
-      </div>
-    </div>
-  );
-}
-
 function StatoBadge({ stato }: { stato: string }) {
-  const map: Record<string, { bg: string; color: string; label: string }> = {
-    accettato: { bg: '#dcfce7', color: '#15803d', label: 'Accettato' },
-    fatturato: { bg: '#dcfce7', color: '#15803d', label: 'Fatturato' },
-    inviato: { bg: '#fef9c3', color: '#854d0e', label: 'In attesa' },
-    rifiutato: { bg: '#fee2e2', color: '#b91c1c', label: 'Rifiutato' },
-    bozza: { bg: '#f3f4f6', color: '#4b5563', label: 'Bozza' },
+  const m: Record<string, { bg: string; c: string; l: string }> = {
+    accettato: { bg: '#dcfce7', c: '#15803d', l: 'ACC' },
+    fatturato: { bg: '#dcfce7', c: '#15803d', l: 'FAT' },
+    inviato: { bg: '#fef9c3', c: '#854d0e', l: 'ATT' },
+    rifiutato: { bg: '#fee2e2', c: '#b91c1c', l: 'RIF' },
+    bozza: { bg: '#f3f4f6', c: '#4b5563', l: 'BOZ' },
   };
-  const s = map[stato] || map.bozza;
-  return <span className="text-[9px] px-1.5 py-0.5 rounded font-medium" style={{ background: s.bg, color: s.color }}>{s.label}</span>;
+  const s = m[stato] || m.bozza;
+  return <span style={{ fontSize: 9, padding: '1px 4px', borderRadius: 2, background: s.bg, color: s.c, fontWeight: 800, letterSpacing: '0.05em' }}>{s.l}</span>;
 }
 
 export default AdminOverview;
