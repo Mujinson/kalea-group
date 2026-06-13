@@ -330,7 +330,7 @@ const T: any = {
     privacy_titolo: 'PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679',
     privacy_1: 'Consento al trattamento dei miei dati personali ai sensi dell\'art. 13 del Regolamento UE n. 2016/679',
     privacy_2: 'Autorizzo il trattamento dei dati personali per l\'invio di materiale informativo e pubblicitario come indicato nell\'Informativa',
-    parti_dichiarano: 'Le parti dichiarano di aver preso visione degli articoli 1,2,3,4,5,6,7,8,9 del presente contratto ai sensi degli artt. 1341 e 1342 c.c. e di approvarne il contenuto.',
+    parti_dichiarano: '{t.parti_dichiarano}',
     stato_bozza: 'Bozza',
     stato_inviato: 'Inviato',
     stato_accettato: 'Accettato',
@@ -352,7 +352,7 @@ const T: any = {
     trasp_btn: "Transport (2€/km)",
     param_globali: 'Parametri globali — si applicano a tutti i prodotti',
     markup_label: 'Markup Kalēa sui materiali', data: "Data",
-    luogo: "Luogo e data", accetta: "Il/La sottoscritto/a dichiara di accettare il presente preventivo",
+    luogo: "Luogo e data", accetta: "{t.accetta}",
   },
   EN: {
     titolo: "QUOTATION", validita: "Valid until", cliente: "Client",
@@ -1225,7 +1225,7 @@ export default function CreaPreventivo() {
 
           <div>
             <div style={card}>
-              <div style={sectionTitle}>Condizioni di pagamento</div>
+              <div style={sectionTitle}>{t.pagamenti}</div>
               {pagamenti.map((p,i)=>(
                 <div key={i} style={{marginBottom:12,padding:"10px 12px",background:"#F0EDE8",borderRadius:8}}>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 70px 1fr",gap:8}}>
@@ -1284,17 +1284,17 @@ export default function CreaPreventivo() {
                 <div style={{fontSize:11,color:"#9A9890",marginTop:2}}>Desenzano del Garda (BS) · info@kalea.space · kalea.space</div>
               </div>
               <div style={{textAlign:"right"}}>
-                <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>PREVENTIVO</div>
+                <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>{t.titolo}</div>
                 <div style={{fontSize:13,color:"#6B6860",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
                 <div style={{fontSize:13,color:"#6B6860"}}>Data: <strong>{dataPrev}</strong></div>
-                <div style={{fontSize:13,color:"#A32D2D"}}>Valido fino al: <strong>{addDays(dataPrev,30)}</strong></div>
+                <div style={{fontSize:13,color:"#A32D2D"}}>{t.validita}: <strong>{addDays(dataPrev,30)}</strong></div>
               </div>
             </div>
 
             {/* Cliente */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
               <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Cliente</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.cliente}</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.indirizzo}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.citta}</div>
@@ -1302,7 +1302,7 @@ export default function CreaPreventivo() {
                 <div style={{fontSize:13,color:"#6B6860"}}>{cliente.email}</div>
               </div>
               {cantiere && <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>Oggetto / Cantiere</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.oggetto}</div>
                 <div style={{fontSize:13,color:"#6B6860"}}>{cantiere}</div>
               </div>}
             </div>
@@ -1311,14 +1311,14 @@ export default function CreaPreventivo() {
             <table style={{width:"100%",borderCollapse:"collapse",marginBottom:24}}>
               <thead>
                 <tr style={{background:"#1A1A2E"}}>
-                  {["Descrizione","mq","Prezzo unit.","Totale"].map(h=>(
-                    <th key={h} style={{padding:"9px 12px",textAlign:h==="Descrizione"?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
+                  {[t.desc,t.mq,t.prezzo_unit,t.totale].map((h:string)=>(
+                    <th key={h} style={{padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 <tr style={{background:"#F7F6F3"}}>
-                  <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Fornitura materiale</td>
+                  <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
                 </tr>
                 <tr>
                   <td style={{padding:"8px 12px",fontSize:13}}>{prodotto?.nome} — {prodotto?.dims}</td>
@@ -1336,10 +1336,10 @@ export default function CreaPreventivo() {
                 ))}
                 {incPosa && <>
                   <tr style={{background:"#F7F6F3"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Posa in opera</td>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.posa}</td>
                   </tr>
                   <tr>
-                    <td style={{padding:"8px 12px",fontSize:13}}>Posa in opera — {complessita}</td>
+                    <td style={{padding:"8px 12px",fontSize:13}}>{t.posa} — {complessita}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(PREZZI_POSA[complessita])}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoPosaTot)}</td>
@@ -1347,10 +1347,10 @@ export default function CreaPreventivo() {
                 </>}
                 {calc.tappNeeded && <>
                   <tr style={{background:"#F7F6F3"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Tappetino / Sottofondo</td>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.tappetino}</td>
                   </tr>
                   <tr>
-                    <td style={{padding:"8px 12px",fontSize:13}}>Tappetino/sottofondo</td>
+                    <td style={{padding:"8px 12px",fontSize:13}}>{t.tappetino}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(PREZZO_TAPPETINO_CLIENTE)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTappTot)}</td>
@@ -1358,7 +1358,7 @@ export default function CreaPreventivo() {
                 </>}
                 {incTrasporto && calc.kmExtra>0 && (
                   <tr>
-                    <td style={{padding:"8px 12px",fontSize:13}}>Trasporto ({calc.kmExtra} km)</td>
+                    <td style={{padding:"8px 12px",fontSize:13}}>{t.trasporto} ({calc.kmExtra} km)</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.kmExtra}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(COSTO_KM*MARKUP)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasporto)}</td>
@@ -1366,7 +1366,7 @@ export default function CreaPreventivo() {
                 )}
                 {calc.trasfertaAttiva && (
                   <tr>
-                    <td style={{padding:"8px 12px",fontSize:13}}>Trasferta posatori</td>
+                    <td style={{padding:"8px 12px",fontSize:13}}>{t.trasferta}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(SUPPL_TRASFERTA_POSA[complessita])}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasfertaTot)}</td>
@@ -1378,10 +1378,10 @@ export default function CreaPreventivo() {
             {/* Totali */}
             <div style={{marginLeft:"auto",width:280}}>
               {[
-                {l:"Subtotale",v:euro(calc.prezzoLordoTot)},
-                sconto>0 && {l:`Sconto ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
-                sconto>0 && {l:"Imponibile scontato",v:euro(calc.prezzoNetto)},
-                {l:"IVA 22%",v:euro(calc.iva)},
+                {l:t.subtotale,v:euro(calc.prezzoLordoTot)},
+                sconto>0 && {l:`${t.sconto_label||"Sconto"} ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
+                sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
+                {l:t.iva,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
                 <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
                   <span style={{color:"#6B6860"}}>{r.l}</span>
@@ -1389,7 +1389,7 @@ export default function CreaPreventivo() {
                 </div>
               ))}
               <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4}}>
-                <span>TOTALE DOCUMENTO</span>
+                <span>{t.totale_doc}</span>
                 <span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
               </div>
             </div>
@@ -1408,24 +1408,15 @@ export default function CreaPreventivo() {
             {/* Note cliente */}
             {noteCliente && (
               <div style={{marginTop:20,padding:"12px 16px",background:"#F0EDE8",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>Note per il cliente</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
                 {noteCliente}
               </div>
             )}
 
             {/* Termini */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8"}}>
-              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>Termini e condizioni</div>
-              <div style={{fontSize:11,color:"#6B6860",lineHeight:1.8,whiteSpace:"pre-line"}}>{`Premesse
-1) La società committente dichiara di essere a conoscenza e di essere informata che la pavimentazione "Kalea" che il fornitore si appresta a fornire e posare con il presente contratto di posa e fornitura è esclusivamente un prodotto estetico, non ha proprietà di isolamento né di impermeabilizzazione e come tale deve essere considerato.
-2) Qualsiasi onere di impermeabilizzazione del fondo è da ritenersi a carico del Committente, pertanto nessuna responsabilità potrà essere addebitata al fornitore qualora si verificassero problematiche di infiltrazioni presso l'immobile o comunque problematiche derivanti da un fondo non conforme sul quale il materiale venga posato.
-3) Sarà esclusiva cura del committente: a) Garantire corrente elettrica 220V e acqua. b) Effettuare l'assistenza con proprio personale per la messa in quota del materiale fornito dal fornitore. c) Garantire il fondo di posa (fondo piano e asciutto) sul quale Kalea effettuerà il posizionamento dei suoi materiali.
-4) A cura del fornitore: a) Fornire il nominativo della squadra di posa che verrà inviata sul cantiere e tutta la documentazione necessaria per la verifica della idoneità tecnico professionale ai sensi del D. Lgs 81/2008, tra cui il DURC. b) Effettuare tutti i lavori commissionati a regola d'arte. c) Garantire che la data d'inizio lavori sia entro il ……………………………, con condizioni climatiche idonee alla posa. d) Che l'attività di posa prosegua in continuità. e) Mantenere pulito il cantiere stoccando i materiali di scarto e rifiuti in appositi luoghi e/o contenitori definiti con la committenza. f) Un tecnico in rappresentanza del fornitore assicurerà visite periodiche in cantiere. g) Durante le lavorazioni sarà possibile che Kalea S.r.l. esegua fotografie o riprese ai fini pubblicitari e di marketing che verranno possibilmente pubblicate sul sito internet o sui social network.
-5) Condizioni Generali di fornitura e posa: a) I prezzi esposti nel presente contratto si intendono IVA esclusa. b) Il presente accordo s'intende a misura e non a corpo. Ai fini del pagamento delle fatture, si precisa che i lavori si intenderanno finiti e dunque l'importo riscuotibile anche qualora sopraggiungano impedimenti esterni e contingenti che determinino l'interruzione o la sospensione della posa in opera per cause indipendenti dalla volontà della scrivente Ditta. In tal caso sarà fatturata solo la metratura effettivamente consegnata ad opera d'arte.
-6) Modalità di misurazione: Per le opere di posa, la pavimentazione verrà calcolata al mq conteggiando il 5% di sfrido di lavorazione. Accessori verranno calcolati al ML conteggiando il 5% di sfrido di lavorazione. Eventuali prestazioni extra richieste dal committente verranno addebitate a parte in economia nella misura di EURO 30,00/ora per persona applicata, più il costo del materiale utilizzato.
-7) Ogni eventuale contestazione che dovesse sorgere tra le parti in ordine alla interpretazione, esecuzione o risoluzione del rapporto di cui al presente contratto sarà devoluta alla competenza esclusiva del Foro di Brescia.
-8) Le parti di comune accordo stabiliscono di voler far prevalere l'obbligazione del fare e che quindi il presente contratto si considera di prestazione di servizi come attività prevalente.
-9) Modalità di Pagamento: Primo acconto alla firma del presente 50% + IVA. Saldo a fine lavori.`}</div>
+              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
+              <div style={{fontSize:11,color:"#6B6860",lineHeight:1.8,whiteSpace:"pre-line"}}>{t.termini_testo}</div>
             </div>
 
             {/* Sezione Privacy firma */}
@@ -1433,11 +1424,11 @@ export default function CreaPreventivo() {
               <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679</div>
               <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#6B6860"}}>
                 <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
-                <span>Consento al trattamento dei miei dati personali ai sensi dell'art. 13 del Regolamento UE n. 2016/679</span>
+                <span>{t.privacy_1}</span>
               </div>
               <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",fontSize:12,color:"#6B6860"}}>
                 <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
-                <span>Autorizzo il trattamento dei dati personali per l'invio di materiale informativo e pubblicitario come indicato nell'Informativa</span>
+                <span>{t.privacy_2}</span>
               </div>
             </div>
 
@@ -1447,13 +1438,13 @@ export default function CreaPreventivo() {
               <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>Il/La sottoscritto/a dichiara di accettare il presente preventivo</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
                 <div>
-                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>Firma Cliente</div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>{t.firma_cliente}</div>
                 </div>
                 <div>
-                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>Per Kalēa</div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>{t.firma_kalēa}</div>
                 </div>
               </div>
-              <div style={{marginTop:20,fontSize:12,color:"#6B6860"}}>Luogo e data: _______________________</div>
+              <div style={{marginTop:20,fontSize:12,color:"#6B6860"}}>{t.luogo}: _______________________</div>
             </div>
 
             {/* Footer */}
