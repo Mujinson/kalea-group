@@ -330,7 +330,7 @@ const T: any = {
     privacy_titolo: 'PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679',
     privacy_1: 'Consento al trattamento dei miei dati personali ai sensi dell\'art. 13 del Regolamento UE n. 2016/679',
     privacy_2: 'Autorizzo il trattamento dei dati personali per l\'invio di materiale informativo e pubblicitario come indicato nell\'Informativa',
-    parti_dichiarano: '{t.parti_dichiarano}',
+    parti_dichiarano: 'Le parti dichiarano di aver preso visione degli articoli 1,2,3,4,5,6,7,8,9 del presente contratto ai sensi degli artt. 1341 e 1342 c.c. e di approvarne il contenuto.',
     stato_bozza: 'Bozza',
     stato_inviato: 'Inviato',
     stato_accettato: 'Accettato',
