@@ -662,16 +662,16 @@ const AdminSales = () => {
   const paidCount = sales.filter(s => s.is_paid).length;
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold">Vendite</h2>
-          <p className="text-sm text-muted-foreground">Gestisci vendite con commerciali e provvigioni</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button><Plus className="w-4 h-4 mr-2" />Nuova Vendita</Button>
-          </DialogTrigger>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Vendite"]}
+        title="Vendite"
+        subtitle="Gestione vendite, commerciali e provvigioni"
+        actions={
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90"><Plus className="w-4 h-4 mr-2" />Nuova Vendita</Button>
+            </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingSaleId ? 'Modifica Vendita' : 'Registra Vendita'}</DialogTitle>
