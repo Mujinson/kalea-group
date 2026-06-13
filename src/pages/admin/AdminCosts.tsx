@@ -25,6 +25,7 @@ import {
   User,
   Edit2
 } from 'lucide-react';
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
 
 // Types
 interface FixedCost {
