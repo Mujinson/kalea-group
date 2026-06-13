@@ -352,7 +352,7 @@ const T: any = {
     trasp_btn: "Transport (2€/km)",
     param_globali: 'Parametri globali — si applicano a tutti i prodotti',
     markup_label: 'Markup Kalēa sui materiali', data: "Data",
-    luogo: "Luogo e data", accetta: "{t.accetta}",
+    luogo: "Luogo e data", accetta: "Il/La sottoscritto/a dichiara di accettare il presente preventivo",
   },
   EN: {
     titolo: "QUOTATION", validita: "Valid until", cliente: "Client",
