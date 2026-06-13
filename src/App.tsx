@@ -152,10 +152,20 @@ const CrmHostGate = () => {
     p === "/cantieri-app" ||
     p.startsWith("/cantieri-app/");
 
-  if (!allowed) {
+  if (allowed) return null;
+
+  // Root → admin overview
+  if (p === "/" || p === "") {
     return <Navigate to="/admin" replace />;
   }
-  return null;
+
+  // Block public-site language prefixes on the CRM host
+  if (/^\/(it|en|de|fr)(\/|$)/.test(p)) {
+    return <Navigate to="/admin" replace />;
+  }
+
+  // Clean URL rewrite: crm.kalea.space/leads → /admin/leads
+  return <Navigate to={`/admin${p}${location.search}${location.hash}`} replace />;
 };
 
 const App = () => (
