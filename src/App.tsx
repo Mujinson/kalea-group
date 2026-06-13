@@ -91,6 +91,7 @@ import PricingParquet from "./pages/admin/strumenti/PricingParquet";
 import PricingSignature from "./pages/admin/strumenti/PricingSignature";
 import PricingExterno from "./pages/admin/strumenti/PricingExterno";
 import Preventivatore from "./pages/admin/strumenti/Preventivatore";
+import SistemaPreventivi from "./pages/admin/strumenti/SistemaPreventivi";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
