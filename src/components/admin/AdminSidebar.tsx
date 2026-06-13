@@ -167,6 +167,7 @@ const menuStructure: MenuEntry[] = [
       icon: Wrench,
       adminOnly: true,
       items: [
+        { title: 'Crea Preventivo', url: '/admin/strumenti/crea-preventivo', icon: FileText, adminOnly: true },
         { title: 'Preventivatore', url: '/admin/strumenti/preventivatore', icon: Calculator, adminOnly: true },
         { title: 'Sistema Preventivi', url: '/admin/strumenti/sistema-preventivi', icon: FileText, adminOnly: true },
         { title: 'Costo Operaio', url: '/admin/strumenti/costo-operaio', icon: Calculator, adminOnly: true },
