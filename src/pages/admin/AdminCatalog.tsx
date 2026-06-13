@@ -13,6 +13,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Plus, Search, Edit, Trash2, AlertTriangle, Package, Truck, Wrench, Building2, History } from "lucide-react";
 import { toast } from "sonner";
 import { fetchAllRows } from "@/lib/fetchAllRows";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
 
 type CatalogProduct = any;
 
