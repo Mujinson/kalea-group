@@ -225,104 +225,81 @@ const AdminInventory = () => {
                 Nuovo Movimento
               </Button>
             </DialogTrigger>
-              <Plus className="w-4 h-4 mr-2" />
-              Nuovo Movimento
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Registra Movimento</DialogTitle>
-              <DialogDescription>Inserisci i dati del movimento di magazzino</DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Prodotto</Label>
-                  <Select value={formData.product_type} onValueChange={(v) => setFormData({...formData, product_type: v, color: ''})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="MgO">MgO</SelectItem>
-                      <SelectItem value="CWC">CWC</SelectItem>
-                      <SelectItem value="Tappetino">Tappetino</SelectItem>
-                      <SelectItem value="Profili">Profili</SelectItem>
-                    </SelectContent>
-                  </Select>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Registra Movimento</DialogTitle>
+                <DialogDescription>Inserisci i dati del movimento di magazzino</DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Prodotto</Label>
+                    <Select value={formData.product_type} onValueChange={(v) => setFormData({...formData, product_type: v, color: ''})}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MgO">MgO</SelectItem>
+                        <SelectItem value="CWC">CWC</SelectItem>
+                        <SelectItem value="Tappetino">Tappetino</SelectItem>
+                        <SelectItem value="Profili">Profili</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tipo Movimento</Label>
+                    <Select value={formData.movement_type} onValueChange={(v) => setFormData({...formData, movement_type: v})}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="IN">Entrata (IN)</SelectItem>
+                        <SelectItem value="OUT">Uscita (OUT)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                {(formData.product_type === 'MgO' || formData.product_type === 'CWC') && (
+                  <div className="space-y-2">
+                    <Label>Colore / Variante</Label>
+                    <Select value={formData.color} onValueChange={(v) => setFormData({...formData, color: v})}>
+                      <SelectTrigger><SelectValue placeholder="Seleziona..." /></SelectTrigger>
+                      <SelectContent>
+                        {getVariantsList().map(v => (
+                          <SelectItem key={v} value={v}>{v}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Quantità (mq) *</Label>
+                    <Input type="number" step="0.01" value={formData.quantity_sqm} onChange={(e) => setFormData({...formData, quantity_sqm: e.target.value})} placeholder="1000" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Costo Acquisto (€/mq) *</Label>
+                    <Input type="number" step="0.01" value={formData.purchase_cost} onChange={(e) => setFormData({...formData, purchase_cost: e.target.value})} placeholder="15" />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Tipo Movimento</Label>
-                  <Select value={formData.movement_type} onValueChange={(v) => setFormData({...formData, movement_type: v})}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="IN">Entrata (IN)</SelectItem>
-                      <SelectItem value="OUT">Uscita (OUT)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label>Data Movimento</Label>
+                  <Input type="date" value={formData.movement_date} onChange={(e) => setFormData({...formData, movement_date: e.target.value})} />
                 </div>
-              </div>
+                <div className="space-y-2">
+                  <Label>Note</Label>
+                  <Input value={formData.notes} onChange={(e) => setFormData({...formData, notes: e.target.value})} placeholder="Note aggiuntive" />
+                </div>
+                <Button type="submit" className="w-full">Salva Movimento</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+        }
+      />
 
-              {(formData.product_type === 'MgO' || formData.product_type === 'CWC') && (
-                <div className="space-y-2">
-                  <Label>Colore / Variante</Label>
-                  <Select value={formData.color} onValueChange={(v) => setFormData({...formData, color: v})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleziona..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {getVariantsList().map(v => (
-                        <SelectItem key={v} value={v}>{v}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
+      <CrmKpiRow>
+        <CrmKpiTile label="Stock MgO" value={`${mgoTotalStock.toFixed(0)} mq`} color="blue" icon={<Package className="w-4 h-4" />} hint={criticalAlerts.filter(a => a.product === 'MgO').length > 0 ? `${criticalAlerts.filter(a => a.product === 'MgO').length} colori critici` : undefined} onClick={() => setActiveTab('mgo')} />
+        <CrmKpiTile label="Stock CWC" value={`${cwcTotalStock.toFixed(0)} mq`} color="green" icon={<Package className="w-4 h-4" />} hint={criticalAlerts.filter(a => a.product === 'CWC').length > 0 ? `${criticalAlerts.filter(a => a.product === 'CWC').length} varianti critiche` : undefined} onClick={() => setActiveTab('cwc')} />
+        <CrmKpiTile label="Tappetino" value={`${tappetino.toFixed(0)} mq`} color="amber" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('tappetino')} />
+        <CrmKpiTile label="Profili" value={`${profili.toFixed(0)} mq`} color="purple" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('profili')} />
+      </CrmKpiRow>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Quantità (mq) *</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.quantity_sqm}
-                    onChange={(e) => setFormData({...formData, quantity_sqm: e.target.value})}
-                    placeholder="1000"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Costo Acquisto (€/mq) *</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.purchase_cost}
-                    onChange={(e) => setFormData({...formData, purchase_cost: e.target.value})}
-                    placeholder="15"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Data Movimento</Label>
-                <Input
-                  type="date"
-                  value={formData.movement_date}
-                  onChange={(e) => setFormData({...formData, movement_date: e.target.value})}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Note</Label>
-                <Input
-                  value={formData.notes}
-                  onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  placeholder="Note aggiuntive"
-                />
-              </div>
-              <Button type="submit" className="w-full">Salva Movimento</Button>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
 
       {/* Low Stock Alerts */}
       {lowStockAlerts.length > 0 && (
