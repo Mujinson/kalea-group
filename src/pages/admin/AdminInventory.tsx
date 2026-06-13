@@ -212,15 +212,19 @@ const AdminInventory = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Magazzino</h2>
-          <p className="text-muted-foreground">Gestisci l'inventario per prodotto e colore</p>
-        </div>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Magazzino"]}
+        title="Magazzino"
+        subtitle="Inventario per prodotto e colore"
+        actions={
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+                <Plus className="w-4 h-4 mr-2" />
+                Nuovo Movimento
+              </Button>
+            </DialogTrigger>
               <Plus className="w-4 h-4 mr-2" />
               Nuovo Movimento
             </Button>
