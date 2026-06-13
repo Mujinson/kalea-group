@@ -64,16 +64,18 @@ const AdminPipeline = () => {
     leads?.filter((l) => (l.pipeline_stage || "cold") === stage) || [];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Pipeline Lead</h1>
-          <p className="text-muted-foreground text-sm mt-1">Gestisci i lead attraverso le fasi di qualificazione</p>
-        </div>
-        <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1"><Thermometer className="w-4 h-4" /> {leads?.length || 0} lead totali</span>
-        </div>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Lead", "Pipeline"]}
+        title="Pipeline Lead"
+        subtitle="Gestione fasi di qualificazione"
+        actions={
+          <div className="flex items-center gap-1.5 text-sm text-white/85 bg-white/10 rounded-lg px-3 py-1.5">
+            <Thermometer className="w-4 h-4" /> {leads?.length || 0} lead totali
+          </div>
+        }
+      />
+
 
       {/* Kanban Board */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
