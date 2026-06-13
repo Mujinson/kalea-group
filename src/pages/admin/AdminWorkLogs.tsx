@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Camera, Package, Search, Calendar, HardHat, User, ChevronDown, ChevronRight } from "lucide-react";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 
@@ -64,33 +65,16 @@ const AdminWorkLogs = () => {
   const todayLogs = filteredLogs?.filter((l: any) => l.work_date === today) || [];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Registro Lavori</h1>
-        <p className="text-sm text-muted-foreground">Attività giornaliere degli operai</p>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader breadcrumb={["CRM", "Cantieri", "Registro Lavori"]} title="Registro Lavori" subtitle="Attività giornaliere degli operai" />
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: "Ore Totali", value: totalHours.toFixed(1), icon: Clock, color: "bg-blue-100 text-blue-700" },
-          { label: "Foto Caricate", value: totalPhotos, icon: Camera, color: "bg-green-100 text-green-700" },
-          { label: "Cantieri Attivi", value: uniqueSites, icon: HardHat, color: "bg-amber-100 text-amber-700" },
-          { label: "Attività Oggi", value: todayLogs.length, icon: Calendar, color: "bg-purple-100 text-purple-700" },
-        ].map((stat) => (
-          <Card key={stat.label} className="bg-[#F5F0E8] border-0">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 mb-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${stat.color}`}>
-                  <stat.icon className="w-4 h-4" />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <CrmKpiRow>
+        <CrmKpiTile label="Ore Totali" value={totalHours.toFixed(1)} color="blue" icon={<Clock className="w-4 h-4" />} />
+        <CrmKpiTile label="Foto Caricate" value={totalPhotos} color="green" icon={<Camera className="w-4 h-4" />} />
+        <CrmKpiTile label="Cantieri Attivi" value={uniqueSites} color="amber" icon={<HardHat className="w-4 h-4" />} />
+        <CrmKpiTile label="Attività Oggi" value={todayLogs.length} color="purple" icon={<Calendar className="w-4 h-4" />} />
+      </CrmKpiRow>
+
 
       {/* Search */}
       <div className="relative">

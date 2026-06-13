@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Bot, MessageSquare, Users, TrendingUp, Globe, Instagram, MessageCircle } from "lucide-react";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
 
 const CHANNEL_ICONS: Record<string, any> = {
   website: Globe,
@@ -42,61 +43,20 @@ const AdminChatbot = () => {
   }, {}) || {};
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">AI Chatbot</h1>
-        <p className="text-muted-foreground text-sm mt-1">Monitora le conversazioni del chatbot AI su tutti i canali</p>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "AI Chatbot"]}
+        title="AI Chatbot"
+        subtitle="Conversazioni del chatbot AI su tutti i canali"
+      />
 
-      {/* KPI */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{totalConversations}</p>
-              <p className="text-xs text-muted-foreground">Conversazioni</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-              <Users className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{convertedLeads}</p>
-              <p className="text-xs text-muted-foreground">Lead convertiti</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-purple-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">
-                {totalConversations > 0 ? Math.round((convertedLeads / totalConversations) * 100) : 0}%
-              </p>
-              <p className="text-xs text-muted-foreground">Tasso conversione</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="bg-white">
-          <CardContent className="p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-amber-600" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{Object.keys(channelBreakdown).length}</p>
-              <p className="text-xs text-muted-foreground">Canali attivi</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <CrmKpiRow>
+        <CrmKpiTile label="Conversazioni" value={totalConversations} color="blue" icon={<MessageSquare className="w-4 h-4" />} />
+        <CrmKpiTile label="Lead convertiti" value={convertedLeads} color="green" icon={<Users className="w-4 h-4" />} />
+        <CrmKpiTile label="Tasso conversione" value={`${totalConversations > 0 ? Math.round((convertedLeads / totalConversations) * 100) : 0}%`} color="purple" icon={<TrendingUp className="w-4 h-4" />} />
+        <CrmKpiTile label="Canali attivi" value={Object.keys(channelBreakdown).length} color="amber" icon={<Bot className="w-4 h-4" />} />
+      </CrmKpiRow>
+
 
       {/* Channel breakdown */}
       <div className="flex gap-2 flex-wrap">

@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { Upload, FileSpreadsheet, CheckCircle, AlertCircle, Download } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 
 type ImportType = 'sales' | 'inventory' | 'costs';
 
@@ -223,11 +224,9 @@ const AdminImport = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Import Dati</h2>
-        <p className="text-muted-foreground">Importa dati da file CSV</p>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader breadcrumb={["CRM", "Strumenti", "Import"]} title="Import Dati" subtitle="Importa dati da file CSV" />
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Import Form */}

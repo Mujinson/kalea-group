@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
 import { Plus, Trash2, Calendar, AlertTriangle } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { format, differenceInDays } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
@@ -195,12 +196,9 @@ const AdminPayments = () => {
   const isUrgent = daysRemaining < 30 && remaining > 0;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Pagamenti Fornitore</h2>
-          <p className="text-muted-foreground">Gestisci l'accordo di pagamento differito</p>
-        </div>
+    <div className="space-y-4">
+      <CrmPageHeader breadcrumb={["CRM", "Finanza", "Pagamenti"]} title="Pagamenti Fornitore" subtitle="Accordo di pagamento differito" />
+      <div className="flex items-center justify-end gap-2">
         <div className="flex gap-2">
           <Dialog open={agreementDialogOpen} onOpenChange={setAgreementDialogOpen}>
             <DialogTrigger asChild>

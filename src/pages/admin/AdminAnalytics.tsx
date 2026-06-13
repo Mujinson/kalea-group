@@ -10,6 +10,7 @@ import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4'];
 
@@ -223,25 +224,27 @@ const AdminAnalytics = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Analisi & Marginalità</h2>
-          <p className="text-muted-foreground">Analizza margini, ricavi e performance</p>
-        </div>
-        <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-[180px]">
-            <Calendar className="w-4 h-4 mr-2" />
-            <SelectValue placeholder="Periodo" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tutto il periodo</SelectItem>
-            <SelectItem value="month">Mese corrente</SelectItem>
-            <SelectItem value="quarter">Trimestre</SelectItem>
-            <SelectItem value="year">Anno corrente</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Statistiche"]}
+        title="Analisi & Marginalità"
+        subtitle="Margini, ricavi e performance"
+        actions={
+          <Select value={period} onValueChange={setPeriod}>
+            <SelectTrigger className="w-[180px] bg-white/15 border-0 text-white">
+              <Calendar className="w-4 h-4 mr-2" />
+              <SelectValue placeholder="Periodo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tutto il periodo</SelectItem>
+              <SelectItem value="month">Mese corrente</SelectItem>
+              <SelectItem value="quarter">Trimestre</SelectItem>
+              <SelectItem value="year">Anno corrente</SelectItem>
+            </SelectContent>
+          </Select>
+        }
+      />
+
 
       {/* KPI Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

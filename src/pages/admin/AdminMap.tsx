@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Navigation, Loader2, MapPin, Users, UserPlus, HardHat, RefreshCw } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 
 // Fix Leaflet default icon issue
@@ -241,14 +242,8 @@ const AdminMap = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Mappa</h1>
-          <p className="text-sm text-muted-foreground">
-            Visualizza lead, clienti e cantieri sulla mappa
-          </p>
-        </div>
-      </div>
+      <CrmPageHeader breadcrumb={["CRM", "Mappa"]} title="Mappa Territoriale" subtitle="Lead, clienti e cantieri sulla mappa" />
+
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">

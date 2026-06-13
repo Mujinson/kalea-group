@@ -25,6 +25,7 @@ import {
   User,
   Edit2
 } from 'lucide-react';
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
 
 // Types
 interface FixedCost {
@@ -396,48 +397,20 @@ const AdminCosts = () => {
   if (loading) return <div className="flex items-center justify-center h-64">Caricamento...</div>;
 
   return (
-    <div className="space-y-4 md:space-y-6">
-      <h2 className="text-xl md:text-2xl font-bold">Gestione Costi</h2>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Finanza", "Costi"]}
+        title="Gestione Costi"
+        subtitle="Costi fissi, variabili e COGS prodotto"
+      />
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
-            <TrendingDown className="w-5 h-5 text-red-500" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Costi Fissi</p>
-            <p className="text-lg font-bold">{formatCurrency(totalFixedCosts)}</p>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
-            <TrendingUp className="w-5 h-5 text-orange-500" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Costi Variabili</p>
-            <p className="text-lg font-bold">{formatCurrency(totalVariableCosts)}</p>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-yellow-100 flex items-center justify-center shrink-0">
-            <Receipt className="w-5 h-5 text-yellow-600" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Da Pagare</p>
-            <p className="text-lg font-bold">{formatCurrency(unpaidTotal)}</p>
-          </div>
-        </div>
-        <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3 cursor-pointer hover:shadow-lg transition-all" onClick={() => setStockDialog(true)}>
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
-            <Euro className="w-5 h-5 text-blue-600" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Stock Terni</p>
-            <p className="text-lg font-bold">{formatCurrency(stockValuation?.total_value || 0)}</p>
-          </div>
-        </div>
-      </div>
+      <CrmKpiRow>
+        <CrmKpiTile label="Costi Fissi" value={formatCurrency(totalFixedCosts)} color="red" icon={<TrendingDown className="w-4 h-4" />} />
+        <CrmKpiTile label="Costi Variabili" value={formatCurrency(totalVariableCosts)} color="orange" icon={<TrendingUp className="w-4 h-4" />} />
+        <CrmKpiTile label="Da Pagare" value={formatCurrency(unpaidTotal)} color="amber" icon={<Receipt className="w-4 h-4" />} />
+        <CrmKpiTile label="Stock Terni" value={formatCurrency(stockValuation?.total_value || 0)} color="blue" icon={<Euro className="w-4 h-4" />} onClick={() => setStockDialog(true)} />
+      </CrmKpiRow>
+
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>

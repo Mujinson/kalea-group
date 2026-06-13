@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { UserPlus, Trash2, Shield, Users, AlertTriangle, Key } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
 import CommercialiSection from '@/components/admin/CommercialiSection';
 
@@ -210,11 +211,9 @@ const AdminSettings = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Impostazioni</h2>
-        <p className="text-muted-foreground">Gestisci gli utenti admin e le configurazioni</p>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader breadcrumb={["CRM", "Impostazioni"]} title="Impostazioni" subtitle="Utenti admin e configurazioni" />
+
 
       {/* Admin Users */}
       <Card>
