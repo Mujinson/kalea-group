@@ -10,6 +10,7 @@ import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4'];
 
