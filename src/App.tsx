@@ -178,6 +178,7 @@ const App = () => (
 
                 {/* Strumenti */}
                 <Route path="strumenti/preventivatore" element={<Preventivatore />} />
+                <Route path="strumenti/sistema-preventivi" element={<SistemaPreventivi />} />
                 <Route path="strumenti/costo-operaio" element={<CostoOperaio />} />
                 <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />
                 <Route path="strumenti/pricing-flow" element={<PricingFlow />} />
