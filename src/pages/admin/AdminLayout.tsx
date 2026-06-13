@@ -5,11 +5,27 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import CommandPalette from '@/components/admin/CommandPalette';
-import { Loader2, Search } from 'lucide-react';
-import logoDark from '@/assets/logo-new.png';
+import { Loader2, Search, LayoutGrid, HelpCircle, Settings, LogOut } from 'lucide-react';
+
+const TOPBAR_BG = 'linear-gradient(180deg, #1E1B4B 0%, #2A1F5C 100%)';
+const TOPBAR_BORDER = 'rgba(255,255,255,0.08)';
+const TOPBAR_ICON = 'rgba(226,222,255,0.78)';
+
+const TopIconButton = ({ children, onClick, title }: { children: React.ReactNode; onClick?: () => void; title?: string }) => (
+  <button
+    onClick={onClick}
+    title={title}
+    className="w-9 h-9 inline-flex items-center justify-center rounded-md transition-colors"
+    style={{ color: TOPBAR_ICON, background: 'transparent' }}
+    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#FFFFFF'; }}
+    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = TOPBAR_ICON; }}
+  >
+    {children}
+  </button>
+);
 
 const AdminLayout = () => {
-  const { user, isAdmin, role, loading } = useAdminAuth();
+  const { user, isAdmin, role, loading, signOut } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,42 +48,88 @@ const AdminLayout = () => {
     );
   }
 
-  if (!user || !isAdmin) {
-    return null;
-  }
+  if (!user || !isAdmin) return null;
+
+  const openSearch = () => {
+    const ev = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+    window.dispatchEvent(ev);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/admin/login');
+  };
+
+  const initial = (user?.email?.[0] || 'K').toUpperCase();
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full admin-theme" style={{ background: '#F5F0EA' }}>
-        <AdminSidebar />
-        <main className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 border-b" style={{ background: '#FFFFFF', borderColor: 'rgba(59,35,20,0.10)' }}>
-            <div className="h-full flex items-center px-3 md:px-4 gap-3">
-              <SidebarTrigger className="text-[#8A7060] hover:bg-[rgba(200,169,110,0.08)]" />
-              <img src={logoDark} alt="Kalēa" className="h-7" />
-              <span className="text-[13px] tracking-wide" style={{ color: '#8A7060' }}>/ Dashboard</span>
-              <div className="flex-1" />
-              <button
-                onClick={() => {
-                  const ev = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
-                  window.dispatchEvent(ev);
-                }}
-                className="hidden md:inline-flex items-center gap-2 px-3 h-9 rounded-md border text-[12px] text-[#8A7060] hover:bg-[rgba(200,169,110,0.08)] transition-colors"
-                style={{ borderColor: 'rgba(59,35,20,0.12)' }}
-                title="Cerca (⌘K)"
-              >
-                <Search className="w-3.5 h-3.5" />
-                <span>Cerca…</span>
-                <kbd className="ml-2 px-1.5 py-0.5 text-[10px] rounded bg-[rgba(59,35,20,0.06)] text-[#8A7060]">⌘K</kbd>
-              </button>
-              <NotificationCenter />
-            </div>
-          </header>
-          <CommandPalette />
-          <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: '#F5F0EA' }}>
-            <Outlet />
+      <div className="min-h-screen flex flex-col w-full admin-theme" style={{ background: '#F5F0EA' }}>
+        {/* TOP BAR — Creatio style, full width */}
+        <header
+          className="h-12 flex items-center px-3 md:px-4 gap-2 shrink-0"
+          style={{ background: TOPBAR_BG, borderBottom: `1px solid ${TOPBAR_BORDER}` }}
+        >
+          <SidebarTrigger className="text-white/80 hover:bg-white/10 hover:text-white" />
+          <span className="font-heading font-semibold text-[16px] tracking-tight ml-1" style={{ color: '#F5F1E8' }}>
+            Kalēa<span className="text-[11px] align-top">®</span>
+          </span>
+
+          {/* Search */}
+          <button
+            onClick={openSearch}
+            className="ml-4 hidden md:flex items-center gap-2 h-8 px-3 rounded-md text-[12px] transition-colors w-[280px]"
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              color: 'rgba(226,222,255,0.75)',
+              border: '1px solid rgba(255,255,255,0.05)',
+            }}
+            title="Cerca (⌘K)"
+            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
+          >
+            <Search className="w-3.5 h-3.5" />
+            <span>Cerca…</span>
+            <kbd className="ml-auto px-1.5 py-0.5 text-[10px] rounded bg-white/10 text-white/70">⌘K</kbd>
+          </button>
+
+          <div className="flex-1" />
+
+          {/* Right actions */}
+          <TopIconButton title="App"><LayoutGrid className="w-4 h-4" /></TopIconButton>
+          <div className="text-white/80 [&_button]:text-white/80 [&_button:hover]:text-white">
+            <NotificationCenter />
           </div>
-        </main>
+          <TopIconButton title="Aiuto"><HelpCircle className="w-4 h-4" /></TopIconButton>
+          <TopIconButton title="Impostazioni" onClick={() => navigate('/admin/impostazioni')}>
+            <Settings className="w-4 h-4" />
+          </TopIconButton>
+          <TopIconButton title="Esci" onClick={handleSignOut}><LogOut className="w-4 h-4" /></TopIconButton>
+
+          {/* Avatar */}
+          <div
+            className="ml-1 w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-semibold"
+            style={{
+              background: 'linear-gradient(135deg, #C4A882 0%, #8B6F4E 100%)',
+              color: '#1E1B4B',
+              border: '2px solid rgba(255,255,255,0.15)',
+            }}
+            title={user?.email || ''}
+          >
+            {initial}
+          </div>
+        </header>
+
+        {/* BODY: sidebar + main */}
+        <div className="flex flex-1 w-full min-h-0">
+          <AdminSidebar />
+          <main className="flex-1 flex flex-col min-w-0">
+            <CommandPalette />
+            <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: '#F5F0EA' }}>
+              <Outlet />
+            </div>
+          </main>
+        </div>
       </div>
     </SidebarProvider>
   );
