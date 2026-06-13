@@ -16,6 +16,7 @@ import { CalendarClock, Plus, Phone, Video, MapPin, Check, X, ChevronLeft, Chevr
 import { toast } from "sonner";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { fetchAllRows } from "@/lib/fetchAllRows";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
 
 const APPOINTMENT_TYPES = [
   { value: "chiamata", label: "Chiamata", icon: Phone },
