@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { Bot, MessageSquare, Users, TrendingUp, Globe, Instagram, MessageCircle } from "lucide-react";
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
 
 const CHANNEL_ICONS: Record<string, any> = {
   website: Globe,
