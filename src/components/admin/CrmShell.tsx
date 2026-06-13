@@ -46,11 +46,11 @@ export function CrmPageHeader({ breadcrumb, title, subtitle, actions }: CrmPageH
     >
       <div className="min-w-0">
         {breadcrumb && breadcrumb.length > 0 && (
-          <div className="flex items-center gap-1 text-[11px] uppercase tracking-[0.14em] text-white/55 mb-1">
+          <div className="flex items-center gap-1 text-[11px] uppercase tracking-[0.14em] mb-1" style={{ color: "rgba(255,255,255,0.7)" }}>
             {breadcrumb.map((b, i) => (
-              <span key={i} className="flex items-center gap-1">
+              <span key={i} className="flex items-center gap-1" style={{ color: i === breadcrumb.length - 1 ? "#ffffff" : "rgba(255,255,255,0.7)" }}>
                 {i > 0 && <ChevronRight className="w-3 h-3" />}
-                <span className={i === breadcrumb.length - 1 ? "text-white/80" : ""}>{b}</span>
+                <span>{b}</span>
               </span>
             ))}
           </div>
