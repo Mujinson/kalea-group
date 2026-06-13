@@ -176,6 +176,7 @@ const App = () => (
                 <Route path="impostazioni" element={<AdminSettings />} />
 
                 {/* Strumenti */}
+                <Route path="strumenti/preventivatore" element={<Preventivatore />} />
                 <Route path="strumenti/costo-operaio" element={<CostoOperaio />} />
                 <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />
                 <Route path="strumenti/pricing-flow" element={<PricingFlow />} />
