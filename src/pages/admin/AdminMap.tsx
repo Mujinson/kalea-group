@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Navigation, Loader2, MapPin, Users, UserPlus, HardHat, RefreshCw } from 'lucide-react';
+import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 
 // Fix Leaflet default icon issue
