@@ -232,42 +232,29 @@ const AdminCatalog = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: "#1A1008" }}>Catalogo Prodotti</h1>
-          <p className="text-sm mt-1" style={{ color: "#8A7060" }}>Listini fornitori, prezzi vendita e regole anti-perdita</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setOpenSupplierDialog(true)}>
-            <Building2 className="w-4 h-4 mr-2" /> Nuovo fornitore
-          </Button>
-          <Button onClick={openNew} style={{ background: "#C8A96E", color: "#1A1008" }}>
-            <Plus className="w-4 h-4 mr-2" /> Nuovo prodotto
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-4">
+      <CrmPageHeader
+        breadcrumb={["CRM", "Catalogo"]}
+        title="Catalogo Prodotti"
+        subtitle="Listini fornitori, prezzi vendita e regole anti-perdita"
+        actions={
+          <>
+            <Button variant="secondary" size="sm" onClick={() => setOpenSupplierDialog(true)} className="bg-white/15 hover:bg-white/25 text-white border-0">
+              <Building2 className="w-4 h-4 mr-2" /> Nuovo fornitore
+            </Button>
+            <Button size="sm" onClick={openNew} className="bg-white text-[#1E1B4B] hover:bg-white/90">
+              <Plus className="w-4 h-4 mr-2" /> Nuovo prodotto
+            </Button>
+          </>
+        }
+      />
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg border p-4" style={{ borderColor: "rgba(59,35,20,0.1)" }}>
-          <div className="text-[10px] uppercase tracking-wider" style={{ color: "#8A7060", letterSpacing: "0.12em" }}>Prodotti totali</div>
-          <div className="text-2xl font-bold mt-2" style={{ color: "#1A1008" }}>{stats.total}</div>
-        </div>
-        <div className="bg-white rounded-lg border p-4" style={{ borderColor: "rgba(59,35,20,0.1)" }}>
-          <div className="text-[10px] uppercase tracking-wider" style={{ color: "#8A7060", letterSpacing: "0.12em" }}>Sotto scorta</div>
-          <div className="text-2xl font-bold mt-2 flex items-center gap-2" style={{ color: stats.lowStock > 0 ? "#C97A4A" : "#1A1008" }}>
-            {stats.lowStock} {stats.lowStock > 0 && <AlertTriangle className="w-5 h-5" />}
-          </div>
-        </div>
-        <div className="bg-white rounded-lg border p-4" style={{ borderColor: "rgba(59,35,20,0.1)" }}>
-          <div className="text-[10px] uppercase tracking-wider" style={{ color: "#8A7060", letterSpacing: "0.12em" }}>Margine sotto soglia</div>
-          <div className="text-2xl font-bold mt-2 flex items-center gap-2" style={{ color: stats.lowMargin > 0 ? "#C0392B" : "#1A1008" }}>
-            {stats.lowMargin} {stats.lowMargin > 0 && <AlertTriangle className="w-5 h-5" />}
-          </div>
-        </div>
-      </div>
+      <CrmKpiRow cols={3}>
+        <CrmKpiTile label="Prodotti totali" value={stats.total} color="indigo" icon={<Package className="w-4 h-4" />} />
+        <CrmKpiTile label="Sotto scorta" value={stats.lowStock} color={stats.lowStock > 0 ? "orange" : "slate"} icon={stats.lowStock > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} />
+        <CrmKpiTile label="Margine sotto soglia" value={stats.lowMargin} color={stats.lowMargin > 0 ? "red" : "slate"} icon={stats.lowMargin > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} />
+      </CrmKpiRow>
+
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 items-center">
