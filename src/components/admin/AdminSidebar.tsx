@@ -168,6 +168,7 @@ const menuStructure: MenuEntry[] = [
       adminOnly: true,
       items: [
         { title: 'Preventivatore', url: '/admin/strumenti/preventivatore', icon: Calculator, adminOnly: true },
+        { title: 'Sistema Preventivi', url: '/admin/strumenti/sistema-preventivi', icon: FileText, adminOnly: true },
         { title: 'Costo Operaio', url: '/admin/strumenti/costo-operaio', icon: Calculator, adminOnly: true },
         { title: 'Sostenibilità', url: '/admin/strumenti/sostenibilita', icon: LineChart, adminOnly: true },
         { title: 'Pricing Flow', url: '/admin/strumenti/pricing-flow', icon: Tag, adminOnly: true },
