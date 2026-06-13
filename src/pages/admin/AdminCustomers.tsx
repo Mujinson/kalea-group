@@ -16,6 +16,7 @@ import { DataTable, DataTableColumn } from '@/components/admin/DataTable';
 import { ITALIAN_REGIONS, getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from '@/components/admin/CrmShell';
 
 const CUSTOMER_TYPES = [
   { value: 'cliente_privato', label: 'Cliente privato' },
