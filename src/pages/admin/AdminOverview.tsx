@@ -272,15 +272,17 @@ const AdminOverview = () => {
 
   // ─── Derived ──────────────────────────────────────────────
   const sumRevenue = (s: Date, e: Date) =>
-    preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && inRange(x.data, s, e))
+    preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && inRange(x.data || x.created_at, s, e))
       .reduce((a, x) => a + Number(x.importo_totale || 0), 0) +
-    quotes.filter(x => x.status === 'accepted' && inRange(x.accepted_date || x.created_at, s, e))
+    quotes.filter(x => ['accepted','accettato','fatturato'].includes(x.status) && inRange(x.accepted_date || x.created_at, s, e))
+      .reduce((a, x) => a + Number(x.total_amount || 0), 0) +
+    sales.filter(x => inRange(x.sale_date || x.created_at, s, e))
       .reduce((a, x) => a + Number(x.total_amount || 0), 0);
 
-  const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [preventivi, quotes, range]);
-  const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [preventivi, quotes, range]);
+  const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [preventivi, quotes, sales, range]);
+  const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [preventivi, quotes, sales, range]);
   const revenueDelta = revenuePrev > 0 ? ((revenuePeriod - revenuePrev) / revenuePrev) * 100 : null;
-  const revenueYTD = useMemo(() => sumRevenue(startOfYear(new Date()), endOfYear(new Date())), [preventivi, quotes]);
+  const revenueYTD = useMemo(() => sumRevenue(startOfYear(new Date()), endOfYear(new Date())), [preventivi, quotes, sales]);
   const goalPct = goal > 0 ? (revenueYTD / goal) * 100 : 0;
 
   const preventiviPeriod = useMemo(() => {
