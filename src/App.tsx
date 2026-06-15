@@ -46,6 +46,7 @@ import SustainabilityMaintenance from "./pages/SustainabilityMaintenance";
 import Normative from "./pages/Normative";
 import Realizzazioni from "./pages/Realizzazioni";
 import Welcome from "./pages/Welcome";
+import DiscoverKalea from "./pages/DiscoverKalea";
 import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
@@ -434,6 +435,15 @@ const App = () => (
               <Route path="/en/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
               <Route path="/de/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
               <Route path="/fr/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
+
+              {/* Discover Kalēa */}
+              <Route path="/discover-kalea" element={<Navigate to="/it/discover-kalea" replace />} />
+              <Route path="/it/discover-kalea" element={<><SEOHandler /><Layout><DiscoverKalea /></Layout></>} />
+              <Route path="/en/discover-kalea" element={<><SEOHandler /><Layout><DiscoverKalea /></Layout></>} />
+              <Route path="/de/discover-kalea" element={<><SEOHandler /><Layout><DiscoverKalea /></Layout></>} />
+              <Route path="/fr/discover-kalea" element={<><SEOHandler /><Layout><DiscoverKalea /></Layout></>} />
+
+
 
 
 
