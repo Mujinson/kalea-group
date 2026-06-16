@@ -65,6 +65,7 @@ import AdminPayments from "./pages/admin/AdminPayments";
 import AdminImport from "./pages/admin/AdminImport";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
+import AppLangRedirect from "./pages/AppLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminQuoteCreate from "./pages/admin/AdminQuoteCreate";
 import AdminLeads from "./pages/admin/AdminLeads";
