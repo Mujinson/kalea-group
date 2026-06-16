@@ -160,6 +160,8 @@ const CrmHostGate = () => {
   const allowed =
     p === "/admin" ||
     p.startsWith("/admin/") ||
+    p === "/app" ||
+    p.startsWith("/app/") ||
     p === "/cantieri-app" ||
     p.startsWith("/cantieri-app/");
 
