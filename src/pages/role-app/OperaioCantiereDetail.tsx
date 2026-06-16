@@ -300,12 +300,12 @@ const FotoTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
       <div className="grid grid-cols-2 gap-2">
         {photos.map((p) => (
           <a key={p.id} href={p.file_url} target="_blank" rel="noreferrer" className="relative aspect-square rounded-lg overflow-hidden bg-[#F5F0EA]">
-            <img src={p.file_url} alt={p.caption || ''} className="w-full h-full object-cover" loading="lazy" />
-            {p.phase && (
+            <img src={p.file_url} alt={p.description || p.file_name || ''} className="w-full h-full object-cover" loading="lazy" />
+            {(p.description === 'pre' || p.description === 'post') && (
               <span className={`absolute top-1 left-1 text-[10px] uppercase px-1.5 py-0.5 rounded-md text-white ${
-                p.phase === 'post' ? 'bg-[#16A34A]' : 'bg-[#1E1B4B]'
+                p.description === 'post' ? 'bg-[#16A34A]' : 'bg-[#1E1B4B]'
               }`}>
-                {p.phase}
+                {p.description}
               </span>
             )}
           </a>
