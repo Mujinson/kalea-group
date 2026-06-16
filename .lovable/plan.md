@@ -1,92 +1,54 @@
-## Sistema Ruoli & Permessi CRM Kalēa — Piano di implementazione
+## Risposta diretta alla tua domanda
 
-Il lavoro è enorme. Lo divido in 8 step incrementali. Ogni step è auto-consistente: alla fine di ciascuno il CRM rimane funzionante. Dopo la tua approvazione del piano procedo con lo **Step 1** e ti aggiorno; tu mi dici "vai" e procedo al successivo (così possiamo correggere il tiro in corsa invece di scoprire problemi a fine lavoro).
+Tutti — admin, commerciali e operai — entrano **da un unico link**:
 
----
+**`https://crm.kalea.space/admin/login`**
 
-### Stato attuale (rilevato)
-- Ruoli già esistenti nel DB: `admin`, `commerciale`, `operaio` (enum `app_role`).
-- Hook `useAdminAuth` già distingue i 3 ruoli.
-- Manca: ruolo **ibrido**, RLS granulare per commerciale/operaio, dashboard dedicate, commissioni, ferie, chat cantiere, notifiche giornaliere, mobile-first per tutto.
+Dopo aver inserito email + password, il sistema legge il ruolo dell'utente da `user_roles` e lo smista automaticamente:
 
----
+| Ruolo | Destinazione |
+|---|---|
+| admin | `/admin` (CRM completo) |
+| commerciale | `/app/commerciale` (app mobile) |
+| operaio | `/app/operaio` (app mobile cantieri) |
+| ibrido | `/app/ibrido` (app mobile mista) |
 
-### STEP 1 — Fondamenta DB & Ruoli (migrazione)
-- Aggiungo enum value `ibrido` ad `app_role`.
-- Tabella `user_profiles` (nome, cognome, avatar_url, attivo, preferenze notifiche, percentuale_commissione, is_commission_earner).
-- Tabella `monthly_targets` (user_id, anno, mese, target_eur).
-- Tabella `commissions` (preventivo_id, user_id, importo_base, percentuale, importo, stato: maturata/da_liquidare/liquidata, data_liquidazione).
-- Tabella `time_off_requests` (user_id, data_inizio, data_fine, tipo, note, stato, approvato_da).
-- Tabella `availability_blocks` (user_id, data, fascia, motivo).
-- Tabella `site_chat_messages` (cantiere_id, user_id, testo, allegato_url).
-- Tabella `site_assignments` (cantiere_id, operaio_id, data, orario_inizio, orario_fine, stato).
-- Estensione `leads`/`customers`/`quotes` con `created_by` / `assigned_to` se mancanti.
-- RLS granulare:
-  - admin → tutto via `has_role(uid,'admin')`
-  - commerciale/ibrido → solo righe dove `created_by = auth.uid()` o `assigned_to = auth.uid()`
-  - operaio/ibrido → cantieri dove esiste `site_assignments` con `operaio_id = auth.uid()`
-- GRANT corretti su tutte le nuove tabelle.
-- Trigger: alla `UPDATE` di `quotes.stato = 'accettato'` calcola commissione (solo netto materiale, esclude posa) se l'utente ha `is_commission_earner=true`.
+L'utente non deve ricordare URL diversi: stesso login per tutti, la app giusta gli si apre da sola.
 
-### STEP 2 — Gestione Utenti (Admin Settings)
-- Estensione `AdminSettings.tsx`: tabella utenti con ruolo, attivo/disattivo, modifica % commissione, target mensili.
-- Form "Nuovo utente" con scelta ruolo (admin/commerciale/operaio/ibrido), flag commissioni + %, upload avatar.
-- Edge function `admin-create-user` (service role) per creare auth user + profilo + ruolo in una sola transazione.
+## Cosa sistemo con questo piano
 
-### STEP 3 — Routing & Redirect per ruolo
-- `useAdminAuth` riconosce `ibrido` e ritorna anche `is_commission_earner` + `commission_pct`.
-- Login redirect:
-  - admin → `/admin`
-  - commerciale → `/app/commerciale`
-  - operaio → `/app/operaio`
-  - ibrido → `/app/ibrido`
-- Guard route che blocca cross-access.
-- Layout mobile-first con **Bottom Navigation** dedicata per ruolo.
+In base alle tue risposte, faccio tre cose mirate:
 
-### STEP 4 — Dashboard Commerciale (mobile-first)
-- KPI mese (preventivi inviati/accettati/€/conversione) — query filtrate `created_by = uid`.
-- Barra target mensile (verde/giallo/rosso).
-- Lista miei lead + miei preventivi + prossimi appuntamenti.
-- CTA "+ Nuovo Lead" / "+ Nuovo Preventivo".
-- Riuso `CreaPreventivo` ma con flag che nasconde costi interni quando ruolo ≠ admin.
+### 1. Auto-redirect post-login per ruolo
+Oggi `AdminLogin` manda tutti a `/admin`. Modifico in modo che dopo il login chiami `routeForRole(role)`:
+- admin → `/admin`
+- commerciale → `/app/commerciale`
+- operaio → `/app/operaio`
+- ibrido → `/app/ibrido`
 
-### STEP 5 — Dashboard Operaio (mobile-first)
-- Header con stato turno.
-- Card cantieri di oggi con: tel: link, Maps link, prodotto/mq, stato cambiabile, bottoni Foto/Chat.
-- Vista settimanale calendario personale.
-- Bottoni "Richiedi ferie" / "Segnala indisponibilità".
-- Scheda cantiere mobile dettagliata (come da mockup ASCII).
+Stessa logica applicata anche quando un utente già autenticato apre `/admin/login` (oggi resta sulla pagina di login).
 
-### STEP 6 — Dashboard Ibrido + Commissioni
-- 3 tab: Oggi (operaio) / Commerciale / Commissioni.
-- Tab commissioni: lista, totali, filtro mese, **export PDF** (jsPDF).
-- Pannello admin "Commissioni da liquidare" in `/admin/finanza/commissioni`: per persona, marca come liquidata, export CSV/PDF.
+### 2. Unificazione `/cantieri-app` → `/app/operaio`
+- La route `/cantieri-app` diventa un redirect permanente a `/app/operaio`.
+- Stesso redirect per `/:lang/cantieri-app` (già gestito da `AppLangRedirect`, lo allineo).
+- Aggiorno la memoria `mem://admin/crm/worker-auth-flow` di conseguenza (oggi dice che gli operai vanno su `/cantieri-app`).
 
-### STEP 7 — Ferie, Indisponibilità, Chat cantiere, Foto
-- Form richiesta ferie + pannello admin approva/rifiuta con notifica.
-- Calendario admin mostra giorni bloccati, warning su assegnazione conflittuale.
-- Chat per cantiere (realtime via Supabase channel) con upload allegati su bucket `site-media`.
-- Upload foto pre/post posa con thumbnail grid.
+Le funzionalità di `WorkerApp` (timbra ore, foto pre/post, chat cantiere) restano disponibili — vanno migrate dentro `/app/operaio` come moduli della bottom-nav. Per non bloccare questa iterazione, in questo step faccio solo il redirect; la migrazione vera dei moduli WorkerApp dentro `OperaioApp` la faccio nello step successivo se confermi.
 
-### STEP 8 — Notifiche giornaliere & rifiniture mobile
-- Edge function `daily-briefing` schedulata via `pg_cron` alle 07:30 Europe/Rome → email tramite Lovable AI / Resend (decidiamo: email built-in o solo notifica in-app).
-- `NotificationCenter` esteso con notifiche per: preventivo cambio stato, nuovo messaggio chat, ferie approvate/rifiutate, nuova assegnazione.
-- Audit mobile su tutte le viste admin esistenti: hamburger menu, font 16px su input, target touch 52px.
+### 3. Schermata "stai per essere reindirizzato" più chiara
+Oggi se un admin apre per sbaglio `/app/commerciale` vede "Questa app non è per il tuo ruolo" con un bottone manuale. Aggiungo un piccolo auto-redirect (1.5s) verso `routeForRole(role)` così non resta bloccato.
 
----
+## File toccati
 
-### Note tecniche
-- Stack: React + Vite + Tailwind + shadcn + Supabase (Lovable Cloud).
-- RLS sempre via `has_role()` SECURITY DEFINER per evitare ricorsione.
-- Commissioni calcolate **server-side** (trigger SQL), mai client-side.
-- Nessuna nuova dipendenza pesante; per PDF uso `jspdf` (già usato altrove nel progetto, da verificare).
-- Mobile-first: bottom nav fissa per ruolo non-admin; admin mantiene sidebar + hamburger.
+- `src/pages/admin/AdminLogin.tsx` — dopo `signIn` ok, leggere il ruolo e fare `navigate(routeForRole(role))` invece di `navigate('/admin')`.
+- `src/App.tsx` — sostituire la route `/cantieri-app` con un `<Navigate to="/app/operaio" replace />`.
+- `src/pages/AppLangRedirect.tsx` — assicurarsi che `/it/cantieri-app` finisca su `/app/operaio`.
+- `src/components/role-app/RoleAppLayout.tsx` — aggiungere auto-redirect alla schermata "ruolo errato".
+- `mem://admin/crm/worker-auth-flow` — aggiornare per riflettere il nuovo entry point unico.
 
-### Costi / impatto
-- ~10 nuove tabelle, ~25 nuove pagine/componenti, 2 edge function nuove.
-- Tempo stimato totale: lungo. Ti consiglio fortemente di andare uno step alla volta con verifica.
+## Cosa NON faccio in questo step
 
----
+- Non sposto i moduli operativi di `WorkerApp` (timbratura, foto, chat) dentro `OperaioApp`: oggi `OperaioApp` ha solo "I miei cantieri" + stub. Se vuoi che li migri davvero, lo faccio come step separato per non mescolare troppe cose.
+- Non tocco la creazione utenti — già funzionante in `CommercialiSection`.
 
-**Procedo con lo Step 1 (migrazione DB) appena approvi?**
-Se vuoi modifiche all'ordine o vuoi accorpare/dividere step diversamente, dimmelo ora.
+Confermi e procedo?
