@@ -19,11 +19,25 @@ const OperaioHome = () => {
   const navigate = useNavigate();
   const [sites, setSites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [firstName, setFirstName] = useState<string>('');
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const today = new Date().toISOString().slice(0, 10);
+
+      const { data: w } = await supabase
+        .from('workers')
+        .select('first_name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      const meta: any = (user as any).user_metadata || {};
+      const fromMeta = (meta.first_name as string) ||
+        ((meta.full_name as string) || (meta.name as string) || '').split(' ')[0];
+      const fromEmail = (user.email || '').split('@')[0].split('.')[0];
+      const n = (w?.first_name || fromMeta || fromEmail || '').trim();
+      if (n) setFirstName(n.charAt(0).toUpperCase() + n.slice(1));
+
       // sites where I'm an active worker
       const { data: assigns } = await supabase
         .from('site_workers')
@@ -50,7 +64,10 @@ const OperaioHome = () => {
     <div className="p-4 space-y-4">
       <div>
         <p className="text-[13px] text-[#8C7B6B] capitalize">{today}</p>
-        <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">I miei cantieri</h1>
+        <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">
+          Ciao{firstName ? ` ${firstName}` : ''} 👋
+        </h1>
+        <p className="text-[14px] text-[#6B6258] mt-1">I miei cantieri di oggi</p>
       </div>
 
       {loading && <div className="text-center py-8 text-[#8C7B6B]">Caricamento…</div>}
