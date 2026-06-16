@@ -191,6 +191,7 @@ const OperaioApp = () => (
       <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />
       <Route path="lead/:id" element={<CommercialeLeadDetail />} />
       <Route path="profilo" element={<RoleProfile />} />
+      <Route path="crea-preventivo" element={<CreaPreventivo />} />
       <Route path="*" element={<Navigate to="/app/operaio" replace />} />
     </Route>
   </Routes>
