@@ -7,9 +7,10 @@ import OperaioCantiereDetail from './OperaioCantiereDetail';
 import OperaioCalendario from './OperaioCalendario';
 import CommercialeLeadDetail from './CommercialeLeadDetail';
 import RoleProfile from './RoleProfile';
+import CreaPreventivo from '@/pages/admin/strumenti/CreaPreventivo';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Phone, MapPin, Camera, MessageSquare } from 'lucide-react';
+import { Phone, MapPin, Camera, MessageSquare, Plus } from 'lucide-react';
 
 const nav = [
   { to: '/app/operaio', label: 'Oggi', icon: <Home className="w-5 h-5" /> },
