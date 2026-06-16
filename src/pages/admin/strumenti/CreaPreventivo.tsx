@@ -1239,6 +1239,34 @@ export default function CreaPreventivo() {
                     style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
                 </div>
               ))}
+              <div style={{marginBottom:8}}>
+                <div style={{fontSize:11,color:"#6B6860",marginBottom:4}}>Tipologia cliente</div>
+                <select value={cliente.tipo} onChange={e=>setCliente(c=>({...c,tipo:e.target.value, tipoAltro: e.target.value==="altro" ? c.tipoAltro : ""}))}
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                  <option value="">Seleziona tipologia…</option>
+                  <option value="architetto">Architetto</option>
+                  <option value="geometra">Geometra</option>
+                  <option value="impresa_edile">Impresa edile</option>
+                  <option value="cliente_privato">Cliente privato</option>
+                  <option value="altro">Altro</option>
+                </select>
+              </div>
+              {cliente.tipo === "altro" && (
+                <div style={{marginBottom:8}}>
+                  <input value={cliente.tipoAltro} onChange={e=>setCliente(c=>({...c,tipoAltro:e.target.value}))} placeholder="Specifica di cosa si tratta"
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                </div>
+              )}
+              <div style={{marginBottom:8}}>
+                <input value={cliente.partitaIva} onChange={e=>setCliente(c=>({...c,partitaIva:e.target.value}))} placeholder="Partita IVA / Codice Fiscale"
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+                <input value={cliente.referente} onChange={e=>setCliente(c=>({...c,referente:e.target.value}))} placeholder="Persona di riferimento"
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                <input value={cliente.ruoloReferente} onChange={e=>setCliente(c=>({...c,ruoloReferente:e.target.value}))} placeholder="Ruolo in azienda (es. titolare, geometra…)"
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+              </div>
             </div>
           </div>
 
