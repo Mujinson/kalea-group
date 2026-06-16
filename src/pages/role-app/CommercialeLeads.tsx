@@ -92,6 +92,8 @@ const CommercialeLeads = () => {
                 <MapPin className="w-3.5 h-3.5" /> {place}
               </div>
             )}
+            </a>
+
 
             <div className="flex gap-2 pt-2">
               {l.phone && (
