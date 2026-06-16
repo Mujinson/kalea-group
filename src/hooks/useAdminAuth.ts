@@ -53,7 +53,7 @@ export const useAdminAuth = () => {
       else if (roleList.includes('operaio')) chosen = 'operaio';
 
       setRole(chosen);
-      setIsAdmin(chosen === 'admin' || chosen === 'commerciale' || chosen === 'ibrido');
+      setIsAdmin(chosen === 'admin');
 
       if (chosen === 'commerciale' || chosen === 'ibrido') {
         const { data: sp } = await supabase
