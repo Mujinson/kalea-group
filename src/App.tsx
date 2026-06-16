@@ -199,8 +199,9 @@ const App = () => (
               <Route path="/:lang/cantieri-app" element={<AppLangRedirect />} />
 
 
-              {/* Worker app (standalone, no sidebar) */}
-              <Route path="/cantieri-app" element={<WorkerApp />} />
+              {/* Legacy worker app → unified under /app/operaio */}
+              <Route path="/cantieri-app" element={<Navigate to="/app/operaio" replace />} />
+              <Route path="/cantieri-app/*" element={<Navigate to="/app/operaio" replace />} />
 
               {/* Role-based mobile apps */}
               <Route path="/app/commerciale/*" element={<CommercialeApp />} />
