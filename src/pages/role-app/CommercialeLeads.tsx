@@ -22,18 +22,19 @@ const CommercialeLeads = () => {
   const [showNew, setShowNew] = useState(false);
 
   const load = useCallback(async () => {
-      setLoading(true);
-      let q = supabase
-        .from('leads')
-        .select('id,name,phone,email,city,province,pipeline_stage,status,project_type,last_interaction_at,created_at')
-        .order('created_at', { ascending: false })
-        .limit(100);
+    if (!user) return;
+    setLoading(true);
+    let q = supabase
+      .from('leads')
+      .select('id,name,phone,email,city,province,pipeline_stage,status,project_type,last_interaction_at,created_at')
+      .order('created_at', { ascending: false })
+      .limit(100);
 
-      if (salespersonId) {
-        q = q.or(`assigned_salesperson_id.eq.${salespersonId},created_by_user_id.eq.${user.id}`);
-      } else {
-        q = q.eq('created_by_user_id', user.id);
-      }
+    if (salespersonId) {
+      q = q.or(`assigned_salesperson_id.eq.${salespersonId},created_by_user_id.eq.${user.id}`);
+    } else {
+      q = q.eq('created_by_user_id', user.id);
+    }
     const { data } = await q;
     setLeads(data || []);
     setLoading(false);
