@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Phone, Mail, MapPin, User, Loader2 } from 'lucide-react';
+import { Phone, Mail, MapPin, User, Loader2, Plus } from 'lucide-react';
+import QuickNewLeadSheet from '@/components/role-app/QuickNewLeadSheet';
 
 const stageColor = (s: string) => {
   const k = (s || '').toLowerCase();
@@ -18,10 +19,9 @@ const CommercialeLeads = () => {
   const { user, salespersonId } = useAdminAuth();
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showNew, setShowNew] = useState(false);
 
-  useEffect(() => {
-    if (!user) return;
-    (async () => {
+  const load = useCallback(async () => {
       setLoading(true);
       let q = supabase
         .from('leads')
@@ -34,11 +34,14 @@ const CommercialeLeads = () => {
       } else {
         q = q.eq('created_by_user_id', user.id);
       }
-      const { data } = await q;
-      setLeads(data || []);
-      setLoading(false);
-    })();
+    const { data } = await q;
+    setLeads(data || []);
+    setLoading(false);
   }, [user, salespersonId]);
+
+  useEffect(() => {
+    if (user) load();
+  }, [user, load]);
 
   return (
     <div className="p-4 space-y-3">
