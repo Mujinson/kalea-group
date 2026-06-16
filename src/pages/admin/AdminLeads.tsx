@@ -72,6 +72,7 @@ interface Lead {
   source: string | null;
   status: string;
   assigned_salesperson_id: string | null;
+  assigned_user_id: string | null;
   notes: string | null;
   region: string | null;
   province: string | null;
@@ -117,6 +118,7 @@ const emptyLeadForm = {
   source: 'area_tecnica',
   status: 'nuovo',
   assigned_salesperson_id: '',
+  assigned_user_id: '',
   notes: '',
   region: '',
   province: '',
@@ -150,6 +152,32 @@ const AdminLeads = () => {
     queryFn: async () => {
       const { data } = await supabase.from("salespeople").select("id, first_name, last_name").eq("is_active", true);
       return (data || []) as Salesperson[];
+    },
+  });
+
+  const { data: assignableUsers } = useQuery({
+    queryKey: ["assignable-users"],
+    queryFn: async () => {
+      const { data: roles } = await supabase
+        .from("user_roles")
+        .select("user_id, role")
+        .in("role", ["commerciale", "ibrido", "operaio"] as any);
+      const ids = Array.from(new Set((roles || []).map((r: any) => r.user_id)));
+      if (ids.length === 0) return [] as Array<{ user_id: string; name: string; role: string }>;
+      const [{ data: sp }, { data: wk }] = await Promise.all([
+        supabase.from("salespeople").select("user_id, first_name, last_name").in("user_id", ids),
+        supabase.from("workers").select("user_id, first_name, last_name").in("user_id", ids),
+      ]);
+      const nameMap = new Map<string, string>();
+      (sp || []).forEach((s: any) => nameMap.set(s.user_id, `${s.first_name} ${s.last_name}`));
+      (wk || []).forEach((w: any) => { if (!nameMap.has(w.user_id)) nameMap.set(w.user_id, `${w.first_name} ${w.last_name}`); });
+      const roleMap = new Map<string, string>();
+      (roles || []).forEach((r: any) => roleMap.set(r.user_id, r.role));
+      return ids.map((id) => ({
+        user_id: id,
+        name: nameMap.get(id) || 'Utente',
+        role: roleMap.get(id) || '',
+      })).sort((a, b) => a.name.localeCompare(b.name));
     },
   });
 
@@ -208,6 +236,7 @@ const AdminLeads = () => {
       source: lead.source || 'area_tecnica',
       status: lead.status,
       assigned_salesperson_id: lead.assigned_salesperson_id || '',
+      assigned_user_id: (lead as any).assigned_user_id || '',
       notes: lead.notes || '',
       region: lead.region || '',
       province: lead.province || '',
@@ -231,6 +260,7 @@ const AdminLeads = () => {
       source: editForm.source || null,
       status: editForm.status,
       assigned_salesperson_id: editForm.assigned_salesperson_id || null,
+      assigned_user_id: editForm.assigned_user_id || null,
       notes: editForm.notes || null,
       region: editForm.region || null,
       province: editForm.province || null,
@@ -262,6 +292,7 @@ const AdminLeads = () => {
       source: createForm.source || null,
       status: createForm.status || 'nuovo',
       assigned_salesperson_id: createForm.assigned_salesperson_id || null,
+      assigned_user_id: createForm.assigned_user_id || null,
       notes: createForm.notes || null,
       region: createForm.region || null,
       province: createForm.province || null,
