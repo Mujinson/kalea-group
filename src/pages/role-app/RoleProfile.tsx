@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { LogOut, Mail, Phone, User as UserIcon, Shield } from 'lucide-react';
+import { LogOut, Mail, Phone, User as UserIcon, Shield, CalendarOff } from 'lucide-react';
+import TimeOffSheet from '@/components/role-app/TimeOffSheet';
 
 const RoleProfile = () => {
   const { user, role } = useAdminAuth();
   const [info, setInfo] = useState<{ first?: string; last?: string; phone?: string }>({});
+  const [timeOffOpen, setTimeOffOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -72,11 +74,20 @@ const RoleProfile = () => {
       </div>
 
       <button
+        onClick={() => setTimeOffOpen(true)}
+        className="w-full h-[52px] rounded-lg border border-[#E5E2DD] bg-white text-[#1E1B4B] font-medium flex items-center justify-center gap-2"
+      >
+        <CalendarOff className="w-5 h-5" /> Richiedi ferie / indisponibilità
+      </button>
+
+      <button
         onClick={logout}
         className="w-full h-[52px] rounded-lg bg-[#1E1B4B] text-white font-medium flex items-center justify-center gap-2"
       >
         <LogOut className="w-5 h-5" /> Esci
       </button>
+
+      <TimeOffSheet open={timeOffOpen} onClose={() => setTimeOffOpen(false)} />
     </div>
   );
 };
