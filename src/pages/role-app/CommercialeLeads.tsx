@@ -30,11 +30,12 @@ const CommercialeLeads = () => {
       .order('created_at', { ascending: false })
       .limit(100);
 
-    if (salespersonId) {
-      q = q.or(`assigned_salesperson_id.eq.${salespersonId},created_by_user_id.eq.${user.id}`);
-    } else {
-      q = q.eq('created_by_user_id', user.id);
-    }
+    const orParts = [
+      `assigned_user_id.eq.${user.id}`,
+      `created_by_user_id.eq.${user.id}`,
+    ];
+    if (salespersonId) orParts.push(`assigned_salesperson_id.eq.${salespersonId}`);
+    q = q.or(orParts.join(','));
     const { data } = await q;
     setLeads(data || []);
     setLoading(false);

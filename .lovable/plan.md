@@ -1,54 +1,37 @@
-## Risposta diretta alla tua domanda
+# Assegnazione lead & notifiche
 
-Tutti — admin, commerciali e operai — entrano **da un unico link**:
+Attualmente i commerciali vedono già solo i lead assegnati al proprio `salespersonId` o creati da loro — quindi i lead di altri non compaiono. Quello che manca è:
 
-**`https://crm.kalea.space/admin/login`**
+1. Un modo per l'**admin** di assegnare un lead a **qualsiasi utente** (commerciale, ibrido o operaio), non solo a chi ha un record in `salespeople`.
+2. Una **notifica in-app** al destinatario quando riceve un nuovo lead.
+3. La vista mobile del destinatario deve mostrare anche i lead assegnati a lui come utente (oltre a quelli via `salespersonId`).
 
-Dopo aver inserito email + password, il sistema legge il ruolo dell'utente da `user_roles` e lo smista automaticamente:
+## Modifiche
 
-| Ruolo | Destinazione |
-|---|---|
-| admin | `/admin` (CRM completo) |
-| commerciale | `/app/commerciale` (app mobile) |
-| operaio | `/app/operaio` (app mobile cantieri) |
-| ibrido | `/app/ibrido` (app mobile mista) |
+### Database
+- Aggiungere colonna `assigned_user_id uuid` a `leads` (riferimento logico a `auth.users`).
+- Creare tabella `notifications`:
+  - `user_id` (destinatario), `type` (`lead_assigned` | …), `title`, `body`, `link`, `read_at`, `entity_id`.
+  - RLS: ogni utente vede/aggiorna solo le proprie notifiche; admin/service_role pieno accesso.
+  - Realtime abilitato.
+- Trigger su `leads`: quando `assigned_user_id` o `assigned_salesperson_id` cambia (INSERT o UPDATE), crea una `notifications` per l'utente destinatario.
 
-L'utente non deve ricordare URL diversi: stesso login per tutti, la app giusta gli si apre da sola.
+### Backend / vista mobile
+- `CommercialeLeads.tsx`: estendere il filtro a `assigned_user_id = user.id OR assigned_salesperson_id = salespersonId OR created_by_user_id = user.id`.
+- `OperaioApp` / `IbridoApp`: piccola pagina "I miei lead" basata sullo stesso filtro (per operaio: solo `assigned_user_id`).
 
-## Cosa sistemo con questo piano
+### Notifiche
+- Hook `useNotifications()` con Realtime subscription su `notifications` filtrato per `user_id = auth.uid()`.
+- Badge sul tab attivo + bottom sheet/lista in `RoleProfile` o icona in header con conteggio non letti.
+- Toast quando arriva una notifica nuova mentre l'app è aperta.
 
-In base alle tue risposte, faccio tre cose mirate:
+### Admin UI
+- Nella vista admin Leads, accanto al selettore "Salesperson" aggiungere selettore "Assegna a utente" (lista di utenti con ruolo commerciale/ibrido/operaio dalla tabella `user_roles`).
+- Salvataggio aggiorna `assigned_user_id` → il trigger crea automaticamente la notifica.
 
-### 1. Auto-redirect post-login per ruolo
-Oggi `AdminLogin` manda tutti a `/admin`. Modifico in modo che dopo il login chiami `routeForRole(role)`:
-- admin → `/admin`
-- commerciale → `/app/commerciale`
-- operaio → `/app/operaio`
-- ibrido → `/app/ibrido`
+## Note tecniche
+- Realtime: `ALTER PUBLICATION supabase_realtime ADD TABLE public.notifications;`
+- Nessuna modifica al meccanismo di chat/SMS esistente — solo notifiche in-app per ora.
+- I lead esistenti restano invariati; `assigned_user_id` NULL = nessun utente specifico, si applica solo il flusso salesperson attuale.
 
-Stessa logica applicata anche quando un utente già autenticato apre `/admin/login` (oggi resta sulla pagina di login).
-
-### 2. Unificazione `/cantieri-app` → `/app/operaio`
-- La route `/cantieri-app` diventa un redirect permanente a `/app/operaio`.
-- Stesso redirect per `/:lang/cantieri-app` (già gestito da `AppLangRedirect`, lo allineo).
-- Aggiorno la memoria `mem://admin/crm/worker-auth-flow` di conseguenza (oggi dice che gli operai vanno su `/cantieri-app`).
-
-Le funzionalità di `WorkerApp` (timbra ore, foto pre/post, chat cantiere) restano disponibili — vanno migrate dentro `/app/operaio` come moduli della bottom-nav. Per non bloccare questa iterazione, in questo step faccio solo il redirect; la migrazione vera dei moduli WorkerApp dentro `OperaioApp` la faccio nello step successivo se confermi.
-
-### 3. Schermata "stai per essere reindirizzato" più chiara
-Oggi se un admin apre per sbaglio `/app/commerciale` vede "Questa app non è per il tuo ruolo" con un bottone manuale. Aggiungo un piccolo auto-redirect (1.5s) verso `routeForRole(role)` così non resta bloccato.
-
-## File toccati
-
-- `src/pages/admin/AdminLogin.tsx` — dopo `signIn` ok, leggere il ruolo e fare `navigate(routeForRole(role))` invece di `navigate('/admin')`.
-- `src/App.tsx` — sostituire la route `/cantieri-app` con un `<Navigate to="/app/operaio" replace />`.
-- `src/pages/AppLangRedirect.tsx` — assicurarsi che `/it/cantieri-app` finisca su `/app/operaio`.
-- `src/components/role-app/RoleAppLayout.tsx` — aggiungere auto-redirect alla schermata "ruolo errato".
-- `mem://admin/crm/worker-auth-flow` — aggiornare per riflettere il nuovo entry point unico.
-
-## Cosa NON faccio in questo step
-
-- Non sposto i moduli operativi di `WorkerApp` (timbratura, foto, chat) dentro `OperaioApp`: oggi `OperaioApp` ha solo "I miei cantieri" + stub. Se vuoi che li migri davvero, lo faccio come step separato per non mescolare troppe cose.
-- Non tocco la creazione utenti — già funzionante in `CommercialiSection`.
-
-Confermi e procedo?
+Confermi e procedo con la migrazione?

@@ -1136,6 +1136,7 @@ export type Database = {
         Row: {
           address: string | null
           assigned_salesperson_id: string | null
+          assigned_user_id: string | null
           budget_range: string | null
           city: string | null
           company_name: string | null
@@ -1167,6 +1168,7 @@ export type Database = {
         Insert: {
           address?: string | null
           assigned_salesperson_id?: string | null
+          assigned_user_id?: string | null
           budget_range?: string | null
           city?: string | null
           company_name?: string | null
@@ -1198,6 +1200,7 @@ export type Database = {
         Update: {
           address?: string | null
           assigned_salesperson_id?: string | null
+          assigned_user_id?: string | null
           budget_range?: string | null
           city?: string | null
           company_name?: string | null
@@ -1263,6 +1266,42 @@ export type Database = {
           updated_at?: string
           user_id?: string
           year?: number
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          entity_id: string | null
+          id: string
+          link: string | null
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          entity_id?: string | null
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string
         }
         Relationships: []
       }
