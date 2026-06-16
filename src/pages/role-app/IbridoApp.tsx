@@ -8,6 +8,7 @@ import OperaioSites from './OperaioSites';
 import OperaioCantiereDetail from './OperaioCantiereDetail';
 import IbridoCommissioni from './IbridoCommissioni';
 import RoleProfile from './RoleProfile';
+import CreaPreventivo from '@/pages/admin/strumenti/CreaPreventivo';
 
 const nav = [
   { to: '/app/ibrido', label: 'Oggi', icon: <Home className="w-5 h-5" /> },
@@ -27,6 +28,7 @@ const IbridoApp = () => (
       <Route path="lead/:id" element={<CommercialeLeadDetail />} />
       <Route path="commissioni" element={<IbridoCommissioni />} />
       <Route path="profilo" element={<RoleProfile />} />
+      <Route path="crea-preventivo" element={<CreaPreventivo />} />
       <Route path="*" element={<Navigate to="/app/ibrido" replace />} />
     </Route>
   </Routes>
