@@ -35,7 +35,12 @@ const AdminLayout = () => {
       if (!user) {
         navigate('/admin/login');
       } else if (role === 'operaio') {
-        navigate('/cantieri-app');
+        navigate('/app/operaio');
+      } else if (role === 'ibrido') {
+        navigate('/app/ibrido');
+      } else if (role === 'commerciale') {
+        // commerciale uses the mobile app, NOT admin shell
+        navigate('/app/commerciale');
       } else if (!isAdmin) {
         navigate('/admin/login');
       }
