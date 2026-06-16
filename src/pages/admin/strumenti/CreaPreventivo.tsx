@@ -86,14 +86,31 @@ const today = () => new Date().toLocaleDateString("it-IT");
 const addDays = (d: any, n: number) => { const x=new Date(); x.setDate(x.getDate()+n); return x.toLocaleDateString("it-IT"); };
 const nextNum = () => { const n=(parseInt(localStorage.getItem("kal_prev_num")||"0")+1); localStorage.setItem("kal_prev_num", String(n)); return "KAL-"+new Date().getFullYear()+"-"+String(n).padStart(3,"0"); };
 
-function Slider({ label, min, max, value, step, onChange, format }: any) {
+function Slider({ label, min, max, value, step, onChange, format, unit, editable }: any) {
   return (
     <div style={{marginBottom:12}}>
-      <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+      <div style={{display:"flex",justifyContent:"space-between",marginBottom:4,alignItems:"center"}}>
         <span style={{fontSize:13,color:"#6B6860"}}>{label}</span>
-        <span style={{fontSize:13,fontWeight:500}}>{format(value)}</span>
+        {editable ? (
+          <span style={{fontSize:13,fontWeight:500,display:"inline-flex",alignItems:"center",gap:4}}>
+            <input
+              type="number"
+              value={value}
+              min={min}
+              step={step}
+              onChange={e=>{
+                const v = e.target.value === "" ? 0 : Number(e.target.value);
+                if (!Number.isNaN(v)) onChange(v);
+              }}
+              style={{width:72,textAlign:"right",border:"1px solid #E0DDD8",borderRadius:6,padding:"2px 6px",fontSize:13,fontWeight:500,background:"#fff"}}
+            />
+            {unit && <span style={{color:"#6B6860"}}>{unit}</span>}
+          </span>
+        ) : (
+          <span style={{fontSize:13,fontWeight:500}}>{format(value)}</span>
+        )}
       </div>
-      <input type="range" min={min} max={max} step={step} value={value}
+      <input type="range" min={min} max={max} step={step} value={Math.min(Math.max(value,min),max)}
         onChange={e=>onChange(Number(e.target.value))}
         style={{width:"100%",accentColor:"#1A1A2E",cursor:"pointer"}}/>
     </div>
@@ -1119,7 +1136,7 @@ export default function CreaPreventivo() {
                   ))}
                 </div>
               </div>
-              <Slider label="mq da posare" min={5} max={600} value={mqPrev} step={5} onChange={setMqPrev} format={(v:any)=>v+" mq"}/>
+              <Slider label="mq da posare" min={1} max={600} value={mqPrev} step={1} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
               <Slider label="Sfrido (%)" min={5} max={25} value={sfrido} step={1} onChange={setSfrido} format={(v:any)=>v+"%"}/>
               <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={1} onChange={setSconto} format={(v:any)=>v+"%"}/>
               <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
