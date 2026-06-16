@@ -976,7 +976,7 @@ export default function CreaPreventivo() {
 
   const selectCrm = (r: CrmRecord) => {
     setCrmLink(r);
-    setCliente({ nome:r.nome, indirizzo:r.indirizzo, citta:r.citta, telefono:r.telefono, email:r.email });
+    setCliente(c => ({ ...c, nome:r.nome, indirizzo:r.indirizzo, citta:r.citta, telefono:r.telefono, email:r.email }));
   };
 
   const salvaPreventivo = async () => {
