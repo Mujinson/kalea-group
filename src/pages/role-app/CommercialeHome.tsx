@@ -12,6 +12,26 @@ const CommercialeHome = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({ inviati: 0, accettati: 0, valore: 0, target: 0 });
   const [loading, setLoading] = useState(true);
+  const [firstName, setFirstName] = useState<string>('');
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: sp } = await supabase
+        .from('salespeople')
+        .select('first_name, full_name, name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      const meta: any = (user as any).user_metadata || {};
+      const fromSp = (sp?.first_name as string) ||
+        ((sp?.full_name as string) || (sp?.name as string) || '').split(' ')[0];
+      const fromMeta = (meta.first_name as string) ||
+        ((meta.full_name as string) || (meta.name as string) || '').split(' ')[0];
+      const fromEmail = (user.email || '').split('@')[0].split('.')[0];
+      const n = (fromSp || fromMeta || fromEmail || '').trim();
+      if (n) setFirstName(n.charAt(0).toUpperCase() + n.slice(1));
+    })();
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
