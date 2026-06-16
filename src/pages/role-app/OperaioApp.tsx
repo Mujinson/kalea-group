@@ -5,6 +5,7 @@ import RoleAppLayout from '@/components/role-app/RoleAppLayout';
 import OperaioSites from './OperaioSites';
 import OperaioCantiereDetail from './OperaioCantiereDetail';
 import OperaioCalendario from './OperaioCalendario';
+import CommercialeLeadDetail from './CommercialeLeadDetail';
 import RoleProfile from './RoleProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -21,6 +22,7 @@ const OperaioHome = () => {
   const { user } = useAdminAuth();
   const navigate = useNavigate();
   const [sites, setSites] = useState<any[]>([]);
+  const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState<string>('');
 
@@ -55,6 +57,16 @@ const OperaioHome = () => {
           (!s.start_date || s.start_date <= today) && (!s.end_date || s.end_date >= today)
         );
       setSites(list);
+
+      // leads assigned directly to this user
+      const { data: ld } = await supabase
+        .from('leads')
+        .select('id,name,phone,city,province,project_type,pipeline_stage')
+        .eq('assigned_user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      setLeads(ld || []);
+
       setLoading(false);
     })();
   }, [user]);
@@ -134,6 +146,28 @@ const OperaioHome = () => {
           </div>
         );
       })}
+
+      {leads.length > 0 && (
+        <div className="space-y-3 pt-4">
+          <h2 className="text-[18px] font-semibold text-[#1E1B4B]">Lead assegnati a me</h2>
+          {leads.map((l) => {
+            const place = [l.city, l.province].filter(Boolean).join(', ');
+            return (
+              <button
+                key={l.id}
+                onClick={() => navigate(`/app/operaio/lead/${l.id}`)}
+                className="w-full text-left bg-white rounded-xl border border-[#E5E2DD] p-4 space-y-1"
+              >
+                <div className="text-[15px] font-semibold text-[#1E1B4B]">{l.name}</div>
+                {l.project_type && <div className="text-[13px] text-[#6B6258]">{l.project_type}</div>}
+                {(place || l.phone) && (
+                  <div className="text-[12px] text-[#8C7B6B]">{[place, l.phone].filter(Boolean).join(' · ')}</div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
