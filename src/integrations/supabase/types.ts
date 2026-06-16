@@ -108,6 +108,33 @@ export type Database = {
           },
         ]
       }
+      availability_blocks: {
+        Row: {
+          block_date: string
+          created_at: string
+          id: string
+          reason: string | null
+          slot: string
+          user_id: string
+        }
+        Insert: {
+          block_date: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          slot?: string
+          user_id: string
+        }
+        Update: {
+          block_date?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+          slot?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       catalog_price_history: {
         Row: {
           change_reason: string | null
@@ -409,6 +436,72 @@ export type Database = {
             columns: ["salesperson_id"]
             isOneToOne: false
             referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commissions: {
+        Row: {
+          amount: number
+          base_amount: number
+          created_at: string
+          customer_id: string | null
+          customer_name: string | null
+          id: string
+          note: string | null
+          paid_at: string | null
+          percentage: number
+          preventivo_id: string | null
+          quote_id: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          base_amount?: number
+          created_at?: string
+          customer_id?: string | null
+          customer_name?: string | null
+          id?: string
+          note?: string | null
+          paid_at?: string | null
+          percentage?: number
+          preventivo_id?: string | null
+          quote_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          base_amount?: number
+          created_at?: string
+          customer_id?: string | null
+          customer_name?: string | null
+          id?: string
+          note?: string | null
+          paid_at?: string | null
+          percentage?: number
+          preventivo_id?: string | null
+          quote_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_preventivo_id_fkey"
+            columns: ["preventivo_id"]
+            isOneToOne: false
+            referencedRelation: "preventivi"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commissions_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
             referencedColumns: ["id"]
           },
         ]
@@ -1051,6 +1144,7 @@ export type Database = {
           contact_person_phone: string | null
           contact_person_role: string | null
           created_at: string
+          created_by_user_id: string | null
           email: string
           id: string
           ip_address: string | null
@@ -1081,6 +1175,7 @@ export type Database = {
           contact_person_phone?: string | null
           contact_person_role?: string | null
           created_at?: string
+          created_by_user_id?: string | null
           email: string
           id?: string
           ip_address?: string | null
@@ -1111,6 +1206,7 @@ export type Database = {
           contact_person_phone?: string | null
           contact_person_role?: string | null
           created_at?: string
+          created_by_user_id?: string | null
           email?: string
           id?: string
           ip_address?: string | null
@@ -1139,6 +1235,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      monthly_targets: {
+        Row: {
+          created_at: string
+          id: string
+          month: number
+          target_eur: number
+          updated_at: string
+          user_id: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          month: number
+          target_eur?: number
+          updated_at?: string
+          user_id: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          month?: number
+          target_eur?: number
+          updated_at?: string
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
       }
       payment_agreements: {
         Row: {
@@ -1749,6 +1875,7 @@ export type Database = {
           first_name: string
           id: string
           is_active: boolean | null
+          is_commission_earner: boolean
           last_name: string
           notes: string | null
           phone: string | null
@@ -1762,6 +1889,7 @@ export type Database = {
           first_name: string
           id?: string
           is_active?: boolean | null
+          is_commission_earner?: boolean
           last_name: string
           notes?: string | null
           phone?: string | null
@@ -1775,6 +1903,7 @@ export type Database = {
           first_name?: string
           id?: string
           is_active?: boolean | null
+          is_commission_earner?: boolean
           last_name?: string
           notes?: string | null
           phone?: string | null
@@ -1811,6 +1940,44 @@ export type Database = {
             columns: ["salesperson_id"]
             isOneToOne: false
             referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_chat_messages: {
+        Row: {
+          attachment_url: string | null
+          created_at: string
+          id: string
+          message: string
+          site_id: string
+          user_id: string
+          user_name: string | null
+        }
+        Insert: {
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          site_id: string
+          user_id: string
+          user_name?: string | null
+        }
+        Update: {
+          attachment_url?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          site_id?: string
+          user_id?: string
+          user_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_chat_messages_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
             referencedColumns: ["id"]
           },
         ]
@@ -2258,6 +2425,51 @@ export type Database = {
         }
         Relationships: []
       }
+      time_off_requests: {
+        Row: {
+          approved_by: string | null
+          created_at: string
+          decided_at: string | null
+          decision_note: string | null
+          end_date: string
+          id: string
+          kind: string
+          note: string | null
+          start_date: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved_by?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decision_note?: string | null
+          end_date: string
+          id?: string
+          kind?: string
+          note?: string | null
+          start_date: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved_by?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decision_note?: string | null
+          end_date?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tool_settings: {
         Row: {
           created_at: string
@@ -2491,7 +2703,13 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user" | "commerciale" | "operaio"
+      app_role:
+        | "admin"
+        | "moderator"
+        | "user"
+        | "commerciale"
+        | "operaio"
+        | "ibrido"
       contract_status: "in_corso" | "completato" | "annullato"
       cost_frequency: "mensile" | "trimestrale" | "annuale" | "una_tantum"
       customer_status: "opportunity" | "signed" | "working"
@@ -2649,7 +2867,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user", "commerciale", "operaio"],
+      app_role: [
+        "admin",
+        "moderator",
+        "user",
+        "commerciale",
+        "operaio",
+        "ibrido",
+      ],
       contract_status: ["in_corso", "completato", "annullato"],
       cost_frequency: ["mensile", "trimestrale", "annuale", "una_tantum"],
       customer_status: ["opportunity", "signed", "working"],
