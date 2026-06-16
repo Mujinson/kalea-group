@@ -109,6 +109,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Dashboard', url: '/admin/cantieri-dashboard', icon: LayoutDashboard, adminOnly: true },
         { title: 'Lista cantieri', url: '/admin/cantieri', icon: HardHat, adminOnly: false },
         { title: 'Operai & Ore', url: '/admin/cantieri-operai', icon: Users, adminOnly: true },
+        { title: 'Ferie / Indisponibilità', url: '/admin/ferie', icon: CalendarClock, adminOnly: true },
         { title: 'Materiali', url: '/admin/cantieri-materiali', icon: ListOrdered, adminOnly: true },
         { title: 'Budget vs Consuntivo', url: '/admin/cantieri-budget', icon: DollarSign, adminOnly: true },
         { title: 'Report', url: '/admin/cantieri-report', icon: BarChart3, adminOnly: true },
