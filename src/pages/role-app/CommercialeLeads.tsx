@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Phone, Mail, MapPin, User, Loader2 } from 'lucide-react';
+import { Phone, Mail, MapPin, User, Loader2, Plus } from 'lucide-react';
+import QuickNewLeadSheet from '@/components/role-app/QuickNewLeadSheet';
 
 const stageColor = (s: string) => {
   const k = (s || '').toLowerCase();
@@ -18,27 +19,30 @@ const CommercialeLeads = () => {
   const { user, salespersonId } = useAdminAuth();
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showNew, setShowNew] = useState(false);
+
+  const load = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    let q = supabase
+      .from('leads')
+      .select('id,name,phone,email,city,province,pipeline_stage,status,project_type,last_interaction_at,created_at')
+      .order('created_at', { ascending: false })
+      .limit(100);
+
+    if (salespersonId) {
+      q = q.or(`assigned_salesperson_id.eq.${salespersonId},created_by_user_id.eq.${user.id}`);
+    } else {
+      q = q.eq('created_by_user_id', user.id);
+    }
+    const { data } = await q;
+    setLeads(data || []);
+    setLoading(false);
+  }, [user, salespersonId]);
 
   useEffect(() => {
-    if (!user) return;
-    (async () => {
-      setLoading(true);
-      let q = supabase
-        .from('leads')
-        .select('id,name,phone,email,city,province,pipeline_stage,status,project_type,last_interaction_at,created_at')
-        .order('created_at', { ascending: false })
-        .limit(100);
-
-      if (salespersonId) {
-        q = q.or(`assigned_salesperson_id.eq.${salespersonId},created_by_user_id.eq.${user.id}`);
-      } else {
-        q = q.eq('created_by_user_id', user.id);
-      }
-      const { data } = await q;
-      setLeads(data || []);
-      setLoading(false);
-    })();
-  }, [user, salespersonId]);
+    if (user) load();
+  }, [user, load]);
 
   return (
     <div className="p-4 space-y-3">
@@ -108,6 +112,16 @@ const CommercialeLeads = () => {
           </div>
         );
       })}
+
+      <button
+        onClick={() => setShowNew(true)}
+        className="fixed bottom-24 right-5 z-40 h-14 w-14 rounded-full bg-[#1E1B4B] text-white shadow-lg flex items-center justify-center"
+        aria-label="Nuovo lead"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
+
+      <QuickNewLeadSheet open={showNew} onClose={() => setShowNew(false)} onCreated={() => load()} />
     </div>
   );
 };
