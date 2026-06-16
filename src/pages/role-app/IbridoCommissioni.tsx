@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Wallet, Loader2 } from 'lucide-react';
+import { Wallet, Loader2, Download } from 'lucide-react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const eur = (n: number) =>
   new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
@@ -43,13 +45,58 @@ const IbridoCommissioni = () => {
     return { pending, paid };
   }, [items]);
 
+  const exportPdf = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text('Estratto Commissioni — Kalēa', 14, 18);
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(
+      `Generato il ${new Date().toLocaleDateString('it-IT')} · ${user?.email || ''}`,
+      14, 25
+    );
+    doc.setTextColor(0);
+
+    autoTable(doc, {
+      startY: 32,
+      head: [['Data', 'Cliente', 'Base', '%', 'Importo', 'Stato']],
+      body: items.map((c) => [
+        new Date(c.created_at).toLocaleDateString('it-IT'),
+        c.customer_name || '—',
+        eur(Number(c.base_amount || 0)),
+        `${Number(c.percentage || 0)}%`,
+        eur(Number(c.amount || 0)),
+        c.status || '—',
+      ]),
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [30, 27, 75] },
+    });
+
+    const finalY = (doc as any).lastAutoTable.finalY + 8;
+    doc.setFontSize(11);
+    doc.text(`Totale da liquidare: ${eur(totals.pending)}`, 14, finalY);
+    doc.text(`Totale liquidato: ${eur(totals.paid)}`, 14, finalY + 6);
+
+    doc.save(`commissioni-${new Date().toISOString().slice(0, 10)}.pdf`);
+  };
+
   return (
     <div className="p-4 space-y-4">
-      <div>
-        <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">Le mie commissioni</p>
-        <h1 className="text-[24px] font-semibold text-[#1E1B4B] mt-1">
-          {items.length} {items.length === 1 ? 'commissione' : 'commissioni'}
-        </h1>
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">Le mie commissioni</p>
+          <h1 className="text-[24px] font-semibold text-[#1E1B4B] mt-1">
+            {items.length} {items.length === 1 ? 'commissione' : 'commissioni'}
+          </h1>
+        </div>
+        {items.length > 0 && (
+          <button
+            onClick={exportPdf}
+            className="h-10 px-3 rounded-lg border border-[#E5E2DD] bg-white text-[13px] text-[#1E1B4B] font-medium flex items-center gap-1.5"
+          >
+            <Download className="w-4 h-4" /> PDF
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-3">
