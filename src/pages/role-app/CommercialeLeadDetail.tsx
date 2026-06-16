@@ -83,10 +83,10 @@ const CommercialeLeadDetail = () => {
   return (
     <div className="p-4 space-y-4 pb-32">
       <button
-        onClick={() => navigate(`${basePath}/lead`)}
+        onClick={() => navigate(basePath === '/app/operaio' ? '/app/operaio' : `${basePath}/lead`)}
         className="flex items-center gap-1 text-[13px] text-[#8C7B6B]"
       >
-        <ArrowLeft className="w-4 h-4" /> Lead
+        <ArrowLeft className="w-4 h-4" /> Indietro
       </button>
 
       <div className="bg-white rounded-xl border border-[#E5E2DD] p-5 space-y-2">
