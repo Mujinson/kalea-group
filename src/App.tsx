@@ -95,6 +95,9 @@ import PricingExterno from "./pages/admin/strumenti/PricingExterno";
 import Preventivatore from "./pages/admin/strumenti/Preventivatore";
 import SistemaPreventivi from "./pages/admin/strumenti/SistemaPreventivi";
 import CreaPreventivo from "./pages/admin/strumenti/CreaPreventivo";
+import CommercialeApp from "./pages/role-app/CommercialeApp";
+import OperaioApp from "./pages/role-app/OperaioApp";
+import IbridoApp from "./pages/role-app/IbridoApp";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
