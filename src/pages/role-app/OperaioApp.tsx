@@ -4,6 +4,7 @@ import { Home, Calendar, Hammer, User } from 'lucide-react';
 import RoleAppLayout from '@/components/role-app/RoleAppLayout';
 import RoleStub from './RoleStub';
 import OperaioSites from './OperaioSites';
+import OperaioCantiereDetail from './OperaioCantiereDetail';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Phone, MapPin, Camera, MessageSquare } from 'lucide-react';
@@ -142,7 +143,7 @@ const OperaioApp = () => (
       <Route index element={<OperaioHome />} />
       <Route path="calendario" element={<RoleStub title="Calendario" />} />
       <Route path="cantieri" element={<OperaioSites />} />
-      <Route path="cantieri/:id" element={<RoleStub title="Scheda cantiere" />} />
+      <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />
       <Route path="profilo" element={<RoleStub title="Profilo" />} />
       <Route path="*" element={<Navigate to="/app/operaio" replace />} />
     </Route>
