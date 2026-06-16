@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Home, Calendar, Hammer, User } from 'lucide-react';
 import RoleAppLayout from '@/components/role-app/RoleAppLayout';
-import RoleStub from './RoleStub';
 import OperaioSites from './OperaioSites';
 import OperaioCantiereDetail from './OperaioCantiereDetail';
+import OperaioCalendario from './OperaioCalendario';
+import RoleProfile from './RoleProfile';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Phone, MapPin, Camera, MessageSquare } from 'lucide-react';
@@ -141,10 +142,10 @@ const OperaioApp = () => (
   <Routes>
     <Route element={<RoleAppLayout allowedRoles={['operaio']} navItems={nav} title="Operaio" />}>
       <Route index element={<OperaioHome />} />
-      <Route path="calendario" element={<RoleStub title="Calendario" />} />
+      <Route path="calendario" element={<OperaioCalendario />} />
       <Route path="cantieri" element={<OperaioSites />} />
       <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />
-      <Route path="profilo" element={<RoleStub title="Profilo" />} />
+      <Route path="profilo" element={<RoleProfile />} />
       <Route path="*" element={<Navigate to="/app/operaio" replace />} />
     </Route>
   </Routes>
