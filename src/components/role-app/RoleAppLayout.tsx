@@ -20,6 +20,11 @@ const RoleAppLayout = ({ allowedRoles, navItems, title }: RoleAppLayoutProps) =>
   useEffect(() => {
     if (loading) return;
     if (!user) { navigate('/admin/login'); return; }
+    // If logged in but role doesn't match this app, auto-redirect to the correct one
+    if (role && !allowedRoles.includes(role as any)) {
+      const t = setTimeout(() => navigate(routeForRole(role)), 1200);
+      return () => clearTimeout(t);
+    }
   }, [user, role, loading, navigate, allowedRoles]);
 
   if (loading || !user) {
