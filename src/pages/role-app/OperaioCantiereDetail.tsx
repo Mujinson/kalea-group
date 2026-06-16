@@ -222,7 +222,7 @@ const FotoTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
     setLoading(true);
     const { data } = await supabase
       .from('site_media')
-      .select('id,file_url,caption,phase,created_at')
+      .select('id,file_url,file_name,description,file_type,created_at')
       .eq('site_id', siteId)
       .order('created_at', { ascending: false })
       .limit(60);
@@ -246,10 +246,11 @@ const FotoTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
       const { data: pub } = supabase.storage.from('site-media').getPublicUrl(path);
       const { error: insErr } = await supabase.from('site_media').insert({
         site_id: siteId,
-        uploaded_by: userId,
         file_url: pub.publicUrl,
         file_name: file.name,
-        phase,
+        file_type: file.type || 'image/jpeg',
+        description: phase, // store phase in description (pre|post)
+        file_size: file.size,
       });
       if (insErr) throw insErr;
       toast.success(`Foto ${phase}-posa caricata`);
