@@ -112,6 +112,16 @@ const CommercialeLeads = () => {
           </div>
         );
       })}
+
+      <button
+        onClick={() => setShowNew(true)}
+        className="fixed bottom-24 right-5 z-40 h-14 w-14 rounded-full bg-[#1E1B4B] text-white shadow-lg flex items-center justify-center"
+        aria-label="Nuovo lead"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
+
+      <QuickNewLeadSheet open={showNew} onClose={() => setShowNew(false)} onCreated={() => load()} />
     </div>
   );
 };
