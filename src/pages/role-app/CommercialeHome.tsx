@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Plus, TrendingUp, FileText, CheckCircle2, Target } from 'lucide-react';
+import QuickNewLeadSheet from '@/components/role-app/QuickNewLeadSheet';
 
 const eur = (n: number) =>
   new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
@@ -13,6 +14,7 @@ const CommercialeHome = () => {
   const [stats, setStats] = useState({ inviati: 0, accettati: 0, valore: 0, target: 0 });
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState<string>('');
+  const [showNew, setShowNew] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -104,7 +106,7 @@ const CommercialeHome = () => {
       {/* Quick actions */}
       <div className="grid grid-cols-2 gap-3">
         <button
-          onClick={() => navigate('/app/commerciale/lead')}
+          onClick={() => setShowNew(true)}
           className="h-[56px] rounded-xl bg-[#1E1B4B] text-white font-medium text-[15px] flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" /> Nuovo Lead
@@ -118,6 +120,12 @@ const CommercialeHome = () => {
       </div>
 
       {loading && <div className="text-center text-[12px] text-[#8C7B6B]">Caricamento…</div>}
+
+      <QuickNewLeadSheet
+        open={showNew}
+        onClose={() => setShowNew(false)}
+        onCreated={() => navigate('/app/commerciale/lead')}
+      />
     </div>
   );
 };
