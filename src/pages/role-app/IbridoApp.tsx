@@ -28,6 +28,7 @@ const IbridoApp = () => (
       <Route path="lead/:id" element={<CommercialeLeadDetail />} />
       <Route path="commissioni" element={<IbridoCommissioni />} />
       <Route path="profilo" element={<RoleProfile />} />
+      <Route path="crea-preventivo" element={<CreaPreventivo />} />
       <Route path="*" element={<Navigate to="/app/ibrido" replace />} />
     </Route>
   </Routes>
