@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Home, Calendar, Hammer, User } from 'lucide-react';
 import RoleAppLayout from '@/components/role-app/RoleAppLayout';
 import RoleStub from './RoleStub';
+import OperaioSites from './OperaioSites';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Phone, MapPin, Camera, MessageSquare } from 'lucide-react';

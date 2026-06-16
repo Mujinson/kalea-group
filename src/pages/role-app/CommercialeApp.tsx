@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Home, Users, FileText, Calendar, User } from 'lucide-react';
 import RoleAppLayout from '@/components/role-app/RoleAppLayout';
 import CommercialeHome from './CommercialeHome';
+import CommercialeLeads from './CommercialeLeads';
+import CommercialeQuotes from './CommercialeQuotes';
 import RoleStub from './RoleStub';
 
 const nav = [
@@ -16,8 +18,8 @@ const CommercialeApp = () => (
   <Routes>
     <Route element={<RoleAppLayout allowedRoles={['commerciale']} navItems={nav} title="Commerciale" />}>
       <Route index element={<CommercialeHome />} />
-      <Route path="lead" element={<RoleStub title="I miei Lead" />} />
-      <Route path="preventivi" element={<RoleStub title="I miei Preventivi" />} />
+      <Route path="lead" element={<CommercialeLeads />} />
+      <Route path="preventivi" element={<CommercialeQuotes />} />
       <Route path="calendario" element={<RoleStub title="Calendario" />} />
       <Route path="profilo" element={<RoleStub title="Profilo" />} />
       <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
@@ -26,3 +28,4 @@ const CommercialeApp = () => (
 );
 
 export default CommercialeApp;
+
