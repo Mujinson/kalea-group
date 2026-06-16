@@ -145,6 +145,31 @@ const AdminSettings = () => {
           </div>
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Notifiche di sistema</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Il digest giornaliero parte ogni mattina alle <strong>07:30</strong> (ora italiana) e invia a ciascun utente un riepilogo di appuntamenti, lead da contattare e cantieri attivi.
+          </p>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              const t = toast.loading('Invio digest in corso...');
+              const { data, error } = await supabase.functions.invoke('daily-digest');
+              if (error) {
+                toast.error('Errore invio digest', { id: t });
+              } else {
+                toast.success(`Digest inviato a ${data?.sent ?? 0} utenti`, { id: t });
+              }
+            }}
+          >
+            Invia digest ora (test)
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 };
