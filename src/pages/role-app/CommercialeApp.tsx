@@ -7,7 +7,7 @@ import CommercialeLeadDetail from './CommercialeLeadDetail';
 import CommercialeQuotes from './CommercialeQuotes';
 import CommercialeCalendario from './CommercialeCalendario';
 import RoleProfile from './RoleProfile';
-import CreaPreventivo from '@/pages/admin/strumenti/CreaPreventivo';
+import CreaPreventivo from '@/components/role-app/MobileQuoteWrapper';
 
 const nav = [
   { to: '/app/commerciale', label: 'Home', icon: <Home className="w-5 h-5" /> },
