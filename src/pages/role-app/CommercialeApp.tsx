@@ -3,6 +3,7 @@ import { Home, Users, FileText, Calendar, User } from 'lucide-react';
 import RoleAppLayout from '@/components/role-app/RoleAppLayout';
 import CommercialeHome from './CommercialeHome';
 import CommercialeLeads from './CommercialeLeads';
+import CommercialeLeadDetail from './CommercialeLeadDetail';
 import CommercialeQuotes from './CommercialeQuotes';
 import CommercialeCalendario from './CommercialeCalendario';
 import RoleProfile from './RoleProfile';
@@ -20,6 +21,7 @@ const CommercialeApp = () => (
     <Route element={<RoleAppLayout allowedRoles={['commerciale']} navItems={nav} title="Commerciale" />}>
       <Route index element={<CommercialeHome />} />
       <Route path="lead" element={<CommercialeLeads />} />
+      <Route path="lead/:id" element={<CommercialeLeadDetail />} />
       <Route path="preventivi" element={<CommercialeQuotes />} />
       <Route path="calendario" element={<CommercialeCalendario />} />
       <Route path="profilo" element={<RoleProfile />} />
