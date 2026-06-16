@@ -196,6 +196,11 @@ const App = () => (
               {/* Worker app (standalone, no sidebar) */}
               <Route path="/cantieri-app" element={<WorkerApp />} />
 
+              {/* Role-based mobile apps */}
+              <Route path="/app/commerciale/*" element={<CommercialeApp />} />
+              <Route path="/app/operaio/*" element={<OperaioApp />} />
+              <Route path="/app/ibrido/*" element={<IbridoApp />} />
+
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
