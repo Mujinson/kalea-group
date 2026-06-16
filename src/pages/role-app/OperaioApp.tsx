@@ -93,8 +93,7 @@ const OperaioHome = () => {
         <Plus className="w-5 h-5" /> Crea preventivo
       </button>
 
-      <div className="hidden">
-      </div>
+
 
       {loading && <div className="text-center py-8 text-[#8C7B6B]">Caricamento…</div>}
       {!loading && sites.length === 0 && (
