@@ -4,7 +4,8 @@ import RoleAppLayout from '@/components/role-app/RoleAppLayout';
 import CommercialeHome from './CommercialeHome';
 import CommercialeLeads from './CommercialeLeads';
 import CommercialeQuotes from './CommercialeQuotes';
-import RoleStub from './RoleStub';
+import CommercialeCalendario from './CommercialeCalendario';
+import RoleProfile from './RoleProfile';
 
 const nav = [
   { to: '/app/commerciale', label: 'Home', icon: <Home className="w-5 h-5" /> },
@@ -20,8 +21,8 @@ const CommercialeApp = () => (
       <Route index element={<CommercialeHome />} />
       <Route path="lead" element={<CommercialeLeads />} />
       <Route path="preventivi" element={<CommercialeQuotes />} />
-      <Route path="calendario" element={<RoleStub title="Calendario" />} />
-      <Route path="profilo" element={<RoleStub title="Profilo" />} />
+      <Route path="calendario" element={<CommercialeCalendario />} />
+      <Route path="profilo" element={<RoleProfile />} />
       <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
     </Route>
   </Routes>
