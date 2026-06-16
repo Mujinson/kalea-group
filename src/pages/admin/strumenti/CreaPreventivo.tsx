@@ -914,7 +914,7 @@ export default function CreaPreventivo() {
   const t = T[lingua];
   const [numPrev, setNumPrev] = useState("");
   const [dataPrev, setDataPrev] = useState(today());
-  const [cliente, setCliente] = useState({ nome:"", indirizzo:"", citta:"", telefono:"", email:"" });
+  const [cliente, setCliente] = useState({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
   const [crmLink, setCrmLink] = useState<CrmRecord | null>(null);
   const [cantiere, setCantiere] = useState("");
   const [noteCliente, setNoteCliente] = useState("");
