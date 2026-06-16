@@ -69,6 +69,7 @@ import AppLangRedirect from "./pages/AppLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminQuoteCreate from "./pages/admin/AdminQuoteCreate";
 import AdminLeads from "./pages/admin/AdminLeads";
+import AdminTimeOff from "./pages/admin/AdminTimeOff";
 import AdminPipeline from "./pages/admin/AdminPipeline";
 import AdminAppointments from "./pages/admin/AdminAppointments";
 import AdminChatbot from "./pages/admin/AdminChatbot";
@@ -240,6 +241,8 @@ const App = () => (
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="import" element={<AdminImport />} />
+                <Route path="ferie" element={<AdminTimeOff />} />
+                <Route path="time-off" element={<AdminTimeOff />} />
 
                 <Route path="impostazioni" element={<AdminSettings />} />
 
