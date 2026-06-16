@@ -26,6 +26,7 @@ const CommercialeApp = () => (
       <Route path="preventivi" element={<CommercialeQuotes />} />
       <Route path="calendario" element={<CommercialeCalendario />} />
       <Route path="profilo" element={<RoleProfile />} />
+      <Route path="crea-preventivo" element={<CreaPreventivo />} />
       <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
     </Route>
   </Routes>
