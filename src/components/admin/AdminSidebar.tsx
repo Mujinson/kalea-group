@@ -87,6 +87,7 @@ const menuStructure: MenuEntry[] = [
       items: [
         { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart, adminOnly: true },
         { title: 'Preventivi', url: '/admin/preventivi', icon: FileText, adminOnly: false },
+        { title: 'Commissioni', url: '/admin/commissioni', icon: DollarSign, adminOnly: true },
       ],
     },
   },
