@@ -4,6 +4,7 @@ import { useAdminAuth, routeForRole } from '@/hooks/useAdminAuth';
 import { Loader2, LogOut } from 'lucide-react';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import NotificationsBell from '@/components/role-app/NotificationsBell';
 
 interface NavItem { to: string; label: string; icon: ReactNode; }
 
@@ -75,13 +76,16 @@ const RoleAppLayout = ({ allowedRoles, navItems, title }: RoleAppLayoutProps) =>
           <span className="text-white/40">·</span>
           <span className="text-[14px] text-white/80">{title}</span>
         </div>
-        <button
-          onClick={handleSignOut}
-          className="text-white/80 hover:text-white p-2 -mr-2"
-          title="Esci"
-        >
-          <LogOut className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-1 -mr-2">
+          <NotificationsBell />
+          <button
+            onClick={handleSignOut}
+            className="text-white/80 hover:text-white p-2"
+            title="Esci"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
+        </div>
       </header>
 
       <main className="flex-1 overflow-auto pb-[76px]">
