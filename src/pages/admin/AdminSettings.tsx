@@ -1,35 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { UserPlus, Trash2, Shield, Users, AlertTriangle, Key } from 'lucide-react';
+import { AlertTriangle, Key } from 'lucide-react';
 import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
 import CommercialiSection from '@/components/admin/CommercialiSection';
 
-interface AdminUser {
-  id: string;
-  user_id: string;
-  role: string;
-  created_at: string;
-  email?: string;
-}
-
 const AdminSettings = () => {
   const { user } = useAdminAuth();
-  const [admins, setAdmins] = useState<AdminUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
-  const [newUserEmail, setNewUserEmail] = useState('');
-  const [newUserPassword, setNewUserPassword] = useState('');
-  const [creating, setCreating] = useState(false);
   const [checkingPassword, setCheckingPassword] = useState(false);
   
   // Change password state
@@ -37,98 +22,6 @@ const AdminSettings = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
-
-  useEffect(() => {
-    fetchAdmins();
-  }, []);
-
-  const fetchAdmins = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('*')
-        .eq('role', 'admin');
-
-      if (error) throw error;
-      setAdmins(data || []);
-    } catch (error) {
-      console.error('Error fetching admins:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateAdmin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!newUserEmail || !newUserPassword) {
-      toast.error('Compila tutti i campi');
-      return;
-    }
-
-    // Validate password strength
-    const passwordValidation = validatePassword(newUserPassword);
-    if (!passwordValidation.valid) {
-      toast.error(passwordValidation.message);
-      return;
-    }
-
-    setCheckingPassword(true);
-    
-    // Check if password is compromised (HIBP)
-    const { compromised, count } = await checkPasswordCompromised(newUserPassword);
-    setCheckingPassword(false);
-    
-    if (compromised) {
-      toast.error(`Questa password è stata trovata in ${count.toLocaleString()} data breach. Scegli una password più sicura.`, {
-        duration: 6000,
-        icon: <AlertTriangle className="w-5 h-5 text-destructive" />
-      });
-      return;
-    }
-
-    setCreating(true);
-
-    try {
-      // Create the user account
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: newUserEmail,
-        password: newUserPassword,
-        options: {
-          emailRedirectTo: `${window.location.origin}/admin`
-        }
-      });
-
-      if (authError) throw authError;
-
-      if (!authData.user) {
-        throw new Error('Errore nella creazione utente');
-      }
-
-      // Add admin role
-      const { error: roleError } = await supabase.from('user_roles').insert({
-        user_id: authData.user.id,
-        role: 'admin',
-      });
-
-      if (roleError) throw roleError;
-
-      toast.success('Admin creato con successo! L\'utente riceverà una email di conferma.');
-      setDialogOpen(false);
-      setNewUserEmail('');
-      setNewUserPassword('');
-      fetchAdmins();
-    } catch (error: any) {
-      console.error('Error creating admin:', error);
-      if (error.message.includes('already registered')) {
-        toast.error('Questo indirizzo email è già registrato');
-      } else {
-        toast.error('Errore nella creazione: ' + error.message);
-      }
-    } finally {
-      setCreating(false);
-    }
-  };
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
