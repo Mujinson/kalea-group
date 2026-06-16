@@ -18,7 +18,6 @@ const AdminSettings = () => {
   const [checkingPassword, setCheckingPassword] = useState(false);
   
   // Change password state
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
@@ -68,7 +67,6 @@ const AdminSettings = () => {
 
       toast.success('Password aggiornata con successo');
       setChangePasswordOpen(false);
-      setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
     } catch (error: any) {
@@ -79,135 +77,9 @@ const AdminSettings = () => {
     }
   };
 
-  const handleDeleteAdmin = async (adminId: string, userId: string) => {
-    if (userId === user?.id) {
-      toast.error('Non puoi rimuovere te stesso');
-      return;
-    }
-
-    if (!confirm('Sei sicuro di voler rimuovere questo admin?')) return;
-
-    try {
-      const { error } = await supabase
-        .from('user_roles')
-        .delete()
-        .eq('id', adminId);
-
-      if (error) throw error;
-
-      toast.success('Admin rimosso');
-      fetchAdmins();
-    } catch (error) {
-      console.error('Error deleting admin:', error);
-      toast.error('Errore nella rimozione');
-    }
-  };
-
   return (
     <div className="space-y-4">
       <CrmPageHeader breadcrumb={["CRM", "Impostazioni"]} title="Impostazioni" subtitle="Utenti admin e configurazioni" />
-
-
-      {/* Admin Users */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Utenti Admin
-            </CardTitle>
-            <CardDescription>Gestisci chi può accedere alla dashboard</CardDescription>
-          </div>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <UserPlus className="w-4 h-4 mr-2" />
-                Nuovo Admin
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Crea Nuovo Admin</DialogTitle>
-                <DialogDescription>
-                  Crea un nuovo account con accesso alla dashboard
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleCreateAdmin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Email *</Label>
-                  <Input
-                    type="email"
-                    value={newUserEmail}
-                    onChange={(e) => setNewUserEmail(e.target.value)}
-                    placeholder="nome@azienda.com"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Password *</Label>
-                  <Input
-                    type="password"
-                    value={newUserPassword}
-                    onChange={(e) => setNewUserPassword(e.target.value)}
-                    placeholder="Minimo 6 caratteri"
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={creating}>
-                  {creating ? 'Creazione...' : 'Crea Admin'}
-                </Button>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <p>Caricamento...</p>
-          ) : admins.length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">Nessun admin configurato</p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>User ID</TableHead>
-                  <TableHead>Ruolo</TableHead>
-                  <TableHead>Data Creazione</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {admins.map((admin) => (
-                  <TableRow key={admin.id}>
-                    <TableCell className="font-mono text-sm">
-                      {admin.user_id.substring(0, 8)}...
-                      {admin.user_id === user?.id && (
-                        <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">Tu</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
-                        <Shield className="w-3 h-3" />
-                        {admin.role}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {new Date(admin.created_at).toLocaleDateString('it-IT')}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteAdmin(admin.id, admin.user_id)}
-                        disabled={admin.user_id === user?.id}
-                      >
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Commerciali Section */}
       <CommercialiSection />
