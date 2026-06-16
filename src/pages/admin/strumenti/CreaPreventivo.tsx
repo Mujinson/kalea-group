@@ -1138,7 +1138,7 @@ export default function CreaPreventivo() {
                   ))}
                 </div>
               </div>
-              <Slider label="mq da posare" min={1} max={600} value={mqPrev} step={1} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
+              <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={1} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
               <Slider label="Sfrido (%)" min={0} max={25} value={sfrido} step={1} onChange={setSfrido} format={(v:any)=>v+"%"}/>
               <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={1} onChange={setSconto} format={(v:any)=>v+"%"}/>
               <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
