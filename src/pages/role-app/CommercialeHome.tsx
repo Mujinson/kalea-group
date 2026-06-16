@@ -71,7 +71,7 @@ const CommercialeHome = () => {
     <div className="p-4 space-y-4">
       <div>
         <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">Questo mese</p>
-        <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">Ciao 👋</h1>
+        <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">Ciao{firstName ? ` ${firstName}` : ''} 👋</h1>
       </div>
 
       {/* KPI cards */}
