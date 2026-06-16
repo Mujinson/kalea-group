@@ -141,7 +141,7 @@ const OperaioApp = () => (
     <Route element={<RoleAppLayout allowedRoles={['operaio']} navItems={nav} title="Operaio" />}>
       <Route index element={<OperaioHome />} />
       <Route path="calendario" element={<RoleStub title="Calendario" />} />
-      <Route path="cantieri" element={<RoleStub title="Tutti i cantieri" />} />
+      <Route path="cantieri" element={<OperaioSites />} />
       <Route path="cantieri/:id" element={<RoleStub title="Scheda cantiere" />} />
       <Route path="profilo" element={<RoleStub title="Profilo" />} />
       <Route path="*" element={<Navigate to="/app/operaio" replace />} />
