@@ -86,6 +86,16 @@ const OperaioHome = () => {
         <p className="text-[14px] text-[#6B6258] mt-1">I miei cantieri di oggi</p>
       </div>
 
+      <button
+        onClick={() => navigate('crea-preventivo')}
+        className="w-full h-[56px] rounded-xl bg-[#8B6F4E] text-white font-medium text-[15px] flex items-center justify-center gap-2"
+      >
+        <Plus className="w-5 h-5" /> Crea preventivo
+      </button>
+
+      <div className="hidden">
+      </div>
+
       {loading && <div className="text-center py-8 text-[#8C7B6B]">Caricamento…</div>}
       {!loading && sites.length === 0 && (
         <div className="bg-white rounded-xl border border-[#E5E2DD] p-6 text-center text-[#6B6258]">
