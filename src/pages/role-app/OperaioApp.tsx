@@ -179,6 +179,7 @@ const OperaioApp = () => (
       <Route path="calendario" element={<OperaioCalendario />} />
       <Route path="cantieri" element={<OperaioSites />} />
       <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />
+      <Route path="lead/:id" element={<CommercialeLeadDetail />} />
       <Route path="profilo" element={<RoleProfile />} />
       <Route path="*" element={<Navigate to="/app/operaio" replace />} />
     </Route>
