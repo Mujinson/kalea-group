@@ -3,6 +3,7 @@ import { Home, Hammer, Users, Wallet, User } from 'lucide-react';
 import RoleAppLayout from '@/components/role-app/RoleAppLayout';
 import CommercialeHome from './CommercialeHome';
 import CommercialeLeads from './CommercialeLeads';
+import CommercialeLeadDetail from './CommercialeLeadDetail';
 import OperaioSites from './OperaioSites';
 import OperaioCantiereDetail from './OperaioCantiereDetail';
 import IbridoCommissioni from './IbridoCommissioni';
@@ -23,6 +24,7 @@ const IbridoApp = () => (
       <Route path="cantieri" element={<OperaioSites />} />
       <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />
       <Route path="lead" element={<CommercialeLeads />} />
+      <Route path="lead/:id" element={<CommercialeLeadDetail />} />
       <Route path="commissioni" element={<IbridoCommissioni />} />
       <Route path="profilo" element={<RoleProfile />} />
       <Route path="*" element={<Navigate to="/app/ibrido" replace />} />

@@ -67,8 +67,10 @@ const CommercialeLeads = () => {
 
       {leads.map((l) => {
         const place = [l.city, l.province].filter(Boolean).join(', ');
+        const basePath = window.location.pathname.startsWith('/app/ibrido') ? '/app/ibrido' : '/app/commerciale';
         return (
           <div key={l.id} className="bg-white rounded-xl border border-[#E5E2DD] p-4 space-y-2">
+            <a href={`${basePath}/lead/${l.id}`} className="block space-y-2">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2 text-[#1E1B4B] font-semibold text-[16px]">
                 <User className="w-4 h-4 text-[#8C7B6B]" />
@@ -90,6 +92,8 @@ const CommercialeLeads = () => {
                 <MapPin className="w-3.5 h-3.5" /> {place}
               </div>
             )}
+            </a>
+
 
             <div className="flex gap-2 pt-2">
               {l.phone && (
