@@ -191,6 +191,9 @@ const App = () => (
             <Routes>
               {/* Redirect /it/admin/* to /admin/* */}
               <Route path="/:lang/admin/*" element={<AdminLangRedirect />} />
+              {/* Redirect /it/app/* and /it/cantieri-app to non-prefixed equivalents */}
+              <Route path="/:lang/app/*" element={<AppLangRedirect />} />
+              <Route path="/:lang/cantieri-app" element={<AppLangRedirect />} />
 
 
               {/* Worker app (standalone, no sidebar) */}
