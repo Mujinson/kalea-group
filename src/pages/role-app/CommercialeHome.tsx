@@ -12,6 +12,24 @@ const CommercialeHome = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState({ inviati: 0, accettati: 0, valore: 0, target: 0 });
   const [loading, setLoading] = useState(true);
+  const [firstName, setFirstName] = useState<string>('');
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data: sp } = await supabase
+        .from('salespeople')
+        .select('first_name')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      const meta: any = (user as any).user_metadata || {};
+      const fromMeta = (meta.first_name as string) ||
+        ((meta.full_name as string) || (meta.name as string) || '').split(' ')[0];
+      const fromEmail = (user.email || '').split('@')[0].split('.')[0];
+      const n = (sp?.first_name || fromMeta || fromEmail || '').trim();
+      if (n) setFirstName(n.charAt(0).toUpperCase() + n.slice(1));
+    })();
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -53,7 +71,7 @@ const CommercialeHome = () => {
     <div className="p-4 space-y-4">
       <div>
         <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">Questo mese</p>
-        <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">Ciao 👋</h1>
+        <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">Ciao{firstName ? ` ${firstName}` : ''} 👋</h1>
       </div>
 
       {/* KPI cards */}
