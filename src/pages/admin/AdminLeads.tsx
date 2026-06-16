@@ -582,6 +582,20 @@ const AdminLeads = () => {
                 </div>
               </div>
 
+              <div className="space-y-1">
+                <Label className="text-xs">Assegna a utente (commerciale / ibrido / operaio)</Label>
+                <Select value={dlg.form.assigned_user_id || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, assigned_user_id: v === 'none' ? '' : v })}>
+                  <SelectTrigger><SelectValue placeholder="Seleziona utente" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">Nessuno</SelectItem>
+                    {assignableUsers?.map(u => (
+                      <SelectItem key={u.user_id} value={u.user_id}>{u.name} · {u.role}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-[11px] text-muted-foreground">L'utente riceverà una notifica in-app appena assegnato.</p>
+              </div>
+
               {/* Localizzazione */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="space-y-1">
