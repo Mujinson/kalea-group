@@ -112,7 +112,7 @@ const CommercialeHome = () => {
           <Plus className="w-5 h-5" /> Nuovo Lead
         </button>
         <button
-          onClick={() => navigate('/admin/strumenti/crea-preventivo')}
+          onClick={() => navigate('crea-preventivo')}
           className="h-[56px] rounded-xl bg-[#8B6F4E] text-white font-medium text-[15px] flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" /> Preventivo
