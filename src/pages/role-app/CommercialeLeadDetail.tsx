@@ -18,7 +18,8 @@ const STATUSES = ['nuovo', 'contattato', 'qualificato', 'preventivo', 'chiuso'];
 const CommercialeLeadDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const basePath = window.location.pathname.startsWith('/app/ibrido') ? '/app/ibrido' : '/app/commerciale';
+  const path = window.location.pathname;
+  const basePath = path.startsWith('/app/ibrido') ? '/app/ibrido' : path.startsWith('/app/operaio') ? '/app/operaio' : '/app/commerciale';
   const [lead, setLead] = useState<any | null>(null);
   const [stage, setStage] = useState('cold');
   const [status, setStatus] = useState('nuovo');
