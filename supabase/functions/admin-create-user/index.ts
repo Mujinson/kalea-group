@@ -85,7 +85,7 @@ Deno.serve(async (req) => {
     }
 
     // 3. Create salespeople row for commerciale / ibrido
-    if (body.role === 'commerciale' || body.role === 'ibrido') {
+    if (body.role === 'commerciale' || body.role === 'ibrido' || body.role === 'admin') {
       const { error: spErr } = await admin.from('salespeople').insert({
         user_id: newUserId,
         first_name: body.first_name,
@@ -93,7 +93,7 @@ Deno.serve(async (req) => {
         email: body.email,
         phone: body.phone || null,
         commission_rate: body.commission_rate ?? 0,
-        is_commission_earner: body.is_commission_earner ?? (body.role === 'ibrido'),
+        is_commission_earner: body.role === 'admin' ? false : body.is_commission_earner ?? (body.role === 'ibrido'),
         is_active: true,
       });
       if (spErr) console.error('salespeople insert failed', spErr);

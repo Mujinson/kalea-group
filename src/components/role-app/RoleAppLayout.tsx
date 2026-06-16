@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAdminAuth, routeForRole } from '@/hooks/useAdminAuth';
 import { Loader2, LogOut } from 'lucide-react';
 import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
 interface NavItem { to: string; label: string; icon: ReactNode; }
 
@@ -19,9 +20,6 @@ const RoleAppLayout = ({ allowedRoles, navItems, title }: RoleAppLayoutProps) =>
   useEffect(() => {
     if (loading) return;
     if (!user) { navigate('/admin/login'); return; }
-    if (!role || !allowedRoles.includes(role as any)) {
-      navigate(routeForRole(role));
-    }
   }, [user, role, loading, navigate, allowedRoles]);
 
   if (loading || !user) {
@@ -36,6 +34,25 @@ const RoleAppLayout = ({ allowedRoles, navItems, title }: RoleAppLayoutProps) =>
     await signOut();
     navigate('/admin/login');
   };
+
+  if (!role || !allowedRoles.includes(role as any)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F5F0EA] p-6">
+        <div className="w-full max-w-sm rounded-lg border border-[#E5E2DD] bg-white p-5 text-center space-y-4">
+          <div>
+            <p className="text-sm text-[#8C7B6B]">Accesso non disponibile</p>
+            <h1 className="text-xl font-semibold text-[#1E1B4B]">Questa app non è per il tuo ruolo</h1>
+          </div>
+          <Button className="w-full" onClick={() => navigate(routeForRole(role))}>
+            Vai alla tua area
+          </Button>
+          <Button variant="outline" className="w-full" onClick={handleSignOut}>
+            Esci
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F0EA]">
