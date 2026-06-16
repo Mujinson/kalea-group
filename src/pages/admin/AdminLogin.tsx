@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { useAdminAuth, routeForRole, AppRole } from '@/hooks/useAdminAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -37,7 +38,21 @@ const AdminLogin = () => {
         }
       } else {
         toast.success('Accesso effettuato');
-        navigate('/admin');
+        // Resolve role and redirect to the right area
+        const { data: { user: u } } = await supabase.auth.getUser();
+        let target = '/admin';
+        if (u) {
+          const { data: roles } = await supabase
+            .from('user_roles').select('role').eq('user_id', u.id);
+          const list = (roles || []).map((r: any) => r.role);
+          const chosen: AppRole =
+            list.includes('admin') ? 'admin'
+            : list.includes('ibrido') ? 'ibrido'
+            : list.includes('commerciale') ? 'commerciale'
+            : list.includes('operaio') ? 'operaio' : null;
+          target = routeForRole(chosen);
+        }
+        navigate(target);
       }
     } catch (err) {
       toast.error('Errore durante l\'accesso');
