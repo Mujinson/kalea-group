@@ -14,8 +14,13 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn } = useAdminAuth();
+  const { signIn, user, role, loading } = useAdminAuth();
   const navigate = useNavigate();
+
+  // If already authenticated, send to the right area for the user's role
+  if (!loading && user && role) {
+    return <Navigate to={routeForRole(role)} replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
