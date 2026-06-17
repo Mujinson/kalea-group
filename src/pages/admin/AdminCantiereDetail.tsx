@@ -664,27 +664,38 @@ const AdminCantiereDetail = () => {
               <Input value={workerForm.notes} onChange={e => setWorkerForm({ ...workerForm, notes: e.target.value })} placeholder="Note opzionali" />
             </div>
             <div className="space-y-2">
-              <Label>Seleziona operaio</Label>
-              <div className="max-h-64 overflow-y-auto space-y-2 border rounded-lg p-2">
+              <Label>Seleziona operai (multi)</Label>
+              <div className="max-h-64 overflow-y-auto space-y-1 border rounded-lg p-2">
                 {operaioUsers?.map((u: any) => {
                   const isAlready = workers?.some((w: any) => w.worker_id === u.id || (u.user_id && w.worker_user_id === u.user_id));
+                  const isSelected = selectedWorkerIds.includes(u.id);
                   return (
-                    <button
+                    <label
                       key={u.id}
-                      disabled={isAlready}
-                      onClick={() => handleAddWorkerById(u)}
-                      className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${isAlready ? 'bg-muted/50 text-muted-foreground cursor-not-allowed' : 'hover:bg-muted'}`}
+                      className={`flex items-center gap-2 w-full p-2 rounded-lg text-sm transition-colors ${isAlready ? 'bg-muted/50 text-muted-foreground cursor-not-allowed' : 'hover:bg-muted cursor-pointer'} ${isSelected ? 'bg-primary/10' : ''}`}
                     >
-                      <span className="font-medium">{u.first_name} {u.last_name}</span>
-                      {u.role && <Badge variant="outline" className="ml-2 text-[10px]">{u.role}</Badge>}
-                      {isAlready && <span className="text-xs text-muted-foreground ml-2">(già assegnato)</span>}
-                    </button>
+                      <input
+                        type="checkbox"
+                        disabled={isAlready}
+                        checked={isSelected}
+                        onChange={() => setSelectedWorkerIds((s) => s.includes(u.id) ? s.filter(x => x !== u.id) : [...s, u.id])}
+                      />
+                      <span className="font-medium flex-1">{u.first_name} {u.last_name}</span>
+                      {u.role && <Badge variant="outline" className="text-[10px]">{u.role}</Badge>}
+                      {isAlready && <span className="text-xs text-muted-foreground">(già)</span>}
+                    </label>
                   );
                 })}
                 {(!operaioUsers || operaioUsers.length === 0) && (
                   <p className="text-sm text-muted-foreground text-center py-4">Nessun operaio trovato. Crealo in "Operai".</p>
                 )}
               </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => { setAddWorkerOpen(false); setSelectedWorkerIds([]); }}>Annulla</Button>
+              <Button onClick={() => handleAssignSelected(operaioUsers || [])} disabled={selectedWorkerIds.length === 0}>
+                Assegna {selectedWorkerIds.length > 0 && `(${selectedWorkerIds.length})`}
+              </Button>
             </div>
           </div>
         </DialogContent>
