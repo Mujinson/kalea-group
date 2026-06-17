@@ -166,7 +166,7 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
           <>
             <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">In corso</p>
             <p className="text-[22px] font-semibold text-[#1E1B4B]">
-              dalle {new Date(activeLog.start_time).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
+              dalle {new Date(`${activeLog.work_date}T${activeLog.start_time}`).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
             </p>
             <button
               onClick={stopWork} disabled={busy}
