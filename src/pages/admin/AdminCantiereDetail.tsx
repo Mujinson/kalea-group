@@ -159,17 +159,21 @@ const AdminCantiereDetail = () => {
     toast.error("Usa il selettore per aggiungere un operaio esistente");
   };
 
-  const handleAddWorkerById = async (userId: string) => {
+  const handleAddWorkerById = async (worker: { id: string; user_id: string | null; first_name: string; last_name: string }) => {
     if (!id) return;
     const { error } = await supabase.from("site_workers" as any).insert({
-      site_id: id, worker_user_id: userId, worker_role: workerForm.worker_role, notes: workerForm.notes || null
+      site_id: id,
+      worker_id: worker.id,
+      worker_user_id: worker.user_id,
+      worker_role: workerForm.worker_role,
+      notes: workerForm.notes || null,
     });
     if (error) {
       if (error.code === '23505') toast.error("Operaio già assegnato a questo cantiere");
-      else toast.error("Errore nell'assegnazione");
+      else toast.error("Errore: " + error.message);
       return;
     }
-    toast.success("Operaio assegnato");
+    toast.success(`${worker.first_name} ${worker.last_name} assegnato`);
     setAddWorkerOpen(false);
     setWorkerForm({ worker_email: "", worker_role: "operaio", notes: "" });
     queryClient.invalidateQueries({ queryKey: ["site-workers", id] });
