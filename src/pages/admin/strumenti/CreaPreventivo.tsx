@@ -1226,32 +1226,24 @@ export default function CreaPreventivo() {
                   <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
                 )}
                 {tonalita.map((tn, idx) => (
-                  <div key={tn.id} style={{display:"grid",gridTemplateColumns:"1fr 100px 30px",gap:8,marginBottom:8,alignItems:"center"}}>
+                  <div key={tn.id} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,marginBottom:8,alignItems:"center"}}>
                     <input list={`ton-${prodotto.id}`} value={tn.nome}
                       onChange={e=>updTon(tn.id,"nome",e.target.value)}
                       placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
-                      style={{padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
-                    <div style={{display:"flex",alignItems:"center",gap:4,border:"1px solid #E0DDD8",borderRadius:7,padding:"0 8px",background:"#fff"}}>
-                      <input type="number" min={0} step={0.5} value={tn.mq}
+                      style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
+                    <div style={{position:"relative"}}>
+                      <input type="number" min={0} step={0.5} value={tn.mq || ""}
                         onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
-                        style={{flex:1,padding:"7px 0",border:"none",fontSize:13,outline:"none",textAlign:"right",background:"transparent"}}/>
-                      <span style={{fontSize:11,color:"#9A9890"}}>mq</span>
+                        style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
+                      <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
                     </div>
-                    <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:18,padding:0}}>×</button>
+                    <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
                   </div>
                 ))}
                 {tonalita.length > 0 && (
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 12px",background:"#F0EDE8",borderRadius:8,marginTop:6}}>
-                    <div style={{fontSize:12,color:"#6B6860"}}>
-                      Totale tonalità: <b style={{color:"#1A1A2E"}}>{tonMqTot} mq</b>
-                      {tonMqTot !== mqPrev && <span style={{color:"#A32D2D",marginLeft:8}}>≠ {mqPrev} mq totali</span>}
-                    </div>
-                    {tonMqTot > 0 && tonMqTot !== mqPrev && (
-                      <button onClick={()=>setMqPrev(tonMqTot)}
-                        style={{padding:"4px 10px",borderRadius:6,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:11}}>
-                        Applica ai mq totali
-                      </button>
-                    )}
+                  <div style={{padding:"10px 12px",background:"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:"#6B6860"}}>
+                    Totale tonalità: <b style={{color:"#1A1A2E"}}>{tonMqTot} mq</b>
+                    <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
                   </div>
                 )}
               </>
