@@ -572,8 +572,21 @@ export default function AdminPlanner() {
           </div>
           <div className="flex items-center gap-2">
             <Button size="sm" variant="ghost" onClick={() => shift(-1)}><ChevronLeft className="w-4 h-4" /></Button>
-            <Button size="sm" variant="outline" onClick={() => setCursor(new Date())}>Oggi</Button>
-            <span className="text-sm font-semibold capitalize min-w-[180px] text-center">{periodLabel}</span>
+            <Button
+              size="sm"
+              variant={format(cursor, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') ? 'default' : 'outline'}
+              onClick={() => setCursor(new Date())}
+            >Oggi</Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="text-sm font-semibold capitalize min-w-[180px] text-center px-2 py-1 rounded hover:bg-muted transition-colors">
+                  {periodLabel}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="center">
+                <Calendar mode="single" selected={cursor} onSelect={(d) => d && setCursor(d)} weekStartsOn={1} locale={it} initialFocus />
+              </PopoverContent>
+            </Popover>
             <Button size="sm" variant="ghost" onClick={() => shift(1)}><ChevronRight className="w-4 h-4" /></Button>
           </div>
           <div className="flex items-center gap-2 text-xs">
