@@ -1,0 +1,1 @@
+CREATE POLICY "Workers can update own logs" ON public.site_work_logs FOR UPDATE TO authenticated USING (worker_user_id = auth.uid()) WITH CHECK (worker_user_id = auth.uid());
