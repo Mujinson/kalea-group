@@ -1293,6 +1293,54 @@ export default function CreaPreventivo() {
             </div>
 
             <div style={card}>
+              <div style={sectionTitle}>Condizioni di fornitura</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Metodo di trasporto</div>
+                  <select value={metodoTrasporto} onChange={e=>setMetodoTrasporto(e.target.value)}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    <option>Trasporto a cura Kalēa</option>
+                    <option>Corriere espresso</option>
+                    <option>Ritiro in sede</option>
+                    <option>Franco cantiere</option>
+                    <option>Franco fabbrica</option>
+                    <option>A cura del cliente</option>
+                  </select>
+                </div>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tempi di consegna</div>
+                  <input value={tempiConsegna} onChange={e=>setTempiConsegna(e.target.value)} placeholder="Es. 15-20 giorni lavorativi"
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                </div>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tipo di pagamento</div>
+                  <select value={tipoPagamento} onChange={e=>setTipoPagamento(e.target.value)}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    <option>Bonifico bancario</option>
+                    <option>Contanti</option>
+                    <option>Assegno</option>
+                    <option>Carta di credito</option>
+                    <option>Rateale</option>
+                    <option>Ri.Ba.</option>
+                    <option>Anticipato</option>
+                  </select>
+                </div>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Aliquota IVA</div>
+                  <select value={ivaRate} onChange={e=>setIvaRate(Number(e.target.value))}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    <option value={0}>0% (esente)</option>
+                    <option value={4}>4%</option>
+                    <option value={10}>10%</option>
+                    <option value={22}>22%</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div style={card}>
               <div style={sectionTitle}>Note visibili al cliente</div>
               <textarea value={noteCliente} onChange={e=>setNoteCliente(e.target.value)} rows={3} style={{width:"100%",padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
             </div>
