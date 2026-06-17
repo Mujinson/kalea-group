@@ -1141,65 +1141,117 @@ export default function CreaPreventivo() {
       {step===1 && (
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
           <div style={card}>
-            <div style={sectionTitle}>Scegli prodotto — {PRODOTTI.length} articoli</div>
-            <div style={{position:"relative",marginBottom:10}}>
-              <input value={search} onChange={e=>{setSearch(e.target.value);setShowAll(false);}}
-                placeholder="🔍 Cerca nome, fornitore, categoria..."
-                style={{width:"100%",padding:"9px 12px",borderRadius:9,border:"1px solid #E0DDD8",fontSize:13,outline:"none",background:"#F7F6F3",boxSizing:"border-box"}}/>
-            </div>
-            <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:10}}>
-              {FORNITORI_LIST.map(f=>{
-                const fc=FORN_STYLE[f]||{bg:"#1A1A2E",c:"#fff"};
-                return <button key={f} onClick={()=>{setFornFilt(f);setShowAll(false);}}
-                  style={{padding:"3px 11px",borderRadius:16,border:"1px solid",cursor:"pointer",fontSize:11,fontWeight:500,
-                    background:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.bg):"transparent",
-                    color:fornFilt===f?(f==="Tutti"?"#fff":fc.c):"#9A9890",
-                    borderColor:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.c):"#E0DDD8"}}>{f}</button>;
-              })}
-            </div>
-            <div style={{maxHeight:420,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8"}}>
-              {(showAll?filtered:filtered.slice(0,25)).map(p=>{
-                const costoMq=p.listino*p.coeff;
-                const prezzoMq=costoMq*MARKUP;
-                const isSel=prodotto?.id===p.id;
-                const fc=FORN_STYLE[p.fornitore]||{bg:"#F0EDE8",c:"#5F5E5A"};
-                return (
-                  <div key={p.id} onClick={()=>setProdotto(p)}
-                    style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",cursor:"pointer",
-                      background:isSel?"#E6F1FB":"transparent",
-                      borderLeft:isSel?"3px solid #1A1A2E":"3px solid transparent"}}>
-                    <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
-                      <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
-                      <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+            {!prodotto ? (
+              <>
+                <div style={sectionTitle}>Scegli prodotto — {PRODOTTI.length} articoli</div>
+                <div style={{position:"relative",marginBottom:10}}>
+                  <input value={search} onChange={e=>{setSearch(e.target.value);setShowAll(false);}}
+                    placeholder="🔍 Cerca nome, fornitore, categoria..."
+                    style={{width:"100%",padding:"9px 12px",borderRadius:9,border:"1px solid #E0DDD8",fontSize:13,outline:"none",background:"#F7F6F3",boxSizing:"border-box"}}/>
+                </div>
+                <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:10}}>
+                  {FORNITORI_LIST.map(f=>{
+                    const fc=FORN_STYLE[f]||{bg:"#1A1A2E",c:"#fff"};
+                    return <button key={f} onClick={()=>{setFornFilt(f);setShowAll(false);}}
+                      style={{padding:"3px 11px",borderRadius:16,border:"1px solid",cursor:"pointer",fontSize:11,fontWeight:500,
+                        background:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.bg):"transparent",
+                        color:fornFilt===f?(f==="Tutti"?"#fff":fc.c):"#9A9890",
+                        borderColor:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.c):"#E0DDD8"}}>{f}</button>;
+                  })}
+                </div>
+                <div style={{maxHeight:520,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8"}}>
+                  {(showAll?filtered:filtered.slice(0,25)).map(p=>{
+                    const costoMq=p.listino*p.coeff;
+                    const prezzoMq=costoMq*MARKUP;
+                    const fc=FORN_STYLE[p.fornitore]||{bg:"#F0EDE8",c:"#5F5E5A"};
+                    return (
+                      <div key={p.id} onClick={()=>selectProdotto(p)}
+                        style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",cursor:"pointer",borderLeft:"3px solid transparent"}}>
+                        <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
+                          <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
+                          <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                        </div>
+                        <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
+                          <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{p.fornitore}</span>
+                          <span>{p.categoria}</span><span>· {p.dims}</span>
+                          <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {!showAll && filtered.length>25 && (
+                    <div style={{padding:10,textAlign:"center"}}>
+                      <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F0EDE8",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
                     </div>
-                    <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
-                      <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{p.fornitore}</span>
-                      <span>{p.categoria}</span><span>· {p.dims}</span>
-                      <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Prodotto selezionato — collassato */}
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14,paddingBottom:12,borderBottom:"1px solid #E0DDD8"}}>
+                  <div>
+                    <div style={{fontSize:11,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:4}}>Prodotto scelto</div>
+                    <div style={{fontSize:17,fontWeight:500,color:"#1A1A2E"}}>{prodotto.nome}</div>
+                    <div style={{fontSize:12,color:"#9A9890",marginTop:2}}>{prodotto.dims} · {prodotto.categoria}</div>
+                    <div style={{display:"flex",gap:6,alignItems:"center",marginTop:8}}>
+                      <span style={{fontSize:10,padding:"3px 9px",borderRadius:6,fontWeight:500,background:FORN_STYLE[prodotto.fornitore]?.bg,color:FORN_STYLE[prodotto.fornitore]?.c}}>{prodotto.fornitore}</span>
+                      <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*MARKUP)}/mq</span>
                     </div>
                   </div>
-                );
-              })}
-              {!showAll && filtered.length>25 && (
-                <div style={{padding:10,textAlign:"center"}}>
-                  <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F0EDE8",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
+                  <button onClick={resetProdotto}
+                    style={{padding:"6px 12px",borderRadius:7,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860",whiteSpace:"nowrap"}}>
+                    ← Cambia prodotto
+                  </button>
                 </div>
-              )}
-            </div>
+
+                {/* Tonalità */}
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                  <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em"}}>Tonalità / colori</div>
+                  <button onClick={addTon}
+                    style={{padding:"4px 12px",borderRadius:6,border:"1px solid #1A1A2E",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Tonalità</button>
+                </div>
+                <datalist id={`ton-${prodotto.id}`}>
+                  {(TONALITA_BY_PRODUCT[prodotto.id] || []).map(t => <option key={t} value={t} />)}
+                </datalist>
+                {tonalita.length === 0 && (
+                  <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
+                )}
+                {tonalita.map((tn, idx) => (
+                  <div key={tn.id} style={{display:"grid",gridTemplateColumns:"1fr 100px 30px",gap:8,marginBottom:8,alignItems:"center"}}>
+                    <input list={`ton-${prodotto.id}`} value={tn.nome}
+                      onChange={e=>updTon(tn.id,"nome",e.target.value)}
+                      placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
+                      style={{padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                    <div style={{display:"flex",alignItems:"center",gap:4,border:"1px solid #E0DDD8",borderRadius:7,padding:"0 8px",background:"#fff"}}>
+                      <input type="number" min={0} step={0.5} value={tn.mq}
+                        onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
+                        style={{flex:1,padding:"7px 0",border:"none",fontSize:13,outline:"none",textAlign:"right",background:"transparent"}}/>
+                      <span style={{fontSize:11,color:"#9A9890"}}>mq</span>
+                    </div>
+                    <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:18,padding:0}}>×</button>
+                  </div>
+                ))}
+                {tonalita.length > 0 && (
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 12px",background:"#F0EDE8",borderRadius:8,marginTop:6}}>
+                    <div style={{fontSize:12,color:"#6B6860"}}>
+                      Totale tonalità: <b style={{color:"#1A1A2E"}}>{tonMqTot} mq</b>
+                      {tonMqTot !== mqPrev && <span style={{color:"#A32D2D",marginLeft:8}}>≠ {mqPrev} mq totali</span>}
+                    </div>
+                    {tonMqTot > 0 && tonMqTot !== mqPrev && (
+                      <button onClick={()=>setMqPrev(tonMqTot)}
+                        style={{padding:"4px 10px",borderRadius:6,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:11}}>
+                        Applica ai mq totali
+                      </button>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           <div style={{display:"flex",flexDirection:"column",gap:14}}>
-            {prodotto && (
-              <div style={{...card,marginBottom:0}}>
-                <div style={{display:"flex",justifyContent:"space-between"}}>
-                  <div>
-                    <div style={{fontSize:15,fontWeight:500}}>{prodotto.nome}</div>
-                    <div style={{fontSize:12,color:"#9A9890"}}>{prodotto.dims} · {prodotto.categoria}</div>
-                  </div>
-                  <span style={{fontSize:10,padding:"3px 9px",borderRadius:6,fontWeight:500,background:FORN_STYLE[prodotto.fornitore]?.bg,color:FORN_STYLE[prodotto.fornitore]?.c}}>{prodotto.fornitore}</span>
-                </div>
-              </div>
-            )}
+
 
             <div style={{...card,marginBottom:0}}>
               <div style={sectionTitle}>Parametri cantiere</div>
