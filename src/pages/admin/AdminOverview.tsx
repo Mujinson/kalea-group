@@ -245,17 +245,19 @@ const AdminOverview = () => {
   const [variableCosts, setVariableCosts] = useState<any[]>([]);
   const [staticCosts, setStaticCosts] = useState<any[]>([]);
   const [commercialInvoices, setCommercialInvoices] = useState<any[]>([]);
+  const [paymentAgreements, setPaymentAgreements] = useState<any[]>([]);
   const [goal, setGoal] = useState<number>(400000);
 
   const fetchAll = useCallback(async () => {
     try {
-      const [p, q, s, c, l, sp, inv, sps, ps, ap, rem, cu, fc, vc, sc, ci, gs] = await Promise.all([
+      const [p, q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ci, gs] = await Promise.all([
         fetchAllRows(supabase.from('preventivi').select('*')),
         fetchAllRows(supabase.from('quotes').select('*')),
         fetchAllRows(supabase.from('sales').select('*')),
         fetchAllRows(supabase.from('construction_sites').select('*')),
         fetchAllRows(supabase.from('leads').select('*')),
         fetchAllRows(supabase.from('supplier_payments').select('*')),
+        fetchAllRows(supabase.from('payment_agreements').select('*')),
         fetchAllRows(supabase.from('inventory').select('*')),
         fetchAllRows(supabase.from('salespeople').select('*')),
         fetchAllRows(supabase.from('payment_schedules').select('*')),
@@ -269,7 +271,7 @@ const AdminOverview = () => {
         supabase.from('app_settings').select('value').eq('key', 'yearly_revenue_goal').maybeSingle(),
       ]);
       setPreventivi(p || []); setQuotes(q || []); setSales(s || []);
-      setSites(c || []); setLeads(l || []); setSupplierPayments(sp || []);
+      setSites(c || []); setLeads(l || []); setSupplierPayments(sp || []); setPaymentAgreements(pa || []);
       setInventory(inv || []); setSalespeople(sps || []);
       setPaymentSchedules(ps || []); setAppointments(ap || []); setReminders(rem || []);
       setCustomers(cu || []); setFixedCosts(fc || []); setVariableCosts(vc || []);
@@ -283,7 +285,7 @@ const AdminOverview = () => {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useRealtimeSubscription({
-    tables: ['preventivi', 'quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices'],
+    tables: ['preventivi', 'quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices'],
     onDataChange: fetchAll,
   });
 
@@ -357,8 +359,14 @@ const AdminOverview = () => {
 
   const debiti = useMemo(() => {
     const bySupplier: Record<string, { total: number; paid: number; lastDate?: string }> = {};
+    paymentAgreements.forEach(a => {
+      const k = (a.supplier_name || 'Fornitore').trim() || 'Fornitore';
+      if (!bySupplier[k]) bySupplier[k] = { total: 0, paid: 0 };
+      bySupplier[k].total += Number(a.total_amount || 0);
+      if (a.end_date && (!bySupplier[k].lastDate || a.end_date > bySupplier[k].lastDate)) bySupplier[k].lastDate = a.end_date;
+    });
     supplierPayments.forEach(p => {
-      const k = p.supplier_name || 'Fornitore';
+      const k = (p.supplier_name || 'Fornitore').trim() || 'Fornitore';
       if (!bySupplier[k]) bySupplier[k] = { total: 0, paid: 0 };
       bySupplier[k].paid += Number(p.payment_amount || 0);
       bySupplier[k].total = Math.max(bySupplier[k].total, Number(p.total_debt || 0));
@@ -368,7 +376,7 @@ const AdminOverview = () => {
       .map(([name, v]) => ({ name, residuo: Math.max(0, v.total - v.paid), lastDate: v.lastDate }))
       .filter(x => x.residuo > 0).sort((a, b) => b.residuo - a.residuo);
     return { open, total: open.reduce((s, x) => s + x.residuo, 0) };
-  }, [supplierPayments]);
+  }, [supplierPayments, paymentAgreements]);
 
   const lowStock = useMemo(() => {
     const byProd: Record<string, number> = {};

@@ -59,7 +59,7 @@ const AdminPayments = () => {
   }, []);
 
   useRealtimeSubscription({
-    tables: ['payment_schedules', 'sales'],
+    tables: ['supplier_payments', 'payment_agreements'],
     onDataChange: handleDataChange,
   });
 
@@ -71,7 +71,7 @@ const AdminPayments = () => {
     try {
       const [paymentsRes, agreementRes] = await Promise.all([
         supabase.from('supplier_payments').select('*').order('payment_date', { ascending: false }),
-        supabase.from('payment_agreements').select('*').maybeSingle(),
+        supabase.from('payment_agreements').select('*').order('created_at', { ascending: false }).limit(1).maybeSingle(),
       ]);
 
       if (paymentsRes.error) throw paymentsRes.error;
@@ -85,6 +85,15 @@ const AdminPayments = () => {
           start_date: agreementRes.data.start_date,
           end_date: agreementRes.data.end_date,
           notes: agreementRes.data.notes || '',
+        });
+      } else {
+        setAgreement(null);
+        setAgreementForm({
+          supplier_name: '',
+          total_amount: '',
+          start_date: format(new Date(), 'yyyy-MM-dd'),
+          end_date: '',
+          notes: '',
         });
       }
     } catch (error) {
