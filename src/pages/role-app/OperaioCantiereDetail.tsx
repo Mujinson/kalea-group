@@ -10,6 +10,11 @@ import { toast } from 'sonner';
 
 type Tab = 'lavoro' | 'foto' | 'chat';
 
+const formatExactTime = (time?: string | null) => {
+  if (!time) return '—';
+  return time.split('.')[0].slice(0, 8);
+};
+
 const OperaioCantiereDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -176,7 +181,7 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
           <>
             <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">In corso</p>
             <p className="text-[22px] font-semibold text-[#1E1B4B]">
-              dalle {new Date(`${activeLog.work_date}T${activeLog.start_time}`).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
+              dalle {formatExactTime(activeLog.start_time)}
             </p>
             <button
               onClick={stopWork} disabled={busy}
@@ -208,10 +213,12 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
         )}
         <div className="space-y-2">
           {logs.map((l) => (
-            <div key={l.id} className="bg-white rounded-lg border border-[#E5E2DD] p-3 flex justify-between text-[13px]">
-              <span className="text-[#1E1B4B]">{new Date(l.work_date).toLocaleDateString('it-IT')}</span>
-              <span className="text-[#6B6258]">
-                {l.end_time ? `${Number(l.hours_worked).toFixed(1)} h` : 'in corso'}
+            <div key={l.id} className="bg-white rounded-lg border border-[#E5E2DD] p-3 flex flex-col gap-2 text-[13px] sm:flex-row sm:items-center sm:justify-between">
+              <span className="text-[#1E1B4B] font-medium">{new Date(l.work_date).toLocaleDateString('it-IT')}</span>
+              <span className="text-[#6B6258] flex flex-wrap gap-x-3 gap-y-1 sm:justify-end">
+                <span>Inizio {formatExactTime(l.start_time)}</span>
+                <span>Fine {formatExactTime(l.end_time)}</span>
+                <span>{l.end_time ? `${Number(l.hours_worked).toFixed(2)} h` : 'in corso'}</span>
               </span>
             </div>
           ))}
