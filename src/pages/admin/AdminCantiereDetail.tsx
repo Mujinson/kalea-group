@@ -70,7 +70,9 @@ const AdminCantiereDetail = () => {
   const { data: workers } = useQuery({
     queryKey: ["site-workers", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("site_workers" as any).select("*").eq("site_id", id!).order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("site_workers" as any)
+        .select("*, workers(id, first_name, last_name)")
+        .eq("site_id", id!).order("created_at", { ascending: false });
       if (error) throw error;
       return data as any[];
     },
