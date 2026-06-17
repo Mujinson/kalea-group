@@ -367,7 +367,7 @@ const AdminCantiereDetail = () => {
                           <Users className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium">{w.worker_user_id?.slice(0, 8)}...</p>
+                          <p className="text-sm font-medium">{w.workers ? `${w.workers.first_name} ${w.workers.last_name}` : (w.worker_user_id?.slice(0, 8) + "…")}</p>
                           <p className="text-xs text-muted-foreground">{w.worker_role} · {w.is_active ? "Attivo" : "Inattivo"}</p>
                         </div>
                       </div>
