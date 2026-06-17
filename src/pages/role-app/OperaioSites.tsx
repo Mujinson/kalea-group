@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Hammer, MapPin, Loader2, ChevronRight } from 'lucide-react';
@@ -15,6 +15,8 @@ const statusColor = (s: string) => {
 const OperaioSites = () => {
   const { user } = useAdminAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const basePath = location.pathname.startsWith('/app/ibrido') ? '/app/ibrido' : '/app/operaio';
   const [sites, setSites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -62,7 +64,7 @@ const OperaioSites = () => {
         return (
           <button
             key={s.id}
-            onClick={() => navigate(`/app/operaio/cantieri/${s.id}`)}
+            onClick={() => navigate(`${basePath}/cantieri/${s.id}`)}
             className="w-full text-left bg-white rounded-xl border border-[#E5E2DD] p-4 flex items-center gap-3"
           >
             <div className="w-10 h-10 rounded-lg bg-[#F5F0EA] flex items-center justify-center text-[#1E1B4B] shrink-0">
