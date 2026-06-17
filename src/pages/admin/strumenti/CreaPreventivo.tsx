@@ -967,6 +967,20 @@ export default function CreaPreventivo() {
   const [sconto, setSconto] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const [righeMat, setRigheMat] = useState<any[]>([]);
+  const [tonalita, setTonalita] = useState<Array<{id:number; nome:string; mq:number}>>([]);
+
+  const selectProdotto = (p: any) => {
+    setProdotto(p);
+    setTonalita([{ id: Date.now(), nome: "", mq: 0 }]);
+  };
+  const resetProdotto = () => {
+    setProdotto(null);
+    setTonalita([]);
+  };
+  const addTon = () => setTonalita(t => [...t, { id: Date.now()+Math.random(), nome:"", mq:0 }]);
+  const updTon = (id:number,k:string,v:any) => setTonalita(t => t.map(x => x.id===id ? {...x,[k]:v} : x));
+  const delTon = (id:number) => setTonalita(t => t.filter(x => x.id!==id));
+  const tonMqTot = tonalita.reduce((s,x) => s + (Number(x.mq)||0), 0);
 
   // INTESTAZIONE
   const [lingua, setLingua] = useState("IT");
