@@ -151,11 +151,11 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
   // ─── Parquet Woodco — tonalità fornite dal cliente ───
   "pq-dream":    ["Night","Cinnamon","Chocolate","Bark","Leather","Cognac","Earth","Tannin","Incense","Fog","Flint","Honey","Almond","Cumin","Malt","Fallow","Vicuña","Alpaca","Cashmere","Earth of Umber","Cookie","Sandstone","Golden","Natural","Moonlight","Spicy","Salt","Monk's Robe","Cream","Elegant","Camel","Ivory","Natural Oiled","White","Sand","Hemp"],
   "pq-star":     ["Smoked","Cream","Natural"],
-  "pq-ground":   [],
-  "pq-kalika":   [],
-  "pq-element":  [],
-  "pq-sense":    [],
-  "pq-him":      [],
+  "pq-ground":   ["American","Forest","Arctic","Field","Underwood","Dune","Tundra","Peat","Calanca","Limo"],
+  "pq-kalika":   ["Kalika"],
+  "pq-element":  ["Clay","Ink","Paper","Plaster"],
+  "pq-sense":    ["Canvas","Hessian","Mohair","Silk","Jute","Cotton","Wool"],
+  "pq-him":      ["Naturale ABCD","Natural AB"],
   "pq-her":      [],
 
   // ─── Signature — colori non confermati ───
