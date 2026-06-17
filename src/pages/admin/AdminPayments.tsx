@@ -47,8 +47,8 @@ const AdminPayments = () => {
   });
 
   const [agreementForm, setAgreementForm] = useState({
-    supplier_name: 'Fornitore Terni',
-    total_amount: '89100',
+    supplier_name: '',
+    total_amount: '',
     start_date: format(new Date(), 'yyyy-MM-dd'),
     end_date: '',
     notes: '',
