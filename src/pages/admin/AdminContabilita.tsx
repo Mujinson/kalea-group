@@ -157,12 +157,12 @@ export default function AdminContabilita() {
   const totComPaid = commissions.filter(c => c.status === 'pagata' || c.status === 'paid').reduce((s, c) => s + c.amount, 0);
 
   const recCols: DataTableColumn<Receivable>[] = [
-    { key: 'source', label: 'Tipo', render: (r) => <Badge variant="outline">{r.source}</Badge> },
-    { key: 'customer', label: 'Cliente / Rif.' },
-    { key: 'amount', label: 'Importo', render: (r) => <span className="font-semibold">{eur(r.amount)}</span> },
-    { key: 'due_date', label: 'Scadenza', render: (r) => r.due_date ? format(new Date(r.due_date), 'dd/MM/yyyy', { locale: it }) : '—' },
+    { key: 'source', header: 'Tipo', cell: (r) => <Badge variant="outline">{r.source}</Badge> },
+    { key: 'customer', header: 'Cliente / Rif.' },
+    { key: 'amount', header: 'Importo', cell: (r) => <span className="font-semibold">{eur(r.amount)}</span> },
+    { key: 'due_date', header: 'Scadenza', cell: (r) => r.due_date ? format(new Date(r.due_date), 'dd/MM/yyyy', { locale: it }) : '—' },
     {
-      key: 'status', label: 'Stato', render: (r) => {
+      key: 'status', header: 'Stato', cell: (r) => {
         if (r.paid) return <Badge className="bg-green-100 text-green-800">pagata</Badge>;
         if (r.due_date && new Date(r.due_date) < today) {
           const d = differenceInDays(today, new Date(r.due_date));
@@ -174,21 +174,21 @@ export default function AdminContabilita() {
   ];
 
   const payCols: DataTableColumn<Payable>[] = [
-    { key: 'source', label: 'Tipo', render: (p) => <Badge variant="outline">{p.source}</Badge> },
-    { key: 'supplier', label: 'Fornitore' },
-    { key: 'amount', label: 'Importo', render: (p) => <span className="font-semibold">{eur(p.amount)}</span> },
-    { key: 'date', label: 'Data', render: (p) => p.date ? format(new Date(p.date), 'dd/MM/yyyy', { locale: it }) : '—' },
-    { key: 'notes', label: 'Note', render: (p) => p.notes || '—' },
+    { key: 'source', header: 'Tipo', cell: (p) => <Badge variant="outline">{p.source}</Badge> },
+    { key: 'supplier', header: 'Fornitore' },
+    { key: 'amount', header: 'Importo', cell: (p) => <span className="font-semibold">{eur(p.amount)}</span> },
+    { key: 'date', header: 'Data', cell: (p) => p.date ? format(new Date(p.date), 'dd/MM/yyyy', { locale: it }) : '—' },
+    { key: 'notes', header: 'Note', cell: (p) => p.notes || '—' },
   ];
 
   const comCols: DataTableColumn<CommissionRow>[] = [
-    { key: 'user', label: 'Commerciale' },
-    { key: 'customer', label: 'Cliente', render: (c) => c.customer || '—' },
-    { key: 'base', label: 'Base', render: (c) => eur(c.base) },
-    { key: 'pct', label: '%', render: (c) => `${c.pct}%` },
-    { key: 'amount', label: 'Provvigione', render: (c) => <span className="font-semibold">{eur(c.amount)}</span> },
+    { key: 'user', header: 'Commerciale' },
+    { key: 'customer', header: 'Cliente', cell: (c) => c.customer || '—' },
+    { key: 'base', header: 'Base', cell: (c) => eur(c.base) },
+    { key: 'pct', header: '%', cell: (c) => `${c.pct}%` },
+    { key: 'amount', header: 'Provvigione', cell: (c) => <span className="font-semibold">{eur(c.amount)}</span> },
     {
-      key: 'status', label: 'Stato', render: (c) =>
+      key: 'status', header: 'Stato', cell: (c) =>
         c.status === 'pagata' || c.status === 'paid'
           ? <Badge className="bg-green-100 text-green-800">pagata</Badge>
           : <Badge className="bg-amber-100 text-amber-800">da liquidare</Badge>
@@ -199,8 +199,8 @@ export default function AdminContabilita() {
     <div className="space-y-6">
       <CrmPageHeader
         title="Contabilità"
-        description="Crediti, debiti e commissioni in un'unica vista"
-        icon={Wallet}
+        subtitle="Crediti, debiti e commissioni in un'unica vista"
+        
       />
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -222,7 +222,7 @@ export default function AdminContabilita() {
           <Card>
             <CardHeader><CardTitle>Crediti — fatture clienti e rate</CardTitle></CardHeader>
             <CardContent>
-              <DataTable data={receivables} columns={recCols} loading={loading} emptyMessage="Nessun credito registrato" />
+              <DataTable data={receivables} columns={recCols} loading={loading} emptyTitle="Nessun credito registrato" />
             </CardContent>
           </Card>
         </TabsContent>
@@ -231,7 +231,7 @@ export default function AdminContabilita() {
           <Card>
             <CardHeader><CardTitle>Debiti — pagamenti fornitori e accordi</CardTitle></CardHeader>
             <CardContent>
-              <DataTable data={payables} columns={payCols} loading={loading} emptyMessage="Nessun debito registrato" />
+              <DataTable data={payables} columns={payCols} loading={loading} emptyTitle="Nessun debito registrato" />
             </CardContent>
           </Card>
         </TabsContent>
@@ -240,7 +240,7 @@ export default function AdminContabilita() {
           <Card>
             <CardHeader><CardTitle>Commissioni commerciali</CardTitle></CardHeader>
             <CardContent>
-              <DataTable data={commissions} columns={comCols} loading={loading} emptyMessage="Nessuna commissione generata" />
+              <DataTable data={commissions} columns={comCols} loading={loading} emptyTitle="Nessuna commissione generata" />
             </CardContent>
           </Card>
         </TabsContent>
@@ -249,7 +249,7 @@ export default function AdminContabilita() {
   );
 }
 
-function KpiCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: string; color: string }) {
+function KpiCard({ icon: Icon, label, value, color }: { icon: any; header: string; value: string; color: string }) {
   return (
     <Card>
       <CardContent className="p-4 flex items-center gap-3">
