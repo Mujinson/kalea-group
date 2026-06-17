@@ -1110,7 +1110,15 @@ export default function CreaPreventivo() {
 
   const calc = useMemo(()=>{
     if (!prodotto) return null;
-    const costoMatMq = prodotto.listino * prodotto.coeff;
+    // Per Woodco usiamo il prezzo del listino DB (cascading) + lo sconto fornitore associato
+    let listinoUsed = prodotto.listino;
+    let coeffUsed = prodotto.coeff;
+    if (isWoodco && wcSel.listPrice !== null) {
+      listinoUsed = wcSel.listPrice;
+      const disc = wcSel.supplierDiscountPct ?? 55;
+      coeffUsed = (100 - disc) / 100;
+    }
+    const costoMatMq = listinoUsed * coeffUsed;
     const prezzoMatMq = costoMatMq * MARKUP;
     const mqOrd = mqPrev * (1 + sfrido/100);
     const costoMatTot = mqOrd * costoMatMq;
@@ -1128,8 +1136,11 @@ export default function CreaPreventivo() {
     const supplMq = trasfertaAttiva ? SUPPL_TRASFERTA_POSA[complessita] : 0;
     const costoTrasfertaTot = trasfertaAttiva ? mqPrev*supplMq*0.5 : 0;
     const prezzoTrasfertaTot = trasfertaAttiva ? mqPrev*supplMq : 0;
-    const costoExtraTot = righeMat.reduce((s,r)=>s+(r.costoUn||0)*(r.qta||0), 0);
-    const prezzoExtraTot = righeMat.reduce((s,r)=>s+(r.prezzoUn||0)*(r.qta||0), 0);
+    // Accessori Woodco
+    const costoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.costoUn||0)*(a.qta||0), 0);
+    const prezzoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.prezzoUn||0)*(a.qta||0), 0);
+    const costoExtraTot = righeMat.reduce((s,r)=>s+(r.costoUn||0)*(r.qta||0), 0) + costoAccTot;
+    const prezzoExtraTot = righeMat.reduce((s,r)=>s+(r.prezzoUn||0)*(r.qta||0), 0) + prezzoAccTot;
     const costoTotale = costoMatTot+costoPosaTot+costoTappTot+costoTrasporto+costoTrasfertaTot+costoExtraTot;
     const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
@@ -1140,8 +1151,8 @@ export default function CreaPreventivo() {
     const marginePct = prezzoNetto>0 ? (margineE/prezzoNetto)*100 : 0;
     const prezzoMqTot = mqPrev>0 ? prezzoNetto/mqPrev : 0;
     const scontoMax = prezzoLordoTot>0 ? ((prezzoLordoTot-costoTotale)/prezzoLordoTot)*100 : 0;
-    return { costoMatMq,prezzoMatMq,mqOrd,costoMatTot,prezzoMatTot,costoPosaTot,prezzoPosaTot,costoTappTot,prezzoTappTot,tappNeeded,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
-  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate]);
+    return { costoMatMq,prezzoMatMq,mqOrd,costoMatTot,prezzoMatTot,costoPosaTot,prezzoPosaTot,costoTappTot,prezzoTappTot,tappNeeded,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
+  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel]);
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"mq", costoUn:0, prezzoUn:0 }]);
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
