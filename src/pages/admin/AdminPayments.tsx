@@ -104,9 +104,13 @@ const AdminPayments = () => {
     }
 
     try {
+      if (!agreement) {
+        toast.error('Configura prima un accordo');
+        return;
+      }
       const { error } = await supabase.from('supplier_payments').insert({
-        supplier_name: agreement?.supplier_name || 'Fornitore Terni',
-        total_debt: agreement?.total_amount || 89100,
+        supplier_name: agreement.supplier_name,
+        total_debt: agreement.total_amount,
         payment_amount: parseFloat(paymentForm.payment_amount),
         payment_date: paymentForm.payment_date,
         notes: paymentForm.notes || null,
