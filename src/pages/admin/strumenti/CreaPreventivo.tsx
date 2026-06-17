@@ -929,6 +929,12 @@ export default function CreaPreventivo() {
     { label:"Saldo finale", pct:30, data:"", note:"" },
   ]);
 
+  // CONDIZIONI DI FORNITURA
+  const [ivaRate, setIvaRate] = useState<number>(22);
+  const [metodoTrasporto, setMetodoTrasporto] = useState<string>("Trasporto a cura Kalēa");
+  const [tempiConsegna, setTempiConsegna] = useState<string>("");
+  const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
+
   const filtered = useMemo(()=>PRODOTTI.filter(p=>{
     const fs = fornFilt==="Tutti" || p.fornitore===fornFilt;
     const ss = !search || p.nome.toLowerCase().includes(search.toLowerCase()) || p.fornitore.toLowerCase().includes(search.toLowerCase()) || p.categoria.toLowerCase().includes(search.toLowerCase()) || p.dims.toLowerCase().includes(search.toLowerCase());
