@@ -1006,6 +1006,10 @@ export default function CreaPreventivo() {
   const [righeMat, setRigheMat] = useState<any[]>([]);
   const [tonalita, setTonalita] = useState<Array<{id:number; nome:string; mq:number}>>([]);
   const [stockMap, setStockMap] = useState<Record<string, number>>({});
+  // Selezione Woodco da catalogo DB (collezione → essenza → finitura → formato + accessori)
+  const [wcSel, setWcSel] = useState<WoodcoSelection>(emptyWoodcoSelection);
+  const isWoodco = prodotto?.fornitore === "Parquet Woodco";
+  const wcReady = isWoodco && wcSel.listPrice !== null && wcSel.formatCode !== null;
 
   // Carica giacenza per tonalità (solo prodotti gestiti a magazzino, es. Biomag MgO)
   useEffect(() => {
