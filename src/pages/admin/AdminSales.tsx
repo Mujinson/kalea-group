@@ -988,11 +988,23 @@ const AdminSales = () => {
           },
           {
             key: 'total',
-            header: 'Totale',
+            header: 'Totale fattura',
             sortable: true,
             className: 'text-right font-medium',
-            accessor: (s) => Number(s.quantity_sqm) * Number(s.sale_price),
-            cell: (s) => formatCurrency(Number(s.quantity_sqm) * Number(s.sale_price)),
+            accessor: (s) => Number(s.total_amount || (Number(s.quantity_sqm) * Number(s.sale_price))),
+            cell: (s) => {
+              const netto = Number(s.subtotal_amount ?? (Number(s.quantity_sqm) * Number(s.sale_price)));
+              const iva = Number(s.vat_amount ?? (s.vat_included ? 0 : netto * 0.22));
+              const totale = Number(s.total_amount ?? (netto + iva));
+              return (
+                <div className="leading-tight">
+                  <div className="font-semibold">{formatCurrency(totale)}</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    {formatCurrency(netto)} + IVA {formatCurrency(iva)}
+                  </div>
+                </div>
+              );
+            },
           },
           {
             key: 'margin_amount',
