@@ -274,6 +274,25 @@ const AdminCantiereDetail = () => {
   const totalExpenses = expenses?.reduce((sum, e) => sum + (e.amount || 0), 0) || 0;
   const unpaidExpenses = expenses?.filter(e => !e.is_paid).reduce((sum, e) => sum + (e.amount || 0), 0) || 0;
 
+  // Incassi: somma preventivi accettati del cliente collegato al cantiere
+  const { data: customerQuotes } = useQuery({
+    queryKey: ["site-customer-quotes", site?.customer_id],
+    enabled: !!site?.customer_id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("quotes")
+        .select("id, total_amount, status, project_name")
+        .eq("customer_id", site!.customer_id!)
+        .in("status", ["accepted", "accettato"]);
+      if (error) throw error;
+      return data || [];
+    },
+  });
+  const totalIncassi = (customerQuotes || []).reduce((s, q: any) => s + (q.total_amount || 0), 0);
+  const totalCosti = totalMaterialCost + totalExpenses;
+  const margine = totalIncassi - totalCosti;
+  const marginePerc = totalIncassi > 0 ? (margine / totalIncassi) * 100 : 0;
+
   if (!site) return <div className="p-8 text-center text-muted-foreground">Caricamento...</div>;
 
   return (
