@@ -64,7 +64,7 @@ const OperaioSites = () => {
         return (
           <button
             key={s.id}
-            onClick={() => navigate(`/app/operaio/cantieri/${s.id}`)}
+            onClick={() => navigate(`${basePath}/cantieri/${s.id}`)}
             className="w-full text-left bg-white rounded-xl border border-[#E5E2DD] p-4 flex items-center gap-3"
           >
             <div className="w-10 h-10 rounded-lg bg-[#F5F0EA] flex items-center justify-center text-[#1E1B4B] shrink-0">
