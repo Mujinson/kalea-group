@@ -967,14 +967,14 @@ export default function CreaPreventivo() {
     const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
     const prezzoNetto = prezzoLordoTot - scontoAmt;
-    const iva = prezzoNetto*0.22;
+    const iva = prezzoNetto*(ivaRate/100);
     const totaleIva = prezzoNetto + iva;
     const margineE = prezzoNetto - costoTotale;
     const marginePct = prezzoNetto>0 ? (margineE/prezzoNetto)*100 : 0;
     const prezzoMqTot = mqPrev>0 ? prezzoNetto/mqPrev : 0;
     const scontoMax = prezzoLordoTot>0 ? ((prezzoLordoTot-costoTotale)/prezzoLordoTot)*100 : 0;
     return { costoMatMq,prezzoMatMq,mqOrd,costoMatTot,prezzoMatTot,costoPosaTot,prezzoPosaTot,costoTappTot,prezzoTappTot,tappNeeded,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
-  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat]);
+  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate]);
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"mq", costoUn:0, prezzoUn:0 }]);
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
