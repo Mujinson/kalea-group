@@ -14,10 +14,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import {
   ArrowLeft, Upload, Trash2, Image, Film, FileText, Search, Download,
   Users, Package, Receipt, Clock, Plus, CalendarDays, MapPin, Phone, Mail, X,
-  CheckCircle2, AlertCircle, Euro
+  CheckCircle2, AlertCircle, Euro, Settings, AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format, differenceInDays } from "date-fns";
+import SiteConfigPanel, { priorityBadge } from "@/components/admin/cantieri/SiteConfigPanel";
+import SiteIssuesPanel from "@/components/admin/cantieri/SiteIssuesPanel";
 
 const EXPENSE_TYPES = [
   "Materiali", "Trasporto", "Attrezzatura", "Manodopera esterna",
