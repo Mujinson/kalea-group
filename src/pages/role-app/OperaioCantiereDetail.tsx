@@ -15,6 +15,20 @@ const formatExactTime = (time?: string | null) => {
   return time.split('.')[0].slice(0, 8);
 };
 
+const formatDuration = (h?: number | null) => {
+  if (h == null || isNaN(h)) return '—';
+  if (h < 0.1) {
+    const s = Math.round(h * 3600);
+    return `${s} s`;
+  }
+  if (h < 1) {
+    const m = h * 60;
+    if (m < 10) return `${m.toFixed(1)} min`;
+    return `${Math.round(m)} min`;
+  }
+  return `${h.toFixed(2)} h`;
+};
+
 const OperaioCantiereDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
