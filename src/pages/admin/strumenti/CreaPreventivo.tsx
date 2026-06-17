@@ -1496,6 +1496,17 @@ export default function CreaPreventivo() {
               </div>
             </div>
 
+            {/* Condizioni di fornitura */}
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
+              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di fornitura</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
+                <div><span style={{color:"#6B6860"}}>Metodo di trasporto: </span><span style={{fontWeight:500}}>{metodoTrasporto||"—"}</span></div>
+                <div><span style={{color:"#6B6860"}}>Tempi di consegna: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
+                <div><span style={{color:"#6B6860"}}>Tipo di pagamento: </span><span style={{fontWeight:500}}>{tipoPagamento||"—"}</span></div>
+                <div><span style={{color:"#6B6860"}}>Aliquota IVA: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
+              </div>
+            </div>
+
             {/* Pagamenti */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di pagamento</div>
