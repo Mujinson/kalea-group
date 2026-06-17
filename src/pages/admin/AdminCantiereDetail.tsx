@@ -41,6 +41,7 @@ const AdminCantiereDetail = () => {
 
   // Worker form
   const [workerForm, setWorkerForm] = useState({ worker_email: "", worker_role: "operaio", notes: "" });
+  const [selectedWorkerIds, setSelectedWorkerIds] = useState<string[]>([]);
   // Material form
   const [materialForm, setMaterialForm] = useState({ material_name: "", quantity: "", unit: "pz", unit_cost: "", notes: "" });
   // Expense form
