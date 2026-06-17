@@ -244,6 +244,7 @@ const App = () => (
                 <Route path="registro-lavori" element={<AdminWorkLogs />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
+                <Route path="contabilita" element={<AdminContabilita />} />
                 <Route path="import" element={<AdminImport />} />
                 <Route path="ferie" element={<AdminTimeOff />} />
                 <Route path="time-off" element={<AdminTimeOff />} />
