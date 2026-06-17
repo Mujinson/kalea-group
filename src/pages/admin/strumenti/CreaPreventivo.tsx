@@ -1193,6 +1193,7 @@ export default function CreaPreventivo() {
           cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
           incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
           ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
+          wcSel,
           noteCliente, noteInterne, calc,
         },
       };
