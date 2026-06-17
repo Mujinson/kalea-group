@@ -895,4 +895,14 @@ const AdminCantiereDetail = () => {
   );
 };
 
+const KpiCard = ({ label, value, sub, danger }: { label: string; value: string; sub?: string; danger?: boolean }) => (
+  <Card className="bg-white">
+    <CardContent className="p-3">
+      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className={`text-xl font-bold mt-1 ${danger ? "text-red-600" : "text-foreground"}`}>{value}</p>
+      {sub && <p className="text-[11px] text-muted-foreground mt-0.5">{sub}</p>}
+    </CardContent>
+  </Card>
+);
+
 export default AdminCantiereDetail;
