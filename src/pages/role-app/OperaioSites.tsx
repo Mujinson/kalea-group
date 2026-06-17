@@ -15,6 +15,8 @@ const statusColor = (s: string) => {
 const OperaioSites = () => {
   const { user } = useAdminAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const basePath = location.pathname.startsWith('/app/ibrido') ? '/app/ibrido' : '/app/operaio';
   const [sites, setSites] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
