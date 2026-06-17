@@ -1002,6 +1002,39 @@ export default function CreaPreventivo() {
   const [showAll, setShowAll] = useState(false);
   const [righeMat, setRigheMat] = useState<any[]>([]);
   const [tonalita, setTonalita] = useState<Array<{id:number; nome:string; mq:number}>>([]);
+  const [stockMap, setStockMap] = useState<Record<string, number>>({});
+
+  // Carica giacenza per tonalità (solo prodotti gestiti a magazzino, es. Biomag MgO)
+  useEffect(() => {
+    if (!prodotto?.magazzino || !prodotto?.magazzinoProductType) {
+      setStockMap({});
+      return;
+    }
+    (async () => {
+      const { data, error } = await supabase
+        .from("inventory")
+        .select("color, quantity_sqm, movement_type")
+        .eq("product_type", prodotto.magazzinoProductType);
+      if (error || !data) { setStockMap({}); return; }
+      const map: Record<string, number> = {};
+      for (const r of data) {
+        const k = String(r.color || "").trim();
+        if (!k) continue;
+        const q = Number(r.quantity_sqm) || 0;
+        const sign = r.movement_type === "OUT" ? -1 : 1;
+        map[k] = (map[k] || 0) + sign * q;
+      }
+      setStockMap(map);
+    })();
+  }, [prodotto?.id, prodotto?.magazzino, prodotto?.magazzinoProductType]);
+
+  const stockFor = (nome: string) => {
+    const k = String(nome || "").trim();
+    if (!k) return null;
+    // match case-insensitive
+    const found = Object.keys(stockMap).find(x => x.toLowerCase() === k.toLowerCase());
+    return found ? stockMap[found] : 0;
+  };
 
   const selectProdotto = (p: any) => {
     setProdotto(p);
@@ -1016,6 +1049,15 @@ export default function CreaPreventivo() {
   const delTon = (id:number) => setTonalita(t => t.filter(x => x.id!==id));
   const tonMqTot = tonalita.reduce((s,x) => s + (Number(x.mq)||0), 0);
 
+  // Tonalità che superano la giacenza (solo per prodotti a magazzino)
+  const overstockRows = prodotto?.magazzino
+    ? tonalita.filter(tn => {
+        const av = stockFor(tn.nome);
+        return av !== null && Number(tn.mq) > av;
+      })
+    : [];
+  const hasOverstock = overstockRows.length > 0;
+
   // Auto-sync: i mq totali del preventivo seguono la somma delle tonalità
   useEffect(() => {
     if (tonalita.length > 0 && tonMqTot > 0 && tonMqTot !== mqPrev) {
@@ -1023,6 +1065,7 @@ export default function CreaPreventivo() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tonMqTot, tonalita.length]);
+
 
   // INTESTAZIONE
   const [lingua, setLingua] = useState("IT");
