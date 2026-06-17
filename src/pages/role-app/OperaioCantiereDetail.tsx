@@ -15,6 +15,20 @@ const formatExactTime = (time?: string | null) => {
   return time.split('.')[0].slice(0, 8);
 };
 
+const formatDuration = (h?: number | null) => {
+  if (h == null || isNaN(h)) return '—';
+  if (h < 0.1) {
+    const s = Math.round(h * 3600);
+    return `${s} s`;
+  }
+  if (h < 1) {
+    const m = h * 60;
+    if (m < 10) return `${m.toFixed(1)} min`;
+    return `${Math.round(m)} min`;
+  }
+  return `${h.toFixed(2)} h`;
+};
+
 const OperaioCantiereDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -218,7 +232,7 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
               <span className="text-[#6B6258] flex flex-wrap gap-x-3 gap-y-1 sm:justify-end">
                 <span>Inizio {formatExactTime(l.start_time)}</span>
                 <span>Fine {formatExactTime(l.end_time)}</span>
-                <span>{l.end_time ? `${Number(l.hours_worked).toFixed(2)} h` : 'in corso'}</span>
+                <span>{l.end_time ? formatDuration(Number(l.hours_worked)) : 'in corso'}</span>
               </span>
             </div>
           ))}
