@@ -813,7 +813,11 @@ const AdminOverview = () => {
         </Panel>
 
         <Panel title={`Settimana · ${format(weekDays[0], 'd MMM', { locale: it })} → ${format(weekDays[6], 'd MMM', { locale: it })}`}
-          right={<CalIcon className="w-3.5 h-3.5" style={{ color: '#9A9890' }} />} className="lg:col-span-3">
+          right={
+            <button onClick={() => navigate('/admin/planner')} className="text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded hover:bg-muted/50 flex items-center gap-1" style={{ color: '#3B82F6' }}>
+              <CalIcon className="w-3 h-3" /> Apri Planner Operativo →
+            </button>
+          } className="lg:col-span-3">
           <div className="grid grid-cols-7 gap-1">
             {weekDays.map(d => {
               const key = format(d, 'yyyy-MM-dd');
