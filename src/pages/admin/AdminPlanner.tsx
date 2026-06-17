@@ -249,30 +249,100 @@ export default function AdminPlanner() {
   };
 
   // ────────────── Views ──────────────
+  // Google-Calendar style time grid (06:00 → 22:00)
+  const HOUR_START = 6;
+  const HOUR_END = 22;
+  const HOUR_PX = 48;
+  const HOURS = Array.from({ length: HOUR_END - HOUR_START }, (_, i) => HOUR_START + i);
+
+  const TimeColumn = ({ day, assignsByDay }: { day: Date; assignsByDay: Assignment[] }) => {
+    const dayStr = format(day, 'yyyy-MM-dd');
+    const isToday = format(new Date(), 'yyyy-MM-dd') === dayStr;
+    const now = new Date();
+    const nowOffset = isToday ? (now.getHours() + now.getMinutes() / 60 - HOUR_START) * HOUR_PX : -1;
+    return (
+      <div className="relative border-l" style={{ height: HOURS.length * HOUR_PX }}>
+        {/* Hour grid lines + clickable slots */}
+        {HOURS.map((h) => (
+          <button
+            key={h}
+            onClick={() => setAssignDialog({ start_date: dayStr, end_date: dayStr } as any)}
+            className="absolute left-0 right-0 border-t border-border/60 hover:bg-blue-50/60 transition-colors"
+            style={{ top: (h - HOUR_START) * HOUR_PX, height: HOUR_PX }}
+            title={`Crea evento ${dayStr} ${String(h).padStart(2, '0')}:00`}
+          />
+        ))}
+        {/* Now indicator */}
+        {nowOffset >= 0 && nowOffset <= HOURS.length * HOUR_PX && (
+          <div className="absolute left-0 right-0 z-20 pointer-events-none" style={{ top: nowOffset }}>
+            <div className="h-px bg-red-500" />
+            <div className="absolute -left-1 -top-1 w-2 h-2 rounded-full bg-red-500" />
+          </div>
+        )}
+        {/* Events */}
+        {assignsByDay.map((a, idx) => {
+          const c = crews.find((x) => x.id === a.crew_id);
+          if (!c) return null;
+          const s = sites.find((x) => x.id === a.site_id);
+          const startH = 8; // default 08:00
+          const dur = Math.min(HOUR_END - startH, Number(a.hours_per_day || 8));
+          const top = (startH - HOUR_START) * HOUR_PX;
+          const height = dur * HOUR_PX - 2;
+          const overlapping = assignsByDay.length;
+          const width = overlapping > 1 ? `calc(${100 / overlapping}% - 2px)` : 'calc(100% - 4px)';
+          const left = overlapping > 1 ? `calc(${(100 / overlapping) * idx}% + 1px)` : '2px';
+          return (
+            <button
+              key={a.id}
+              onClick={(e) => { e.stopPropagation(); s && setSelectedSite(s); }}
+              className="absolute rounded px-1.5 py-1 text-left overflow-hidden shadow-sm hover:shadow-md transition-shadow z-10"
+              style={{ top, height, left, width, background: c.color + 'E6', color: 'white', borderLeft: `3px solid ${c.color}` }}
+            >
+              <div className="text-[10px] font-bold uppercase truncate">{c.name}</div>
+              <div className="text-[9px] opacity-90 truncate">{s?.name || s?.city}</div>
+              <div className="text-[9px] opacity-75">{String(startH).padStart(2, '0')}:00 — {String(startH + dur).padStart(2, '0')}:00</div>
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
   const renderSettimana = () => {
     const ws = startOfWeek(cursor, { weekStartsOn: 1 });
     const days = eachDayOfInterval({ start: ws, end: endOfWeek(cursor, { weekStartsOn: 1 }) });
-    const activeSites = filteredSites.filter((s) => filteredAssignments.some((a) => a.site_id === s.id && parseISO(a.start_date) <= days[6] && parseISO(a.end_date) >= days[0]));
-    if (!activeSites.length) return <EmptyState />;
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
     return (
-      <div className="overflow-auto">
-        <div className="min-w-[900px]">
-          <div className="grid grid-cols-[200px_repeat(7,minmax(0,1fr))] gap-px bg-border">
-            <div className="bg-muted/50 p-2 text-[10px] uppercase font-bold tracking-wider">Cantiere</div>
-            {days.map((d) => (
-              <div key={d.toISOString()} className="bg-muted/50 p-2 text-center">
-                <div className="text-[9px] uppercase text-muted-foreground font-semibold">{format(d, 'EEE', { locale: it })}</div>
-                <div className="text-sm font-bold">{format(d, 'd')}</div>
+      <div className="bg-white border rounded-md overflow-hidden">
+        {/* Header */}
+        <div className="grid grid-cols-[60px_repeat(7,minmax(0,1fr))] border-b sticky top-0 bg-white z-10">
+          <div />
+          {days.map((d) => {
+            const ds = format(d, 'yyyy-MM-dd');
+            const isToday = ds === todayStr;
+            return (
+              <div key={ds} className={`p-2 text-center border-l ${isToday ? 'bg-blue-50' : ''}`}>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{format(d, 'EEE', { locale: it })}</div>
+                <div className={`text-lg font-bold ${isToday ? 'text-blue-600' : ''}`}>{format(d, 'd')}</div>
               </div>
-            ))}
-            {activeSites.map((s) => (
-              <SiteRow key={s.id} site={s} days={days} customerName={customerName(s.customer_id)}
-                assignments={filteredAssignments.filter((a) => a.site_id === s.id)}
-                crews={crews} crewMembers={crewMembers} workers={workers}
-                onOpen={() => setSelectedSite(s)}
-                onAddAssignment={(start_date) => setAssignDialog({ site_id: s.id, start_date })}
-              />
-            ))}
+            );
+          })}
+        </div>
+        {/* Body */}
+        <div className="overflow-auto max-h-[70vh]">
+          <div className="grid grid-cols-[60px_repeat(7,minmax(0,1fr))]">
+            {/* Hours gutter */}
+            <div className="relative" style={{ height: HOURS.length * HOUR_PX }}>
+              {HOURS.map((h) => (
+                <div key={h} className="absolute left-0 right-0 text-[10px] text-muted-foreground text-right pr-1.5 -mt-1.5" style={{ top: (h - HOUR_START) * HOUR_PX }}>
+                  {String(h).padStart(2, '0')}:00
+                </div>
+              ))}
+            </div>
+            {days.map((d) => {
+              const dayAssigns = filteredAssignments.filter((a) => assignmentContainsDay(a, d));
+              return <TimeColumn key={d.toISOString()} day={d} assignsByDay={dayAssigns} />;
+            })}
           </div>
         </div>
       </div>
@@ -280,39 +350,31 @@ export default function AdminPlanner() {
   };
 
   const renderGiorno = () => {
-    const dayStr = format(cursor, 'yyyy-MM-dd');
-    const todays = filteredAssignments.filter((a) => assignmentContainsDay(a, cursor));
-    const sitesToday = filteredSites.filter((s) => todays.some((a) => a.site_id === s.id));
-    if (!sitesToday.length) return <EmptyState msg="Nessun cantiere attivo oggi" />;
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const ds = format(cursor, 'yyyy-MM-dd');
+    const isToday = ds === todayStr;
+    const dayAssigns = filteredAssignments.filter((a) => assignmentContainsDay(a, cursor));
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-        {sitesToday.map((s) => {
-          const sAssign = todays.filter((a) => a.site_id === s.id);
-          return (
-            <DroppableCell key={s.id} id={`site:${s.id}`} data={{ type: 'site', site_id: s.id }} className="bg-white border rounded-md p-3 hover:shadow-md transition-shadow">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="cursor-pointer flex-1 min-w-0" onClick={() => setSelectedSite(s)}>
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <PriorityDot priority={s.priority} />
-                    <span className="font-bold text-sm truncate">📍 {s.name || s.city || '—'}</span>
-                  </div>
-                  {customerName(s.customer_id) && <div className="text-xs text-muted-foreground truncate">🏠 {customerName(s.customer_id)}</div>}
+      <div className="bg-white border rounded-md overflow-hidden">
+        <div className="grid grid-cols-[60px_1fr] border-b sticky top-0 bg-white z-10">
+          <div />
+          <div className={`p-2 text-center border-l ${isToday ? 'bg-blue-50' : ''}`}>
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{format(cursor, 'EEEE', { locale: it })}</div>
+            <div className={`text-lg font-bold ${isToday ? 'text-blue-600' : ''}`}>{format(cursor, 'd MMMM', { locale: it })}</div>
+          </div>
+        </div>
+        <div className="overflow-auto max-h-[70vh]">
+          <div className="grid grid-cols-[60px_1fr]">
+            <div className="relative" style={{ height: HOURS.length * HOUR_PX }}>
+              {HOURS.map((h) => (
+                <div key={h} className="absolute left-0 right-0 text-[10px] text-muted-foreground text-right pr-1.5 -mt-1.5" style={{ top: (h - HOUR_START) * HOUR_PX }}>
+                  {String(h).padStart(2, '0')}:00
                 </div>
-                <StatusPill status={s.status} />
-              </div>
-              <div className="space-y-1.5">
-                {sAssign.map((a) => {
-                  const c = crews.find((x) => x.id === a.crew_id);
-                  return c ? <DraggableAssignment key={a.id} assignment={a} crew={c} members={crewMembers} workers={workers} /> : null;
-                })}
-              </div>
-              <div className="mt-2 pt-2 border-t flex items-center justify-between text-[10px] text-muted-foreground">
-                <span>⏱ {formatDeadline(s.planned_end_date)}</span>
-                <Button size="sm" variant="ghost" className="h-6 text-[10px]" onClick={() => setAssignDialog({ site_id: s.id, start_date: dayStr })}><Plus className="w-3 h-3 mr-1" />Squadra</Button>
-              </div>
-            </DroppableCell>
-          );
-        })}
+              ))}
+            </div>
+            <TimeColumn day={cursor} assignsByDay={dayAssigns} />
+          </div>
+        </div>
       </div>
     );
   };
