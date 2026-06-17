@@ -550,7 +550,9 @@ export type Database = {
           product_model: string | null
           project_name: string | null
           province: string | null
+          quote_id: string | null
           region: string | null
+          salesperson_id: string | null
           start_date: string | null
           status: string
           tipologia: string | null
@@ -602,7 +604,9 @@ export type Database = {
           product_model?: string | null
           project_name?: string | null
           province?: string | null
+          quote_id?: string | null
           region?: string | null
+          salesperson_id?: string | null
           start_date?: string | null
           status?: string
           tipologia?: string | null
@@ -654,7 +658,9 @@ export type Database = {
           product_model?: string | null
           project_name?: string | null
           province?: string | null
+          quote_id?: string | null
           region?: string | null
+          salesperson_id?: string | null
           start_date?: string | null
           status?: string
           tipologia?: string | null
@@ -676,6 +682,20 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "construction_sites_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "construction_sites_salesperson_id_fkey"
+            columns: ["salesperson_id"]
+            isOneToOne: false
+            referencedRelation: "salespeople"
             referencedColumns: ["id"]
           },
         ]
@@ -1797,6 +1817,7 @@ export type Database = {
           delivery_time: string | null
           id: string
           items: Json | null
+          lead_id: string | null
           notes: string | null
           payment_terms_text: string | null
           payment_type: string | null
@@ -1806,6 +1827,7 @@ export type Database = {
           site_address: string | null
           site_city: string | null
           site_country: string | null
+          site_id: string | null
           site_postal_code: string | null
           site_province: string | null
           status: string
@@ -1830,6 +1852,7 @@ export type Database = {
           delivery_time?: string | null
           id?: string
           items?: Json | null
+          lead_id?: string | null
           notes?: string | null
           payment_terms_text?: string | null
           payment_type?: string | null
@@ -1839,6 +1862,7 @@ export type Database = {
           site_address?: string | null
           site_city?: string | null
           site_country?: string | null
+          site_id?: string | null
           site_postal_code?: string | null
           site_province?: string | null
           status?: string
@@ -1863,6 +1887,7 @@ export type Database = {
           delivery_time?: string | null
           id?: string
           items?: Json | null
+          lead_id?: string | null
           notes?: string | null
           payment_terms_text?: string | null
           payment_type?: string | null
@@ -1872,6 +1897,7 @@ export type Database = {
           site_address?: string | null
           site_city?: string | null
           site_country?: string | null
+          site_id?: string | null
           site_postal_code?: string | null
           site_province?: string | null
           status?: string
@@ -1898,6 +1924,20 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
             referencedColumns: ["id"]
           },
         ]

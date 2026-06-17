@@ -123,6 +123,14 @@ export default function AdminPlanner() {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
 
+  // Server-side KPIs (count + sum) — affidabili, indipendenti dai filtri client
+  const [serverKpis, setServerKpis] = useState({
+    sitesActive: 0, sitesCompleted: 0, sitesOverdue: 0,
+    leadsTotal: 0, leadsLast30: 0,
+    quotesSent: 0, quotesAccepted: 0, quotesValue: 0, activeSitesValue: 0,
+    receivables: 0, payables: 0, paymentsOverdue: 0, commissionsAccrued: 0,
+  });
+
   const [crewDialog, setCrewDialog] = useState(false);
   const [assignDialog, setAssignDialog] = useState<null | { crew_id?: string; site_id?: string; start_date?: string }>(null);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
@@ -144,7 +152,65 @@ export default function AdminPlanner() {
     setCrews(cs || []); setCrewMembers(cm || []); setAssignments(ca || []);
     setSites(st || []); setWorkers(wk || []); setCustomers(cu || []);
   }, []);
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+
+  const fetchServerKpis = useCallback(async () => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const since30 = format(addDays(new Date(), -30), 'yyyy-MM-dd');
+    const ACTIVE = ['attivo', 'in_corso', 'in_progress', 'pianificato', 'planned', 'da_iniziare'];
+    const DONE = ['completato', 'completed', 'chiuso'];
+    const ACCEPTED = ['accettato', 'accepted', 'approved', 'approvato'];
+    const SENT = ['inviato', 'sent', 'inviata', 'accettato', 'accepted'];
+
+    const safe = async <T,>(p: Promise<T>, fb: T): Promise<T> => { try { return await p; } catch { return fb; } };
+
+    const head = (tbl: string, build?: (q: any) => any) => safe(
+      (async () => {
+        let q: any = (supabase as any).from(tbl).select('*', { count: 'exact', head: true });
+        if (build) q = build(q);
+        const { count } = await q;
+        return count || 0;
+      })(), 0);
+
+    const [
+      sitesActive, sitesCompleted, sitesOverdue,
+      leadsTotal, leadsLast30,
+      quotesSent, quotesAccepted,
+    ] = await Promise.all([
+      head('construction_sites', (q) => q.in('status', ACTIVE)),
+      head('construction_sites', (q) => q.in('status', DONE)),
+      head('construction_sites', (q) => q.lt('planned_end_date', today).not('status', 'in', `(${DONE.join(',')})`)),
+      head('leads'),
+      head('leads', (q) => q.gte('created_at', since30)),
+      head('quotes', (q) => q.in('status', SENT)),
+      head('quotes', (q) => q.in('status', ACCEPTED)),
+    ]);
+
+    // Somme valore: quotes accettati + commissioni + crediti + debiti
+    const sumCol = async (tbl: string, col: string, build?: (q: any) => any): Promise<number> => safe(
+      (async () => {
+        let q: any = (supabase as any).from(tbl).select(col);
+        if (build) q = build(q);
+        const { data } = await q;
+        return (data || []).reduce((acc: number, r: any) => acc + Number(r[col] || 0), 0);
+      })(), 0);
+
+    const [quotesValue, commissionsAccrued, receivables, payables, paymentsOverdue] = await Promise.all([
+      sumCol('quotes', 'total_amount', (q) => q.in('status', ACCEPTED)),
+      sumCol('commissions', 'amount', (q) => q.eq('status', 'da_liquidare')),
+      sumCol('commercial_invoices', 'total_amount', (q) => q.is('paid_date', null)),
+      sumCol('site_expenses', 'amount', (q) => q.eq('is_paid', false)),
+      sumCol('payment_schedules', 'amount', (q) => q.lt('due_date', today).eq('is_paid', false)),
+    ]);
+
+    setServerKpis({
+      sitesActive, sitesCompleted, sitesOverdue,
+      leadsTotal, leadsLast30,
+      quotesSent, quotesAccepted, quotesValue, activeSitesValue: quotesValue,
+      receivables, payables, paymentsOverdue, commissionsAccrued,
+    });
+  }, []);
+
+  useEffect(() => { fetchAll(); fetchServerKpis(); }, [fetchAll, fetchServerKpis]);
 
   const customerName = (id?: string | null) => {
     if (!id) return '';
@@ -189,8 +255,13 @@ export default function AdminPlanner() {
     const sat = crews.length
       ? Math.round(crews.reduce((acc, c) => acc + crewSaturation(c, assignments, ws, we).pct, 0) / crews.length)
       : 0;
-    return { active: activeSites.length, workersToday: workersToday.size, freeCrews, overdue, weekHours: Math.round(weekHours), sat };
-  }, [sites, assignments, crews, crewMembers]);
+    return {
+      active: Math.max(activeSites.length, serverKpis.sitesActive),
+      workersToday: workersToday.size, freeCrews,
+      overdue: Math.max(overdue, serverKpis.sitesOverdue),
+      weekHours: Math.round(weekHours), sat,
+    };
+  }, [sites, assignments, crews, crewMembers, serverKpis]);
 
   const conflicts = useMemo(() => computeConflicts(assignments, crews, crewMembers, sites), [assignments, crews, crewMembers, sites]);
 
@@ -555,11 +626,21 @@ export default function AdminPlanner() {
         {/* KPI */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
           <KPI icon={HardHat} label="Cantieri attivi" value={kpis.active} color="#3B82F6" />
+          <KPI icon={HardHat} label="Completati" value={serverKpis.sitesCompleted} color="#16A34A" />
+          <KPI icon={AlertTriangle} label="In ritardo" value={kpis.overdue} color="#DC2626" />
           <KPI icon={UsersIcon} label="Operai oggi" value={kpis.workersToday} color="#16A34A" />
           <KPI icon={Layers} label="Squadre libere" value={kpis.freeCrews} color="#8C7B6B" />
-          <KPI icon={AlertTriangle} label="In ritardo" value={kpis.overdue} color="#DC2626" />
           <KPI icon={Clock} label="Ore settimana" value={kpis.weekHours} color="#F59E0B" />
           <KPI icon={TrendingUp} label="Saturazione" value={`${kpis.sat}%`} color="#A855F7" />
+          <KPI icon={UsersIcon} label="Lead totali" value={serverKpis.leadsTotal} color="#0EA5E9" />
+          <KPI icon={UsersIcon} label="Lead 30gg" value={serverKpis.leadsLast30} color="#0EA5E9" />
+          <KPI icon={Layers} label="Preventivi inviati" value={serverKpis.quotesSent} color="#6366F1" />
+          <KPI icon={Layers} label="Preventivi accettati" value={serverKpis.quotesAccepted} color="#16A34A" />
+          <KPI icon={TrendingUp} label="Valore venduto" value={`€${Math.round(serverKpis.quotesValue).toLocaleString('it-IT')}`} color="#16A34A" />
+          <KPI icon={TrendingUp} label="Crediti" value={`€${Math.round(serverKpis.receivables).toLocaleString('it-IT')}`} color="#0EA5E9" />
+          <KPI icon={AlertTriangle} label="Debiti" value={`€${Math.round(serverKpis.payables).toLocaleString('it-IT')}`} color="#DC2626" />
+          <KPI icon={AlertTriangle} label="Scaduti" value={`€${Math.round(serverKpis.paymentsOverdue).toLocaleString('it-IT')}`} color="#B91C1C" />
+          <KPI icon={TrendingUp} label="Commissioni" value={`€${Math.round(serverKpis.commissionsAccrued).toLocaleString('it-IT')}`} color="#A855F7" />
         </div>
 
         {/* Toolbar */}

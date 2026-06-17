@@ -1,168 +1,104 @@
-# Planner Operativo Cantieri
 
-Trasformo la card calendario statica della dashboard admin in un Planner Operativo completo con drag & drop, gestione squadre, conflitti, Gantt e KPI.
+# Audit CRM & ricablaggio dati
 
----
-
-## 1) Database (una migrazione)
-
-Nuove tabelle:
-
-- **`crews`** — squadre operative
-  - `name` (es. "Alpha"), `color` (hex per badge), `max_workers` (capienza), `lead_worker_id` (capocantiere), `notes`, `active`
-- **`crew_members`** — operai dentro una squadra (associazione corrente, non storica)
-  - `crew_id`, `worker_id`, `role` (capo/operaio), UNIQUE(worker_id) → un operaio in una sola squadra alla volta
-- **`crew_assignments`** — assegnazione squadra → cantiere per intervallo di date
-  - `crew_id`, `site_id`, `start_date`, `end_date`, `hours_per_day` (default 8), `notes`, `created_by`
-  - Indici su (site_id, start_date), (crew_id, start_date)
-
-Riuso esistenti:
-- `construction_sites` ha già `priority`, `planned_start_date/end_date`, `estimated_hours`, `latitude/longitude`, status, ecc.
-- `site_workers` rimane per assegnazioni storiche/dirette operaio-cantiere (compatibilità). Il planner lavora su squadre, ma può anche assegnare operai singoli tramite spostamento tra squadre.
-- `workers` per anagrafica.
-
-RLS: admin full access, commerciali/operai SELECT su crews e crew_assignments dei propri cantieri (pattern già in uso). GRANT a `authenticated` e `service_role`.
+Obiettivo: trasformare il CRM in un sistema unico dove ogni inserimento aggiorna automaticamente tutto. Lavoro in **5 fasi** con approvazione tra una e l'altra (troppo grande per un solo round).
 
 ---
 
-## 2) Pagina nuova: `AdminPlanner`
+## Stato attuale (verificato in DB ora)
 
-Nuova rotta `/admin/planner` (icona nel sidebar), e **la card calendario in dashboard diventa un widget di anteprima** che linka al planner.
-
-Layout pagina:
-
-```text
-┌──────────────────────────────────────────────────────────┐
-│ KPI BAR: Cantieri attivi · Operai oggi · Squadre libere  │
-│          Cantieri in ritardo · Ore settimana · Saturaz.  │
-├──────────────────────────────────────────────────────────┤
-│ [Giorno|Settimana|Mese|Anno|Gantt|Carico] [< oggi >]     │
-│ Filtri: Squadra ▾ Operaio ▾ Cliente ▾ Stato ▾ Priorità ▾ │
-│         Zona ▾ Capocantiere ▾                            │
-├──────────────────────────────────────────────────────────┤
-│  AREA PLANNER (vista corrente)                           │
-└──────────────────────────────────────────────────────────┘
-```
-
-### Viste
-
-1. **Giorno** — colonne = cantieri attivi quel giorno; ogni colonna lista le squadre assegnate (card squadra droppabile)
-2. **Settimana** — griglia 7 giorni × cantieri (riga); celle contengono badge squadra
-3. **Mese** — griglia tipo calendario; ogni giorno mostra max 3 squadre+contatore
-4. **Anno** — heatmap mensile con conteggio cantieri/giorno
-5. **Gantt** — righe = cantieri, asse X = giorni; barre `crew_assignments` con resize/drag (sposta date, allunga durata)
-6. **Carico squadre** — per ogni squadra: progress bar saturazione (ore settimana / capacità), n. cantieri attivi, giorni occupati, capacità residua
-
-### Card cantiere (vista Giorno/Settimana)
-
-```
-📍 Piacenza                      🔴 Alta
-🏠 Carla Romano
-👥 Squadra Alpha (3)
-   • Mario Rossi
-   • Luca Bianchi  
-   • Andrea Verdi
-⏱ Scade tra 3 giorni · 📈 65%   🟡
-```
-
-Stato (Da iniziare/In corso/Pausa/Completato/Bloccato) come pill colorata top-right.
-Click → drawer laterale con tab: Dettaglio · Chat · Foto · Documenti · Ore · Materiali · Attrezzatura. Pulsante "Apri pagina completa" naviga a `AdminCantiereDetail`.
-
-### Drag & drop (dnd-kit)
-
-Già in `package.json` controllo se presente, altrimenti `bun add @dnd-kit/core @dnd-kit/sortable`.
-
-Casi gestiti:
-- **Squadra tra giorni**: drag card squadra da giorno A → giorno B (Settimana/Mese) → update `crew_assignments.start_date/end_date` shift
-- **Squadra tra cantieri**: drag card squadra da cantiere X → cantiere Y → cambia `site_id`
-- **Più squadre stesso cantiere**: la card cantiere accetta più drop, mostra le squadre stackate
-- **Operaio tra squadre**: drag chip operaio da Squadra Alpha → Squadra Beta → update `crew_members.crew_id` (e check unique)
-- **Gantt resize**: handle ai bordi barra → aggiorna `start_date`/`end_date`
-
-Ottimistico via React Query mutations + rollback su errore.
-
-### Gestione conflitti
-
-Calcolata client-side dopo ogni mutation, prima del commit:
-
-| Conflitto | Severità | Check |
+| Modulo | Righe DB | Note |
 |---|---|---|
-| Operaio in 2 cantieri stesso giorno | 🔴 | join crew_assignments overlap su giorno + crew_members |
-| Squadra > max_workers | 🟡 | count crew_members > crews.max_workers |
-| Cantiere non finirà entro deadline | 🟡 | ore_residue > ore_disponibili_dai_assignments fino a planned_end_date |
-| Cantiere senza assegnazioni nei prossimi N giorni | 🔴 | nessun crew_assignment attivo |
+| `construction_sites` | 1 (status `attivo`) | Il KPI "Cantieri attivi" del Planner mostra 0 → **bug di lettura/RLS, non di logica filtro** |
+| `quotes` | 0 | nessun preventivo collegato a cantieri |
+| `leads` | 1027 | non collegati a quotes/sites |
+| `crews` / `crew_assignments` | 0 / 0 | KPI a 0 è corretto, mancano dati |
+| `commissions` | trigger esiste su `quotes.status='accepted'` ma nessun quote → 0 commissioni |
+| Debiti/crediti | tabelle `commercial_invoices`, `payment_schedules`, `supplier_payments` esistono ma scollegate | nessun KPI le legge |
 
-Badge: 🟢/🟡/🔴 sulla card + toast warning + lista conflitti in pannello laterale.
-
-### Automazioni intelligenti (pannello "Suggerimenti")
-
-Calcolo client-side:
-- Squadre senza assignment nei prossimi 7gg → "Disponibile"
-- Operai senza crew → "Da assegnare"
-- Cantieri in ritardo → propone squadra libera più vicina geograficamente (se lat/lng presenti)
-- Sovraccarichi → segnala squadra > 100% saturazione
-
-### Filtri rapidi
-
-Stato globale via `useState` + `useMemo` filter su data fetched. Filtri: squadra (chip multi), operaio, cliente (lookup), stato cantiere, priorità, zona (regione/provincia da indirizzo cantiere), capocantiere.
-
-### KPI bar (top)
-
-Query React Query con `select count`:
-- Cantieri attivi (status IN ...)
-- Operai al lavoro oggi (distinct worker da crew_assignments oggi)
-- Squadre libere oggi
-- Cantieri in ritardo (planned_end_date < now AND status != completato)
-- Ore totali settimana (sum hours_per_day × giorni assignment)
-- Saturazione media squadre
+Quindi i problemi sono **due famiglie**: (A) i dati esistono ma le pagine non li leggono (RLS/query sbagliate), (B) i moduli non si attivano a vicenda (manca la catena lead→quote→site→commission→invoice→payment).
 
 ---
 
-## 3) File da creare
+## Fase 1 — Diagnosi & quick fix KPI (questa sessione)
 
-```
-src/pages/admin/AdminPlanner.tsx                    # pagina principale + KPI + filtri + switch viste
-src/components/admin/planner/PlannerDayView.tsx
-src/components/admin/planner/PlannerWeekView.tsx
-src/components/admin/planner/PlannerMonthView.tsx
-src/components/admin/planner/PlannerYearView.tsx
-src/components/admin/planner/PlannerGanttView.tsx
-src/components/admin/planner/PlannerLoadView.tsx    # carico squadre
-src/components/admin/planner/SiteCard.tsx           # card cantiere droppable
-src/components/admin/planner/CrewChip.tsx           # squadra draggable
-src/components/admin/planner/WorkerPill.tsx         # operaio draggable
-src/components/admin/planner/SiteDetailDrawer.tsx   # drawer laterale (riusa parti AdminCantiereDetail)
-src/components/admin/planner/PlannerFilters.tsx
-src/components/admin/planner/PlannerKPIBar.tsx
-src/components/admin/planner/ConflictsPanel.tsx
-src/components/admin/planner/SuggestionsPanel.tsx
-src/components/admin/planner/CrewManagerDialog.tsx  # crea/modifica squadre
-src/lib/planner.ts                                  # helpers: overlap, conflicts, saturation, format scadenza
-supabase/migrations/<new>.sql
-```
+Obiettivo: far comparire dati reali ovunque, **senza nuove tabelle**.
 
-File da modificare:
-- `src/pages/admin/AdminOverview.tsx` — la card calendario diventa "Planner di settimana (anteprima)" con CTA "Apri Planner Operativo"
-- `src/components/admin/AdminSidebar.tsx` — voce "Planner" con icona `CalendarRange`
-- `src/App.tsx` — rotta `/admin/planner`
+1. Verifico RLS su `construction_sites`, `leads`, `quotes`, `crew_assignments`, `commissions`, `commercial_invoices` — l'admin loggato deve poter `SELECT` tutto. Sistemo le policy che bloccano.
+2. Riscrivo i 6 KPI del **Planner** e i KPI della **AdminOverview** usando query reali (count + sum), normalizzando i valori di `status` (`attivo`, `in_corso`, `pianificato`, `completato`, ecc.).
+3. Aggiungo i KPI mancanti richiesti:
+   - Cantieri completati / in ritardo
+   - Lead ricevuti (totale + ultimi 30gg)
+   - Preventivi inviati / accettati / valore
+   - Valore cantieri attivi (somma `quotes.total_amount` dei quote accettati linkati al cantiere)
+   - Crediti da incassare, Debiti fornitori, Pagamenti scaduti, Commissioni maturate
+
+Output: dashboard admin e planner con numeri corretti. Niente modifiche di schema.
 
 ---
 
-## 4) Cosa NON tocco
+## Fase 2 — Catena lead → preventivo → cantiere → commissione (migrazione + trigger)
 
-- Calendario operai (`AdminAppointments`, `OperaioCalendario`) — separato, resta com'è
-- Pagine cantiere dettaglio — il drawer richiama dati esistenti
-- RLS pattern già consolidato — replicato 1:1
-- i18n — modulo admin è in italiano come oggi
+Una sola migrazione:
+
+1. Colonne mancanti per chiudere il cerchio:
+   - `quotes.lead_id` (FK leads)
+   - `quotes.site_id` (FK construction_sites, popolato all'accettazione)
+   - `construction_sites.quote_id` (FK quotes)
+   - `construction_sites.salesperson_id` (FK salespeople)
+   - `construction_sites.lead_id` (FK leads)
+2. Trigger `quote_accepted_create_site`: quando `quotes.status` diventa `accettato`/`accepted` e non esiste già un cantiere collegato → crea `construction_sites` con cliente, commerciale, valore previsto, e collega `quotes.site_id`. (Il trigger commissioni esiste già e continua a funzionare.)
+3. Trigger `lead_won_creates_quote_draft`: quando `leads.status` diventa `vinto`/`won` → crea bozza `quotes` collegata (opzionale, solo se non già presente).
+4. Backfill: per i quote già accettati senza site, creo il cantiere; per i lead vinti senza quote, niente automazione retroattiva (evito spam).
 
 ---
 
-## 5) Note tecniche
+## Fase 3 — Contabilità (debiti / crediti / pagamenti)
 
-- DnD: `@dnd-kit/core` (mobile-friendly, accessibile) — se non installato lo aggiungo
-- Date: `date-fns` (già usato altrove nel CRM)
-- Gantt: implementazione custom con grid CSS (no librerie pesanti), barre assolute posizionate per giorno
-- Realtime: opzionale fase 2 (subscribe a `crew_assignments`); per ora React Query refetch on mutation
-- Performance: query con range filter per finestra visibile (es. ±1 mese)
+Una migrazione che riusa/estende l'esistente:
 
-Procedo con migrazione + codice?
+- **Crediti**: vista `customer_receivables` che unisce `quotes` accettati + `commercial_invoices` + `payment_schedules` con stato calcolato (`da_incassare` / `parziale` / `incassato` / `scaduto`).
+- **Debiti**: vista `supplier_payables` da `site_materials` + `site_expenses` + `supplier_payments` con stesso stato calcolato.
+- Trigger: quando si inserisce un `supplier_payment` o un `payment_schedule.paid_amount`, ricalcola lo stato sul record padre.
+- Pagina **Contabilità** unica (`/admin/contabilita`) con 3 tab: Crediti · Debiti · Scaduti. KPI dashboard collegati a queste viste.
+
+---
+
+## Fase 4 — Ricablaggio pagine ruolo (Operaio · Commerciale · Ibrido)
+
+Niente migrazione, solo codice:
+
+- **Dashboard Operaio**: cantieri assegnati (join `site_workers` + `crew_members`), ore totali (`site_work_logs`), foto, segnalazioni aperte.
+- **Dashboard Commerciale**: lead suoi, preventivi inviati/accettati, cantieri generati (`construction_sites.salesperson_id`), commissioni maturate/pagate.
+- **Ibrido**: dashboard mista in base ai ruoli in `user_roles` (può avere `admin`+`commerciale`+`operaio`).
+- Pulsante "Inizia turno" → già scrive in `site_work_logs`; aggiungo refresh delle KPI admin via React Query invalidation.
+
+---
+
+## Fase 5 — Permessi (RLS coerente per ruolo)
+
+Audit finale RLS:
+
+| Tabella | Admin | Commerciale | Operaio |
+|---|---|---|---|
+| leads | full | solo `assigned_*` = lui | — |
+| quotes | full | solo creati da lui | — |
+| construction_sites | full | solo `salesperson_id` = lui | solo se in `site_workers` o `crew_members` |
+| site_work_logs | full | — | solo i propri |
+| commissions | full | solo `user_id` = lui | — |
+| commercial_invoices / supplier_payments | full | read se collegate ai suoi cantieri | — |
+
+---
+
+## Cosa NON tocco
+
+- Layout/visual delle pagine esistenti (solo dati).
+- Pagine pubbliche del sito Kalēa.
+- Sistema preventivi PDF, chatbot, mappa — restano com'è.
+- Localizzazione (modulo admin resta in italiano).
+
+---
+
+## Domanda prima di iniziare
+
+Procedo con **Fase 1 (quick fix KPI + RLS)** subito, poi torno con il riepilogo prima di lanciare la migrazione di Fase 2? Oppure preferisci che parta direttamente con la pipeline lead→quote→cantiere (Fase 2) perché è quella che ti blocca di più?
