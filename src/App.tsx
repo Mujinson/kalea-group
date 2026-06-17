@@ -220,8 +220,8 @@ const App = () => (
                 {/* Italian slugs (used in sidebar) */}
                 <Route path="vendite" element={<AdminSales />} />
                 <Route path="preventivi" element={<AdminQuotes />} />
-                <Route path="preventivi/nuovo" element={<AdminQuoteCreate />} />
-                <Route path="preventivi/modifica" element={<AdminQuoteCreate />} />
+                <Route path="preventivi/nuovo" element={<CreaPreventivo />} />
+                <Route path="preventivi/modifica" element={<CreaPreventivo />} />
                 <Route path="clienti" element={<AdminCustomers />} />
                 <Route path="magazzino" element={<AdminInventory />} />
                 <Route path="catalogo" element={<AdminCatalog />} />
@@ -256,7 +256,7 @@ const App = () => (
                 {/* Strumenti */}
                 <Route path="strumenti/preventivatore" element={<Preventivatore />} />
                 <Route path="strumenti/sistema-preventivi" element={<SistemaPreventivi />} />
-                <Route path="strumenti/crea-preventivo" element={<CreaPreventivo />} />
+                <Route path="strumenti/crea-preventivo" element={<Navigate to="/admin/preventivi/nuovo" replace />} />
                 <Route path="strumenti/costo-operaio" element={<CostoOperaio />} />
                 <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />
                 <Route path="strumenti/pricing-flow" element={<PricingFlow />} />
