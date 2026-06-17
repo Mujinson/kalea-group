@@ -658,25 +658,25 @@ const AdminCantiereDetail = () => {
               <Input value={workerForm.notes} onChange={e => setWorkerForm({ ...workerForm, notes: e.target.value })} placeholder="Note opzionali" />
             </div>
             <div className="space-y-2">
-              <Label>Seleziona utente</Label>
-              <div className="max-h-48 overflow-y-auto space-y-2 border rounded-lg p-2">
-                {operaioUsers?.map((u) => {
-                  const isAlready = workers?.some((w: any) => w.worker_user_id === u.user_id);
+              <Label>Seleziona operaio</Label>
+              <div className="max-h-64 overflow-y-auto space-y-2 border rounded-lg p-2">
+                {operaioUsers?.map((u: any) => {
+                  const isAlready = workers?.some((w: any) => w.worker_id === u.id || (u.user_id && w.worker_user_id === u.user_id));
                   return (
                     <button
-                      key={u.user_id}
+                      key={u.id}
                       disabled={isAlready}
-                      onClick={() => handleAddWorkerById(u.user_id)}
+                      onClick={() => handleAddWorkerById(u)}
                       className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${isAlready ? 'bg-muted/50 text-muted-foreground cursor-not-allowed' : 'hover:bg-muted'}`}
                     >
-                      <span className="font-medium">{u.user_id.slice(0, 8)}...</span>
-                      <Badge variant="outline" className="ml-2 text-[10px]">{u.role}</Badge>
+                      <span className="font-medium">{u.first_name} {u.last_name}</span>
+                      {u.role && <Badge variant="outline" className="ml-2 text-[10px]">{u.role}</Badge>}
                       {isAlready && <span className="text-xs text-muted-foreground ml-2">(già assegnato)</span>}
                     </button>
                   );
                 })}
                 {(!operaioUsers || operaioUsers.length === 0) && (
-                  <p className="text-sm text-muted-foreground text-center py-4">Nessun utente trovato</p>
+                  <p className="text-sm text-muted-foreground text-center py-4">Nessun operaio trovato. Crealo in "Operai".</p>
                 )}
               </div>
             </div>
