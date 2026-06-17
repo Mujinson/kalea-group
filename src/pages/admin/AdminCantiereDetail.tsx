@@ -402,14 +402,24 @@ const AdminCantiereDetail = () => {
       )}
 
       {/* Tabs */}
-      <Tabs defaultValue="workers" className="space-y-4">
-        <TabsList className="bg-white border">
+      <Tabs defaultValue="config" className="space-y-4">
+        <TabsList className="bg-white border flex-wrap h-auto">
+          <TabsTrigger value="config" className="gap-2"><Settings className="w-4 h-4" /> Configurazione</TabsTrigger>
           <TabsTrigger value="workers" className="gap-2"><Users className="w-4 h-4" /> Operai ({workers?.length || 0})</TabsTrigger>
           <TabsTrigger value="materials" className="gap-2"><Package className="w-4 h-4" /> Materiali ({materials?.length || 0})</TabsTrigger>
           <TabsTrigger value="expenses" className="gap-2"><Receipt className="w-4 h-4" /> Spese ({expenses?.length || 0})</TabsTrigger>
           <TabsTrigger value="worklogs" className="gap-2"><Clock className="w-4 h-4" /> Registro ({workLogs?.length || 0})</TabsTrigger>
           <TabsTrigger value="media" className="gap-2"><Image className="w-4 h-4" /> Media ({media?.length || 0})</TabsTrigger>
+          <TabsTrigger value="issues" className="gap-2"><AlertTriangle className="w-4 h-4" /> Segnalazioni</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="config">
+          <SiteConfigPanel siteId={id!} site={site} />
+        </TabsContent>
+
+        <TabsContent value="issues">
+          <SiteIssuesPanel siteId={id!} />
+        </TabsContent>
 
         {/* WORKERS TAB */}
         <TabsContent value="workers">
