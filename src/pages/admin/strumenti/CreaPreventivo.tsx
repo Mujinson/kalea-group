@@ -82,10 +82,11 @@ const FORN_STYLE: Record<string, { bg: string; c: string }> = {
 };
 
 // ─── TONALITÀ per prodotto (datalist suggestion, input libero comunque consentito) ─
-// Nomi commerciali REALI delle tonalità (fonti ufficiali: pavimentoflow.it, kronosceramiche.com,
-// berryalloc.com, woodco.it). Dove non disponibili sono nomi generici da personalizzare a mano.
+// Nomi commerciali REALI delle tonalità — fonti ufficiali verificate:
+// pavimentoflow.it, kronosceramiche.com, berryalloc.com.
+// Per le collezioni non verificate l'array è vuoto: scrivere il nome a mano nel preventivo.
 const TONALITA_BY_PRODUCT: Record<string, string[]> = {
-  // Flow Floor — collezioni 40 / 55 / XL / Spina (nomi di montagne e vulcani)
+  // ─── Flow Floor (pavimentoflow.it) — nomi di montagne e vulcani ───
   "fl-40":     ["Vinson","Sinai","Pirenei","Pamir","Cook","Carpazi"],
   "fl-55w":    ["Annapurna","Nanga Parbat","Himalaya","Kilimangiaro","Cerro Torre","Atlante","Dolomiti","Monte Bianco","K2","Everest"],
   "fl-55c":    ["Teide","Fuji","Asama"],
@@ -95,61 +96,71 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
   "fl-pxlt":   ["Ambrym","Aso","Vesuvio","Nabro","Kibo"],
   "fl-pspita": ["Karu","Zagros","Ural"],
   "fl-pspfr":  ["Taurus","Jura"],
-  "fl-55gdw":  ["Annapurna","Nanga Parbat","Himalaya","Kilimangiaro","Atlante","Dolomiti","Monte Bianco","Everest"],
-  "fl-55gdc":  ["Teide","Fuji","Asama"],
+  "fl-55gdw":  [],
+  "fl-55gdc":  [],
 
-  // Kronos Prima Materia (verificato)
-  "kp-pv120x280": ["Cemento","Cenere","Sandalo"],
-  "kp-pv120x120": ["Cemento","Cenere","Sandalo"],
-  "kp-pv60x120":  ["Cemento","Cenere","Sandalo"],
-  "kp-pv60x120g": ["Cemento","Cenere","Sandalo"],
-  "kp-pv60x60":   ["Cemento","Cenere","Sandalo"],
-  // Kronos Marmi / Pietra / Onyx / Metalli / Wood / Outdoor / Rocks (nomi reali da verificare)
-  "kp-ma120x280": ["Calacatta","Statuario","Sahara Noir","Travertino"],
-  "kp-ma120x120": ["Calacatta","Statuario","Sahara Noir","Travertino"],
-  "kp-ma60x120":  ["Calacatta","Statuario","Sahara Noir","Travertino"],
-  "kp-ps60x120":  ["Pietra di Vals","Pietra del Cardoso"],
-  "kp-na60x120":  ["Onice Bianco","Onice Miele","Onice Verde"],
-  "kp-me120x280": ["Bronzo","Acciaio","Corten","Titanio"],
-  "kp-me60x120":  ["Bronzo","Acciaio","Corten","Titanio"],
-  "kp-lr150":     ["Chevron Naturale","Chevron Crema","Chevron Sbiancato"],
-  "kp-ws240":     ["Rovere","Noce","Wengè"],
-  "kp-out95":     ["Cemento","Cenere","Sandalo"],
-  "kp-rk102":     ["Porfido","Quarzite","Ardesia"],
+  // ─── Kronos Ceramiche (kronosceramiche.com) ───
+  // Pierre Vive (collezione Maxi)
+  "kp-pv120x280": ["Loire Noble","Orval Noble","Morvan Noble","Brionne Noble"],
+  "kp-pv120x120": ["Loire Noble","Orval Noble","Morvan Noble","Brionne Noble"],
+  "kp-pv60x120":  ["Loire Noble","Orval Noble","Morvan Noble","Brionne Noble"],
+  "kp-pv60x120g": ["Loire Noble","Orval Noble","Morvan Noble","Brionne Noble"],
+  "kp-pv60x60":   ["Loire Noble","Orval Noble","Morvan Noble","Brionne Noble"],
+  // Materia
+  "kp-ma120x280": ["Gesso","Cemento","Sandalo","Seta","Cenere","Tortora","Incenso","Pesca","Oliva"],
+  "kp-ma120x120": ["Gesso","Cemento","Sandalo","Seta","Cenere","Tortora","Incenso","Pesca","Oliva"],
+  "kp-ma60x120":  ["Gesso","Cemento","Sandalo","Seta","Cenere","Tortora","Incenso","Pesca","Oliva"],
+  // Piasentina Stone
+  "kp-ps60x120":  ["Velvet","Flamed","Milled"],
+  // Nativa (Vena)
+  "kp-na60x120":  ["Vena Lux","Vena Aurum","Vena Tibur","Vena Lapillo"],
+  // Metallique
+  "kp-me120x280": ["Noir","Lame","Brune","Noir Oxyde","Lame Oxyde","Brune Oxyde"],
+  "kp-me60x120":  ["Noir","Lame","Brune","Noir Oxyde","Lame Oxyde","Brune Oxyde"],
+  // Le Reverse (chevron)
+  "kp-lr150":     ["Opal Elegance","Opal Antique","Opal Carved","Dune Elegance","Dune Antique","Dune Carved","Taupe Elegance","Taupe Antique","Taupe Carved","Nuit Elegance","Nuit Antique","Nuit Carved"],
+  // Wood Side
+  "kp-ws240":     ["Oak","Nut"],
+  // Outdoor SKE 2.0 — colori non confermati dal sito
+  "kp-out95":     [],
+  // Rocks
+  "kp-rk102":     ["Porfido","Silver Black"],
 
-  // Externo (decking) — nomi generici, da verificare
-  "ex-skudo": ["Teak","Ipè","Grigio","Antracite"],
-  "ex-trad":  ["Teak","Ipè","Grigio","Antracite"],
+  // ─── Externo (decking) — colori non confermati ───
+  "ex-skudo": [],
+  "ex-trad":  [],
 
-  // BerryAlloc — nomi commerciali ufficiali
+  // ─── BerryAlloc (berryalloc.com) ───
   "ba-ocean8v4":  ["Bloom Light Brown","Bloom Light Natural","Bloom Natural","Bloom Sand Natural","Bloom Silver Grey","Bloom Warm Natural","Canyon Light","Canyon Natural","Charme Black","Charme Light Natural","Charme White","Chestnut White","Crush Brown Natural","Crush Light","Crush Natural"],
   "ba-ocean12v4": ["Bloom Sand Natural","Bloom Silver Grey","Epic Light","Epic Natural","Gyant Light Sand","Gyant Sand Natural","Gyant Warm Brown","Gyant Warm Natural","Jazz Light Grey","Jazz Sand Natural","Select Light Brown","Select Sand Natural"],
   "ba-ocean8xl":  ["Bloom Sand Natural","Bloom Silver Grey","Gyant XL Light Sand","Gyant XL Sand Natural","Gyant XL Warm Brown","Gyant XL Warm Natural","Jazz XL Light Grey","Jazz XL Sand Natural","Select Light Brown","Select Sand Natural"],
   "ba-chateau":   ["Bloom Light Brown","Bloom Sand Natural","Charme Black","Charme Light Natural","Chestnut White","Gyant Dark Brown","Gyant Light","Java Light Grey"],
-  "ba-cadenza":   ["Allegro Light","Legato Light","Allegro Natural","Legato Light Natural","Allegro Brown","Allegro Dark Brown","Legato Dark Brown","Allegro Light Grey","Legato Dark Grey"],
-  "ba-origcomp":  ["Bloom Natural","Charme Light","Gyant Warm","Java Light Grey"],
-  "ba-grandav":   ["Avenue Light","Avenue Natural","Avenue Dark Brown"],
-  "ba-parqxl":    ["Rovere Naturale","Rovere Spazzolato","Rovere Affumicato"],
-  "ba-parqherr":  ["Rovere Naturale","Rovere Affumicato"],
-  "ba-zenn55p":   ["Bloom Natural","Charme Light","Gyant Warm"],
-  "ba-zenn30p":   ["Bloom Natural","Charme Light"],
-  "ba-zenngd55":  ["Bloom Natural","Gyant Warm"],
-  "ba-spirit55":  ["Country Natural","Country Brown","Country Dark"],
+  "ba-cadenza":   ["Allegro Light","Allegro Natural","Allegro Brown","Allegro Dark Brown","Allegro Light Grey","Legato Light","Legato Light Natural","Legato Dark Brown","Legato Dark Grey"],
+  // Zenn — nomi di città (verificato su berryalloc.com)
+  "ba-zenn55p":   ["Caïro","Faro","Monsanto","Orlando","Oslo","Palermo","Porto","Sorrento"],
+  "ba-zenn30p":   ["Caïro","Faro","Monsanto","Orlando","Oslo","Palermo","Porto","Sorrento"],
+  "ba-zenngd55":  ["Caïro","Faro","Monsanto","Orlando","Oslo","Palermo","Porto","Sorrento"],
+  // Le seguenti collezioni non sono confermate dal sito ufficiale — inserire il nome a mano
+  "ba-origcomp":  [],
+  "ba-grandav":   [],
+  "ba-parqxl":    [],
+  "ba-parqherr":  [],
+  "ba-spirit55":  [],
 
-  // Woodco — collezioni verificate (Star / Dream)
-  "pq-drnat":    ["Rovere Naturale"],
-  "pq-drcrema":  ["Rovere Crema"],
-  "pq-drbianco": ["Rovere Bianco"],
-  "pq-slim120":  ["Rovere Naturale","Rovere Sbiancato"],
-  "pq-slim180":  ["Rovere Naturale","Rovere Sbiancato","Rovere Affumicato"],
-  "pq-hernat":   ["Rovere Naturale","Rovere Sbiancato"],
-  "pq-starnat":  ["Rovere Naturale","Rovere Bianco","Rovere Cream"],
+  // ─── Woodco — il sito carica i colori via JS, non sono leggibili dallo scrape ───
+  "pq-drnat":    [],
+  "pq-drcrema":  [],
+  "pq-drbianco": [],
+  "pq-slim120":  [],
+  "pq-slim180":  [],
+  "pq-hernat":   [],
+  "pq-starnat":  [],
 
-  // Signature — nomi generici, da verificare
-  "sg-s45nat":   ["Rovere Naturale","Rovere Spazzolato"],
-  "sg-s45crema": ["Rovere Crema","Rovere Crema Spazzolato"],
-  "sg-escnat":   ["Rovere Naturale"],
-  "sg-q1nat":    ["Rovere Naturale","Rovere Sbiancato"],
+  // ─── Signature — colori non confermati ───
+  "sg-s45nat":   [],
+  "sg-s45crema": [],
+  "sg-escnat":   [],
+  "sg-q1nat":    [],
 };
 
 
