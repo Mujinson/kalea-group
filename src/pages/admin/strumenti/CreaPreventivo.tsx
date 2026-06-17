@@ -982,6 +982,14 @@ export default function CreaPreventivo() {
   const delTon = (id:number) => setTonalita(t => t.filter(x => x.id!==id));
   const tonMqTot = tonalita.reduce((s,x) => s + (Number(x.mq)||0), 0);
 
+  // Auto-sync: i mq totali del preventivo seguono la somma delle tonalità
+  useEffect(() => {
+    if (tonalita.length > 0 && tonMqTot > 0 && tonMqTot !== mqPrev) {
+      setMqPrev(tonMqTot);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tonMqTot, tonalita.length]);
+
   // INTESTAZIONE
   const [lingua, setLingua] = useState("IT");
   const t = T[lingua];
