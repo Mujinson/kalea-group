@@ -1302,25 +1302,43 @@ export default function CreaPreventivo() {
                 {tonalita.length === 0 && (
                   <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
                 )}
-                {tonalita.map((tn, idx) => (
-                  <div key={tn.id} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,marginBottom:8,alignItems:"center"}}>
-                    <input list={`ton-${prodotto.id}`} value={tn.nome}
-                      onChange={e=>updTon(tn.id,"nome",e.target.value)}
-                      placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
-                      style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
-                    <div style={{position:"relative"}}>
-                      <input type="number" min={0} step={0.5} value={tn.mq || ""}
-                        onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
-                        style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
-                      <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
+                {tonalita.map((tn, idx) => {
+                  const av = prodotto.magazzino ? stockFor(tn.nome) : null;
+                  const over = av !== null && Number(tn.mq) > av;
+                  return (
+                  <div key={tn.id} style={{marginBottom:8}}>
+                    <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,alignItems:"center"}}>
+                      <input list={`ton-${prodotto.id}`} value={tn.nome}
+                        onChange={e=>updTon(tn.id,"nome",e.target.value)}
+                        placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
+                        style={{padding:"8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
+                      <div style={{position:"relative"}}>
+                        <input type="number" min={0} step={0.5} value={tn.mq || ""}
+                          onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
+                          style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
+                        <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
+                      </div>
+                      <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
                     </div>
-                    <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
+                    {prodotto.magazzino && tn.nome && av !== null && (
+                      <div style={{fontSize:11,marginTop:4,marginLeft:2,color:over?"#A32D2D":"#6B6860"}}>
+                        {over
+                          ? `⚠ Disponibili solo ${av} mq di "${tn.nome}" — richiesti ${tn.mq} mq. Non è possibile preventivare questa quantità.`
+                          : `Disponibili a magazzino: ${av} mq`}
+                      </div>
+                    )}
                   </div>
-                ))}
+                  );
+                })}
                 {tonalita.length > 0 && (
-                  <div style={{padding:"10px 12px",background:"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:"#6B6860"}}>
-                    Totale tonalità: <b style={{color:"#1A1A2E"}}>{tonMqTot} mq</b>
+                  <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#6B6860"}}>
+                    Totale tonalità: <b style={{color:hasOverstock?"#A32D2D":"#1A1A2E"}}>{tonMqTot} mq</b>
                     <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
+                    {hasOverstock && (
+                      <div style={{marginTop:6,fontWeight:500}}>
+                        Quantità non disponibile a magazzino — riduci i mq o cambia tonalità prima di salvare il preventivo.
+                      </div>
+                    )}
                   </div>
                 )}
               </>
