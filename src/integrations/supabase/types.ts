@@ -3224,7 +3224,7 @@ export type Database = {
       submit_public_lead: {
         Args: {
           _city?: string
-          _company?: string
+          _company_name?: string
           _country?: string
           _email: string
           _interest?: string
