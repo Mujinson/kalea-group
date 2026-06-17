@@ -238,16 +238,16 @@ const AdminCantiereDetail = () => {
     queryClient.invalidateQueries({ queryKey: ["site-expenses", id] });
   };
 
-  // Fetch operaio users for assignment
+  // Fetch workers (operai/posatori) from workers table for assignment
   const { data: operaioUsers } = useQuery({
-    queryKey: ["operaio-users"],
+    queryKey: ["assignable-workers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("user_roles")
-        .select("user_id, role")
-        .in("role", ["operaio", "admin"]);
+        .from("workers")
+        .select("id, first_name, last_name, user_id, role")
+        .order("first_name");
       if (error) throw error;
-      return data;
+      return data as any[];
     },
     enabled: addWorkerOpen,
   });
