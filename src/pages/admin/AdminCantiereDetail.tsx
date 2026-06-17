@@ -310,6 +310,7 @@ const AdminCantiereDetail = () => {
           {site.project_name && <p className="text-sm text-muted-foreground">{site.project_name}</p>}
         </div>
         <div className="flex items-center gap-2">
+          {site.priority && priorityBadge(site.priority)}
           {site.tipologia && <Badge variant="outline">{site.tipologia}</Badge>}
           <Badge variant={site.status === "attivo" ? "default" : "secondary"}>{site.status}</Badge>
         </div>
