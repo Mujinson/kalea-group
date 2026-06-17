@@ -296,7 +296,7 @@ const AdminOverview = () => {
     quotes.filter(x => ['accepted','accettato','fatturato'].includes(x.status) && inRange(x.accepted_date || x.created_at, s, e))
       .reduce((a, x) => a + Number(x.total_amount || 0), 0) +
     sales.filter(x => inRange(x.sale_date || x.created_at, s, e))
-      .reduce((a, x) => a + Number(x.subtotal_amount ?? x.total_amount ?? 0), 0);
+      .reduce((a, x) => a + Number(x.total_amount || 0), 0);
 
   const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [preventivi, quotes, sales, range]);
   const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [preventivi, quotes, sales, range]);
