@@ -1078,7 +1078,7 @@ export default function CreaPreventivo() {
         json_dati: {
           cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
           incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
-          ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento,
+          ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
           noteCliente, noteInterne, calc,
         },
       };
