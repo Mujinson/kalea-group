@@ -3111,6 +3111,251 @@ export type Database = {
           },
         ]
       }
+      wc_accessories: {
+        Row: {
+          active: boolean
+          category: string
+          code: string | null
+          compatible_collections: string[] | null
+          created_at: string
+          description: string | null
+          id: string
+          list_price: number
+          name: string
+          sort_order: number
+          supplier_discount_pct: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category: string
+          code?: string | null
+          compatible_collections?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          list_price?: number
+          name: string
+          sort_order?: number
+          supplier_discount_pct?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category?: string
+          code?: string | null
+          compatible_collections?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          list_price?: number
+          name?: string
+          sort_order?: number
+          supplier_discount_pct?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      wc_collections: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      wc_essences: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+          surface_treatment: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+          surface_treatment?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
+          surface_treatment?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      wc_finishes: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      wc_formats: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          dimensions: string | null
+          id: string
+          name: string
+          sort_order: number
+          thickness_mm: number | null
+          top_layer_mm: number | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          dimensions?: string | null
+          id?: string
+          name: string
+          sort_order?: number
+          thickness_mm?: number | null
+          top_layer_mm?: number | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          dimensions?: string | null
+          id?: string
+          name?: string
+          sort_order?: number
+          thickness_mm?: number | null
+          top_layer_mm?: number | null
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      wc_prices: {
+        Row: {
+          collection_id: string
+          created_at: string
+          essence_id: string
+          finish_id: string
+          format_id: string
+          id: string
+          list_price: number
+          notes: string | null
+          supplier_discount_pct: number
+          updated_at: string
+        }
+        Insert: {
+          collection_id: string
+          created_at?: string
+          essence_id: string
+          finish_id: string
+          format_id: string
+          id?: string
+          list_price: number
+          notes?: string | null
+          supplier_discount_pct?: number
+          updated_at?: string
+        }
+        Update: {
+          collection_id?: string
+          created_at?: string
+          essence_id?: string
+          finish_id?: string
+          format_id?: string
+          id?: string
+          list_price?: number
+          notes?: string | null
+          supplier_discount_pct?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wc_prices_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "wc_collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wc_prices_essence_id_fkey"
+            columns: ["essence_id"]
+            isOneToOne: false
+            referencedRelation: "wc_essences"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wc_prices_finish_id_fkey"
+            columns: ["finish_id"]
+            isOneToOne: false
+            referencedRelation: "wc_finishes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "wc_prices_format_id_fkey"
+            columns: ["format_id"]
+            isOneToOne: false
+            referencedRelation: "wc_formats"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       worker_documents: {
         Row: {
           created_at: string

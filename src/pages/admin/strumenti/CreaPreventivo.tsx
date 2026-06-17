@@ -2,6 +2,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import WoodcoBlock, { emptyWoodcoSelection, type WoodcoSelection } from "@/components/preventivo/WoodcoBlock";
 
 const KALEA_LOGO = "data:image/png;base64,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";
 
@@ -1005,6 +1006,10 @@ export default function CreaPreventivo() {
   const [righeMat, setRigheMat] = useState<any[]>([]);
   const [tonalita, setTonalita] = useState<Array<{id:number; nome:string; mq:number}>>([]);
   const [stockMap, setStockMap] = useState<Record<string, number>>({});
+  // Selezione Woodco da catalogo DB (collezione → essenza → finitura → formato + accessori)
+  const [wcSel, setWcSel] = useState<WoodcoSelection>(emptyWoodcoSelection);
+  const isWoodco = prodotto?.fornitore === "Parquet Woodco";
+  const wcReady = isWoodco && wcSel.listPrice !== null && wcSel.formatCode !== null;
 
   // Carica giacenza per tonalità (solo prodotti gestiti a magazzino, es. Biomag MgO)
   useEffect(() => {
@@ -1041,10 +1046,12 @@ export default function CreaPreventivo() {
   const selectProdotto = (p: any) => {
     setProdotto(p);
     setTonalita([{ id: Date.now(), nome: "", mq: 0 }]);
+    setWcSel(emptyWoodcoSelection);
   };
   const resetProdotto = () => {
     setProdotto(null);
     setTonalita([]);
+    setWcSel(emptyWoodcoSelection);
   };
   const addTon = () => setTonalita(t => [...t, { id: Date.now()+Math.random(), nome:"", mq:0 }]);
   const updTon = (id:number,k:string,v:any) => setTonalita(t => t.map(x => x.id===id ? {...x,[k]:v} : x));
@@ -1103,7 +1110,15 @@ export default function CreaPreventivo() {
 
   const calc = useMemo(()=>{
     if (!prodotto) return null;
-    const costoMatMq = prodotto.listino * prodotto.coeff;
+    // Per Woodco usiamo il prezzo del listino DB (cascading) + lo sconto fornitore associato
+    let listinoUsed = prodotto.listino;
+    let coeffUsed = prodotto.coeff;
+    if (isWoodco && wcSel.listPrice !== null) {
+      listinoUsed = wcSel.listPrice;
+      const disc = wcSel.supplierDiscountPct ?? 55;
+      coeffUsed = (100 - disc) / 100;
+    }
+    const costoMatMq = listinoUsed * coeffUsed;
     const prezzoMatMq = costoMatMq * MARKUP;
     const mqOrd = mqPrev * (1 + sfrido/100);
     const costoMatTot = mqOrd * costoMatMq;
@@ -1121,8 +1136,11 @@ export default function CreaPreventivo() {
     const supplMq = trasfertaAttiva ? SUPPL_TRASFERTA_POSA[complessita] : 0;
     const costoTrasfertaTot = trasfertaAttiva ? mqPrev*supplMq*0.5 : 0;
     const prezzoTrasfertaTot = trasfertaAttiva ? mqPrev*supplMq : 0;
-    const costoExtraTot = righeMat.reduce((s,r)=>s+(r.costoUn||0)*(r.qta||0), 0);
-    const prezzoExtraTot = righeMat.reduce((s,r)=>s+(r.prezzoUn||0)*(r.qta||0), 0);
+    // Accessori Woodco
+    const costoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.costoUn||0)*(a.qta||0), 0);
+    const prezzoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.prezzoUn||0)*(a.qta||0), 0);
+    const costoExtraTot = righeMat.reduce((s,r)=>s+(r.costoUn||0)*(r.qta||0), 0) + costoAccTot;
+    const prezzoExtraTot = righeMat.reduce((s,r)=>s+(r.prezzoUn||0)*(r.qta||0), 0) + prezzoAccTot;
     const costoTotale = costoMatTot+costoPosaTot+costoTappTot+costoTrasporto+costoTrasfertaTot+costoExtraTot;
     const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
@@ -1133,8 +1151,8 @@ export default function CreaPreventivo() {
     const marginePct = prezzoNetto>0 ? (margineE/prezzoNetto)*100 : 0;
     const prezzoMqTot = mqPrev>0 ? prezzoNetto/mqPrev : 0;
     const scontoMax = prezzoLordoTot>0 ? ((prezzoLordoTot-costoTotale)/prezzoLordoTot)*100 : 0;
-    return { costoMatMq,prezzoMatMq,mqOrd,costoMatTot,prezzoMatTot,costoPosaTot,prezzoPosaTot,costoTappTot,prezzoTappTot,tappNeeded,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
-  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate]);
+    return { costoMatMq,prezzoMatMq,mqOrd,costoMatTot,prezzoMatTot,costoPosaTot,prezzoPosaTot,costoTappTot,prezzoTappTot,tappNeeded,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
+  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel]);
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"mq", costoUn:0, prezzoUn:0 }]);
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
@@ -1150,6 +1168,10 @@ export default function CreaPreventivo() {
     if (hasOverstock) {
       const det = overstockRows.map(r => `${r.nome}: ${r.mq} mq richiesti / ${stockFor(r.nome)} mq disp.`).join("; ");
       toast.error(`Quantità non disponibile a magazzino — ${det}`);
+      return;
+    }
+    if (isWoodco && !wcReady) {
+      toast.error("Seleziona collezione, essenza, finitura e formato Woodco prima di salvare");
       return;
     }
     setSaving(true);
@@ -1171,6 +1193,7 @@ export default function CreaPreventivo() {
           cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
           incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
           ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
+          wcSel,
           noteCliente, noteInterne, calc,
         },
       };
@@ -1297,56 +1320,70 @@ export default function CreaPreventivo() {
                   </button>
                 </div>
 
-                {/* Tonalità */}
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-                  <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em"}}>Tonalità / colori</div>
-                  <button onClick={addTon}
-                    style={{padding:"4px 12px",borderRadius:6,border:"1px solid #1A1A2E",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Tonalità</button>
-                </div>
-                <datalist id={`ton-${prodotto.id}`}>
-                  {(TONALITA_BY_PRODUCT[prodotto.id] || []).map(t => <option key={t} value={t} />)}
-                </datalist>
-                {tonalita.length === 0 && (
-                  <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
-                )}
-                {tonalita.map((tn, idx) => {
-                  const av = prodotto.magazzino ? stockFor(tn.nome) : null;
-                  const over = av !== null && Number(tn.mq) > av;
-                  return (
-                  <div key={tn.id} style={{marginBottom:8}}>
-                    <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,alignItems:"center"}}>
-                      <input list={`ton-${prodotto.id}`} value={tn.nome}
-                        onChange={e=>updTon(tn.id,"nome",e.target.value)}
-                        placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
-                        style={{padding:"8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
-                      <div style={{position:"relative"}}>
-                        <input type="number" min={0} step={0.5} value={tn.mq || ""}
-                          onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
-                          style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
-                        <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
-                      </div>
-                      <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
+                {/* ─── Selezione Woodco da catalogo DB ─── */}
+                {isWoodco && (
+                  <div style={{marginBottom:14}}>
+                    <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>
+                      Configurazione Woodco
                     </div>
-                    {prodotto.magazzino && tn.nome && av !== null && (
-                      <div style={{fontSize:11,marginTop:4,marginLeft:2,color:over?"#A32D2D":"#6B6860"}}>
-                        {over
-                          ? `⚠ Disponibili solo ${av} mq di "${tn.nome}" — richiesti ${tn.mq} mq. Non è possibile preventivare questa quantità.`
-                          : `Disponibili a magazzino: ${av} mq`}
+                    <WoodcoBlock value={wcSel} onChange={setWcSel} />
+                  </div>
+                )}
+
+                {/* Tonalità (nascosta per Woodco — la selezione DB la sostituisce) */}
+                {!isWoodco && (
+                  <>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                      <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em"}}>Tonalità / colori</div>
+                      <button onClick={addTon}
+                        style={{padding:"4px 12px",borderRadius:6,border:"1px solid #1A1A2E",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Tonalità</button>
+                    </div>
+                    <datalist id={`ton-${prodotto.id}`}>
+                      {(TONALITA_BY_PRODUCT[prodotto.id] || []).map(t => <option key={t} value={t} />)}
+                    </datalist>
+                    {tonalita.length === 0 && (
+                      <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
+                    )}
+                    {tonalita.map((tn, idx) => {
+                      const av = prodotto.magazzino ? stockFor(tn.nome) : null;
+                      const over = av !== null && Number(tn.mq) > av;
+                      return (
+                      <div key={tn.id} style={{marginBottom:8}}>
+                        <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,alignItems:"center"}}>
+                          <input list={`ton-${prodotto.id}`} value={tn.nome}
+                            onChange={e=>updTon(tn.id,"nome",e.target.value)}
+                            placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
+                            style={{padding:"8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
+                          <div style={{position:"relative"}}>
+                            <input type="number" min={0} step={0.5} value={tn.mq || ""}
+                              onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
+                              style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
+                            <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
+                          </div>
+                          <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
+                        </div>
+                        {prodotto.magazzino && tn.nome && av !== null && (
+                          <div style={{fontSize:11,marginTop:4,marginLeft:2,color:over?"#A32D2D":"#6B6860"}}>
+                            {over
+                              ? `⚠ Disponibili solo ${av} mq di "${tn.nome}" — richiesti ${tn.mq} mq. Non è possibile preventivare questa quantità.`
+                              : `Disponibili a magazzino: ${av} mq`}
+                          </div>
+                        )}
+                      </div>
+                      );
+                    })}
+                    {tonalita.length > 0 && (
+                      <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#6B6860"}}>
+                        Totale tonalità: <b style={{color:hasOverstock?"#A32D2D":"#1A1A2E"}}>{tonMqTot} mq</b>
+                        <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
+                        {hasOverstock && (
+                          <div style={{marginTop:6,fontWeight:500}}>
+                            Quantità non disponibile a magazzino — riduci i mq o cambia tonalità prima di salvare il preventivo.
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                  );
-                })}
-                {tonalita.length > 0 && (
-                  <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#6B6860"}}>
-                    Totale tonalità: <b style={{color:hasOverstock?"#A32D2D":"#1A1A2E"}}>{tonMqTot} mq</b>
-                    <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
-                    {hasOverstock && (
-                      <div style={{marginTop:6,fontWeight:500}}>
-                        Quantità non disponibile a magazzino — riduci i mq o cambia tonalità prima di salvare il preventivo.
-                      </div>
-                    )}
-                  </div>
+                  </>
                 )}
               </>
             )}
