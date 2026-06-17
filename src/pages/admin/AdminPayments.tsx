@@ -184,20 +184,36 @@ const AdminPayments = () => {
     }
   };
 
+  const handleDeleteAgreement = async () => {
+    if (!agreement) return;
+    if (!confirm('Eliminare definitivamente questo accordo? I pagamenti registrati verranno mantenuti.')) return;
+    try {
+      const { error } = await supabase.from('payment_agreements').delete().eq('id', agreement.id);
+      if (error) throw error;
+      toast.success('Accordo eliminato');
+      setAgreement(null);
+      setAgreementForm({ supplier_name: '', total_amount: '', start_date: format(new Date(), 'yyyy-MM-dd'), end_date: '', notes: '' });
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting agreement:', error);
+      toast.error('Errore nell\'eliminazione');
+    }
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
   };
 
   const totalPaid = payments.reduce((sum, p) => sum + Number(p.payment_amount), 0);
-  const totalDebt = agreement?.total_amount || 89100;
-  const remaining = totalDebt - totalPaid;
-  const progressPercent = (totalPaid / totalDebt) * 100;
+  const totalDebt = agreement?.total_amount || 0;
+  const remaining = Math.max(0, totalDebt - totalPaid);
+  const progressPercent = totalDebt > 0 ? (totalPaid / totalDebt) * 100 : 0;
 
-  const daysRemaining = agreement?.end_date 
+  const daysRemaining = agreement?.end_date
     ? Math.max(0, differenceInDays(new Date(agreement.end_date), new Date()))
-    : 365;
+    : 0;
 
-  const isUrgent = daysRemaining < 30 && remaining > 0;
+  const isUrgent = !!agreement && daysRemaining < 30 && remaining > 0;
 
   return (
     <div className="space-y-4">
