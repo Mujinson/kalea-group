@@ -138,7 +138,7 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
       site_id: siteId,
       worker_user_id: userId,
       work_date: now.toISOString().slice(0, 10),
-      start_time: now.toISOString(),
+      start_time: now.toTimeString().slice(0, 8),
       hours_worked: 0,
     });
     if (error) toast.error(error.message); else { toast.success('Inizio turno registrato'); await load(); }
@@ -149,11 +149,11 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
     if (!activeLog) return;
     setBusy(true);
     const end = new Date();
-    const start = new Date(activeLog.start_time);
+    const start = new Date(`${activeLog.work_date}T${activeLog.start_time}`);
     const hrs = Math.max(0, (end.getTime() - start.getTime()) / 3_600_000);
     const { error } = await supabase
       .from('site_work_logs')
-      .update({ end_time: end.toISOString(), hours_worked: Number(hrs.toFixed(2)) })
+      .update({ end_time: end.toTimeString().slice(0, 8), hours_worked: Number(hrs.toFixed(2)) })
       .eq('id', activeLog.id);
     if (error) toast.error(error.message); else { toast.success('Fine turno registrata'); await load(); }
     setBusy(false);
@@ -166,7 +166,7 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
           <>
             <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">In corso</p>
             <p className="text-[22px] font-semibold text-[#1E1B4B]">
-              dalle {new Date(activeLog.start_time).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
+              dalle {new Date(`${activeLog.work_date}T${activeLog.start_time}`).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
             </p>
             <button
               onClick={stopWork} disabled={busy}
