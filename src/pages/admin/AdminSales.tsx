@@ -83,6 +83,8 @@ interface Sale {
   customer_name: string | null;
   vat_included: boolean;
   vat_amount: number | null;
+  subtotal_amount: number | null;
+  total_amount: number | null;
   payment_method: string | null;
   payment_terms: string | null;
   deposit_amount: number | null;
@@ -657,7 +659,7 @@ const AdminSales = () => {
 
   const totals = calculateTotals();
   const totalMq = sales.reduce((sum, s) => sum + Number(s.quantity_sqm), 0);
-  const totalRevenue = sales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * Number(s.sale_price)), 0);
+  const totalRevenue = sales.reduce((sum, s) => sum + Number(s.total_amount || (Number(s.quantity_sqm) * Number(s.sale_price))), 0);
   const totalMargin = sales.reduce((sum, s) => sum + (Number(s.margin_amount) || 0), 0);
   const paidCount = sales.filter(s => s.is_paid).length;
 
@@ -986,11 +988,23 @@ const AdminSales = () => {
           },
           {
             key: 'total',
-            header: 'Totale',
+            header: 'Totale fattura',
             sortable: true,
             className: 'text-right font-medium',
-            accessor: (s) => Number(s.quantity_sqm) * Number(s.sale_price),
-            cell: (s) => formatCurrency(Number(s.quantity_sqm) * Number(s.sale_price)),
+            accessor: (s) => Number(s.total_amount || (Number(s.quantity_sqm) * Number(s.sale_price))),
+            cell: (s) => {
+              const netto = Number(s.subtotal_amount ?? (Number(s.quantity_sqm) * Number(s.sale_price)));
+              const iva = Number(s.vat_amount ?? (s.vat_included ? 0 : netto * 0.22));
+              const totale = Number(s.total_amount ?? (netto + iva));
+              return (
+                <div className="leading-tight">
+                  <div className="font-semibold">{formatCurrency(totale)}</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    {formatCurrency(netto)} + IVA {formatCurrency(iva)}
+                  </div>
+                </div>
+              );
+            },
           },
           {
             key: 'margin_amount',
