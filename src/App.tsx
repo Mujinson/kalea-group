@@ -62,6 +62,7 @@ import AdminInventory from "./pages/admin/AdminInventory";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminCosts from "./pages/admin/AdminCosts";
 import AdminPayments from "./pages/admin/AdminPayments";
+import AdminContabilita from "./pages/admin/AdminContabilita";
 import AdminImport from "./pages/admin/AdminImport";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminLangRedirect from "./pages/admin/AdminLangRedirect";
@@ -243,6 +244,7 @@ const App = () => (
                 <Route path="registro-lavori" element={<AdminWorkLogs />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
+                <Route path="contabilita" element={<AdminContabilita />} />
                 <Route path="import" element={<AdminImport />} />
                 <Route path="ferie" element={<AdminTimeOff />} />
                 <Route path="time-off" element={<AdminTimeOff />} />
