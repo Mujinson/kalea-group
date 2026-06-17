@@ -108,6 +108,7 @@ const menuStructure: MenuEntry[] = [
       label: 'Cantieri', icon: HardHat, color: '#F97316', adminOnly: false,
       items: [
         { title: 'Dashboard', url: '/admin/cantieri-dashboard', icon: LayoutDashboard, adminOnly: true },
+        { title: 'Planner Operativo', url: '/admin/planner', icon: CalendarClock, adminOnly: true },
         { title: 'Lista cantieri', url: '/admin/cantieri', icon: HardHat, adminOnly: false },
         { title: 'Operai & Ore', url: '/admin/cantieri-operai', icon: Users, adminOnly: true },
         { title: 'Ferie / Indisponibilità', url: '/admin/ferie', icon: CalendarClock, adminOnly: true },

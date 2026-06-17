@@ -680,6 +680,143 @@ export type Database = {
           },
         ]
       }
+      crew_assignments: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          crew_id: string
+          end_date: string
+          hours_per_day: number
+          id: string
+          notes: string | null
+          site_id: string
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          crew_id: string
+          end_date: string
+          hours_per_day?: number
+          id?: string
+          notes?: string | null
+          site_id: string
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          crew_id?: string
+          end_date?: string
+          hours_per_day?: number
+          id?: string
+          notes?: string | null
+          site_id?: string
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_assignments_crew_id_fkey"
+            columns: ["crew_id"]
+            isOneToOne: false
+            referencedRelation: "crews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_assignments_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_members: {
+        Row: {
+          created_at: string
+          crew_id: string
+          id: string
+          role: string
+          worker_id: string
+        }
+        Insert: {
+          created_at?: string
+          crew_id: string
+          id?: string
+          role?: string
+          worker_id: string
+        }
+        Update: {
+          created_at?: string
+          crew_id?: string
+          id?: string
+          role?: string
+          worker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_members_crew_id_fkey"
+            columns: ["crew_id"]
+            isOneToOne: false
+            referencedRelation: "crews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_members_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: true
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crews: {
+        Row: {
+          active: boolean
+          color: string
+          created_at: string
+          id: string
+          lead_worker_id: string | null
+          max_workers: number
+          name: string
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          color?: string
+          created_at?: string
+          id?: string
+          lead_worker_id?: string | null
+          max_workers?: number
+          name: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          color?: string
+          created_at?: string
+          id?: string
+          lead_worker_id?: string | null
+          max_workers?: number
+          name?: string
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crews_lead_worker_id_fkey"
+            columns: ["lead_worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customer_action_logs: {
         Row: {
           action_description: string

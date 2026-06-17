@@ -76,6 +76,7 @@ import AdminAppointments from "./pages/admin/AdminAppointments";
 import AdminChatbot from "./pages/admin/AdminChatbot";
 import AdminMap from "./pages/admin/AdminMap";
 import AdminCantieri from "./pages/admin/AdminCantieri";
+import AdminPlanner from "./pages/admin/AdminPlanner";
 import AdminCantiereDetail from "./pages/admin/AdminCantiereDetail";
 import AdminMedia from "./pages/admin/AdminMedia";
 import WorkerApp from "./pages/admin/WorkerApp";
@@ -230,6 +231,7 @@ const App = () => (
                 <Route path="chatbot" element={<AdminChatbot />} />
                 <Route path="mappa" element={<AdminMap />} />
                 <Route path="cantieri" element={<AdminCantieri />} />
+                <Route path="planner" element={<AdminPlanner />} />
                 <Route path="cantieri/:id" element={<AdminCantiereDetail />} />
                 <Route path="cantieri-dashboard" element={<CantieriDashboard />} />
                 <Route path="cantieri-operai" element={<CantieriOperaiOre />} />
