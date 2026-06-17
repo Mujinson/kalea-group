@@ -247,7 +247,7 @@ const AdminPayments = () => {
                     step="0.01"
                     value={agreementForm.total_amount}
                     onChange={(e) => setAgreementForm({...agreementForm, total_amount: e.target.value})}
-                    placeholder="89100"
+                    placeholder="0.00"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
