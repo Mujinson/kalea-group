@@ -166,6 +166,9 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
   "sg-s45crema": ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
   "sg-escnat":   ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
   "sg-q1nat":    ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
+
+  // ─── Biomag Floor MgO — tonalità Kalēa ───
+  "bm-mgo":      ["Aurora","Corteccia","Cenere","Sabbia","Silven","Terram","Perla","Velora"],
 };
 
 
