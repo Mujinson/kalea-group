@@ -14,10 +14,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import {
   ArrowLeft, Upload, Trash2, Image, Film, FileText, Search, Download,
   Users, Package, Receipt, Clock, Plus, CalendarDays, MapPin, Phone, Mail, X,
-  CheckCircle2, AlertCircle, Euro
+  CheckCircle2, AlertCircle, Euro, Settings, AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format, differenceInDays } from "date-fns";
+import SiteConfigPanel, { priorityBadge } from "@/components/admin/cantieri/SiteConfigPanel";
+import SiteIssuesPanel from "@/components/admin/cantieri/SiteIssuesPanel";
 
 const EXPENSE_TYPES = [
   "Materiali", "Trasporto", "Attrezzatura", "Manodopera esterna",
@@ -110,6 +112,23 @@ const AdminCantiereDetail = () => {
         .order("work_date", { ascending: false });
       if (error) throw error;
       return data;
+    },
+    enabled: !!id,
+  });
+
+  const { data: kpiChecklist } = useQuery({
+    queryKey: ["site-checklist-kpi", id],
+    queryFn: async () => {
+      const { data } = await supabase.from("site_checklist_items" as any).select("completed_at").eq("site_id", id!);
+      return (data as any[]) || [];
+    },
+    enabled: !!id,
+  });
+  const { data: kpiIssues } = useQuery({
+    queryKey: ["site-issues-kpi", id],
+    queryFn: async () => {
+      const { data } = await supabase.from("site_issues" as any).select("status").eq("site_id", id!);
+      return (data as any[]) || [];
     },
     enabled: !!id,
   });
@@ -308,6 +327,7 @@ const AdminCantiereDetail = () => {
           {site.project_name && <p className="text-sm text-muted-foreground">{site.project_name}</p>}
         </div>
         <div className="flex items-center gap-2">
+          {site.priority && priorityBadge(site.priority)}
           {site.tipologia && <Badge variant="outline">{site.tipologia}</Badge>}
           <Badge variant={site.status === "attivo" ? "default" : "secondary"}>{site.status}</Badge>
         </div>
@@ -389,24 +409,57 @@ const AdminCantiereDetail = () => {
         </CardContent>
       </Card>
 
+      {/* KPI cantiere */}
+      {(() => {
+        const total = (kpiChecklist || []).length;
+        const done = (kpiChecklist || []).filter((c) => c.completed_at).length;
+        const progress = total ? Math.round((done / total) * 100) : 0;
+        const endRef = site.planned_end_date || site.end_date;
+        const daysLeft = endRef ? differenceInDays(new Date(endRef), new Date()) : null;
+        const openIssues = (kpiIssues || []).filter((i) => i.status !== "chiusa").length;
+        const photoCount = (media || []).filter((m) => m.file_type === "image").length;
+        const est = Number(site.estimated_hours || 0);
+        return (
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <KpiCard label="Avanzamento" value={`${progress}%`} sub={`${done}/${total} voci`} />
+            <KpiCard label="Giorni residui" value={daysLeft === null ? "—" : String(daysLeft)} sub={daysLeft !== null && daysLeft < 0 ? "in ritardo" : ""} danger={daysLeft !== null && daysLeft < 0} />
+            <KpiCard label="Ore lavorate" value={`${totalHours}h`} sub={est ? `su ${est}h previste` : "nessuna stima"} />
+            <KpiCard label="Foto" value={String(photoCount)} sub="caricate" />
+            <KpiCard label="Segnalazioni aperte" value={String(openIssues)} danger={openIssues > 0} />
+          </div>
+        );
+      })()}
+
       {/* Date */}
-      {(site.start_date || site.end_date) && (
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+      {(site.start_date || site.end_date || site.planned_start_date || site.planned_end_date) && (
+        <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
           <CalendarDays className="w-4 h-4" />
+          {site.planned_start_date && <span>Prev. inizio: {format(new Date(site.planned_start_date), "dd/MM/yyyy")}</span>}
+          {site.planned_end_date && <span>Prev. fine: {format(new Date(site.planned_end_date), "dd/MM/yyyy")}</span>}
           {site.start_date && <span>Inizio: {format(new Date(site.start_date), "dd/MM/yyyy")}</span>}
           {site.end_date && <span>Fine: {format(new Date(site.end_date), "dd/MM/yyyy")}</span>}
         </div>
       )}
 
       {/* Tabs */}
-      <Tabs defaultValue="workers" className="space-y-4">
-        <TabsList className="bg-white border">
+      <Tabs defaultValue="config" className="space-y-4">
+        <TabsList className="bg-white border flex-wrap h-auto">
+          <TabsTrigger value="config" className="gap-2"><Settings className="w-4 h-4" /> Configurazione</TabsTrigger>
           <TabsTrigger value="workers" className="gap-2"><Users className="w-4 h-4" /> Operai ({workers?.length || 0})</TabsTrigger>
           <TabsTrigger value="materials" className="gap-2"><Package className="w-4 h-4" /> Materiali ({materials?.length || 0})</TabsTrigger>
           <TabsTrigger value="expenses" className="gap-2"><Receipt className="w-4 h-4" /> Spese ({expenses?.length || 0})</TabsTrigger>
           <TabsTrigger value="worklogs" className="gap-2"><Clock className="w-4 h-4" /> Registro ({workLogs?.length || 0})</TabsTrigger>
           <TabsTrigger value="media" className="gap-2"><Image className="w-4 h-4" /> Media ({media?.length || 0})</TabsTrigger>
+          <TabsTrigger value="issues" className="gap-2"><AlertTriangle className="w-4 h-4" /> Segnalazioni</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="config">
+          <SiteConfigPanel siteId={id!} site={site} />
+        </TabsContent>
+
+        <TabsContent value="issues">
+          <SiteIssuesPanel siteId={id!} />
+        </TabsContent>
 
         {/* WORKERS TAB */}
         <TabsContent value="workers">
@@ -841,5 +894,15 @@ const AdminCantiereDetail = () => {
     </div>
   );
 };
+
+const KpiCard = ({ label, value, sub, danger }: { label: string; value: string; sub?: string; danger?: boolean }) => (
+  <Card className="bg-white">
+    <CardContent className="p-3">
+      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className={`text-xl font-bold mt-1 ${danger ? "text-red-600" : "text-foreground"}`}>{value}</p>
+      {sub && <p className="text-[11px] text-muted-foreground mt-0.5">{sub}</p>}
+    </CardContent>
+  </Card>
+);
 
 export default AdminCantiereDetail;

@@ -508,8 +508,12 @@ export type Database = {
       }
       construction_sites: {
         Row: {
+          access_difficulty: string | null
           address: string | null
+          available_days: number | null
+          building_floor: string | null
           city: string | null
+          construction_type: string | null
           contact_email: string | null
           contact_name: string | null
           contact_phone: string | null
@@ -517,11 +521,32 @@ export type Database = {
           country: string | null
           created_at: string
           customer_id: string | null
+          electricity_available: boolean | null
           end_date: string | null
+          estimated_hours: number | null
+          floor_brand: string | null
+          floor_color: string | null
+          floor_lot: string | null
+          floor_model: string | null
+          floor_sqm: number | null
+          floor_tech_notes: string | null
+          floor_thickness: string | null
+          floor_type: string | null
+          has_elevator: boolean | null
           id: string
+          inhabited: boolean | null
+          latitude: number | null
           lead_id: string | null
+          logistics_notes: string | null
+          longitude: number | null
           notes: string | null
+          parking_available: boolean | null
+          parking_distance_m: number | null
+          permits_required: boolean | null
+          planned_end_date: string | null
+          planned_start_date: string | null
           postal_code: string | null
+          priority: string | null
           product_model: string | null
           project_name: string | null
           province: string | null
@@ -531,10 +556,16 @@ export type Database = {
           tipologia: string | null
           title: string
           updated_at: string
+          water_available: boolean | null
+          ztl_zone: boolean | null
         }
         Insert: {
+          access_difficulty?: string | null
           address?: string | null
+          available_days?: number | null
+          building_floor?: string | null
           city?: string | null
+          construction_type?: string | null
           contact_email?: string | null
           contact_name?: string | null
           contact_phone?: string | null
@@ -542,11 +573,32 @@ export type Database = {
           country?: string | null
           created_at?: string
           customer_id?: string | null
+          electricity_available?: boolean | null
           end_date?: string | null
+          estimated_hours?: number | null
+          floor_brand?: string | null
+          floor_color?: string | null
+          floor_lot?: string | null
+          floor_model?: string | null
+          floor_sqm?: number | null
+          floor_tech_notes?: string | null
+          floor_thickness?: string | null
+          floor_type?: string | null
+          has_elevator?: boolean | null
           id?: string
+          inhabited?: boolean | null
+          latitude?: number | null
           lead_id?: string | null
+          logistics_notes?: string | null
+          longitude?: number | null
           notes?: string | null
+          parking_available?: boolean | null
+          parking_distance_m?: number | null
+          permits_required?: boolean | null
+          planned_end_date?: string | null
+          planned_start_date?: string | null
           postal_code?: string | null
+          priority?: string | null
           product_model?: string | null
           project_name?: string | null
           province?: string | null
@@ -556,10 +608,16 @@ export type Database = {
           tipologia?: string | null
           title: string
           updated_at?: string
+          water_available?: boolean | null
+          ztl_zone?: boolean | null
         }
         Update: {
+          access_difficulty?: string | null
           address?: string | null
+          available_days?: number | null
+          building_floor?: string | null
           city?: string | null
+          construction_type?: string | null
           contact_email?: string | null
           contact_name?: string | null
           contact_phone?: string | null
@@ -567,11 +625,32 @@ export type Database = {
           country?: string | null
           created_at?: string
           customer_id?: string | null
+          electricity_available?: boolean | null
           end_date?: string | null
+          estimated_hours?: number | null
+          floor_brand?: string | null
+          floor_color?: string | null
+          floor_lot?: string | null
+          floor_model?: string | null
+          floor_sqm?: number | null
+          floor_tech_notes?: string | null
+          floor_thickness?: string | null
+          floor_type?: string | null
+          has_elevator?: boolean | null
           id?: string
+          inhabited?: boolean | null
+          latitude?: number | null
           lead_id?: string | null
+          logistics_notes?: string | null
+          longitude?: number | null
           notes?: string | null
+          parking_available?: boolean | null
+          parking_distance_m?: number | null
+          permits_required?: boolean | null
+          planned_end_date?: string | null
+          planned_start_date?: string | null
           postal_code?: string | null
+          priority?: string | null
           product_model?: string | null
           project_name?: string | null
           province?: string | null
@@ -581,6 +660,8 @@ export type Database = {
           tipologia?: string | null
           title?: string
           updated_at?: string
+          water_available?: boolean | null
+          ztl_zone?: boolean | null
         }
         Relationships: [
           {
@@ -1983,6 +2064,85 @@ export type Database = {
           },
         ]
       }
+      site_accessories: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          quantity: number | null
+          site_id: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          quantity?: number | null
+          site_id: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          quantity?: number | null
+          site_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_accessories_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_attachments: {
+        Row: {
+          category: string | null
+          created_at: string
+          file_name: string | null
+          file_size: number | null
+          file_type: string | null
+          file_url: string
+          id: string
+          site_id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          file_name?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url: string
+          id?: string
+          site_id: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          file_name?: string | null
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string
+          id?: string
+          site_id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_attachments_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       site_chat_messages: {
         Row: {
           attachment_url: string | null
@@ -2014,6 +2174,79 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "site_chat_messages_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_checklist_items: {
+        Row: {
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          id: string
+          label: string
+          site_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          id?: string
+          label: string
+          site_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          id?: string
+          label?: string
+          site_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_checklist_items_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_equipment: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          site_id: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          site_id: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          site_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_equipment_site_id_fkey"
             columns: ["site_id"]
             isOneToOne: false
             referencedRelation: "construction_sites"
@@ -2070,6 +2303,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "site_expenses_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_issues: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          issue_type: string
+          photo_url: string
+          reported_by: string
+          reporter_name: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          site_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          issue_type: string
+          photo_url: string
+          reported_by: string
+          reporter_name?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          site_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          issue_type?: string
+          photo_url?: string
+          reported_by?: string
+          reporter_name?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          site_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_issues_site_id_fkey"
             columns: ["site_id"]
             isOneToOne: false
             referencedRelation: "construction_sites"
@@ -2172,6 +2458,9 @@ export type Database = {
         Row: {
           break_minutes: number
           created_at: string
+          end_distance_m: number | null
+          end_latitude: number | null
+          end_longitude: number | null
           end_time: string | null
           hourly_cost: number | null
           hours_worked: number
@@ -2179,6 +2468,9 @@ export type Database = {
           materials_used: string[] | null
           notes: string | null
           site_id: string
+          start_distance_m: number | null
+          start_latitude: number | null
+          start_longitude: number | null
           start_time: string | null
           updated_at: string
           work_date: string
@@ -2188,6 +2480,9 @@ export type Database = {
         Insert: {
           break_minutes?: number
           created_at?: string
+          end_distance_m?: number | null
+          end_latitude?: number | null
+          end_longitude?: number | null
           end_time?: string | null
           hourly_cost?: number | null
           hours_worked?: number
@@ -2195,6 +2490,9 @@ export type Database = {
           materials_used?: string[] | null
           notes?: string | null
           site_id: string
+          start_distance_m?: number | null
+          start_latitude?: number | null
+          start_longitude?: number | null
           start_time?: string | null
           updated_at?: string
           work_date?: string
@@ -2204,6 +2502,9 @@ export type Database = {
         Update: {
           break_minutes?: number
           created_at?: string
+          end_distance_m?: number | null
+          end_latitude?: number | null
+          end_longitude?: number | null
           end_time?: string | null
           hourly_cost?: number | null
           hours_worked?: number
@@ -2211,6 +2512,9 @@ export type Database = {
           materials_used?: string[] | null
           notes?: string | null
           site_id?: string
+          start_distance_m?: number | null
+          start_latitude?: number | null
+          start_longitude?: number | null
           start_time?: string | null
           updated_at?: string
           work_date?: string
