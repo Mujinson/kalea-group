@@ -104,23 +104,42 @@ export default function AdminContabilita() {
         })),
       ];
 
+      // Aggrega i pagamenti per fornitore (per calcolare residuo accordi)
+      const paidBySupplier = new Map<string, number>();
+      (payRes.data || []).forEach((p: any) => {
+        const k = (p.supplier_name || '').trim().toLowerCase();
+        paidBySupplier.set(k, (paidBySupplier.get(k) || 0) + Number(p.payment_amount || 0));
+      });
+
+      const agreementSuppliers = new Set(
+        (agrRes.data || []).map((a: any) => (a.supplier_name || '').trim().toLowerCase())
+      );
+
       const payRows: Payable[] = [
-        ...(payRes.data || []).map((p: any) => ({
-          id: p.id,
-          source: 'pagamento' as const,
-          supplier: p.supplier_name || '—',
-          amount: Number(p.payment_amount || 0),
-          date: p.payment_date,
-          notes: p.notes,
-        })),
-        ...(agrRes.data || []).map((a: any) => ({
-          id: a.id,
-          source: 'accordo' as const,
-          supplier: a.supplier_name || '—',
-          amount: Number(a.total_amount || 0),
-          date: a.end_date,
-          notes: a.notes,
-        })),
+        // Pagamenti a fornitori SENZA accordo → debito storico residuo
+        ...(payRes.data || [])
+          .filter((p: any) => !agreementSuppliers.has((p.supplier_name || '').trim().toLowerCase()))
+          .map((p: any) => ({
+            id: p.id,
+            source: 'pagamento' as const,
+            supplier: p.supplier_name || '—',
+            amount: Number(p.payment_amount || 0),
+            date: p.payment_date,
+            notes: p.notes,
+          })),
+        // Accordi → mostro RESIDUO (totale - già pagato)
+        ...(agrRes.data || []).map((a: any) => {
+          const paid = paidBySupplier.get((a.supplier_name || '').trim().toLowerCase()) || 0;
+          const residuo = Math.max(0, Number(a.total_amount || 0) - paid);
+          return {
+            id: a.id,
+            source: 'accordo' as const,
+            supplier: a.supplier_name || '—',
+            amount: residuo,
+            date: a.end_date,
+            notes: a.notes ? `${a.notes} · pagato ${eur(paid)} / ${eur(Number(a.total_amount || 0))}` : `pagato ${eur(paid)} / ${eur(Number(a.total_amount || 0))}`,
+          };
+        }),
       ];
 
       const comRows: CommissionRow[] = (comRes.data || []).map((c: any) => ({
