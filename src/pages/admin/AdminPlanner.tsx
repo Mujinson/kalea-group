@@ -123,6 +123,14 @@ export default function AdminPlanner() {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
 
+  // Server-side KPIs (count + sum) — affidabili, indipendenti dai filtri client
+  const [serverKpis, setServerKpis] = useState({
+    sitesActive: 0, sitesCompleted: 0, sitesOverdue: 0,
+    leadsTotal: 0, leadsLast30: 0,
+    quotesSent: 0, quotesAccepted: 0, quotesValue: 0, activeSitesValue: 0,
+    receivables: 0, payables: 0, paymentsOverdue: 0, commissionsAccrued: 0,
+  });
+
   const [crewDialog, setCrewDialog] = useState(false);
   const [assignDialog, setAssignDialog] = useState<null | { crew_id?: string; site_id?: string; start_date?: string }>(null);
   const [selectedSite, setSelectedSite] = useState<Site | null>(null);
@@ -144,7 +152,65 @@ export default function AdminPlanner() {
     setCrews(cs || []); setCrewMembers(cm || []); setAssignments(ca || []);
     setSites(st || []); setWorkers(wk || []); setCustomers(cu || []);
   }, []);
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+
+  const fetchServerKpis = useCallback(async () => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const since30 = format(addDays(new Date(), -30), 'yyyy-MM-dd');
+    const ACTIVE = ['attivo', 'in_corso', 'in_progress', 'pianificato', 'planned', 'da_iniziare'];
+    const DONE = ['completato', 'completed', 'chiuso'];
+    const ACCEPTED = ['accettato', 'accepted', 'approved', 'approvato'];
+    const SENT = ['inviato', 'sent', 'inviata', 'accettato', 'accepted'];
+
+    const safe = async <T,>(p: Promise<T>, fb: T): Promise<T> => { try { return await p; } catch { return fb; } };
+
+    const head = (tbl: string, build?: (q: any) => any) => safe(
+      (async () => {
+        let q: any = (supabase as any).from(tbl).select('*', { count: 'exact', head: true });
+        if (build) q = build(q);
+        const { count } = await q;
+        return count || 0;
+      })(), 0);
+
+    const [
+      sitesActive, sitesCompleted, sitesOverdue,
+      leadsTotal, leadsLast30,
+      quotesSent, quotesAccepted,
+    ] = await Promise.all([
+      head('construction_sites', (q) => q.in('status', ACTIVE)),
+      head('construction_sites', (q) => q.in('status', DONE)),
+      head('construction_sites', (q) => q.lt('planned_end_date', today).not('status', 'in', `(${DONE.join(',')})`)),
+      head('leads'),
+      head('leads', (q) => q.gte('created_at', since30)),
+      head('quotes', (q) => q.in('status', SENT)),
+      head('quotes', (q) => q.in('status', ACCEPTED)),
+    ]);
+
+    // Somme valore: quotes accettati + commissioni + crediti + debiti
+    const sumCol = async (tbl: string, col: string, build?: (q: any) => any): Promise<number> => safe(
+      (async () => {
+        let q: any = (supabase as any).from(tbl).select(col);
+        if (build) q = build(q);
+        const { data } = await q;
+        return (data || []).reduce((acc: number, r: any) => acc + Number(r[col] || 0), 0);
+      })(), 0);
+
+    const [quotesValue, commissionsAccrued, receivables, payables, paymentsOverdue] = await Promise.all([
+      sumCol('quotes', 'total_amount', (q) => q.in('status', ACCEPTED)),
+      sumCol('commissions', 'amount', (q) => q.eq('status', 'da_liquidare')),
+      sumCol('commercial_invoices', 'amount', (q) => q.neq('status', 'pagata').neq('status', 'paid').neq('status', 'incassata')),
+      sumCol('site_expenses', 'amount', (q) => q.eq('paid', false)),
+      sumCol('payment_schedules', 'amount', (q) => q.lt('due_date', today).neq('status', 'paid').neq('status', 'pagato')),
+    ]);
+
+    setServerKpis({
+      sitesActive, sitesCompleted, sitesOverdue,
+      leadsTotal, leadsLast30,
+      quotesSent, quotesAccepted, quotesValue, activeSitesValue: quotesValue,
+      receivables, payables, paymentsOverdue, commissionsAccrued,
+    });
+  }, []);
+
+  useEffect(() => { fetchAll(); fetchServerKpis(); }, [fetchAll, fetchServerKpis]);
 
   const customerName = (id?: string | null) => {
     if (!id) return '';
