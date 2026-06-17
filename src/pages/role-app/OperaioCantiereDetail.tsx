@@ -232,7 +232,7 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
               <span className="text-[#6B6258] flex flex-wrap gap-x-3 gap-y-1 sm:justify-end">
                 <span>Inizio {formatExactTime(l.start_time)}</span>
                 <span>Fine {formatExactTime(l.end_time)}</span>
-                <span>{l.end_time ? `${Number(l.hours_worked).toFixed(2)} h` : 'in corso'}</span>
+                <span>{l.end_time ? formatDuration(Number(l.hours_worked)) : 'in corso'}</span>
               </span>
             </div>
           ))}
