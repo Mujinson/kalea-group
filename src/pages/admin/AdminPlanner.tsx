@@ -25,6 +25,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Crew, CrewMember, Assignment, Site, Worker, computeConflicts, crewSaturation,
   workerName, durationDays, formatDeadline, PRIORITY_COLORS, STATUS_COLORS, STATUS_LABEL, assignmentContainsDay, shiftAssignment,
@@ -397,16 +399,21 @@ export default function AdminPlanner() {
             const dayStr = format(d, 'yyyy-MM-dd');
             const inMonth = isSameMonth(d, cursor);
             const dayAssigns = filteredAssignments.filter((a) => assignmentContainsDay(a, d));
+            const isToday = format(new Date(), 'yyyy-MM-dd') === dayStr;
             return (
-              <div key={dayStr} className={`bg-white min-h-[90px] p-1 ${inMonth ? '' : 'opacity-40'}`}>
-                <div className="text-[10px] font-bold mb-1">{format(d, 'd')}</div>
+              <div
+                key={dayStr}
+                onClick={() => { setCursor(d); setView('giorno'); }}
+                className={`bg-white min-h-[90px] p-1 cursor-pointer hover:bg-blue-50/60 transition-colors ${inMonth ? '' : 'opacity-40'} ${isToday ? 'ring-2 ring-blue-500 ring-inset' : ''}`}
+              >
+                <div className={`text-[10px] font-bold mb-1 inline-flex items-center justify-center ${isToday ? 'bg-blue-600 text-white rounded-full w-5 h-5' : ''}`}>{format(d, 'd')}</div>
                 <div className="space-y-0.5">
                   {dayAssigns.slice(0, 3).map((a) => {
                     const c = crews.find((x) => x.id === a.crew_id);
                     const s = sites.find((x) => x.id === a.site_id);
                     if (!c) return null;
                     return (
-                      <div key={a.id} onClick={() => s && setSelectedSite(s)} className="text-[9px] truncate cursor-pointer px-1 rounded" style={{ background: c.color + '20', borderLeft: `2px solid ${c.color}` }} title={`${c.name} → ${s?.name || s?.city}`}>
+                      <div key={a.id} onClick={(e) => { e.stopPropagation(); s && setSelectedSite(s); }} className="text-[9px] truncate cursor-pointer px-1 rounded" style={{ background: c.color + '20', borderLeft: `2px solid ${c.color}` }} title={`${c.name} → ${s?.name || s?.city}`}>
                         {c.name} · {s?.name || s?.city}
                       </div>
                     );
@@ -567,8 +574,21 @@ export default function AdminPlanner() {
           </div>
           <div className="flex items-center gap-2">
             <Button size="sm" variant="ghost" onClick={() => shift(-1)}><ChevronLeft className="w-4 h-4" /></Button>
-            <Button size="sm" variant="outline" onClick={() => setCursor(new Date())}>Oggi</Button>
-            <span className="text-sm font-semibold capitalize min-w-[180px] text-center">{periodLabel}</span>
+            <Button
+              size="sm"
+              variant={format(cursor, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd') ? 'default' : 'outline'}
+              onClick={() => setCursor(new Date())}
+            >Oggi</Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="text-sm font-semibold capitalize min-w-[180px] text-center px-2 py-1 rounded hover:bg-muted transition-colors">
+                  {periodLabel}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="center">
+                <Calendar mode="single" selected={cursor} onSelect={(d) => d && setCursor(d)} weekStartsOn={1} locale={it} initialFocus />
+              </PopoverContent>
+            </Popover>
             <Button size="sm" variant="ghost" onClick={() => shift(1)}><ChevronRight className="w-4 h-4" /></Button>
           </div>
           <div className="flex items-center gap-2 text-xs">
