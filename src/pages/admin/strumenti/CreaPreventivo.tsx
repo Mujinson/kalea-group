@@ -61,9 +61,7 @@ const PRODOTTI = [
   { id:"ba-zenn30p", nome:"BerryAlloc Zenn RigidClick 30", fornitore:"BerryAlloc", categoria:"Vinilico SPC", dims:"1219×178×4+1mm", listino:43.80, coeff:0.45, tappetino:"mai" },
   { id:"ba-spirit55", nome:"BerryAlloc Spirit Soul 55", fornitore:"BerryAlloc", categoria:"Vinilico SPC", dims:"1524×228×5+1mm", listino:61.70, coeff:0.45, tappetino:"mai" },
   { id:"ba-zenngd55", nome:"BerryAlloc Zenn GD 55", fornitore:"BerryAlloc", categoria:"Vinilico colla", dims:"1219×178×2,5mm", listino:37.80, coeff:0.45, tappetino:"mai" },
-  { id:"pq-drnat", nome:"Parquet Dream Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Dream", dims:"160×1200/2200 14mm", listino:152.20, coeff:0.45, tappetino:"opzionale" },
-  { id:"pq-drcrema", nome:"Parquet Dream Rovere Crema", fornitore:"Parquet Woodco", categoria:"Parquet Dream", dims:"160×1200/2200 14mm", listino:175.00, coeff:0.45, tappetino:"opzionale" },
-  { id:"pq-drbianco", nome:"Parquet Dream Rovere Bianco", fornitore:"Parquet Woodco", categoria:"Parquet Dream", dims:"160×1200/2200 14mm", listino:176.80, coeff:0.45, tappetino:"opzionale" },
+  { id:"pq-dream", nome:"Parquet Dream", fornitore:"Parquet Woodco", categoria:"Parquet Dream", dims:"160×1200/2200 14mm", listino:152.20, coeff:0.45, tappetino:"opzionale" },
   { id:"pq-slim120", nome:"Parquet Slim 120 Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Slim", dims:"120×800/1200 10mm", listino:114.80, coeff:0.45, tappetino:"opzionale" },
   { id:"pq-slim180", nome:"Parquet Slim 180 Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Slim", dims:"180×1200/2200 10mm", listino:144.70, coeff:0.45, tappetino:"opzionale" },
   { id:"pq-hernat", nome:"Parquet Her Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Spina", dims:"90×600 spina ital.", listino:86.10, coeff:0.45, tappetino:"mai" },
@@ -147,10 +145,8 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
   "ba-parqherr":  [],
   "ba-spirit55":  [],
 
-  // ─── Woodco — il sito carica i colori via JS, non sono leggibili dallo scrape ───
-  "pq-drnat":    [],
-  "pq-drcrema":  [],
-  "pq-drbianco": [],
+  // ─── Woodco Dream — tonalità fornite direttamente ───
+  "pq-dream":    ["Night","Cinnamon","Chocolate","Bark","Leather","Cognac","Earth","Tannin","Incense","Fog","Flint","Honey","Almond","Cumin","Malt","Fallow","Vicuña","Alpaca","Cashmere","Earth of Umber","Cookie","Sandstone","Golden","Natural","Moonlight","Spicy","Salt","Monk's Robe","cream","Elegant","Camel","Ivory","Natural Oiled","White","Sand","Hemp"],
   "pq-slim120":  [],
   "pq-slim180":  [],
   "pq-hernat":   [],
