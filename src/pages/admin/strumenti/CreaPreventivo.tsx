@@ -73,13 +73,16 @@ const PRODOTTI = [
   { id:"sg-s45crema", nome:"Signature Spina 45 Rovere Crema", fornitore:"Signature", categoria:"Parquet Premium", dims:"180×620mm", listino:242.30, coeff:0.45, tappetino:"mai" },
   { id:"sg-escnat", nome:"Signature Esagono Rovere Naturale", fornitore:"Signature", categoria:"Parquet Premium", dims:"200×231mm", listino:281.10, coeff:0.45, tappetino:"mai" },
   { id:"sg-q1nat", nome:"Signature Q1 Rovere Naturale", fornitore:"Signature", categoria:"Parquet Premium", dims:"600×600mm", listino:316.40, coeff:0.45, tappetino:"mai" },
+  // ─── Biomag (kalea.space/it/biomag-floor) — produzione Kalēa, gestito a magazzino ───
+  { id:"bm-mgo", nome:"Biomag Floor MgO", fornitore:"Biomag", categoria:"Pannello MgO", dims:"1220×2440×6mm", listino:50.00, coeff:0.30, tappetino:"mai", magazzino:true, magazzinoProductType:"MgO" },
 ];
 
-const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Signature"];
+const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Signature","Biomag"];
 const FORN_STYLE: Record<string, { bg: string; c: string }> = {
   "Flow":{bg:"#E6F1FB",c:"#0C447C"},"Kronos":{bg:"#FCE4EC",c:"#880E4F"},
   "Externo":{bg:"#E1F5EE",c:"#085041"},"BerryAlloc":{bg:"#FAEEDA",c:"#633806"},
   "Parquet Woodco":{bg:"#FFF3E0",c:"#7B3A10"},"Signature":{bg:"#EEEDFE",c:"#3C3489"},
+  "Biomag":{bg:"#EAF3DE",c:"#27500A"},
 };
 
 // ─── TONALITÀ per prodotto (datalist suggestion, input libero comunque consentito) ─
@@ -163,6 +166,9 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
   "sg-s45crema": ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
   "sg-escnat":   ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
   "sg-q1nat":    ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
+
+  // ─── Biomag Floor MgO — tonalità Kalēa ───
+  "bm-mgo":      ["Aurora","Corteccia","Cenere","Sabbia","Silven","Terram","Perla","Velora"],
 };
 
 
@@ -996,6 +1002,39 @@ export default function CreaPreventivo() {
   const [showAll, setShowAll] = useState(false);
   const [righeMat, setRigheMat] = useState<any[]>([]);
   const [tonalita, setTonalita] = useState<Array<{id:number; nome:string; mq:number}>>([]);
+  const [stockMap, setStockMap] = useState<Record<string, number>>({});
+
+  // Carica giacenza per tonalità (solo prodotti gestiti a magazzino, es. Biomag MgO)
+  useEffect(() => {
+    if (!prodotto?.magazzino || !prodotto?.magazzinoProductType) {
+      setStockMap({});
+      return;
+    }
+    (async () => {
+      const { data, error } = await supabase
+        .from("inventory")
+        .select("color, quantity_sqm, movement_type")
+        .eq("product_type", prodotto.magazzinoProductType);
+      if (error || !data) { setStockMap({}); return; }
+      const map: Record<string, number> = {};
+      for (const r of data) {
+        const k = String(r.color || "").trim();
+        if (!k) continue;
+        const q = Number(r.quantity_sqm) || 0;
+        const sign = r.movement_type === "OUT" ? -1 : 1;
+        map[k] = (map[k] || 0) + sign * q;
+      }
+      setStockMap(map);
+    })();
+  }, [prodotto?.id, prodotto?.magazzino, prodotto?.magazzinoProductType]);
+
+  const stockFor = (nome: string) => {
+    const k = String(nome || "").trim();
+    if (!k) return null;
+    // match case-insensitive
+    const found = Object.keys(stockMap).find(x => x.toLowerCase() === k.toLowerCase());
+    return found ? stockMap[found] : 0;
+  };
 
   const selectProdotto = (p: any) => {
     setProdotto(p);
@@ -1010,6 +1049,15 @@ export default function CreaPreventivo() {
   const delTon = (id:number) => setTonalita(t => t.filter(x => x.id!==id));
   const tonMqTot = tonalita.reduce((s,x) => s + (Number(x.mq)||0), 0);
 
+  // Tonalità che superano la giacenza (solo per prodotti a magazzino)
+  const overstockRows = prodotto?.magazzino
+    ? tonalita.filter(tn => {
+        const av = stockFor(tn.nome);
+        return av !== null && Number(tn.mq) > av;
+      })
+    : [];
+  const hasOverstock = overstockRows.length > 0;
+
   // Auto-sync: i mq totali del preventivo seguono la somma delle tonalità
   useEffect(() => {
     if (tonalita.length > 0 && tonMqTot > 0 && tonMqTot !== mqPrev) {
@@ -1017,6 +1065,7 @@ export default function CreaPreventivo() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tonMqTot, tonalita.length]);
+
 
   // INTESTAZIONE
   const [lingua, setLingua] = useState("IT");
@@ -1096,6 +1145,11 @@ export default function CreaPreventivo() {
 
   const salvaPreventivo = async () => {
     if (!calc) { toast.error("Configura prima il preventivo"); return; }
+    if (hasOverstock) {
+      const det = overstockRows.map(r => `${r.nome}: ${r.mq} mq richiesti / ${stockFor(r.nome)} mq disp.`).join("; ");
+      toast.error(`Quantità non disponibile a magazzino — ${det}`);
+      return;
+    }
     setSaving(true);
     try {
       const num = numPrev || nextNum();
@@ -1253,25 +1307,43 @@ export default function CreaPreventivo() {
                 {tonalita.length === 0 && (
                   <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
                 )}
-                {tonalita.map((tn, idx) => (
-                  <div key={tn.id} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,marginBottom:8,alignItems:"center"}}>
-                    <input list={`ton-${prodotto.id}`} value={tn.nome}
-                      onChange={e=>updTon(tn.id,"nome",e.target.value)}
-                      placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
-                      style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
-                    <div style={{position:"relative"}}>
-                      <input type="number" min={0} step={0.5} value={tn.mq || ""}
-                        onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
-                        style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
-                      <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
+                {tonalita.map((tn, idx) => {
+                  const av = prodotto.magazzino ? stockFor(tn.nome) : null;
+                  const over = av !== null && Number(tn.mq) > av;
+                  return (
+                  <div key={tn.id} style={{marginBottom:8}}>
+                    <div style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,alignItems:"center"}}>
+                      <input list={`ton-${prodotto.id}`} value={tn.nome}
+                        onChange={e=>updTon(tn.id,"nome",e.target.value)}
+                        placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
+                        style={{padding:"8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
+                      <div style={{position:"relative"}}>
+                        <input type="number" min={0} step={0.5} value={tn.mq || ""}
+                          onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
+                          style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
+                        <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
+                      </div>
+                      <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
                     </div>
-                    <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
+                    {prodotto.magazzino && tn.nome && av !== null && (
+                      <div style={{fontSize:11,marginTop:4,marginLeft:2,color:over?"#A32D2D":"#6B6860"}}>
+                        {over
+                          ? `⚠ Disponibili solo ${av} mq di "${tn.nome}" — richiesti ${tn.mq} mq. Non è possibile preventivare questa quantità.`
+                          : `Disponibili a magazzino: ${av} mq`}
+                      </div>
+                    )}
                   </div>
-                ))}
+                  );
+                })}
                 {tonalita.length > 0 && (
-                  <div style={{padding:"10px 12px",background:"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:"#6B6860"}}>
-                    Totale tonalità: <b style={{color:"#1A1A2E"}}>{tonMqTot} mq</b>
+                  <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#6B6860"}}>
+                    Totale tonalità: <b style={{color:hasOverstock?"#A32D2D":"#1A1A2E"}}>{tonMqTot} mq</b>
                     <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
+                    {hasOverstock && (
+                      <div style={{marginTop:6,fontWeight:500}}>
+                        Quantità non disponibile a magazzino — riduci i mq o cambia tonalità prima di salvare il preventivo.
+                      </div>
+                    )}
                   </div>
                 )}
               </>
