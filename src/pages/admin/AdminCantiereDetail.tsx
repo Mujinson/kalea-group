@@ -116,6 +116,23 @@ const AdminCantiereDetail = () => {
     enabled: !!id,
   });
 
+  const { data: kpiChecklist } = useQuery({
+    queryKey: ["site-checklist-kpi", id],
+    queryFn: async () => {
+      const { data } = await supabase.from("site_checklist_items" as any).select("completed_at").eq("site_id", id!);
+      return (data as any[]) || [];
+    },
+    enabled: !!id,
+  });
+  const { data: kpiIssues } = useQuery({
+    queryKey: ["site-issues-kpi", id],
+    queryFn: async () => {
+      const { data } = await supabase.from("site_issues" as any).select("status").eq("site_id", id!);
+      return (data as any[]) || [];
+    },
+    enabled: !!id,
+  });
+
   // --- Handlers ---
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
