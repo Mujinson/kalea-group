@@ -249,7 +249,7 @@ export default function AdminContabilita() {
   );
 }
 
-function KpiCard({ icon: Icon, label, value, color }: { icon: any; header: string; value: string; color: string }) {
+function KpiCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: string; color: string }) {
   return (
     <Card>
       <CardContent className="p-4 flex items-center gap-3">
