@@ -255,8 +255,13 @@ export default function AdminPlanner() {
     const sat = crews.length
       ? Math.round(crews.reduce((acc, c) => acc + crewSaturation(c, assignments, ws, we).pct, 0) / crews.length)
       : 0;
-    return { active: activeSites.length, workersToday: workersToday.size, freeCrews, overdue, weekHours: Math.round(weekHours), sat };
-  }, [sites, assignments, crews, crewMembers]);
+    return {
+      active: Math.max(activeSites.length, serverKpis.sitesActive),
+      workersToday: workersToday.size, freeCrews,
+      overdue: Math.max(overdue, serverKpis.sitesOverdue),
+      weekHours: Math.round(weekHours), sat,
+    };
+  }, [sites, assignments, crews, crewMembers, serverKpis]);
 
   const conflicts = useMemo(() => computeConflicts(assignments, crews, crewMembers, sites), [assignments, crews, crewMembers, sites]);
 
