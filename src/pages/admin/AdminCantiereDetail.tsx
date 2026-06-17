@@ -354,6 +354,41 @@ const AdminCantiereDetail = () => {
         </Card>
       </div>
 
+      {/* Riepilogo economico */}
+      <Card className="bg-gradient-to-br from-[#1E1B4B] to-[#312E81] text-white border-0">
+        <CardContent className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/60 font-semibold">Riepilogo economico</p>
+              <p className="text-xs text-white/70 mt-0.5">Incassi da preventivi accettati · costi di cantiere · margine</p>
+            </div>
+            <Euro className="w-5 h-5 text-white/40" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/50">Incassi</p>
+              <p className="text-2xl font-bold mt-1">€{totalIncassi.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/50 mt-0.5">{customerQuotes?.length || 0} preventivi accettati</p>
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/50">Materiali</p>
+              <p className="text-2xl font-bold mt-1">€{totalMaterialCost.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/50 mt-0.5">{materials?.length || 0} voci</p>
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/50">Costi & trasporti</p>
+              <p className="text-2xl font-bold mt-1">€{totalExpenses.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/50 mt-0.5">{expenses?.length || 0} spese · €{unpaidExpenses.toLocaleString("it-IT")} da pagare</p>
+            </div>
+            <div className={`rounded-xl p-3 -m-1 ${margine >= 0 ? "bg-emerald-500/15" : "bg-red-500/15"}`}>
+              <p className="text-[11px] uppercase tracking-wider text-white/60">Margine</p>
+              <p className={`text-2xl font-bold mt-1 ${margine >= 0 ? "text-emerald-300" : "text-red-300"}`}>€{margine.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/60 mt-0.5">{marginePerc.toFixed(1)}% del fatturato</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Date */}
       {(site.start_date || site.end_date) && (
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
