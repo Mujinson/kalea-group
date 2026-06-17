@@ -145,6 +145,12 @@ const OperaioCantiereDetail = () => {
               <Mail className="w-3 h-3" /> Email
             </a>
           )}
+          <button
+            onClick={() => setIssueOpen(true)}
+            className="inline-flex items-center gap-1 text-[12px] px-2 py-1 rounded-md bg-[#DC2626] text-white ml-auto"
+          >
+            <AlertTriangle className="w-3 h-3" /> Segnala
+          </button>
         </div>
       </div>
 
