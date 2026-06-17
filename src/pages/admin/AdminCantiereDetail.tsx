@@ -70,7 +70,9 @@ const AdminCantiereDetail = () => {
   const { data: workers } = useQuery({
     queryKey: ["site-workers", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("site_workers" as any).select("*").eq("site_id", id!).order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("site_workers" as any)
+        .select("*, workers(id, first_name, last_name)")
+        .eq("site_id", id!).order("created_at", { ascending: false });
       if (error) throw error;
       return data as any[];
     },
@@ -159,17 +161,21 @@ const AdminCantiereDetail = () => {
     toast.error("Usa il selettore per aggiungere un operaio esistente");
   };
 
-  const handleAddWorkerById = async (userId: string) => {
+  const handleAddWorkerById = async (worker: { id: string; user_id: string | null; first_name: string; last_name: string }) => {
     if (!id) return;
     const { error } = await supabase.from("site_workers" as any).insert({
-      site_id: id, worker_user_id: userId, worker_role: workerForm.worker_role, notes: workerForm.notes || null
+      site_id: id,
+      worker_id: worker.id,
+      worker_user_id: worker.user_id,
+      worker_role: workerForm.worker_role,
+      notes: workerForm.notes || null,
     });
     if (error) {
       if (error.code === '23505') toast.error("Operaio già assegnato a questo cantiere");
-      else toast.error("Errore nell'assegnazione");
+      else toast.error("Errore: " + error.message);
       return;
     }
-    toast.success("Operaio assegnato");
+    toast.success(`${worker.first_name} ${worker.last_name} assegnato`);
     setAddWorkerOpen(false);
     setWorkerForm({ worker_email: "", worker_role: "operaio", notes: "" });
     queryClient.invalidateQueries({ queryKey: ["site-workers", id] });
@@ -234,16 +240,16 @@ const AdminCantiereDetail = () => {
     queryClient.invalidateQueries({ queryKey: ["site-expenses", id] });
   };
 
-  // Fetch operaio users for assignment
+  // Fetch workers (operai/posatori) from workers table for assignment
   const { data: operaioUsers } = useQuery({
-    queryKey: ["operaio-users"],
+    queryKey: ["assignable-workers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("user_roles")
-        .select("user_id, role")
-        .in("role", ["operaio", "admin"]);
+        .from("workers")
+        .select("id, first_name, last_name, user_id, role")
+        .order("first_name");
       if (error) throw error;
-      return data;
+      return data as any[];
     },
     enabled: addWorkerOpen,
   });
@@ -361,7 +367,7 @@ const AdminCantiereDetail = () => {
                           <Users className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium">{w.worker_user_id?.slice(0, 8)}...</p>
+                          <p className="text-sm font-medium">{w.workers ? `${w.workers.first_name} ${w.workers.last_name}` : (w.worker_user_id?.slice(0, 8) + "…")}</p>
                           <p className="text-xs text-muted-foreground">{w.worker_role} · {w.is_active ? "Attivo" : "Inattivo"}</p>
                         </div>
                       </div>
@@ -652,25 +658,25 @@ const AdminCantiereDetail = () => {
               <Input value={workerForm.notes} onChange={e => setWorkerForm({ ...workerForm, notes: e.target.value })} placeholder="Note opzionali" />
             </div>
             <div className="space-y-2">
-              <Label>Seleziona utente</Label>
-              <div className="max-h-48 overflow-y-auto space-y-2 border rounded-lg p-2">
-                {operaioUsers?.map((u) => {
-                  const isAlready = workers?.some((w: any) => w.worker_user_id === u.user_id);
+              <Label>Seleziona operaio</Label>
+              <div className="max-h-64 overflow-y-auto space-y-2 border rounded-lg p-2">
+                {operaioUsers?.map((u: any) => {
+                  const isAlready = workers?.some((w: any) => w.worker_id === u.id || (u.user_id && w.worker_user_id === u.user_id));
                   return (
                     <button
-                      key={u.user_id}
+                      key={u.id}
                       disabled={isAlready}
-                      onClick={() => handleAddWorkerById(u.user_id)}
+                      onClick={() => handleAddWorkerById(u)}
                       className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${isAlready ? 'bg-muted/50 text-muted-foreground cursor-not-allowed' : 'hover:bg-muted'}`}
                     >
-                      <span className="font-medium">{u.user_id.slice(0, 8)}...</span>
-                      <Badge variant="outline" className="ml-2 text-[10px]">{u.role}</Badge>
+                      <span className="font-medium">{u.first_name} {u.last_name}</span>
+                      {u.role && <Badge variant="outline" className="ml-2 text-[10px]">{u.role}</Badge>}
                       {isAlready && <span className="text-xs text-muted-foreground ml-2">(già assegnato)</span>}
                     </button>
                   );
                 })}
                 {(!operaioUsers || operaioUsers.length === 0) && (
-                  <p className="text-sm text-muted-foreground text-center py-4">Nessun utente trovato</p>
+                  <p className="text-sm text-muted-foreground text-center py-4">Nessun operaio trovato. Crealo in "Operai".</p>
                 )}
               </div>
             </div>
