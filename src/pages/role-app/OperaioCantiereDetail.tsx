@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import {
   ArrowLeft, Play, Square, Camera, MessageSquare, Send, Loader2,
-  MapPin, Phone, Image as ImageIcon, Info, Wrench, ListChecks, AlertTriangle,
+  MapPin, Phone, Image as ImageIcon, Wrench, ListChecks, AlertTriangle,
   Mail, MessageCircle, CheckCircle2,
 } from 'lucide-react';
 import { toast } from 'sonner';
