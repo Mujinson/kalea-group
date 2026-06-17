@@ -69,21 +69,23 @@ const PRODOTTI = [
   { id:"pq-star", nome:"Parquet Star", fornitore:"Parquet Woodco", categoria:"Parquet Star", dims:"—", listino:98.80, coeff:0.45, tappetino:"mai" },
   { id:"pq-him", nome:"Parquet Him", fornitore:"Parquet Woodco", categoria:"Parquet Him", dims:"—", listino:0, coeff:0.45, tappetino:"mai" },
   { id:"pq-her", nome:"Parquet Her", fornitore:"Parquet Woodco", categoria:"Parquet Her", dims:"—", listino:86.10, coeff:0.45, tappetino:"mai" },
-  { id:"sg-s45nat", nome:"Signature Spina 45 Rovere Naturale", fornitore:"Signature", categoria:"Parquet Premium", dims:"180×620mm", listino:223.00, coeff:0.45, tappetino:"mai" },
-  { id:"sg-s45crema", nome:"Signature Spina 45 Rovere Crema", fornitore:"Signature", categoria:"Parquet Premium", dims:"180×620mm", listino:242.30, coeff:0.45, tappetino:"mai" },
-  { id:"sg-escnat", nome:"Signature Esagono Rovere Naturale", fornitore:"Signature", categoria:"Parquet Premium", dims:"200×231mm", listino:281.10, coeff:0.45, tappetino:"mai" },
-  { id:"sg-q1nat", nome:"Signature Q1 Rovere Naturale", fornitore:"Signature", categoria:"Parquet Premium", dims:"600×600mm", listino:316.40, coeff:0.45, tappetino:"mai" },
+  { id:"sg-s45nat", nome:"Signature Spina 45 Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"180×620mm", listino:223.00, coeff:0.45, tappetino:"mai" },
+  { id:"sg-s45crema", nome:"Signature Spina 45 Rovere Crema", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"180×620mm", listino:242.30, coeff:0.45, tappetino:"mai" },
+  { id:"sg-escnat", nome:"Signature Esagono Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"200×231mm", listino:281.10, coeff:0.45, tappetino:"mai" },
+  { id:"sg-q1nat", nome:"Signature Q1 Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"600×600mm", listino:316.40, coeff:0.45, tappetino:"mai" },
   // ─── Biomag (kalea.space/it/biomag-floor) — produzione Kalēa, gestito a magazzino ───
   { id:"bm-mgo", nome:"Biomag Floor MgO", fornitore:"Biomag", categoria:"Pannello MgO", dims:"1220×2440×6mm", listino:50.00, coeff:0.30, tappetino:"mai", magazzino:true, magazzinoProductType:"MgO" },
 ];
 
-const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Signature","Biomag"];
+const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Biomag"];
 const FORN_STYLE: Record<string, { bg: string; c: string }> = {
   "Flow":{bg:"#E6F1FB",c:"#0C447C"},"Kronos":{bg:"#FCE4EC",c:"#880E4F"},
   "Externo":{bg:"#E1F5EE",c:"#085041"},"BerryAlloc":{bg:"#FAEEDA",c:"#633806"},
   "Parquet Woodco":{bg:"#FFF3E0",c:"#7B3A10"},"Signature":{bg:"#EEEDFE",c:"#3C3489"},
   "Biomag":{bg:"#EAF3DE",c:"#27500A"},
 };
+const prodStyle = (p: any) => FORN_STYLE[p.nome?.startsWith("Signature") ? "Signature" : p.fornitore] || {bg:"#F0EDE8",c:"#5F5E5A"};
+const prodBadgeLabel = (p: any) => p.nome?.startsWith("Signature") ? "Signature" : p.fornitore;
 
 // ─── TONALITÀ per prodotto (datalist suggestion, input libero comunque consentito) ─
 // Nomi commerciali REALI delle tonalità — fonti ufficiali verificate:
@@ -1253,7 +1255,7 @@ export default function CreaPreventivo() {
                   {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                     const costoMq=p.listino*p.coeff;
                     const prezzoMq=costoMq*MARKUP;
-                    const fc=FORN_STYLE[p.fornitore]||{bg:"#F0EDE8",c:"#5F5E5A"};
+                    const fc=prodStyle(p);
                     return (
                       <div key={p.id} onClick={()=>selectProdotto(p)}
                         style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",cursor:"pointer",borderLeft:"3px solid transparent"}}>
@@ -1262,7 +1264,7 @@ export default function CreaPreventivo() {
                           <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
                         </div>
                         <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
-                          <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{p.fornitore}</span>
+                          <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
                           <span>{p.categoria}</span><span>· {p.dims}</span>
                           <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
                         </div>
@@ -1285,7 +1287,7 @@ export default function CreaPreventivo() {
                     <div style={{fontSize:17,fontWeight:500,color:"#1A1A2E"}}>{prodotto.nome}</div>
                     <div style={{fontSize:12,color:"#9A9890",marginTop:2}}>{prodotto.dims} · {prodotto.categoria}</div>
                     <div style={{display:"flex",gap:6,alignItems:"center",marginTop:8}}>
-                      <span style={{fontSize:10,padding:"3px 9px",borderRadius:6,fontWeight:500,background:FORN_STYLE[prodotto.fornitore]?.bg,color:FORN_STYLE[prodotto.fornitore]?.c}}>{prodotto.fornitore}</span>
+                      <span style={{fontSize:10,padding:"3px 9px",borderRadius:6,fontWeight:500,background:prodStyle(prodotto).bg,color:prodStyle(prodotto).c}}>{prodBadgeLabel(prodotto)}</span>
                       <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*MARKUP)}/mq</span>
                     </div>
                   </div>
