@@ -47,8 +47,8 @@ const AdminPayments = () => {
   });
 
   const [agreementForm, setAgreementForm] = useState({
-    supplier_name: 'Fornitore Terni',
-    total_amount: '89100',
+    supplier_name: '',
+    total_amount: '',
     start_date: format(new Date(), 'yyyy-MM-dd'),
     end_date: '',
     notes: '',
@@ -104,9 +104,13 @@ const AdminPayments = () => {
     }
 
     try {
+      if (!agreement) {
+        toast.error('Configura prima un accordo');
+        return;
+      }
       const { error } = await supabase.from('supplier_payments').insert({
-        supplier_name: agreement?.supplier_name || 'Fornitore Terni',
-        total_debt: agreement?.total_amount || 89100,
+        supplier_name: agreement.supplier_name,
+        total_debt: agreement.total_amount,
         payment_amount: parseFloat(paymentForm.payment_amount),
         payment_date: paymentForm.payment_date,
         notes: paymentForm.notes || null,
@@ -180,20 +184,36 @@ const AdminPayments = () => {
     }
   };
 
+  const handleDeleteAgreement = async () => {
+    if (!agreement) return;
+    if (!confirm('Eliminare definitivamente questo accordo? I pagamenti registrati verranno mantenuti.')) return;
+    try {
+      const { error } = await supabase.from('payment_agreements').delete().eq('id', agreement.id);
+      if (error) throw error;
+      toast.success('Accordo eliminato');
+      setAgreement(null);
+      setAgreementForm({ supplier_name: '', total_amount: '', start_date: format(new Date(), 'yyyy-MM-dd'), end_date: '', notes: '' });
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting agreement:', error);
+      toast.error('Errore nell\'eliminazione');
+    }
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
   };
 
   const totalPaid = payments.reduce((sum, p) => sum + Number(p.payment_amount), 0);
-  const totalDebt = agreement?.total_amount || 89100;
-  const remaining = totalDebt - totalPaid;
-  const progressPercent = (totalPaid / totalDebt) * 100;
+  const totalDebt = agreement?.total_amount || 0;
+  const remaining = Math.max(0, totalDebt - totalPaid);
+  const progressPercent = totalDebt > 0 ? (totalPaid / totalDebt) * 100 : 0;
 
-  const daysRemaining = agreement?.end_date 
+  const daysRemaining = agreement?.end_date
     ? Math.max(0, differenceInDays(new Date(agreement.end_date), new Date()))
-    : 365;
+    : 0;
 
-  const isUrgent = daysRemaining < 30 && remaining > 0;
+  const isUrgent = !!agreement && daysRemaining < 30 && remaining > 0;
 
   return (
     <div className="space-y-4">
@@ -227,7 +247,7 @@ const AdminPayments = () => {
                     step="0.01"
                     value={agreementForm.total_amount}
                     onChange={(e) => setAgreementForm({...agreementForm, total_amount: e.target.value})}
-                    placeholder="89100"
+                    placeholder="0.00"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -308,59 +328,66 @@ const AdminPayments = () => {
       </div>
 
       {/* Agreement Status Card */}
-      <Card className={isUrgent ? 'border-orange-500' : ''}>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                {isUrgent && <AlertTriangle className="w-5 h-5 text-orange-500" />}
-                Stato Accordo - {agreement?.supplier_name || 'Fornitore Terni'}
-              </CardTitle>
-              <CardDescription>
-                {agreement ? (
-                  <>Dal {format(new Date(agreement.start_date), 'dd MMM yyyy', { locale: it })} al {format(new Date(agreement.end_date), 'dd MMM yyyy', { locale: it })}</>
-                ) : (
-                  'Configura l\'accordo per iniziare'
-                )}
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
+      {agreement ? (
+        <Card className={isUrgent ? 'border-orange-500' : ''}>
+          <CardHeader>
+            <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-2xl font-bold">{formatCurrency(totalDebt)}</p>
-                <p className="text-sm text-muted-foreground">Debito Totale</p>
+                <CardTitle className="flex items-center gap-2">
+                  {isUrgent && <AlertTriangle className="w-5 h-5 text-orange-500" />}
+                  Stato Accordo - {agreement.supplier_name}
+                </CardTitle>
+                <CardDescription>
+                  Dal {format(new Date(agreement.start_date), 'dd MMM yyyy', { locale: it })} al {format(new Date(agreement.end_date), 'dd MMM yyyy', { locale: it })}
+                </CardDescription>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-green-600">{formatCurrency(totalPaid)}</p>
-                <p className="text-sm text-muted-foreground">Pagato</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-orange-600">{formatCurrency(remaining)}</p>
-                <p className="text-sm text-muted-foreground">Residuo</p>
-              </div>
+              <Button variant="ghost" size="icon" onClick={handleDeleteAgreement} title="Elimina accordo">
+                <Trash2 className="w-4 h-4 text-destructive" />
+              </Button>
             </div>
-            
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Progresso: {progressPercent.toFixed(1)}%</span>
-                <span className={isUrgent ? 'text-orange-600 font-medium' : ''}>
-                  {daysRemaining} giorni rimanenti
-                </span>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-2xl font-bold">{formatCurrency(totalDebt)}</p>
+                  <p className="text-sm text-muted-foreground">Debito Totale</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-green-600">{formatCurrency(totalPaid)}</p>
+                  <p className="text-sm text-muted-foreground">Pagato</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-orange-600">{formatCurrency(remaining)}</p>
+                  <p className="text-sm text-muted-foreground">Residuo</p>
+                </div>
               </div>
-              <Progress value={progressPercent} className="h-4" />
-            </div>
 
-            {isUrgent && remaining > 0 && (
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-sm text-orange-800">
-                <strong>Attenzione:</strong> Mancano meno di 30 giorni alla scadenza e ci sono ancora {formatCurrency(remaining)} da pagare.
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Progresso: {progressPercent.toFixed(1)}%</span>
+                  <span className={isUrgent ? 'text-orange-600 font-medium' : ''}>
+                    {daysRemaining} giorni rimanenti
+                  </span>
+                </div>
+                <Progress value={progressPercent} className="h-4" />
               </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+
+              {isUrgent && remaining > 0 && (
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-sm text-orange-800">
+                  <strong>Attenzione:</strong> Mancano meno di 30 giorni alla scadenza e ci sono ancora {formatCurrency(remaining)} da pagare.
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardContent className="py-10 text-center text-muted-foreground">
+            Nessun accordo configurato. Premi <strong>Configura Accordo</strong> per crearne uno.
+          </CardContent>
+        </Card>
+      )}
 
       {/* Payments Table */}
       <div>
