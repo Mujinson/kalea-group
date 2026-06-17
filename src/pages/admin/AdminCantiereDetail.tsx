@@ -41,6 +41,7 @@ const AdminCantiereDetail = () => {
 
   // Worker form
   const [workerForm, setWorkerForm] = useState({ worker_email: "", worker_role: "operaio", notes: "" });
+  const [selectedWorkerIds, setSelectedWorkerIds] = useState<string[]>([]);
   // Material form
   const [materialForm, setMaterialForm] = useState({ material_name: "", quantity: "", unit: "pz", unit_cost: "", notes: "" });
   // Expense form
@@ -161,22 +162,27 @@ const AdminCantiereDetail = () => {
     toast.error("Usa il selettore per aggiungere un operaio esistente");
   };
 
-  const handleAddWorkerById = async (worker: { id: string; user_id: string | null; first_name: string; last_name: string }) => {
-    if (!id) return;
-    const { error } = await supabase.from("site_workers" as any).insert({
-      site_id: id,
-      worker_id: worker.id,
-      worker_user_id: worker.user_id,
-      worker_role: workerForm.worker_role,
-      notes: workerForm.notes || null,
+  const handleAssignSelected = async (allWorkers: any[]) => {
+    if (!id || selectedWorkerIds.length === 0) { toast.error("Seleziona almeno un operaio"); return; }
+    const rows = selectedWorkerIds.map((wid) => {
+      const w = allWorkers.find((x) => x.id === wid);
+      return {
+        site_id: id,
+        worker_id: wid,
+        worker_user_id: w?.user_id || null,
+        worker_role: workerForm.worker_role,
+        notes: workerForm.notes || null,
+      };
     });
+    const { error } = await supabase.from("site_workers" as any).insert(rows);
     if (error) {
-      if (error.code === '23505') toast.error("Operaio già assegnato a questo cantiere");
+      if (error.code === '23505') toast.error("Uno o più operai sono già assegnati");
       else toast.error("Errore: " + error.message);
       return;
     }
-    toast.success(`${worker.first_name} ${worker.last_name} assegnato`);
+    toast.success(`${rows.length} operai assegnati`);
     setAddWorkerOpen(false);
+    setSelectedWorkerIds([]);
     setWorkerForm({ worker_email: "", worker_role: "operaio", notes: "" });
     queryClient.invalidateQueries({ queryKey: ["site-workers", id] });
   };
@@ -268,6 +274,25 @@ const AdminCantiereDetail = () => {
   const totalExpenses = expenses?.reduce((sum, e) => sum + (e.amount || 0), 0) || 0;
   const unpaidExpenses = expenses?.filter(e => !e.is_paid).reduce((sum, e) => sum + (e.amount || 0), 0) || 0;
 
+  // Incassi: somma preventivi accettati del cliente collegato al cantiere
+  const { data: customerQuotes } = useQuery({
+    queryKey: ["site-customer-quotes", site?.customer_id],
+    enabled: !!site?.customer_id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("quotes")
+        .select("id, total_amount, status, project_name")
+        .eq("customer_id", site!.customer_id!)
+        .in("status", ["accepted", "accettato"]);
+      if (error) throw error;
+      return data || [];
+    },
+  });
+  const totalIncassi = (customerQuotes || []).reduce((s, q: any) => s + (q.total_amount || 0), 0);
+  const totalCosti = totalMaterialCost + totalExpenses;
+  const margine = totalIncassi - totalCosti;
+  const marginePerc = totalIncassi > 0 ? (margine / totalIncassi) * 100 : 0;
+
   if (!site) return <div className="p-8 text-center text-muted-foreground">Caricamento...</div>;
 
   return (
@@ -328,6 +353,41 @@ const AdminCantiereDetail = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Riepilogo economico */}
+      <Card className="bg-gradient-to-br from-[#1E1B4B] to-[#312E81] text-white border-0">
+        <CardContent className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/60 font-semibold">Riepilogo economico</p>
+              <p className="text-xs text-white/70 mt-0.5">Incassi da preventivi accettati · costi di cantiere · margine</p>
+            </div>
+            <Euro className="w-5 h-5 text-white/40" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/50">Incassi</p>
+              <p className="text-2xl font-bold mt-1">€{totalIncassi.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/50 mt-0.5">{customerQuotes?.length || 0} preventivi accettati</p>
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/50">Materiali</p>
+              <p className="text-2xl font-bold mt-1">€{totalMaterialCost.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/50 mt-0.5">{materials?.length || 0} voci</p>
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-white/50">Costi & trasporti</p>
+              <p className="text-2xl font-bold mt-1">€{totalExpenses.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/50 mt-0.5">{expenses?.length || 0} spese · €{unpaidExpenses.toLocaleString("it-IT")} da pagare</p>
+            </div>
+            <div className={`rounded-xl p-3 -m-1 ${margine >= 0 ? "bg-emerald-500/15" : "bg-red-500/15"}`}>
+              <p className="text-[11px] uppercase tracking-wider text-white/60">Margine</p>
+              <p className={`text-2xl font-bold mt-1 ${margine >= 0 ? "text-emerald-300" : "text-red-300"}`}>€{margine.toLocaleString("it-IT", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-[10px] text-white/60 mt-0.5">{marginePerc.toFixed(1)}% del fatturato</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Date */}
       {(site.start_date || site.end_date) && (
@@ -658,27 +718,38 @@ const AdminCantiereDetail = () => {
               <Input value={workerForm.notes} onChange={e => setWorkerForm({ ...workerForm, notes: e.target.value })} placeholder="Note opzionali" />
             </div>
             <div className="space-y-2">
-              <Label>Seleziona operaio</Label>
-              <div className="max-h-64 overflow-y-auto space-y-2 border rounded-lg p-2">
+              <Label>Seleziona operai (multi)</Label>
+              <div className="max-h-64 overflow-y-auto space-y-1 border rounded-lg p-2">
                 {operaioUsers?.map((u: any) => {
                   const isAlready = workers?.some((w: any) => w.worker_id === u.id || (u.user_id && w.worker_user_id === u.user_id));
+                  const isSelected = selectedWorkerIds.includes(u.id);
                   return (
-                    <button
+                    <label
                       key={u.id}
-                      disabled={isAlready}
-                      onClick={() => handleAddWorkerById(u)}
-                      className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${isAlready ? 'bg-muted/50 text-muted-foreground cursor-not-allowed' : 'hover:bg-muted'}`}
+                      className={`flex items-center gap-2 w-full p-2 rounded-lg text-sm transition-colors ${isAlready ? 'bg-muted/50 text-muted-foreground cursor-not-allowed' : 'hover:bg-muted cursor-pointer'} ${isSelected ? 'bg-primary/10' : ''}`}
                     >
-                      <span className="font-medium">{u.first_name} {u.last_name}</span>
-                      {u.role && <Badge variant="outline" className="ml-2 text-[10px]">{u.role}</Badge>}
-                      {isAlready && <span className="text-xs text-muted-foreground ml-2">(già assegnato)</span>}
-                    </button>
+                      <input
+                        type="checkbox"
+                        disabled={isAlready}
+                        checked={isSelected}
+                        onChange={() => setSelectedWorkerIds((s) => s.includes(u.id) ? s.filter(x => x !== u.id) : [...s, u.id])}
+                      />
+                      <span className="font-medium flex-1">{u.first_name} {u.last_name}</span>
+                      {u.role && <Badge variant="outline" className="text-[10px]">{u.role}</Badge>}
+                      {isAlready && <span className="text-xs text-muted-foreground">(già)</span>}
+                    </label>
                   );
                 })}
                 {(!operaioUsers || operaioUsers.length === 0) && (
                   <p className="text-sm text-muted-foreground text-center py-4">Nessun operaio trovato. Crealo in "Operai".</p>
                 )}
               </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => { setAddWorkerOpen(false); setSelectedWorkerIds([]); }}>Annulla</Button>
+              <Button onClick={() => handleAssignSelected(operaioUsers || [])} disabled={selectedWorkerIds.length === 0}>
+                Assegna {selectedWorkerIds.length > 0 && `(${selectedWorkerIds.length})`}
+              </Button>
             </div>
           </div>
         </DialogContent>

@@ -23,6 +23,7 @@ const AdminCantieri = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "attivo" | "completato" | "pausa">("all");
   const [createOpen, setCreateOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
@@ -48,6 +49,9 @@ const AdminCantieri = () => {
   });
 
   const filtered = sites?.filter((s) => {
+    if (statusFilter === "attivo" && s.status !== "attivo") return false;
+    if (statusFilter === "completato" && s.status !== "completato") return false;
+    if (statusFilter === "pausa" && (s.status === "attivo" || s.status === "completato")) return false;
     if (!search) return true;
     const q = search.toLowerCase();
     return (
@@ -161,11 +165,22 @@ const AdminCantieri = () => {
       />
 
       <CrmKpiRow cols={4}>
-        <CrmKpiTile label="Totale" value={sites?.length || 0} color="indigo" icon={<HardHat className="w-4 h-4" />} />
-        <CrmKpiTile label="Attivi" value={sites?.filter(s => s.status === 'attivo').length || 0} color="green" />
-        <CrmKpiTile label="Completati" value={sites?.filter(s => s.status === 'completato').length || 0} color="blue" />
-        <CrmKpiTile label="In pausa" value={sites?.filter(s => s.status !== 'attivo' && s.status !== 'completato').length || 0} color="amber" />
+        <div onClick={() => setStatusFilter("all")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "all" ? "ring-2 ring-[#1E1B4B]/40" : "hover:scale-[1.01]"}`}>
+          <CrmKpiTile label="Totale" value={sites?.length || 0} color="indigo" icon={<HardHat className="w-4 h-4" />} />
+        </div>
+        <div onClick={() => setStatusFilter("attivo")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "attivo" ? "ring-2 ring-green-500/50" : "hover:scale-[1.01]"}`}>
+          <CrmKpiTile label="Attivi" value={sites?.filter(s => s.status === 'attivo').length || 0} color="green" />
+        </div>
+        <div onClick={() => setStatusFilter("completato")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "completato" ? "ring-2 ring-blue-500/50" : "hover:scale-[1.01]"}`}>
+          <CrmKpiTile label="Completati" value={sites?.filter(s => s.status === 'completato').length || 0} color="blue" />
+        </div>
+        <div onClick={() => setStatusFilter("pausa")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "pausa" ? "ring-2 ring-amber-500/50" : "hover:scale-[1.01]"}`}>
+          <CrmKpiTile label="In pausa" value={sites?.filter(s => s.status !== 'attivo' && s.status !== 'completato').length || 0} color="amber" />
+        </div>
       </CrmKpiRow>
+      {statusFilter !== "all" && (
+        <p className="text-xs text-[#8A7060]">Filtro: <span className="font-semibold">{statusFilter}</span> · <button onClick={() => setStatusFilter("all")} className="underline">rimuovi</button></p>
+      )}
 
       <CrmFilterBar>
         <div className="relative flex-1">
