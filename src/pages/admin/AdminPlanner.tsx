@@ -197,9 +197,9 @@ export default function AdminPlanner() {
     const [quotesValue, commissionsAccrued, receivables, payables, paymentsOverdue] = await Promise.all([
       sumCol('quotes', 'total_amount', (q) => q.in('status', ACCEPTED)),
       sumCol('commissions', 'amount', (q) => q.eq('status', 'da_liquidare')),
-      sumCol('commercial_invoices', 'amount', (q) => q.neq('status', 'pagata').neq('status', 'paid').neq('status', 'incassata')),
-      sumCol('site_expenses', 'amount', (q) => q.eq('paid', false)),
-      sumCol('payment_schedules', 'amount', (q) => q.lt('due_date', today).neq('status', 'paid').neq('status', 'pagato')),
+      sumCol('commercial_invoices', 'total_amount', (q) => q.is('paid_date', null)),
+      sumCol('site_expenses', 'amount', (q) => q.eq('is_paid', false)),
+      sumCol('payment_schedules', 'amount', (q) => q.lt('due_date', today).eq('is_paid', false)),
     ]);
 
     setServerKpis({
