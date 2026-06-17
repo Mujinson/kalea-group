@@ -409,10 +409,33 @@ const AdminCantiereDetail = () => {
         </CardContent>
       </Card>
 
+      {/* KPI cantiere */}
+      {(() => {
+        const total = (kpiChecklist || []).length;
+        const done = (kpiChecklist || []).filter((c) => c.completed_at).length;
+        const progress = total ? Math.round((done / total) * 100) : 0;
+        const endRef = site.planned_end_date || site.end_date;
+        const daysLeft = endRef ? differenceInDays(new Date(endRef), new Date()) : null;
+        const openIssues = (kpiIssues || []).filter((i) => i.status !== "chiusa").length;
+        const photoCount = (media || []).filter((m) => m.file_type === "image").length;
+        const est = Number(site.estimated_hours || 0);
+        return (
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <KpiCard label="Avanzamento" value={`${progress}%`} sub={`${done}/${total} voci`} />
+            <KpiCard label="Giorni residui" value={daysLeft === null ? "—" : String(daysLeft)} sub={daysLeft !== null && daysLeft < 0 ? "in ritardo" : ""} danger={daysLeft !== null && daysLeft < 0} />
+            <KpiCard label="Ore lavorate" value={`${totalHours}h`} sub={est ? `su ${est}h previste` : "nessuna stima"} />
+            <KpiCard label="Foto" value={String(photoCount)} sub="caricate" />
+            <KpiCard label="Segnalazioni aperte" value={String(openIssues)} danger={openIssues > 0} />
+          </div>
+        );
+      })()}
+
       {/* Date */}
-      {(site.start_date || site.end_date) && (
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+      {(site.start_date || site.end_date || site.planned_start_date || site.planned_end_date) && (
+        <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
           <CalendarDays className="w-4 h-4" />
+          {site.planned_start_date && <span>Prev. inizio: {format(new Date(site.planned_start_date), "dd/MM/yyyy")}</span>}
+          {site.planned_end_date && <span>Prev. fine: {format(new Date(site.planned_end_date), "dd/MM/yyyy")}</span>}
           {site.start_date && <span>Inizio: {format(new Date(site.start_date), "dd/MM/yyyy")}</span>}
           {site.end_date && <span>Fine: {format(new Date(site.end_date), "dd/MM/yyyy")}</span>}
         </div>
