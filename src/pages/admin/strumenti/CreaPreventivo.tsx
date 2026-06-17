@@ -82,60 +82,74 @@ const FORN_STYLE: Record<string, { bg: string; c: string }> = {
 };
 
 // ─── TONALITÀ per prodotto (datalist suggestion, input libero comunque consentito) ─
+// Nomi commerciali REALI delle tonalità (fonti ufficiali: pavimentoflow.it, kronosceramiche.com,
+// berryalloc.com, woodco.it). Dove non disponibili sono nomi generici da personalizzare a mano.
 const TONALITA_BY_PRODUCT: Record<string, string[]> = {
-  "fl-40": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato","Rovere Affumicato","Noce","Cemento Chiaro","Cemento Scuro"],
-  "fl-55w": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato","Rovere Affumicato","Noce"],
-  "fl-55c": ["Cemento Chiaro","Cemento Beige","Cemento Grigio","Cemento Scuro"],
-  "fl-xl": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato","Rovere Affumicato"],
-  "fl-spina": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato"],
-  "fl-pxlw": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato","Rovere Affumicato","Noce"],
-  "fl-pxlt": ["Pietra Beige","Pietra Grigia","Cemento Chiaro","Cemento Scuro","Travertino"],
-  "fl-pspita": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato"],
-  "fl-pspfr": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato"],
-  "fl-55gdw": ["Rovere Naturale","Rovere Miele","Noce"],
-  "fl-55gdc": ["Cemento Chiaro","Cemento Scuro"],
-  "kp-pv120x280": ["Beige","Grigio","Avorio","Antracite"],
-  "kp-pv120x120": ["Beige","Grigio","Avorio","Antracite"],
-  "kp-pv60x120": ["Beige","Grigio","Avorio","Antracite"],
-  "kp-pv60x120g": ["Beige","Grigio","Avorio","Antracite"],
-  "kp-pv60x60": ["Beige","Grigio","Avorio","Antracite"],
-  "kp-ma120x280": ["Bianco","Beige","Grigio","Nero"],
-  "kp-ma120x120": ["Bianco","Beige","Grigio","Nero"],
-  "kp-ma60x120": ["Bianco","Beige","Grigio","Nero"],
-  "kp-ps60x120": ["Naturale","Grigia"],
-  "kp-na60x120": ["Bianco","Crema","Grigio"],
+  // Flow Floor — collezioni 40 / 55 / XL / Spina (nomi di montagne e vulcani)
+  "fl-40":     ["Vinson","Sinai","Pirenei","Pamir","Cook","Carpazi"],
+  "fl-55w":    ["Annapurna","Nanga Parbat","Himalaya","Kilimangiaro","Cerro Torre","Atlante","Dolomiti","Monte Bianco","K2","Everest"],
+  "fl-55c":    ["Teide","Fuji","Asama"],
+  "fl-xl":     ["Cordillera","Rocky","Ararat","Whitney","Meru","Logan","Caucaso","Ambrym","Aso","Vesuvio","Nabro","Kibo"],
+  "fl-spina":  ["Karu","Zagros","Ural","Taurus","Jura"],
+  "fl-pxlw":   ["Cordillera","Rocky","Ararat","Whitney","Meru","Logan","Caucaso"],
+  "fl-pxlt":   ["Ambrym","Aso","Vesuvio","Nabro","Kibo"],
+  "fl-pspita": ["Karu","Zagros","Ural"],
+  "fl-pspfr":  ["Taurus","Jura"],
+  "fl-55gdw":  ["Annapurna","Nanga Parbat","Himalaya","Kilimangiaro","Atlante","Dolomiti","Monte Bianco","Everest"],
+  "fl-55gdc":  ["Teide","Fuji","Asama"],
+
+  // Kronos Prima Materia (verificato)
+  "kp-pv120x280": ["Cemento","Cenere","Sandalo"],
+  "kp-pv120x120": ["Cemento","Cenere","Sandalo"],
+  "kp-pv60x120":  ["Cemento","Cenere","Sandalo"],
+  "kp-pv60x120g": ["Cemento","Cenere","Sandalo"],
+  "kp-pv60x60":   ["Cemento","Cenere","Sandalo"],
+  // Kronos Marmi / Pietra / Onyx / Metalli / Wood / Outdoor / Rocks (nomi reali da verificare)
+  "kp-ma120x280": ["Calacatta","Statuario","Sahara Noir","Travertino"],
+  "kp-ma120x120": ["Calacatta","Statuario","Sahara Noir","Travertino"],
+  "kp-ma60x120":  ["Calacatta","Statuario","Sahara Noir","Travertino"],
+  "kp-ps60x120":  ["Pietra di Vals","Pietra del Cardoso"],
+  "kp-na60x120":  ["Onice Bianco","Onice Miele","Onice Verde"],
   "kp-me120x280": ["Bronzo","Acciaio","Corten","Titanio"],
-  "kp-me60x120": ["Bronzo","Acciaio","Corten","Titanio"],
-  "kp-lr150": ["Chevron Bianco","Chevron Beige","Chevron Grigio"],
-  "kp-ws240": ["Rovere","Noce","Wengè"],
-  "kp-out95": ["Beige","Grigio","Antracite"],
-  "kp-rk102": ["Bianca","Beige","Grigia","Nera"],
+  "kp-me60x120":  ["Bronzo","Acciaio","Corten","Titanio"],
+  "kp-lr150":     ["Chevron Naturale","Chevron Crema","Chevron Sbiancato"],
+  "kp-ws240":     ["Rovere","Noce","Wengè"],
+  "kp-out95":     ["Cemento","Cenere","Sandalo"],
+  "kp-rk102":     ["Porfido","Quarzite","Ardesia"],
+
+  // Externo (decking) — nomi generici, da verificare
   "ex-skudo": ["Teak","Ipè","Grigio","Antracite"],
-  "ex-trad": ["Teak","Ipè","Grigio","Antracite"],
-  "ba-ocean8v4": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato"],
-  "ba-ocean12v4": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato","Rovere Scuro"],
-  "ba-ocean8xl": ["Rovere Naturale","Rovere Sbiancato","Rovere Affumicato"],
-  "ba-chateau": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato"],
-  "ba-cadenza": ["Rovere Naturale","Rovere Sbiancato"],
-  "ba-origcomp": ["Rovere Naturale","Rovere Miele","Rovere Sbiancato"],
-  "ba-grandav": ["Rovere Naturale","Rovere Sbiancato","Noce"],
-  "ba-parqxl": ["Rovere Naturale","Rovere Spazzolato","Rovere Affumicato"],
-  "ba-parqherr": ["Rovere Naturale","Rovere Affumicato"],
-  "ba-zenn55p": ["Rovere Naturale","Rovere Miele","Cemento"],
-  "ba-zenn30p": ["Rovere Naturale","Cemento"],
-  "ba-spirit55": ["Rovere Naturale","Rovere Sbiancato","Rovere Scuro"],
-  "ba-zenngd55": ["Rovere Naturale","Cemento"],
-  "pq-drnat": ["Rovere Naturale Spazzolato","Rovere Naturale Oliato"],
-  "pq-drcrema": ["Rovere Crema Spazzolato","Rovere Crema Oliato"],
-  "pq-drbianco": ["Rovere Bianco Spazzolato","Rovere Bianco Oliato"],
-  "pq-slim120": ["Rovere Naturale"],
-  "pq-slim180": ["Rovere Naturale","Rovere Sbiancato"],
-  "pq-hernat": ["Rovere Naturale","Rovere Sbiancato"],
-  "pq-starnat": ["Rovere Naturale","Rovere Affumicato"],
-  "sg-s45nat": ["Rovere Naturale","Rovere Spazzolato"],
+  "ex-trad":  ["Teak","Ipè","Grigio","Antracite"],
+
+  // BerryAlloc — nomi commerciali ufficiali
+  "ba-ocean8v4":  ["Bloom Light Brown","Bloom Light Natural","Bloom Natural","Bloom Sand Natural","Bloom Silver Grey","Bloom Warm Natural","Canyon Light","Canyon Natural","Charme Black","Charme Light Natural","Charme White","Chestnut White","Crush Brown Natural","Crush Light","Crush Natural"],
+  "ba-ocean12v4": ["Bloom Sand Natural","Bloom Silver Grey","Epic Light","Epic Natural","Gyant Light Sand","Gyant Sand Natural","Gyant Warm Brown","Gyant Warm Natural","Jazz Light Grey","Jazz Sand Natural","Select Light Brown","Select Sand Natural"],
+  "ba-ocean8xl":  ["Bloom Sand Natural","Bloom Silver Grey","Gyant XL Light Sand","Gyant XL Sand Natural","Gyant XL Warm Brown","Gyant XL Warm Natural","Jazz XL Light Grey","Jazz XL Sand Natural","Select Light Brown","Select Sand Natural"],
+  "ba-chateau":   ["Bloom Light Brown","Bloom Sand Natural","Charme Black","Charme Light Natural","Chestnut White","Gyant Dark Brown","Gyant Light","Java Light Grey"],
+  "ba-cadenza":   ["Allegro Light","Legato Light","Allegro Natural","Legato Light Natural","Allegro Brown","Allegro Dark Brown","Legato Dark Brown","Allegro Light Grey","Legato Dark Grey"],
+  "ba-origcomp":  ["Bloom Natural","Charme Light","Gyant Warm","Java Light Grey"],
+  "ba-grandav":   ["Avenue Light","Avenue Natural","Avenue Dark Brown"],
+  "ba-parqxl":    ["Rovere Naturale","Rovere Spazzolato","Rovere Affumicato"],
+  "ba-parqherr":  ["Rovere Naturale","Rovere Affumicato"],
+  "ba-zenn55p":   ["Bloom Natural","Charme Light","Gyant Warm"],
+  "ba-zenn30p":   ["Bloom Natural","Charme Light"],
+  "ba-zenngd55":  ["Bloom Natural","Gyant Warm"],
+  "ba-spirit55":  ["Country Natural","Country Brown","Country Dark"],
+
+  // Woodco — collezioni verificate (Star / Dream)
+  "pq-drnat":    ["Rovere Naturale"],
+  "pq-drcrema":  ["Rovere Crema"],
+  "pq-drbianco": ["Rovere Bianco"],
+  "pq-slim120":  ["Rovere Naturale","Rovere Sbiancato"],
+  "pq-slim180":  ["Rovere Naturale","Rovere Sbiancato","Rovere Affumicato"],
+  "pq-hernat":   ["Rovere Naturale","Rovere Sbiancato"],
+  "pq-starnat":  ["Rovere Naturale","Rovere Bianco","Rovere Cream"],
+
+  // Signature — nomi generici, da verificare
+  "sg-s45nat":   ["Rovere Naturale","Rovere Spazzolato"],
   "sg-s45crema": ["Rovere Crema","Rovere Crema Spazzolato"],
-  "sg-escnat": ["Rovere Naturale"],
-  "sg-q1nat": ["Rovere Naturale","Rovere Sbiancato"],
+  "sg-escnat":   ["Rovere Naturale"],
+  "sg-q1nat":    ["Rovere Naturale","Rovere Sbiancato"],
 };
 
 
@@ -982,6 +996,14 @@ export default function CreaPreventivo() {
   const delTon = (id:number) => setTonalita(t => t.filter(x => x.id!==id));
   const tonMqTot = tonalita.reduce((s,x) => s + (Number(x.mq)||0), 0);
 
+  // Auto-sync: i mq totali del preventivo seguono la somma delle tonalità
+  useEffect(() => {
+    if (tonalita.length > 0 && tonMqTot > 0 && tonMqTot !== mqPrev) {
+      setMqPrev(tonMqTot);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tonMqTot, tonalita.length]);
+
   // INTESTAZIONE
   const [lingua, setLingua] = useState("IT");
   const t = T[lingua];
@@ -1218,32 +1240,24 @@ export default function CreaPreventivo() {
                   <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
                 )}
                 {tonalita.map((tn, idx) => (
-                  <div key={tn.id} style={{display:"grid",gridTemplateColumns:"1fr 100px 30px",gap:8,marginBottom:8,alignItems:"center"}}>
+                  <div key={tn.id} style={{display:"grid",gridTemplateColumns:"minmax(0,1fr) 120px 28px",gap:8,marginBottom:8,alignItems:"center"}}>
                     <input list={`ton-${prodotto.id}`} value={tn.nome}
                       onChange={e=>updTon(tn.id,"nome",e.target.value)}
                       placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
-                      style={{padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
-                    <div style={{display:"flex",alignItems:"center",gap:4,border:"1px solid #E0DDD8",borderRadius:7,padding:"0 8px",background:"#fff"}}>
-                      <input type="number" min={0} step={0.5} value={tn.mq}
+                      style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
+                    <div style={{position:"relative"}}>
+                      <input type="number" min={0} step={0.5} value={tn.mq || ""}
                         onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
-                        style={{flex:1,padding:"7px 0",border:"none",fontSize:13,outline:"none",textAlign:"right",background:"transparent"}}/>
-                      <span style={{fontSize:11,color:"#9A9890"}}>mq</span>
+                        style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
+                      <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
                     </div>
-                    <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:18,padding:0}}>×</button>
+                    <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
                   </div>
                 ))}
                 {tonalita.length > 0 && (
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 12px",background:"#F0EDE8",borderRadius:8,marginTop:6}}>
-                    <div style={{fontSize:12,color:"#6B6860"}}>
-                      Totale tonalità: <b style={{color:"#1A1A2E"}}>{tonMqTot} mq</b>
-                      {tonMqTot !== mqPrev && <span style={{color:"#A32D2D",marginLeft:8}}>≠ {mqPrev} mq totali</span>}
-                    </div>
-                    {tonMqTot > 0 && tonMqTot !== mqPrev && (
-                      <button onClick={()=>setMqPrev(tonMqTot)}
-                        style={{padding:"4px 10px",borderRadius:6,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:11}}>
-                        Applica ai mq totali
-                      </button>
-                    )}
+                  <div style={{padding:"10px 12px",background:"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:"#6B6860"}}>
+                    Totale tonalità: <b style={{color:"#1A1A2E"}}>{tonMqTot} mq</b>
+                    <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
                   </div>
                 )}
               </>
