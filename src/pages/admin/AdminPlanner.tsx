@@ -25,6 +25,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Crew, CrewMember, Assignment, Site, Worker, computeConflicts, crewSaturation,
   workerName, durationDays, formatDeadline, PRIORITY_COLORS, STATUS_COLORS, STATUS_LABEL, assignmentContainsDay, shiftAssignment,
