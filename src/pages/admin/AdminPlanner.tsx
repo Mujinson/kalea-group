@@ -626,11 +626,21 @@ export default function AdminPlanner() {
         {/* KPI */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
           <KPI icon={HardHat} label="Cantieri attivi" value={kpis.active} color="#3B82F6" />
+          <KPI icon={HardHat} label="Completati" value={serverKpis.sitesCompleted} color="#16A34A" />
+          <KPI icon={AlertTriangle} label="In ritardo" value={kpis.overdue} color="#DC2626" />
           <KPI icon={UsersIcon} label="Operai oggi" value={kpis.workersToday} color="#16A34A" />
           <KPI icon={Layers} label="Squadre libere" value={kpis.freeCrews} color="#8C7B6B" />
-          <KPI icon={AlertTriangle} label="In ritardo" value={kpis.overdue} color="#DC2626" />
           <KPI icon={Clock} label="Ore settimana" value={kpis.weekHours} color="#F59E0B" />
           <KPI icon={TrendingUp} label="Saturazione" value={`${kpis.sat}%`} color="#A855F7" />
+          <KPI icon={UsersIcon} label="Lead totali" value={serverKpis.leadsTotal} color="#0EA5E9" />
+          <KPI icon={UsersIcon} label="Lead 30gg" value={serverKpis.leadsLast30} color="#0EA5E9" />
+          <KPI icon={Layers} label="Preventivi inviati" value={serverKpis.quotesSent} color="#6366F1" />
+          <KPI icon={Layers} label="Preventivi accettati" value={serverKpis.quotesAccepted} color="#16A34A" />
+          <KPI icon={TrendingUp} label="Valore venduto" value={`€${Math.round(serverKpis.quotesValue).toLocaleString('it-IT')}`} color="#16A34A" />
+          <KPI icon={TrendingUp} label="Crediti" value={`€${Math.round(serverKpis.receivables).toLocaleString('it-IT')}`} color="#0EA5E9" />
+          <KPI icon={AlertTriangle} label="Debiti" value={`€${Math.round(serverKpis.payables).toLocaleString('it-IT')}`} color="#DC2626" />
+          <KPI icon={AlertTriangle} label="Scaduti" value={`€${Math.round(serverKpis.paymentsOverdue).toLocaleString('it-IT')}`} color="#B91C1C" />
+          <KPI icon={TrendingUp} label="Commissioni" value={`€${Math.round(serverKpis.commissionsAccrued).toLocaleString('it-IT')}`} color="#A855F7" />
         </div>
 
         {/* Toolbar */}
