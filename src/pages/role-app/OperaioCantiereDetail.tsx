@@ -151,11 +151,21 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
     const end = new Date();
     const start = new Date(`${activeLog.work_date}T${activeLog.start_time}`);
     const hrs = Math.max(0, (end.getTime() - start.getTime()) / 3_600_000);
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('site_work_logs')
       .update({ end_time: end.toTimeString().slice(0, 8), hours_worked: Number(hrs.toFixed(2)) })
-      .eq('id', activeLog.id);
-    if (error) toast.error(error.message); else { toast.success('Fine turno registrata'); await load(); }
+      .eq('id', activeLog.id)
+      .select('id,end_time')
+      .maybeSingle();
+    if (error) {
+      toast.error(error.message);
+    } else if (!data) {
+      toast.error('Impossibile aggiornare il turno (permessi mancanti)');
+    } else {
+      toast.success('Fine turno registrata');
+      setActiveLog(null);
+      await load();
+    }
     setBusy(false);
   };
 
