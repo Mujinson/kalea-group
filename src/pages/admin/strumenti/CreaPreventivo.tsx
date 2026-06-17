@@ -1170,6 +1170,10 @@ export default function CreaPreventivo() {
       toast.error(`Quantità non disponibile a magazzino — ${det}`);
       return;
     }
+    if (isWoodco && !wcReady) {
+      toast.error("Seleziona collezione, essenza, finitura e formato Woodco prima di salvare");
+      return;
+    }
     setSaving(true);
     try {
       const num = numPrev || nextNum();
