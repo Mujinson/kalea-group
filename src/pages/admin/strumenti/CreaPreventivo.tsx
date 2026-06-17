@@ -1145,6 +1145,11 @@ export default function CreaPreventivo() {
 
   const salvaPreventivo = async () => {
     if (!calc) { toast.error("Configura prima il preventivo"); return; }
+    if (hasOverstock) {
+      const det = overstockRows.map(r => `${r.nome}: ${r.mq} mq richiesti / ${stockFor(r.nome)} mq disp.`).join("; ");
+      toast.error(`Quantità non disponibile a magazzino — ${det}`);
+      return;
+    }
     setSaving(true);
     try {
       const num = numPrev || nextNum();
