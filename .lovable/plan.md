@@ -1,90 +1,168 @@
-## Obiettivo
-Estendere il modulo Cantiere esistente (Admin + App Operaio) con dati tecnici pavimento, accessori, attrezzatura, logistica, checklist, segnalazioni problemi, GPS sui turni, allegati e KPI. Nessuna nuova sezione del CRM, solo evoluzione di quello che già esiste.
+# Planner Operativo Cantieri
+
+Trasformo la card calendario statica della dashboard admin in un Planner Operativo completo con drag & drop, gestione squadre, conflitti, Gantt e KPI.
 
 ---
 
-## 1) Database (migrazione unica)
-
-Estensione tabella `construction_sites` con nuove colonne:
-- **Pavimento**: `floor_type`, `floor_brand`, `floor_model`, `floor_color`, `floor_thickness`, `floor_sqm`, `floor_lot`, `floor_tech_notes`
-- **Tempistiche**: `planned_start_date`, `planned_end_date`, `available_days`, `estimated_hours`
-- **Logistica**: `building_floor`, `has_elevator`, `access_difficulty` (facile/media/difficile), `parking_available`, `parking_distance_m`, `ztl_zone`, `permits_required`, `electricity_available`, `water_available`, `inhabited`, `construction_type` (nuova/ristrutturazione), `logistics_notes`
-- **Contatti**: `contact_email` (gli altri esistono già)
-- **Priorità**: `priority` (bassa/media/alta/urgente)
-- **GPS**: `latitude`, `longitude` (per verifica distanza turno)
+## 1) Database (una migrazione)
 
 Nuove tabelle:
-- `site_accessories` — accessorio (battiscopa/profili/sottopavimento/materassino/colla/silicone/stucco/giunti/altro), quantità, note
-- `site_equipment` — attrezzatura richiesta (taglierina/sega/laser/trapano/aspiratore/miscelatore/martello/carrello/scala/prolunghe/DPI/altro)
-- `site_checklist_items` — voce checklist + ordine + `completed_by` + `completed_at` (config admin, spunta operaio)
-- `site_issues` — segnalazione operaio: tipo (materiale_mancante/tecnico/ritardo/cliente_assente/altro), descrizione, foto obbligatoria, stato (aperta/chiusa), `reported_by`, `resolved_at`
-- `site_attachments` — file admin (planimetrie/disegni/PDF/foto iniziali/documenti) su bucket `site-media`
 
-Estensione `site_work_logs` con colonne GPS:
-- `start_latitude`, `start_longitude`, `end_latitude`, `end_longitude`, `start_distance_m`, `end_distance_m`
+- **`crews`** — squadre operative
+  - `name` (es. "Alpha"), `color` (hex per badge), `max_workers` (capienza), `lead_worker_id` (capocantiere), `notes`, `active`
+- **`crew_members`** — operai dentro una squadra (associazione corrente, non storica)
+  - `crew_id`, `worker_id`, `role` (capo/operaio), UNIQUE(worker_id) → un operaio in una sola squadra alla volta
+- **`crew_assignments`** — assegnazione squadra → cantiere per intervallo di date
+  - `crew_id`, `site_id`, `start_date`, `end_date`, `hours_per_day` (default 8), `notes`, `created_by`
+  - Indici su (site_id, start_date), (crew_id, start_date)
 
-Estensione `site_media` con `phase` enum (`pre`|`during`|`post`) — già usato `description` per pre/post, aggiungiamo `during`.
+Riuso esistenti:
+- `construction_sites` ha già `priority`, `planned_start_date/end_date`, `estimated_hours`, `latitude/longitude`, status, ecc.
+- `site_workers` rimane per assegnazioni storiche/dirette operaio-cantiere (compatibilità). Il planner lavora su squadre, ma può anche assegnare operai singoli tramite spostamento tra squadre.
+- `workers` per anagrafica.
 
-RLS coerente con pattern esistente: admin gestisce, operai assegnati al cantiere leggono/inseriscono dove pertinente. GRANT a `authenticated` e `service_role`.
-
----
-
-## 2) Lato Admin — `src/pages/admin/AdminCantiereDetail.tsx`
-
-Riorganizzo in sezioni (accordion o tab interni alla pagina, mantenendo header attuale):
-1. **Info pavimento** — form con tutti i campi tecnici
-2. **Accessori** — tabella editabile (add/remove righe)
-3. **Attrezzatura** — multi-select checklist
-4. **Tempistiche** — date + ore + calcoli auto (giorni rimanenti, ritardo, avanzamento % da checklist)
-5. **Caratteristiche cantiere** — form logistica completo
-6. **Indirizzo & contatti** — campi + bottoni Chiama / Maps / WhatsApp
-7. **Allegati** — upload multipli su `site-media` con `phase='attachment'`
-8. **Checklist lavori** — builder voci ordinate
-9. **Priorità** — selettore con badge colorato
-10. **KPI** — pannello con: % avanzamento, giorni residui, ore lavorate vs previste, n. foto, n. segnalazioni aperte
-11. **Segnalazioni** — lista issues con possibilità di chiuderle
+RLS: admin full access, commerciali/operai SELECT su crews e crew_assignments dei propri cantieri (pattern già in uso). GRANT a `authenticated` e `service_role`.
 
 ---
 
-## 3) Lato Operaio — `src/pages/role-app/OperaioCantiereDetail.tsx`
+## 2) Pagina nuova: `AdminPlanner`
 
-Estendo l'header con: stato, badge priorità, giorni rimanenti, referente, telefono, indirizzo, bottoni Chiama/Maps/WhatsApp.
+Nuova rotta `/admin/planner` (icona nel sidebar), e **la card calendario in dashboard diventa un widget di anteprima** che linka al planner.
 
-Aggiungo nuovi tab (oltre a Ore/Foto/Chat esistenti):
-- **Info** — pavimento, accessori, MQ, note tecniche, caratteristiche cantiere (sola lettura)
-- **Attrezzatura** — checklist "portato / mancante" salvato per turno corrente
-- **Checklist** — voci configurate da admin, operaio spunta (salva `completed_by`/`completed_at`)
-- **Segnala** — bottone "Segnala problema" → sheet con tipo + descrizione + foto obbligatoria (upload su `site-media`)
+Layout pagina:
 
-Aggiornamenti tab esistenti:
-- **Ore**: aggiungo riepilogo "totale sul cantiere", "oggi", "residue stimate" (estimated_hours - totale). Su `Inizia turno` richiedo geolocalizzazione browser, calcolo distanza haversine dal cantiere, salvo `start_latitude/longitude/distance_m`; idem `Termina turno`.
-- **Foto**: aggiungo bottone "Durante lavori" oltre a PRE/POST; ogni foto già ha `created_at` come timestamp.
+```text
+┌──────────────────────────────────────────────────────────┐
+│ KPI BAR: Cantieri attivi · Operai oggi · Squadre libere  │
+│          Cantieri in ritardo · Ore settimana · Saturaz.  │
+├──────────────────────────────────────────────────────────┤
+│ [Giorno|Settimana|Mese|Anno|Gantt|Carico] [< oggi >]     │
+│ Filtri: Squadra ▾ Operaio ▾ Cliente ▾ Stato ▾ Priorità ▾ │
+│         Zona ▾ Capocantiere ▾                            │
+├──────────────────────────────────────────────────────────┤
+│  AREA PLANNER (vista corrente)                           │
+└──────────────────────────────────────────────────────────┘
+```
+
+### Viste
+
+1. **Giorno** — colonne = cantieri attivi quel giorno; ogni colonna lista le squadre assegnate (card squadra droppabile)
+2. **Settimana** — griglia 7 giorni × cantieri (riga); celle contengono badge squadra
+3. **Mese** — griglia tipo calendario; ogni giorno mostra max 3 squadre+contatore
+4. **Anno** — heatmap mensile con conteggio cantieri/giorno
+5. **Gantt** — righe = cantieri, asse X = giorni; barre `crew_assignments` con resize/drag (sposta date, allunga durata)
+6. **Carico squadre** — per ogni squadra: progress bar saturazione (ore settimana / capacità), n. cantieri attivi, giorni occupati, capacità residua
+
+### Card cantiere (vista Giorno/Settimana)
+
+```
+📍 Piacenza                      🔴 Alta
+🏠 Carla Romano
+👥 Squadra Alpha (3)
+   • Mario Rossi
+   • Luca Bianchi  
+   • Andrea Verdi
+⏱ Scade tra 3 giorni · 📈 65%   🟡
+```
+
+Stato (Da iniziare/In corso/Pausa/Completato/Bloccato) come pill colorata top-right.
+Click → drawer laterale con tab: Dettaglio · Chat · Foto · Documenti · Ore · Materiali · Attrezzatura. Pulsante "Apri pagina completa" naviga a `AdminCantiereDetail`.
+
+### Drag & drop (dnd-kit)
+
+Già in `package.json` controllo se presente, altrimenti `bun add @dnd-kit/core @dnd-kit/sortable`.
+
+Casi gestiti:
+- **Squadra tra giorni**: drag card squadra da giorno A → giorno B (Settimana/Mese) → update `crew_assignments.start_date/end_date` shift
+- **Squadra tra cantieri**: drag card squadra da cantiere X → cantiere Y → cambia `site_id`
+- **Più squadre stesso cantiere**: la card cantiere accetta più drop, mostra le squadre stackate
+- **Operaio tra squadre**: drag chip operaio da Squadra Alpha → Squadra Beta → update `crew_members.crew_id` (e check unique)
+- **Gantt resize**: handle ai bordi barra → aggiorna `start_date`/`end_date`
+
+Ottimistico via React Query mutations + rollback su errore.
+
+### Gestione conflitti
+
+Calcolata client-side dopo ogni mutation, prima del commit:
+
+| Conflitto | Severità | Check |
+|---|---|---|
+| Operaio in 2 cantieri stesso giorno | 🔴 | join crew_assignments overlap su giorno + crew_members |
+| Squadra > max_workers | 🟡 | count crew_members > crews.max_workers |
+| Cantiere non finirà entro deadline | 🟡 | ore_residue > ore_disponibili_dai_assignments fino a planned_end_date |
+| Cantiere senza assegnazioni nei prossimi N giorni | 🔴 | nessun crew_assignment attivo |
+
+Badge: 🟢/🟡/🔴 sulla card + toast warning + lista conflitti in pannello laterale.
+
+### Automazioni intelligenti (pannello "Suggerimenti")
+
+Calcolo client-side:
+- Squadre senza assignment nei prossimi 7gg → "Disponibile"
+- Operai senza crew → "Da assegnare"
+- Cantieri in ritardo → propone squadra libera più vicina geograficamente (se lat/lng presenti)
+- Sovraccarichi → segnala squadra > 100% saturazione
+
+### Filtri rapidi
+
+Stato globale via `useState` + `useMemo` filter su data fetched. Filtri: squadra (chip multi), operaio, cliente (lookup), stato cantiere, priorità, zona (regione/provincia da indirizzo cantiere), capocantiere.
+
+### KPI bar (top)
+
+Query React Query con `select count`:
+- Cantieri attivi (status IN ...)
+- Operai al lavoro oggi (distinct worker da crew_assignments oggi)
+- Squadre libere oggi
+- Cantieri in ritardo (planned_end_date < now AND status != completato)
+- Ore totali settimana (sum hours_per_day × giorni assignment)
+- Saturazione media squadre
 
 ---
 
-## 4) File toccati
+## 3) File da creare
 
-- `supabase/migrations/<nuova>.sql` — schema + RLS + GRANT
-- `src/pages/admin/AdminCantiereDetail.tsx` — esteso
-- `src/pages/role-app/OperaioCantiereDetail.tsx` — esteso, nuovi tab
-- Piccoli componenti nuovi: `src/components/admin/cantieri/SiteAccessoriesEditor.tsx`, `SiteEquipmentEditor.tsx`, `SiteChecklistEditor.tsx`, `SiteAttachmentsEditor.tsx`, `SiteKPIPanel.tsx`
-- `src/components/role-app/SiteIssueSheet.tsx` — segnalazione operaio
-- Helper: `src/lib/geo.ts` (haversine)
+```
+src/pages/admin/AdminPlanner.tsx                    # pagina principale + KPI + filtri + switch viste
+src/components/admin/planner/PlannerDayView.tsx
+src/components/admin/planner/PlannerWeekView.tsx
+src/components/admin/planner/PlannerMonthView.tsx
+src/components/admin/planner/PlannerYearView.tsx
+src/components/admin/planner/PlannerGanttView.tsx
+src/components/admin/planner/PlannerLoadView.tsx    # carico squadre
+src/components/admin/planner/SiteCard.tsx           # card cantiere droppable
+src/components/admin/planner/CrewChip.tsx           # squadra draggable
+src/components/admin/planner/WorkerPill.tsx         # operaio draggable
+src/components/admin/planner/SiteDetailDrawer.tsx   # drawer laterale (riusa parti AdminCantiereDetail)
+src/components/admin/planner/PlannerFilters.tsx
+src/components/admin/planner/PlannerKPIBar.tsx
+src/components/admin/planner/ConflictsPanel.tsx
+src/components/admin/planner/SuggestionsPanel.tsx
+src/components/admin/planner/CrewManagerDialog.tsx  # crea/modifica squadre
+src/lib/planner.ts                                  # helpers: overlap, conflicts, saturation, format scadenza
+supabase/migrations/<new>.sql
+```
+
+File da modificare:
+- `src/pages/admin/AdminOverview.tsx` — la card calendario diventa "Planner di settimana (anteprima)" con CTA "Apri Planner Operativo"
+- `src/components/admin/AdminSidebar.tsx` — voce "Planner" con icona `CalendarRange`
+- `src/App.tsx` — rotta `/admin/planner`
 
 ---
 
-## 5) Cosa NON faccio
-- Non tocco la struttura del CRM né le rotte
-- Non rifaccio la chat (resta com'è, già per-cantiere)
-- Non aggiungo i18n nuovi se non strettamente necessario (italiano come oggi nel modulo)
+## 4) Cosa NON tocco
+
+- Calendario operai (`AdminAppointments`, `OperaioCalendario`) — separato, resta com'è
+- Pagine cantiere dettaglio — il drawer richiama dati esistenti
+- RLS pattern già consolidato — replicato 1:1
+- i18n — modulo admin è in italiano come oggi
 
 ---
 
-## Note tecniche
-- Calcoli auto (giorni rimanenti, ritardo, avanzamento %) lato client da campi `planned_*` e checklist completata
-- GPS: `navigator.geolocation.getCurrentPosition` con fallback graceful se utente rifiuta (turno parte comunque, distanza = null)
-- Foto segnalazione: obbligo lato UI (submit disabilitato senza file)
-- Bucket `site-media` già pubblico, riuso pattern upload esistente
-- Storico cantiere: già coperto da tabelle esistenti (`site_work_logs`, `site_media`, `site_chat_messages`) + nuove `site_issues`
+## 5) Note tecniche
 
-Confermi e procedo con la migrazione + codice?
+- DnD: `@dnd-kit/core` (mobile-friendly, accessibile) — se non installato lo aggiungo
+- Date: `date-fns` (già usato altrove nel CRM)
+- Gantt: implementazione custom con grid CSS (no librerie pesanti), barre assolute posizionate per giorno
+- Realtime: opzionale fase 2 (subscribe a `crew_assignments`); per ora React Query refetch on mutation
+- Performance: query con range filter per finestra visibile (es. ±1 mese)
+
+Procedo con migrazione + codice?
