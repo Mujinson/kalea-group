@@ -657,7 +657,7 @@ const AdminSales = () => {
 
   const totals = calculateTotals();
   const totalMq = sales.reduce((sum, s) => sum + Number(s.quantity_sqm), 0);
-  const totalRevenue = sales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * Number(s.sale_price)), 0);
+  const totalRevenue = sales.reduce((sum, s) => sum + Number(s.total_amount || (Number(s.quantity_sqm) * Number(s.sale_price))), 0);
   const totalMargin = sales.reduce((sum, s) => sum + (Number(s.margin_amount) || 0), 0);
   const paidCount = sales.filter(s => s.is_paid).length;
 
