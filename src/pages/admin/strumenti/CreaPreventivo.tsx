@@ -929,6 +929,12 @@ export default function CreaPreventivo() {
     { label:"Saldo finale", pct:30, data:"", note:"" },
   ]);
 
+  // CONDIZIONI DI FORNITURA
+  const [ivaRate, setIvaRate] = useState<number>(22);
+  const [metodoTrasporto, setMetodoTrasporto] = useState<string>("Trasporto a cura Kalēa");
+  const [tempiConsegna, setTempiConsegna] = useState<string>("");
+  const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
+
   const filtered = useMemo(()=>PRODOTTI.filter(p=>{
     const fs = fornFilt==="Tutti" || p.fornitore===fornFilt;
     const ss = !search || p.nome.toLowerCase().includes(search.toLowerCase()) || p.fornitore.toLowerCase().includes(search.toLowerCase()) || p.categoria.toLowerCase().includes(search.toLowerCase()) || p.dims.toLowerCase().includes(search.toLowerCase());
@@ -961,14 +967,14 @@ export default function CreaPreventivo() {
     const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
     const prezzoNetto = prezzoLordoTot - scontoAmt;
-    const iva = prezzoNetto*0.22;
+    const iva = prezzoNetto*(ivaRate/100);
     const totaleIva = prezzoNetto + iva;
     const margineE = prezzoNetto - costoTotale;
     const marginePct = prezzoNetto>0 ? (margineE/prezzoNetto)*100 : 0;
     const prezzoMqTot = mqPrev>0 ? prezzoNetto/mqPrev : 0;
     const scontoMax = prezzoLordoTot>0 ? ((prezzoLordoTot-costoTotale)/prezzoLordoTot)*100 : 0;
     return { costoMatMq,prezzoMatMq,mqOrd,costoMatTot,prezzoMatTot,costoPosaTot,prezzoPosaTot,costoTappTot,prezzoTappTot,tappNeeded,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
-  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat]);
+  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate]);
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"mq", costoUn:0, prezzoUn:0 }]);
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
@@ -999,6 +1005,7 @@ export default function CreaPreventivo() {
         json_dati: {
           cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
           incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
+          ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento,
           noteCliente, noteInterne, calc,
         },
       };
@@ -1286,6 +1293,54 @@ export default function CreaPreventivo() {
             </div>
 
             <div style={card}>
+              <div style={sectionTitle}>Condizioni di fornitura</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Metodo di trasporto</div>
+                  <select value={metodoTrasporto} onChange={e=>setMetodoTrasporto(e.target.value)}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    <option>Trasporto a cura Kalēa</option>
+                    <option>Corriere espresso</option>
+                    <option>Ritiro in sede</option>
+                    <option>Franco cantiere</option>
+                    <option>Franco fabbrica</option>
+                    <option>A cura del cliente</option>
+                  </select>
+                </div>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tempi di consegna</div>
+                  <input value={tempiConsegna} onChange={e=>setTempiConsegna(e.target.value)} placeholder="Es. 15-20 giorni lavorativi"
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                </div>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tipo di pagamento</div>
+                  <select value={tipoPagamento} onChange={e=>setTipoPagamento(e.target.value)}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    <option>Bonifico bancario</option>
+                    <option>Contanti</option>
+                    <option>Assegno</option>
+                    <option>Carta di credito</option>
+                    <option>Rateale</option>
+                    <option>Ri.Ba.</option>
+                    <option>Anticipato</option>
+                  </select>
+                </div>
+                <div>
+                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Aliquota IVA</div>
+                  <select value={ivaRate} onChange={e=>setIvaRate(Number(e.target.value))}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    <option value={0}>0% (esente)</option>
+                    <option value={4}>4%</option>
+                    <option value={10}>10%</option>
+                    <option value={22}>22%</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div style={card}>
               <div style={sectionTitle}>Note visibili al cliente</div>
               <textarea value={noteCliente} onChange={e=>setNoteCliente(e.target.value)} rows={3} style={{width:"100%",padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
             </div>
@@ -1428,7 +1483,7 @@ export default function CreaPreventivo() {
                 {l:t.subtotale,v:euro(calc.prezzoLordoTot)},
                 sconto>0 && {l:`${t.sconto_label||"Sconto"} ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
-                {l:t.iva,v:euro(calc.iva)},
+                {l:`IVA ${ivaRate}%`,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
                 <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
                   <span style={{color:"#6B6860"}}>{r.l}</span>
@@ -1438,6 +1493,17 @@ export default function CreaPreventivo() {
               <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4}}>
                 <span>{t.totale_doc}</span>
                 <span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
+              </div>
+            </div>
+
+            {/* Condizioni di fornitura */}
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
+              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di fornitura</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
+                <div><span style={{color:"#6B6860"}}>Metodo di trasporto: </span><span style={{fontWeight:500}}>{metodoTrasporto||"—"}</span></div>
+                <div><span style={{color:"#6B6860"}}>Tempi di consegna: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
+                <div><span style={{color:"#6B6860"}}>Tipo di pagamento: </span><span style={{fontWeight:500}}>{tipoPagamento||"—"}</span></div>
+                <div><span style={{color:"#6B6860"}}>Aliquota IVA: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
               </div>
             </div>
 
