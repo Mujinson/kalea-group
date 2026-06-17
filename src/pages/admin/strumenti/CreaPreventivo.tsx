@@ -1046,10 +1046,12 @@ export default function CreaPreventivo() {
   const selectProdotto = (p: any) => {
     setProdotto(p);
     setTonalita([{ id: Date.now(), nome: "", mq: 0 }]);
+    setWcSel(emptyWoodcoSelection);
   };
   const resetProdotto = () => {
     setProdotto(null);
     setTonalita([]);
+    setWcSel(emptyWoodcoSelection);
   };
   const addTon = () => setTonalita(t => [...t, { id: Date.now()+Math.random(), nome:"", mq:0 }]);
   const updTon = (id:number,k:string,v:any) => setTonalita(t => t.map(x => x.id===id ? {...x,[k]:v} : x));
