@@ -127,9 +127,9 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
   // Rocks
   "kp-rk102":     ["Porfido","Silver Black"],
 
-  // ─── Externo (decking) — colori non confermati ───
-  "ex-skudo": [],
-  "ex-trad":  [],
+  // ─── Externo (decking) — tonalità fornite dal cliente ───
+  "ex-trad":  ["Traditional Dark Grey Polished","Traditional Dark Grey Zigrinato","Traditional Light Brown Polished","Traditional Light Brown Knurled"],
+  "ex-skudo": ["Skudo Golden Polished","Brushed Golden Shield","Skudo Sand Polished","Skudo Sand Brushed","Skudo Antique Polished","Skudo Antique Brushed","Skudo Teak Polished","Skudo Teak Brushed","Skudo Ipe Polished","Brushed Ipe Shield"],
 
   // ─── BerryAlloc (berryalloc.com) ───
   "ba-ocean8v4":  ["Bloom Light Brown","Bloom Light Natural","Bloom Natural","Bloom Sand Natural","Bloom Silver Grey","Bloom Warm Natural","Canyon Light","Canyon Natural","Charme Black","Charme Light Natural","Charme White","Chestnut White","Crush Brown Natural","Crush Light","Crush Natural"],
@@ -156,14 +156,15 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
   "pq-element":  ["Clay","Ink","Paper","Plaster"],
   "pq-sense":    ["Canvas","Hessian","Mohair","Silk","Jute","Cotton","Wool"],
   "pq-him":      ["Naturale ABCD","Natural AB"],
-  "pq-her":      [],
+  "pq-her":      ["Naturale","Cream","Fumé"],
 
-  // ─── Signature — colori non confermati ───
-  "sg-s45nat":   [],
-  "sg-s45crema": [],
-  "sg-escnat":   [],
-  "sg-q1nat":    [],
+  // ─── Signature — tonalità fornite dal cliente ───
+  "sg-s45nat":   ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
+  "sg-s45crema": ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
+  "sg-escnat":   ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
+  "sg-q1nat":    ["Dorato","Arenaria","Naturale","Chiaro di Luna","Elegante","Cammello","Veste di Monaco","Cannella Fumé","Speziato","Terra","Tannino"],
 };
+
 
 
 

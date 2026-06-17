@@ -3221,6 +3221,22 @@ export type Database = {
         }
         Returns: boolean
       }
+      submit_public_lead: {
+        Args: {
+          _city?: string
+          _company_name?: string
+          _country?: string
+          _email: string
+          _interest?: string
+          _message?: string
+          _name: string
+          _phone?: string
+          _province?: string
+          _region?: string
+          _source?: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role:

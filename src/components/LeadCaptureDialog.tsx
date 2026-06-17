@@ -53,12 +53,12 @@ const LeadCaptureDialog = ({ open, onOpenChange, onSuccess, pendingDownloadUrl }
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("leads").insert({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        company_name: formData.companyName.trim() || null,
-        source: "area_tecnica",
+      const { error } = await supabase.rpc("submit_public_lead", {
+        _name: formData.name.trim(),
+        _email: formData.email.trim(),
+        _phone: formData.phone.trim(),
+        _company_name: formData.companyName.trim() || null,
+        _source: "area_tecnica",
       });
 
       if (error) {
