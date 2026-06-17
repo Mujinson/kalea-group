@@ -138,7 +138,7 @@ const LavoroTab = ({ siteId, userId }: { siteId: string; userId?: string }) => {
       site_id: siteId,
       worker_user_id: userId,
       work_date: now.toISOString().slice(0, 10),
-      start_time: now.toISOString(),
+      start_time: now.toTimeString().slice(0, 8),
       hours_worked: 0,
     });
     if (error) toast.error(error.message); else { toast.success('Inizio turno registrato'); await load(); }
