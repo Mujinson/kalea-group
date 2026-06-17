@@ -83,6 +83,8 @@ interface Sale {
   customer_name: string | null;
   vat_included: boolean;
   vat_amount: number | null;
+  subtotal_amount: number | null;
+  total_amount: number | null;
   payment_method: string | null;
   payment_terms: string | null;
   deposit_amount: number | null;
