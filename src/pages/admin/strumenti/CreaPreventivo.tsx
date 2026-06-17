@@ -73,13 +73,16 @@ const PRODOTTI = [
   { id:"sg-s45crema", nome:"Signature Spina 45 Rovere Crema", fornitore:"Signature", categoria:"Parquet Premium", dims:"180×620mm", listino:242.30, coeff:0.45, tappetino:"mai" },
   { id:"sg-escnat", nome:"Signature Esagono Rovere Naturale", fornitore:"Signature", categoria:"Parquet Premium", dims:"200×231mm", listino:281.10, coeff:0.45, tappetino:"mai" },
   { id:"sg-q1nat", nome:"Signature Q1 Rovere Naturale", fornitore:"Signature", categoria:"Parquet Premium", dims:"600×600mm", listino:316.40, coeff:0.45, tappetino:"mai" },
+  // ─── Biomag (kalea.space/it/biomag-floor) — produzione Kalēa, gestito a magazzino ───
+  { id:"bm-mgo", nome:"Biomag Floor MgO", fornitore:"Biomag", categoria:"Pannello MgO", dims:"1220×2440×6mm", listino:50.00, coeff:0.30, tappetino:"mai", magazzino:true, magazzinoProductType:"MgO" },
 ];
 
-const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Signature"];
+const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Signature","Biomag"];
 const FORN_STYLE: Record<string, { bg: string; c: string }> = {
   "Flow":{bg:"#E6F1FB",c:"#0C447C"},"Kronos":{bg:"#FCE4EC",c:"#880E4F"},
   "Externo":{bg:"#E1F5EE",c:"#085041"},"BerryAlloc":{bg:"#FAEEDA",c:"#633806"},
   "Parquet Woodco":{bg:"#FFF3E0",c:"#7B3A10"},"Signature":{bg:"#EEEDFE",c:"#3C3489"},
+  "Biomag":{bg:"#EAF3DE",c:"#27500A"},
 };
 
 // ─── TONALITÀ per prodotto (datalist suggestion, input libero comunque consentito) ─
