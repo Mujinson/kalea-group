@@ -23,6 +23,7 @@ const AdminCantieri = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "attivo" | "completato" | "pausa">("all");
   const [createOpen, setCreateOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
