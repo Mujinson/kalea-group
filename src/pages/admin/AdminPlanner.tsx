@@ -397,16 +397,21 @@ export default function AdminPlanner() {
             const dayStr = format(d, 'yyyy-MM-dd');
             const inMonth = isSameMonth(d, cursor);
             const dayAssigns = filteredAssignments.filter((a) => assignmentContainsDay(a, d));
+            const isToday = format(new Date(), 'yyyy-MM-dd') === dayStr;
             return (
-              <div key={dayStr} className={`bg-white min-h-[90px] p-1 ${inMonth ? '' : 'opacity-40'}`}>
-                <div className="text-[10px] font-bold mb-1">{format(d, 'd')}</div>
+              <div
+                key={dayStr}
+                onClick={() => { setCursor(d); setView('giorno'); }}
+                className={`bg-white min-h-[90px] p-1 cursor-pointer hover:bg-blue-50/60 transition-colors ${inMonth ? '' : 'opacity-40'} ${isToday ? 'ring-2 ring-blue-500 ring-inset' : ''}`}
+              >
+                <div className={`text-[10px] font-bold mb-1 inline-flex items-center justify-center ${isToday ? 'bg-blue-600 text-white rounded-full w-5 h-5' : ''}`}>{format(d, 'd')}</div>
                 <div className="space-y-0.5">
                   {dayAssigns.slice(0, 3).map((a) => {
                     const c = crews.find((x) => x.id === a.crew_id);
                     const s = sites.find((x) => x.id === a.site_id);
                     if (!c) return null;
                     return (
-                      <div key={a.id} onClick={() => s && setSelectedSite(s)} className="text-[9px] truncate cursor-pointer px-1 rounded" style={{ background: c.color + '20', borderLeft: `2px solid ${c.color}` }} title={`${c.name} → ${s?.name || s?.city}`}>
+                      <div key={a.id} onClick={(e) => { e.stopPropagation(); s && setSelectedSite(s); }} className="text-[9px] truncate cursor-pointer px-1 rounded" style={{ background: c.color + '20', borderLeft: `2px solid ${c.color}` }} title={`${c.name} → ${s?.name || s?.city}`}>
                         {c.name} · {s?.name || s?.city}
                       </div>
                     );
