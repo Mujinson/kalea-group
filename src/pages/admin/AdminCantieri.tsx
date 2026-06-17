@@ -48,6 +48,9 @@ const AdminCantieri = () => {
   });
 
   const filtered = sites?.filter((s) => {
+    if (statusFilter === "attivo" && s.status !== "attivo") return false;
+    if (statusFilter === "completato" && s.status !== "completato") return false;
+    if (statusFilter === "pausa" && (s.status === "attivo" || s.status === "completato")) return false;
     if (!search) return true;
     const q = search.toLowerCase();
     return (
