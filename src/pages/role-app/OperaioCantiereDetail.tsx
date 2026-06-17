@@ -183,13 +183,8 @@ const OperaioCantiereDetail = () => {
       {tab === 'checklist' && <ChecklistTab siteId={site.id} userId={user?.id} />}
       {tab === 'chat' && <ChatTab siteId={site.id} user={user} />}
 
-      {/* Floating "Segnala problema" */}
-      <button
-        onClick={() => setIssueOpen(true)}
-        className="fixed bottom-6 right-4 z-20 h-12 px-4 rounded-full bg-[#DC2626] text-white shadow-lg flex items-center gap-2 text-sm font-medium"
-      >
-        <AlertTriangle className="w-4 h-4" /> Segnala
-      </button>
+
+
 
       <SiteIssueSheet open={issueOpen} onOpenChange={setIssueOpen} siteId={site.id} user={user} />
     </div>
