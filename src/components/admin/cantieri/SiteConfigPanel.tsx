@@ -54,6 +54,8 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       floor_sqm: site.floor_sqm ?? "",
       floor_lot: site.floor_lot || "",
       floor_tech_notes: site.floor_tech_notes || "",
+      floor_product_id: site.floor_product_id || null,
+      worker_notes: site.worker_notes || "",
       planned_start_date: site.planned_start_date || "",
       planned_end_date: site.planned_end_date || "",
       available_days: site.available_days ?? "",
@@ -81,6 +83,7 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       city: site.city || "",
     });
   }, [site]);
+
 
   const saveAll = async () => {
     setSaving(true);
