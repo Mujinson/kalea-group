@@ -13,9 +13,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Plus, Trash2, Save, Upload, CheckCircle2, AlertCircle, GripVertical, Download } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import CatalogProductPicker, { CatalogProduct } from "./CatalogProductPicker";
 
 const FLOOR_TYPES = ["SPC", "Laminato", "Parquet", "PVC", "Ceramica", "Gres", "Resina", "Altro"];
-const ACCESSORY_TYPES = ["Battiscopa", "Profili", "Sottopavimento", "Materassino", "Colla", "Silicone", "Stucco", "Giunti", "Altro"];
+
 const EQUIPMENT_TYPES = [
   "Taglierina", "Sega", "Livella laser", "Trapano", "Aspiratore", "Miscelatore",
   "Martello in gomma", "Carrello", "Scala", "Prolunghe", "DPI obbligatori", "Altro"
