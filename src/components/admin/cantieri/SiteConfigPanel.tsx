@@ -394,34 +394,48 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       <Card className="bg-white">
         <CardHeader className="pb-2"><CardTitle className="text-base">Accessori richiesti</CardTitle></CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex flex-wrap gap-2 items-end">
-            <div className="w-44">
-              <Label className="text-xs">Tipo</Label>
-              <Select value={newAcc.type} onValueChange={(v) => setNewAcc({ ...newAcc, type: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{ACCESSORY_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
-              </Select>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_110px_1fr_auto] gap-2 items-end">
+            <div>
+              <Label className="text-xs">Accessorio (dal catalogo)</Label>
+              <CatalogProductPicker
+                value={newAcc.product}
+                onChange={(p) => setNewAcc({ ...newAcc, product: p })}
+                placeholder="Cerca battiscopa, profili, colla, sottofondo…"
+                categoryNames={["Accessori", "Sottofondi"]}
+              />
             </div>
-            <div className="w-28">
+            <div>
               <Label className="text-xs">Quantità</Label>
-              <Input type="number" value={newAcc.quantity} onChange={(e) => setNewAcc({ ...newAcc, quantity: e.target.value })} />
+              <Input
+                type="number"
+                placeholder={newAcc.product?.unit_of_measure || ""}
+                value={newAcc.quantity}
+                onChange={(e) => setNewAcc({ ...newAcc, quantity: e.target.value })}
+              />
             </div>
-            <div className="flex-1 min-w-[160px]">
+            <div>
               <Label className="text-xs">Note</Label>
               <Input value={newAcc.notes} onChange={(e) => setNewAcc({ ...newAcc, notes: e.target.value })} />
             </div>
-            <Button onClick={addAcc} size="sm"><Plus className="w-4 h-4 mr-1" /> Aggiungi</Button>
+            <Button onClick={addAcc} size="sm" disabled={!newAcc.product}>
+              <Plus className="w-4 h-4 mr-1" /> Aggiungi
+            </Button>
           </div>
           <div className="space-y-1">
             {(accessories || []).map((a: any) => (
               <div key={a.id} className="flex items-center justify-between p-2 border rounded-lg">
-                <div className="text-sm"><span className="font-medium">{a.type}</span>{a.quantity ? ` · ${a.quantity}` : ""}{a.notes ? ` · ${a.notes}` : ""}</div>
+                <div className="text-sm">
+                  <span className="font-medium">{a.product_name || a.type}</span>
+                  {a.quantity ? ` · ${a.quantity}${a.unit ? " " + a.unit : ""}` : ""}
+                  {a.notes ? ` · ${a.notes}` : ""}
+                </div>
                 <Button size="icon" variant="ghost" onClick={() => delAcc(a.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
               </div>
             ))}
             {!(accessories || []).length && <p className="text-sm text-muted-foreground py-2 text-center">Nessun accessorio.</p>}
           </div>
         </CardContent>
+
       </Card>
 
       {/* ============ Attrezzatura ============ */}
