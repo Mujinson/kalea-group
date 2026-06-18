@@ -226,27 +226,74 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       <Accordion type="multiple" defaultValue={["dati", "tempi", "priorita"]} className="space-y-3">
         {/* ---------- Pavimento ---------- */}
         <AccordionItem value="dati" className="bg-white rounded-xl border px-4">
-          <AccordionTrigger className="text-base font-semibold">Informazioni pavimento</AccordionTrigger>
+          <AccordionTrigger className="text-base font-semibold">Prodotto pavimento</AccordionTrigger>
           <AccordionContent className="pt-2">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Field label="Tipologia">
-                <Select value={form.floor_type} onValueChange={(v) => setForm({ ...form, floor_type: v })}>
-                  <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
-                  <SelectContent>{FLOOR_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
-                </Select>
+            <div className="space-y-3">
+              <Field label="Seleziona dal catalogo Kalēa">
+                <CatalogProductPicker
+                  value={
+                    form.__floor_product_obj ||
+                    (form.floor_product_id
+                      ? {
+                          id: form.floor_product_id,
+                          product_code: form.floor_model || "—",
+                          name: form.floor_model || "Prodotto selezionato",
+                          brand: form.floor_brand,
+                          collection: null,
+                          format: null,
+                          color: form.floor_color,
+                          finish: null,
+                          thickness_mm: null,
+                          unit_of_measure: "mq",
+                          list_price: 0,
+                        }
+                      : null)
+                  }
+                  onChange={(p) => {
+                    if (!p) {
+                      setForm({ ...form, floor_product_id: null, __floor_product_obj: null });
+                      return;
+                    }
+                    setForm({
+                      ...form,
+                      __floor_product_obj: p,
+                      floor_product_id: p.id,
+                      floor_type: form.floor_type || "",
+                      floor_brand: p.brand || "",
+                      floor_model: p.name || "",
+                      floor_color: [p.color, p.finish].filter(Boolean).join(" / "),
+                      floor_thickness: p.thickness_mm ? `${p.thickness_mm} mm` : form.floor_thickness,
+                    });
+                  }}
+                />
               </Field>
-              <Field label="Marca"><Input value={form.floor_brand} onChange={(e) => setForm({ ...form, floor_brand: e.target.value })} /></Field>
-              <Field label="Modello"><Input value={form.floor_model} onChange={(e) => setForm({ ...form, floor_model: e.target.value })} /></Field>
-              <Field label="Colore / Finitura"><Input value={form.floor_color} onChange={(e) => setForm({ ...form, floor_color: e.target.value })} /></Field>
-              <Field label="Spessore"><Input value={form.floor_thickness} onChange={(e) => setForm({ ...form, floor_thickness: e.target.value })} placeholder="es. 8 mm" /></Field>
-              <Field label="MQ da posare"><Input type="number" value={form.floor_sqm} onChange={(e) => setForm({ ...form, floor_sqm: e.target.value })} /></Field>
-              <Field label="Lotto materiale"><Input value={form.floor_lot} onChange={(e) => setForm({ ...form, floor_lot: e.target.value })} /></Field>
-              <div className="md:col-span-3">
-                <Field label="Note tecniche"><Textarea rows={2} value={form.floor_tech_notes} onChange={(e) => setForm({ ...form, floor_tech_notes: e.target.value })} /></Field>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Field label="Tipologia">
+                  <Select value={form.floor_type} onValueChange={(v) => setForm({ ...form, floor_type: v })}>
+                    <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
+                    <SelectContent>{FLOOR_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                  </Select>
+                </Field>
+                <Field label="MQ da posare"><Input type="number" value={form.floor_sqm} onChange={(e) => setForm({ ...form, floor_sqm: e.target.value })} /></Field>
+                <Field label="Lotto materiale"><Input value={form.floor_lot} onChange={(e) => setForm({ ...form, floor_lot: e.target.value })} /></Field>
+                <div className="md:col-span-3">
+                  <Field label="Note tecniche"><Textarea rows={2} value={form.floor_tech_notes} onChange={(e) => setForm({ ...form, floor_tech_notes: e.target.value })} /></Field>
+                </div>
+                <div className="md:col-span-3">
+                  <Field label="Note per gli operai (visibili nell'app operaio)">
+                    <Textarea
+                      rows={3}
+                      placeholder="Istruzioni di posa, accorgimenti, indicazioni del cliente…"
+                      value={form.worker_notes}
+                      onChange={(e) => setForm({ ...form, worker_notes: e.target.value })}
+                    />
+                  </Field>
+                </div>
               </div>
             </div>
           </AccordionContent>
         </AccordionItem>
+
 
         {/* ---------- Tempistiche ---------- */}
         <AccordionItem value="tempi" className="bg-white rounded-xl border px-4">
