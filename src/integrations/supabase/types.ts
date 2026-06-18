@@ -528,6 +528,7 @@ export type Database = {
           floor_color: string | null
           floor_lot: string | null
           floor_model: string | null
+          floor_product_id: string | null
           floor_sqm: number | null
           floor_tech_notes: string | null
           floor_thickness: string | null
@@ -559,6 +560,7 @@ export type Database = {
           title: string
           updated_at: string
           water_available: boolean | null
+          worker_notes: string | null
           ztl_zone: boolean | null
         }
         Insert: {
@@ -582,6 +584,7 @@ export type Database = {
           floor_color?: string | null
           floor_lot?: string | null
           floor_model?: string | null
+          floor_product_id?: string | null
           floor_sqm?: number | null
           floor_tech_notes?: string | null
           floor_thickness?: string | null
@@ -613,6 +616,7 @@ export type Database = {
           title: string
           updated_at?: string
           water_available?: boolean | null
+          worker_notes?: string | null
           ztl_zone?: boolean | null
         }
         Update: {
@@ -636,6 +640,7 @@ export type Database = {
           floor_color?: string | null
           floor_lot?: string | null
           floor_model?: string | null
+          floor_product_id?: string | null
           floor_sqm?: number | null
           floor_tech_notes?: string | null
           floor_thickness?: string | null
@@ -667,6 +672,7 @@ export type Database = {
           title?: string
           updated_at?: string
           water_available?: boolean | null
+          worker_notes?: string | null
           ztl_zone?: boolean | null
         }
         Relationships: [
@@ -675,6 +681,13 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "construction_sites_floor_product_id_fkey"
+            columns: ["floor_product_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
             referencedColumns: ["id"]
           },
           {
@@ -2243,30 +2256,46 @@ export type Database = {
       }
       site_accessories: {
         Row: {
+          catalog_product_id: string | null
           created_at: string
           id: string
           notes: string | null
+          product_name: string | null
           quantity: number | null
           site_id: string
           type: string
+          unit: string | null
         }
         Insert: {
+          catalog_product_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
+          product_name?: string | null
           quantity?: number | null
           site_id: string
           type: string
+          unit?: string | null
         }
         Update: {
+          catalog_product_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
+          product_name?: string | null
           quantity?: number | null
           site_id?: string
           type?: string
+          unit?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "site_accessories_catalog_product_id_fkey"
+            columns: ["catalog_product_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "site_accessories_site_id_fkey"
             columns: ["site_id"]

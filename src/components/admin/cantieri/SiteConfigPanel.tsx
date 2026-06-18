@@ -13,9 +13,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Plus, Trash2, Save, Upload, CheckCircle2, AlertCircle, GripVertical, Download } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import CatalogProductPicker, { CatalogProduct } from "./CatalogProductPicker";
 
 const FLOOR_TYPES = ["SPC", "Laminato", "Parquet", "PVC", "Ceramica", "Gres", "Resina", "Altro"];
-const ACCESSORY_TYPES = ["Battiscopa", "Profili", "Sottopavimento", "Materassino", "Colla", "Silicone", "Stucco", "Giunti", "Altro"];
+
 const EQUIPMENT_TYPES = [
   "Taglierina", "Sega", "Livella laser", "Trapano", "Aspiratore", "Miscelatore",
   "Martello in gomma", "Carrello", "Scala", "Prolunghe", "DPI obbligatori", "Altro"
@@ -53,6 +54,8 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       floor_sqm: site.floor_sqm ?? "",
       floor_lot: site.floor_lot || "",
       floor_tech_notes: site.floor_tech_notes || "",
+      floor_product_id: site.floor_product_id || null,
+      worker_notes: site.worker_notes || "",
       planned_start_date: site.planned_start_date || "",
       planned_end_date: site.planned_end_date || "",
       available_days: site.available_days ?? "",
@@ -81,9 +84,12 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
     });
   }, [site]);
 
+
   const saveAll = async () => {
     setSaving(true);
-    const payload: any = { ...form };
+    const { __floor_product_obj, ...rest } = form;
+    const payload: any = { ...rest };
+
     ["floor_sqm", "available_days", "estimated_hours", "parking_distance_m", "latitude", "longitude"].forEach((k) => {
       payload[k] = payload[k] === "" || payload[k] == null ? null : Number(payload[k]);
     });
@@ -107,22 +113,34 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       if (error) throw error; return data as any[];
     },
   });
-  const [newAcc, setNewAcc] = useState({ type: "Battiscopa", quantity: "", notes: "" });
+  const [newAcc, setNewAcc] = useState<{ product: CatalogProduct | null; quantity: string; notes: string }>({
+    product: null,
+    quantity: "",
+    notes: "",
+  });
   const addAcc = async () => {
-    if (!newAcc.type) return;
+    if (!newAcc.product) {
+      toast.error("Seleziona un accessorio dal catalogo");
+      return;
+    }
     const { error } = await supabase.from("site_accessories" as any).insert({
-      site_id: siteId, type: newAcc.type,
+      site_id: siteId,
+      type: newAcc.product.name,
+      product_name: [newAcc.product.brand, newAcc.product.name].filter(Boolean).join(" — "),
+      catalog_product_id: newAcc.product.id,
+      unit: newAcc.product.unit_of_measure,
       quantity: newAcc.quantity ? Number(newAcc.quantity) : null,
       notes: newAcc.notes || null,
     });
     if (error) { toast.error(error.message); return; }
-    setNewAcc({ type: "Battiscopa", quantity: "", notes: "" });
+    setNewAcc({ product: null, quantity: "", notes: "" });
     qc.invalidateQueries({ queryKey: ["site-accessories", siteId] });
   };
   const delAcc = async (id: string) => {
     await supabase.from("site_accessories" as any).delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["site-accessories", siteId] });
   };
+
 
   // ============ Equipment ============
   const { data: equipment } = useQuery({
@@ -210,27 +228,74 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       <Accordion type="multiple" defaultValue={["dati", "tempi", "priorita"]} className="space-y-3">
         {/* ---------- Pavimento ---------- */}
         <AccordionItem value="dati" className="bg-white rounded-xl border px-4">
-          <AccordionTrigger className="text-base font-semibold">Informazioni pavimento</AccordionTrigger>
+          <AccordionTrigger className="text-base font-semibold">Prodotto pavimento</AccordionTrigger>
           <AccordionContent className="pt-2">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Field label="Tipologia">
-                <Select value={form.floor_type} onValueChange={(v) => setForm({ ...form, floor_type: v })}>
-                  <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
-                  <SelectContent>{FLOOR_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
-                </Select>
+            <div className="space-y-3">
+              <Field label="Seleziona dal catalogo Kalēa">
+                <CatalogProductPicker
+                  value={
+                    form.__floor_product_obj ||
+                    (form.floor_product_id
+                      ? {
+                          id: form.floor_product_id,
+                          product_code: form.floor_model || "—",
+                          name: form.floor_model || "Prodotto selezionato",
+                          brand: form.floor_brand,
+                          collection: null,
+                          format: null,
+                          color: form.floor_color,
+                          finish: null,
+                          thickness_mm: null,
+                          unit_of_measure: "mq",
+                          list_price: 0,
+                        }
+                      : null)
+                  }
+                  onChange={(p) => {
+                    if (!p) {
+                      setForm({ ...form, floor_product_id: null, __floor_product_obj: null });
+                      return;
+                    }
+                    setForm({
+                      ...form,
+                      __floor_product_obj: p,
+                      floor_product_id: p.id,
+                      floor_type: form.floor_type || "",
+                      floor_brand: p.brand || "",
+                      floor_model: p.name || "",
+                      floor_color: [p.color, p.finish].filter(Boolean).join(" / "),
+                      floor_thickness: p.thickness_mm ? `${p.thickness_mm} mm` : form.floor_thickness,
+                    });
+                  }}
+                />
               </Field>
-              <Field label="Marca"><Input value={form.floor_brand} onChange={(e) => setForm({ ...form, floor_brand: e.target.value })} /></Field>
-              <Field label="Modello"><Input value={form.floor_model} onChange={(e) => setForm({ ...form, floor_model: e.target.value })} /></Field>
-              <Field label="Colore / Finitura"><Input value={form.floor_color} onChange={(e) => setForm({ ...form, floor_color: e.target.value })} /></Field>
-              <Field label="Spessore"><Input value={form.floor_thickness} onChange={(e) => setForm({ ...form, floor_thickness: e.target.value })} placeholder="es. 8 mm" /></Field>
-              <Field label="MQ da posare"><Input type="number" value={form.floor_sqm} onChange={(e) => setForm({ ...form, floor_sqm: e.target.value })} /></Field>
-              <Field label="Lotto materiale"><Input value={form.floor_lot} onChange={(e) => setForm({ ...form, floor_lot: e.target.value })} /></Field>
-              <div className="md:col-span-3">
-                <Field label="Note tecniche"><Textarea rows={2} value={form.floor_tech_notes} onChange={(e) => setForm({ ...form, floor_tech_notes: e.target.value })} /></Field>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Field label="Tipologia">
+                  <Select value={form.floor_type} onValueChange={(v) => setForm({ ...form, floor_type: v })}>
+                    <SelectTrigger><SelectValue placeholder="—" /></SelectTrigger>
+                    <SelectContent>{FLOOR_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                  </Select>
+                </Field>
+                <Field label="MQ da posare"><Input type="number" value={form.floor_sqm} onChange={(e) => setForm({ ...form, floor_sqm: e.target.value })} /></Field>
+                <Field label="Lotto materiale"><Input value={form.floor_lot} onChange={(e) => setForm({ ...form, floor_lot: e.target.value })} /></Field>
+                <div className="md:col-span-3">
+                  <Field label="Note tecniche"><Textarea rows={2} value={form.floor_tech_notes} onChange={(e) => setForm({ ...form, floor_tech_notes: e.target.value })} /></Field>
+                </div>
+                <div className="md:col-span-3">
+                  <Field label="Note per gli operai (visibili nell'app operaio)">
+                    <Textarea
+                      rows={3}
+                      placeholder="Istruzioni di posa, accorgimenti, indicazioni del cliente…"
+                      value={form.worker_notes}
+                      onChange={(e) => setForm({ ...form, worker_notes: e.target.value })}
+                    />
+                  </Field>
+                </div>
               </div>
             </div>
           </AccordionContent>
         </AccordionItem>
+
 
         {/* ---------- Tempistiche ---------- */}
         <AccordionItem value="tempi" className="bg-white rounded-xl border px-4">
@@ -331,34 +396,48 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       <Card className="bg-white">
         <CardHeader className="pb-2"><CardTitle className="text-base">Accessori richiesti</CardTitle></CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex flex-wrap gap-2 items-end">
-            <div className="w-44">
-              <Label className="text-xs">Tipo</Label>
-              <Select value={newAcc.type} onValueChange={(v) => setNewAcc({ ...newAcc, type: v })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{ACCESSORY_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
-              </Select>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_110px_1fr_auto] gap-2 items-end">
+            <div>
+              <Label className="text-xs">Accessorio (dal catalogo)</Label>
+              <CatalogProductPicker
+                value={newAcc.product}
+                onChange={(p) => setNewAcc({ ...newAcc, product: p })}
+                placeholder="Cerca battiscopa, profili, colla, sottofondo…"
+                categoryNames={["Accessori", "Sottofondi"]}
+              />
             </div>
-            <div className="w-28">
+            <div>
               <Label className="text-xs">Quantità</Label>
-              <Input type="number" value={newAcc.quantity} onChange={(e) => setNewAcc({ ...newAcc, quantity: e.target.value })} />
+              <Input
+                type="number"
+                placeholder={newAcc.product?.unit_of_measure || ""}
+                value={newAcc.quantity}
+                onChange={(e) => setNewAcc({ ...newAcc, quantity: e.target.value })}
+              />
             </div>
-            <div className="flex-1 min-w-[160px]">
+            <div>
               <Label className="text-xs">Note</Label>
               <Input value={newAcc.notes} onChange={(e) => setNewAcc({ ...newAcc, notes: e.target.value })} />
             </div>
-            <Button onClick={addAcc} size="sm"><Plus className="w-4 h-4 mr-1" /> Aggiungi</Button>
+            <Button onClick={addAcc} size="sm" disabled={!newAcc.product}>
+              <Plus className="w-4 h-4 mr-1" /> Aggiungi
+            </Button>
           </div>
           <div className="space-y-1">
             {(accessories || []).map((a: any) => (
               <div key={a.id} className="flex items-center justify-between p-2 border rounded-lg">
-                <div className="text-sm"><span className="font-medium">{a.type}</span>{a.quantity ? ` · ${a.quantity}` : ""}{a.notes ? ` · ${a.notes}` : ""}</div>
+                <div className="text-sm">
+                  <span className="font-medium">{a.product_name || a.type}</span>
+                  {a.quantity ? ` · ${a.quantity}${a.unit ? " " + a.unit : ""}` : ""}
+                  {a.notes ? ` · ${a.notes}` : ""}
+                </div>
                 <Button size="icon" variant="ghost" onClick={() => delAcc(a.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
               </div>
             ))}
             {!(accessories || []).length && <p className="text-sm text-muted-foreground py-2 text-center">Nessun accessorio.</p>}
           </div>
         </CardContent>
+
       </Card>
 
       {/* ============ Attrezzatura ============ */}
