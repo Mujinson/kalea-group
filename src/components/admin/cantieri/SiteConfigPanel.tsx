@@ -111,22 +111,34 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
       if (error) throw error; return data as any[];
     },
   });
-  const [newAcc, setNewAcc] = useState({ type: "Battiscopa", quantity: "", notes: "" });
+  const [newAcc, setNewAcc] = useState<{ product: CatalogProduct | null; quantity: string; notes: string }>({
+    product: null,
+    quantity: "",
+    notes: "",
+  });
   const addAcc = async () => {
-    if (!newAcc.type) return;
+    if (!newAcc.product) {
+      toast.error("Seleziona un accessorio dal catalogo");
+      return;
+    }
     const { error } = await supabase.from("site_accessories" as any).insert({
-      site_id: siteId, type: newAcc.type,
+      site_id: siteId,
+      type: newAcc.product.name,
+      product_name: [newAcc.product.brand, newAcc.product.name].filter(Boolean).join(" — "),
+      catalog_product_id: newAcc.product.id,
+      unit: newAcc.product.unit_of_measure,
       quantity: newAcc.quantity ? Number(newAcc.quantity) : null,
       notes: newAcc.notes || null,
     });
     if (error) { toast.error(error.message); return; }
-    setNewAcc({ type: "Battiscopa", quantity: "", notes: "" });
+    setNewAcc({ product: null, quantity: "", notes: "" });
     qc.invalidateQueries({ queryKey: ["site-accessories", siteId] });
   };
   const delAcc = async (id: string) => {
     await supabase.from("site_accessories" as any).delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["site-accessories", siteId] });
   };
+
 
   // ============ Equipment ============
   const { data: equipment } = useQuery({
