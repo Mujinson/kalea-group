@@ -466,18 +466,25 @@ const InfoTab = ({ site }: { site: any }) => {
         <Row k="Spessore" v={site.floor_thickness} />
         <Row k="MQ da posare" v={site.floor_sqm} />
         <Row k="Lotto" v={site.floor_lot} />
-        {site.floor_tech_notes && <Row k="Note" v={site.floor_tech_notes} />}
+        {site.floor_tech_notes && <Row k="Note tecniche" v={site.floor_tech_notes} />}
       </Block>
+
+      {site.worker_notes && (
+        <Block title="Note per gli operai">
+          <p className="whitespace-pre-wrap text-[#1E1B4B]">{site.worker_notes}</p>
+        </Block>
+      )}
 
       <Block title="Accessori">
         {accessories.length === 0 && <p className="text-[#8C7B6B]">Nessuno.</p>}
         {accessories.map((a) => (
           <div key={a.id} className="flex justify-between border-b last:border-0 py-1">
-            <span>{a.type}{a.notes ? ` — ${a.notes}` : ''}</span>
-            {a.quantity && <span className="font-medium">{a.quantity}</span>}
+            <span>{a.product_name || a.type}{a.notes ? ` — ${a.notes}` : ''}</span>
+            {a.quantity != null && <span className="font-medium">{a.quantity}{a.unit ? ` ${a.unit}` : ''}</span>}
           </div>
         ))}
       </Block>
+
 
       <Block title="Caratteristiche cantiere">
         <Row k="Piano" v={site.building_floor} />
