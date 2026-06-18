@@ -87,7 +87,9 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
 
   const saveAll = async () => {
     setSaving(true);
-    const payload: any = { ...form };
+    const { __floor_product_obj, ...rest } = form;
+    const payload: any = { ...rest };
+
     ["floor_sqm", "available_days", "estimated_hours", "parking_distance_m", "latitude", "longitude"].forEach((k) => {
       payload[k] = payload[k] === "" || payload[k] == null ? null : Number(payload[k]);
     });
