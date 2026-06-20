@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import HomeHero, { HomeDescription } from "@/components/HomeHero";
 import ChiSiamoManifesto from "@/components/ChiSiamoManifesto";
-import ScrollZoomSection from "@/components/ScrollZoomSection";
+import ScrollStoryCarousel from "@/components/ScrollStoryCarousel";
 
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import SEOHead from "@/components/SEOHead";
