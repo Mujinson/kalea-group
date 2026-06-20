@@ -116,13 +116,52 @@ const Home = () => {
 
       <div id="chi-siamo-next" className="scroll-mt-20" />
 
-      {/* Scroll-zoom showcase (PayPal-style) — placeholder content */}
-      <ScrollZoomSection
-        eyebrow="Showcase"
-        title="Una superficie, infinite possibilità."
-        description="Scopri come il sistema Kalēa® trasforma ogni ambiente con materiali continui, eleganti e durevoli."
-        image={bgManifesto}
-        alt="Kalēa surface showcase"
+      {/* Scrollytelling carousel (PayPal-style) — placeholder content */}
+      <ScrollStoryCarousel
+        slides={[
+          {
+            image: bgApplicationResidential,
+            eyebrow: "Capitolo 01",
+            title: "Spazi che respirano.",
+            description: "Superfici continue, naturali, pensate per vivere ogni giorno con leggerezza.",
+            tint: "hsl(34 35% 30%)",
+          },
+          {
+            image: bgApplicationHospitality,
+            eyebrow: "Capitolo 02",
+            title: "L'ospitalità del materiale.",
+            description: "Texture calde e dettagli sartoriali per ambienti che accolgono.",
+            tint: "hsl(20 30% 25%)",
+          },
+          {
+            image: bgApplicationRetail,
+            eyebrow: "Capitolo 03",
+            title: "Identità visiva.",
+            description: "Pavimenti e rivestimenti che diventano parte del linguaggio del brand.",
+            tint: "hsl(10 25% 22%)",
+          },
+          {
+            image: bgApplicationOffices,
+            eyebrow: "Capitolo 04",
+            title: "Lavorare con grazia.",
+            description: "Ambienti professionali silenziosi, durevoli, eleganti.",
+            tint: "hsl(200 18% 22%)",
+          },
+          {
+            image: bgApplicationHealthcare,
+            eyebrow: "Capitolo 05",
+            title: "Pulizia e cura.",
+            description: "Superfici igieniche e performanti per spazi che proteggono.",
+            tint: "hsl(190 22% 25%)",
+          },
+          {
+            image: bgApplicationCommercial,
+            eyebrow: "Capitolo 06",
+            title: "Resistenza nel tempo.",
+            description: "Una promessa di durata, anche dove il passaggio non si ferma mai.",
+            tint: "hsl(28 28% 22%)",
+          },
+        ]}
       />
 
       {/* Description (Surface System + Indoor/Outdoor cards) */}
