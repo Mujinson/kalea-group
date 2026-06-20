@@ -145,36 +145,43 @@ const SlideImage = ({
   indexMv: MotionValue<number>;
   reduced: boolean;
 }) => {
-  // Distance from active (positive = upcoming, negative = past)
+  // Each slide is only visible inside its own segment around `index`.
+  // Visible plateau: |d| <= VISIBLE. Fade band: VISIBLE..HIDDEN. Gap (both 0) between HIDDEN of one and HIDDEN of the next.
+  const VISIBLE = 0.32; // fully opaque half-width
+  const HIDDEN = 0.42; // fully invisible beyond this — leaves a 0.16-wide blank gap between consecutive slides
   const opacity = useTransform(indexMv, (v) => {
-    const d = v - index;
-    if (d <= -1 || d >= 1) return 0;
-    // smooth bell curve
-    return 1 - Math.abs(d);
+    const a = Math.abs(v - index);
+    if (a >= HIDDEN) return 0;
+    if (a <= VISIBLE) return 1;
+    return 1 - (a - VISIBLE) / (HIDDEN - VISIBLE);
   });
+  // Gentle zoom-in as the slide enters, settles at 1 while visible.
   const scale = useTransform(indexMv, (v) => {
     const d = v - index;
-    // entering: 1.05 -> 1, leaving: 1 -> 0.96
-    if (d <= 0) return 1.05 + d * 0.05; // d in [-1,0]
-    return 1 - d * 0.04; // d in [0,1]
+    const a = Math.abs(d);
+    if (a >= HIDDEN) return 1.04;
+    if (a <= VISIBLE) return 1;
+    return 1 + (a - VISIBLE) / (HIDDEN - VISIBLE) * 0.04;
   });
-  const blur = useTransform(indexMv, (v) => {
-    const d = v - index;
-    if (d <= 0) return 0;
-    return Math.min(12, d * 12);
+  // Soft blur only during the fade band.
+  const filter = useTransform(indexMv, (v) => {
+    const a = Math.abs(v - index);
+    if (a <= VISIBLE) return "blur(0px)";
+    if (a >= HIDDEN) return "blur(10px)";
+    const t = (a - VISIBLE) / (HIDDEN - VISIBLE);
+    return `blur(${(t * 10).toFixed(2)}px)`;
   });
-  const x = useTransform(indexMv, (v) => {
-    const d = v - index;
-    return d * -40; // gentle parallax
-  });
-  const filter = useTransform(blur, (b) => `blur(${b}px)`);
+  // Hide from compositor entirely when off — avoids stacked invisible layers eating perf and pointer events.
+  const visibility = useTransform(indexMv, (v) =>
+    Math.abs(v - index) >= HIDDEN ? "hidden" : "visible"
+  );
 
   return (
     <motion.div
       style={
         reduced
           ? { opacity: index === 0 ? 1 : 0 }
-          : { opacity, scale, x, filter }
+          : { opacity, scale, filter, visibility, pointerEvents: "none" }
       }
       className="absolute inset-0 overflow-hidden rounded-[28px] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)] will-change-transform"
     >
