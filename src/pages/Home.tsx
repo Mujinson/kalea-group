@@ -116,6 +116,15 @@ const Home = () => {
 
       <div id="chi-siamo-next" className="scroll-mt-20" />
 
+      {/* Scroll-zoom showcase (PayPal-style) — placeholder content */}
+      <ScrollZoomSection
+        eyebrow="Showcase"
+        title="Una superficie, infinite possibilità."
+        description="Scopri come il sistema Kalēa® trasforma ogni ambiente con materiali continui, eleganti e durevoli."
+        image={bgManifesto}
+        alt="Kalēa surface showcase"
+      />
+
       {/* Description (Surface System + Indoor/Outdoor cards) */}
       <HomeDescription />
 
