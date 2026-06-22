@@ -207,49 +207,6 @@ const SlideImage = ({
   );
 };
 
-const SlideText = ({
-  slides,
-  indexMv,
-  reduced,
-}: {
-  slides: ScrollStorySlide[];
-  indexMv: MotionValue<number>;
-  reduced: boolean;
-}) => {
-  return (
-    <div className="relative h-[170px] md:h-[190px]">
-      {slides.map((s, i) => {
-        const opacity = useTransform(indexMv, (v) => {
-          const d = Math.abs(v - i);
-          if (d >= 0.6) return 0;
-          return 1 - d / 0.6;
-        });
-        const y = useTransform(indexMv, (v) => (v - i) * -20);
-        return (
-          <motion.div
-            key={i}
-            style={reduced ? { opacity: i === 0 ? 1 : 0 } : { opacity, y }}
-            className="absolute inset-0 text-white"
-          >
-            {s.eyebrow && (
-              <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-white/70 mb-3">
-                {s.eyebrow}
-              </p>
-            )}
-            <h3 className="font-heading font-light text-2xl md:text-4xl lg:text-5xl leading-tight max-w-xl">
-              {s.title}
-            </h3>
-            {s.description && (
-              <p className="mt-3 text-sm md:text-base text-white/80 max-w-lg leading-relaxed">
-                {s.description}
-              </p>
-            )}
-          </motion.div>
-        );
-      })}
-    </div>
-  );
-};
 
 const ProgressIndicator = ({
   total,
