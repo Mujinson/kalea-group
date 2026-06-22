@@ -1155,6 +1155,19 @@ export default function CreaPreventivo() {
   }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel]);
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"mq", costoUn:0, prezzoUn:0 }]);
+  const addRigaFromProdotto = (p:any) => {
+    const costo = (p.listino||0) * (p.coeff||0.45);
+    const prezzo = costo * MARKUP;
+    setRigheMat(r=>[...r,{
+      id: Date.now()+Math.random(),
+      desc: `${p.fornitore} — ${p.nome}${p.dims?` (${p.dims})`:""}`,
+      qta: 1, unita: "mq",
+      costoUn: Math.round(costo*100)/100,
+      prezzoUn: Math.round(prezzo*100)/100,
+      prodId: p.id,
+    }]);
+    toast.success(`Aggiunto: ${p.nome}`);
+  };
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
   const delRiga = (id:any) => setRigheMat(r=>r.filter(x=>x.id!==id));
 
