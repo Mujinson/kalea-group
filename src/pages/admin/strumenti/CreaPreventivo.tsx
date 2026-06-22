@@ -1155,6 +1155,19 @@ export default function CreaPreventivo() {
   }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel]);
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"mq", costoUn:0, prezzoUn:0 }]);
+  const addRigaFromProdotto = (p:any) => {
+    const costo = (p.listino||0) * (p.coeff||0.45);
+    const prezzo = costo * MARKUP;
+    setRigheMat(r=>[...r,{
+      id: Date.now()+Math.random(),
+      desc: `${p.fornitore} — ${p.nome}${p.dims?` (${p.dims})`:""}`,
+      qta: 1, unita: "mq",
+      costoUn: Math.round(costo*100)/100,
+      prezzoUn: Math.round(prezzo*100)/100,
+      prodId: p.id,
+    }]);
+    toast.success(`Aggiunto: ${p.nome}`);
+  };
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
   const delRiga = (id:any) => setRigheMat(r=>r.filter(x=>x.id!==id));
 
@@ -1425,10 +1438,36 @@ export default function CreaPreventivo() {
             </div>
 
             <div style={{...card,marginBottom:0}}>
-              <div style={{...sectionTitle,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <span>Materiali aggiuntivi</span>
-                <button onClick={addRiga} style={{padding:"3px 12px",borderRadius:6,border:"1px solid #1A1A2E",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Aggiungi riga</button>
+              <div style={{...sectionTitle,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+                <span>Prodotti & accessori aggiuntivi</span>
+                <div style={{display:"flex",gap:6,alignItems:"center",flexWrap:"wrap"}}>
+                  <select
+                    value=""
+                    onChange={(e)=>{
+                      const p = PRODOTTI.find(x=>x.id===e.target.value);
+                      if (p) addRigaFromProdotto(p);
+                      e.target.value = "";
+                    }}
+                    style={{padding:"4px 8px",borderRadius:6,border:"1px solid #1A1A2E",background:"#fff",fontSize:12,cursor:"pointer",maxWidth:260}}
+                  >
+                    <option value="">+ Prodotto da catalogo…</option>
+                    {FORNITORI_LIST.filter(f=>f!=="Tutti").map(forn=>(
+                      <optgroup key={forn} label={forn}>
+                        {PRODOTTI.filter(p=>p.fornitore===forn).map(p=>(
+                          <option key={p.id} value={p.id}>{p.nome}{p.dims?` — ${p.dims}`:""}</option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
+                  <button onClick={addRiga} style={{padding:"3px 12px",borderRadius:6,border:"1px solid #1A1A2E",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Riga libera</button>
+                </div>
               </div>
+              <div style={{fontSize:11,color:"#9A9890",marginBottom:8}}>
+                Aggiungi quanti prodotti o accessori vuoi, anche di collezioni diverse. Verranno inclusi nel totale e nella stampa del preventivo.
+              </div>
+              {righeMat.length === 0 && (
+                <div style={{fontSize:12,color:"#9A9890",fontStyle:"italic",padding:"8px 0"}}>Nessuna voce aggiuntiva.</div>
+              )}
               {righeMat.map(r=>(
                 <div key={r.id} style={{display:"grid",gridTemplateColumns:"2fr 60px 70px 90px 90px 30px",gap:6,marginBottom:8}}>
                   <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Descrizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>

@@ -65,7 +65,7 @@ const ScrollStoryCarousel = ({
         {/* Soft dark overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/50 pointer-events-none" />
 
-        {/* Image stack */}
+        {/* Image stack — text travels inside each slide */}
         <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-8 md:px-16">
           <div className="relative w-full max-w-[1400px] aspect-[16/10] md:aspect-[16/9]">
             {slides.map((s, i) => (
@@ -77,15 +77,6 @@ const ScrollStoryCarousel = ({
                 reduced={!!prefersReduced}
               />
             ))}
-          </div>
-        </div>
-
-        {/* Text overlay */}
-        <div className="absolute inset-x-0 bottom-0 z-20 pointer-events-none">
-          <div className="px-6 sm:px-10 md:px-16 pb-10 md:pb-14">
-            <div className="max-w-2xl">
-              <SlideText slides={slides} indexMv={indexMv} reduced={!!prefersReduced} />
-            </div>
           </div>
         </div>
 
@@ -195,54 +186,27 @@ const SlideImage = ({
         decoding="async"
       />
       {/* Subtle inner gradient to seat the text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
+      {/* Text travels together with the image */}
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 md:p-14 text-white max-w-2xl">
+        {slide.eyebrow && (
+          <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-white/70 mb-3">
+            {slide.eyebrow}
+          </p>
+        )}
+        <h3 className="font-heading font-light text-2xl md:text-4xl lg:text-5xl leading-tight">
+          {slide.title}
+        </h3>
+        {slide.description && (
+          <p className="mt-3 text-sm md:text-base text-white/80 max-w-lg leading-relaxed">
+            {slide.description}
+          </p>
+        )}
+      </div>
     </motion.div>
   );
 };
 
-const SlideText = ({
-  slides,
-  indexMv,
-  reduced,
-}: {
-  slides: ScrollStorySlide[];
-  indexMv: MotionValue<number>;
-  reduced: boolean;
-}) => {
-  return (
-    <div className="relative h-[170px] md:h-[190px]">
-      {slides.map((s, i) => {
-        const opacity = useTransform(indexMv, (v) => {
-          const d = Math.abs(v - i);
-          if (d >= 0.6) return 0;
-          return 1 - d / 0.6;
-        });
-        const y = useTransform(indexMv, (v) => (v - i) * -20);
-        return (
-          <motion.div
-            key={i}
-            style={reduced ? { opacity: i === 0 ? 1 : 0 } : { opacity, y }}
-            className="absolute inset-0 text-white"
-          >
-            {s.eyebrow && (
-              <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-white/70 mb-3">
-                {s.eyebrow}
-              </p>
-            )}
-            <h3 className="font-heading font-light text-2xl md:text-4xl lg:text-5xl leading-tight max-w-xl">
-              {s.title}
-            </h3>
-            {s.description && (
-              <p className="mt-3 text-sm md:text-base text-white/80 max-w-lg leading-relaxed">
-                {s.description}
-              </p>
-            )}
-          </motion.div>
-        );
-      })}
-    </div>
-  );
-};
 
 const ProgressIndicator = ({
   total,
