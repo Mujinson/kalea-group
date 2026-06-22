@@ -186,7 +186,23 @@ const SlideImage = ({
         decoding="async"
       />
       {/* Subtle inner gradient to seat the text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
+      {/* Text travels together with the image */}
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 md:p-14 text-white max-w-2xl">
+        {slide.eyebrow && (
+          <p className="text-[11px] md:text-xs tracking-[0.3em] uppercase text-white/70 mb-3">
+            {slide.eyebrow}
+          </p>
+        )}
+        <h3 className="font-heading font-light text-2xl md:text-4xl lg:text-5xl leading-tight">
+          {slide.title}
+        </h3>
+        {slide.description && (
+          <p className="mt-3 text-sm md:text-base text-white/80 max-w-lg leading-relaxed">
+            {slide.description}
+          </p>
+        )}
+      </div>
     </motion.div>
   );
 };
