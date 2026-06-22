@@ -65,7 +65,7 @@ const ScrollStoryCarousel = ({
         {/* Soft dark overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/50 pointer-events-none" />
 
-        {/* Image stack */}
+        {/* Image stack — text travels inside each slide */}
         <div className="absolute inset-0 flex items-center justify-center px-4 sm:px-8 md:px-16">
           <div className="relative w-full max-w-[1400px] aspect-[16/10] md:aspect-[16/9]">
             {slides.map((s, i) => (
@@ -77,15 +77,6 @@ const ScrollStoryCarousel = ({
                 reduced={!!prefersReduced}
               />
             ))}
-          </div>
-        </div>
-
-        {/* Text overlay */}
-        <div className="absolute inset-x-0 bottom-0 z-20 pointer-events-none">
-          <div className="px-6 sm:px-10 md:px-16 pb-10 md:pb-14">
-            <div className="max-w-2xl">
-              <SlideText slides={slides} indexMv={indexMv} reduced={!!prefersReduced} />
-            </div>
           </div>
         </div>
 
