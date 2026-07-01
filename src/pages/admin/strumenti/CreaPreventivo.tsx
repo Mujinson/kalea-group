@@ -1192,6 +1192,7 @@ export default function CreaPreventivo() {
       const num = numPrev || nextNum();
       if (!numPrev) setNumPrev(num);
       const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Devi effettuare il login per salvare il preventivo");
       const payload: any = {
         lead_id: crmLink?.source === "lead" ? crmLink.id : null,
         customer_id: crmLink?.source === "customer" ? crmLink.id : null,
@@ -1201,7 +1202,7 @@ export default function CreaPreventivo() {
         lingua,
         cliente_nome: cliente.nome || crmLink?.label || null,
         cantiere: cantiere || null,
-        created_by: user?.id || null,
+        created_by: user.id,
         json_dati: {
           cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
           incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
@@ -1210,14 +1211,69 @@ export default function CreaPreventivo() {
           noteCliente, noteInterne, calc,
         },
       };
+
+      // Mirror-payload per la tabella `quotes` (che alimenta la pagina "Preventivi creati")
+      const statusMap: any = { bozza: "draft", inviato: "sent", accettato: "accepted", rifiutato: "rejected" };
+      const items = [
+        prodotto && {
+          type: "prodotto",
+          descrizione: `${prodotto.fornitore} — ${prodotto.nome}${prodotto.dims ? ` (${prodotto.dims})` : ""}`,
+          mq: mqPrev,
+          prezzo_mq: calc.prezzoMatMq,
+          importo: calc.prezzoMatTot,
+          tonalita,
+          woodco: isWoodco ? wcSel : undefined,
+        },
+        ...(righeMat || []).map((r: any) => ({
+          type: "extra",
+          descrizione: r.desc,
+          qta: r.qta,
+          unita: r.unita,
+          prezzo_un: r.prezzoUn,
+          importo: (r.prezzoUn || 0) * (r.qta || 0),
+        })),
+      ].filter(Boolean);
+
+      const quotePayload: any = {
+        customer_id: crmLink?.source === "customer" ? crmLink.id : null,
+        lead_id: crmLink?.source === "lead" ? crmLink.id : null,
+        quote_number: num,
+        status: statusMap[stato] || "draft",
+        total_amount: Math.round(calc.totaleIva * 100) / 100,
+        vat_amount: Math.round(calc.iva * 100) / 100,
+        vat_included: true,
+        vat_rate: ivaRate / 100,
+        notes: noteCliente || null,
+        items,
+        additional_costs: [
+          calc.prezzoPosaTot ? { label: "Posa", importo: calc.prezzoPosaTot } : null,
+          calc.prezzoTappTot ? { label: "Tappetino", importo: calc.prezzoTappTot } : null,
+          calc.prezzoTrasporto ? { label: "Trasporto", importo: calc.prezzoTrasporto } : null,
+          calc.prezzoTrasfertaTot ? { label: "Trasferta posatori", importo: calc.prezzoTrasfertaTot } : null,
+        ].filter(Boolean),
+        created_by: user.email || user.id,
+        project_name: cantiere || null,
+        site_address: cliente.indirizzo || null,
+        site_city: cliente.citta || null,
+        transport_method: metodoTrasporto || null,
+        delivery_time: tempiConsegna || null,
+        payment_type: tipoPagamento || null,
+        payment_terms_text: (pagamenti || []).map((p: any) => `${p.label}: ${p.pct}%`).join(" · ") || null,
+        subject: prodotto ? `${prodotto.fornitore} — ${prodotto.nome}` : null,
+      };
+
       if (preventivoId) {
         const { error } = await supabase.from("preventivi").update(payload).eq("id", preventivoId);
         if (error) throw error;
+        // aggiorna anche la riga in quotes (match per quote_number)
+        await supabase.from("quotes").update(quotePayload).eq("quote_number", num);
         toast.success("Preventivo aggiornato");
       } else {
         const { data, error } = await supabase.from("preventivi").insert(payload).select("id").single();
         if (error) throw error;
         setPreventivoId(data.id);
+        const { error: qErr } = await supabase.from("quotes").insert(quotePayload);
+        if (qErr) console.warn("quotes mirror insert:", qErr.message);
         toast.success("Preventivo salvato" + (crmLink ? ` e collegato al ${crmLink.source}` : ""));
       }
     } catch (e:any) {
@@ -1228,12 +1284,44 @@ export default function CreaPreventivo() {
     }
   };
 
-  const generaPDF = () => {
+  const generaPDF = async () => {
     if (calc && calc.marginePct < MARGINE_BLOCCO) {
       alert(`⛔ BLOCCO: Margine ${pct(calc.marginePct)} sotto il ${MARGINE_BLOCCO}%. Rivedi il preventivo.`);
       return;
     }
-    window.print();
+    const preview = document.getElementById("pdf-preview") as HTMLElement | null;
+    if (!preview) { toast.error("Vai su 'Anteprima & PDF' prima di scaricare"); return; }
+    const tId = toast.loading("Generazione PDF...");
+    try {
+      const [{ default: html2canvas }, jsPDFmod] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+      const jsPDF = (jsPDFmod as any).jsPDF || (jsPDFmod as any).default;
+      const canvas = await html2canvas(preview, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const imgData = canvas.toDataURL("image/jpeg", 0.92);
+      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const imgW = pageW;
+      const imgH = (canvas.height * imgW) / canvas.width;
+      let heightLeft = imgH;
+      let position = 0;
+      pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
+      heightLeft -= pageH;
+      while (heightLeft > 0) {
+        position = heightLeft - imgH;
+        pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
+        heightLeft -= pageH;
+      }
+      const fname = `Preventivo_${(numPrev || "Kalea").replace(/[^\w-]+/g, "_")}.pdf`;
+      pdf.save(fname);
+      toast.success("PDF scaricato", { id: tId });
+    } catch (e: any) {
+      console.error(e);
+      toast.error(`Errore PDF: ${e?.message || e}`, { id: tId });
+    }
   };
 
   const statoColor: Record<string,string> = { bozza:"#9A9890", inviato:"#0C447C", accettato:"#27500A", rifiutato:"#A32D2D" };
