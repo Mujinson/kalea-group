@@ -1122,11 +1122,13 @@ export default function CreaPreventivo() {
           const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
           if (q) {
             quoteRow = q;
-            const { data: p2 } = await supabase.from("preventivi" as any)
-              .select("*").eq("numero_preventivo", q.quote_number).maybeSingle();
-            if (p2) prev = p2;
+            const { data: p2list } = await supabase.from("preventivi" as any)
+              .select("*").eq("numero_preventivo", q.quote_number)
+              .order("created_at", { ascending: false }).limit(1);
+            if (p2list && p2list.length) prev = p2list[0];
           }
         }
+
 
         if (cancelled) return;
 
