@@ -1823,6 +1823,7 @@ export type Database = {
           accepted_date: string | null
           additional_costs: Json | null
           assigned_to: string | null
+          client_name: string | null
           converted_sale_id: string | null
           created_at: string
           created_by: string | null
@@ -1858,6 +1859,7 @@ export type Database = {
           accepted_date?: string | null
           additional_costs?: Json | null
           assigned_to?: string | null
+          client_name?: string | null
           converted_sale_id?: string | null
           created_at?: string
           created_by?: string | null
@@ -1893,6 +1895,7 @@ export type Database = {
           accepted_date?: string | null
           additional_costs?: Json | null
           assigned_to?: string | null
+          client_name?: string | null
           converted_sale_id?: string | null
           created_at?: string
           created_by?: string | null
