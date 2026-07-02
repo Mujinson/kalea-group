@@ -1102,6 +1102,86 @@ export default function CreaPreventivo() {
   const [tempiConsegna, setTempiConsegna] = useState<string>("");
   const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
 
+  // ─── Carica preventivo esistente dalla querystring (?edit=<id>) ───
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const editId = params.get("edit");
+    if (!editId) return;
+    let cancelled = false;
+    (async () => {
+      const tId = toast.loading("Caricamento preventivo…");
+      try {
+        // 1) prova preventivi.id
+        let prev: any = null;
+        const { data: p1 } = await supabase.from("preventivi" as any).select("*").eq("id", editId).maybeSingle();
+        if (p1) prev = p1;
+
+        // 2) se non trovato, cerca in quotes e usa il numero
+        let quoteRow: any = null;
+        if (!prev) {
+          const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
+          if (q) {
+            quoteRow = q;
+            const { data: p2 } = await supabase.from("preventivi" as any)
+              .select("*").eq("numero_preventivo", q.quote_number).maybeSingle();
+            if (p2) prev = p2;
+          }
+        }
+
+        if (cancelled) return;
+
+        if (prev) {
+          setPreventivoId(prev.id);
+          setNumPrev(prev.numero_preventivo || "");
+          if (prev.lingua) setLingua(prev.lingua);
+          if (prev.stato) setStato(prev.stato);
+          if (prev.cantiere) setCantiere(prev.cantiere);
+          const d = prev.json_dati || {};
+          if (d.cliente) setCliente(d.cliente);
+          if (d.prodotto) setProdotto(d.prodotto);
+          if (d.complessita) setComplessita(d.complessita);
+          if (typeof d.mqPrev === "number") setMqPrev(d.mqPrev);
+          if (typeof d.sfrido === "number") setSfrido(d.sfrido);
+          if (typeof d.sconto === "number") setSconto(d.sconto);
+          if (typeof d.incPosa === "boolean") setIncPosa(d.incPosa);
+          if (typeof d.incTapp === "boolean") setIncTapp(d.incTapp);
+          if (typeof d.incTrasporto === "boolean") setIncTrasporto(d.incTrasporto);
+          if (typeof d.kmDist === "number") setKmDist(d.kmDist);
+          if (Array.isArray(d.righeMat)) setRigheMat(d.righeMat);
+          if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
+          if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
+          if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
+          if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
+          if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
+          if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
+          if (d.wcSel) setWcSel(d.wcSel);
+          if (d.noteCliente) setNoteCliente(d.noteCliente);
+          if (d.noteInterne) setNoteInterne(d.noteInterne);
+          toast.success("Preventivo caricato", { id: tId });
+        } else if (quoteRow) {
+          // Fallback minimo dalla riga quotes (senza json_dati)
+          setNumPrev(quoteRow.quote_number || "");
+          if (quoteRow.notes) setNoteCliente(quoteRow.notes);
+          if (quoteRow.project_name) setCantiere(quoteRow.project_name);
+          if (quoteRow.transport_method) setMetodoTrasporto(quoteRow.transport_method);
+          if (quoteRow.delivery_time) setTempiConsegna(quoteRow.delivery_time);
+          if (quoteRow.payment_type) setTipoPagamento(quoteRow.payment_type);
+          if (quoteRow.vat_rate) setIvaRate(Math.round(Number(quoteRow.vat_rate) * 100));
+          const statusRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
+          if (statusRev[quoteRow.status]) setStato(statusRev[quoteRow.status]);
+          toast.success("Preventivo caricato (dati base)", { id: tId });
+        } else {
+          toast.error("Preventivo non trovato", { id: tId });
+        }
+      } catch (e: any) {
+        console.error(e);
+        toast.error("Errore caricamento: " + (e?.message || ""), { id: tId });
+      }
+    })();
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const filtered = useMemo(()=>PRODOTTI.filter(p=>{
     const fs = fornFilt==="Tutti" || p.fornitore===fornFilt;
     const ss = !search || p.nome.toLowerCase().includes(search.toLowerCase()) || p.fornitore.toLowerCase().includes(search.toLowerCase()) || p.categoria.toLowerCase().includes(search.toLowerCase()) || p.dims.toLowerCase().includes(search.toLowerCase());
