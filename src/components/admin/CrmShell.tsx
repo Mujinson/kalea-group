@@ -96,10 +96,12 @@ export function CrmKpiTile({ label, value, color = "indigo", icon, hint, onClick
 
 export function CrmKpiRow({ children, cols }: { children: ReactNode; cols?: number }) {
   const gridCols =
-    cols === 6 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
+    cols === 7 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-7"
+    : cols === 6 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-6"
     : cols === 5 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
     : cols === 3 ? "grid-cols-1 sm:grid-cols-3"
     : "grid-cols-2 md:grid-cols-4";
+
   return <div className={`grid ${gridCols} gap-3`}>{children}</div>;
 }
 
