@@ -395,8 +395,10 @@ const AdminQuotes = () => {
   const getCustomerName = (quote: Quote) => {
     if (quote.customer?.company_name) return quote.customer.company_name;
     if (quote.customer?.first_name) return `${quote.customer.first_name} ${quote.customer.last_name || ''}`;
-    return 'Cliente';
+    if (quote.client_name && quote.client_name.trim()) return quote.client_name;
+    return '—';
   };
+
 
   const { subtotal, vat, total } = calculateTotals();
 
