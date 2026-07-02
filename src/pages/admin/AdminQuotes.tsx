@@ -441,7 +441,7 @@ const AdminQuotes = () => {
 
       <CrmKpiRow cols={7}>
         <CrmKpiTile label="Totale" value={statCounts.total} color="indigo" />
-        <CrmKpiTile label="Preventivato" value={formatEuroCompact(totalePreventivato)} color="violet" />
+        <CrmKpiTile label="Preventivato" value={formatEuroCompact(totalePreventivato)} color="purple" />
         <CrmKpiTile label="Nuove" value={statCounts.nuove} color="blue" />
         <CrmKpiTile label="Inviate" value={statCounts.inviate} color="orange" />
         <CrmKpiTile label="In trattativa" value={statCounts.in_trattativa} color="amber" />
