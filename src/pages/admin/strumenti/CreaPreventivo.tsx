@@ -1122,11 +1122,13 @@ export default function CreaPreventivo() {
           const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
           if (q) {
             quoteRow = q;
-            const { data: p2 } = await supabase.from("preventivi" as any)
-              .select("*").eq("numero_preventivo", q.quote_number).maybeSingle();
-            if (p2) prev = p2;
+            const { data: p2list } = await supabase.from("preventivi" as any)
+              .select("*").eq("numero_preventivo", q.quote_number)
+              .order("created_at", { ascending: false }).limit(1);
+            if (p2list && p2list.length) prev = p2list[0];
           }
         }
+
 
         if (cancelled) return;
 
@@ -1340,7 +1342,9 @@ export default function CreaPreventivo() {
         payment_type: tipoPagamento || null,
         payment_terms_text: (pagamenti || []).map((p: any) => `${p.label}: ${p.pct}%`).join(" · ") || null,
         subject: prodotto ? `${prodotto.fornitore} — ${prodotto.nome}` : null,
+        client_name: cliente.nome || crmLink?.label || null,
       };
+
 
       if (preventivoId) {
         const { error } = await supabase.from("preventivi").update(payload).eq("id", preventivoId);

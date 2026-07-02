@@ -48,6 +48,8 @@ interface Quote {
   converted_sale_id: string | null;
   created_by: string | null;
   customer?: { company_name: string | null; first_name: string | null; last_name: string | null };
+  client_name?: string | null;
+
 }
 
 const AdminQuotes = () => {
@@ -393,8 +395,10 @@ const AdminQuotes = () => {
   const getCustomerName = (quote: Quote) => {
     if (quote.customer?.company_name) return quote.customer.company_name;
     if (quote.customer?.first_name) return `${quote.customer.first_name} ${quote.customer.last_name || ''}`;
-    return 'Cliente';
+    if (quote.client_name && quote.client_name.trim()) return quote.client_name;
+    return '—';
   };
+
 
   const { subtotal, vat, total } = calculateTotals();
 
@@ -415,6 +419,12 @@ const AdminQuotes = () => {
     vinte: quotes.filter(q => q.status === 'converted' || q.status === 'accepted').length,
     perse: quotes.filter(q => q.status === 'rejected').length,
   };
+  const totalePreventivato = quotes.reduce((sum, q) => sum + (Number(q.total_amount) || 0), 0);
+  const formatEuroCompact = (n: number) => {
+    if (n >= 1_000_000) return `€${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `€${(n / 1_000).toFixed(1)}k`;
+    return `€${n.toLocaleString('it-IT', { maximumFractionDigits: 0 })}`;
+  };
 
   return (
     <div className="space-y-4">
@@ -429,14 +439,16 @@ const AdminQuotes = () => {
         }
       />
 
-      <CrmKpiRow cols={6}>
+      <CrmKpiRow cols={7}>
         <CrmKpiTile label="Totale" value={statCounts.total} color="indigo" />
+        <CrmKpiTile label="Preventivato" value={formatEuroCompact(totalePreventivato)} color="purple" />
         <CrmKpiTile label="Nuove" value={statCounts.nuove} color="blue" />
         <CrmKpiTile label="Inviate" value={statCounts.inviate} color="orange" />
         <CrmKpiTile label="In trattativa" value={statCounts.in_trattativa} color="amber" />
         <CrmKpiTile label="Vinte" value={statCounts.vinte} color="emerald" />
         <CrmKpiTile label="Perse" value={statCounts.perse} color="red" />
       </CrmKpiRow>
+
 
       <CrmFilterBar>
         <div className="relative flex-1">
