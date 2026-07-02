@@ -48,6 +48,8 @@ interface Quote {
   converted_sale_id: string | null;
   created_by: string | null;
   customer?: { company_name: string | null; first_name: string | null; last_name: string | null };
+  client_name?: string | null;
+
 }
 
 const AdminQuotes = () => {
