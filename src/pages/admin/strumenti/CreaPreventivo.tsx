@@ -1270,16 +1270,33 @@ export default function CreaPreventivo() {
   };
 
   const salvaPreventivo = async () => {
-    if (!calc) { toast.error("Configura prima il preventivo"); return; }
-    if (hasOverstock) {
-      const det = overstockRows.map(r => `${r.nome}: ${r.mq} mq richiesti / ${stockFor(r.nome)} mq disp.`).join("; ");
-      toast.error(`Quantità non disponibile a magazzino — ${det}`);
-      return;
+    // Validazione dettagliata: raccoglie tutti i campi mancanti
+    const missing: string[] = [];
+    const errs = new Set<string>();
+    const clienteName = (crmLink?.label || crmLink?.nome || cliente.nome || "").trim();
+    if (!clienteName) { missing.push("Nome cliente / Ragione sociale"); errs.add("cliente.nome"); }
+    if (!prodotto && (righeMat?.length || 0) === 0) {
+      missing.push("Almeno un prodotto (principale o aggiuntivo)");
+      errs.add("prodotto");
+    }
+    if (prodotto && (!mqPrev || mqPrev <= 0)) {
+      missing.push("Metri quadri da posare (> 0)");
+      errs.add("mqPrev");
     }
     if (isWoodco && !wcReady) {
-      toast.error("Seleziona collezione, essenza, finitura e formato Woodco prima di salvare");
+      missing.push("Collezione, essenza, finitura e formato Woodco");
+      errs.add("woodco");
+    }
+    if (hasOverstock) {
+      const det = overstockRows.map(r => `${r.nome}: ${r.mq} mq richiesti / ${stockFor(r.nome)} mq disp.`).join("; ");
+      missing.push(`Quantità superiore al magazzino — ${det}`);
+    }
+    setErrors(errs);
+    if (missing.length > 0) {
+      toast.error(`Manca: ${missing.join(" · ")}`, { duration: 6000 });
       return;
     }
+    if (!calc) { toast.error("Errore nel calcolo del preventivo"); return; }
     setSaving(true);
     try {
       const num = numPrev || nextNum();
