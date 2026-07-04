@@ -105,7 +105,7 @@ const AdminQuotes = () => {
     setLoading(true);
     try {
       const [quotesRes, customersRes, costsRes] = await Promise.all([
-        supabase.from('quotes').select('*, customer:customers(company_name, first_name, last_name)').order('created_at', { ascending: false }),
+        supabase.from('quotes').select('*, customer:customers(company_name, first_name, last_name), lead:leads(name, company_name)').order('created_at', { ascending: false }),
         fetchAllRows(supabase.from('customers').select('id, company_name, first_name, last_name').order('company_name')),
         supabase.from('static_costs').select('*'),
       ]);
