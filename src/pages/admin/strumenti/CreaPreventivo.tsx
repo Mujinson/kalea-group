@@ -1499,11 +1499,76 @@ export default function CreaPreventivo() {
                       <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*MARKUP)}/mq</span>
                     </div>
                   </div>
-                  <button onClick={resetProdotto}
-                    style={{padding:"6px 12px",borderRadius:7,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860",whiteSpace:"nowrap"}}>
-                    ← Cambia prodotto
-                  </button>
+                  <div style={{display:"flex",flexDirection:"column",gap:6,alignItems:"flex-end"}}>
+                    <button onClick={()=>setAddingMore(v=>!v)}
+                      style={{padding:"6px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:addingMore?"#1A1A2E":"transparent",color:addingMore?"#fff":"#1A1A2E",cursor:"pointer",fontSize:12,fontWeight:500,whiteSpace:"nowrap"}}>
+                      {addingMore ? "× Chiudi ricerca" : "+ Aggiungi altro prodotto"}
+                    </button>
+                    <button onClick={resetProdotto}
+                      style={{padding:"6px 12px",borderRadius:7,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860",whiteSpace:"nowrap"}}>
+                      ← Cambia prodotto principale
+                    </button>
+                  </div>
                 </div>
+
+                {/* Ricerca inline per aggiungere ulteriori prodotti (illimitati) come righe extra */}
+                {addingMore && (
+                  <div style={{marginBottom:14,padding:12,border:"1px dashed #C8A96E",borderRadius:10,background:"#FBF8F2"}}>
+                    <div style={{fontSize:11,fontWeight:500,color:"#8A7060",textTransform:"uppercase",letterSpacing:".08em",marginBottom:8}}>
+                      Aggiungi prodotti extra (illimitati)
+                    </div>
+                    <div style={{position:"relative",marginBottom:8}}>
+                      <input value={search} onChange={e=>{setSearch(e.target.value);setShowAll(false);}}
+                        placeholder="🔍 Cerca nome, fornitore, categoria..."
+                        style={{width:"100%",padding:"8px 10px",borderRadius:8,border:"1px solid #E0DDD8",fontSize:13,outline:"none",background:"#fff",boxSizing:"border-box"}}/>
+                    </div>
+                    <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:8}}>
+                      {FORNITORI_LIST.map(f=>{
+                        const fc=FORN_STYLE[f]||{bg:"#1A1A2E",c:"#fff"};
+                        return <button key={f} onClick={()=>{setFornFilt(f);setShowAll(false);}}
+                          style={{padding:"3px 10px",borderRadius:16,border:"1px solid",cursor:"pointer",fontSize:11,fontWeight:500,
+                            background:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.bg):"transparent",
+                            color:fornFilt===f?(f==="Tutti"?"#fff":fc.c):"#9A9890",
+                            borderColor:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.c):"#E0DDD8"}}>{f}</button>;
+                      })}
+                    </div>
+                    <div style={{maxHeight:340,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff"}}>
+                      {(showAll?filtered:filtered.slice(0,25)).map(p=>{
+                        const costoMq=p.listino*p.coeff;
+                        const prezzoMq=costoMq*MARKUP;
+                        const fc=prodStyle(p);
+                        return (
+                          <div key={p.id} style={{padding:"8px 12px",borderBottom:"0.5px solid #E0DDD8",display:"flex",alignItems:"center",gap:10}}>
+                            <div style={{flex:1,minWidth:0}}>
+                              <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
+                                <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
+                                <span style={{fontSize:13,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                              </div>
+                              <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
+                                <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
+                                <span>{p.categoria}</span><span>· {p.dims}</span>
+                              </div>
+                            </div>
+                            <button
+                              onClick={()=>{addRigaFromProdotto(p);}}
+                              title="Aggiungi al preventivo (puoi aggiungerne all'infinito)"
+                              style={{padding:"6px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500,whiteSpace:"nowrap",flexShrink:0}}>
+                              + Aggiungi
+                            </button>
+                          </div>
+                        );
+                      })}
+                      {!showAll && filtered.length>25 && (
+                        <div style={{padding:8,textAlign:"center"}}>
+                          <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F0EDE8",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
+                        </div>
+                      )}
+                    </div>
+                    <div style={{fontSize:11,color:"#8A7060",marginTop:8}}>
+                      Ogni "+ Aggiungi" crea una nuova riga sotto — puoi aggiungerne quanti vuoi. Le trovi in "Prodotti & accessori aggiuntivi" con quantità, sfrido e sconto per riga.
+                    </div>
+                  </div>
+                )}
 
                 {/* ─── Selezione Woodco da catalogo DB ─── */}
                 {isWoodco && (
