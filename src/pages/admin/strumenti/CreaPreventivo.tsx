@@ -998,7 +998,7 @@ export default function CreaPreventivo() {
   const [mqPrev, setMqPrev] = useState(50);
   const [sfrido, setSfrido] = useState(10);
   const [incPosa, setIncPosa] = useState(true);
-  const [incTapp, setIncTapp] = useState(true);
+  const [incTapp, setIncTapp] = useState(false);
   const [kmDist, setKmDist] = useState(0);
   const [incTrasporto, setIncTrasporto] = useState(false);
   const [sconto, setSconto] = useState(0);
