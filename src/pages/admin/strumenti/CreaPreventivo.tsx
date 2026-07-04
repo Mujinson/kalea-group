@@ -1139,7 +1139,7 @@ export default function CreaPreventivo() {
         const statusMapRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
         setPreventivoId(q.id);
         setNumPrev(q.quote_number || "");
-        if (q.status) setStato(statusMapRev[q.status] || "bozza");
+        if (q.status) { const st = statusMapRev[q.status] || "bozza"; setStato(st); if (st === "accettato") setStep(3); }
         if (q.project_name) setCantiere(q.project_name);
         const d: any = q.quote_data || {};
         if (d.lingua) setLingua(d.lingua);
