@@ -1111,53 +1111,39 @@ export default function CreaPreventivo() {
     (async () => {
       const tId = toast.loading("Caricamento preventivo…");
       try {
-        // 1) prova preventivi.id
-        let prev: any = null;
-        const { data: p1 } = await supabase.from("preventivi" as any).select("*").eq("id", editId).maybeSingle();
-        if (p1) prev = p1;
-
-        // 2) se non trovato, cerca in quotes e usa il numero
-        let quoteRow: any = null;
-        if (!prev) {
-          const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
-          if (q) {
-            quoteRow = q;
-            const { data: p2list } = await supabase.from("preventivi" as any)
-              .select("*").eq("numero_preventivo", q.quote_number)
-              .order("created_at", { ascending: false }).limit(1);
-            if (p2list && p2list.length) prev = p2list[0];
-          }
-        }
-
-
+        // Carica da quotes (sorgente unica)
+        const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
         if (cancelled) return;
-
-        if (prev) {
-          setPreventivoId(prev.id);
-          setNumPrev(prev.numero_preventivo || "");
-          if (prev.lingua) setLingua(prev.lingua);
-          if (prev.stato) setStato(prev.stato);
-          if (prev.cantiere) setCantiere(prev.cantiere);
-          const d = prev.json_dati || {};
-          if (d.cliente) setCliente(d.cliente);
-          if (d.prodotto) setProdotto(d.prodotto);
-          if (d.complessita) setComplessita(d.complessita);
-          if (typeof d.mqPrev === "number") setMqPrev(d.mqPrev);
-          if (typeof d.sfrido === "number") setSfrido(d.sfrido);
-          if (typeof d.sconto === "number") setSconto(d.sconto);
-          if (typeof d.incPosa === "boolean") setIncPosa(d.incPosa);
-          if (typeof d.incTapp === "boolean") setIncTapp(d.incTapp);
-          if (typeof d.incTrasporto === "boolean") setIncTrasporto(d.incTrasporto);
-          if (typeof d.kmDist === "number") setKmDist(d.kmDist);
-          if (Array.isArray(d.righeMat)) setRigheMat(d.righeMat);
-          if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
-          if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
-          if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
-          if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
-          if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
-          if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
-          if (d.wcSel) setWcSel(d.wcSel);
-          if (d.noteCliente) setNoteCliente(d.noteCliente);
+        if (!q) {
+          toast.error("Preventivo non trovato", { id: tId });
+          return;
+        }
+        const statusMapRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
+        setPreventivoId(q.id);
+        setNumPrev(q.quote_number || "");
+        if (q.status) setStato(statusMapRev[q.status] || "bozza");
+        if (q.project_name) setCantiere(q.project_name);
+        const d: any = q.quote_data || {};
+        if (d.lingua) setLingua(d.lingua);
+        if (d.cliente) setCliente(d.cliente);
+        if (d.prodotto) setProdotto(d.prodotto);
+        if (d.complessita) setComplessita(d.complessita);
+        if (typeof d.mqPrev === "number") setMqPrev(d.mqPrev);
+        if (typeof d.sfrido === "number") setSfrido(d.sfrido);
+        if (typeof d.sconto === "number") setSconto(d.sconto);
+        if (typeof d.incPosa === "boolean") setIncPosa(d.incPosa);
+        if (typeof d.incTapp === "boolean") setIncTapp(d.incTapp);
+        if (typeof d.incTrasporto === "boolean") setIncTrasporto(d.incTrasporto);
+        if (typeof d.kmDist === "number") setKmDist(d.kmDist);
+        if (Array.isArray(d.righeMat)) setRigheMat(d.righeMat);
+        if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
+        if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
+        if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
+        if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
+        if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
+        if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
+        if (d.wcSel) setWcSel(d.wcSel);
+        if (d.noteCliente) setNoteCliente(d.noteCliente);
           if (d.noteInterne) setNoteInterne(d.noteInterne);
           toast.success("Preventivo caricato", { id: tId });
         } else if (quoteRow) {
