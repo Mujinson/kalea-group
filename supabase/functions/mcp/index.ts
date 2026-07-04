@@ -6,15 +6,19 @@
 import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 
 // src/lib/mcp/tools/list-leads.ts
-import { createClient } from "npm:@supabase/supabase-js@^2.86.0";
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
-import { z } from "npm:zod@^4.4.3";
+
+// src/lib/mcp/sb.ts
+import { createClient } from "npm:@supabase/supabase-js@^2.86.0";
 function sb(ctx) {
   return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
     global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
     auth: { persistSession: false, autoRefreshToken: false }
   });
 }
+
+// src/lib/mcp/tools/list-leads.ts
+import { z } from "npm:zod@^4.4.3";
 var list_leads_default = defineTool({
   name: "list_leads",
   title: "List leads",
@@ -44,15 +48,8 @@ ${JSON.stringify(data, null, 2)}` }],
 });
 
 // src/lib/mcp/tools/list-quotes.ts
-import { createClient as createClient2 } from "npm:@supabase/supabase-js@^2.86.0";
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z2 } from "npm:zod@^4.4.3";
-function sb2(ctx) {
-  return createClient2(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
 var list_quotes_default = defineTool2({
   name: "list_quotes",
   title: "List quotes",
@@ -65,7 +62,7 @@ var list_quotes_default = defineTool2({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ status, search, limit }, ctx) => {
     if (!ctx.isAuthenticated()) return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    let q = sb2(ctx).from("quotes").select("id, quote_number, client_name, status, total_amount, vat_amount, vat_included, valid_until, created_at, created_by").order("created_at", { ascending: false }).limit(limit ?? 25);
+    let q = sb(ctx).from("quotes").select("id, quote_number, client_name, status, total_amount, vat_amount, vat_included, valid_until, created_at, created_by").order("created_at", { ascending: false }).limit(limit ?? 25);
     if (status) q = q.eq("status", status);
     if (search) q = q.or(`quote_number.ilike.%${search}%,client_name.ilike.%${search}%`);
     const { data, error } = await q;
@@ -80,15 +77,8 @@ ${JSON.stringify(data, null, 2)}` }],
 });
 
 // src/lib/mcp/tools/list-customers.ts
-import { createClient as createClient3 } from "npm:@supabase/supabase-js@^2.86.0";
 import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z3 } from "npm:zod@^4.4.3";
-function sb3(ctx) {
-  return createClient3(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
 var list_customers_default = defineTool3({
   name: "list_customers",
   title: "List customers",
@@ -101,7 +91,7 @@ var list_customers_default = defineTool3({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ status, search, limit }, ctx) => {
     if (!ctx.isAuthenticated()) return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    let q = sb3(ctx).from("customers").select("id, company_name, first_name, last_name, email, phone, city, province, status, total_value, total_margin, created_at").order("created_at", { ascending: false }).limit(limit ?? 25);
+    let q = sb(ctx).from("customers").select("id, company_name, first_name, last_name, email, phone, city, province, status, total_value, total_margin, created_at").order("created_at", { ascending: false }).limit(limit ?? 25);
     if (status) q = q.eq("status", status);
     if (search) q = q.or(`company_name.ilike.%${search}%,first_name.ilike.%${search}%,last_name.ilike.%${search}%,email.ilike.%${search}%`);
     const { data, error } = await q;
@@ -116,15 +106,8 @@ ${JSON.stringify(data, null, 2)}` }],
 });
 
 // src/lib/mcp/tools/list-sites.ts
-import { createClient as createClient4 } from "npm:@supabase/supabase-js@^2.86.0";
 import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z4 } from "npm:zod@^4.4.3";
-function sb4(ctx) {
-  return createClient4(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
 var list_sites_default = defineTool4({
   name: "list_construction_sites",
   title: "List construction sites",
@@ -138,7 +121,7 @@ var list_sites_default = defineTool4({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ status, priority, search, limit }, ctx) => {
     if (!ctx.isAuthenticated()) return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    let q = sb4(ctx).from("construction_sites").select("id, title, project_name, status, priority, city, province, planned_start_date, planned_end_date, customer_id, salesperson_id, created_at").order("created_at", { ascending: false }).limit(limit ?? 25);
+    let q = sb(ctx).from("construction_sites").select("id, title, project_name, status, priority, city, province, planned_start_date, planned_end_date, customer_id, salesperson_id, created_at").order("created_at", { ascending: false }).limit(limit ?? 25);
     if (status) q = q.eq("status", status);
     if (priority) q = q.eq("priority", priority);
     if (search) q = q.or(`title.ilike.%${search}%,project_name.ilike.%${search}%,city.ilike.%${search}%`);
@@ -154,15 +137,8 @@ ${JSON.stringify(data, null, 2)}` }],
 });
 
 // src/lib/mcp/tools/create-lead.ts
-import { createClient as createClient5 } from "npm:@supabase/supabase-js@^2.86.0";
 import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z5 } from "npm:zod@^4.4.3";
-function sb5(ctx) {
-  return createClient5(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
 var create_lead_default = defineTool5({
   name: "create_lead",
   title: "Create lead",
@@ -181,7 +157,7 @@ var create_lead_default = defineTool5({
   annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false },
   handler: async (input, ctx) => {
     if (!ctx.isAuthenticated()) return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
-    const { data, error } = await sb5(ctx).from("leads").insert({
+    const { data, error } = await sb(ctx).from("leads").insert({
       name: input.name,
       email: input.email.toLowerCase(),
       phone: input.phone ?? null,
