@@ -103,6 +103,7 @@ import CreaPreventivo from "./pages/admin/strumenti/CreaPreventivo";
 import CommercialeApp from "./pages/role-app/CommercialeApp";
 import OperaioApp from "./pages/role-app/OperaioApp";
 import IbridoApp from "./pages/role-app/IbridoApp";
+import OAuthConsent from "./pages/OAuthConsent";
 const queryClient = new QueryClient();
 
 // Component to handle SEO meta tags
@@ -167,7 +168,8 @@ const CrmHostGate = () => {
     p === "/app" ||
     p.startsWith("/app/") ||
     p === "/cantieri-app" ||
-    p.startsWith("/cantieri-app/");
+    p.startsWith("/cantieri-app/") ||
+    p.startsWith("/.lovable/");
 
   if (allowed) return null;
 
@@ -211,6 +213,9 @@ const App = () => (
               <Route path="/app/commerciale/*" element={<CommercialeApp />} />
               <Route path="/app/operaio/*" element={<OperaioApp />} />
               <Route path="/app/ibrido/*" element={<IbridoApp />} />
+
+              {/* OAuth consent (MCP) */}
+              <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
 
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />

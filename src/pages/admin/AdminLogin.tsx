@@ -1,10 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { useAdminAuth, routeForRole, AppRole } from '@/hooks/useAdminAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 import bgLogin from '@/assets/bg-manifesto.jpg';
+
+const safeNext = (v: string | null): string | null => {
+  if (!v) return null;
+  // same-origin relative path only
+  if (!v.startsWith('/') || v.startsWith('//')) return null;
+  return v;
+};
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -13,10 +20,13 @@ const AdminLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, user, role, loading } = useAdminAuth();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const nextParam = safeNext(params.get('next'));
 
   if (!loading && user && role) {
-    return <Navigate to={routeForRole(role)} replace />;
+    return <Navigate to={nextParam ?? routeForRole(role)} replace />;
   }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +58,7 @@ const AdminLogin = () => {
             : list.includes('operaio') ? 'operaio' : null;
           target = routeForRole(chosen);
         }
-        navigate(target);
+        navigate(nextParam ?? target);
       }
     } catch (err) {
       toast.error("Errore durante l'accesso");
