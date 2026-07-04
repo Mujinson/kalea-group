@@ -1273,7 +1273,7 @@ export default function CreaPreventivo() {
         cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
         ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
-        wcSel, noteCliente, noteInterne, calc, lingua, stato,
+        wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
       };
 
       const statusMap: any = { bozza: "draft", inviato: "sent", accettato: "accepted", rifiutato: "rejected" };
