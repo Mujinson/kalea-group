@@ -1456,17 +1456,25 @@ export default function CreaPreventivo() {
                     const prezzoMq=costoMq*MARKUP;
                     const fc=prodStyle(p);
                     return (
-                      <div key={p.id} onClick={()=>selectProdotto(p)}
-                        style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",cursor:"pointer",borderLeft:"3px solid transparent"}}>
-                        <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
-                          <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
-                          <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                      <div key={p.id}
+                        style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",borderLeft:"3px solid transparent",display:"flex",alignItems:"center",gap:10}}>
+                        <div onClick={()=>selectProdotto(p)} style={{flex:1,cursor:"pointer",minWidth:0}}>
+                          <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
+                            <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
+                            <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                          </div>
+                          <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
+                            <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
+                            <span>{p.categoria}</span><span>· {p.dims}</span>
+                            <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
+                          </div>
                         </div>
-                        <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
-                          <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
-                          <span>{p.categoria}</span><span>· {p.dims}</span>
-                          <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
-                        </div>
+                        <button
+                          onClick={(e)=>{e.stopPropagation(); addRigaFromProdotto(p);}}
+                          title="Aggiungi al preventivo (puoi aggiungerne all'infinito)"
+                          style={{padding:"6px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500,whiteSpace:"nowrap",flexShrink:0}}>
+                          + Aggiungi
+                        </button>
                       </div>
                     );
                   })}
