@@ -1,0 +1,1 @@
+ALTER VIEW public.v_customer_receivables SET (security_invoker = true);
