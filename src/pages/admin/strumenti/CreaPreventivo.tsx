@@ -1239,7 +1239,7 @@ export default function CreaPreventivo() {
     return { costoMatMq,prezzoMatMq,prezzoMatMqAuto,mqOrd,costoMatTot,prezzoMatTot,prezzoPosaMq,prezzoPosaMqAuto,costoPosaTot,prezzoPosaTot,prezzoTappMq,prezzoTappMqAuto,costoTappTot,prezzoTappTot,tappNeeded,prezzoTrasportoKm,prezzoTrasportoKmAuto,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,supplMq,supplMqAuto,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
   }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel,overrides]);
 
-  const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0 }]);
+  const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0, sfridoPct:0, scontoPct:0, scontoEur:null }]);
   const addRigaFromProdotto = (p:any) => {
     const costo = (p.listino||0) * (p.coeff||0.45);
     const prezzo = costo * MARKUP;
@@ -1250,10 +1250,14 @@ export default function CreaPreventivo() {
       costoUn: Math.round(costo*100)/100,
       prezzoUn: Math.round(prezzo*100)/100,
       prodId: p.id,
+      sfridoPct: 10,
+      scontoPct: 0,
+      scontoEur: null,
     }]);
     toast.success(`Aggiunto: ${p.nome}`);
   };
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
+  const updRigaMany = (id:any, patch:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,...patch}:x));
   const delRiga = (id:any) => setRigheMat(r=>r.filter(x=>x.id!==id));
 
   const selectCrm = (r: CrmRecord) => {
