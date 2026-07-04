@@ -229,7 +229,7 @@ const AdminOverview = () => {
   const [loading, setLoading] = useState(true);
 
   // Data
-  const [preventivi, setPreventivi] = useState<any[]>([]);
+  const [preventivi] = useState<any[]>([]); // legacy — non più usata, tenuta per compat
   const [quotes, setQuotes] = useState<any[]>([]);
   const [sales, setSales] = useState<any[]>([]);
   const [sites, setSites] = useState<any[]>([]);
@@ -246,12 +246,13 @@ const AdminOverview = () => {
   const [staticCosts, setStaticCosts] = useState<any[]>([]);
   const [commercialInvoices, setCommercialInvoices] = useState<any[]>([]);
   const [paymentAgreements, setPaymentAgreements] = useState<any[]>([]);
+  const [customerInvoices, setCustomerInvoices] = useState<any[]>([]);
+  const [customerPayments, setCustomerPayments] = useState<any[]>([]);
   const [goal, setGoal] = useState<number>(400000);
 
   const fetchAll = useCallback(async () => {
     try {
-      const [p, q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ci, gs] = await Promise.all([
-        fetchAllRows(supabase.from('preventivi').select('*')),
+      const [q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ci, ciNew, cpNew, gs] = await Promise.all([
         fetchAllRows(supabase.from('quotes').select('*')),
         fetchAllRows(supabase.from('sales').select('*')),
         fetchAllRows(supabase.from('construction_sites').select('*')),
@@ -268,14 +269,17 @@ const AdminOverview = () => {
         fetchAllRows(supabase.from('variable_costs').select('*')),
         fetchAllRows(supabase.from('static_costs').select('*')),
         fetchAllRows(supabase.from('commercial_invoices').select('*')),
+        fetchAllRows(supabase.from('customer_invoices' as any).select('*')),
+        fetchAllRows(supabase.from('customer_payments' as any).select('*')),
         supabase.from('app_settings').select('value').eq('key', 'yearly_revenue_goal').maybeSingle(),
       ]);
-      setPreventivi(p || []); setQuotes(q || []); setSales(s || []);
+      setQuotes(q || []); setSales(s || []);
       setSites(c || []); setLeads(l || []); setSupplierPayments(sp || []); setPaymentAgreements(pa || []);
       setInventory(inv || []); setSalespeople(sps || []);
       setPaymentSchedules(ps || []); setAppointments(ap || []); setReminders(rem || []);
       setCustomers(cu || []); setFixedCosts(fc || []); setVariableCosts(vc || []);
       setStaticCosts(sc || []); setCommercialInvoices(ci || []);
+      setCustomerInvoices(ciNew || []); setCustomerPayments(cpNew || []);
       const goalVal = (gs as any)?.data?.value?.amount;
       if (typeof goalVal === 'number') setGoal(goalVal);
       setLastSync(new Date());
@@ -285,23 +289,36 @@ const AdminOverview = () => {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useRealtimeSubscription({
-    tables: ['preventivi', 'quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices'],
+    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices', 'customer_invoices' as any, 'customer_payments' as any],
     onDataChange: fetchAll,
   });
 
   // ─── Derived ──────────────────────────────────────────────
+  // VENDUTO = valore preventivi accettati (quello che era il vecchio "Fatturato")
   const sumRevenue = (s: Date, e: Date) =>
-    preventivi.filter(x => ['accettato','fatturato'].includes(x.stato) && inRange(x.data || x.created_at, s, e))
-      .reduce((a, x) => a + Number(x.importo_totale || 0), 0) +
-    quotes.filter(x => ['accepted','accettato','fatturato'].includes(x.status) && inRange(x.accepted_date || x.created_at, s, e))
+    quotes.filter(x => ['accepted','accettato','fatturato'].includes((x.status || '').toLowerCase()) && inRange(x.accepted_date || x.created_at, s, e))
       .reduce((a, x) => a + Number(x.total_amount || 0), 0) +
     sales.filter(x => inRange(x.sale_date || x.created_at, s, e))
       .reduce((a, x) => a + Number(x.total_amount || 0), 0);
 
-  const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [preventivi, quotes, sales, range]);
-  const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [preventivi, quotes, sales, range]);
+  const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [quotes, sales, range]);
+  const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [quotes, sales, range]);
   const revenueDelta = revenuePrev > 0 ? ((revenuePeriod - revenuePrev) / revenuePrev) * 100 : null;
-  const revenueYTD = useMemo(() => sumRevenue(startOfYear(new Date()), endOfYear(new Date())), [preventivi, quotes, sales]);
+  const revenueYTD = useMemo(() => sumRevenue(startOfYear(new Date()), endOfYear(new Date())), [quotes, sales]);
+
+  // FATTURATO / INCASSATO / DA INCASSARE dal nuovo sistema fatture
+  const financials = useMemo(() => {
+    const active = customerInvoices.filter(i => i.status !== 'annullata');
+    const fatturato = active.reduce((s, i) => s + Number(i.total || 0), 0);
+    const incassato = active.reduce((s, i) => s + Number(i.paid_amount || 0), 0);
+    const daIncassare = active
+      .filter(i => ['emessa','parziale','scaduta'].includes(i.status))
+      .reduce((s, i) => s + (Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
+    const scaduto = active
+      .filter(i => i.status === 'scaduta')
+      .reduce((s, i) => s + (Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
+    return { fatturato, incassato, daIncassare, scaduto };
+  }, [customerInvoices]);
   const goalPct = goal > 0 ? (revenueYTD / goal) * 100 : 0;
 
   const preventiviPeriod = useMemo(() => {
@@ -553,20 +570,40 @@ const AdminOverview = () => {
         </div>
       </div>
 
-      {/* KPI ROW 1 — main */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-        {showCom && (
+      {/* KPI ROW — split finanziario: Venduto / Fatturato / Incassato / Da incassare */}
+      {showCom && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           <BigKPI
-            label="Fatturato" value={revenuePeriod} format="eur" variant="dark"
-            delta={revenueDelta} sub={`vs ${eurShort(revenuePrev)}`}
-            icon={TrendingUp} onClick={() => navigate('/admin/pagamenti')}
+            label="Venduto" value={revenuePeriod} format="eur" variant="dark"
+            delta={revenueDelta} sub={`Preventivi accettati · vs ${eurShort(revenuePrev)}`}
+            icon={TrendingUp} onClick={() => navigate('/admin/quotes')}
           />
-        )}
+          <BigKPI
+            label="Fatturato" value={financials.fatturato} format="eur" variant="light"
+            sub="Fatture emesse ai clienti"
+            icon={FileText} onClick={() => navigate('/admin/fatturazione')}
+          />
+          <BigKPI
+            label="Incassato" value={financials.incassato} format="eur" variant="gold"
+            sub="Pagamenti ricevuti"
+            icon={Target} onClick={() => navigate('/admin/fatturazione')}
+          />
+          <BigKPI
+            label="Da incassare" value={financials.daIncassare} format="eur" variant="semaphore"
+            semaphore={financials.scaduto > 0 ? 'red' : financials.daIncassare > 0 ? 'amber' : 'green'}
+            sub={financials.scaduto > 0 ? `${eurShort(financials.scaduto)} scaduto` : 'Fatture aperte'}
+            icon={HardHat} onClick={() => navigate('/admin/fatturazione')}
+          />
+        </div>
+      )}
+
+      {/* KPI ROW — operativa: Preventivi · Cantieri · Margine */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {showCom && (
           <BigKPI
             label="Preventivi" value={preventiviPeriod.tot} variant="light"
             sub={`${preventiviPeriod.acc} acc · ${preventiviPeriod.rif} rif · ${preventiviPeriod.att} att`}
-            icon={FileText} onClick={() => navigate('/admin/preventivi')}
+            icon={FileText} onClick={() => navigate('/admin/quotes')}
           />
         )}
         {showCan && (

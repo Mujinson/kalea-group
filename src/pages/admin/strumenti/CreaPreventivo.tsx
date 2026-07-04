@@ -1111,70 +1111,41 @@ export default function CreaPreventivo() {
     (async () => {
       const tId = toast.loading("Caricamento preventivo…");
       try {
-        // 1) prova preventivi.id
-        let prev: any = null;
-        const { data: p1 } = await supabase.from("preventivi" as any).select("*").eq("id", editId).maybeSingle();
-        if (p1) prev = p1;
-
-        // 2) se non trovato, cerca in quotes e usa il numero
-        let quoteRow: any = null;
-        if (!prev) {
-          const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
-          if (q) {
-            quoteRow = q;
-            const { data: p2list } = await supabase.from("preventivi" as any)
-              .select("*").eq("numero_preventivo", q.quote_number)
-              .order("created_at", { ascending: false }).limit(1);
-            if (p2list && p2list.length) prev = p2list[0];
-          }
-        }
-
-
+        // Carica da quotes (sorgente unica)
+        const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
         if (cancelled) return;
-
-        if (prev) {
-          setPreventivoId(prev.id);
-          setNumPrev(prev.numero_preventivo || "");
-          if (prev.lingua) setLingua(prev.lingua);
-          if (prev.stato) setStato(prev.stato);
-          if (prev.cantiere) setCantiere(prev.cantiere);
-          const d = prev.json_dati || {};
-          if (d.cliente) setCliente(d.cliente);
-          if (d.prodotto) setProdotto(d.prodotto);
-          if (d.complessita) setComplessita(d.complessita);
-          if (typeof d.mqPrev === "number") setMqPrev(d.mqPrev);
-          if (typeof d.sfrido === "number") setSfrido(d.sfrido);
-          if (typeof d.sconto === "number") setSconto(d.sconto);
-          if (typeof d.incPosa === "boolean") setIncPosa(d.incPosa);
-          if (typeof d.incTapp === "boolean") setIncTapp(d.incTapp);
-          if (typeof d.incTrasporto === "boolean") setIncTrasporto(d.incTrasporto);
-          if (typeof d.kmDist === "number") setKmDist(d.kmDist);
-          if (Array.isArray(d.righeMat)) setRigheMat(d.righeMat);
-          if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
-          if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
-          if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
-          if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
-          if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
-          if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
-          if (d.wcSel) setWcSel(d.wcSel);
-          if (d.noteCliente) setNoteCliente(d.noteCliente);
-          if (d.noteInterne) setNoteInterne(d.noteInterne);
-          toast.success("Preventivo caricato", { id: tId });
-        } else if (quoteRow) {
-          // Fallback minimo dalla riga quotes (senza json_dati)
-          setNumPrev(quoteRow.quote_number || "");
-          if (quoteRow.notes) setNoteCliente(quoteRow.notes);
-          if (quoteRow.project_name) setCantiere(quoteRow.project_name);
-          if (quoteRow.transport_method) setMetodoTrasporto(quoteRow.transport_method);
-          if (quoteRow.delivery_time) setTempiConsegna(quoteRow.delivery_time);
-          if (quoteRow.payment_type) setTipoPagamento(quoteRow.payment_type);
-          if (quoteRow.vat_rate) setIvaRate(Math.round(Number(quoteRow.vat_rate) * 100));
-          const statusRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
-          if (statusRev[quoteRow.status]) setStato(statusRev[quoteRow.status]);
-          toast.success("Preventivo caricato (dati base)", { id: tId });
-        } else {
+        if (!q) {
           toast.error("Preventivo non trovato", { id: tId });
+          return;
         }
+        const statusMapRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
+        setPreventivoId(q.id);
+        setNumPrev(q.quote_number || "");
+        if (q.status) setStato(statusMapRev[q.status] || "bozza");
+        if (q.project_name) setCantiere(q.project_name);
+        const d: any = q.quote_data || {};
+        if (d.lingua) setLingua(d.lingua);
+        if (d.cliente) setCliente(d.cliente);
+        if (d.prodotto) setProdotto(d.prodotto);
+        if (d.complessita) setComplessita(d.complessita);
+        if (typeof d.mqPrev === "number") setMqPrev(d.mqPrev);
+        if (typeof d.sfrido === "number") setSfrido(d.sfrido);
+        if (typeof d.sconto === "number") setSconto(d.sconto);
+        if (typeof d.incPosa === "boolean") setIncPosa(d.incPosa);
+        if (typeof d.incTapp === "boolean") setIncTapp(d.incTapp);
+        if (typeof d.incTrasporto === "boolean") setIncTrasporto(d.incTrasporto);
+        if (typeof d.kmDist === "number") setKmDist(d.kmDist);
+        if (Array.isArray(d.righeMat)) setRigheMat(d.righeMat);
+        if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
+        if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
+        if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
+        if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
+        if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
+        if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
+        if (d.wcSel) setWcSel(d.wcSel);
+        if (d.noteCliente) setNoteCliente(d.noteCliente);
+        if (d.noteInterne) setNoteInterne(d.noteInterne);
+        toast.success("Preventivo caricato", { id: tId });
       } catch (e: any) {
         console.error(e);
         toast.error("Errore caricamento: " + (e?.message || ""), { id: tId });
@@ -1275,26 +1246,14 @@ export default function CreaPreventivo() {
       if (!numPrev) setNumPrev(num);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Devi effettuare il login per salvare il preventivo");
-      const payload: any = {
-        lead_id: crmLink?.source === "lead" ? crmLink.id : null,
-        customer_id: crmLink?.source === "customer" ? crmLink.id : null,
-        numero_preventivo: num,
-        importo_totale: calc.totaleIva,
-        stato,
-        lingua,
-        cliente_nome: cliente.nome || crmLink?.label || null,
-        cantiere: cantiere || null,
-        created_by: user.id,
-        json_dati: {
-          cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
-          incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
-          ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
-          wcSel,
-          noteCliente, noteInterne, calc,
-        },
+      // Dettaglio completo del preventivo, salvato dentro quotes.quote_data
+      const quoteData: any = {
+        cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
+        incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
+        ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
+        wcSel, noteCliente, noteInterne, calc, lingua, stato,
       };
 
-      // Mirror-payload per la tabella `quotes` (che alimenta la pagina "Preventivi creati")
       const statusMap: any = { bozza: "draft", inviato: "sent", accettato: "accepted", rifiutato: "rejected" };
       const items = [
         prodotto && {
@@ -1343,21 +1302,17 @@ export default function CreaPreventivo() {
         payment_terms_text: (pagamenti || []).map((p: any) => `${p.label}: ${p.pct}%`).join(" · ") || null,
         subject: prodotto ? `${prodotto.fornitore} — ${prodotto.nome}` : null,
         client_name: cliente.nome || crmLink?.label || null,
+        quote_data: quoteData,
       };
 
-
       if (preventivoId) {
-        const { error } = await supabase.from("preventivi").update(payload).eq("id", preventivoId);
+        const { error } = await supabase.from("quotes").update(quotePayload).eq("id", preventivoId);
         if (error) throw error;
-        // aggiorna anche la riga in quotes (match per quote_number)
-        await supabase.from("quotes").update(quotePayload).eq("quote_number", num);
         toast.success("Preventivo aggiornato");
       } else {
-        const { data, error } = await supabase.from("preventivi").insert(payload).select("id").single();
+        const { data, error } = await supabase.from("quotes").insert(quotePayload).select("id").single();
         if (error) throw error;
         setPreventivoId(data.id);
-        const { error: qErr } = await supabase.from("quotes").insert(quotePayload);
-        if (qErr) console.warn("quotes mirror insert:", qErr.message);
         toast.success("Preventivo salvato" + (crmLink ? ` e collegato al ${crmLink.source}` : ""));
       }
     } catch (e:any) {

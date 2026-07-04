@@ -2049,6 +2049,7 @@ export type Database = {
           payment_terms_text: string | null
           payment_type: string | null
           project_name: string | null
+          quote_data: Json | null
           quote_number: string | null
           sent_date: string | null
           site_address: string | null
@@ -2085,6 +2086,7 @@ export type Database = {
           payment_terms_text?: string | null
           payment_type?: string | null
           project_name?: string | null
+          quote_data?: Json | null
           quote_number?: string | null
           sent_date?: string | null
           site_address?: string | null
@@ -2121,6 +2123,7 @@ export type Database = {
           payment_terms_text?: string | null
           payment_type?: string | null
           project_name?: string | null
+          quote_data?: Json | null
           quote_number?: string | null
           sent_date?: string | null
           site_address?: string | null
