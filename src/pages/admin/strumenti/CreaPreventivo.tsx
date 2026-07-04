@@ -2199,19 +2199,21 @@ export default function CreaPreventivo() {
                 <tr style={{background:"#F7F6F3"}}>
                   <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
                 </tr>
-                <tr>
-                  <td style={{padding:"8px 12px",fontSize:13}}>
-                    {prodotto?.nome} — {prodotto?.dims}
-                    {tonalita.filter(x=>x.nome).length>0 && (
-                      <div style={{fontSize:11,color:"#6B6860",marginTop:3}}>
-                        Tonalità: {tonalita.filter(x=>x.nome).map(x => `${x.nome}${x.mq>0?` (${x.mq} mq)`:""}`).join(" · ")}
-                      </div>
-                    )}
-                  </td>
-                  <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.mqOrd.toFixed(1)}</td>
-                  <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.prezzoMatMq)}</td>
-                  <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoMatTot)}</td>
-                </tr>
+                {prodotto && (
+                  <tr>
+                    <td style={{padding:"8px 12px",fontSize:13}}>
+                      {prodotto?.nome} — {prodotto?.dims}
+                      {tonalita.filter(x=>x.nome).length>0 && (
+                        <div style={{fontSize:11,color:"#6B6860",marginTop:3}}>
+                          Tonalità: {tonalita.filter(x=>x.nome).map(x => `${x.nome}${x.mq>0?` (${x.mq} mq)`:""}`).join(" · ")}
+                        </div>
+                      )}
+                    </td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.mqOrd.toFixed(1)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.prezzoMatMq)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoMatTot)}</td>
+                  </tr>
+                )}
                 {righeMat.filter((r:any)=>r.desc).map((r:any)=>(
                   <tr key={r.id}>
                     <td style={{padding:"8px 12px",fontSize:13}}>{r.desc}</td>
@@ -2220,7 +2222,7 @@ export default function CreaPreventivo() {
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(r.prezzoUn*r.qta)}</td>
                   </tr>
                 ))}
-                {incPosa && <>
+                {incPosa && calc.prezzoPosaTot>0 && <>
                   <tr style={{background:"#F7F6F3"}}>
                     <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.posa}</td>
                   </tr>
