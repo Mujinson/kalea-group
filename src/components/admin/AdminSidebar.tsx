@@ -142,6 +142,7 @@ const menuStructure: MenuEntry[] = [
     group: {
       label: 'Finanza', icon: Landmark, color: '#22C55E', adminOnly: true,
       items: [
+        { title: 'Fatturazione & Incassi', url: '/admin/fatturazione', icon: FileText, adminOnly: true },
         { title: 'Contabilità', url: '/admin/contabilita', icon: Landmark, adminOnly: true },
         { title: 'Costi', url: '/admin/costi', icon: DollarSign, adminOnly: true },
         { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard, adminOnly: true },
