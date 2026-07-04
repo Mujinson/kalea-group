@@ -1785,12 +1785,17 @@ export default function CreaPreventivo() {
                   ))}
                 </div>
               </div>
-              <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={1} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
-              <Slider label="Sfrido (%)" min={0} max={25} value={sfrido} step={1} onChange={setSfrido} format={(v:any)=>v+"%"}/>
-              <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={1} onChange={setSconto} format={(v:any)=>v+"%"}/>
+              <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={0.01} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
+              <Slider label="Sfrido (%)" min={0} max={25} value={sfrido} step={0.1} onChange={setSfrido} format={(v:any)=>v+"%"} unit="%" editable/>
+              <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={0.1} onChange={setSconto} format={(v:any)=>v+"%"} unit="%" editable/>
               <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
                 <Btn active={incPosa} onClick={()=>setIncPosa(!incPosa)}>{incPosa?"✓ ":""}Posa</Btn>
-                <Btn active={incTapp} onClick={()=>setIncTapp(!incTapp)}>{incTapp?"✓ ":""}Tappetino</Btn>
+                <Btn active={false} onClick={()=>{
+                  const preset = { id:Date.now(), desc:"Tappetino / sottofondo", qta: mqPrev||1, unita:"mq", costoUn: COSTO_TAPPETINO_INTERNO, prezzoUn: PREZZO_TAPPETINO_CLIENTE, sfridoPct:0, scontoPct:0, scontoEur:null, __tappetino:true };
+                  setRigheMat(r=>[...r, preset]);
+                  setIncTapp(false);
+                  toast.success("Tappetino aggiunto — modificalo nella lista prodotti");
+                }}>+ Tappetino</Btn>
                 <Btn active={incTrasporto} onClick={()=>setIncTrasporto(!incTrasporto)}>{incTrasporto?"✓ ":""}Trasporto</Btn>
               </div>
               {incTrasporto && (
