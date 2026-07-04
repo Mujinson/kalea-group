@@ -251,6 +251,7 @@ const App = () => (
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="contabilita" element={<AdminContabilita />} />
+                <Route path="fatturazione" element={<AdminFatturazione />} />
                 <Route path="import" element={<AdminImport />} />
                 <Route path="ferie" element={<AdminTimeOff />} />
                 <Route path="time-off" element={<AdminTimeOff />} />
