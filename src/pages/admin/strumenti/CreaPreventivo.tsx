@@ -1144,23 +1144,8 @@ export default function CreaPreventivo() {
         if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
         if (d.wcSel) setWcSel(d.wcSel);
         if (d.noteCliente) setNoteCliente(d.noteCliente);
-          if (d.noteInterne) setNoteInterne(d.noteInterne);
-          toast.success("Preventivo caricato", { id: tId });
-        } else if (quoteRow) {
-          // Fallback minimo dalla riga quotes (senza json_dati)
-          setNumPrev(quoteRow.quote_number || "");
-          if (quoteRow.notes) setNoteCliente(quoteRow.notes);
-          if (quoteRow.project_name) setCantiere(quoteRow.project_name);
-          if (quoteRow.transport_method) setMetodoTrasporto(quoteRow.transport_method);
-          if (quoteRow.delivery_time) setTempiConsegna(quoteRow.delivery_time);
-          if (quoteRow.payment_type) setTipoPagamento(quoteRow.payment_type);
-          if (quoteRow.vat_rate) setIvaRate(Math.round(Number(quoteRow.vat_rate) * 100));
-          const statusRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
-          if (statusRev[quoteRow.status]) setStato(statusRev[quoteRow.status]);
-          toast.success("Preventivo caricato (dati base)", { id: tId });
-        } else {
-          toast.error("Preventivo non trovato", { id: tId });
-        }
+        if (d.noteInterne) setNoteInterne(d.noteInterne);
+        toast.success("Preventivo caricato", { id: tId });
       } catch (e: any) {
         console.error(e);
         toast.error("Errore caricamento: " + (e?.message || ""), { id: tId });
