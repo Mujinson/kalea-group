@@ -1449,10 +1449,15 @@ export default function CreaPreventivo() {
               background:step===Number(n)?"#fff":"transparent", color:step===Number(n)?"#1A1A2E":"#9A9890",
               boxShadow:step===Number(n)?"0 1px 3px rgba(0,0,0,.1)":"none"}}>{n}. {l}</button>
         ))}
-        {stato === "accettato" && (
+        {stato === "accettato" ? (
           <button onClick={()=>{ setStato("bozza"); setStep(1); toast.info("Preventivo sbloccato per modifica"); }}
             style={{marginLeft:8,padding:"8px 14px",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
-            Sblocca per modifica
+            🔓 Sblocca per modifica
+          </button>
+        ) : preventivoId && (
+          <button onClick={()=>{ setStato("accettato"); setStep(3); toast.success("Preventivo bloccato"); }}
+            style={{marginLeft:8,padding:"8px 14px",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
+            🔒 Blocca preventivo
           </button>
         )}
       </div>
