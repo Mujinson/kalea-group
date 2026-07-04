@@ -4,312 +4,277 @@
 
   <!-- Homepage -->
   <url>
-    <loc>https://kalea.space/it</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en"/>
+    <loc>https://www.kalea.space/it</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en"/>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- Indoor -->
   <url>
-    <loc>https://kalea.space/it/indoor</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/indoor"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/indoor"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/indoor"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/indoor"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/indoor"/>
+    <loc>https://www.kalea.space/it/indoor</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/indoor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/indoor"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/indoor"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/indoor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/indoor"/>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- Outdoor -->
   <url>
-    <loc>https://kalea.space/it/outdoor</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/outdoor"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/outdoor"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/outdoor"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/outdoor"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/outdoor"/>
+    <loc>https://www.kalea.space/it/outdoor</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/outdoor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/outdoor"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/outdoor"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/outdoor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/outdoor"/>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- BIOMAG FLOOR -->
   <url>
-    <loc>https://kalea.space/it/hypermatt</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/hypermatt"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/hypermatt"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/hypermatt"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/hypermatt"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/hypermatt"/>
+    <loc>https://www.kalea.space/it/hypermatt</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/hypermatt"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/hypermatt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/hypermatt"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/hypermatt"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/hypermatt"/>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- HYPERMATT -->
   <url>
-    <loc>https://kalea.space/it/biomag-floor</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/biomag-floor"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/biomag-floor"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/biomag-floor"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/biomag-floor"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/biomag-floor"/>
+    <loc>https://www.kalea.space/it/biomag-floor</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/biomag-floor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/biomag-floor"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/biomag-floor"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/biomag-floor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/biomag-floor"/>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- BIOWALL -->
-  <url>
-    <loc>https://kalea.space/it/biowall</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/biowall"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/biowall"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/biowall"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/biowall"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/biowall"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- EdgeLine -->
-  <url>
-    <loc>https://kalea.space/it/edgeline</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/edgeline"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/edgeline"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/edgeline"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/edgeline"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/edgeline"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Kaleabase -->
-  <url>
-    <loc>https://kalea.space/it/kaleabase</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/kaleabase"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/kaleabase"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/kaleabase"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/kaleabase"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/kaleabase"/>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
 
   <!-- Externo -->
   <url>
-    <loc>https://kalea.space/it/externo</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/externo"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/externo"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/externo"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/externo"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/externo"/>
+    <loc>https://www.kalea.space/it/externo</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/externo"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/externo"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/externo"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/externo"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/externo"/>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Hypermatt XL -->
   <url>
-    <loc>https://kalea.space/it/hypermatt-xl</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/hypermatt-xl"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/hypermatt-xl"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/hypermatt-xl"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/hypermatt-xl"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/hypermatt-xl"/>
+    <loc>https://www.kalea.space/it/hypermatt-xl</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/hypermatt-xl"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/hypermatt-xl"/>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Hypermatt Spina -->
   <url>
-    <loc>https://kalea.space/it/hypermatt-spina</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/hypermatt-spina"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/hypermatt-spina"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/hypermatt-spina"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/hypermatt-spina"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/hypermatt-spina"/>
+    <loc>https://www.kalea.space/it/hypermatt-spina</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/hypermatt-spina"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/hypermatt-spina"/>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Hypermatt 55 -->
   <url>
-    <loc>https://kalea.space/it/hypermatt-55</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/hypermatt-55"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/hypermatt-55"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/hypermatt-55"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/hypermatt-55"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/hypermatt-55"/>
+    <loc>https://www.kalea.space/it/hypermatt-55</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/hypermatt-55"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/hypermatt-55"/>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Ceramiche Interni -->
   <url>
-    <loc>https://kalea.space/it/ceramiche-interni</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/ceramiche-interni"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/ceramiche-interni"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/ceramiche-interni"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/ceramiche-interni"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/ceramiche-interni"/>
+    <loc>https://www.kalea.space/it/ceramiche-interni</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/ceramiche-interni"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/ceramiche-interni"/>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Ceramiche Esterni -->
   <url>
-    <loc>https://kalea.space/it/ceramiche-esterni</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/ceramiche-esterni"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/ceramiche-esterni"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/ceramiche-esterni"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/ceramiche-esterni"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/ceramiche-esterni"/>
+    <loc>https://www.kalea.space/it/ceramiche-esterni</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/ceramiche-esterni"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/ceramiche-esterni"/>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Kaleaceiling -->
   <url>
-    <loc>https://kalea.space/it/kaleaceiling</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/kaleaceiling"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/kaleaceiling"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/kaleaceiling"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/kaleaceiling"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/kaleaceiling"/>
+    <loc>https://www.kalea.space/it/kaleaceiling</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/kaleaceiling"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/kaleaceiling"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/kaleaceiling"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/kaleaceiling"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/kaleaceiling"/>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Realizzazioni -->
   <url>
-    <loc>https://kalea.space/it/realizzazioni</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/realizzazioni"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/realizzazioni"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/realizzazioni"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/realizzazioni"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/realizzazioni"/>
+    <loc>https://www.kalea.space/it/realizzazioni</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/realizzazioni"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/realizzazioni"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/realizzazioni"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/realizzazioni"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/realizzazioni"/>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Area Tecnica -->
   <url>
-    <loc>https://kalea.space/it/area-tecnica</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/area-tecnica"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/area-tecnica"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/area-tecnica"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/area-tecnica"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/area-tecnica"/>
+    <loc>https://www.kalea.space/it/area-tecnica</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/area-tecnica"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/area-tecnica"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/area-tecnica"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/area-tecnica"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/area-tecnica"/>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Contatti -->
   <url>
-    <loc>https://kalea.space/it/contatti</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/contatti"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/contatti"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/contatti"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/contatti"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/contatti"/>
+    <loc>https://www.kalea.space/it/contatti</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/contatti"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/contatti"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/contatti"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/contatti"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/contatti"/>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- Diventa Partner -->
   <url>
-    <loc>https://kalea.space/it/diventa-partner</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/diventa-partner"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/diventa-partner"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/diventa-partner"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/diventa-partner"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/diventa-partner"/>
+    <loc>https://www.kalea.space/it/diventa-partner</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/diventa-partner"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/diventa-partner"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/diventa-partner"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/diventa-partner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/diventa-partner"/>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Chi Siamo -->
   <url>
-    <loc>https://kalea.space/it/chi-siamo</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/chi-siamo"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/chi-siamo"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/chi-siamo"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/chi-siamo"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/chi-siamo"/>
+    <loc>https://www.kalea.space/it/chi-siamo</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/chi-siamo"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/chi-siamo"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/chi-siamo"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/chi-siamo"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/chi-siamo"/>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <!-- Sostenibilità - Impatto Ambientale -->
   <url>
-    <loc>https://kalea.space/it/sostenibilita/impatto-ambientale</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/sostenibilita/impatto-ambientale"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/sostenibilita/impatto-ambientale"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/sostenibilita/impatto-ambientale"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/sostenibilita/impatto-ambientale"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/sostenibilita/impatto-ambientale"/>
+    <loc>https://www.kalea.space/it/sostenibilita/impatto-ambientale</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/sostenibilita/impatto-ambientale"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/sostenibilita/impatto-ambientale"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/sostenibilita/impatto-ambientale"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/sostenibilita/impatto-ambientale"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/sostenibilita/impatto-ambientale"/>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Sostenibilità - Lunga Durata -->
   <url>
-    <loc>https://kalea.space/it/sostenibilita/lunga-durata</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/sostenibilita/lunga-durata"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/sostenibilita/lunga-durata"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/sostenibilita/lunga-durata"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/sostenibilita/lunga-durata"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/sostenibilita/lunga-durata"/>
+    <loc>https://www.kalea.space/it/sostenibilita/lunga-durata</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/sostenibilita/lunga-durata"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/sostenibilita/lunga-durata"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/sostenibilita/lunga-durata"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/sostenibilita/lunga-durata"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/sostenibilita/lunga-durata"/>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Sostenibilità - Manutenzione -->
   <url>
-    <loc>https://kalea.space/it/sostenibilita/manutenzione</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/sostenibilita/manutenzione"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/sostenibilita/manutenzione"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/sostenibilita/manutenzione"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/sostenibilita/manutenzione"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/sostenibilita/manutenzione"/>
+    <loc>https://www.kalea.space/it/sostenibilita/manutenzione</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/sostenibilita/manutenzione"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/sostenibilita/manutenzione"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/sostenibilita/manutenzione"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/sostenibilita/manutenzione"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/sostenibilita/manutenzione"/>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Normative -->
   <url>
-    <loc>https://kalea.space/it/normative</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/normative"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/normative"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/normative"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/normative"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/normative"/>
+    <loc>https://www.kalea.space/it/normative</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/normative"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/normative"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/normative"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/normative"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/normative"/>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <!-- Privacy -->
   <url>
-    <loc>https://kalea.space/it/privacy</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/privacy"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/privacy"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/privacy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/privacy"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/privacy"/>
+    <loc>https://www.kalea.space/it/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/privacy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/privacy"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/privacy"/>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <!-- Termini -->
   <url>
-    <loc>https://kalea.space/it/termini</loc>
-    <xhtml:link rel="alternate" hreflang="it" href="https://kalea.space/it/termini"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://kalea.space/en/termini"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://kalea.space/de/termini"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://kalea.space/fr/termini"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://kalea.space/en/termini"/>
+    <loc>https://www.kalea.space/it/termini</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/termini"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/termini"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/termini"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/termini"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/termini"/>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
