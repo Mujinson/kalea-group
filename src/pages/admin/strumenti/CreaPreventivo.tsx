@@ -1139,7 +1139,7 @@ export default function CreaPreventivo() {
         const statusMapRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
         setPreventivoId(q.id);
         setNumPrev(q.quote_number || "");
-        if (q.status) setStato(statusMapRev[q.status] || "bozza");
+        if (q.status) { const st = statusMapRev[q.status] || "bozza"; setStato(st); if (st === "accettato") setStep(3); }
         if (q.project_name) setCantiere(q.project_name);
         const d: any = q.quote_data || {};
         if (d.lingua) setLingua(d.lingua);
@@ -1440,13 +1440,21 @@ export default function CreaPreventivo() {
         </div>
       </div>
 
-      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F0EDE8",borderRadius:10,padding:4,width:"fit-content"}}>
-        {[["1","Calcolo & Verifica"],["2","Intestazione & Cliente"],["3","Anteprima & PDF"]].map(([n,l])=>(
+      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F0EDE8",borderRadius:10,padding:4,width:"fit-content",alignItems:"center"}}>
+        {([["1","Calcolo & Verifica"],["2","Intestazione & Cliente"],["3","Anteprima & PDF"]] as const)
+          .filter(([n]) => stato !== "accettato" || n === "3")
+          .map(([n,l])=>(
           <button key={n} onClick={()=>setStep(Number(n))}
             style={{padding:"8px 20px",borderRadius:8,border:"none",cursor:"pointer",fontSize:13,fontWeight:step===Number(n)?500:400,
               background:step===Number(n)?"#fff":"transparent", color:step===Number(n)?"#1A1A2E":"#9A9890",
               boxShadow:step===Number(n)?"0 1px 3px rgba(0,0,0,.1)":"none"}}>{n}. {l}</button>
         ))}
+        {stato === "accettato" && (
+          <button onClick={()=>{ setStato("bozza"); setStep(1); toast.info("Preventivo sbloccato per modifica"); }}
+            style={{marginLeft:8,padding:"8px 14px",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
+            Sblocca per modifica
+          </button>
+        )}
       </div>
 
       {/* STEP 1 */}
