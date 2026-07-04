@@ -1612,22 +1612,123 @@ export default function CreaPreventivo() {
                 </div>
               </div>
               <div style={{fontSize:11,color:"#9A9890",marginBottom:8}}>
-                Aggiungi quanti prodotti o accessori vuoi, anche di collezioni diverse. Verranno inclusi nel totale e nella stampa del preventivo.
+                Voci libere e prodotti extra. Metti quanto vuoi al centesimo (prezzo unitario €), anche negativo per uno sconto puntuale. Verranno stampate nel preventivo.
               </div>
               {righeMat.length === 0 && (
                 <div style={{fontSize:12,color:"#9A9890",fontStyle:"italic",padding:"8px 0"}}>Nessuna voce aggiuntiva.</div>
               )}
+              {righeMat.length > 0 && (
+                <div style={{display:"grid",gridTemplateColumns:"2fr 60px 70px 90px 90px 30px",gap:6,marginBottom:4,fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>
+                  <span>Descrizione</span><span style={{textAlign:"right"}}>Q.tà</span><span>Unità</span><span style={{textAlign:"right"}}>Costo €</span><span style={{textAlign:"right"}}>Prezzo €</span><span></span>
+                </div>
+              )}
               {righeMat.map(r=>(
-                <div key={r.id} style={{display:"grid",gridTemplateColumns:"2fr 60px 70px 90px 90px 30px",gap:6,marginBottom:8}}>
-                  <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Descrizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                  <input value={r.qta} type="number" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                  <input value={r.unita} onChange={e=>updRiga(r.id,"unita",e.target.value)} style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                  <input value={r.costoUn} type="number" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="Costo €" style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                  <input value={r.prezzoUn} type="number" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="Prezzo €" style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                  <button onClick={()=>delRiga(r.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D"}}>×</button>
+                <div key={r.id} style={{display:"grid",gridTemplateColumns:"2fr 60px 70px 90px 90px 30px",gap:6,marginBottom:8,alignItems:"center"}}>
+                  <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Es. Sopralluogo tecnico, Sconto fedeltà…" style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
+                  <input value={r.qta} type="number" step="0.01" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right"}}/>
+                  <input value={r.unita} onChange={e=>updRiga(r.id,"unita",e.target.value)} placeholder="pz / mq / ml / a corpo" style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
+                  <input value={r.costoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="0,00" style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right"}}/>
+                  <input value={r.prezzoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="0,00" style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",fontWeight:500}}/>
+                  <button onClick={()=>delRiga(r.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:18,padding:0}}>×</button>
                 </div>
               ))}
             </div>
+
+            {calc && (
+              <div style={{...card,marginBottom:0}}>
+                <div style={sectionTitle}>Prezzi cliente — modifica al centesimo</div>
+                <div style={{fontSize:11,color:"#9A9890",marginBottom:10}}>
+                  Cambia il prezzo unitario per allinearlo a quanto pattuito col cliente. Il costo interno resta invariato: il margine si aggiorna in tempo reale così vedi subito se sei ancora coperto.
+                </div>
+                {(() => {
+                  const rows: Array<{key: keyof typeof overrides; label: string; unit: string; auto: number; current: number}> = [];
+                  rows.push({key:"matMq", label:`Fornitura ${prodotto?.nome || "materiale"}`, unit:"€/mq", auto: calc.prezzoMatMqAuto, current: calc.prezzoMatMq});
+                  if (incPosa) rows.push({key:"posaMq", label:`Posa in opera (${complessita})`, unit:"€/mq", auto: calc.prezzoPosaMqAuto, current: calc.prezzoPosaMq});
+                  if (calc.tappNeeded) rows.push({key:"tappMq", label:"Materassino / sottofondo", unit:"€/mq", auto: calc.prezzoTappMqAuto, current: calc.prezzoTappMq});
+                  if (incTrasporto && calc.kmExtra > 0) rows.push({key:"trasportoKm", label:`Trasporto (${calc.kmExtra} km oltre soglia)`, unit:"€/km", auto: calc.prezzoTrasportoKmAuto, current: calc.prezzoTrasportoKm});
+                  if (calc.trasfertaAttiva) rows.push({key:"trasfertaMq", label:"Supplemento trasferta posatori", unit:"€/mq", auto: calc.supplMqAuto, current: calc.supplMq});
+                  return rows.map(row => {
+                    const overridden = overrides[row.key] != null;
+                    return (
+                      <div key={row.key} style={{display:"grid",gridTemplateColumns:"1fr 110px 60px 28px",gap:8,alignItems:"center",marginBottom:6,padding:"6px 8px",borderRadius:7,background:overridden?"#FFF6E6":"transparent",border:overridden?"1px solid #E8DFC8":"1px solid transparent"}}>
+                        <div style={{fontSize:12,color:"#1A1A2E",minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                          {overridden ? "🔓 " : "🔒 "}{row.label}
+                          {overridden && <span style={{fontSize:10,color:"#9A9890",marginLeft:6}}>auto: {euro(row.auto)}</span>}
+                        </div>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={overridden ? overrides[row.key] : row.auto.toFixed(2)}
+                          onChange={e=>setOv(row.key, e.target.value===""?undefined:Number(e.target.value))}
+                          style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",fontWeight:overridden?600:400,background:"#fff"}}
+                        />
+                        <span style={{fontSize:11,color:"#9A9890"}}>{row.unit}</span>
+                        {overridden ? (
+                          <button onClick={()=>resetOv(row.key)} title="Ripristina automatico"
+                            style={{background:"none",border:"none",cursor:"pointer",color:"#6B6860",fontSize:14,padding:0}}>↺</button>
+                        ) : <span/>}
+                      </div>
+                    );
+                  });
+                })()}
+
+                <div style={{marginTop:14,paddingTop:12,borderTop:"1px dashed #E0DDD8"}}>
+                  <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:6}}>
+                    Chiudi il totale a una cifra pattuita
+                  </div>
+                  <div style={{fontSize:11,color:"#9A9890",marginBottom:8}}>
+                    Se col cliente hai pattuito, per esempio, <b>€ 8.500,00 IVA inclusa</b>, scrivi qui il totale e aggiungo una riga "Adeguamento commerciale" per far quadrare al centesimo.
+                  </div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 130px",gap:8,alignItems:"center"}}>
+                    <input
+                      type="number" step="0.01" min="0"
+                      value={totaleTarget}
+                      onChange={e=>setTotaleTarget(e.target.value)}
+                      placeholder={`Attuale: ${euro(calc.totaleIva)}`}
+                      style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",background:"#fff"}}
+                    />
+                    <button
+                      onClick={()=>{
+                        const target = Number(totaleTarget);
+                        if (!target || isNaN(target)) { toast.error("Inserisci un totale valido"); return; }
+                        const currentTot = calc.totaleIva;
+                        const deltaIva = target - currentTot;
+                        // Converti in imponibile: deltaImponibile * (1 + iva/100) + eventuale sconto% deve dare deltaIva
+                        // Se sconto%: deltaLordo * (1 - sconto/100) * (1 + iva/100) = deltaIva
+                        const factor = (1 - sconto/100) * (1 + ivaRate/100);
+                        const deltaLordo = factor > 0 ? deltaIva / factor : deltaIva;
+                        const rounded = Math.round(deltaLordo * 100) / 100;
+                        if (Math.abs(rounded) < 0.01) { toast.success("Totale già corretto"); return; }
+                        setRigheMat(prev => {
+                          const existing = prev.findIndex((r:any) => r.__adjustment);
+                          const row = {
+                            id: existing >= 0 ? prev[existing].id : Date.now()+Math.random(),
+                            desc: "Adeguamento commerciale",
+                            qta: 1, unita: "a corpo",
+                            costoUn: 0,
+                            prezzoUn: existing >= 0 ? Math.round((prev[existing].prezzoUn + rounded) * 100)/100 : rounded,
+                            __adjustment: true,
+                          };
+                          if (existing >= 0) {
+                            const copy = [...prev]; copy[existing] = row; return copy;
+                          }
+                          return [...prev, row];
+                        });
+                        setTotaleTarget("");
+                        toast.success(`Totale chiuso a ${euro(target)}`);
+                      }}
+                      style={{padding:"8px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500}}>
+                      Applica
+                    </button>
+                  </div>
+                  {righeMat.some((r:any)=>r.__adjustment) && (
+                    <div style={{marginTop:6,fontSize:11,color:"#633806"}}>
+                      ⚠ È attivo un adeguamento commerciale nelle voci libere. Puoi modificarlo o eliminarlo dalla lista sopra.
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {calc && (
               <div style={{...card,marginBottom:0}}>
@@ -1645,9 +1746,14 @@ export default function CreaPreventivo() {
                     </div>
                   ))}
                 </div>
+                <div style={{padding:"8px 12px",background:"#F7F6F3",borderRadius:8,marginBottom:12,fontSize:12,color:"#6B6860",display:"flex",justifyContent:"space-between"}}>
+                  <span>Totale IVA inclusa</span>
+                  <b style={{color:"#1A1A2E",fontSize:14}}>{euro(calc.totaleIva)}</b>
+                </div>
                 <button onClick={()=>setStep(2)} style={{width:"100%",padding:"11px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#9A9890",color:"#fff"}}>
                   {calc.marginePct>MARGINE_BLOCCO ? "Vai a Intestazione & Cliente →" : "⛔ Sblocca prima il margine"}
                 </button>
+
               </div>
             )}
           </div>
