@@ -1275,26 +1275,14 @@ export default function CreaPreventivo() {
       if (!numPrev) setNumPrev(num);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Devi effettuare il login per salvare il preventivo");
-      const payload: any = {
-        lead_id: crmLink?.source === "lead" ? crmLink.id : null,
-        customer_id: crmLink?.source === "customer" ? crmLink.id : null,
-        numero_preventivo: num,
-        importo_totale: calc.totaleIva,
-        stato,
-        lingua,
-        cliente_nome: cliente.nome || crmLink?.label || null,
-        cantiere: cantiere || null,
-        created_by: user.id,
-        json_dati: {
-          cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
-          incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
-          ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
-          wcSel,
-          noteCliente, noteInterne, calc,
-        },
+      // Dettaglio completo del preventivo, salvato dentro quotes.quote_data
+      const quoteData: any = {
+        cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
+        incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
+        ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
+        wcSel, noteCliente, noteInterne, calc, lingua, stato,
       };
 
-      // Mirror-payload per la tabella `quotes` (che alimenta la pagina "Preventivi creati")
       const statusMap: any = { bozza: "draft", inviato: "sent", accettato: "accepted", rifiutato: "rejected" };
       const items = [
         prodotto && {
@@ -1343,21 +1331,17 @@ export default function CreaPreventivo() {
         payment_terms_text: (pagamenti || []).map((p: any) => `${p.label}: ${p.pct}%`).join(" · ") || null,
         subject: prodotto ? `${prodotto.fornitore} — ${prodotto.nome}` : null,
         client_name: cliente.nome || crmLink?.label || null,
+        quote_data: quoteData,
       };
 
-
       if (preventivoId) {
-        const { error } = await supabase.from("preventivi").update(payload).eq("id", preventivoId);
+        const { error } = await supabase.from("quotes").update(quotePayload).eq("id", preventivoId);
         if (error) throw error;
-        // aggiorna anche la riga in quotes (match per quote_number)
-        await supabase.from("quotes").update(quotePayload).eq("quote_number", num);
         toast.success("Preventivo aggiornato");
       } else {
-        const { data, error } = await supabase.from("preventivi").insert(payload).select("id").single();
+        const { data, error } = await supabase.from("quotes").insert(quotePayload).select("id").single();
         if (error) throw error;
         setPreventivoId(data.id);
-        const { error: qErr } = await supabase.from("quotes").insert(quotePayload);
-        if (qErr) console.warn("quotes mirror insert:", qErr.message);
         toast.success("Preventivo salvato" + (crmLink ? ` e collegato al ${crmLink.source}` : ""));
       }
     } catch (e:any) {
