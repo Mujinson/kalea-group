@@ -100,6 +100,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "appointments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
             foreignKeyName: "appointments_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
@@ -684,6 +691,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "construction_sites_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
             foreignKeyName: "construction_sites_floor_product_id_fkey"
             columns: ["floor_product_id"]
             isOneToOne: false
@@ -895,6 +909,13 @@ export type Database = {
             referencedRelation: "customers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "customer_action_logs_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
         ]
       }
       customer_contracts: {
@@ -955,6 +976,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "customer_contracts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
             foreignKeyName: "customer_contracts_sale_id_fkey"
             columns: ["sale_id"]
             isOneToOne: false
@@ -1000,6 +1028,170 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_documents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+        ]
+      }
+      customer_invoices: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          invoice_date: string
+          invoice_number: string
+          invoice_seq: number
+          invoice_year: number
+          notes: string | null
+          paid_amount: number
+          quote_id: string | null
+          site_id: string | null
+          status: string
+          subtotal: number
+          total: number
+          tranche_percentage: number | null
+          tranche_scheme: string
+          tranche_type: string | null
+          updated_at: string
+          vat_amount: number
+          vat_rate: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_date?: string
+          invoice_number: string
+          invoice_seq: number
+          invoice_year?: number
+          notes?: string | null
+          paid_amount?: number
+          quote_id?: string | null
+          site_id?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          tranche_percentage?: number | null
+          tranche_scheme?: string
+          tranche_type?: string | null
+          updated_at?: string
+          vat_amount?: number
+          vat_rate?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_date?: string
+          invoice_number?: string
+          invoice_seq?: number
+          invoice_year?: number
+          notes?: string | null
+          paid_amount?: number
+          quote_id?: string | null
+          site_id?: string | null
+          status?: string
+          subtotal?: number
+          total?: number
+          tranche_percentage?: number | null
+          tranche_scheme?: string
+          tranche_type?: string | null
+          updated_at?: string
+          vat_amount?: number
+          vat_rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_invoices_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_invoices_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "customer_invoices_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_invoices_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          invoice_id: string
+          method: string
+          notes: string | null
+          payment_date: string
+          recorded_by: string | null
+          reference: string | null
+          tranche_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          invoice_id: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          recorded_by?: string | null
+          reference?: string | null
+          tranche_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          invoice_id?: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          recorded_by?: string | null
+          reference?: string | null
+          tranche_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "customer_invoices"
             referencedColumns: ["id"]
           },
         ]
@@ -1048,6 +1240,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "customers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_reminders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
           },
           {
             foreignKeyName: "customer_reminders_salesperson_id_fkey"
@@ -1099,6 +1298,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "customers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_visits_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
           },
           {
             foreignKeyName: "customer_visits_salesperson_id_fkey"
@@ -1694,6 +1900,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "preventivi_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
             foreignKeyName: "preventivi_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
@@ -1943,6 +2156,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "quotes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
             foreignKeyName: "quotes_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
@@ -2177,6 +2397,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "customers"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
           },
         ]
       }
@@ -3128,6 +3355,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "variable_costs_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
             foreignKeyName: "variable_costs_sale_id_fkey"
             columns: ["sale_id"]
             isOneToOne: false
@@ -3488,7 +3722,18 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_customer_receivables: {
+        Row: {
+          customer_id: string | null
+          customer_name: string | null
+          da_incassare: number | null
+          fatturato: number | null
+          incassato: number | null
+          scaduto: number | null
+          venduto: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
