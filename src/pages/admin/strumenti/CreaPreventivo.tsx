@@ -1502,11 +1502,11 @@ export default function CreaPreventivo() {
                   <div style={{display:"flex",flexDirection:"column",gap:6,alignItems:"flex-end"}}>
                     <button onClick={()=>setAddingMore(v=>!v)}
                       style={{padding:"6px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:addingMore?"#1A1A2E":"transparent",color:addingMore?"#fff":"#1A1A2E",cursor:"pointer",fontSize:12,fontWeight:500,whiteSpace:"nowrap"}}>
-                      {addingMore ? "× Chiudi ricerca" : "+ Aggiungi altro prodotto"}
+                      {addingMore ? "× Chiudi ricerca" : "+ Aggiungi prodotto"}
                     </button>
                     <button onClick={resetProdotto}
                       style={{padding:"6px 12px",borderRadius:7,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860",whiteSpace:"nowrap"}}>
-                      ← Cambia prodotto principale
+                      ← Cambia prodotto
                     </button>
                   </div>
                 </div>
@@ -1637,44 +1637,7 @@ export default function CreaPreventivo() {
                 )}
               </>
             )}
-          </div>
-
-          <div style={{display:"flex",flexDirection:"column",gap:14}}>
-
-
-            <div style={{...card,marginBottom:0}}>
-              <div style={sectionTitle}>Parametri cantiere</div>
-              <div style={{marginBottom:14}}>
-                <div style={{fontSize:12,color:"#6B6860",marginBottom:8}}>Complessità posa</div>
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
-                  {(["semplice","media","complessa"] as const).map(k=>(
-                    <div key={k} onClick={()=>setComplessita(k)} style={{
-                      padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
-                      background:complessita===k?"#1A1A2E":"#F0EDE8",
-                      borderColor:complessita===k?"#1A1A2E":"#E0DDD8",
-                      color:complessita===k?"#fff":"#1A1A1A"}}>
-                      <div style={{fontWeight:500,fontSize:13,textTransform:"capitalize"}}>{k}</div>
-                      <div style={{fontSize:13,fontWeight:600,marginTop:4}}>{PREZZI_POSA[k]}€/mq</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={1} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
-              <Slider label="Sfrido (%)" min={0} max={25} value={sfrido} step={1} onChange={setSfrido} format={(v:any)=>v+"%"}/>
-              <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={1} onChange={setSconto} format={(v:any)=>v+"%"}/>
-              <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
-                <Btn active={incPosa} onClick={()=>setIncPosa(!incPosa)}>{incPosa?"✓ ":""}Posa</Btn>
-                <Btn active={incTapp} onClick={()=>setIncTapp(!incTapp)}>{incTapp?"✓ ":""}Tappetino</Btn>
-                <Btn active={incTrasporto} onClick={()=>setIncTrasporto(!incTrasporto)}>{incTrasporto?"✓ ":""}Trasporto</Btn>
-              </div>
-              {incTrasporto && (
-                <div style={{marginTop:12}}>
-                  <Slider label="Distanza da Desenzano (km)" min={0} max={400} value={kmDist} step={5} onChange={setKmDist} format={(v:any)=>v+" km"}/>
-                </div>
-              )}
-            </div>
-
-            <div style={{...card,marginBottom:0}}>
+            <div style={{marginTop:16,paddingTop:16,borderTop:"1px solid #E0DDD8"}}>
               <div style={{...sectionTitle,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
                 <span>Prodotti & accessori aggiuntivi</span>
                 <div style={{display:"flex",gap:6,alignItems:"center",flexWrap:"wrap"}}>
@@ -1800,6 +1763,43 @@ export default function CreaPreventivo() {
                 );
               })}
             </div>
+          </div>
+
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+
+
+            <div style={{...card,marginBottom:0}}>
+              <div style={sectionTitle}>Parametri cantiere</div>
+              <div style={{marginBottom:14}}>
+                <div style={{fontSize:12,color:"#6B6860",marginBottom:8}}>Complessità posa</div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+                  {(["semplice","media","complessa"] as const).map(k=>(
+                    <div key={k} onClick={()=>setComplessita(k)} style={{
+                      padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
+                      background:complessita===k?"#1A1A2E":"#F0EDE8",
+                      borderColor:complessita===k?"#1A1A2E":"#E0DDD8",
+                      color:complessita===k?"#fff":"#1A1A1A"}}>
+                      <div style={{fontWeight:500,fontSize:13,textTransform:"capitalize"}}>{k}</div>
+                      <div style={{fontSize:13,fontWeight:600,marginTop:4}}>{PREZZI_POSA[k]}€/mq</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={1} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
+              <Slider label="Sfrido (%)" min={0} max={25} value={sfrido} step={1} onChange={setSfrido} format={(v:any)=>v+"%"}/>
+              <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={1} onChange={setSconto} format={(v:any)=>v+"%"}/>
+              <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
+                <Btn active={incPosa} onClick={()=>setIncPosa(!incPosa)}>{incPosa?"✓ ":""}Posa</Btn>
+                <Btn active={incTapp} onClick={()=>setIncTapp(!incTapp)}>{incTapp?"✓ ":""}Tappetino</Btn>
+                <Btn active={incTrasporto} onClick={()=>setIncTrasporto(!incTrasporto)}>{incTrasporto?"✓ ":""}Trasporto</Btn>
+              </div>
+              {incTrasporto && (
+                <div style={{marginTop:12}}>
+                  <Slider label="Distanza da Desenzano (km)" min={0} max={400} value={kmDist} step={5} onChange={setKmDist} format={(v:any)=>v+" km"}/>
+                </div>
+              )}
+            </div>
+
 
             {calc && (
               <div style={{...card,marginBottom:0}}>
