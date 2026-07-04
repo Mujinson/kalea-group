@@ -1159,6 +1159,7 @@ export default function CreaPreventivo() {
         if (d.wcSel) setWcSel(d.wcSel);
         if (d.noteCliente) setNoteCliente(d.noteCliente);
         if (d.noteInterne) setNoteInterne(d.noteInterne);
+        if (d.overrides && typeof d.overrides === "object") setOverrides(d.overrides);
         toast.success("Preventivo caricato", { id: tId });
       } catch (e: any) {
         console.error(e);
