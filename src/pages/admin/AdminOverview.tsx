@@ -570,20 +570,40 @@ const AdminOverview = () => {
         </div>
       </div>
 
-      {/* KPI ROW 1 — main */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-        {showCom && (
+      {/* KPI ROW — split finanziario: Venduto / Fatturato / Incassato / Da incassare */}
+      {showCom && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           <BigKPI
-            label="Fatturato" value={revenuePeriod} format="eur" variant="dark"
-            delta={revenueDelta} sub={`vs ${eurShort(revenuePrev)}`}
-            icon={TrendingUp} onClick={() => navigate('/admin/pagamenti')}
+            label="Venduto" value={revenuePeriod} format="eur" variant="dark"
+            delta={revenueDelta} sub={`Preventivi accettati · vs ${eurShort(revenuePrev)}`}
+            icon={TrendingUp} onClick={() => navigate('/admin/quotes')}
           />
-        )}
+          <BigKPI
+            label="Fatturato" value={financials.fatturato} format="eur" variant="light"
+            sub="Fatture emesse ai clienti"
+            icon={FileText} onClick={() => navigate('/admin/fatturazione')}
+          />
+          <BigKPI
+            label="Incassato" value={financials.incassato} format="eur" variant="gold"
+            sub="Pagamenti ricevuti"
+            icon={Target} onClick={() => navigate('/admin/fatturazione')}
+          />
+          <BigKPI
+            label="Da incassare" value={financials.daIncassare} format="eur" variant="semaphore"
+            semaphore={financials.scaduto > 0 ? 'red' : financials.daIncassare > 0 ? 'yellow' : 'green'}
+            sub={financials.scaduto > 0 ? `${eurShort(financials.scaduto)} scaduto` : 'Fatture aperte'}
+            icon={HardHat} onClick={() => navigate('/admin/fatturazione')}
+          />
+        </div>
+      )}
+
+      {/* KPI ROW — operativa: Preventivi · Cantieri · Margine */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {showCom && (
           <BigKPI
             label="Preventivi" value={preventiviPeriod.tot} variant="light"
             sub={`${preventiviPeriod.acc} acc · ${preventiviPeriod.rif} rif · ${preventiviPeriod.att} att`}
-            icon={FileText} onClick={() => navigate('/admin/preventivi')}
+            icon={FileText} onClick={() => navigate('/admin/quotes')}
           />
         )}
         {showCan && (
