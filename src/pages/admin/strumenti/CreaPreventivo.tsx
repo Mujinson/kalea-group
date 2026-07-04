@@ -1913,7 +1913,7 @@ export default function CreaPreventivo() {
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>{t.tappetino}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
-                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(PREZZO_TAPPETINO_CLIENTE)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.prezzoTappMq)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTappTot)}</td>
                   </tr>
                 </>}
