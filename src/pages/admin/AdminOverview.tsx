@@ -289,7 +289,7 @@ const AdminOverview = () => {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useRealtimeSubscription({
-    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices', 'customer_invoices', 'customer_payments'],
+    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices', 'customer_invoices' as any, 'customer_payments' as any],
     onDataChange: fetchAll,
   });
 
