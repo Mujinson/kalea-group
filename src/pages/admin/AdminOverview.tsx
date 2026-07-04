@@ -229,7 +229,7 @@ const AdminOverview = () => {
   const [loading, setLoading] = useState(true);
 
   // Data
-  const [preventivi, setPreventivi] = useState<any[]>([]);
+  const [preventivi] = useState<any[]>([]); // legacy — non più usata, tenuta per compat
   const [quotes, setQuotes] = useState<any[]>([]);
   const [sales, setSales] = useState<any[]>([]);
   const [sites, setSites] = useState<any[]>([]);
@@ -246,12 +246,13 @@ const AdminOverview = () => {
   const [staticCosts, setStaticCosts] = useState<any[]>([]);
   const [commercialInvoices, setCommercialInvoices] = useState<any[]>([]);
   const [paymentAgreements, setPaymentAgreements] = useState<any[]>([]);
+  const [customerInvoices, setCustomerInvoices] = useState<any[]>([]);
+  const [customerPayments, setCustomerPayments] = useState<any[]>([]);
   const [goal, setGoal] = useState<number>(400000);
 
   const fetchAll = useCallback(async () => {
     try {
-      const [p, q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ci, gs] = await Promise.all([
-        fetchAllRows(supabase.from('preventivi').select('*')),
+      const [q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ci, ciNew, cpNew, gs] = await Promise.all([
         fetchAllRows(supabase.from('quotes').select('*')),
         fetchAllRows(supabase.from('sales').select('*')),
         fetchAllRows(supabase.from('construction_sites').select('*')),
@@ -268,14 +269,17 @@ const AdminOverview = () => {
         fetchAllRows(supabase.from('variable_costs').select('*')),
         fetchAllRows(supabase.from('static_costs').select('*')),
         fetchAllRows(supabase.from('commercial_invoices').select('*')),
+        fetchAllRows(supabase.from('customer_invoices' as any).select('*')),
+        fetchAllRows(supabase.from('customer_payments' as any).select('*')),
         supabase.from('app_settings').select('value').eq('key', 'yearly_revenue_goal').maybeSingle(),
       ]);
-      setPreventivi(p || []); setQuotes(q || []); setSales(s || []);
+      setQuotes(q || []); setSales(s || []);
       setSites(c || []); setLeads(l || []); setSupplierPayments(sp || []); setPaymentAgreements(pa || []);
       setInventory(inv || []); setSalespeople(sps || []);
       setPaymentSchedules(ps || []); setAppointments(ap || []); setReminders(rem || []);
       setCustomers(cu || []); setFixedCosts(fc || []); setVariableCosts(vc || []);
       setStaticCosts(sc || []); setCommercialInvoices(ci || []);
+      setCustomerInvoices(ciNew || []); setCustomerPayments(cpNew || []);
       const goalVal = (gs as any)?.data?.value?.amount;
       if (typeof goalVal === 'number') setGoal(goalVal);
       setLastSync(new Date());
@@ -285,7 +289,7 @@ const AdminOverview = () => {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useRealtimeSubscription({
-    tables: ['preventivi', 'quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices'],
+    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices', 'customer_invoices', 'customer_payments'],
     onDataChange: fetchAll,
   });
 
