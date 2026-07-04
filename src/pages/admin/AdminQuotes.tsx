@@ -48,6 +48,8 @@ interface Quote {
   converted_sale_id: string | null;
   created_by: string | null;
   customer?: { company_name: string | null; first_name: string | null; last_name: string | null };
+  lead_id?: string | null;
+  lead?: { name: string | null; company_name: string | null } | null;
   client_name?: string | null;
 
 }
@@ -103,7 +105,7 @@ const AdminQuotes = () => {
     setLoading(true);
     try {
       const [quotesRes, customersRes, costsRes] = await Promise.all([
-        supabase.from('quotes').select('*, customer:customers(company_name, first_name, last_name)').order('created_at', { ascending: false }),
+        supabase.from('quotes').select('*, customer:customers(company_name, first_name, last_name), lead:leads(name, company_name)').order('created_at', { ascending: false }),
         fetchAllRows(supabase.from('customers').select('id, company_name, first_name, last_name').order('company_name')),
         supabase.from('static_costs').select('*'),
       ]);
@@ -393,8 +395,13 @@ const AdminQuotes = () => {
   };
 
   const getCustomerName = (quote: Quote) => {
+    // Fonte di verità: il record CRM collegato (cliente o lead). Il campo
+    // client_name viene usato solo come fallback quando non c'è collegamento,
+    // per evitare che un nome digitato a mano sovrascriva l'associazione reale.
     if (quote.customer?.company_name) return quote.customer.company_name;
-    if (quote.customer?.first_name) return `${quote.customer.first_name} ${quote.customer.last_name || ''}`;
+    if (quote.customer?.first_name) return `${quote.customer.first_name} ${quote.customer.last_name || ''}`.trim();
+    if (quote.lead?.company_name) return quote.lead.company_name;
+    if (quote.lead?.name) return quote.lead.name;
     if (quote.client_name && quote.client_name.trim()) return quote.client_name;
     return '—';
   };

@@ -1301,7 +1301,7 @@ export default function CreaPreventivo() {
         payment_type: tipoPagamento || null,
         payment_terms_text: (pagamenti || []).map((p: any) => `${p.label}: ${p.pct}%`).join(" · ") || null,
         subject: prodotto ? `${prodotto.fornitore} — ${prodotto.nome}` : null,
-        client_name: cliente.nome || crmLink?.label || null,
+        client_name: (crmLink?.label || crmLink?.nome || cliente.nome) || null,
         quote_data: quoteData,
       };
 
