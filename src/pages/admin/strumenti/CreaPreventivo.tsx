@@ -1214,8 +1214,18 @@ export default function CreaPreventivo() {
     // Accessori Woodco
     const costoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.costoUn||0)*(a.qta||0), 0);
     const prezzoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.prezzoUn||0)*(a.qta||0), 0);
-    const costoExtraTot = righeMat.reduce((s,r)=>s+(r.costoUn||0)*(r.qta||0), 0) + costoAccTot;
-    const prezzoExtraTot = righeMat.reduce((s,r)=>s+(r.prezzoUn||0)*(r.qta||0), 0) + prezzoAccTot;
+    const costoExtraTot = righeMat.reduce((s,r)=>{
+      const qta = Number(r.qta)||0;
+      const qtaTot = qta * (1 + (Number(r.sfridoPct)||0)/100);
+      return s + qtaTot*(Number(r.costoUn)||0);
+    }, 0) + costoAccTot;
+    const prezzoExtraTot = righeMat.reduce((s,r)=>{
+      const qta = Number(r.qta)||0;
+      const qtaTot = qta * (1 + (Number(r.sfridoPct)||0)/100);
+      const lordo = qtaTot*(Number(r.prezzoUn)||0);
+      const sc = r.scontoEur != null ? Number(r.scontoEur) : lordo*((Number(r.scontoPct)||0)/100);
+      return s + lordo - sc;
+    }, 0) + prezzoAccTot;
     const costoTotale = costoMatTot+costoPosaTot+costoTappTot+costoTrasporto+costoTrasfertaTot+costoExtraTot;
     const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
@@ -1229,7 +1239,7 @@ export default function CreaPreventivo() {
     return { costoMatMq,prezzoMatMq,prezzoMatMqAuto,mqOrd,costoMatTot,prezzoMatTot,prezzoPosaMq,prezzoPosaMqAuto,costoPosaTot,prezzoPosaTot,prezzoTappMq,prezzoTappMqAuto,costoTappTot,prezzoTappTot,tappNeeded,prezzoTrasportoKm,prezzoTrasportoKmAuto,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,supplMq,supplMqAuto,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
   }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel,overrides]);
 
-  const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0 }]);
+  const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0, sfridoPct:0, scontoPct:0, scontoEur:null }]);
   const addRigaFromProdotto = (p:any) => {
     const costo = (p.listino||0) * (p.coeff||0.45);
     const prezzo = costo * MARKUP;
@@ -1240,10 +1250,14 @@ export default function CreaPreventivo() {
       costoUn: Math.round(costo*100)/100,
       prezzoUn: Math.round(prezzo*100)/100,
       prodId: p.id,
+      sfridoPct: 10,
+      scontoPct: 0,
+      scontoEur: null,
     }]);
     toast.success(`Aggiunto: ${p.nome}`);
   };
   const updRiga = (id:any,k:string,v:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,[k]:v}:x));
+  const updRigaMany = (id:any, patch:any) => setRigheMat(r=>r.map(x=>x.id===id?{...x,...patch}:x));
   const delRiga = (id:any) => setRigheMat(r=>r.filter(x=>x.id!==id));
 
   const selectCrm = (r: CrmRecord) => {
@@ -1442,17 +1456,25 @@ export default function CreaPreventivo() {
                     const prezzoMq=costoMq*MARKUP;
                     const fc=prodStyle(p);
                     return (
-                      <div key={p.id} onClick={()=>selectProdotto(p)}
-                        style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",cursor:"pointer",borderLeft:"3px solid transparent"}}>
-                        <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
-                          <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
-                          <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                      <div key={p.id}
+                        style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",borderLeft:"3px solid transparent",display:"flex",alignItems:"center",gap:10}}>
+                        <div onClick={()=>selectProdotto(p)} style={{flex:1,cursor:"pointer",minWidth:0}}>
+                          <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
+                            <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
+                            <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                          </div>
+                          <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
+                            <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
+                            <span>{p.categoria}</span><span>· {p.dims}</span>
+                            <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
+                          </div>
                         </div>
-                        <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
-                          <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
-                          <span>{p.categoria}</span><span>· {p.dims}</span>
-                          <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
-                        </div>
+                        <button
+                          onClick={(e)=>{e.stopPropagation(); addRigaFromProdotto(p);}}
+                          title="Aggiungi al preventivo (puoi aggiungerne all'infinito)"
+                          style={{padding:"6px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500,whiteSpace:"nowrap",flexShrink:0}}>
+                          + Aggiungi
+                        </button>
                       </div>
                     );
                   })}
@@ -1617,21 +1639,100 @@ export default function CreaPreventivo() {
               {righeMat.length === 0 && (
                 <div style={{fontSize:12,color:"#9A9890",fontStyle:"italic",padding:"8px 0"}}>Nessuna voce aggiuntiva.</div>
               )}
-              {righeMat.length > 0 && (
-                <div style={{display:"grid",gridTemplateColumns:"2fr 60px 70px 90px 90px 30px",gap:6,marginBottom:4,fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>
-                  <span>Descrizione</span><span style={{textAlign:"right"}}>Q.tà</span><span>Unità</span><span style={{textAlign:"right"}}>Costo €</span><span style={{textAlign:"right"}}>Prezzo €</span><span></span>
+              {righeMat.map(r=>{
+                const qta = Number(r.qta)||0;
+                const sfrPct = Number(r.sfridoPct)||0;
+                const qtaSfr = qta * sfrPct/100;
+                const qtaTot = qta + qtaSfr;
+                const prezzoUn = Number(r.prezzoUn)||0;
+                const costoUn = Number(r.costoUn)||0;
+                const lordo = qtaTot * prezzoUn;
+                const scEurStored = r.scontoEur != null ? Number(r.scontoEur) : null;
+                const scEur = scEurStored != null ? scEurStored : lordo * ((Number(r.scontoPct)||0)/100);
+                const scPctDisp = scEurStored != null ? (lordo>0 ? scEurStored/lordo*100 : 0) : (Number(r.scontoPct)||0);
+                const netto = lordo - scEur;
+                const costoTotRiga = qtaTot * costoUn;
+                const marg = netto - costoTotRiga;
+                return (
+                <div key={r.id} style={{marginBottom:14,padding:"10px 12px",borderRadius:8,border:"1px solid #E0DDD8",background:"#FBFAF7"}}>
+                  {/* Riga 1: descrizione + unit + costo/prezzo + elimina */}
+                  <div style={{display:"grid",gridTemplateColumns:"minmax(0,2fr) 70px 90px 100px 26px",gap:6,alignItems:"center",marginBottom:8}}>
+                    <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Descrizione voce" style={{padding:"7px 9px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,minWidth:0}}/>
+                    <input value={r.unita} onChange={e=>updRiga(r.id,"unita",e.target.value)} placeholder="mq / pz / ml" style={{padding:"7px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
+                    <div style={{position:"relative"}}>
+                      <input value={r.costoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="Costo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                      <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>€</span>
+                    </div>
+                    <div style={{position:"relative"}}>
+                      <input value={r.prezzoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="Prezzo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",fontWeight:500,boxSizing:"border-box",background:"#fff"}}/>
+                      <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>€</span>
+                    </div>
+                    <button onClick={()=>delRiga(r.id)} title="Elimina riga" style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
+                  </div>
+
+                  {/* Riga 2: Q.tà · Sfrido% · Q.tà sfrido · Q.tà totale */}
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6,marginBottom:8}}>
+                    <label style={{display:"flex",flexDirection:"column",gap:3}}>
+                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà</span>
+                      <input value={r.qta} type="number" step="0.01" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right"}}/>
+                    </label>
+                    <label style={{display:"flex",flexDirection:"column",gap:3}}>
+                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Sfrido %</span>
+                      <div style={{position:"relative"}}>
+                        <input value={sfrPct} type="number" step="0.5" min={0} onChange={e=>updRiga(r.id,"sfridoPct",Number(e.target.value))} style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>%</span>
+                      </div>
+                    </label>
+                    <label style={{display:"flex",flexDirection:"column",gap:3}}>
+                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà sfrido</span>
+                      <input value={Number(qtaSfr.toFixed(3))} type="number" step="0.01" min={0}
+                        onChange={e=>{
+                          const v = Number(e.target.value);
+                          const newPct = qta>0 ? (v/qta)*100 : 0;
+                          updRiga(r.id,"sfridoPct", Math.round(newPct*1000)/1000);
+                        }}
+                        style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",background:"#fff"}}/>
+                    </label>
+                    <label style={{display:"flex",flexDirection:"column",gap:3}}>
+                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà totale</span>
+                      <input value={Number(qtaTot.toFixed(3))} type="number" step="0.01" min={0}
+                        onChange={e=>{
+                          const v = Number(e.target.value);
+                          const newPct = qta>0 ? ((v-qta)/qta)*100 : 0;
+                          updRiga(r.id,"sfridoPct", Math.round(newPct*1000)/1000);
+                        }}
+                        style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",background:"#fff",fontWeight:500}}/>
+                    </label>
+                  </div>
+
+                  {/* Riga 3: Sconto % ↔ € + totali riga */}
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 2fr",gap:6,alignItems:"end"}}>
+                    <label style={{display:"flex",flexDirection:"column",gap:3}}>
+                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto %</span>
+                      <div style={{position:"relative"}}>
+                        <input value={Number(scPctDisp.toFixed(2))} type="number" step="0.1" min={0}
+                          onChange={e=>updRigaMany(r.id,{scontoPct: Number(e.target.value), scontoEur: null})}
+                          style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>%</span>
+                      </div>
+                    </label>
+                    <label style={{display:"flex",flexDirection:"column",gap:3}}>
+                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto €</span>
+                      <div style={{position:"relative"}}>
+                        <input value={Number(scEur.toFixed(2))} type="number" step="0.01" min={0}
+                          onChange={e=>updRigaMany(r.id,{scontoEur: Number(e.target.value)})}
+                          style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>€</span>
+                      </div>
+                    </label>
+                    <div style={{fontSize:11,color:"#6B6860",textAlign:"right",lineHeight:1.5}}>
+                      <div>Lordo: <b style={{color:"#1A1A2E"}}>{euro(lordo)}</b> <span style={{color:"#9A9890"}}>({Number(qtaTot.toFixed(3))} × {euro(prezzoUn)})</span></div>
+                      <div>Netto cliente: <b style={{color:"#1A1A2E",fontSize:13}}>{euro(netto)}</b> <span style={{color: marg>=0?"#2D7A4F":"#A32D2D"}}>· margine {euro(marg)}</span></div>
+                    </div>
+                  </div>
                 </div>
-              )}
-              {righeMat.map(r=>(
-                <div key={r.id} style={{display:"grid",gridTemplateColumns:"2fr 60px 70px 90px 90px 30px",gap:6,marginBottom:8,alignItems:"center"}}>
-                  <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Es. Sopralluogo tecnico, Sconto fedeltà…" style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                  <input value={r.qta} type="number" step="0.01" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right"}}/>
-                  <input value={r.unita} onChange={e=>updRiga(r.id,"unita",e.target.value)} placeholder="pz / mq / ml / a corpo" style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                  <input value={r.costoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="0,00" style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right"}}/>
-                  <input value={r.prezzoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="0,00" style={{padding:"6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",fontWeight:500}}/>
-                  <button onClick={()=>delRiga(r.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:18,padding:0}}>×</button>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {calc && (
