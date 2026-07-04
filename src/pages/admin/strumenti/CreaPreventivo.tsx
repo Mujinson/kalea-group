@@ -1186,22 +1186,29 @@ export default function CreaPreventivo() {
       coeffUsed = (100 - disc) / 100;
     }
     const costoMatMq = listinoUsed * coeffUsed;
-    const prezzoMatMq = costoMatMq * MARKUP;
+    const prezzoMatMqAuto = costoMatMq * MARKUP;
+    const prezzoMatMq = overrides.matMq != null ? overrides.matMq : prezzoMatMqAuto;
     const mqOrd = mqPrev * (1 + sfrido/100);
     const costoMatTot = mqOrd * costoMatMq;
     const prezzoMatTot = mqOrd * prezzoMatMq;
-    const prezzoPosaMq = PREZZI_POSA[complessita];
+    const prezzoPosaMqAuto = PREZZI_POSA[complessita];
+    const prezzoPosaMq = overrides.posaMq != null ? overrides.posaMq : prezzoPosaMqAuto;
     const costoPosaTot = incPosa ? mqPrev*COSTO_POSA_INTERNO : 0;
     const prezzoPosaTot = incPosa ? mqPrev*prezzoPosaMq : 0;
     const tappNeeded = incTapp && prodotto.tappetino !== "mai";
+    const prezzoTappMqAuto = PREZZO_TAPPETINO_CLIENTE;
+    const prezzoTappMq = overrides.tappMq != null ? overrides.tappMq : prezzoTappMqAuto;
     const costoTappTot = tappNeeded ? mqPrev*COSTO_TAPPETINO_INTERNO : 0;
-    const prezzoTappTot = tappNeeded ? mqPrev*PREZZO_TAPPETINO_CLIENTE : 0;
+    const prezzoTappTot = tappNeeded ? mqPrev*prezzoTappMq : 0;
     const kmExtra = Math.max(0, kmDist - KM_SOGLIA);
+    const prezzoTrasportoKmAuto = COSTO_KM*MARKUP;
+    const prezzoTrasportoKm = overrides.trasportoKm != null ? overrides.trasportoKm : prezzoTrasportoKmAuto;
     const costoTrasporto = incTrasporto && kmExtra>0 ? kmExtra*COSTO_KM : 0;
-    const prezzoTrasporto = incTrasporto && kmExtra>0 ? kmExtra*COSTO_KM*MARKUP : 0;
+    const prezzoTrasporto = incTrasporto && kmExtra>0 ? kmExtra*prezzoTrasportoKm : 0;
     const trasfertaAttiva = kmDist > KM_SOGLIA && incPosa;
-    const supplMq = trasfertaAttiva ? SUPPL_TRASFERTA_POSA[complessita] : 0;
-    const costoTrasfertaTot = trasfertaAttiva ? mqPrev*supplMq*0.5 : 0;
+    const supplMqAuto = trasfertaAttiva ? SUPPL_TRASFERTA_POSA[complessita] : 0;
+    const supplMq = overrides.trasfertaMq != null ? overrides.trasfertaMq : supplMqAuto;
+    const costoTrasfertaTot = trasfertaAttiva ? mqPrev*SUPPL_TRASFERTA_POSA[complessita]*0.5 : 0;
     const prezzoTrasfertaTot = trasfertaAttiva ? mqPrev*supplMq : 0;
     // Accessori Woodco
     const costoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.costoUn||0)*(a.qta||0), 0);
@@ -1218,10 +1225,10 @@ export default function CreaPreventivo() {
     const marginePct = prezzoNetto>0 ? (margineE/prezzoNetto)*100 : 0;
     const prezzoMqTot = mqPrev>0 ? prezzoNetto/mqPrev : 0;
     const scontoMax = prezzoLordoTot>0 ? ((prezzoLordoTot-costoTotale)/prezzoLordoTot)*100 : 0;
-    return { costoMatMq,prezzoMatMq,mqOrd,costoMatTot,prezzoMatTot,costoPosaTot,prezzoPosaTot,costoTappTot,prezzoTappTot,tappNeeded,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
-  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel]);
+    return { costoMatMq,prezzoMatMq,prezzoMatMqAuto,mqOrd,costoMatTot,prezzoMatTot,prezzoPosaMq,prezzoPosaMqAuto,costoPosaTot,prezzoPosaTot,prezzoTappMq,prezzoTappMqAuto,costoTappTot,prezzoTappTot,tappNeeded,prezzoTrasportoKm,prezzoTrasportoKmAuto,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,supplMq,supplMqAuto,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
+  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel,overrides]);
 
-  const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"mq", costoUn:0, prezzoUn:0 }]);
+  const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0 }]);
   const addRigaFromProdotto = (p:any) => {
     const costo = (p.listino||0) * (p.coeff||0.45);
     const prezzo = costo * MARKUP;
