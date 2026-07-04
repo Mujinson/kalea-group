@@ -590,7 +590,7 @@ const AdminOverview = () => {
           />
           <BigKPI
             label="Da incassare" value={financials.daIncassare} format="eur" variant="semaphore"
-            semaphore={financials.scaduto > 0 ? 'red' : financials.daIncassare > 0 ? 'yellow' : 'green'}
+            semaphore={financials.scaduto > 0 ? 'red' : financials.daIncassare > 0 ? 'amber' : 'green'}
             sub={financials.scaduto > 0 ? `${eurShort(financials.scaduto)} scaduto` : 'Fatture aperte'}
             icon={HardHat} onClick={() => navigate('/admin/fatturazione')}
           />
