@@ -1121,16 +1121,40 @@ export default function CreaPreventivo() {
   const [tempiConsegna, setTempiConsegna] = useState<string>("");
   const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
 
-  // ─── Carica preventivo esistente dalla querystring (?edit=<id>) ───
+  const [searchParams] = useSearchParams();
+  const editId = searchParams.get("edit");
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const editId = params.get("edit");
-    if (!editId) return;
+    if (!editId) {
+      // Nuovo preventivo: reset stato per evitare di ereditare dati precedenti
+      setPreventivoId(null);
+      setNumPrev("");
+      setCliente({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+      setCrmLink(null);
+      setCantiere("");
+      setProdotto(null);
+      setRigheMat([]);
+      setOverrides({});
+      setNoteCliente("");
+      setNoteInterne("");
+      setStato("bozza");
+      setStep(1);
+      return;
+    }
     let cancelled = false;
     (async () => {
       const tId = toast.loading("Caricamento preventivo…");
       try {
-        // Carica da quotes (sorgente unica)
+        // Reset stato prima di popolare col nuovo preventivo (evita mix con quello precedente)
+        setPreventivoId(null);
+        setProdotto(null);
+        setRigheMat([]);
+        setOverrides({});
+        setCrmLink(null);
+        setCliente({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+        setCantiere("");
+        setNoteCliente("");
+        setNoteInterne("");
+
         const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
         if (cancelled) return;
         if (!q) {
@@ -1140,7 +1164,7 @@ export default function CreaPreventivo() {
         const statusMapRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
         setPreventivoId(q.id);
         setNumPrev(q.quote_number || "");
-        if (q.status) { const st = statusMapRev[q.status] || "bozza"; setStato(st); if (st === "accettato") setStep(3); }
+        if (q.status) { const st = statusMapRev[q.status] || "bozza"; setStato(st); if (st === "accettato") setStep(3); else setStep(1); }
         if (q.project_name) setCantiere(q.project_name);
         const d: any = q.quote_data || {};
         if (d.lingua) setLingua(d.lingua);
@@ -1173,7 +1197,7 @@ export default function CreaPreventivo() {
     })();
     return () => { cancelled = true; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [editId]);
 
   const filtered = useMemo(()=>PRODOTTI.filter(p=>{
     const fs = fornFilt==="Tutti" || p.fornitore===fornFilt;
