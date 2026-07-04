@@ -1178,26 +1178,26 @@ export default function CreaPreventivo() {
   }), [search, fornFilt]);
 
   const calc = useMemo(()=>{
-    if (!prodotto) return null;
+    if (!prodotto && (righeMat?.length || 0) === 0) return null;
     // Per Woodco usiamo il prezzo del listino DB (cascading) + lo sconto fornitore associato
-    let listinoUsed = prodotto.listino;
-    let coeffUsed = prodotto.coeff;
-    if (isWoodco && wcSel.listPrice !== null) {
+    let listinoUsed = prodotto?.listino ?? 0;
+    let coeffUsed = prodotto?.coeff ?? 0;
+    if (prodotto && isWoodco && wcSel.listPrice !== null) {
       listinoUsed = wcSel.listPrice;
       const disc = wcSel.supplierDiscountPct ?? 55;
       coeffUsed = (100 - disc) / 100;
     }
-    const costoMatMq = listinoUsed * coeffUsed;
+    const costoMatMq = prodotto ? listinoUsed * coeffUsed : 0;
     const prezzoMatMqAuto = costoMatMq * MARKUP;
     const prezzoMatMq = overrides.matMq != null ? overrides.matMq : prezzoMatMqAuto;
-    const mqOrd = mqPrev * (1 + sfrido/100);
+    const mqOrd = prodotto ? mqPrev * (1 + sfrido/100) : 0;
     const costoMatTot = mqOrd * costoMatMq;
     const prezzoMatTot = mqOrd * prezzoMatMq;
     const prezzoPosaMqAuto = PREZZI_POSA[complessita];
     const prezzoPosaMq = overrides.posaMq != null ? overrides.posaMq : prezzoPosaMqAuto;
-    const costoPosaTot = incPosa ? mqPrev*COSTO_POSA_INTERNO : 0;
-    const prezzoPosaTot = incPosa ? mqPrev*prezzoPosaMq : 0;
-    const tappNeeded = incTapp && prodotto.tappetino !== "mai";
+    const costoPosaTot = prodotto && incPosa ? mqPrev*COSTO_POSA_INTERNO : 0;
+    const prezzoPosaTot = prodotto && incPosa ? mqPrev*prezzoPosaMq : 0;
+    const tappNeeded = !!prodotto && incTapp && prodotto.tappetino !== "mai";
     const prezzoTappMqAuto = PREZZO_TAPPETINO_CLIENTE;
     const prezzoTappMq = overrides.tappMq != null ? overrides.tappMq : prezzoTappMqAuto;
     const costoTappTot = tappNeeded ? mqPrev*COSTO_TAPPETINO_INTERNO : 0;
