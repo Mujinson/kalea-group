@@ -1502,11 +1502,11 @@ export default function CreaPreventivo() {
                   <div style={{display:"flex",flexDirection:"column",gap:6,alignItems:"flex-end"}}>
                     <button onClick={()=>setAddingMore(v=>!v)}
                       style={{padding:"6px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:addingMore?"#1A1A2E":"transparent",color:addingMore?"#fff":"#1A1A2E",cursor:"pointer",fontSize:12,fontWeight:500,whiteSpace:"nowrap"}}>
-                      {addingMore ? "× Chiudi ricerca" : "+ Aggiungi altro prodotto"}
+                      {addingMore ? "× Chiudi ricerca" : "+ Aggiungi prodotto"}
                     </button>
                     <button onClick={resetProdotto}
                       style={{padding:"6px 12px",borderRadius:7,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860",whiteSpace:"nowrap"}}>
-                      ← Cambia prodotto principale
+                      ← Cambia prodotto
                     </button>
                   </div>
                 </div>
