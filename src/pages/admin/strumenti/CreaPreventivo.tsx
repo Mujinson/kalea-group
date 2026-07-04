@@ -1104,6 +1104,9 @@ export default function CreaPreventivo() {
   const [stato, setStato] = useState<"bozza"|"inviato"|"accettato"|"rifiutato">("bozza");
   const [saving, setSaving] = useState(false);
   const [preventivoId, setPreventivoId] = useState<string|null>(null);
+  const [errors, setErrors] = useState<Set<string>>(new Set());
+  const hasErr = (k: string) => errors.has(k);
+  const errStyle = (k: string) => hasErr(k) ? { borderColor: "#DC2626", boxShadow: "0 0 0 2px rgba(220,38,38,.15)" } : {};
 
   const [pagamenti, setPagamenti] = useState<any[]>([
     { label:"Acconto", pct:30, data:"", note:"" },
@@ -1178,26 +1181,26 @@ export default function CreaPreventivo() {
   }), [search, fornFilt]);
 
   const calc = useMemo(()=>{
-    if (!prodotto) return null;
+    if (!prodotto && (righeMat?.length || 0) === 0) return null;
     // Per Woodco usiamo il prezzo del listino DB (cascading) + lo sconto fornitore associato
-    let listinoUsed = prodotto.listino;
-    let coeffUsed = prodotto.coeff;
-    if (isWoodco && wcSel.listPrice !== null) {
+    let listinoUsed = prodotto?.listino ?? 0;
+    let coeffUsed = prodotto?.coeff ?? 0;
+    if (prodotto && isWoodco && wcSel.listPrice !== null) {
       listinoUsed = wcSel.listPrice;
       const disc = wcSel.supplierDiscountPct ?? 55;
       coeffUsed = (100 - disc) / 100;
     }
-    const costoMatMq = listinoUsed * coeffUsed;
+    const costoMatMq = prodotto ? listinoUsed * coeffUsed : 0;
     const prezzoMatMqAuto = costoMatMq * MARKUP;
     const prezzoMatMq = overrides.matMq != null ? overrides.matMq : prezzoMatMqAuto;
-    const mqOrd = mqPrev * (1 + sfrido/100);
+    const mqOrd = prodotto ? mqPrev * (1 + sfrido/100) : 0;
     const costoMatTot = mqOrd * costoMatMq;
     const prezzoMatTot = mqOrd * prezzoMatMq;
     const prezzoPosaMqAuto = PREZZI_POSA[complessita];
     const prezzoPosaMq = overrides.posaMq != null ? overrides.posaMq : prezzoPosaMqAuto;
-    const costoPosaTot = incPosa ? mqPrev*COSTO_POSA_INTERNO : 0;
-    const prezzoPosaTot = incPosa ? mqPrev*prezzoPosaMq : 0;
-    const tappNeeded = incTapp && prodotto.tappetino !== "mai";
+    const costoPosaTot = prodotto && incPosa ? mqPrev*COSTO_POSA_INTERNO : 0;
+    const prezzoPosaTot = prodotto && incPosa ? mqPrev*prezzoPosaMq : 0;
+    const tappNeeded = !!prodotto && incTapp && prodotto.tappetino !== "mai";
     const prezzoTappMqAuto = PREZZO_TAPPETINO_CLIENTE;
     const prezzoTappMq = overrides.tappMq != null ? overrides.tappMq : prezzoTappMqAuto;
     const costoTappTot = tappNeeded ? mqPrev*COSTO_TAPPETINO_INTERNO : 0;
@@ -1267,16 +1270,33 @@ export default function CreaPreventivo() {
   };
 
   const salvaPreventivo = async () => {
-    if (!calc) { toast.error("Configura prima il preventivo"); return; }
-    if (hasOverstock) {
-      const det = overstockRows.map(r => `${r.nome}: ${r.mq} mq richiesti / ${stockFor(r.nome)} mq disp.`).join("; ");
-      toast.error(`Quantità non disponibile a magazzino — ${det}`);
-      return;
+    // Validazione dettagliata: raccoglie tutti i campi mancanti
+    const missing: string[] = [];
+    const errs = new Set<string>();
+    const clienteName = (crmLink?.label || crmLink?.nome || cliente.nome || "").trim();
+    if (!clienteName) { missing.push("Nome cliente / Ragione sociale"); errs.add("cliente.nome"); }
+    if (!prodotto && (righeMat?.length || 0) === 0) {
+      missing.push("Almeno un prodotto (principale o aggiuntivo)");
+      errs.add("prodotto");
+    }
+    if (prodotto && (!mqPrev || mqPrev <= 0)) {
+      missing.push("Metri quadri da posare (> 0)");
+      errs.add("mqPrev");
     }
     if (isWoodco && !wcReady) {
-      toast.error("Seleziona collezione, essenza, finitura e formato Woodco prima di salvare");
+      missing.push("Collezione, essenza, finitura e formato Woodco");
+      errs.add("woodco");
+    }
+    if (hasOverstock) {
+      const det = overstockRows.map(r => `${r.nome}: ${r.mq} mq richiesti / ${stockFor(r.nome)} mq disp.`).join("; ");
+      missing.push(`Quantità superiore al magazzino — ${det}`);
+    }
+    setErrors(errs);
+    if (missing.length > 0) {
+      toast.error(`Manca: ${missing.join(" · ")}`, { duration: 6000 });
       return;
     }
+    if (!calc) { toast.error("Errore nel calcolo del preventivo"); return; }
     setSaving(true);
     try {
       const num = numPrev || nextNum();
@@ -1998,8 +2018,9 @@ export default function CreaPreventivo() {
               />
               {[["nome","Nome / Ragione sociale"],["indirizzo","Indirizzo"],["citta","Città"],["telefono","Telefono"],["email","Email"]].map(([k,pl])=>(
                 <div key={k} style={{marginBottom:8}}>
-                  <input value={(cliente as any)[k]} onChange={e=>setCliente(c=>({...c,[k]:e.target.value}))} placeholder={pl}
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                  <input value={(cliente as any)[k]} onChange={e=>{setCliente(c=>({...c,[k]:e.target.value})); if(k==="nome"&&e.target.value.trim()) setErrors(s=>{const n=new Set(s);n.delete("cliente.nome");return n;});}} placeholder={pl}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box", ...(k==="nome"?errStyle("cliente.nome"):{})}}/>
+                  {k==="nome" && hasErr("cliente.nome") && <div style={{fontSize:11,color:"#DC2626",marginTop:3}}>Campo obbligatorio</div>}
                 </div>
               ))}
               <div style={{marginBottom:8}}>
