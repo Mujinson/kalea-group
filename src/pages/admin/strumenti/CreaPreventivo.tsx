@@ -2018,8 +2018,9 @@ export default function CreaPreventivo() {
               />
               {[["nome","Nome / Ragione sociale"],["indirizzo","Indirizzo"],["citta","Città"],["telefono","Telefono"],["email","Email"]].map(([k,pl])=>(
                 <div key={k} style={{marginBottom:8}}>
-                  <input value={(cliente as any)[k]} onChange={e=>setCliente(c=>({...c,[k]:e.target.value}))} placeholder={pl}
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                  <input value={(cliente as any)[k]} onChange={e=>{setCliente(c=>({...c,[k]:e.target.value})); if(k==="nome"&&e.target.value.trim()) setErrors(s=>{const n=new Set(s);n.delete("cliente.nome");return n;});}} placeholder={pl}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box", ...(k==="nome"?errStyle("cliente.nome"):{})}}/>
+                  {k==="nome" && hasErr("cliente.nome") && <div style={{fontSize:11,color:"#DC2626",marginTop:3}}>Campo obbligatorio</div>}
                 </div>
               ))}
               <div style={{marginBottom:8}}>
