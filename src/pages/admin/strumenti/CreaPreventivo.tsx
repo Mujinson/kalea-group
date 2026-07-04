@@ -1004,6 +1004,20 @@ export default function CreaPreventivo() {
   const [sconto, setSconto] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const [righeMat, setRigheMat] = useState<any[]>([]);
+  // Override manuali per riga generata automaticamente (prezzo unit. al cliente, in €)
+  // Se undefined → usa il calcolo automatico; se number → l'utente ha forzato quel prezzo al centesimo
+  const [overrides, setOverrides] = useState<{
+    matMq?: number;
+    posaMq?: number;
+    tappMq?: number;
+    trasportoKm?: number;
+    trasfertaMq?: number;
+  }>({});
+  const [totaleTarget, setTotaleTarget] = useState<string>("");
+  const setOv = (k: keyof typeof overrides, v: number | undefined) =>
+    setOverrides((o) => ({ ...o, [k]: v }));
+  const resetOv = (k: keyof typeof overrides) =>
+    setOverrides((o) => { const n = { ...o }; delete n[k]; return n; });
   const [tonalita, setTonalita] = useState<Array<{id:number; nome:string; mq:number}>>([]);
   const [stockMap, setStockMap] = useState<Record<string, number>>({});
   // Selezione Woodco da catalogo DB (collezione → essenza → finitura → formato + accessori)
