@@ -1772,17 +1772,43 @@ export default function CreaPreventivo() {
               <div style={sectionTitle}>Parametri cantiere</div>
               <div style={{marginBottom:14}}>
                 <div style={{fontSize:12,color:"#6B6860",marginBottom:8}}>Complessità posa</div>
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
-                  {(["semplice","media","complessa"] as const).map(k=>(
-                    <div key={k} onClick={()=>setComplessita(k)} style={{
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8}}>
+                  {(["semplice","media","complessa"] as const).map(k=>{
+                    const isCustom = overrides.posaMq != null;
+                    const active = complessita===k && !isCustom;
+                    return (
+                    <div key={k} onClick={()=>{ setComplessita(k); resetOv("posaMq"); }} style={{
                       padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
-                      background:complessita===k?"#1A1A2E":"#F0EDE8",
-                      borderColor:complessita===k?"#1A1A2E":"#E0DDD8",
-                      color:complessita===k?"#fff":"#1A1A1A"}}>
+                      background:active?"#1A1A2E":"#F0EDE8",
+                      borderColor:active?"#1A1A2E":"#E0DDD8",
+                      color:active?"#fff":"#1A1A1A"}}>
                       <div style={{fontWeight:500,fontSize:13,textTransform:"capitalize"}}>{k}</div>
                       <div style={{fontSize:13,fontWeight:600,marginTop:4}}>{PREZZI_POSA[k]}€/mq</div>
                     </div>
-                  ))}
+                    );
+                  })}
+                  {(() => {
+                    const isCustom = overrides.posaMq != null;
+                    return (
+                      <div onClick={()=>{ if (!isCustom) setOv("posaMq", PREZZI_POSA[complessita]); }} style={{
+                        padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
+                        background:isCustom?"#C8A96E":"#F0EDE8",
+                        borderColor:isCustom?"#C8A96E":"#E0DDD8",
+                        color:isCustom?"#fff":"#1A1A1A"}}>
+                        <div style={{fontWeight:500,fontSize:13}}>Personalizzato</div>
+                        {isCustom ? (
+                          <div style={{display:"flex",alignItems:"center",gap:4,marginTop:4}} onClick={e=>e.stopPropagation()}>
+                            <input type="number" step="0.01" min={0} value={overrides.posaMq}
+                              onChange={e=>setOv("posaMq", e.target.value===""?0:Number(e.target.value))}
+                              style={{width:"100%",padding:"3px 6px",borderRadius:5,border:"1px solid rgba(255,255,255,.5)",background:"rgba(255,255,255,.15)",color:"#fff",fontSize:13,fontWeight:600,textAlign:"right",boxSizing:"border-box"}}/>
+                            <span style={{fontSize:11}}>€/mq</span>
+                          </div>
+                        ) : (
+                          <div style={{fontSize:12,marginTop:4,color:"#6B6860"}}>manuale €/mq</div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
               <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={0.01} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
