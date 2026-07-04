@@ -11,7 +11,7 @@ interface SEOHeadProps {
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const BASE_URL = "https://kalea.space";
+const BASE_URL = "https://www.kalea.space";
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 
 const SEOHead = ({
