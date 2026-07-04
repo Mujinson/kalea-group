@@ -1214,8 +1214,18 @@ export default function CreaPreventivo() {
     // Accessori Woodco
     const costoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.costoUn||0)*(a.qta||0), 0);
     const prezzoAccTot = (wcSel.accessories || []).reduce((s,a)=>s + (a.prezzoUn||0)*(a.qta||0), 0);
-    const costoExtraTot = righeMat.reduce((s,r)=>s+(r.costoUn||0)*(r.qta||0), 0) + costoAccTot;
-    const prezzoExtraTot = righeMat.reduce((s,r)=>s+(r.prezzoUn||0)*(r.qta||0), 0) + prezzoAccTot;
+    const costoExtraTot = righeMat.reduce((s,r)=>{
+      const qta = Number(r.qta)||0;
+      const qtaTot = qta * (1 + (Number(r.sfridoPct)||0)/100);
+      return s + qtaTot*(Number(r.costoUn)||0);
+    }, 0) + costoAccTot;
+    const prezzoExtraTot = righeMat.reduce((s,r)=>{
+      const qta = Number(r.qta)||0;
+      const qtaTot = qta * (1 + (Number(r.sfridoPct)||0)/100);
+      const lordo = qtaTot*(Number(r.prezzoUn)||0);
+      const sc = r.scontoEur != null ? Number(r.scontoEur) : lordo*((Number(r.scontoPct)||0)/100);
+      return s + lordo - sc;
+    }, 0) + prezzoAccTot;
     const costoTotale = costoMatTot+costoPosaTot+costoTappTot+costoTrasporto+costoTrasfertaTot+costoExtraTot;
     const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
