@@ -1104,6 +1104,9 @@ export default function CreaPreventivo() {
   const [stato, setStato] = useState<"bozza"|"inviato"|"accettato"|"rifiutato">("bozza");
   const [saving, setSaving] = useState(false);
   const [preventivoId, setPreventivoId] = useState<string|null>(null);
+  const [errors, setErrors] = useState<Set<string>>(new Set());
+  const hasErr = (k: string) => errors.has(k);
+  const errStyle = (k: string) => hasErr(k) ? { borderColor: "#DC2626", boxShadow: "0 0 0 2px rgba(220,38,38,.15)" } : {};
 
   const [pagamenti, setPagamenti] = useState<any[]>([
     { label:"Acconto", pct:30, data:"", note:"" },
