@@ -1003,6 +1003,7 @@ export default function CreaPreventivo() {
   const [incTrasporto, setIncTrasporto] = useState(false);
   const [sconto, setSconto] = useState(0);
   const [showAll, setShowAll] = useState(false);
+  const [addingMore, setAddingMore] = useState(false);
   const [righeMat, setRigheMat] = useState<any[]>([]);
   // Override manuali per riga generata automaticamente (prezzo unit. al cliente, in €)
   // Se undefined → usa il calcolo automatico; se number → l'utente ha forzato quel prezzo al centesimo
