@@ -1921,7 +1921,7 @@ export default function CreaPreventivo() {
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>{t.trasporto} ({calc.kmExtra} km)</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{calc.kmExtra}</td>
-                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(COSTO_KM*MARKUP)}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.prezzoTrasportoKm)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasporto)}</td>
                   </tr>
                 )}
