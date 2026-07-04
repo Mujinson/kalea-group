@@ -395,8 +395,13 @@ const AdminQuotes = () => {
   };
 
   const getCustomerName = (quote: Quote) => {
+    // Fonte di verità: il record CRM collegato (cliente o lead). Il campo
+    // client_name viene usato solo come fallback quando non c'è collegamento,
+    // per evitare che un nome digitato a mano sovrascriva l'associazione reale.
     if (quote.customer?.company_name) return quote.customer.company_name;
-    if (quote.customer?.first_name) return `${quote.customer.first_name} ${quote.customer.last_name || ''}`;
+    if (quote.customer?.first_name) return `${quote.customer.first_name} ${quote.customer.last_name || ''}`.trim();
+    if (quote.lead?.company_name) return quote.lead.company_name;
+    if (quote.lead?.name) return quote.lead.name;
     if (quote.client_name && quote.client_name.trim()) return quote.client_name;
     return '—';
   };
