@@ -1929,7 +1929,7 @@ export default function CreaPreventivo() {
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>{t.trasferta}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
-                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(SUPPL_TRASFERTA_POSA[complessita])}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.supplMq)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasfertaTot)}</td>
                   </tr>
                 )}
