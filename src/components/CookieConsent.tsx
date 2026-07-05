@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Checkbox } from "./ui/checkbox";
 import { X, Cookie } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { updateConsent } from "@/lib/consent";
 
 interface CookiePreferences {
   necessary: boolean;
