@@ -30,6 +30,16 @@ const CookieConsent = () => {
     if (!consent) {
       // Delay banner appearance for smooth experience
       setTimeout(() => setShowBanner(true), 1000);
+    } else {
+      // Re-broadcast saved preferences to Consent Mode on every load
+      // (index.html sets the initial default, this keeps SPA state in sync).
+      try {
+        const saved = JSON.parse(consent) as CookiePreferences;
+        setPreferences(saved);
+        updateConsent(saved);
+      } catch {
+        /* ignore malformed value */
+      }
     }
   }, []);
 
@@ -41,12 +51,14 @@ const CookieConsent = () => {
       marketing: true,
     };
     localStorage.setItem("cookie-consent", JSON.stringify(allAccepted));
+    updateConsent(allAccepted);
     setShowBanner(false);
     setShowPreferences(false);
   };
 
   const savePreferences = () => {
     localStorage.setItem("cookie-consent", JSON.stringify(preferences));
+    updateConsent(preferences);
     setShowBanner(false);
     setShowPreferences(false);
   };
@@ -59,6 +71,7 @@ const CookieConsent = () => {
       marketing: false,
     };
     localStorage.setItem("cookie-consent", JSON.stringify(onlyNecessary));
+    updateConsent(onlyNecessary);
     setShowBanner(false);
     setShowPreferences(false);
   };
