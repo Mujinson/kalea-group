@@ -4,6 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="google" content="notranslate" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Consent Mode v2 — default denied, updated by CookieConsent UI.
+         MUST load before any gtag.js / GTM / Ads / Analytics tag. -->
+    <script>
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        window.gtag = gtag;
+
+        // Read any previously saved consent so returning visitors keep their choice.
+        var saved = null;
+        try { saved = JSON.parse(localStorage.getItem('cookie-consent') || 'null'); } catch (e) {}
+
+        var analytics    = saved && saved.analytics    ? 'granted' : 'denied';
+        var marketing    = saved && saved.marketing    ? 'granted' : 'denied';
+        var preferences  = saved && saved.preferences  ? 'granted' : 'denied';
+
+        gtag('consent', 'default', {
+          ad_storage:              marketing,
+          ad_user_data:            marketing,
+          ad_personalization:      marketing,
+          analytics_storage:       analytics,
+          functionality_storage:   preferences,
+          personalization_storage: preferences,
+          security_storage:        'granted',
+          wait_for_update:         500
+        });
+
+        // URL redaction on until Ads consent is granted (privacy-safe pings).
+        gtag('set', 'ads_data_redaction', marketing === 'granted' ? false : true);
+        gtag('set', 'url_passthrough', false);
+      })();
+    </script>
     <title>Kalēa® — Pavimenti Flottanti in MgO</title>
     <meta name="description" content="Pavimenti flottanti in MgO e fibre naturali: waterproof, ignifughi, click-clack senza colla. Designed in Italy.">
     <meta name="keywords" content="pavimenti flottanti, pavimento flottante, pavimenti MgO, pavimenti click clack, pavimento senza colla, pavimenti waterproof, pavimenti ignifughi, pavimento galleggiante, pavimenti di design, pavimenti per ristrutturazione, parquet flottante, pavimenti ecologici, pavimenti sostenibili, SPC pavimento, LVT alternativa" />
