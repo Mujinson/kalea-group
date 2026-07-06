@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { trackGenerateLead } from "@/lib/analytics";
 import {
   Cpu,
   TrendingUp,
@@ -88,6 +89,12 @@ const DiventaPartner = () => {
     e.preventDefault();
     setIsSubmitting(true);
     await new Promise((resolve) => setTimeout(resolve, 1500));
+    trackGenerateLead({
+      source: "partner_form",
+      method: "email",
+      category: formData.category || undefined,
+      volume: formData.volume || undefined,
+    });
     toast.success(t("partner.form.success"));
     setFormData({
       companyName: "",
