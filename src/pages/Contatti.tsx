@@ -17,6 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "@/i18n/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
 import SEOHead from "@/components/SEOHead";
+import { trackGenerateLead } from "@/lib/analytics";
 
 // Warm tan ridged background — same identity as ChiSiamoManifesto
 const tanBgStyle: React.CSSProperties = {
@@ -78,6 +79,12 @@ const Contatti = () => {
         },
       });
       if (error) throw error;
+      trackGenerateLead({
+        source: "contact_form",
+        method: "email",
+        user_type: formData.tipoUtente || undefined,
+        interests: formData.interessi,
+      });
       toast({
         title: t("contacts.successTitle"),
         description: t("contacts.successMessage"),
