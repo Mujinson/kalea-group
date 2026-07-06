@@ -50,6 +50,17 @@ import DiscoverKalea from "./pages/DiscoverKalea";
 import { I18nProvider } from "./i18n/context";
 import ScrollToTop from "./components/ScrollToTop";
 import { useEffect } from "react";
+import { initAnalytics, trackPageView } from "@/lib/analytics";
+
+// GA4 page_view on every SPA navigation. Init runs once.
+const AnalyticsRouteTracker = () => {
+  const location = useLocation();
+  useEffect(() => { initAnalytics(); }, []);
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location.pathname, location.search]);
+  return null;
+};
 
 
 // Admin pages
@@ -197,6 +208,7 @@ const App = () => (
         <BrowserRouter>
           <I18nProvider>
             <ScrollToTop />
+            <AnalyticsRouteTracker />
             <CrmHostGate />
             <Routes>
               {/* Redirect /it/admin/* to /admin/* */}
