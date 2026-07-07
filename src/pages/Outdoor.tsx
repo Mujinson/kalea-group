@@ -72,11 +72,11 @@ const Outdoor = () => {
                language === 'en' ? "Outdoor Flooring & Cladding | Kalēa®" :
                language === 'de' ? "Außenböden & Verkleidungen | Kalēa®" :
                "Revêtements Extérieurs | Kalēa®"}
-        description={language === 'it' ? "Soluzioni Kalēa® per esterni: KALEADECK decking in MgO resistente a umidità, raggi UV e agenti atmosferici. KALEACEILING controsoffitti per pergole e porticati." :
-                     language === 'en' ? "Kalēa® outdoor solutions: KALEADECK MgO decking resistant to moisture, UV and weather. KALEACEILING ceiling panels for pergolas and porches." :
-                     language === 'de' ? "Kalēa® Außenlösungen: KALEADECK MgO-Terrassendielen, feuchtigkeits- und UV-beständig. KALEACEILING Deckenverkleidungen." :
-                     "Solutions Kalēa® pour extérieurs : KALEADECK terrasse en MgO résistant à l'humidité et aux UV. KALEACEILING plafonds."}
-        keywords="pavimenti per esterni, decking MgO, pavimento esterno resistente, decking senza manutenzione, controsoffitto esterno, pavimento terrazza, decking impermeabile, rivestimento esterno minerale"
+        description={language === 'it' ? "Soluzioni Kalēa® per esterni: EXTERNO decking in MgO resistente a umidità, raggi UV e agenti atmosferici. Ceramiche e Outdoor Selection per terrazze, piscine e giardini." :
+                     language === 'en' ? "Kalēa® outdoor solutions: EXTERNO MgO decking resistant to moisture, UV and weather. Ceramics and Outdoor Selection for terraces, pools and gardens." :
+                     language === 'de' ? "Kalēa® Außenlösungen: EXTERNO MgO-Terrassendielen, feuchtigkeits- und UV-beständig. Keramik und Outdoor Selection für Terrassen und Gärten." :
+                     "Solutions Kalēa® pour extérieurs : EXTERNO terrasse en MgO résistant à l'humidité et aux UV. Céramiques et Outdoor Selection pour terrasses et jardins."}
+        keywords="pavimenti per esterni, decking MgO, pavimento esterno resistente, decking senza manutenzione, pavimento terrazza, decking impermeabile, ceramiche esterni, outdoor selection"
       />
 
       {/* Hero Section */}
