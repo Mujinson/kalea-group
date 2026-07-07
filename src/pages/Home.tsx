@@ -3,6 +3,7 @@ import { useEffect } from "react";
 
 import HomeHero, { HomeDescription } from "@/components/HomeHero";
 import ChiSiamoManifesto from "@/components/ChiSiamoManifesto";
+import PartnersMarquee from "@/components/PartnersMarquee";
 import ScrollStoryCarousel from "@/components/ScrollStoryCarousel";
 
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
@@ -113,6 +114,9 @@ const Home = () => {
 
       {/* Chi Siamo — Manifesto del brand (paper-write reveal) */}
       <ChiSiamoManifesto language={language} nextSectionId="chi-siamo-next" />
+
+      {/* Partners marquee (right → left) */}
+      <PartnersMarquee />
 
       <div id="chi-siamo-next" className="scroll-mt-20" />
 
