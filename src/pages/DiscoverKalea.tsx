@@ -152,7 +152,7 @@ const DiscoverKalea = () => {
 
       {/* 1. HERO */}
       <HeroSection
-        title="Superfici architettoniche premium. Fornitura e posa chiavi in mano."
+        title={"Superfici architettoniche premium.\nFornitura e posa chiavi in mano."}
         subtitle="Dalla selezione del materiale alla posa finale: un unico partner per trasformare spazi indoor e outdoor con soluzioni tecniche ed estetiche di alta gamma."
         backgroundImage={heroImg}
         backgroundPosition="center"
