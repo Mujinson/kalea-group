@@ -113,8 +113,8 @@ const Navbar = () => {
         {
           label: "CERAMICHE",
           products: [
-            { label: "CERAMICHE DA INTERNI", path: null, comingSoon: true },
-            { label: "CERAMICHE DA ESTERNI", path: null, comingSoon: true },
+            { label: "CERAMICHE DA INTERNI", path: `/${language}/ceramiche-interni`, comingSoon: false },
+            { label: "CERAMICHE DA ESTERNI", path: `/${language}/ceramiche-esterni`, comingSoon: false },
           ]
         },
       ]
