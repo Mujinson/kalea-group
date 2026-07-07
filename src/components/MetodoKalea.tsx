@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import m1 from "@/assets/metodo/metodo-1.png.asset.json";
 import m2 from "@/assets/metodo/metodo-2.png.asset.json";
 import m3 from "@/assets/metodo/metodo-3.png.asset.json";
