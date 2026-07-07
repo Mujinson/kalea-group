@@ -50,15 +50,17 @@ const tanBgStyle: React.CSSProperties = {
 
 const interestKeys = [
   "biomag",
-  
   "hypermatt",
-  "externo",
+  "parquet",
+  "spc",
+  "laminati",
   "ceramicheInterni",
-  "ceramicheEsterni",
-  "kaleabase",
-  "edgeline",
-  "biowall",
+  "externo",
+  "kaleaElements",
   "kaleaceiling",
+  "ceramicheEsterni",
+  "sopraelevati",
+  "fonoassorbenti",
   "partnership",
   "other",
 ] as const;
