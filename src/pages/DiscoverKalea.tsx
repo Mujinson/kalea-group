@@ -16,8 +16,10 @@ import imgBiomag from "@/assets/biomag-hero-new.jpg";
 import imgSpc from "@/assets/spc/hero.webp";
 import imgLaminati from "@/assets/laminati/hero.webp";
 import imgWpc from "@/assets/product-kaleadeck.jpg";
-import imgIpe from "@/assets/hero-indoor-wood.jpg";
+import imgIpe from "@/assets/card-outdoor.jpg";
+import imgParquet from "@/assets/card-parquet-ambient.jpg";
 import imgCeramiche from "@/assets/ceramiche-esterni-hero.jpg";
+import imgCeramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
 
 interface MaterialCard {
   title: string;
