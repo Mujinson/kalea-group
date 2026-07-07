@@ -75,11 +75,11 @@ const DiscoverKalea = () => {
     },
   ];
 
-  const process = [
-    "Ascoltiamo le esigenze del cliente e analizziamo il contesto",
-    "Individuiamo il materiale più adatto per prestazioni, estetica e destinazione d'uso",
-    "Gestiamo fornitura, logistica e pianificazione",
-    "Eseguiamo la posa e le finiture con personale specializzato",
+  const serviceSteps = [
+    { n: "01", title: "L'Ascolto", subtitle: "Ascoltiamo le esigenze del cliente e analizziamo il contesto.", img: m1.url },
+    { n: "02", title: "La Scelta", subtitle: "Individuiamo il materiale più adatto per prestazioni, estetica e destinazione d'uso.", img: m2.url },
+    { n: "03", title: "La Fornitura", subtitle: "Gestiamo fornitura, logistica e pianificazione senza pensieri.", img: m3.url },
+    { n: "04", title: "La Posa", subtitle: "Eseguiamo la posa e le finiture con personale specializzato.", img: m4.url },
   ];
 
   const clients = [
