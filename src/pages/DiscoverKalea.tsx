@@ -362,6 +362,17 @@ const DiscoverKalea = () => {
                   </h3>
                   <p className="text-sm text-foreground/60 font-medium mb-3">{m.descriptor}</p>
                   <p className="text-sm text-muted-foreground leading-relaxed">{m.description}</p>
+                  {m.href && (
+                    <div className="mt-5 pt-4 border-t border-border/50">
+                      <Link
+                        to={m.href}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-kalea-tan transition-colors group/link"
+                      >
+                        Scopri
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </motion.article>
             ))}
