@@ -106,10 +106,16 @@ const DiscoverKalea = () => {
   ];
 
   const serviceSteps = [
-    { n: "01", title: "L'Ascolto", subtitle: "Ascoltiamo le esigenze del cliente e analizziamo il contesto.", img: m1.url },
-    { n: "02", title: "La Scelta", subtitle: "Individuiamo il materiale più adatto per prestazioni, estetica e destinazione d'uso.", img: m2.url },
-    { n: "03", title: "La Fornitura", subtitle: "Gestiamo fornitura, logistica e pianificazione senza pensieri.", img: m3.url },
-    { n: "04", title: "La Posa", subtitle: "Eseguiamo la posa e le finiture con personale specializzato.", img: m4.url },
+    { n: "01", title: "L'Idea", subtitle: "Ogni grande progetto nasce da una visione.", img: m1.url },
+    { n: "02", title: "Il Sopralluogo", subtitle: "Le scelte migliori iniziano da un'analisi accurata.", img: m2.url },
+    { n: "03", title: "La Scelta", subtitle: "Ogni ambiente merita il pavimento giusto.", img: m3.url },
+    { n: "04", title: "La Fornitura", subtitle: "Materiali selezionati. Consegna senza pensieri.", img: m4.url },
+    { n: "05", title: "Il Fondo", subtitle: "La qualità di un pavimento inizia da ciò che non si vede.", img: m5.url },
+    { n: "06", title: "La Posa", subtitle: "La precisione è il dettaglio che dura negli anni.", img: m6.url },
+    { n: "07", title: "Le Finiture", subtitle: "È qui che una casa acquista carattere.", img: m7.url },
+    { n: "08", title: "Il Controllo", subtitle: "Ogni dettaglio viene verificato.", img: m8.url },
+    { n: "09", title: "La Consegna", subtitle: "La casa che avevi immaginato.", img: m9.url },
+    { n: "10", title: "Il Risultato", subtitle: "Niente promesse. Solo risultati straordinari.", img: m10.url },
   ];
 
   const clients = [
