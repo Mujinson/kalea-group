@@ -25,21 +25,21 @@ const steps = [
 
 const MetodoKalea = () => {
   return (
-    <section className="relative bg-background py-12 md:py-16 px-6 md:px-12 lg:px-20">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative bg-background py-10 md:py-12 px-6 md:px-12 lg:px-20">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-14"
+          className="text-center mb-8 md:mb-10"
         >
           <p className="font-heading tracking-[0.3em] text-xs text-foreground/60 mb-3">
             IL METODO KALĒA<span className="whitespace-nowrap">®</span>
           </p>
           <div className="w-10 h-px bg-kalea-tan mx-auto mb-5" />
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-light text-foreground mb-3">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-light text-foreground mb-3">
             Dieci passi. <span className="italic text-kalea-tan">Un risultato.</span>
           </h2>
           <p className="text-sm md:text-base text-foreground/70 max-w-xl mx-auto">
@@ -48,7 +48,7 @@ const MetodoKalea = () => {
         </motion.div>
 
         {/* Editorial grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-3">
           {steps.map((s, i) => (
             <motion.article
               key={s.n}
@@ -56,25 +56,25 @@ const MetodoKalea = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.6, delay: (i % 5) * 0.06 }}
-              className="group relative overflow-hidden rounded-lg aspect-[4/3] bg-kalea-cream/40"
+              className="group relative overflow-hidden rounded-lg aspect-[3/4] bg-kalea-cream/60"
             >
               <img
                 src={s.img}
                 alt={s.title}
                 loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-contain p-1 transition-transform duration-[1200ms] ease-out group-hover:scale-[1.02]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-between p-3 md:p-4">
+              <div className="absolute inset-0 flex flex-col justify-between p-2.5 md:p-3">
                 <div className="flex items-center gap-2 text-white/90">
                   <span className="font-heading text-[10px] tracking-[0.25em]">{s.n}</span>
                   <span className="h-px flex-1 bg-white/40" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-white text-base md:text-lg leading-tight mb-1">
+                  <h3 className="font-heading text-white text-sm md:text-base leading-tight mb-1">
                     {s.title}
                   </h3>
-                  <p className="text-white/85 text-[10px] md:text-xs leading-snug line-clamp-2">
+                  <p className="text-white/85 text-[10px] leading-snug line-clamp-2">
                     {s.subtitle}
                   </p>
                 </div>
