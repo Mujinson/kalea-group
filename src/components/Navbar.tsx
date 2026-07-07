@@ -111,12 +111,6 @@ const Navbar = () => {
           ]
         },
         {
-          label: t('nav.wallCladding'),
-          products: [
-            { label: "FONOASSORBENTI", path: `/${language}/fonoassorbenti`, comingSoon: false },
-          ]
-        },
-        {
           label: "CERAMICHE",
           products: [
             { label: "CERAMICHE DA INTERNI", path: null, comingSoon: true },
