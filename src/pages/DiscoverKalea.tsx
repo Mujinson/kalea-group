@@ -126,16 +126,19 @@ const DiscoverKalea = () => {
       title: "Architetti e progettisti",
       description:
         "Supportiamo studi di progettazione con schede tecniche, capitolati, campionature e consulenza dedicata. Materiali e soluzioni pensati per integrarsi nel processo progettuale.",
+      image: imgClientsArchitetti,
     },
     {
       title: "Imprese edili e general contractor",
       description:
         "Collaboriamo con operatori del settore offrendo forniture continuative, tempi certi e supporto tecnico in tutte le fasi operative. L'obiettivo è garantire qualità esecutiva e affidabilità di cantiere.",
+      image: imgClientsImprese,
     },
     {
       title: "Privati esigenti",
       description:
         "Accompagniamo il cliente dalla scelta del materiale fino alla posa finale. Una gestione completa del progetto, pensata per chi ricerca qualità, semplicità e attenzione al dettaglio.",
+      image: imgClientsPrivati,
     },
   ];
 
