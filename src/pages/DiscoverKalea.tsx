@@ -26,6 +26,9 @@ import imgIpe from "@/assets/card-outdoor.jpg";
 import imgParquet from "@/assets/card-parquet-ambient.jpg";
 import imgCeramiche from "@/assets/ceramiche-esterni-hero.jpg";
 import imgCeramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
+import imgClientsArchitetti from "@/assets/discover/clients-architetti.jpg";
+import imgClientsImprese from "@/assets/discover/clients-imprese.jpg";
+import imgClientsPrivati from "@/assets/discover/clients-privati.jpg";
 
 interface MaterialCard {
   title: string;
