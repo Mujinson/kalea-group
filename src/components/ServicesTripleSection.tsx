@@ -17,7 +17,7 @@ const ServicesTripleSection = () => {
   const cards: ServiceCard[] = [
     {
       image: cardFornitura,
-      title: "Fornitura e posa laminati e LVT-SPC",
+      title: "Fornitura e posa pavimenti Biomag, parquet, laminati e LVT-SPC",
       link: `/${language}/indoor`,
     },
     {
