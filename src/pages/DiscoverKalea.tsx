@@ -26,6 +26,9 @@ import imgIpe from "@/assets/card-outdoor.jpg";
 import imgParquet from "@/assets/card-parquet-ambient.jpg";
 import imgCeramiche from "@/assets/ceramiche-esterni-hero.jpg";
 import imgCeramicheInterni from "@/assets/ceramiche-interni-hero.jpg";
+import imgClientsArchitetti from "@/assets/discover/clients-architetti.jpg";
+import imgClientsImprese from "@/assets/discover/clients-imprese.jpg";
+import imgClientsPrivati from "@/assets/discover/clients-privati.jpg";
 
 interface MaterialCard {
   title: string;
@@ -123,16 +126,19 @@ const DiscoverKalea = () => {
       title: "Architetti e progettisti",
       description:
         "Supportiamo studi di progettazione con schede tecniche, capitolati, campionature e consulenza dedicata. Materiali e soluzioni pensati per integrarsi nel processo progettuale.",
+      image: imgClientsArchitetti,
     },
     {
       title: "Imprese edili e general contractor",
       description:
         "Collaboriamo con operatori del settore offrendo forniture continuative, tempi certi e supporto tecnico in tutte le fasi operative. L'obiettivo è garantire qualità esecutiva e affidabilità di cantiere.",
+      image: imgClientsImprese,
     },
     {
       title: "Privati esigenti",
       description:
         "Accompagniamo il cliente dalla scelta del materiale fino alla posa finale. Una gestione completa del progetto, pensata per chi ricerca qualità, semplicità e attenzione al dettaglio.",
+      image: imgClientsPrivati,
     },
   ];
 
@@ -413,12 +419,24 @@ const DiscoverKalea = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="kalea-card rounded-2xl p-8 bg-background border border-border/60"
+                className="kalea-card rounded-2xl overflow-hidden bg-background border border-border/60 flex flex-col"
               >
-                <h3 className="text-xl font-heading font-semibold text-foreground mb-4">
-                  {c.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">{c.description}</p>
+                <div className="aspect-[4/3] overflow-hidden bg-muted">
+                  <img
+                    src={c.image}
+                    alt={c.title}
+                    width={1280}
+                    height={960}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-8">
+                  <h3 className="text-xl font-heading font-semibold text-foreground mb-4">
+                    {c.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">{c.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
