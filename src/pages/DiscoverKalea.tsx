@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeroSection from "@/components/HeroSection";
 import SEOHead from "@/components/SEOHead";
 import { useTranslation } from "@/i18n/useTranslation";
 
 import heroImg from "@/assets/hero-chi-siamo.webp";
+import m1 from "@/assets/metodo/metodo-1.png.asset.json";
+import m2 from "@/assets/metodo/metodo-2.png.asset.json";
+import m3 from "@/assets/metodo/metodo-3.png.asset.json";
+import m4 from "@/assets/metodo/metodo-4.png.asset.json";
 import bgCta from "@/assets/bg-cta-collabora.png";
 import imgBiomag from "@/assets/biomag-hero-new.jpg";
 import imgSpc from "@/assets/spc/hero.webp";
@@ -71,11 +75,11 @@ const DiscoverKalea = () => {
     },
   ];
 
-  const process = [
-    "Ascoltiamo le esigenze del cliente e analizziamo il contesto",
-    "Individuiamo il materiale più adatto per prestazioni, estetica e destinazione d'uso",
-    "Gestiamo fornitura, logistica e pianificazione",
-    "Eseguiamo la posa e le finiture con personale specializzato",
+  const serviceSteps = [
+    { n: "01", title: "L'Ascolto", subtitle: "Ascoltiamo le esigenze del cliente e analizziamo il contesto.", img: m1.url },
+    { n: "02", title: "La Scelta", subtitle: "Individuiamo il materiale più adatto per prestazioni, estetica e destinazione d'uso.", img: m2.url },
+    { n: "03", title: "La Fornitura", subtitle: "Gestiamo fornitura, logistica e pianificazione senza pensieri.", img: m3.url },
+    { n: "04", title: "La Posa", subtitle: "Eseguiamo la posa e le finiture con personale specializzato.", img: m4.url },
   ];
 
   const clients = [
@@ -175,31 +179,52 @@ const DiscoverKalea = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-8 md:mb-10"
           >
-            <h2 className="font-heading text-foreground mb-4">
-              Fornitura e posa chiavi in mano
+            <p className="font-heading tracking-[0.3em] text-xs text-foreground/60 mb-3">
+              IL SERVIZIO KALĒA<span className="whitespace-nowrap">®</span>
+            </p>
+            <div className="w-10 h-px bg-kalea-tan mx-auto mb-5" />
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-light text-foreground mb-3">
+              Fornitura e posa <span className="italic text-kalea-tan">chiavi in mano</span>
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Lavoriamo come un partner di progetto.
+            <p className="text-sm md:text-base text-foreground/70 max-w-xl mx-auto">
+              Lavoriamo come un partner di progetto. Un processo integrato dalla consulenza alla posa finale.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-12">
-            {process.map((step, index) => (
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, y: 20 }}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-8 md:mb-10">
+            {serviceSteps.map((s, i) => (
+              <motion.article
+                key={s.n}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="flex items-start gap-4 p-6 rounded-2xl bg-background border border-border/60"
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.6, delay: (i % 4) * 0.06 }}
+                className="group relative overflow-hidden rounded-lg aspect-[3/4] bg-kalea-cream/60"
               >
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center font-heading font-semibold text-sm">
-                  {index + 1}
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-contain p-1 transition-transform duration-[1200ms] ease-out group-hover:scale-[1.02]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                <div className="absolute inset-0 flex flex-col justify-between p-2.5 md:p-3">
+                  <div className="flex items-center gap-2 text-white/90">
+                    <span className="font-heading text-[10px] tracking-[0.25em]">{s.n}</span>
+                    <span className="h-px flex-1 bg-white/40" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-white text-sm md:text-base leading-tight mb-1">
+                      {s.title}
+                    </h3>
+                    <p className="text-white/85 text-[10px] leading-snug line-clamp-2">
+                      {s.subtitle}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-foreground/90 pt-1.5">{step}</p>
-              </motion.div>
+              </motion.article>
             ))}
           </div>
 
@@ -208,10 +233,28 @@ const DiscoverKalea = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center text-muted-foreground max-w-3xl mx-auto"
+            className="text-center text-muted-foreground max-w-3xl mx-auto mb-8 md:mb-10"
           >
             Un unico interlocutore per l'intero processo. Nessun coordinamento tra fornitori diversi. Nessuna complessità operativa. Solo un servizio completo, pensato per garantire qualità e continuità dal concept alla realizzazione.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center"
+          >
+            <a
+              href="https://web.whatsapp.com/send?phone=393520351738&text=Ciao%2C%20vorrei%20richiedere%20un%20preventivo%20gratuito%20per%20i%20vostri%20pavimenti."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground text-sm font-medium rounded-full px-8 py-3.5 shadow-[0_4px_20px_rgba(74,42,19,0.18)] ring-1 ring-kalea-tan/30 hover:bg-primary/90 hover:shadow-[0_6px_24px_rgba(74,42,19,0.24)] hover:ring-kalea-tan/50 transition-all duration-150"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Contattaci per un preventivo gratuito
+            </a>
+          </motion.div>
         </div>
       </section>
 
