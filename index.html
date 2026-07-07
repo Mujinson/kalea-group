@@ -34,7 +34,7 @@
 
         // URL redaction on until Ads consent is granted (privacy-safe pings).
         gtag('set', 'ads_data_redaction', marketing === 'granted' ? false : true);
-        gtag('set', 'url_passthrough', false);
+        gtag('set', 'url_passthrough', true);
       })();
     </script>
 
