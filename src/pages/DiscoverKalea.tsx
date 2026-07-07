@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeroSection from "@/components/HeroSection";
 import SEOHead from "@/components/SEOHead";
 import { useTranslation } from "@/i18n/useTranslation";
 
 import heroImg from "@/assets/hero-chi-siamo.webp";
+import m1 from "@/assets/metodo/metodo-1.png.asset.json";
+import m2 from "@/assets/metodo/metodo-2.png.asset.json";
+import m3 from "@/assets/metodo/metodo-3.png.asset.json";
+import m4 from "@/assets/metodo/metodo-4.png.asset.json";
 import bgCta from "@/assets/bg-cta-collabora.png";
 import imgBiomag from "@/assets/biomag-hero-new.jpg";
 import imgSpc from "@/assets/spc/hero.webp";
