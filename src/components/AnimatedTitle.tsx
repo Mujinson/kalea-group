@@ -84,8 +84,13 @@ const AnimatedTitle = ({
     <Tag key={animationKey} className={className} aria-label={text}>
       {letters.map((letter, index) => {
         const isSpace = letter === " ";
+        const isBreak = letter === "\n";
         const hasRegistered = letter.includes("®");
-        
+
+        if (isBreak) {
+          return <br key={`${animationKey}:${index}`} />;
+        }
+
         return reduceMotion ? (
           <span
             key={`${animationKey}:${index}`}
