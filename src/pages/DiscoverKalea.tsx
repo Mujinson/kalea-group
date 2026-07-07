@@ -236,7 +236,7 @@ const DiscoverKalea = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.6, delay: (i % 4) * 0.06 }}
+                transition={{ duration: 0.6, delay: (i % 5) * 0.06 }}
                 className="group relative overflow-hidden rounded-lg aspect-[3/4] bg-kalea-cream/60"
               >
                 <img
