@@ -52,12 +52,6 @@ const Outdoor = () => {
       link: `/${language}/externo`,
     },
     {
-      name: "KALEACEILING®",
-      description: "Rivestimenti per soffitti esterni.",
-      image: productKaleaceiling,
-      link: `/${language}/kaleaceiling`,
-    },
-    {
       name: "CERAMICHE DA ESTERNI",
       description: "Gres porcellanato 20mm per terrazze, piscine e giardini. Continuità estetica indoor-outdoor e resistenza eterna.",
       image: ceramicheEsterni,
