@@ -47,6 +47,7 @@ const DiscoverKalea = () => {
       description:
         "Realizzato con nucleo minerale e polvere di pietra, garantisce resistenza, stabilità dimensionale e facilità di installazione. Una soluzione versatile per ambienti indoor e applicazioni specifiche outdoor.",
       image: imgSpc,
+      href: `/${language}/indoor/spc`,
     },
     {
       title: "Laminati",
@@ -54,13 +55,15 @@ const DiscoverKalea = () => {
       description:
         "Materiali evoluti che combinano estetica, praticità e resistenza all'uso quotidiano. Disponibili in finiture contemporanee e texture materiche, permettono di realizzare ambienti coerenti e durevoli nel tempo.",
       image: imgLaminati,
+      href: `/${language}/indoor/laminati`,
     },
     {
-      title: "Car Parquet",
+      title: "Parquet",
       descriptor: "Parquet in legno naturale di pregio",
       description:
         "Eleganza e calore del legno per ambienti indoor raffinati. Ogni essenza è selezionata per carattere estetico, durabilità e capacità di valorizzare gli spazi residenziali e contract con un tocco senza tempo.",
       image: imgParquet,
+      href: `/${language}/parquet`,
     },
     {
       title: "WPC Decking",
@@ -68,6 +71,7 @@ const DiscoverKalea = () => {
       description:
         "Una soluzione outdoor ad alte prestazioni, progettata per resistere agli agenti atmosferici e ridurre la manutenzione nel tempo. L'estetica del legno incontra la stabilità dei materiali compositi, rendendolo ideale per terrazze, giardini e aree hospitality.",
       image: imgWpc,
+      href: `/${language}/externo`,
     },
     {
       title: "IPE",
@@ -75,6 +79,7 @@ const DiscoverKalea = () => {
       description:
         "Tra le essenze più apprezzate in architettura outdoor per densità, durabilità e carattere estetico. La sua naturale resistenza e la ricchezza cromatica lo rendono una scelta senza tempo per decking e superfici esterne di pregio.",
       image: imgIpe,
+      href: `/${language}/externo`,
     },
     {
       title: "Ceramiche da interno",
@@ -82,6 +87,7 @@ const DiscoverKalea = () => {
       description:
         "Grès porcellanato e ceramiche di alta gamma pensate per abitazioni, hospitality e spazi commerciali. Texture materiche, formati generosi e performance tecniche per pavimenti e rivestimenti coordinati.",
       image: imgCeramicheInterni,
+      href: `/${language}/ceramiche-interni`,
     },
     {
       title: "Ceramiche da esterno su piedini",
@@ -89,6 +95,7 @@ const DiscoverKalea = () => {
       description:
         "Sistemi sopraelevati che uniscono precisione tecnica e pulizia formale. La posa su piedini consente ispezionabilità, drenaggio e flessibilità progettuale, offrendo una soluzione evoluta per spazi esterni contemporanei.",
       image: imgCeramiche,
+      href: `/${language}/ceramiche-esterni`,
     },
   ];
 
