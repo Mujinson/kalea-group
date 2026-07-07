@@ -114,7 +114,6 @@ const Navbar = () => {
           label: "CERAMICHE",
           products: [
             { label: "CERAMICHE DA INTERNI", path: `/${language}/ceramiche-interni`, comingSoon: false },
-            { label: "CERAMICHE DA ESTERNI", path: `/${language}/ceramiche-esterni`, comingSoon: false },
           ]
         },
       ]
@@ -127,6 +126,12 @@ const Navbar = () => {
           products: [
             { label: "EXTERNO", path: `/${language}/externo`, comingSoon: false },
             { label: "OUTDOOR SELECTION", path: `/${language}/outdoor/selection`, comingSoon: false },
+          ]
+        },
+        {
+          label: "CERAMICHE",
+          products: [
+            { label: "CERAMICHE DA ESTERNI", path: `/${language}/ceramiche-esterni`, comingSoon: false },
           ]
         },
         {
