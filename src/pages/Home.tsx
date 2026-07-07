@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import HomeHero, { HomeDescription } from "@/components/HomeHero";
 import ChiSiamoManifesto from "@/components/ChiSiamoManifesto";
 import PartnersMarquee from "@/components/PartnersMarquee";
+import ServicesTripleSection from "@/components/ServicesTripleSection";
 import ScrollStoryCarousel from "@/components/ScrollStoryCarousel";
 
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
@@ -114,6 +115,9 @@ const Home = () => {
 
       {/* Chi Siamo — Manifesto del brand (paper-write reveal) */}
       <ChiSiamoManifesto language={language} nextSectionId="chi-siamo-next" />
+
+      {/* Servizi — 3 card sopra i partner */}
+      <ServicesTripleSection />
 
       {/* Partners marquee (right → left) */}
       <PartnersMarquee />
