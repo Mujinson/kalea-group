@@ -288,7 +288,7 @@ const DiscoverKalea = () => {
             className="flex justify-center"
           >
             <a
-              href="https://web.whatsapp.com/send?phone=393520351738&text=Ciao%2C%20vorrei%20richiedere%20un%20preventivo%20gratuito%20per%20i%20vostri%20pavimenti."
+              href="https://wa.me/393520351738?text=Ciao%2C%20vorrei%20richiedere%20un%20preventivo%20gratuito%20per%20i%20vostri%20pavimenti."
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground text-sm font-medium rounded-full px-8 py-3.5 shadow-[0_4px_20px_rgba(74,42,19,0.18)] ring-1 ring-kalea-tan/30 hover:bg-primary/90 hover:shadow-[0_6px_24px_rgba(74,42,19,0.24)] hover:ring-kalea-tan/50 transition-all duration-150"
