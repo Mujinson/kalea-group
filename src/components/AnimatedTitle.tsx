@@ -35,14 +35,14 @@ const AnimatedTitle = ({
   const location = useLocation();
   const reduceMotion = useReducedMotion();
   
-  // Split text into characters, but keep ® attached to the previous word
+  // Split text into characters, keeping ® and trailing punctuation attached to the previous word
   const letters = useMemo(() => {
     const chars = text.split("");
     const result: string[] = [];
+    const stickyChars = new Set(["®", ".", ",", ";", ":", "!", "?"]);
     for (let i = 0; i < chars.length; i++) {
-      // If current char is ® and previous char is not a space, merge with previous
-      if (chars[i] === "®" && result.length > 0 && result[result.length - 1] !== " ") {
-        result[result.length - 1] += "®";
+      if (stickyChars.has(chars[i]) && result.length > 0 && result[result.length - 1] !== " ") {
+        result[result.length - 1] += chars[i];
       } else {
         result.push(chars[i]);
       }
