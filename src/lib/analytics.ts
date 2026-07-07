@@ -27,15 +27,18 @@ export function initAnalytics(): void {
     };
   }
 
-  // Inject gtag.js.
-  const s = document.createElement("script");
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
-  document.head.appendChild(s);
-
-  window.gtag("js", new Date());
-  // We handle SPA page_views manually via trackPageView().
-  window.gtag("config", MEASUREMENT_ID, { send_page_view: false });
+  // gtag.js is loaded from index.html; only inject if missing (fallback).
+  const already = document.querySelector(
+    `script[src*="googletagmanager.com/gtag/js"]`
+  );
+  if (!already) {
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`;
+    document.head.appendChild(s);
+    window.gtag("js", new Date());
+    window.gtag("config", MEASUREMENT_ID, { send_page_view: false });
+  }
 }
 
 export function trackPageView(path: string, title?: string): void {
