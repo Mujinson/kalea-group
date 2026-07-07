@@ -26,6 +26,7 @@ interface MaterialCard {
   descriptor: string;
   description: string;
   image: string;
+  href?: string;
 }
 
 const DiscoverKalea = () => {
