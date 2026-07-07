@@ -65,16 +65,16 @@ const MetodoKalea = () => {
                 className="absolute inset-0 w-full h-full object-contain p-1 transition-transform duration-[1200ms] ease-out group-hover:scale-[1.02]"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute inset-0 flex flex-col justify-between p-3 md:p-4">
+              <div className="absolute inset-0 flex flex-col justify-between p-2.5 md:p-3">
                 <div className="flex items-center gap-2 text-white/90">
                   <span className="font-heading text-[10px] tracking-[0.25em]">{s.n}</span>
                   <span className="h-px flex-1 bg-white/40" />
                 </div>
                 <div>
-                  <h3 className="font-heading text-white text-base md:text-lg leading-tight mb-1">
+                  <h3 className="font-heading text-white text-sm md:text-base leading-tight mb-1">
                     {s.title}
                   </h3>
-                  <p className="text-white/85 text-[10px] md:text-xs leading-snug line-clamp-2">
+                  <p className="text-white/85 text-[10px] leading-snug line-clamp-2">
                     {s.subtitle}
                   </p>
                 </div>
