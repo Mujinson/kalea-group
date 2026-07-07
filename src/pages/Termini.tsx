@@ -222,7 +222,7 @@ const Termini = () => {
                   </div>
                 </div>
                 <div className="space-y-1 text-muted-foreground">
-                  <p>P.IVA: 04203540986 | REA: BS - 596517</p>
+                  <p>P.IVA: 04797310986 | REA: BS - 642362</p>
                 </div>
                 <div className="pt-2 border-t border-foreground/10 space-y-1">
                   <p>

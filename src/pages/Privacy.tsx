@@ -69,8 +69,8 @@ const Privacy = () => {
                         <p>25015 Desenzano del Garda (BS)</p>
                       </div>
                       <div className="pt-2 border-t border-foreground/10">
-                        <p>P.IVA: 04203540986</p>
-                        <p>REA: BS - 596517</p>
+                        <p>P.IVA: 04797310986</p>
+                        <p>REA: BS - 642362</p>
                       </div>
                       <div className="pt-2 border-t border-foreground/10">
                         <p>Email: info@kalea.space</p>
@@ -238,7 +238,7 @@ const Privacy = () => {
                       </div>
                     </div>
                     <div className="space-y-1 text-muted-foreground">
-                      <p>P.IVA: 04203540986 | REA: BS - 596517</p>
+                      <p>P.IVA: 04797310986 | REA: BS - 642362</p>
                     </div>
                     <div className="pt-2 border-t border-foreground/10 space-y-1">
                       <p>

@@ -37,8 +37,8 @@ const Footer = () => {
             </div>
             
             <div className="text-sm text-muted-foreground pt-3 border-t border-foreground/5">
-              <p>P.IVA: 04203540986</p>
-              <p>REA: BS - 596517</p>
+              <p>P.IVA: 04797310986</p>
+              <p>REA: BS - 642362</p>
             </div>
           </div>
 
