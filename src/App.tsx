@@ -18,7 +18,6 @@ import EdgeLine from "./pages/EdgeLine";
 import Biowall from "./pages/Biowall";
 import Kaleabase from "./pages/Kaleabase";
 import Externo from "@/pages/Externo";
-import Kaleaceiling from "./pages/Kaleaceiling";
 import CeramicheInterni from "./pages/CeramicheInterni";
 import CeramicheEsterni from "./pages/CeramicheEsterni";
 import AreaTecnica from "./pages/AreaTecnica";
@@ -37,7 +36,6 @@ import IndoorLaminati from "./pages/IndoorLaminati";
 import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
 import BiowallCollectionDetail from "./pages/BiowallCollectionDetail";
 import OutdoorSelection from "./pages/OutdoorSelection";
-import Fonoassorbenti from "./pages/Fonoassorbenti";
 import Sopraelevati from "./pages/Sopraelevati";
 
 import SustainabilityImpact from "./pages/SustainabilityImpact";
@@ -315,7 +313,7 @@ const App = () => (
               <Route path="/it/biowall" element={<Navigate to="/it/indoor" replace />} />
               <Route path="/it/kaleabase" element={<Navigate to="/it/indoor" replace />} />
               <Route path="/it/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
-              <Route path="/it/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/it/kaleaceiling" element={<Navigate to="/it/outdoor" replace />} />
               <Route path="/it/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
               <Route path="/it/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -345,7 +343,7 @@ const App = () => (
               <Route path="/en/biowall" element={<Navigate to="/en/indoor" replace />} />
               <Route path="/en/kaleabase" element={<Navigate to="/en/indoor" replace />} />
               <Route path="/en/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
-              <Route path="/en/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/en/kaleaceiling" element={<Navigate to="/en/outdoor" replace />} />
               <Route path="/en/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
               <Route path="/en/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -375,7 +373,7 @@ const App = () => (
               <Route path="/de/biowall" element={<Navigate to="/de/indoor" replace />} />
               <Route path="/de/kaleabase" element={<Navigate to="/de/indoor" replace />} />
               <Route path="/de/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
-              <Route path="/de/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/de/kaleaceiling" element={<Navigate to="/de/outdoor" replace />} />
               <Route path="/de/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
               <Route path="/de/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -405,7 +403,7 @@ const App = () => (
               <Route path="/fr/biowall" element={<Navigate to="/fr/indoor" replace />} />
               <Route path="/fr/kaleabase" element={<Navigate to="/fr/indoor" replace />} />
               <Route path="/fr/externo" element={<><SEOHandler /><Layout><Externo /></Layout></>} />
-              <Route path="/fr/kaleaceiling" element={<><SEOHandler /><Layout><Kaleaceiling /></Layout></>} />
+              <Route path="/fr/kaleaceiling" element={<Navigate to="/fr/outdoor" replace />} />
               <Route path="/fr/ceramiche-interni" element={<><SEOHandler /><Layout><CeramicheInterni /></Layout></>} />
               <Route path="/fr/ceramiche-esterni" element={<><SEOHandler /><Layout><CeramicheEsterni /></Layout></>} />
               <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
@@ -470,10 +468,10 @@ const App = () => (
               <Route path="/fr/outdoor/selection" element={<><SEOHandler /><Layout><OutdoorSelection /></Layout></>} />
 
               {/* Fonoassorbenti */}
-              <Route path="/it/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
-              <Route path="/en/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
-              <Route path="/de/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
-              <Route path="/fr/fonoassorbenti" element={<><SEOHandler /><Layout><Fonoassorbenti /></Layout></>} />
+              <Route path="/it/fonoassorbenti" element={<Navigate to="/it/indoor" replace />} />
+              <Route path="/en/fonoassorbenti" element={<Navigate to="/en/indoor" replace />} />
+              <Route path="/de/fonoassorbenti" element={<Navigate to="/de/indoor" replace />} />
+              <Route path="/fr/fonoassorbenti" element={<Navigate to="/fr/indoor" replace />} />
 
               <Route path="/it/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />
               <Route path="/en/sopraelevati" element={<><SEOHandler /><Layout><Sopraelevati /></Layout></>} />

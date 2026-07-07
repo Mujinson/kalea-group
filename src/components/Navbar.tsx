@@ -111,12 +111,6 @@ const Navbar = () => {
           ]
         },
         {
-          label: t('nav.wallCladding'),
-          products: [
-            { label: "FONOASSORBENTI", path: `/${language}/fonoassorbenti`, comingSoon: false },
-          ]
-        },
-        {
           label: "CERAMICHE",
           products: [
             { label: "CERAMICHE DA INTERNI", path: null, comingSoon: true },
@@ -139,12 +133,6 @@ const Navbar = () => {
           label: t('nav.accessories'),
           products: [
             { label: "KALEA ELEMENTS", path: `/${language}/kalea-elements`, comingSoon: true },
-          ]
-        },
-        {
-          label: t('nav.ceilingSystems'),
-          products: [
-            { label: "KALEACEILING®", path: `/${language}/kaleaceiling`, comingSoon: false },
           ]
         },
       ]

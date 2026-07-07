@@ -35,10 +35,8 @@ const interestKeys = [
   "ceramicheInterni",
   "externo",
   "kaleaElements",
-  "kaleaceiling",
   "ceramicheEsterni",
   "sopraelevati",
-  "fonoassorbenti",
   "partnership",
   "other",
 ] as const;
