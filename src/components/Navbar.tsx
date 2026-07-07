@@ -135,12 +135,6 @@ const Navbar = () => {
             { label: "KALEA ELEMENTS", path: `/${language}/kalea-elements`, comingSoon: true },
           ]
         },
-        {
-          label: t('nav.ceilingSystems'),
-          products: [
-            { label: "KALEACEILING®", path: `/${language}/kaleaceiling`, comingSoon: false },
-          ]
-        },
       ]
     },
   ];
