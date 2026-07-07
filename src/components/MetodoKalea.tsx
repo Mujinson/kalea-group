@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import m1 from "@/assets/metodo/metodo-1.png.asset.json";
 import m2 from "@/assets/metodo/metodo-2.png.asset.json";
 import m3 from "@/assets/metodo/metodo-3.png.asset.json";
@@ -82,6 +83,25 @@ const MetodoKalea = () => {
             </motion.article>
           ))}
         </div>
+
+        {/* CTA WhatsApp */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-center mt-8 md:mt-10"
+        >
+          <a
+            href="https://wa.me/393520351738?text=Ciao%2C%20vorrei%20richiedere%20un%20preventivo%20gratuito%20per%20i%20vostri%20pavimenti."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center justify-center gap-2 bg-[#25D366] text-white text-sm font-medium rounded-full px-8 py-3.5 hover:bg-[#128C7E] hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] transition-all duration-150"
+          >
+            <MessageCircle className="w-4 h-4" />
+            Contattaci per un preventivo gratuito
+          </a>
+        </motion.div>
       </div>
     </section>
   );
