@@ -111,6 +111,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Planner Operativo', url: '/admin/planner', icon: CalendarClock, adminOnly: true },
         { title: 'Lista cantieri', url: '/admin/cantieri', icon: HardHat, adminOnly: false },
         { title: 'Operai & Ore', url: '/admin/cantieri-operai', icon: Users, adminOnly: true },
+        { title: 'Timbrature Posatori', url: '/admin/timbrature', icon: CalendarClock, adminOnly: true },
         { title: 'Ferie / Indisponibilità', url: '/admin/ferie', icon: CalendarClock, adminOnly: true },
         { title: 'Materiali', url: '/admin/cantieri-materiali', icon: ListOrdered, adminOnly: true },
         { title: 'Budget vs Consuntivo', url: '/admin/cantieri-budget', icon: DollarSign, adminOnly: true },

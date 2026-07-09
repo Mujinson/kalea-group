@@ -92,6 +92,7 @@ import AdminCantiereDetail from "./pages/admin/AdminCantiereDetail";
 import AdminMedia from "./pages/admin/AdminMedia";
 import WorkerApp from "./pages/admin/WorkerApp";
 import AdminWorkLogs from "./pages/admin/AdminWorkLogs";
+import AdminTimbrature from "./pages/admin/AdminTimbrature";
 import CantieriDashboard from "./pages/admin/cantieri/CantieriDashboard";
 import CantieriOperaiOre from "./pages/admin/cantieri/CantieriOperaiOre";
 import CantieriMateriali from "./pages/admin/cantieri/CantieriMateriali";
@@ -258,6 +259,7 @@ const App = () => (
                 <Route path="cantieri-report" element={<CantieriReport />} />
                 <Route path="media" element={<AdminMedia />} />
                 <Route path="registro-lavori" element={<AdminWorkLogs />} />
+                <Route path="timbrature" element={<AdminTimbrature />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="contabilita" element={<AdminContabilita />} />
