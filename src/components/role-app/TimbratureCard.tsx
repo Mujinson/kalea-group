@@ -13,6 +13,7 @@ import {
   type TimbratureEventType,
   type TimeEntry,
 } from '@/lib/timbrature';
+import { reverseGeocode } from '@/lib/geo';
 
 const TimbratureCard = () => {
   const { user } = useAdminAuth();
@@ -21,6 +22,7 @@ const TimbratureCard = () => {
   const [busy, setBusy] = useState<TimbratureEventType | null>(null);
   const [workerId, setWorkerId] = useState<string | null>(null);
   const [assignedSite, setAssignedSite] = useState<{ id: string; latitude: number | null; longitude: number | null; title: string } | null>(null);
+  const [addresses, setAddresses] = useState<Record<string, string>>({});
 
   const load = useCallback(async () => {
     if (!user) return;
@@ -31,8 +33,18 @@ const TimbratureCard = () => {
       .eq('user_id', user.id)
       .eq('event_date', today)
       .order('event_at', { ascending: true });
-    setEntries((data as unknown as TimeEntry[]) || []);
+    const rows = (data as unknown as TimeEntry[]) || [];
+    setEntries(rows);
     setLoading(false);
+
+    // Resolve addresses for entries with coordinates
+    rows.forEach(async (e) => {
+      if (e.latitude == null || e.longitude == null) return;
+      const address = await reverseGeocode(e.latitude, e.longitude);
+      if (address) {
+        setAddresses((prev) => ({ ...prev, [e.id]: address }));
+      }
+    });
   }, [user]);
 
   useEffect(() => {
@@ -115,24 +127,32 @@ const TimbratureCard = () => {
         <>
           {/* Sequenza eventi */}
           {entries.length > 0 && (
-            <div className="space-y-1.5 border-l-2 border-[#E5E2DD] pl-3 ml-1">
+            <div className="space-y-2 border-l-2 border-[#E5E2DD] pl-3 ml-1">
               {entries.map((e) => {
                 const meta = EVENT_LABELS[e.event_type];
                 const t = new Date(e.event_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
                 const bad = e.site_id && e.is_at_site === false;
+                const address = addresses[e.id];
                 return (
-                  <div key={e.id} className="flex items-center gap-2 text-[13px]">
-                    <span className="text-[15px]">{meta.icon}</span>
-                    <span className="text-[#1E1B4B] font-medium">{meta.short}</span>
-                    <span className="text-[#8C7B6B]">· {t}</span>
-                    {e.latitude != null && (
-                      <MapPin className="w-3 h-3 text-[#8B6F4E]" />
-                    )}
-                    {bad && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-red-600">
-                        <AlertTriangle className="w-3 h-3" />
-                        Fuori cantiere ({Math.round(e.distance_from_site_m || 0)}m)
-                      </span>
+                  <div key={e.id}>
+                    <div className="flex items-center gap-2 text-[13px]">
+                      <span className="text-[15px]">{meta.icon}</span>
+                      <span className="text-[#1E1B4B] font-medium">{meta.short}</span>
+                      <span className="text-[#8C7B6B]">· {t}</span>
+                      {e.latitude != null && (
+                        <MapPin className="w-3 h-3 text-[#8B6F4E]" />
+                      )}
+                      {bad && (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-red-600">
+                          <AlertTriangle className="w-3 h-3" />
+                          Fuori cantiere ({Math.round(e.distance_from_site_m || 0)}m)
+                        </span>
+                      )}
+                    </div>
+                    {address && (
+                      <div className="text-[11px] text-[#8C7B6B] pl-5 leading-tight mt-0.5">
+                        {address}
+                      </div>
                     )}
                   </div>
                 );

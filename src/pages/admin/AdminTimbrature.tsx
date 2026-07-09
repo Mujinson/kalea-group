@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Download, MapPin, AlertTriangle, Loader2 } from 'lucide-react';
 import { EVENT_LABELS, summarizeDay, formatHM, type TimeEntry } from '@/lib/timbrature';
+import { reverseGeocode } from '@/lib/geo';
 
 interface Worker {
   id: string;
@@ -34,6 +35,7 @@ const AdminTimbrature = () => {
   });
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addresses, setAddresses] = useState<Record<string, string>>({});
 
   useEffect(() => {
     (async () => {
@@ -67,8 +69,17 @@ const AdminTimbrature = () => {
       }
 
       const { data } = await q;
-      setEntries((data as unknown as TimeEntry[]) || []);
+      const rows = (data as unknown as TimeEntry[]) || [];
+      setEntries(rows);
       setLoading(false);
+
+      rows.forEach(async (e) => {
+        if (e.latitude == null || e.longitude == null) return;
+        const address = await reverseGeocode(e.latitude, e.longitude);
+        if (address) {
+          setAddresses((prev) => ({ ...prev, [e.id]: address }));
+        }
+      });
     })();
   }, [workerId, month, workers]);
 
@@ -182,19 +193,27 @@ const AdminTimbrature = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-2">
-                  <div className="flex flex-wrap gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     {g.entries.map((e) => {
                       const meta = EVENT_LABELS[e.event_type];
                       const t = new Date(e.event_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
                       const bad = e.site_id && e.is_at_site === false;
                       const gmap = e.latitude != null ? `https://www.google.com/maps/search/?api=1&query=${e.latitude},${e.longitude}` : null;
+                      const address = addresses[e.id];
                       return (
-                        <div key={e.id} className={`text-xs px-2 py-1 rounded border flex items-center gap-1 ${bad ? 'border-red-300 bg-red-50 text-red-700' : 'border-[#E5E2DD] bg-[#FAF7F2]'}`}>
-                          <span>{meta.icon}</span>
-                          <span>{meta.short}</span>
-                          <span className="text-muted-foreground">{t}</span>
-                          {gmap && (
-                            <a href={gmap} target="_blank" rel="noreferrer" className="text-[#8B6F4E]"><MapPin className="w-3 h-3" /></a>
+                        <div key={e.id} className={`text-xs p-2 rounded border ${bad ? 'border-red-300 bg-red-50 text-red-700' : 'border-[#E5E2DD] bg-[#FAF7F2]'}`}>
+                          <div className="flex items-center gap-1">
+                            <span>{meta.icon}</span>
+                            <span className="font-medium">{meta.short}</span>
+                            <span className="text-muted-foreground">{t}</span>
+                            {gmap && (
+                              <a href={gmap} target="_blank" rel="noreferrer" className="text-[#8B6F4E] ml-auto"><MapPin className="w-3 h-3" /></a>
+                            )}
+                          </div>
+                          {address && (
+                            <div className="text-[11px] text-[#8C7B6B] mt-1 leading-tight line-clamp-2">
+                              {address}
+                            </div>
                           )}
                         </div>
                       );
