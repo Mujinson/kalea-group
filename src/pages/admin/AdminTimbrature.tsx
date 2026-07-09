@@ -69,8 +69,17 @@ const AdminTimbrature = () => {
       }
 
       const { data } = await q;
-      setEntries((data as unknown as TimeEntry[]) || []);
+      const rows = (data as unknown as TimeEntry[]) || [];
+      setEntries(rows);
       setLoading(false);
+
+      rows.forEach(async (e) => {
+        if (e.latitude == null || e.longitude == null) return;
+        const address = await reverseGeocode(e.latitude, e.longitude);
+        if (address) {
+          setAddresses((prev) => ({ ...prev, [e.id]: address }));
+        }
+      });
     })();
   }, [workerId, month, workers]);
 
