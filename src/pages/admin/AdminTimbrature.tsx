@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Download, MapPin, AlertTriangle, Loader2 } from 'lucide-react';
 import { EVENT_LABELS, summarizeDay, formatHM, type TimeEntry } from '@/lib/timbrature';
+import { reverseGeocode } from '@/lib/geo';
 
 interface Worker {
   id: string;
