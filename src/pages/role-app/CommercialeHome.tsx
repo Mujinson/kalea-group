@@ -80,6 +80,10 @@ const CommercialeHome = () => {
         <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">Ciao{firstName ? ` ${firstName}` : ''} 👋</h1>
       </div>
 
+      {isIbrido && <TimbratureCard />}
+
+
+
       {/* KPI cards */}
       <div className="grid grid-cols-2 gap-3">
         <KPI icon={<FileText className="w-5 h-5" />} label="Inviati" value={stats.inviati} />
