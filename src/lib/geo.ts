@@ -27,3 +27,24 @@ export function getCurrentPosition(): Promise<GeolocationPosition> {
     });
   });
 }
+
+const addressCache = new Map<string, string>();
+
+export async function reverseGeocode(lat: number, lon: number): Promise<string | null> {
+  const key = `${lat.toFixed(5)},${lon.toFixed(5)}`;
+  if (addressCache.has(key)) return addressCache.get(key)!;
+
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=18&addressdetails=0`,
+      { headers: { 'User-Agent': 'KaleaApp/1.0 (timbrature@kalea.space)' } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const address = data?.display_name || null;
+    if (address) addressCache.set(key, address);
+    return address;
+  } catch {
+    return null;
+  }
+}
