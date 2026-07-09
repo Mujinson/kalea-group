@@ -13,6 +13,7 @@ import {
   type TimbratureEventType,
   type TimeEntry,
 } from '@/lib/timbrature';
+import { reverseGeocode } from '@/lib/geo';
 
 const TimbratureCard = () => {
   const { user } = useAdminAuth();
