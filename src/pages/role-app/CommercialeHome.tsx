@@ -12,6 +12,8 @@ const eur = (n: number) =>
 
 const CommercialeHome = () => {
   const { user } = useAdminAuth();
+  const location = useLocation();
+  const isIbrido = location.pathname.startsWith('/app/ibrido');
   const navigate = useNavigate();
   const [stats, setStats] = useState({ inviati: 0, accettati: 0, valore: 0, target: 0 });
   const [loading, setLoading] = useState(true);
