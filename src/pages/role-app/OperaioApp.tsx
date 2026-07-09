@@ -10,6 +10,7 @@ import RoleProfile from './RoleProfile';
 import CreaPreventivo from '@/components/role-app/MobileQuoteWrapper';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import TimbratureCard from '@/components/role-app/TimbratureCard';
 import { Phone, MapPin, Camera, MessageSquare, Plus } from 'lucide-react';
 
 const nav = [
@@ -85,6 +86,8 @@ const OperaioHome = () => {
         </h1>
         <p className="text-[14px] text-[#6B6258] mt-1">I miei cantieri di oggi</p>
       </div>
+
+      <TimbratureCard />
 
       <button
         onClick={() => navigate('crea-preventivo')}
@@ -184,7 +187,7 @@ const OperaioHome = () => {
 
 const OperaioApp = () => (
   <Routes>
-    <Route element={<RoleAppLayout allowedRoles={['operaio']} navItems={nav} title="Operaio" />}>
+    <Route element={<RoleAppLayout allowedRoles={['operaio']} navItems={nav} title="Posatore" />}>
       <Route index element={<OperaioHome />} />
       <Route path="calendario" element={<OperaioCalendario />} />
       <Route path="cantieri" element={<OperaioSites />} />

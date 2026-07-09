@@ -3666,6 +3666,75 @@ export type Database = {
           },
         ]
       }
+      worker_time_entries: {
+        Row: {
+          accuracy_m: number | null
+          created_at: string
+          distance_from_site_m: number | null
+          event_at: string
+          event_date: string
+          event_type: string
+          id: string
+          is_at_site: boolean | null
+          latitude: number | null
+          longitude: number | null
+          notes: string | null
+          site_id: string | null
+          updated_at: string
+          user_id: string
+          worker_id: string | null
+        }
+        Insert: {
+          accuracy_m?: number | null
+          created_at?: string
+          distance_from_site_m?: number | null
+          event_at?: string
+          event_date?: string
+          event_type: string
+          id?: string
+          is_at_site?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          notes?: string | null
+          site_id?: string | null
+          updated_at?: string
+          user_id: string
+          worker_id?: string | null
+        }
+        Update: {
+          accuracy_m?: number | null
+          created_at?: string
+          distance_from_site_m?: number | null
+          event_at?: string
+          event_date?: string
+          event_type?: string
+          id?: string
+          is_at_site?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          notes?: string | null
+          site_id?: string | null
+          updated_at?: string
+          user_id?: string
+          worker_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "worker_time_entries_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "worker_time_entries_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workers: {
         Row: {
           created_at: string

@@ -4,12 +4,16 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Plus, TrendingUp, FileText, CheckCircle2, Target } from 'lucide-react';
 import QuickNewLeadSheet from '@/components/role-app/QuickNewLeadSheet';
+import TimbratureCard from '@/components/role-app/TimbratureCard';
+import { useLocation } from 'react-router-dom';
 
 const eur = (n: number) =>
   new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
 
 const CommercialeHome = () => {
   const { user } = useAdminAuth();
+  const location = useLocation();
+  const isIbrido = location.pathname.startsWith('/app/ibrido');
   const navigate = useNavigate();
   const [stats, setStats] = useState({ inviati: 0, accettati: 0, valore: 0, target: 0 });
   const [loading, setLoading] = useState(true);
@@ -75,6 +79,10 @@ const CommercialeHome = () => {
         <p className="text-[13px] text-[#8C7B6B] uppercase tracking-wider">Questo mese</p>
         <h1 className="text-[26px] font-semibold text-[#1E1B4B] mt-1">Ciao{firstName ? ` ${firstName}` : ''} 👋</h1>
       </div>
+
+      {isIbrido && <TimbratureCard />}
+
+
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 gap-3">
