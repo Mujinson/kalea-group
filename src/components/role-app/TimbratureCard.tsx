@@ -22,6 +22,7 @@ const TimbratureCard = () => {
   const [busy, setBusy] = useState<TimbratureEventType | null>(null);
   const [workerId, setWorkerId] = useState<string | null>(null);
   const [assignedSite, setAssignedSite] = useState<{ id: string; latitude: number | null; longitude: number | null; title: string } | null>(null);
+  const [addresses, setAddresses] = useState<Record<string, string>>({});
 
   const load = useCallback(async () => {
     if (!user) return;
@@ -32,8 +33,18 @@ const TimbratureCard = () => {
       .eq('user_id', user.id)
       .eq('event_date', today)
       .order('event_at', { ascending: true });
-    setEntries((data as unknown as TimeEntry[]) || []);
+    const rows = (data as unknown as TimeEntry[]) || [];
+    setEntries(rows);
     setLoading(false);
+
+    // Resolve addresses for entries with coordinates
+    rows.forEach(async (e) => {
+      if (e.latitude == null || e.longitude == null) return;
+      const address = await reverseGeocode(e.latitude, e.longitude);
+      if (address) {
+        setAddresses((prev) => ({ ...prev, [e.id]: address }));
+      }
+    });
   }, [user]);
 
   useEffect(() => {
