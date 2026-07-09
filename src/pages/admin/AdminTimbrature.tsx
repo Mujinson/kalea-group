@@ -35,6 +35,7 @@ const AdminTimbrature = () => {
   });
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [addresses, setAddresses] = useState<Record<string, string>>({});
 
   useEffect(() => {
     (async () => {
