@@ -355,7 +355,7 @@ const AdminSidebar = () => {
               className="text-[10px] mt-1 uppercase"
               style={{ color: 'rgba(226,222,255,0.55)', letterSpacing: '0.12em' }}
             >
-              {role === 'admin' ? 'Admin' : role === 'commerciale' ? 'Commerciale' : 'Operaio'}
+              {role === 'admin' ? 'Admin' : role === 'commerciale' ? 'Commerciale' : 'Posatore'}
             </div>
           )}
         </div>

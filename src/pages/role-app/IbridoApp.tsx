@@ -20,7 +20,7 @@ const nav = [
 
 const IbridoApp = () => (
   <Routes>
-    <Route element={<RoleAppLayout allowedRoles={['ibrido']} navItems={nav} title="Operaio · Commerciale" />}>
+    <Route element={<RoleAppLayout allowedRoles={['ibrido']} navItems={nav} title="Posatore · Commerciale" />}>
       <Route index element={<CommercialeHome />} />
       <Route path="cantieri" element={<OperaioSites />} />
       <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />

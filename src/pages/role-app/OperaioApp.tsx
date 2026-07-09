@@ -187,7 +187,7 @@ const OperaioHome = () => {
 
 const OperaioApp = () => (
   <Routes>
-    <Route element={<RoleAppLayout allowedRoles={['operaio']} navItems={nav} title="Operaio" />}>
+    <Route element={<RoleAppLayout allowedRoles={['operaio']} navItems={nav} title="Posatore" />}>
       <Route index element={<OperaioHome />} />
       <Route path="calendario" element={<OperaioCalendario />} />
       <Route path="cantieri" element={<OperaioSites />} />
