@@ -127,24 +127,32 @@ const TimbratureCard = () => {
         <>
           {/* Sequenza eventi */}
           {entries.length > 0 && (
-            <div className="space-y-1.5 border-l-2 border-[#E5E2DD] pl-3 ml-1">
+            <div className="space-y-2 border-l-2 border-[#E5E2DD] pl-3 ml-1">
               {entries.map((e) => {
                 const meta = EVENT_LABELS[e.event_type];
                 const t = new Date(e.event_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
                 const bad = e.site_id && e.is_at_site === false;
+                const address = addresses[e.id];
                 return (
-                  <div key={e.id} className="flex items-center gap-2 text-[13px]">
-                    <span className="text-[15px]">{meta.icon}</span>
-                    <span className="text-[#1E1B4B] font-medium">{meta.short}</span>
-                    <span className="text-[#8C7B6B]">· {t}</span>
-                    {e.latitude != null && (
-                      <MapPin className="w-3 h-3 text-[#8B6F4E]" />
-                    )}
-                    {bad && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-red-600">
-                        <AlertTriangle className="w-3 h-3" />
-                        Fuori cantiere ({Math.round(e.distance_from_site_m || 0)}m)
-                      </span>
+                  <div key={e.id}>
+                    <div className="flex items-center gap-2 text-[13px]">
+                      <span className="text-[15px]">{meta.icon}</span>
+                      <span className="text-[#1E1B4B] font-medium">{meta.short}</span>
+                      <span className="text-[#8C7B6B]">· {t}</span>
+                      {e.latitude != null && (
+                        <MapPin className="w-3 h-3 text-[#8B6F4E]" />
+                      )}
+                      {bad && (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-red-600">
+                          <AlertTriangle className="w-3 h-3" />
+                          Fuori cantiere ({Math.round(e.distance_from_site_m || 0)}m)
+                        </span>
+                      )}
+                    </div>
+                    {address && (
+                      <div className="text-[11px] text-[#8C7B6B] pl-5 leading-tight mt-0.5">
+                        {address}
+                      </div>
                     )}
                   </div>
                 );
