@@ -10,6 +10,7 @@ import RoleProfile from './RoleProfile';
 import CreaPreventivo from '@/components/role-app/MobileQuoteWrapper';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import TimbratureCard from '@/components/role-app/TimbratureCard';
 import { Phone, MapPin, Camera, MessageSquare, Plus } from 'lucide-react';
 
 const nav = [
