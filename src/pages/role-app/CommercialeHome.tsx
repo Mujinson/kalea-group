@@ -4,6 +4,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Plus, TrendingUp, FileText, CheckCircle2, Target } from 'lucide-react';
 import QuickNewLeadSheet from '@/components/role-app/QuickNewLeadSheet';
+import TimbratureCard from '@/components/role-app/TimbratureCard';
+import { useAdminAuth as _u } from '@/hooks/useAdminAuth';
+import { useLocation } from 'react-router-dom';
 
 const eur = (n: number) =>
   new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
