@@ -1260,6 +1260,11 @@ export default function CreaPreventivo() {
         if (typeof d.incTrasporto === "boolean") setIncTrasporto(d.incTrasporto);
         if (typeof d.kmDist === "number") setKmDist(d.kmDist);
         if (Array.isArray(d.righeMat)) setRigheMat(d.righeMat);
+        if (d.catalog) {
+          if (Array.isArray(d.catalog.articoli)) setArticoli(d.catalog.articoli);
+          if (Array.isArray(d.catalog.accessori)) setAccessori(d.catalog.accessori);
+          if (Array.isArray(d.catalog.servizi)) setServizi(d.catalog.servizi);
+        }
         if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
         if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
         if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
