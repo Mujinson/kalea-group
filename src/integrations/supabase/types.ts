@@ -1548,6 +1548,91 @@ export type Database = {
           },
         ]
       }
+      lead_activities: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          lead_id: string
+          metadata: Json | null
+          occurred_at: string
+          title: string | null
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          lead_id: string
+          metadata?: Json | null
+          occurred_at?: string
+          title?: string | null
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          lead_id?: string
+          metadata?: Json | null
+          occurred_at?: string
+          title?: string | null
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lead_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          lead_id: string
+          mime_type: string | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          lead_id: string
+          mime_type?: string | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          lead_id?: string
+          mime_type?: string | null
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_attachments_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_automations: {
         Row: {
           automation_type: string
@@ -1592,104 +1677,186 @@ export type Database = {
       leads: {
         Row: {
           address: string | null
+          archived_at: string | null
           assigned_salesperson_id: string | null
           assigned_user_id: string | null
           budget_range: string | null
           city: string | null
+          code: string | null
           company_name: string | null
           contact_person_email: string | null
           contact_person_name: string | null
           contact_person_phone: string | null
           contact_person_role: string | null
+          contact_type: string | null
+          country: string | null
           created_at: string
           created_by_user_id: string | null
-          email: string
+          deleted_at: string | null
+          email: string | null
+          first_name: string | null
+          has_thermal_insulation: boolean | null
           id: string
           ip_address: string | null
+          language: string | null
           last_interaction_at: string | null
+          last_name: string | null
+          latitude: number | null
           lead_type: string | null
+          linkedin_url: string | null
+          longitude: number | null
+          message: string | null
           name: string
           notes: string | null
-          phone: string
+          phone: string | null
           pipeline_stage: string
+          postal_code: string | null
           preferred_contact_method: string | null
+          profession: string | null
+          project_name: string | null
           project_sqm: string | null
           project_type: string | null
           province: string | null
           qualification_score: number | null
+          referrer_id: string | null
           region: string | null
+          site_address: string | null
+          site_city: string | null
+          site_country: string | null
+          site_postal_code: string | null
+          site_province: string | null
           source: string | null
           status: string
           updated_at: string
+          vat_number: string | null
+          visited_showroom: boolean | null
+          website: string | null
         }
         Insert: {
           address?: string | null
+          archived_at?: string | null
           assigned_salesperson_id?: string | null
           assigned_user_id?: string | null
           budget_range?: string | null
           city?: string | null
+          code?: string | null
           company_name?: string | null
           contact_person_email?: string | null
           contact_person_name?: string | null
           contact_person_phone?: string | null
           contact_person_role?: string | null
+          contact_type?: string | null
+          country?: string | null
           created_at?: string
           created_by_user_id?: string | null
-          email: string
+          deleted_at?: string | null
+          email?: string | null
+          first_name?: string | null
+          has_thermal_insulation?: boolean | null
           id?: string
           ip_address?: string | null
+          language?: string | null
           last_interaction_at?: string | null
+          last_name?: string | null
+          latitude?: number | null
           lead_type?: string | null
+          linkedin_url?: string | null
+          longitude?: number | null
+          message?: string | null
           name: string
           notes?: string | null
-          phone: string
+          phone?: string | null
           pipeline_stage?: string
+          postal_code?: string | null
           preferred_contact_method?: string | null
+          profession?: string | null
+          project_name?: string | null
           project_sqm?: string | null
           project_type?: string | null
           province?: string | null
           qualification_score?: number | null
+          referrer_id?: string | null
           region?: string | null
+          site_address?: string | null
+          site_city?: string | null
+          site_country?: string | null
+          site_postal_code?: string | null
+          site_province?: string | null
           source?: string | null
           status?: string
           updated_at?: string
+          vat_number?: string | null
+          visited_showroom?: boolean | null
+          website?: string | null
         }
         Update: {
           address?: string | null
+          archived_at?: string | null
           assigned_salesperson_id?: string | null
           assigned_user_id?: string | null
           budget_range?: string | null
           city?: string | null
+          code?: string | null
           company_name?: string | null
           contact_person_email?: string | null
           contact_person_name?: string | null
           contact_person_phone?: string | null
           contact_person_role?: string | null
+          contact_type?: string | null
+          country?: string | null
           created_at?: string
           created_by_user_id?: string | null
-          email?: string
+          deleted_at?: string | null
+          email?: string | null
+          first_name?: string | null
+          has_thermal_insulation?: boolean | null
           id?: string
           ip_address?: string | null
+          language?: string | null
           last_interaction_at?: string | null
+          last_name?: string | null
+          latitude?: number | null
           lead_type?: string | null
+          linkedin_url?: string | null
+          longitude?: number | null
+          message?: string | null
           name?: string
           notes?: string | null
-          phone?: string
+          phone?: string | null
           pipeline_stage?: string
+          postal_code?: string | null
           preferred_contact_method?: string | null
+          profession?: string | null
+          project_name?: string | null
           project_sqm?: string | null
           project_type?: string | null
           province?: string | null
           qualification_score?: number | null
+          referrer_id?: string | null
           region?: string | null
+          site_address?: string | null
+          site_city?: string | null
+          site_country?: string | null
+          site_postal_code?: string | null
+          site_province?: string | null
           source?: string | null
           status?: string
           updated_at?: string
+          vat_number?: string | null
+          visited_showroom?: boolean | null
+          website?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "leads_assigned_salesperson_id_fkey"
             columns: ["assigned_salesperson_id"]
+            isOneToOne: false
+            referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_referrer_id_fkey"
+            columns: ["referrer_id"]
             isOneToOne: false
             referencedRelation: "salespeople"
             referencedColumns: ["id"]
