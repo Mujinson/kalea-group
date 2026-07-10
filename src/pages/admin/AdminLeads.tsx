@@ -1,776 +1,406 @@
-import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { format } from "date-fns";
-import { it } from "date-fns/locale";
-import { Search, Download, Plus, MoreVertical, Pencil, Eye, FileText } from "lucide-react";
-import { toast } from "sonner";
-import { DataTable } from "@/components/admin/DataTable";
-import { getSalespersonBadgeStyle } from "@/lib/salespersonColors";
-import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from "@/data/italianTerritories";
-import { fetchAllRows } from "@/lib/fetchAllRows";
-import LeadPreventivi from "@/components/admin/LeadPreventivi";
-import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from "@/components/admin/CrmShell";
+import { useMemo, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  Search, Plus, Filter as FilterIcon, Columns3, Download, MoreVertical,
+  Pencil, Eye, Archive, ArchiveRestore, Trash2, FileText, MapPin,
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { it } from 'date-fns/locale';
+import { toast } from 'sonner';
+import { fetchAllRows } from '@/lib/fetchAllRows';
+import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmTableCard } from '@/components/admin/CrmShell';
+import LeadFormDrawer from '@/components/admin/leads/LeadFormDrawer';
+import LeadDetailSheet from '@/components/admin/leads/LeadDetailSheet';
+import { LeadStatusBadge } from '@/components/admin/leads/LeadStatusBadge';
+import { LEAD_STATUSES, LEAD_SOURCES, sourceLabel } from '@/components/admin/leads/leadConstants';
+import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
 
-const LEAD_STATUSES = [
-  { value: 'nuovo', label: 'Nuovo', color: 'bg-blue-100 text-blue-700 border-blue-300' },
-  { value: 'contattato', label: 'Contattato', color: 'bg-orange-100 text-orange-700 border-orange-300' },
-  { value: 'qualificato', label: 'Qualificato', color: 'bg-green-100 text-green-700 border-green-300' },
-  { value: 'proposta', label: 'Proposta', color: 'bg-amber-100 text-amber-700 border-amber-300' },
-  { value: 'vinto', label: 'Vinto', color: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
-  { value: 'perso', label: 'Perso', color: 'bg-red-100 text-red-700 border-red-300' },
+const ALL_COLUMNS = [
+  { key: 'code', label: 'Codice', default: true },
+  { key: 'name', label: 'Nome contatto', default: true, sticky: true },
+  { key: 'company_name', label: 'Cliente', default: true },
+  { key: 'status', label: 'Stato', default: true },
+  { key: 'responsibile', label: 'Responsabile', default: true },
+  { key: 'created_at', label: 'Creato il', default: true },
+  { key: 'email', label: 'Email', default: false },
+  { key: 'phone', label: 'Telefono', default: false },
+  { key: 'contact_type', label: 'Tipologia', default: false },
+  { key: 'city', label: 'Città', default: false },
+  { key: 'source', label: 'Provenienza', default: false },
+  { key: 'project_name', label: 'Progetto', default: false },
+  { key: 'last_interaction_at', label: 'Ultima interazione', default: false },
 ];
 
-const LEAD_TYPES = [
-  { value: 'rivenditore', label: 'Rivenditore' },
-  { value: 'architetto', label: 'Architetto' },
-  { value: 'geometra', label: 'Geometra' },
-  { value: 'impresa_edile', label: 'Impresa Edile' },
-  { value: 'general_contractor', label: 'General Contractor' },
-  { value: 'interior_designer', label: 'Interior Designer' },
-  { value: 'showroom', label: 'Showroom' },
-  { value: 'posatore', label: 'Posatore' },
-  { value: 'costruttore', label: 'Costruttore' },
-  { value: 'privato', label: 'Privato' },
-  { value: 'studio_design', label: 'Studio Design' },
-  { value: 'azienda_pubblica', label: 'Azienda Pubblica' },
-  { value: 'altro', label: 'Altro' },
-];
+const COLS_STORAGE_KEY = 'admin_leads_visible_cols_v1';
 
-const CONTACT_ROLES = [
-  { value: 'titolare', label: 'Titolare' },
-  { value: 'ceo', label: 'CEO' },
-  { value: 'direttore_commerciale', label: 'Direttore Commerciale' },
-  { value: 'responsabile_acquisti', label: 'Resp. Acquisti' },
-  { value: 'architetto', label: 'Architetto' },
-  { value: 'geometra', label: 'Geometra' },
-  { value: 'ingegnere', label: 'Ingegnere' },
-  { value: 'project_manager', label: 'Project Manager' },
-  { value: 'dipendente', label: 'Dipendente' },
-  { value: 'altro', label: 'Altro' },
-];
-
-interface Lead {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  company_name: string | null;
-  source: string | null;
-  status: string;
-  assigned_salesperson_id: string | null;
-  assigned_user_id: string | null;
-  notes: string | null;
-  region: string | null;
-  province: string | null;
-  city: string | null;
-  lead_type: string | null;
-  contact_person_name: string | null;
-  contact_person_role: string | null;
-  contact_person_email: string | null;
-  contact_person_phone: string | null;
-  address: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Salesperson {
-  id: string;
-  first_name: string;
-  last_name: string;
-}
-
-const LEAD_SOURCES = [
-  { value: 'area_tecnica', label: 'Area Tecnica' },
-  { value: 'sito_web', label: 'Sito Web' },
-  { value: 'chatbot_website', label: '🤖 Chatbot Sito' },
-  { value: 'chatbot_instagram', label: '📸 Chatbot Instagram' },
-  { value: 'chatbot_whatsapp', label: '💬 Chatbot WhatsApp' },
-  { value: 'chatbot_facebook', label: '📘 Chatbot Facebook' },
-  { value: 'landing_page', label: '📄 Landing Page' },
-  { value: 'referral', label: 'Referral' },
-  { value: 'fiera', label: 'Fiera' },
-  { value: 'social', label: 'Social Media' },
-  { value: 'telefono', label: 'Telefono' },
-  { value: 'email', label: 'Email' },
-  { value: 'ads_campaign', label: '📢 Campagna Ads' },
-  { value: 'altro', label: 'Altro' },
-];
-
-const emptyLeadForm = {
-  name: '',
-  email: '',
-  phone: '',
-  company_name: '',
-  source: 'area_tecnica',
-  status: 'nuovo',
-  assigned_salesperson_id: '',
-  assigned_user_id: '',
-  notes: '',
-  region: '',
-  province: '',
-  city: '',
-  lead_type: '',
-  contact_person_name: '',
-  contact_person_role: '',
-  contact_person_email: '',
-  contact_person_phone: '',
-  address: '',
-};
-
-const AdminLeads = () => {
+export default function AdminLeads() {
   const { role, salespersonId } = useAdminAuth();
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [detailLead, setDetailLead] = useState<Lead | null>(null);
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editForm, setEditForm] = useState<any>({});
-  const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [createForm, setCreateForm] = useState<any>({ ...emptyLeadForm });
-  const [quoteSearchOpen, setQuoteSearchOpen] = useState(false);
-  const [quoteSearchTerm, setQuoteSearchTerm] = useState("");
-
   const isAdmin = role === 'admin';
 
-  const { data: salespeople } = useQuery({
-    queryKey: ["salespeople-list"],
-    queryFn: async () => {
-      const { data } = await supabase.from("salespeople").select("id, first_name, last_name").eq("is_active", true);
-      return (data || []) as Salesperson[];
-    },
+  // State
+  const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState<{
+    status: string; source: string; country: string; salespersonId: string;
+    referrerId: string; archived: 'without' | 'only' | 'all'; deleted: 'without' | 'only' | 'all';
+  }>({
+    status: '', source: '', country: '', salespersonId: '', referrerId: '',
+    archived: 'without', deleted: 'without',
   });
+  const [visibleCols, setVisibleCols] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem(COLS_STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return ALL_COLUMNS.filter((c) => c.default).map((c) => c.key);
+  });
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
 
-  const { data: assignableUsers } = useQuery({
-    queryKey: ["assignable-users"],
+  const toggleCol = (key: string) => {
+    setVisibleCols((prev) => {
+      const next = prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key];
+      try { localStorage.setItem(COLS_STORAGE_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const { data: salespeople } = useQuery({
+    queryKey: ['salespeople-list'],
     queryFn: async () => {
-      const { data: roles } = await supabase
-        .from("user_roles")
-        .select("user_id, role")
-        .in("role", ["commerciale", "ibrido", "operaio"] as any);
-      const ids = Array.from(new Set((roles || []).map((r: any) => r.user_id)));
-      if (ids.length === 0) return [] as Array<{ user_id: string; name: string; role: string }>;
-      const [{ data: sp }, { data: wk }] = await Promise.all([
-        supabase.from("salespeople").select("user_id, first_name, last_name").in("user_id", ids),
-        supabase.from("workers").select("user_id, first_name, last_name").in("user_id", ids),
-      ]);
-      const nameMap = new Map<string, string>();
-      (sp || []).forEach((s: any) => nameMap.set(s.user_id, `${s.first_name} ${s.last_name}`));
-      (wk || []).forEach((w: any) => { if (!nameMap.has(w.user_id)) nameMap.set(w.user_id, `${w.first_name} ${w.last_name}`); });
-      const roleMap = new Map<string, string>();
-      (roles || []).forEach((r: any) => roleMap.set(r.user_id, r.role));
-      return ids.map((id) => ({
-        user_id: id,
-        name: nameMap.get(id) || 'Utente',
-        role: roleMap.get(id) || '',
-      })).sort((a, b) => a.name.localeCompare(b.name));
+      const { data } = await supabase.from('salespeople').select('id, first_name, last_name').eq('is_active', true);
+      return data || [];
     },
   });
 
   const { data: leads, isLoading } = useQuery({
-    queryKey: ["leads", salespersonId, isAdmin],
+    queryKey: ['admin-leads', isAdmin, salespersonId],
     queryFn: async () => {
-      let query = supabase.from("leads").select("*").order("created_at", { ascending: false });
-      
-      // Commerciali see only leads assigned to them
-      if (!isAdmin && salespersonId) {
-        query = query.eq("assigned_salesperson_id", salespersonId);
-      }
-      
-      return fetchAllRows<Lead>(query);
+      let q = supabase.from('leads').select('*').order('created_at', { ascending: false });
+      if (!isAdmin && salespersonId) q = q.eq('assigned_salesperson_id', salespersonId);
+      return fetchAllRows<any>(q);
     },
   });
 
-  const getSalespersonName = (id: string | null) => {
-    if (!id || !salespeople) return '-';
-    const sp = salespeople.find(s => s.id === id);
-    return sp ? `${sp.first_name} ${sp.last_name}` : '-';
+  const spName = (id: string | null) => {
+    if (!id) return null;
+    const s = (salespeople || []).find((x: any) => x.id === id);
+    return s ? `${s.first_name} ${s.last_name}` : null;
   };
 
-  const getSalespersonBadge = (id: string | null) => {
-    if (!id || !salespeople) return <span className="text-muted-foreground">-</span>;
-    const sp = salespeople.find(s => s.id === id);
-    if (!sp) return <span className="text-muted-foreground">-</span>;
-    return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style={getSalespersonBadgeStyle(sp.id)}>
-        {sp.first_name} {sp.last_name}
-      </span>
-    );
-  };
-
-  const getStatusBadge = (status: string) => {
-    const s = LEAD_STATUSES.find(ls => ls.value === status) || LEAD_STATUSES[0];
-    return <Badge variant="outline" className={`${s.color} text-xs font-medium`}>● {s.label}</Badge>;
-  };
-
-  const filteredLeads = leads?.filter(lead => {
-    const matchSearch = searchTerm === '' ||
-      lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (lead.company_name && lead.company_name.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchStatus = statusFilter === 'all' || lead.status === statusFilter;
-    return matchSearch && matchStatus;
-  });
-
-  const openEdit = (lead: Lead) => {
-    setEditForm({
-      id: lead.id,
-      name: lead.name,
-      email: lead.email,
-      phone: lead.phone,
-      company_name: lead.company_name || '',
-      source: lead.source || 'area_tecnica',
-      status: lead.status,
-      assigned_salesperson_id: lead.assigned_salesperson_id || '',
-      assigned_user_id: (lead as any).assigned_user_id || '',
-      notes: lead.notes || '',
-      region: lead.region || '',
-      province: lead.province || '',
-      city: lead.city || '',
-      lead_type: lead.lead_type || '',
-      contact_person_name: lead.contact_person_name || '',
-      contact_person_role: lead.contact_person_role || '',
-      contact_person_email: lead.contact_person_email || '',
-      contact_person_phone: lead.contact_person_phone || '',
-      address: lead.address || '',
+  const filtered = useMemo(() => {
+    if (!leads) return [];
+    const s = search.trim().toLowerCase();
+    return leads.filter((l: any) => {
+      if (filters.archived === 'without' && l.archived_at) return false;
+      if (filters.archived === 'only' && !l.archived_at) return false;
+      if (filters.deleted === 'without' && l.deleted_at) return false;
+      if (filters.deleted === 'only' && !l.deleted_at) return false;
+      if (filters.status && l.status !== filters.status) return false;
+      if (filters.source && l.source !== filters.source) return false;
+      if (filters.country && l.country !== filters.country) return false;
+      if (filters.salespersonId && l.assigned_salesperson_id !== filters.salespersonId) return false;
+      if (filters.referrerId && l.referrer_id !== filters.referrerId) return false;
+      if (s) {
+        const hay = [l.code, l.name, l.company_name, l.email, l.phone, l.city, l.first_name, l.last_name, l.project_name]
+          .filter(Boolean).join(' ').toLowerCase();
+        if (!hay.includes(s)) return false;
+      }
+      return true;
     });
-    setEditDialogOpen(true);
+  }, [leads, filters, search]);
+
+  const activeFilterCount = Object.entries(filters).filter(([k, v]) => {
+    if (k === 'archived' || k === 'deleted') return v !== 'without';
+    return !!v;
+  }).length;
+
+  const resetFilters = () => setFilters({ status: '', source: '', country: '', salespersonId: '', referrerId: '', archived: 'without', deleted: 'without' });
+
+  const archive = async (id: string, restore = false) => {
+    const { error } = await supabase.from('leads').update({ archived_at: restore ? null : new Date().toISOString() } as any).eq('id', id);
+    if (error) return toast.error(error.message);
+    toast.success(restore ? 'Ripristinato' : 'Archiviato');
+    qc.invalidateQueries({ queryKey: ['admin-leads'] });
+  };
+  const softDelete = async (id: string, restore = false) => {
+    const { error } = await supabase.from('leads').update({ deleted_at: restore ? null : new Date().toISOString() } as any).eq('id', id);
+    if (error) return toast.error(error.message);
+    toast.success(restore ? 'Ripristinato' : 'Eliminato');
+    qc.invalidateQueries({ queryKey: ['admin-leads'] });
   };
 
-  const saveEdit = async () => {
-    const { error } = await supabase.from("leads").update({
-      name: editForm.name,
-      email: editForm.email,
-      phone: editForm.phone,
-      company_name: editForm.company_name || null,
-      source: editForm.source || null,
-      status: editForm.status,
-      assigned_salesperson_id: editForm.assigned_salesperson_id || null,
-      assigned_user_id: editForm.assigned_user_id || null,
-      notes: editForm.notes || null,
-      region: editForm.region || null,
-      province: editForm.province || null,
-      city: editForm.city || null,
-      lead_type: editForm.lead_type || null,
-      contact_person_name: editForm.contact_person_name || null,
-      contact_person_role: editForm.contact_person_role || null,
-      contact_person_email: editForm.contact_person_email || null,
-      contact_person_phone: editForm.contact_person_phone || null,
-      address: editForm.address || null,
-    } as any).eq("id", editForm.id);
-
-    if (error) { toast.error("Errore salvataggio"); return; }
-    toast.success("Lead aggiornato");
-    setEditDialogOpen(false);
-    queryClient.invalidateQueries({ queryKey: ["leads"] });
+  const goCreateQuote = (l: any) => {
+    const p = new URLSearchParams();
+    p.set('leadName', l.company_name || l.name);
+    if (l.email) p.set('leadEmail', l.email);
+    if (l.phone) p.set('leadPhone', l.phone);
+    if (l.city) p.set('leadCity', l.city);
+    if (l.address) p.set('leadAddress', l.address);
+    p.set('leadId', l.id);
+    navigate(`/admin/preventivi/nuovo?${p.toString()}`);
   };
 
-  const createLead = async () => {
-    if (!createForm.name || !createForm.email || !createForm.phone) {
-      toast.error("Nome, email e telefono sono obbligatori");
-      return;
-    }
-    const { error } = await supabase.from("leads").insert({
-      name: createForm.name,
-      email: createForm.email,
-      phone: createForm.phone,
-      company_name: createForm.company_name || null,
-      source: createForm.source || null,
-      status: createForm.status || 'nuovo',
-      assigned_salesperson_id: createForm.assigned_salesperson_id || null,
-      assigned_user_id: createForm.assigned_user_id || null,
-      notes: createForm.notes || null,
-      region: createForm.region || null,
-      province: createForm.province || null,
-      city: createForm.city || null,
-      lead_type: createForm.lead_type || null,
-      contact_person_name: createForm.contact_person_name || null,
-      contact_person_role: createForm.contact_person_role || null,
-      contact_person_email: createForm.contact_person_email || null,
-      contact_person_phone: createForm.contact_person_phone || null,
-      address: createForm.address || null,
-    } as any);
-
-    if (error) { toast.error("Errore creazione lead"); return; }
-    toast.success("Lead creato con successo");
-    setCreateDialogOpen(false);
-    setCreateForm({ ...emptyLeadForm });
-    queryClient.invalidateQueries({ queryKey: ["leads"] });
-  };
-
-  const quickStatusChange = async (leadId: string, newStatus: string) => {
-    const { error } = await supabase.from("leads").update({ status: newStatus }).eq("id", leadId);
-    if (error) { toast.error("Errore"); return; }
-    queryClient.invalidateQueries({ queryKey: ["leads"] });
-  };
-
-  const exportToCsv = () => {
-    if (!leads || leads.length === 0) { toast.error("Nessun lead"); return; }
-    const headers = ["Nome", "Email", "Telefono", "Azienda", "Stato", "Responsabile", "Data"];
-    const csvContent = [
-      headers.join(","),
-      ...leads.map(l => [
-        `"${l.name}"`, `"${l.email}"`, `"${l.phone}"`, `"${l.company_name || ''}"`,
-        `"${l.status}"`, `"${getSalespersonName(l.assigned_salesperson_id)}"`,
-        `"${format(new Date(l.created_at), "dd/MM/yyyy HH:mm", { locale: it })}"`,
-      ].join(","))
-    ].join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
+  const exportCsv = () => {
+    if (!filtered.length) return toast.error('Nessun lead');
+    const headers = ['Codice', 'Nome', 'Cliente', 'Email', 'Telefono', 'Città', 'Stato', 'Responsabile', 'Provenienza', 'Creato il'];
+    const rows = filtered.map((l: any) => [
+      l.code, l.name, l.company_name || '', l.email || '', l.phone || '', l.city || '',
+      l.status, spName(l.assigned_salesperson_id) || '', sourceLabel(l.source),
+      format(new Date(l.created_at), 'dd/MM/yyyy HH:mm'),
+    ]);
+    const csv = [headers, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `leads_${format(new Date(), "yyyy-MM-dd")}.csv`;
+    link.download = `leads_${format(new Date(), 'yyyy-MM-dd')}.csv`;
     link.click();
-    toast.success("Export completato");
+    toast.success('Export CSV completato');
   };
 
-  const navigateToQuoteForLead = (lead: Lead) => {
-    // Navigate to quote creation with lead info as params
-    const params = new URLSearchParams();
-    params.set('leadName', lead.company_name || lead.name);
-    params.set('leadEmail', lead.email);
-    params.set('leadPhone', lead.phone);
-    if (lead.region) params.set('leadRegion', lead.region);
-    if (lead.province) params.set('leadProvince', lead.province);
-    if (lead.city) params.set('leadCity', lead.city);
-    if ((lead as any).address) params.set('leadAddress', (lead as any).address);
-    params.set('leadId', lead.id);
-    navigate(`/admin/preventivi/nuovo?${params.toString()}`);
-  };
-
-  const quoteSearchFiltered = leads?.filter(lead => {
-    if (!quoteSearchTerm) return true;
-    const q = quoteSearchTerm.toLowerCase();
-    return (
-      lead.name.toLowerCase().includes(q) ||
-      (lead.company_name && lead.company_name.toLowerCase().includes(q)) ||
-      lead.email.toLowerCase().includes(q) ||
-      lead.phone.includes(q) ||
-      ((lead as any).contact_person_name && (lead as any).contact_person_name.toLowerCase().includes(q)) ||
-      (lead.city && lead.city.toLowerCase().includes(q)) ||
-      (lead.region && lead.region.toLowerCase().includes(q))
-    );
-  });
-
-  const statCounts = {
-    total: leads?.length || 0,
-    nuovo: leads?.filter(l => l.status === 'nuovo').length || 0,
-    contattato: leads?.filter(l => l.status === 'contattato').length || 0,
-    qualificato: leads?.filter(l => l.status === 'qualificato').length || 0,
-    proposta: leads?.filter(l => l.status === 'proposta').length || 0,
-  };
+  const counts = useMemo(() => {
+    const c: Record<string, number> = { total: filtered.length };
+    LEAD_STATUSES.forEach((s) => (c[s.value] = 0));
+    filtered.forEach((l: any) => { if (c[l.status] !== undefined) c[l.status]++; });
+    return c;
+  }, [filtered]);
 
   return (
     <div className="space-y-4">
       <CrmPageHeader
-        breadcrumb={["CRM", "Lead"]}
+        breadcrumb={['CRM', 'Lead']}
         title="Lead"
-        subtitle="Gestione pipeline contatti e prospect"
+        subtitle={`${filtered.length} contatt${filtered.length === 1 ? 'o' : 'i'} · pipeline aggiornata`}
         actions={
           <>
-            <Button onClick={() => { setQuoteSearchTerm(''); setQuoteSearchOpen(true); }} size="sm" variant="secondary" className="bg-white/15 hover:bg-white/25 text-white border-0">
-              <FileText className="w-4 h-4 mr-2" />Crea Preventivo
+            <Button onClick={() => navigate('/admin/map?layer=leads')} size="sm" variant="secondary" className="bg-white/15 hover:bg-white/25 text-white border-0">
+              <MapPin className="w-4 h-4 mr-2" />Mappa
             </Button>
-            <Button onClick={() => { setCreateForm({ ...emptyLeadForm }); setCreateDialogOpen(true); }} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
-              <Plus className="w-4 h-4 mr-2" />Aggiungi Lead
-            </Button>
-            <Button onClick={exportToCsv} variant="secondary" size="sm" className="bg-white/15 hover:bg-white/25 text-white border-0">
+            <Button onClick={exportCsv} size="sm" variant="secondary" className="bg-white/15 hover:bg-white/25 text-white border-0">
               <Download className="w-4 h-4 mr-2" />Esporta
+            </Button>
+            <Button onClick={() => { setEditingId(null); setFormOpen(true); }} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+              <Plus className="w-4 h-4 mr-2" />Nuovo
             </Button>
           </>
         }
       />
 
       <CrmKpiRow cols={5}>
-        <CrmKpiTile label="Totale" value={statCounts.total} color="indigo" />
-        <CrmKpiTile label="Nuovi" value={statCounts.nuovo} color="blue" />
-        <CrmKpiTile label="Contattati" value={statCounts.contattato} color="orange" />
-        <CrmKpiTile label="Qualificati" value={statCounts.qualificato} color="green" />
-        <CrmKpiTile label="Proposta" value={statCounts.proposta} color="amber" />
+        <CrmKpiTile label="Totale" value={counts.total} color="indigo" />
+        <CrmKpiTile label="Nuovi" value={counts.nuovo} color="blue" />
+        <CrmKpiTile label="Contattati" value={counts.contattato} color="orange" />
+        <CrmKpiTile label="Qualificati" value={counts.qualificato} color="green" />
+        <CrmKpiTile label="Proposta" value={counts.proposta} color="amber" />
       </CrmKpiRow>
 
-      <CrmFilterBar>
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Cerca per nome, azienda, email…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F5F0EA]/60 focus-visible:ring-1" />
-        </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[160px] border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tutti gli stati</SelectItem>
-            {LEAD_STATUSES.map(s => (
-              <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </CrmFilterBar>
-
       <CrmTableCard>
-        <DataTable
-          data={filteredLeads || []}
-          loading={isLoading}
-          searchable={false}
-          emptyTitle={searchTerm ? "Nessun lead trovato" : "Nessun lead registrato"}
-          emptyDescription="Modifica i filtri o crea un nuovo lead per iniziare."
-          onRowClick={(lead) => setDetailLead(lead)}
-          columns={[
-            { key: 'name', header: 'Referente', sortable: true, cell: (l) => <span className="font-medium">{l.name}</span> },
-            { key: 'company_name', header: 'Azienda', sortable: true, cell: (l) => l.company_name || '—' },
-            {
-              key: 'lead_type',
-              header: 'Tipologia',
-              cell: (l) => (l as any).lead_type
-                ? <Badge variant="outline" className="text-xs">{LEAD_TYPES.find(t => t.value === (l as any).lead_type)?.label || (l as any).lead_type}</Badge>
-                : '—',
-            },
-            { key: 'status', header: 'Stato', sortable: true, cell: (l) => getStatusBadge(l.status) },
-            { key: 'assigned_salesperson_id', header: 'Commerciale', cell: (l) => getSalespersonBadge(l.assigned_salesperson_id) },
-            {
-              key: 'created_at',
-              header: 'Creato il',
-              sortable: true,
-              accessor: (l) => new Date(l.created_at).getTime(),
-              cell: (l) => <span className="text-[#8A7060] text-sm">{format(new Date(l.created_at), "dd MMM yyyy · HH:mm", { locale: it })}</span>,
-            },
-            {
-              key: 'actions',
-              header: '',
-              className: 'w-10',
-              cell: (lead) => (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild onClick={e => e.stopPropagation()}>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <MoreVertical className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); openEdit(lead); }}>
-                      <Pencil className="w-4 h-4 mr-2" />Modifica
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setDetailLead(lead); }}>
-                      <Eye className="w-4 h-4 mr-2" />Dettaglio
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ),
-            },
-          ]}
-        />
+        {/* Toolbar */}
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E5E2DD]">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8C7B6B]" />
+            <Input placeholder="Cerca codice, nome, email, città…" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 bg-[#F5F0EA]/60 border-0" />
+          </div>
+
+          {/* Filter popover */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="relative">
+                <FilterIcon className="w-4 h-4 mr-2" />Filtri
+                {activeFilterCount > 0 && (
+                  <span className="ml-2 inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-[#1E1B4B] text-white text-[10px]">{activeFilterCount}</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-[520px] p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-[14px] font-semibold text-[#1E1B4B]">Filtri</div>
+                <button onClick={resetFilters} className="text-[12px] text-[#DC2626] hover:underline">Reimposta</button>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <FilterField label="Stato">
+                  <Select value={filters.status || '__all'} onValueChange={(v) => setFilters((f) => ({ ...f, status: v === '__all' ? '' : v }))}>
+                    <SelectTrigger><SelectValue placeholder="Tutti" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__all">Tutti</SelectItem>
+                      {LEAD_STATUSES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+                <FilterField label="Provenienza">
+                  <Select value={filters.source || '__all'} onValueChange={(v) => setFilters((f) => ({ ...f, source: v === '__all' ? '' : v }))}>
+                    <SelectTrigger><SelectValue placeholder="Tutti" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__all">Tutti</SelectItem>
+                      {LEAD_SOURCES.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+                <FilterField label="Responsabile">
+                  <Select value={filters.salespersonId || '__all'} onValueChange={(v) => setFilters((f) => ({ ...f, salespersonId: v === '__all' ? '' : v }))}>
+                    <SelectTrigger><SelectValue placeholder="Tutti" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__all">Tutti</SelectItem>
+                      {(salespeople || []).map((sp: any) => <SelectItem key={sp.id} value={sp.id}>{sp.first_name} {sp.last_name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+                <FilterField label="Segnalatore">
+                  <Select value={filters.referrerId || '__all'} onValueChange={(v) => setFilters((f) => ({ ...f, referrerId: v === '__all' ? '' : v }))}>
+                    <SelectTrigger><SelectValue placeholder="Tutti" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__all">Tutti</SelectItem>
+                      {(salespeople || []).map((sp: any) => <SelectItem key={sp.id} value={sp.id}>{sp.first_name} {sp.last_name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+                <FilterField label="Lead archiviati">
+                  <Select value={filters.archived} onValueChange={(v: any) => setFilters((f) => ({ ...f, archived: v }))}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="without">Senza archiviati</SelectItem>
+                      <SelectItem value="only">Solo archiviati</SelectItem>
+                      <SelectItem value="all">Tutti</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+                <FilterField label="Record eliminati">
+                  <Select value={filters.deleted} onValueChange={(v: any) => setFilters((f) => ({ ...f, deleted: v }))}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="without">Senza eliminati</SelectItem>
+                      <SelectItem value="only">Solo eliminati</SelectItem>
+                      <SelectItem value="all">Tutti</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FilterField>
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {/* Columns popover */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm"><Columns3 className="w-4 h-4 mr-2" />Colonne</Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-64 p-3">
+              <div className="text-[13px] font-semibold text-[#1E1B4B] mb-2">Colonne visibili</div>
+              <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
+                {ALL_COLUMNS.map((c) => (
+                  <label key={c.key} className="flex items-center gap-2 py-1 px-2 rounded hover:bg-[#F5F0EA] cursor-pointer">
+                    <Checkbox checked={visibleCols.includes(c.key)} onCheckedChange={() => toggleCol(c.key)} disabled={c.sticky} />
+                    <span className="text-[13px] text-[#1E1B4B]">{c.label}</span>
+                  </label>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-[13px]">
+            <thead>
+              <tr className="border-b border-[#E5E2DD] bg-[#FAF7F2]">
+                {ALL_COLUMNS.filter((c) => visibleCols.includes(c.key)).map((c) => (
+                  <th key={c.key} className="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-[#8C7B6B] font-semibold">{c.label}</th>
+                ))}
+                <th className="w-10" />
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading && (
+                <tr><td colSpan={visibleCols.length + 1} className="text-center py-12 text-[#8C7B6B]">Caricamento…</td></tr>
+              )}
+              {!isLoading && filtered.length === 0 && (
+                <tr><td colSpan={visibleCols.length + 1} className="text-center py-12 text-[#8C7B6B]">Nessun lead trovato con i filtri correnti.</td></tr>
+              )}
+              {filtered.map((l: any) => {
+                const display = l.contact_type === 'privato'
+                  ? `${l.first_name || ''} ${l.last_name || ''}`.trim() || l.name
+                  : l.name;
+                return (
+                  <tr key={l.id} className="border-b border-[#F0EDE8] hover:bg-[#FAF7F2] cursor-pointer" onClick={() => setDetailId(l.id)}>
+                    {visibleCols.includes('code') && <td className="px-4 py-3"><span className="inline-flex items-center px-2 py-0.5 rounded bg-[#F5F0EA] text-[11px] font-mono text-[#1E1B4B]">{l.code || '—'}</span></td>}
+                    {visibleCols.includes('name') && <td className="px-4 py-3 font-medium text-[#1E1B4B]">{display}</td>}
+                    {visibleCols.includes('company_name') && <td className="px-4 py-3 text-[#6B6258]">{l.company_name || '—'}</td>}
+                    {visibleCols.includes('status') && <td className="px-4 py-3"><LeadStatusBadge status={l.status} /></td>}
+                    {visibleCols.includes('responsibile') && (
+                      <td className="px-4 py-3">
+                        {l.assigned_salesperson_id
+                          ? <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium" style={getSalespersonBadgeStyle(l.assigned_salesperson_id)}>{spName(l.assigned_salesperson_id)}</span>
+                          : <span className="text-[#8C7B6B]">—</span>}
+                      </td>
+                    )}
+                    {visibleCols.includes('created_at') && <td className="px-4 py-3 text-[#8C7B6B]">{format(new Date(l.created_at), 'd MMM yyyy · HH:mm', { locale: it })}</td>}
+                    {visibleCols.includes('email') && <td className="px-4 py-3 text-[#6B6258]">{l.email || '—'}</td>}
+                    {visibleCols.includes('phone') && <td className="px-4 py-3 text-[#6B6258]">{l.phone || '—'}</td>}
+                    {visibleCols.includes('contact_type') && <td className="px-4 py-3 text-[#6B6258] capitalize">{l.contact_type || '—'}</td>}
+                    {visibleCols.includes('city') && <td className="px-4 py-3 text-[#6B6258]">{l.city || '—'}</td>}
+                    {visibleCols.includes('source') && <td className="px-4 py-3 text-[#6B6258]">{sourceLabel(l.source)}</td>}
+                    {visibleCols.includes('project_name') && <td className="px-4 py-3 text-[#6B6258]">{l.project_name || '—'}</td>}
+                    {visibleCols.includes('last_interaction_at') && <td className="px-4 py-3 text-[#8C7B6B]">{l.last_interaction_at ? format(new Date(l.last_interaction_at), 'd MMM yyyy', { locale: it }) : '—'}</td>}
+                    <td className="px-2 py-3" onClick={(e) => e.stopPropagation()}>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button size="icon" variant="ghost" className="h-8 w-8"><MoreVertical className="w-4 h-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => { setEditingId(l.id); setFormOpen(true); }}><Pencil className="w-4 h-4 mr-2" />Modifica</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setDetailId(l.id)}><Eye className="w-4 h-4 mr-2" />Dettaglio</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => goCreateQuote(l)}><FileText className="w-4 h-4 mr-2" />Crea preventivo</DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          {l.archived_at
+                            ? <DropdownMenuItem onClick={() => archive(l.id, true)}><ArchiveRestore className="w-4 h-4 mr-2" />Ripristina</DropdownMenuItem>
+                            : <DropdownMenuItem onClick={() => archive(l.id)}><Archive className="w-4 h-4 mr-2" />Archivia</DropdownMenuItem>}
+                          {l.deleted_at
+                            ? <DropdownMenuItem onClick={() => softDelete(l.id, true)}><ArchiveRestore className="w-4 h-4 mr-2" />Ripristina eliminato</DropdownMenuItem>
+                            : <DropdownMenuItem className="text-red-600" onClick={() => softDelete(l.id)}><Trash2 className="w-4 h-4 mr-2" />Elimina</DropdownMenuItem>}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </CrmTableCard>
 
-
-
-      {/* Lead Form Dialog (shared for create & edit) */}
-      {[
-        { open: editDialogOpen, setOpen: setEditDialogOpen, form: editForm, setForm: setEditForm, onSave: saveEdit, title: "Modifica Lead", desc: "Aggiorna i dati e lo stato del lead", btnLabel: "Salva Modifiche" },
-        { open: createDialogOpen, setOpen: setCreateDialogOpen, form: createForm, setForm: setCreateForm, onSave: createLead, title: "Nuovo Lead", desc: "Inserisci i dati del nuovo lead", btnLabel: "Crea Lead" },
-      ].map((dlg, idx) => (
-        <Dialog key={idx} open={dlg.open} onOpenChange={dlg.setOpen}>
-           <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{dlg.title}</DialogTitle>
-              <DialogDescription>{dlg.desc}</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              {/* Sezione Azienda */}
-              <p className="text-[11px] font-semibold text-foreground/50 uppercase tracking-widest border-b border-border/60 pb-2">Dati Azienda</p>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Azienda</Label>
-                  <Input value={dlg.form.company_name || ''} onChange={e => dlg.setForm({ ...dlg.form, company_name: e.target.value })} placeholder="Azienda S.r.l." />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Tipologia</Label>
-                  <Select value={dlg.form.lead_type || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, lead_type: v === 'none' ? '' : v })}>
-                    <SelectTrigger><SelectValue placeholder="Seleziona tipo" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">-</SelectItem>
-                      {LEAD_TYPES.map(t => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Email azienda *</Label>
-                  <Input type="email" value={dlg.form.email || ''} onChange={e => dlg.setForm({ ...dlg.form, email: e.target.value })} placeholder="info@azienda.it" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Telefono azienda *</Label>
-                  <Input value={dlg.form.phone || ''} onChange={e => dlg.setForm({ ...dlg.form, phone: e.target.value })} placeholder="+39 06 1234567" />
-                </div>
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Indirizzo</Label>
-                <Input value={dlg.form.address || ''} onChange={e => dlg.setForm({ ...dlg.form, address: e.target.value })} placeholder="Via Roma 1" />
-              </div>
-
-              {/* Sezione Persona di Riferimento */}
-              <p className="text-[11px] font-semibold text-foreground/50 uppercase tracking-widest border-b border-border/60 pb-2 mt-2">Persona di Riferimento</p>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Nome referente *</Label>
-                  <Input value={dlg.form.name || ''} onChange={e => dlg.setForm({ ...dlg.form, name: e.target.value })} placeholder="Mario Rossi" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Ruolo</Label>
-                  <Select value={dlg.form.contact_person_role || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, contact_person_role: v === 'none' ? '' : v })}>
-                    <SelectTrigger><SelectValue placeholder="Seleziona ruolo" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">-</SelectItem>
-                      {CONTACT_ROLES.map(r => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Email referente</Label>
-                  <Input type="email" value={dlg.form.contact_person_email || ''} onChange={e => dlg.setForm({ ...dlg.form, contact_person_email: e.target.value })} placeholder="mario@azienda.it" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Telefono referente</Label>
-                  <Input value={dlg.form.contact_person_phone || ''} onChange={e => dlg.setForm({ ...dlg.form, contact_person_phone: e.target.value })} placeholder="+39 333 1234567" />
-                </div>
-              </div>
-
-              {/* Sezione Gestione */}
-              <p className="text-[11px] font-semibold text-foreground/50 uppercase tracking-widest border-b border-border/60 pb-2 mt-2">Gestione Lead</p>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Stato</Label>
-                  <Select value={dlg.form.status || 'nuovo'} onValueChange={v => dlg.setForm({ ...dlg.form, status: v })}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {LEAD_STATUSES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Fonte</Label>
-                  <Select value={dlg.form.source || 'area_tecnica'} onValueChange={v => dlg.setForm({ ...dlg.form, source: v })}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {LEAD_SOURCES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Commerciale</Label>
-                  <Select value={dlg.form.assigned_salesperson_id || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, assigned_salesperson_id: v === 'none' ? '' : v })}>
-                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">Nessuno</SelectItem>
-                      {salespeople?.map(sp => (
-                        <SelectItem key={sp.id} value={sp.id}>{sp.first_name} {sp.last_name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs">Assegna a utente (commerciale / ibrido / operaio)</Label>
-                <Select value={dlg.form.assigned_user_id || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, assigned_user_id: v === 'none' ? '' : v })}>
-                  <SelectTrigger><SelectValue placeholder="Seleziona utente" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Nessuno</SelectItem>
-                    {assignableUsers?.map(u => (
-                      <SelectItem key={u.user_id} value={u.user_id}>{u.name} · {u.role}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-[11px] text-muted-foreground">L'utente riceverà una notifica in-app appena assegnato.</p>
-              </div>
-
-              {/* Localizzazione */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <Label className="text-xs">Regione</Label>
-                  <Select value={dlg.form.region || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, region: v === 'none' ? '' : v, province: '', city: '' })}>
-                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">-</SelectItem>
-                      {getRegionNames().map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Provincia</Label>
-                  <Select value={dlg.form.province || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, province: v === 'none' ? '' : v, city: '' })} disabled={!dlg.form.region}>
-                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">-</SelectItem>
-                      {dlg.form.region && getProvincesForRegion(dlg.form.region).map(p => <SelectItem key={p.code} value={p.code}>{p.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-xs">Città</Label>
-                  <Select value={dlg.form.city || 'none'} onValueChange={v => dlg.setForm({ ...dlg.form, city: v === 'none' ? '' : v })} disabled={!dlg.form.province}>
-                    <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">-</SelectItem>
-                      {dlg.form.province && dlg.form.region && getCitiesForProvince(dlg.form.region, dlg.form.province).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs">Note / Dettagli</Label>
-                <Textarea value={dlg.form.notes || ''} onChange={e => dlg.setForm({ ...dlg.form, notes: e.target.value })} rows={3} placeholder="Dettagli, next steps..." />
-              </div>
-              <Button onClick={dlg.onSave} className="w-full">{dlg.btnLabel}</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      ))}
-
-      {/* Detail Sheet */}
-      <Sheet open={!!detailLead} onOpenChange={open => { if (!open) setDetailLead(null); }}>
-        <SheetContent className="sm:max-w-lg overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>{detailLead?.company_name || detailLead?.name}</SheetTitle>
-          </SheetHeader>
-          {detailLead && (
-            <div className="space-y-4 mt-4">
-              <div className="flex items-center gap-2 flex-wrap">
-                {getStatusBadge(detailLead.status)}
-                {(detailLead as any).lead_type && (
-                  <Badge variant="secondary" className="text-xs">{LEAD_TYPES.find(t => t.value === (detailLead as any).lead_type)?.label || (detailLead as any).lead_type}</Badge>
-                )}
-                <span className="ml-auto">
-                  {detailLead.assigned_salesperson_id 
-                    ? getSalespersonBadge(detailLead.assigned_salesperson_id)
-                    : <span className="text-sm text-muted-foreground">Non assegnato</span>}
-                </span>
-              </div>
-
-              {/* Dati Azienda */}
-              <Card>
-                <CardHeader className="pb-2"><CardTitle className="text-sm">Dati Azienda</CardTitle></CardHeader>
-                <CardContent className="p-4 pt-0 space-y-2 text-sm">
-                  {detailLead.company_name && <div className="flex justify-between"><span className="text-muted-foreground">Azienda</span><span>{detailLead.company_name}</span></div>}
-                  <div className="flex justify-between"><span className="text-muted-foreground">Email</span><span>{detailLead.email}</span></div>
-                  <div className="flex justify-between"><span className="text-muted-foreground">Telefono</span><span>{detailLead.phone}</span></div>
-                  {(detailLead as any).address && <div className="flex justify-between"><span className="text-muted-foreground">Indirizzo</span><span>{(detailLead as any).address}</span></div>}
-                  <div className="flex justify-between"><span className="text-muted-foreground">Fonte</span><Badge variant="secondary">{LEAD_SOURCES.find(s => s.value === detailLead.source)?.label || detailLead.source || 'Area Tecnica'}</Badge></div>
-                  {detailLead.region && <div className="flex justify-between"><span className="text-muted-foreground">Località</span><span>{[detailLead.city, detailLead.province, detailLead.region].filter(Boolean).join(', ')}</span></div>}
-                </CardContent>
-              </Card>
-
-              {/* Persona di Riferimento */}
-              <Card>
-                <CardHeader className="pb-2"><CardTitle className="text-sm">Persona di Riferimento</CardTitle></CardHeader>
-                <CardContent className="p-4 pt-0 space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-muted-foreground">Nome</span><span>{detailLead.name}</span></div>
-                  {(detailLead as any).contact_person_role && <div className="flex justify-between"><span className="text-muted-foreground">Ruolo</span><Badge variant="outline">{CONTACT_ROLES.find(r => r.value === (detailLead as any).contact_person_role)?.label || (detailLead as any).contact_person_role}</Badge></div>}
-                  {(detailLead as any).contact_person_email && <div className="flex justify-between"><span className="text-muted-foreground">Email</span><span>{(detailLead as any).contact_person_email}</span></div>}
-                  {(detailLead as any).contact_person_phone && <div className="flex justify-between"><span className="text-muted-foreground">Telefono</span><span>{(detailLead as any).contact_person_phone}</span></div>}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-4 space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-muted-foreground">Data creazione</span><span>{format(new Date(detailLead.created_at), "dd MMM yyyy, HH:mm", { locale: it })}</span></div>
-                </CardContent>
-              </Card>
-
-              {detailLead.notes && (
-                <Card>
-                  <CardHeader className="pb-2"><CardTitle className="text-sm">Note</CardTitle></CardHeader>
-                  <CardContent className="text-sm whitespace-pre-wrap">{detailLead.notes}</CardContent>
-                </Card>
-              )}
-              <LeadPreventivi leadId={detailLead.id} />
-              <div className="flex gap-2">
-                <Button size="sm" className="flex-1" onClick={() => { openEdit(detailLead); setDetailLead(null); }}>
-                  <Pencil className="w-4 h-4 mr-2" />Modifica
-                </Button>
-                <Button size="sm" className="flex-1" variant="outline" onClick={() => { setDetailLead(null); navigateToQuoteForLead(detailLead); }}>
-                  <FileText className="w-4 h-4 mr-2" />Crea Preventivo
-                </Button>
-              </div>
-            </div>
-          )}
-        </SheetContent>
-      </Sheet>
-
-      {/* Quote Search Dialog - cerca lead e crea preventivo */}
-      <Dialog open={quoteSearchOpen} onOpenChange={setQuoteSearchOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Crea Preventivo per Lead</DialogTitle>
-            <DialogDescription>Cerca un lead esistente o creane uno nuovo</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Cerca per nome, azienda, email, telefono, città..."
-                value={quoteSearchTerm}
-                onChange={e => setQuoteSearchTerm(e.target.value)}
-                className="pl-10"
-                autoFocus
-              />
-            </div>
-            <div className="max-h-72 overflow-y-auto border rounded-lg divide-y">
-              {quoteSearchFiltered && quoteSearchFiltered.length > 0 ? (
-                quoteSearchFiltered.map(lead => (
-                  <button
-                    key={lead.id}
-                    onClick={() => { setQuoteSearchOpen(false); navigateToQuoteForLead(lead); }}
-                    className="w-full text-left px-3 py-2.5 hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="font-medium text-sm">{lead.company_name || lead.name}</span>
-                        {lead.company_name && <span className="text-xs text-muted-foreground ml-2">· {lead.name}</span>}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {(lead as any).lead_type && (
-                          <Badge variant="outline" className="text-[10px]">{LEAD_TYPES.find(t => t.value === (lead as any).lead_type)?.label || (lead as any).lead_type}</Badge>
-                        )}
-                        {getStatusBadge(lead.status)}
-                      </div>
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-0.5">
-                      {[lead.email, lead.phone, lead.city].filter(Boolean).join(' · ')}
-                    </div>
-                  </button>
-                ))
-              ) : (
-                <div className="text-center py-6 text-sm text-muted-foreground">
-                  {quoteSearchTerm ? 'Nessun lead trovato' : 'Digita per cercare tra tutti i lead'}
-                </div>
-              )}
-            </div>
-            <Button variant="outline" className="w-full" onClick={() => {
-              setQuoteSearchOpen(false);
-              setCreateForm({ ...emptyLeadForm });
-              setCreateDialogOpen(true);
-            }}>
-              <Plus className="w-4 h-4 mr-2" />Crea nuovo lead
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <LeadFormDrawer
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        leadId={editingId}
+        onSaved={() => qc.invalidateQueries({ queryKey: ['admin-leads'] })}
+      />
+      <LeadDetailSheet
+        open={!!detailId}
+        onClose={() => setDetailId(null)}
+        leadId={detailId}
+        onEdit={() => { const id = detailId; setDetailId(null); setEditingId(id); setFormOpen(true); }}
+        onArchive={() => { if (detailId) { archive(detailId); setDetailId(null); } }}
+        onCreateQuote={() => { const l = filtered.find((x: any) => x.id === detailId); if (l) goCreateQuote(l); }}
+      />
     </div>
   );
-};
+}
 
-export default AdminLeads;
+function FilterField({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1">
+      <div className="text-[12px] text-[#8C7B6B]">{label}</div>
+      {children}
+    </div>
+  );
+}
