@@ -1007,6 +1007,10 @@ export default function CreaPreventivo() {
   const [showAll, setShowAll] = useState(false);
   const [addingMore, setAddingMore] = useState(false);
   const [righeMat, setRigheMat] = useState<any[]>([]);
+  // Sezioni catalogo (stile Geopietra): Articoli, Accessori, Servizi
+  const [articoli, setArticoli] = useState<CatalogLine[]>([]);
+  const [accessori, setAccessori] = useState<CatalogLine[]>([]);
+  const [servizi, setServizi] = useState<CatalogLine[]>([]);
   // Override manuali per riga generata automaticamente (prezzo unit. al cliente, in €)
   // Se undefined → usa il calcolo automatico; se number → l'utente ha forzato quel prezzo al centesimo
   const [overrides, setOverrides] = useState<{
