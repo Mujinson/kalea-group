@@ -1600,8 +1600,7 @@ export default function CreaPreventivo() {
       {step===1 && (
         <div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
-        <div style={card}>
-          </div>
+          <div style={card}>
             {!prodotto ? (
               <>
                 <div style={sectionTitle}>Scegli prodotto — {PRODOTTI.length} articoli</div>
