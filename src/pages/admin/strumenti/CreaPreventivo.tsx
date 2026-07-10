@@ -1420,7 +1420,20 @@ export default function CreaPreventivo() {
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
         ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
+        catalog: { articoli, accessori, servizi },
       };
+
+      const mapCatalog = (kind: string) => (r: CatalogLine) => ({
+        type: kind,
+        catalog_id: r.catalog_id || undefined,
+        codice: r.code || undefined,
+        descrizione: r.name + (r.description ? ` — ${r.description}` : ""),
+        qta: r.quantity,
+        unita: r.unit,
+        prezzo_un: r.unit_price,
+        sconto_pct: r.discount_pct,
+        importo: (Number(r.quantity) || 0) * (Number(r.unit_price) || 0) * (1 - (Number(r.discount_pct) || 0) / 100),
+      });
 
       const statusMap: any = { bozza: "draft", inviato: "sent", accettato: "accepted", rifiutato: "rejected" };
       const items = [
@@ -1441,7 +1454,12 @@ export default function CreaPreventivo() {
           prezzo_un: r.prezzoUn,
           importo: (r.prezzoUn || 0) * (r.qta || 0),
         })),
+        ...articoli.map(mapCatalog("articolo")),
+        ...accessori.map(mapCatalog("accessorio")),
+        ...servizi.map(mapCatalog("servizio")),
       ].filter(Boolean);
+
+
 
       const quotePayload: any = {
         customer_id: crmLink?.source === "customer" ? crmLink.id : null,
