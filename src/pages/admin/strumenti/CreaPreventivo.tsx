@@ -2124,6 +2124,14 @@ export default function CreaPreventivo() {
             )}
           </div>
         </div>
+        <div style={{marginTop:16}}>
+          <QuoteCatalogSections
+            articoli={articoli} setArticoli={setArticoli}
+            accessori={accessori} setAccessori={setAccessori}
+            servizi={servizi} setServizi={setServizi}
+          />
+        </div>
+        </div>
       )}
 
       {/* STEP 2 */}
