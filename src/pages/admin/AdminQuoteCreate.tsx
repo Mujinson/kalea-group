@@ -206,7 +206,53 @@ const AdminQuoteCreate = () => {
 
     if (preselectedLeadId) {
       const l = leadList.find(l => l.id === preselectedLeadId);
-      if (l) setSelectedLead(l);
+      if (l) {
+        setSelectedLead(l);
+        if (!custId) {
+          const emailNorm = (l.email || '').trim().toLowerCase();
+          const companyNorm = (l.company_name || '').trim().toLowerCase();
+          const fullNameNorm = `${(l as any).first_name || ''} ${(l as any).last_name || ''}`.trim().toLowerCase() || (l.name || '').trim().toLowerCase();
+          let match = custList.find(c =>
+            (emailNorm && (c.email || '').trim().toLowerCase() === emailNorm) ||
+            (companyNorm && (c.company_name || '').trim().toLowerCase() === companyNorm) ||
+            (fullNameNorm && `${c.first_name || ''} ${c.last_name || ''}`.trim().toLowerCase() === fullNameNorm)
+          );
+          if (!match) {
+            const isCompany = ((l as any).contact_type || '').toLowerCase() === 'azienda' || !!l.company_name;
+            const insertPayload: any = {
+              customer_type: isCompany ? 'costruttore' : 'cliente_privato',
+              company_name: l.company_name || null,
+              first_name: (l as any).first_name || null,
+              last_name: (l as any).last_name || null,
+              email: l.email || null,
+              phone: l.phone || null,
+              address: (l as any).address || null,
+              city: l.city || null,
+              province: (l as any).province || null,
+              postal_code: (l as any).postal_code || null,
+              country: (l as any).country || null,
+              vat_number: (l as any).vat_number || null,
+              assigned_salesperson_id: (l as any).assigned_salesperson_id || null,
+            };
+            if (!insertPayload.company_name && !insertPayload.first_name && !insertPayload.last_name) {
+              insertPayload.company_name = l.name;
+            }
+            const { data: created, error: createErr } = await supabase
+              .from('customers')
+              .insert(insertPayload)
+              .select('id, company_name, first_name, last_name, address, city, province, postal_code, region, country, email, phone')
+              .single();
+            if (!createErr && created) {
+              match = created as any;
+              setCustomers(prev => [...prev, created as any]);
+            }
+          }
+          if (match) {
+            setSelectedCustomerId(match.id);
+            setSelectedCustomer(match as any);
+          }
+        }
+      }
     }
   };
 
