@@ -1385,8 +1385,9 @@ export default function CreaPreventivo() {
     const errs = new Set<string>();
     const clienteName = (crmLink?.label || crmLink?.nome || cliente.nome || "").trim();
     if (!clienteName) { missing.push("Nome cliente / Ragione sociale"); errs.add("cliente.nome"); }
-    if (!prodotto && (righeMat?.length || 0) === 0) {
-      missing.push("Almeno un prodotto (principale o aggiuntivo)");
+    const hasCatalogLine = (articoli.length + accessori.length + servizi.length) > 0;
+    if (!prodotto && (righeMat?.length || 0) === 0 && !hasCatalogLine) {
+      missing.push("Almeno un prodotto (principale, aggiuntivo o da catalogo)");
       errs.add("prodotto");
     }
     if (prodotto && (!mqPrev || mqPrev <= 0)) {
