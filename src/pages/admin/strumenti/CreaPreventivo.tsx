@@ -1138,6 +1138,82 @@ export default function CreaPreventivo() {
       setNoteInterne("");
       setStato("bozza");
       setStep(1);
+
+      // 1) Numero preventivo progressivo dal DB (KAL-YYYY-NNN)
+      (async () => {
+        try {
+          const yy = new Date().getFullYear();
+          const prefix = `KAL-${yy}-`;
+          const { data } = await supabase
+            .from("quotes")
+            .select("quote_number")
+            .like("quote_number", `${prefix}%`)
+            .order("quote_number", { ascending: false })
+            .limit(200);
+          let maxN = 0;
+          (data || []).forEach((r: any) => {
+            const m = /^KAL-\d{4}-(\d+)$/.exec(r.quote_number || "");
+            if (m) { const n = parseInt(m[1], 10); if (n > maxN) maxN = n; }
+          });
+          setNumPrev(`${prefix}${String(maxN + 1).padStart(3, "0")}`);
+        } catch (e) { /* silent */ }
+      })();
+
+      // 2) Prefill da leadId/customerId passati in querystring
+      const leadIdParam = searchParams.get("leadId");
+      const customerIdParam = searchParams.get("customerId") || searchParams.get("customer");
+      const leadName = searchParams.get("leadName");
+      const leadEmail = searchParams.get("leadEmail");
+      const leadPhone = searchParams.get("leadPhone");
+      const leadCity = searchParams.get("leadCity");
+      const leadAddress = searchParams.get("leadAddress");
+
+      if (customerIdParam) {
+        (async () => {
+          const { data: c } = await supabase.from("customers")
+            .select("id,first_name,last_name,company_name,email,phone,address,city")
+            .eq("id", customerIdParam).maybeSingle();
+          if (c) {
+            const nome = c.company_name || `${c.first_name||""} ${c.last_name||""}`.trim();
+            setCrmLink({
+              source:"customer", id:c.id, label: nome || "—",
+              sub: [c.email, c.phone, c.city].filter(Boolean).join(" · "),
+              nome, indirizzo: c.address || "", citta: c.city || "",
+              telefono: c.phone || "", email: c.email || "",
+            });
+            setCliente(prev => ({ ...prev, nome, indirizzo: c.address || "", citta: c.city || "", telefono: c.phone || "", email: c.email || "" }));
+          }
+        })();
+      } else if (leadIdParam) {
+        (async () => {
+          const { data: l } = await supabase.from("leads")
+            .select("id,name,company_name,email,phone,address,city")
+            .eq("id", leadIdParam).maybeSingle();
+          const nome = (l?.company_name || l?.name || leadName || "").trim();
+          const indirizzo = l?.address || leadAddress || "";
+          const citta = l?.city || leadCity || "";
+          const telefono = l?.phone || leadPhone || "";
+          const email = l?.email || leadEmail || "";
+          if (l || leadName) {
+            setCrmLink({
+              source:"lead", id: l?.id || leadIdParam, label: nome || "—",
+              sub: [email, telefono, citta].filter(Boolean).join(" · "),
+              nome, indirizzo, citta, telefono, email,
+            });
+            setCliente(prev => ({ ...prev, nome, indirizzo, citta, telefono, email }));
+          }
+        })();
+      } else if (leadName) {
+        // Nessun id ma parametri manuali (compat)
+        setCliente(prev => ({
+          ...prev,
+          nome: leadName,
+          indirizzo: leadAddress || "",
+          citta: leadCity || "",
+          telefono: leadPhone || "",
+          email: leadEmail || "",
+        }));
+      }
       return;
     }
     let cancelled = false;
