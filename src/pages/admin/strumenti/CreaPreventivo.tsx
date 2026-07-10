@@ -1337,7 +1337,11 @@ export default function CreaPreventivo() {
       return s + lordo - sc;
     }, 0) + prezzoAccTot;
     const costoTotale = costoMatTot+costoPosaTot+costoTappTot+costoTrasporto+costoTrasfertaTot+costoExtraTot;
-    const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot;
+    const catalogArticoliTot = catalogLinesTotal(articoli);
+    const catalogAccessoriTot = catalogLinesTotal(accessori);
+    const catalogServiziTot = catalogLinesTotal(servizi);
+    const catalogTot = catalogArticoliTot + catalogAccessoriTot + catalogServiziTot;
+    const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot+catalogTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
     const prezzoNetto = prezzoLordoTot - scontoAmt;
     const iva = prezzoNetto*(ivaRate/100);
