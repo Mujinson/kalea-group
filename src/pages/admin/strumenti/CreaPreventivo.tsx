@@ -1351,7 +1351,7 @@ export default function CreaPreventivo() {
     const prezzoMqTot = mqPrev>0 ? prezzoNetto/mqPrev : 0;
     const scontoMax = prezzoLordoTot>0 ? ((prezzoLordoTot-costoTotale)/prezzoLordoTot)*100 : 0;
     return { costoMatMq,prezzoMatMq,prezzoMatMqAuto,mqOrd,costoMatTot,prezzoMatTot,prezzoPosaMq,prezzoPosaMqAuto,costoPosaTot,prezzoPosaTot,prezzoTappMq,prezzoTappMqAuto,costoTappTot,prezzoTappTot,tappNeeded,prezzoTrasportoKm,prezzoTrasportoKmAuto,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,supplMq,supplMqAuto,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
-  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel,overrides]);
+  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel,overrides,articoli,accessori,servizi]);
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0, sfridoPct:0, scontoPct:0, scontoEur:null }]);
   const addRigaFromProdotto = (p:any) => {
