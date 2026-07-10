@@ -1,80 +1,66 @@
 ## Obiettivo
-1. Rinominare "Operaio/Operai" in "Posatore/Posatori" in tutta l'app lato utente (label UI, titoli, testi). I ruoli tecnici nel DB (`operaio`, `ibrido`) restano invariati per non rompere policy/RLS.
-2. Aggiungere un sistema di **timbratura giornaliera con geolocalizzazione** nella home del Posatore (sia "operaio" che "ibrido/commerciale"), con export mensile per lo studio paghe.
+Portare la gestione Lead al livello (e oltre) di Geopietra CRM: form nuovo lead completo, lista avanzata con filtri/colonne configurabili, dettaglio lead ricco, mappa geolocalizzata. Sia lato Admin desktop sia app mobile Commerciale/Ibrido.
 
----
+## 1. Schema DB (migrazione)
+Estendo la tabella `leads` con i campi mancanti (mantenendo `pipeline_stage` attuale):
+- `contact_type` (azienda | privato), `vat_number`, `first_name`, `last_name`, `profession`
+- `linkedin_url`, `website`, `address`, `postal_code`, `country`
+- `site_address`, `site_city`, `site_province`, `site_postal_code`, `site_country`
+- `project_name`, `has_thermal_insulation` (bool), `visited_showroom` (bool)
+- `language` (it/en/de/fr), `referrer_id` (segnalatore → salespeople)
+- `archived_at`, `deleted_at` (soft archive/delete)
+- `code` (identificatore leggibile tipo `WEJFO6A8-26`, generato via trigger)
+- `latitude`, `longitude` (per mappa, geocode client-side)
 
-## 1. Rinomina Operaio → Posatore (solo UI)
+Nuova tabella `lead_attachments` (file allegati su bucket privato `lead-attachments`) + `lead_activities` (timeline: nota, chiamata, email, cambio stato, meeting) con RLS coerenti con `leads`.
 
-Sostituzioni testuali in:
-- `src/pages/role-app/OperaioApp.tsx` (titolo "Operaio" → "Posatore", nav "Cantieri" resta)
-- `src/pages/role-app/IbridoApp.tsx` (badge "Operaio · Commerciale" → "Posatore · Commerciale")
-- Componenti admin che mostrano la label del ruolo "operaio" all'utente finale (badge, select) → mostrare "Posatore".
-- Nomi file/route/tabelle DB **non toccati**.
+## 2. Form Nuovo/Modifica Lead (`LeadFormDrawer`)
+Un unico componente riutilizzabile con sezioni collassabili:
+- **Provenienza & Lingua** (source, language)
+- **Contatto** — toggle Azienda/Privato → mostra campi giusti (ragione sociale + P.IVA vs cognome/nome/professione), email, telefono, LinkedIn, sito
+- **Indirizzo contatto** (paese, indirizzo, CAP, città, provincia)
+- **Indirizzo cantiere** (stessi campi + bottone "Copia indirizzo dal contatto")
+- **Progetto** (nome progetto, richiesta rich-text, toggle isolamento termico, toggle sala mostra)
+- **Allegati** (drag & drop → storage)
+- **Note**
+- **Sidebar destra sticky**: Stato, Segnalatore, Responsabile, bottoni Annulla / Salva
+- Validazione zod, salvataggio ottimistico, geocoding automatico dell'indirizzo cantiere.
 
-## 2. Timbrature giornaliere con GPS
+## 3. Lista Lead avanzata (`AdminLeads` + `CommercialeLeads`)
+- Colonne: Codice, Nome contatto, Cliente, Stato, Responsabile, Creato il — con dropdown "Colonne" per aggiungere Email, Tipologia, Città, Provenienza (persistenza in localStorage).
+- Ricerca full-text (nome, email, città, codice, ragione sociale).
+- Popover **Filtri**: Stato, Cliente, Provenienza, Paese, Segnalatore, Responsabile, Lead archiviati (senza/solo/tutti), Record eliminati (senza/solo/tutti) + "Reimposta". Badge con conteggio filtri attivi.
+- Ordinamento colonne, paginazione, azioni riga (Modifica, Archivia, Elimina soft, Ripristina, Converti in cliente).
+- Bottone "Nuovo" apre il drawer.
+- Mobile (Commerciale/Ibrido): card list con filtri in bottom-sheet.
 
-### Nuova tabella `worker_time_entries`
-Campi principali (oltre a id/created_at/updated_at):
-- `user_id uuid` (auth.users)
-- `worker_id uuid` (workers, nullable)
-- `event_type text` — enum-like: `start_home` (partenza da casa), `arrive_site` (arrivo cantiere), `pause_start`, `pause_end`, `leave_site` (uscita cantiere), `arrive_home` (arrivo a casa)
-- `event_at timestamptz default now()`
-- `latitude numeric`, `longitude numeric`, `accuracy_m numeric`
-- `site_id uuid` nullable (cantiere di riferimento se conosciuto)
-- `distance_from_site_m numeric` nullable (calcolato se site_id presente)
-- `is_at_site boolean` nullable (true se entro raggio ~150m)
-- `notes text`
+## 4. Dettaglio Lead (`LeadDetail`)
+Layout 2 colonne desktop / stack mobile:
+- **Header**: codice, nome, badge stato con quick-change, azioni (Modifica, Archivia, Converti in Cliente, Crea Preventivo, Crea Appuntamento).
+- **Tabs**: Panoramica · Timeline attività · Allegati · Preventivi · Appuntamenti · Cantieri collegati.
+- Timeline con inserimento rapido nota/chiamata/email (usa `lead_activities`).
+- Sidebar destra: dati contatto cliccabili (tel/mail/WhatsApp), indirizzo cantiere con mini-mappa Leaflet + pin.
 
-RLS: il posatore vede/inserisce solo i propri record; admin vede tutto. Grant a `authenticated` e `service_role`.
+## 5. Mappa Lead
+Riutilizzo componente Leaflet esistente (già usato in CRM Interactive Map): pin colorati per stato pipeline, popup con nome/città/responsabile e link al dettaglio. Filtro rapido per stato/responsabile in overlay.
 
-### Nuova view/logica calcolo ore giornaliere
-Vista `worker_daily_hours` che aggrega per `user_id + date`:
-- ora inizio = primo `start_home` del giorno
-- ora fine = ultimo `arrive_home`
-- pausa = somma intervalli `pause_start`→`pause_end`
-- ore lavorate = (fine - inizio) - pausa
-- ore in cantiere = somma intervalli `arrive_site`→(pause o leave_site)
-
-### UI Home Posatore (`OperaioHome` e `CommercialeHome`)
-Nuova card **"Timbratura di oggi"** in cima:
-- Mostra sequenza eventi già timbrati con orario + icona ✅/📍 se al cantiere.
-- Un unico bottone grande contestuale che mostra il **prossimo step logico**:
-  - stato iniziale → "🚐 Parto da casa"
-  - dopo start_home → "📍 Arrivato in cantiere"
-  - dopo arrive_site → "☕ Inizio pausa" + "🚪 Esco dal cantiere"
-  - dopo pause_start → "▶️ Fine pausa"
-  - dopo pause_end → "☕ Inizio pausa" + "🚪 Esco dal cantiere"
-  - dopo leave_site → "🏠 Arrivato a casa"
-  - dopo arrive_home → giornata chiusa, riepilogo ore
-- Al click: richiede GPS (`navigator.geolocation`), inserisce riga in `worker_time_entries`. Se GPS negato: salva senza coordinate ma mostra warning.
-- Se `event_type` in [`arrive_site`, `pause_*`, `leave_site`] e c'è un cantiere assegnato oggi, calcola distanza haversine (già in `src/lib/geo.ts`) e salva `distance_from_site_m` + `is_at_site` (≤150m).
-
-### Admin: nuova pagina `/admin/timbrature`
-Tabella filtrabile per posatore + mese con:
-- riga per giorno: ore totali, ore in cantiere, timestamp eventi, mappa mini
-- badge rosso se un `arrive_site` è stato timbrato lontano dal cantiere assegnato
-- **Export CSV mensile** per studio paghe (colonne: data, posatore, ora inizio, ora fine, pausa min, ore totali, note)
-- Link nel sidebar admin.
-
----
+## 6. Mobile (Commerciale/Ibrido)
+- `CommercialeLeads.tsx`: lista con stessi filtri (bottom-sheet), FAB "+" apre `LeadFormDrawer` full-screen mobile.
+- `CommercialeLeadDetail.tsx`: stesse tab in versione mobile-first.
 
 ## Dettagli tecnici
+- Riuso `useAdminAuth` e RLS esistenti (admin vede tutto; commerciale vede solo assegnati/creati/territorio).
+- Geocoding via Nominatim (già in `src/lib/geo.ts`).
+- Codice lead: trigger PL/pgSQL `BEFORE INSERT` che genera 8 char random + `-YY`.
+- Rich text: `@tiptap/react` (già in stack? verifico; fallback a textarea con markdown).
+- Nessuna modifica ad AdminSidebar/route esistenti.
 
-**File nuovi**
-- `supabase/migrations/*_worker_time_entries.sql` (tabella + RLS + grants + funzione `calc_daily_hours`)
-- `src/components/role-app/TimbratureCard.tsx` (UI timbratura riutilizzabile)
-- `src/lib/timbrature.ts` (helper: nextStep, insertEvent con GPS, aggregazione giornaliera)
-- `src/pages/admin/AdminTimbrature.tsx` (dashboard + export CSV)
+## Ordine di implementazione
+1. Migrazione DB (schema + trigger + bucket + RLS)
+2. `LeadFormDrawer` + hook `useLead`
+3. `AdminLeads` lista avanzata
+4. `LeadDetail` + `lead_activities`
+5. Aggiornamento mobile `CommercialeLeads` / `CommercialeLeadDetail`
+6. Vista mappa
 
-**File modificati**
-- `src/pages/role-app/OperaioApp.tsx` — label "Posatore" + montaggio `<TimbratureCard/>` in home
-- `src/pages/role-app/CommercialeHome.tsx` + `IbridoApp.tsx` — label "Posatore · Commerciale" + `<TimbratureCard/>`
-- `src/components/admin/AdminSidebar.tsx` — voce "Timbrature"
-- `src/App.tsx` — route admin
-- Altri punti UI che mostrano "Operaio/Operai" agli utenti → "Posatore/Posatori"
-
-**Note**
-- I ruoli DB (`user_roles.role = 'operaio'`) restano invariati; cambia solo l'etichetta mostrata.
-- Coordinate salvate ad ogni click per verifica anti-frode ("era davvero in cantiere?").
-- Export CSV via `blob` lato client, nessuna edge function necessaria.
+Confermi che procedo?
