@@ -99,6 +99,7 @@ import CantieriMateriali from "./pages/admin/cantieri/CantieriMateriali";
 import CantieriBudget from "./pages/admin/cantieri/CantieriBudget";
 import CantieriReport from "./pages/admin/cantieri/CantieriReport";
 import AdminCatalog from "./pages/admin/AdminCatalog";
+import CatalogPlaceholder from "./pages/admin/catalog/CatalogPlaceholder";
 import WorkerDetail from "./pages/admin/cantieri/WorkerDetail";
 import CostoOperaio from "./pages/admin/strumenti/CostoOperaio";
 import Sostenibilita from "./pages/admin/strumenti/Sostenibilita";
