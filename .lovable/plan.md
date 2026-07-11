@@ -1,66 +1,83 @@
-## Obiettivo
-Portare la gestione Lead al livello (e oltre) di Geopietra CRM: form nuovo lead completo, lista avanzata con filtri/colonne configurabili, dettaglio lead ricco, mappa geolocalizzata. Sia lato Admin desktop sia app mobile Commerciale/Ibrido.
 
-## 1. Schema DB (migrazione)
-Estendo la tabella `leads` con i campi mancanti (mantenendo `pipeline_stage` attuale):
-- `contact_type` (azienda | privato), `vat_number`, `first_name`, `last_name`, `profession`
-- `linkedin_url`, `website`, `address`, `postal_code`, `country`
-- `site_address`, `site_city`, `site_province`, `site_postal_code`, `site_country`
-- `project_name`, `has_thermal_insulation` (bool), `visited_showroom` (bool)
-- `language` (it/en/de/fr), `referrer_id` (segnalatore → salespeople)
-- `archived_at`, `deleted_at` (soft archive/delete)
-- `code` (identificatore leggibile tipo `WEJFO6A8-26`, generato via trigger)
-- `latitude`, `longitude` (per mappa, geocode client-side)
+# Catalogo Generale — Piano di implementazione
 
-Nuova tabella `lead_attachments` (file allegati su bucket privato `lead-attachments`) + `lead_activities` (timeline: nota, chiamata, email, cambio stato, meeting) con RLS coerenti con `leads`.
+Trasformo `catalog_products` nell'unica fonte di verità per prodotti/accessori/servizi in tutto il CRM (preventivi, offerte, fatture, magazzino, commissioni, statistiche). Vista l'ampiezza del lavoro lo consegno in **4 fasi**: ognuna funzionante e non-breaking. Confermami la Fase 1 e procedo in ordine.
 
-## 2. Form Nuovo/Modifica Lead (`LeadFormDrawer`)
-Un unico componente riutilizzabile con sezioni collassabili:
-- **Provenienza & Lingua** (source, language)
-- **Contatto** — toggle Azienda/Privato → mostra campi giusti (ragione sociale + P.IVA vs cognome/nome/professione), email, telefono, LinkedIn, sito
-- **Indirizzo contatto** (paese, indirizzo, CAP, città, provincia)
-- **Indirizzo cantiere** (stessi campi + bottone "Copia indirizzo dal contatto")
-- **Progetto** (nome progetto, richiesta rich-text, toggle isolamento termico, toggle sala mostra)
-- **Allegati** (drag & drop → storage)
-- **Note**
-- **Sidebar destra sticky**: Stato, Segnalatore, Responsabile, bottoni Annulla / Salva
-- Validazione zod, salvataggio ottimistico, geocoding automatico dell'indirizzo cantiere.
+## Stato attuale (verificato)
 
-## 3. Lista Lead avanzata (`AdminLeads` + `CommercialeLeads`)
-- Colonne: Codice, Nome contatto, Cliente, Stato, Responsabile, Creato il — con dropdown "Colonne" per aggiungere Email, Tipologia, Città, Provenienza (persistenza in localStorage).
-- Ricerca full-text (nome, email, città, codice, ragione sociale).
-- Popover **Filtri**: Stato, Cliente, Provenienza, Paese, Segnalatore, Responsabile, Lead archiviati (senza/solo/tutti), Record eliminati (senza/solo/tutti) + "Reimposta". Badge con conteggio filtri attivi.
-- Ordinamento colonne, paginazione, azioni riga (Modifica, Archivia, Elimina soft, Ripristina, Converti in cliente).
-- Bottone "Nuovo" apre il drawer.
-- Mobile (Commerciale/Ibrido): card list con filtri in bottom-sheet.
+- Tabella `catalog_products` esiste già con ~2.579 prodotti, campi ricchi (codice, prezzo listino, sconto fornitore, markup, IVA, formato, spessore, colore, stock, ecc.) e `product_type` = article/accessory/service.
+- `product_categories` esiste ma è piatta (name, slug, parent_id).
+- `brand` e `collection` sono oggi campi testo liberi su `catalog_products` → nessuna anagrafica reale.
+- La pagina `/admin/catalogo` esiste ma è basilare. I preventivi (Kalea + hybrid catalog sections) già leggono da `catalog_products` via `CatalogProductPicker`.
+- Sales/site_materials/quotes.items memorizzano snapshot testuali dei prodotti (nome+prezzo) — corretto per storico prezzi, ma dovranno **sempre** partire dal catalogo.
 
-## 4. Dettaglio Lead (`LeadDetail`)
-Layout 2 colonne desktop / stack mobile:
-- **Header**: codice, nome, badge stato con quick-change, azioni (Modifica, Archivia, Converti in Cliente, Crea Preventivo, Crea Appuntamento).
-- **Tabs**: Panoramica · Timeline attività · Allegati · Preventivi · Appuntamenti · Cantieri collegati.
-- Timeline con inserimento rapido nota/chiamata/email (usa `lead_activities`).
-- Sidebar destra: dati contatto cliccabili (tel/mail/WhatsApp), indirizzo cantiere con mini-mappa Leaflet + pin.
+---
 
-## 5. Mappa Lead
-Riutilizzo componente Leaflet esistente (già usato in CRM Interactive Map): pin colorati per stato pipeline, popup con nome/città/responsabile e link al dettaglio. Filtro rapido per stato/responsabile in overlay.
+## Fase 1 — Fondamenta dati (schema + menu)
 
-## 6. Mobile (Commerciale/Ibrido)
-- `CommercialeLeads.tsx`: lista con stessi filtri (bottom-sheet), FAB "+" apre `LeadFormDrawer` full-screen mobile.
-- `CommercialeLeadDetail.tsx`: stesse tab in versione mobile-first.
+### DB — nuove tabelle
+- `catalog_brands` (name unique, logo_url, color, display_order, is_active)
+- `catalog_collections` (brand_id FK, name, description, image_url, display_order, is_active — unique brand_id+name)
+- `catalog_price_lists` (nome, versione auto-incrementale, data, source_file, status: draft/applied/archived, created_by, note)
+- `catalog_price_list_items` (price_list_id, snapshot completo del prodotto + diff_type: new/updated/deleted/price_changed)
+- Estendo `catalog_products`: `brand_id` FK, `collection_id` FK, `barcode`, `purchase_price`, `subcategory`, `image_url`, `technical_sheet_pdf_url`, `attributes jsonb`
+- Estendo `product_categories`: `macro_category` enum ('articoli','accessori','servizi') per la gerarchia richiesta
+- Nuova `catalog_audit_log` (product_id, user_id, field, old_value, new_value, action, ts)
+- Trigger di audit su tutte le modifiche di `catalog_products`, `catalog_brands`, `catalog_collections`
+- Backfill: derivo brand/collection dai campi testo esistenti in nuovi record delle tabelle anagrafica
 
-## Dettagli tecnici
-- Riuso `useAdminAuth` e RLS esistenti (admin vede tutto; commerciale vede solo assegnati/creati/territorio).
-- Geocoding via Nominatim (già in `src/lib/geo.ts`).
-- Codice lead: trigger PL/pgSQL `BEFORE INSERT` che genera 8 char random + `-YY`.
-- Rich text: `@tiptap/react` (già in stack? verifico; fallback a textarea con markdown).
-- Nessuna modifica ad AdminSidebar/route esistenti.
+### RLS/Grants
+Tutti admin: full manage. Commerciali: SELECT. `catalog_price_lists` e `catalog_audit_log`: solo admin.
 
-## Ordine di implementazione
-1. Migrazione DB (schema + trigger + bucket + RLS)
-2. `LeadFormDrawer` + hook `useLead`
-3. `AdminLeads` lista avanzata
-4. `LeadDetail` + `lead_activities`
-5. Aggiornamento mobile `CommercialeLeads` / `CommercialeLeadDetail`
-6. Vista mappa
+### Menu
+Nuova voce sidebar **Catalogo** (icona `Library`, colore proprio) sopra Magazzino, con sotto-voci:
+- Prodotti
+- Marche
+- Collezioni
+- Categorie
+- Listini & versioni
+- Storico modifiche
+- Importa
 
-Confermi che procedo?
+Rimuovo "Catalogo prodotti" da Magazzino (rimane "Lista articoli" = stock).
+
+---
+
+## Fase 2 — UI catalogo (CRUD completo)
+
+- `/admin/catalog` — lista prodotti server-side con paginazione (25/50/100), lazy loading, ricerca istantanea (codice/SKU/barcode/nome/desc/marca/collezione via `ilike` + indici), filtri combinabili (macro, marca, collezione, categoria, sottocategoria, fornitore, stock, stato, fascia prezzo), selezione multipla + azioni bulk (sconto, IVA, categoria, marca, collezione, stato, disponibilità).
+- `/admin/catalog/product/:id` — scheda completa modificabile (tutti i campi), upload immagine + scheda tecnica PDF su bucket `product-images` (nuovo `catalog-docs` per PDF), tab "Storico modifiche" dalla `catalog_audit_log`, tab "Storico prezzi" già esistente.
+- `/admin/catalog/brands` — CRUD marche con logo/colore/ordine.
+- `/admin/catalog/collections` — CRUD collezioni raggruppate per marca.
+- `/admin/catalog/categories` — CRUD categorie con macro-categoria e sottocategorie.
+
+---
+
+## Fase 3 — Import listini con anteprima/versioni
+
+- `/admin/catalog/import` — upload `.xlsx`, `.csv`, `.pdf`
+  - XLSX/CSV: parsing con `xlsx` (già in progetto)
+  - PDF: estrazione tabellare via edge function `catalog-import-parse` (Lovable AI Gemini per riconoscere colonne)
+- **Auto-mapping** dei campi con euristica su nomi colonna; per ogni colonna non riconosciuta modale con dropdown "mappa a → codice / SKU / nome / …".
+- **Anteprima diff** (nessuna scrittura): tab Nuovi / Aggiornati / Eliminati / Prezzi cambiati con conteggi e tabella dettaglio.
+- Alla conferma: creo `catalog_price_lists` versione N+1 (per marca o globale), applico patch a `catalog_products`, popolo `catalog_price_list_items` per storico.
+- `/admin/catalog/price-lists` — lista versioni + diff visuale fra due versioni.
+
+---
+
+## Fase 4 — Integrazione con moduli esistenti (compatibilità)
+
+- **Preventivi Kalea** (`CreaPreventivo.tsx`): mantengo i calcoli automatici mq/posa (business logic Kalea) ma la selezione articoli/accessori/servizi già va via `CatalogProductPicker` — verifico che nessuna riga possa essere creata senza `catalog_product_id`.
+- **Preventivi generali** (`AdminQuoteCreate.tsx`): ogni riga richiede product picker dal catalogo (manuale consentito solo per servizi custom, comunque marcato come "off-catalog"). Snapshot di nome/prezzo per storico.
+- **Offerte, Ordini, Fatture** (`customer_invoices`, `sales`, `sale_items`): il picker prodotti punta a `catalog_products`. Nessun cambiamento di schema (già usano snapshot testuali che restano validi per compatibilità dati esistenti).
+- **Magazzino** (`inventory`): collego `inventory.product_id` → `catalog_products.id` dove combacia via codice; conservo record esistenti.
+- **Site materials/accessories**: già FK a `catalog_products`. Nessuna azione.
+- **Commissioni/Statistiche**: già calcolano da `quotes.items` — nessun cambiamento.
+
+**Compatibilità**: nessuna migrazione distruttiva. Tutti i campi nuovi sono nullable, i dati esistenti rimangono, i moduli esistenti continuano a funzionare mentre migrano progressivamente al picker.
+
+---
+
+## Domanda operativa
+
+Confermi che procedo in ordine 1 → 2 → 3 → 4 (una fase per turno, così puoi testare fra una e l'altra)? Oppure preferisci che parta subito con Fasi 1+2 insieme?
