@@ -41,6 +41,8 @@ import {
   LineChart,
   Tag,
   Layers,
+  Library,
+  History,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
