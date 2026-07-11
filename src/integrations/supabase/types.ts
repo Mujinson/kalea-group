@@ -142,6 +142,131 @@ export type Database = {
         }
         Relationships: []
       }
+      catalog_audit_log: {
+        Row: {
+          action: string
+          created_at: string
+          entity_code: string | null
+          entity_id: string | null
+          entity_type: string
+          field: string | null
+          id: string
+          new_value: Json | null
+          old_value: Json | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          entity_code?: string | null
+          entity_id?: string | null
+          entity_type: string
+          field?: string | null
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          entity_code?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          field?: string | null
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      catalog_brands: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          is_active: boolean
+          logo_url: string | null
+          name: string
+          slug: string | null
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name: string
+          slug?: string | null
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name?: string
+          slug?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      catalog_collections: {
+        Row: {
+          brand_id: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          image_url: string | null
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_collections_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       catalog_price_history: {
         Row: {
           change_reason: string | null
@@ -183,19 +308,149 @@ export type Database = {
           },
         ]
       }
+      catalog_price_list_items: {
+        Row: {
+          brand: string | null
+          collection: string | null
+          created_at: string
+          diff_type: Database["public"]["Enums"]["catalog_diff_type"]
+          id: string
+          list_price: number | null
+          name: string | null
+          old_snapshot: Json | null
+          price_list_id: string
+          product_code: string
+          product_id: string | null
+          snapshot: Json
+          supplier_discount_percentage: number | null
+          unit_of_measure: string | null
+          vat_percentage: number | null
+        }
+        Insert: {
+          brand?: string | null
+          collection?: string | null
+          created_at?: string
+          diff_type?: Database["public"]["Enums"]["catalog_diff_type"]
+          id?: string
+          list_price?: number | null
+          name?: string | null
+          old_snapshot?: Json | null
+          price_list_id: string
+          product_code: string
+          product_id?: string | null
+          snapshot?: Json
+          supplier_discount_percentage?: number | null
+          unit_of_measure?: string | null
+          vat_percentage?: number | null
+        }
+        Update: {
+          brand?: string | null
+          collection?: string | null
+          created_at?: string
+          diff_type?: Database["public"]["Enums"]["catalog_diff_type"]
+          id?: string
+          list_price?: number | null
+          name?: string | null
+          old_snapshot?: Json | null
+          price_list_id?: string
+          product_code?: string
+          product_id?: string | null
+          snapshot?: Json
+          supplier_discount_percentage?: number | null
+          unit_of_measure?: string | null
+          vat_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_price_list_items_price_list_id_fkey"
+            columns: ["price_list_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_price_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_price_list_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      catalog_price_lists: {
+        Row: {
+          applied_at: string | null
+          brand_id: string | null
+          created_at: string
+          created_by: string | null
+          effective_date: string
+          id: string
+          name: string
+          notes: string | null
+          source_file: string | null
+          status: Database["public"]["Enums"]["catalog_price_list_status"]
+          totals: Json
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          applied_at?: string | null
+          brand_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string
+          id?: string
+          name: string
+          notes?: string | null
+          source_file?: string | null
+          status?: Database["public"]["Enums"]["catalog_price_list_status"]
+          totals?: Json
+          updated_at?: string
+          version: number
+        }
+        Update: {
+          applied_at?: string | null
+          brand_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          source_file?: string | null
+          status?: Database["public"]["Enums"]["catalog_price_list_status"]
+          totals?: Json
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_price_lists_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_brands"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       catalog_products: {
         Row: {
+          attributes: Json
           available_stock: number | null
+          barcode: string | null
           brand: string | null
+          brand_id: string | null
           category_id: string | null
           certifications: string[] | null
           collection: string | null
+          collection_id: string | null
           color: string | null
           created_at: string
           description: string | null
           finish: string | null
           format: string | null
           id: string
+          image_url: string | null
           is_active: boolean | null
           list_price: number
           low_stock_threshold: number | null
@@ -211,10 +466,13 @@ export type Database = {
           pieces_per_pack: number | null
           product_code: string
           product_type: string
+          purchase_price: number | null
           sale_price: number | null
+          subcategory: string | null
           supplier_code: string | null
           supplier_discount_percentage: number
           supplier_id: string | null
+          technical_sheet_pdf_url: string | null
           technical_sheet_url: string | null
           thickness_mm: number | null
           unit_of_measure: string
@@ -224,17 +482,22 @@ export type Database = {
           weight_per_unit: number | null
         }
         Insert: {
+          attributes?: Json
           available_stock?: number | null
+          barcode?: string | null
           brand?: string | null
+          brand_id?: string | null
           category_id?: string | null
           certifications?: string[] | null
           collection?: string | null
+          collection_id?: string | null
           color?: string | null
           created_at?: string
           description?: string | null
           finish?: string | null
           format?: string | null
           id?: string
+          image_url?: string | null
           is_active?: boolean | null
           list_price?: number
           low_stock_threshold?: number | null
@@ -250,10 +513,13 @@ export type Database = {
           pieces_per_pack?: number | null
           product_code: string
           product_type?: string
+          purchase_price?: number | null
           sale_price?: number | null
+          subcategory?: string | null
           supplier_code?: string | null
           supplier_discount_percentage?: number
           supplier_id?: string | null
+          technical_sheet_pdf_url?: string | null
           technical_sheet_url?: string | null
           thickness_mm?: number | null
           unit_of_measure?: string
@@ -263,17 +529,22 @@ export type Database = {
           weight_per_unit?: number | null
         }
         Update: {
+          attributes?: Json
           available_stock?: number | null
+          barcode?: string | null
           brand?: string | null
+          brand_id?: string | null
           category_id?: string | null
           certifications?: string[] | null
           collection?: string | null
+          collection_id?: string | null
           color?: string | null
           created_at?: string
           description?: string | null
           finish?: string | null
           format?: string | null
           id?: string
+          image_url?: string | null
           is_active?: boolean | null
           list_price?: number
           low_stock_threshold?: number | null
@@ -289,10 +560,13 @@ export type Database = {
           pieces_per_pack?: number | null
           product_code?: string
           product_type?: string
+          purchase_price?: number | null
           sale_price?: number | null
+          subcategory?: string | null
           supplier_code?: string | null
           supplier_discount_percentage?: number
           supplier_id?: string | null
+          technical_sheet_pdf_url?: string | null
           technical_sheet_url?: string | null
           thickness_mm?: number | null
           unit_of_measure?: string
@@ -303,10 +577,24 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "catalog_products_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_brands"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "catalog_products_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_products_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_collections"
             referencedColumns: ["id"]
           },
           {
@@ -2088,6 +2376,9 @@ export type Database = {
           description: string | null
           display_order: number | null
           id: string
+          macro_category:
+            | Database["public"]["Enums"]["catalog_macro_category"]
+            | null
           name: string
           parent_id: string | null
           slug: string
@@ -2097,6 +2388,9 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           id?: string
+          macro_category?:
+            | Database["public"]["Enums"]["catalog_macro_category"]
+            | null
           name: string
           parent_id?: string | null
           slug: string
@@ -2106,6 +2400,9 @@ export type Database = {
           description?: string | null
           display_order?: number | null
           id?: string
+          macro_category?:
+            | Database["public"]["Enums"]["catalog_macro_category"]
+            | null
           name?: string
           parent_id?: string | null
           slug?: string
@@ -3982,6 +4279,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       submit_public_lead: {
         Args: {
           _city?: string
@@ -4007,6 +4306,14 @@ export type Database = {
         | "commerciale"
         | "operaio"
         | "ibrido"
+      catalog_diff_type:
+        | "new"
+        | "updated"
+        | "deleted"
+        | "price_changed"
+        | "unchanged"
+      catalog_macro_category: "articoli" | "accessori" | "servizi"
+      catalog_price_list_status: "draft" | "applied" | "archived"
       contract_status: "in_corso" | "completato" | "annullato"
       cost_frequency: "mensile" | "trimestrale" | "annuale" | "una_tantum"
       customer_status: "opportunity" | "signed" | "working"
@@ -4172,6 +4479,15 @@ export const Constants = {
         "operaio",
         "ibrido",
       ],
+      catalog_diff_type: [
+        "new",
+        "updated",
+        "deleted",
+        "price_changed",
+        "unchanged",
+      ],
+      catalog_macro_category: ["articoli", "accessori", "servizi"],
+      catalog_price_list_status: ["draft", "applied", "archived"],
       contract_status: ["in_corso", "completato", "annullato"],
       cost_frequency: ["mensile", "trimestrale", "annuale", "una_tantum"],
       customer_status: ["opportunity", "signed", "working"],

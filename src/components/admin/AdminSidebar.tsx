@@ -41,6 +41,8 @@ import {
   LineChart,
   Tag,
   Layers,
+  Library,
+  History,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -122,9 +124,23 @@ const menuStructure: MenuEntry[] = [
   {
     type: 'group',
     group: {
+      label: 'Catalogo', icon: Library, color: '#0EA5E9', adminOnly: false,
+      items: [
+        { title: 'Prodotti', url: '/admin/catalogo', icon: Package, adminOnly: false },
+        { title: 'Marche', url: '/admin/catalogo/marche', icon: Tag, adminOnly: true },
+        { title: 'Collezioni', url: '/admin/catalogo/collezioni', icon: Layers, adminOnly: true },
+        { title: 'Categorie', url: '/admin/catalogo/categorie', icon: ListOrdered, adminOnly: true },
+        { title: 'Listini & versioni', url: '/admin/catalogo/listini', icon: FileText, adminOnly: true },
+        { title: 'Storico modifiche', url: '/admin/catalogo/storico', icon: History, adminOnly: true },
+        { title: 'Importa listino', url: '/admin/catalogo/importa', icon: Upload, adminOnly: true },
+      ],
+    },
+  },
+  {
+    type: 'group',
+    group: {
       label: 'Magazzino', icon: Package, color: '#A855F7', adminOnly: true,
       items: [
-        { title: 'Catalogo prodotti', url: '/admin/catalogo', icon: Package, adminOnly: true },
         { title: 'Lista articoli', url: '/admin/magazzino', icon: ListOrdered, adminOnly: true },
       ],
     },

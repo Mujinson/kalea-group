@@ -99,6 +99,7 @@ import CantieriMateriali from "./pages/admin/cantieri/CantieriMateriali";
 import CantieriBudget from "./pages/admin/cantieri/CantieriBudget";
 import CantieriReport from "./pages/admin/cantieri/CantieriReport";
 import AdminCatalog from "./pages/admin/AdminCatalog";
+import CatalogPlaceholder from "./pages/admin/catalog/CatalogPlaceholder";
 import WorkerDetail from "./pages/admin/cantieri/WorkerDetail";
 import CostoOperaio from "./pages/admin/strumenti/CostoOperaio";
 import Sostenibilita from "./pages/admin/strumenti/Sostenibilita";
@@ -242,6 +243,12 @@ const App = () => (
                 <Route path="clienti" element={<AdminCustomers />} />
                 <Route path="magazzino" element={<AdminInventory />} />
                 <Route path="catalogo" element={<AdminCatalog />} />
+                <Route path="catalogo/marche" element={<CatalogPlaceholder title="Marche" />} />
+                <Route path="catalogo/collezioni" element={<CatalogPlaceholder title="Collezioni" />} />
+                <Route path="catalogo/categorie" element={<CatalogPlaceholder title="Categorie" />} />
+                <Route path="catalogo/listini" element={<CatalogPlaceholder title="Listini & versioni" />} />
+                <Route path="catalogo/storico" element={<CatalogPlaceholder title="Storico modifiche" />} />
+                <Route path="catalogo/importa" element={<CatalogPlaceholder title="Importa listino" description="Upload di file XLSX / CSV / PDF con anteprima diff e versioning. In arrivo nella Fase 3." />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
