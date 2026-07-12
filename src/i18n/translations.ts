@@ -2969,6 +2969,18 @@ export const translations: Record<Language, Translations> = {
       privacyText: "Ihre Daten werden gemäß unserer",
       privacyLink: "Datenschutzerklärung",
     },
+    social: {
+      overline: "Social Community",
+      title: "Erlebe Kalēa",
+      subtitle: "Tägliche Inspiration, Projekte und Neuigkeiten direkt aus unseren Kanälen.",
+      cta: "Teile deine Projekte mit",
+      follow: "Folge uns",
+      instagram: "Instagram",
+      facebook: "Facebook",
+      tiktok: "TikTok",
+      linkedin: "LinkedIn",
+      pinterest: "Pinterest",
+    },
     footer: {
       tagline: "MgO-Oberflächensystem. Böden, Profile und Paneele, entworfen in Italien für Innenarchitektur.",
       quickLinks: "Schnelle Links",
