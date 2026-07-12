@@ -609,6 +609,18 @@ export const translations: Record<Language, Translations> = {
       privacyText: "I tuoi dati saranno trattati secondo la nostra",
       privacyLink: "Privacy Policy",
     },
+    social: {
+      overline: "Social Community",
+      title: "Experience Kalēa",
+      subtitle: "Ispirazione quotidiana, progetti e novità direttamente dai nostri canali.",
+      cta: "Condividi i tuoi progetti con",
+      follow: "Seguici",
+      instagram: "Instagram",
+      facebook: "Facebook",
+      tiktok: "TikTok",
+      linkedin: "LinkedIn",
+      pinterest: "Pinterest",
+    },
     footer: {
       tagline: "Sistema di superfici HYPERMATT e BIOMAG FLOOR®. Pavimenti, profili e pannelli progettati in Italia per l'architettura degli interni.",
       quickLinks: "Link Rapidi",
