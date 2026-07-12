@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { toast } from 'sonner';
 import { ArrowLeft, Save, X, Search, Plus, Trash2, Package } from 'lucide-react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { PRODUCT_CATALOG, CatalogProduct } from '@/data/quoteProducts';
+import type { CatalogProduct } from '@/data/quoteProducts';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const QUOTE_STATUSES = [
@@ -147,6 +147,32 @@ const AdminQuoteCreate = () => {
   });
   const [newItemCatalogOpen, setNewItemCatalogOpen] = useState(false);
   const [newItemCatalogSearch, setNewItemCatalogSearch] = useState('');
+  const [PRODUCT_CATALOG, setProductCatalog] = useState<CatalogProduct[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const rows = await fetchAllRows<any>(
+        supabase
+          .from('catalog_products')
+          .select('product_code,name,description,product_type,list_price,unit_of_measure')
+          .eq('is_active', true)
+          .order('name')
+      );
+      const mapType = (t: string): CatalogProduct['category'] =>
+        t === 'accessory' ? 'accessory' : t === 'service' ? 'service' : 'article';
+      setProductCatalog(
+        (rows || []).map(r => ({
+          code: r.product_code || '',
+          name: r.name || '',
+          description: r.description || '',
+          category: mapType(r.product_type),
+          defaultPrice: Number(r.list_price) || 0,
+          defaultUnit: r.unit_of_measure || 'Pezzo',
+          hasColor: false,
+        }))
+      );
+    })();
+  }, []);
 
   // Form
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
