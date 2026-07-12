@@ -127,6 +127,7 @@ const menuStructure: MenuEntry[] = [
       label: 'Catalogo', icon: Library, color: '#0EA5E9', adminOnly: false,
       items: [
         { title: 'Prodotti', url: '/admin/catalogo', icon: Package, adminOnly: false },
+        { title: 'Prezzi & Margini', url: '/admin/catalogo/prezzi', icon: DollarSign, adminOnly: true },
         { title: 'Marche', url: '/admin/catalogo/marche', icon: Tag, adminOnly: true },
         { title: 'Collezioni', url: '/admin/catalogo/collezioni', icon: Layers, adminOnly: true },
         { title: 'Categorie', url: '/admin/catalogo/categorie', icon: ListOrdered, adminOnly: true },
