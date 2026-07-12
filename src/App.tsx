@@ -106,6 +106,7 @@ import CatalogCategories from "./pages/admin/catalog/CatalogCategories";
 import CatalogPriceLists from "./pages/admin/catalog/CatalogPriceLists";
 import CatalogAuditLog from "./pages/admin/catalog/CatalogAuditLog";
 import CatalogImport from "./pages/admin/catalog/CatalogImport";
+import CatalogPrices from "./pages/admin/catalog/CatalogPrices";
 
 import WorkerDetail from "./pages/admin/cantieri/WorkerDetail";
 import CostoOperaio from "./pages/admin/strumenti/CostoOperaio";
