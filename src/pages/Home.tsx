@@ -80,7 +80,12 @@ const Home = () => {
             url: "https://www.kalea.space",
             logo: "https://www.kalea.space/favicon-k.png",
             description: "Pavimenti flottanti di nuova generazione in ossido di magnesio e fibra naturale. Progettati in Italia.",
-            sameAs: [],
+            sameAs: [
+              "https://www.instagram.com/kalea.group/",
+              "https://www.facebook.com/people/Kalea/61585013655612/",
+              "https://it.pinterest.com/Kalea_Group/_created/",
+              "https://www.linkedin.com/in/kalea-group-4bb7583b6/",
+            ],
             contactPoint: {
               "@type": "ContactPoint",
               contactType: "customer service",
