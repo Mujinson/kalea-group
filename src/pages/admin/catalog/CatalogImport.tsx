@@ -363,10 +363,10 @@ export default function CatalogImport() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Marca (opzionale — restringe il confronto e abilita "eliminati")</Label>
-                <Select value={brandId} onValueChange={setBrandId}>
+                <Select value={brandId || '__none__'} onValueChange={v => setBrandId(v === '__none__' ? '' : v)}>
                   <SelectTrigger><SelectValue placeholder="Tutte le marche" /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">— Nessuna (globale) —</SelectItem>
+                    <SelectItem value="__none__">— Nessuna (globale) —</SelectItem>
                     {brands.map(b => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
