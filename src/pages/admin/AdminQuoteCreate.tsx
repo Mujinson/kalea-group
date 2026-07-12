@@ -151,8 +151,12 @@ const AdminQuoteCreate = () => {
 
   useEffect(() => {
     (async () => {
-      const rows = await fetchAllRows<any>('catalog_products', q =>
-        q.select('product_code,name,description,product_type,list_price,unit_of_measure').eq('is_active', true).order('name')
+      const rows = await fetchAllRows<any>(
+        supabase
+          .from('catalog_products')
+          .select('product_code,name,description,product_type,list_price,unit_of_measure')
+          .eq('is_active', true)
+          .order('name')
       );
       const mapType = (t: string): CatalogProduct['category'] =>
         t === 'accessory' ? 'accessory' : t === 'service' ? 'service' : 'article';
