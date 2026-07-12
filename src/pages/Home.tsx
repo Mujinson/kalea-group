@@ -6,6 +6,7 @@ import ChiSiamoManifesto from "@/components/ChiSiamoManifesto";
 import PartnersMarquee from "@/components/PartnersMarquee";
 import ServicesTripleSection from "@/components/ServicesTripleSection";
 import MetodoKalea from "@/components/MetodoKalea";
+import SocialSection from "@/components/SocialSection";
 
 import IndoorOutdoorSection from "@/components/IndoorOutdoorSection";
 import SEOHead from "@/components/SEOHead";
