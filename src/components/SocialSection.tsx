@@ -102,7 +102,7 @@ const SocialSection = () => {
         <div
           ref={containerRef}
           {...handlers}
-          className={`flex gap-4 md:gap-6 overflow-x-auto px-6 md:px-12 lg:px-20 pb-4 scrollbar-hide snap-x snap-mandatory ${
+          className={`flex gap-4 md:gap-6 overflow-x-auto px-6 md:px-12 lg:px-20 pb-4 snap-x snap-mandatory ${
             isDragging ? "cursor-grabbing" : "cursor-grab"
           }`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
