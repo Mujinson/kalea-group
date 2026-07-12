@@ -48,6 +48,12 @@ export default function CatalogPrices() {
   const [query, setQuery] = useState('');
   const [brandFilter, setBrandFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [priceMin, setPriceMin] = useState<string>('');
+  const [priceMax, setPriceMax] = useState<string>('');
+  const [missingPrice, setMissingPrice] = useState(false);
+  const [missingMargin, setMissingMargin] = useState(false);
   const [page, setPage] = useState(1);
   const [bulkOp, setBulkOp] = useState<'variation' | 'discount' | 'markup' | 'active'>('variation');
   const [bulkValue, setBulkValue] = useState<string>('');
