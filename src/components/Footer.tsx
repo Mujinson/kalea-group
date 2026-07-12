@@ -159,6 +159,17 @@ const Footer = () => {
               >
                 <Linkedin size={22} className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110" strokeWidth={1.5} />
               </a>
+              <a
+                href="#tiktok-url-needed"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 -m-2 group"
+                aria-label="TikTok"
+              >
+                <svg width={22} height={22} viewBox="0 0 24 24" fill="currentColor" className="text-foreground/80 group-hover:text-foreground transition-all duration-250 group-hover:scale-110">
+                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.11-1.46-.01 2.31 0 4.62-.01 6.93-.01 1.27-.19 2.53-.74 3.71-.56 1.28-1.54 2.39-2.75 3.12-1.37.8-2.93 1.18-4.51 1.13-1.41-.01-2.81-.35-4.04-1.05-1.44-.81-2.58-2.09-3.11-3.66-.56-1.64-.42-3.48.33-5.01.73-1.57 2.13-2.84 3.79-3.37 1.15-.38 2.37-.47 3.56-.25v4.11c-.72-.14-1.48-.11-2.16.14-.96.34-1.74 1.09-2.09 2.03-.39 1.03-.18 2.22.5 3.06.6.76 1.55 1.2 2.51 1.22.99.03 2.01-.31 2.74-1.02.66-.67.97-1.59.97-2.52V0h-.01z" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
