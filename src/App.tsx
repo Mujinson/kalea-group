@@ -258,6 +258,7 @@ const App = () => (
                 <Route path="catalogo/storico" element={<CatalogAuditLog />} />
 
                 <Route path="catalogo/importa" element={<CatalogImport />} />
+                <Route path="catalogo/prezzi" element={<CatalogPrices />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
