@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { toast } from 'sonner';
 import { ArrowLeft, Save, X, Search, Plus, Trash2, Package } from 'lucide-react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
-import { PRODUCT_CATALOG, CatalogProduct } from '@/data/quoteProducts';
+import type { CatalogProduct } from '@/data/quoteProducts';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const QUOTE_STATUSES = [
