@@ -1798,6 +1798,18 @@ export const translations: Record<Language, Translations> = {
       privacyText: "Your data will be processed according to our",
       privacyLink: "Privacy Policy",
     },
+    social: {
+      overline: "Social Community",
+      title: "Experience Kalēa",
+      subtitle: "Daily inspiration, projects and news straight from our channels.",
+      cta: "Share your projects with",
+      follow: "Follow us",
+      instagram: "Instagram",
+      facebook: "Facebook",
+      tiktok: "TikTok",
+      linkedin: "LinkedIn",
+      pinterest: "Pinterest",
+    },
     footer: {
       tagline: "MgO surface system. Floors, profiles and panels designed in Italy for interior architecture.",
       quickLinks: "Quick Links",
