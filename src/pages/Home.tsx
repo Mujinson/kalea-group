@@ -456,6 +456,9 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Social Community */}
+      <SocialSection />
     </div>
   );
 };
