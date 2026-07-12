@@ -103,6 +103,9 @@ import CatalogPlaceholder from "./pages/admin/catalog/CatalogPlaceholder";
 import CatalogBrands from "./pages/admin/catalog/CatalogBrands";
 import CatalogCollections from "./pages/admin/catalog/CatalogCollections";
 import CatalogCategories from "./pages/admin/catalog/CatalogCategories";
+import CatalogPriceLists from "./pages/admin/catalog/CatalogPriceLists";
+import CatalogAuditLog from "./pages/admin/catalog/CatalogAuditLog";
+
 import WorkerDetail from "./pages/admin/cantieri/WorkerDetail";
 import CostoOperaio from "./pages/admin/strumenti/CostoOperaio";
 import Sostenibilita from "./pages/admin/strumenti/Sostenibilita";
