@@ -256,7 +256,7 @@ const App = () => (
                 <Route path="catalogo/listini" element={<CatalogPriceLists />} />
                 <Route path="catalogo/storico" element={<CatalogAuditLog />} />
 
-                <Route path="catalogo/importa" element={<CatalogPlaceholder title="Importa listino" description="Upload di file XLSX / CSV / PDF con anteprima diff e versioning. In arrivo nella Fase 3." />} />
+                <Route path="catalogo/importa" element={<CatalogImport />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
