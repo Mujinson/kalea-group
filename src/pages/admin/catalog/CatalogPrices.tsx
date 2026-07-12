@@ -48,6 +48,12 @@ export default function CatalogPrices() {
   const [query, setQuery] = useState('');
   const [brandFilter, setBrandFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [priceMin, setPriceMin] = useState<string>('');
+  const [priceMax, setPriceMax] = useState<string>('');
+  const [missingPrice, setMissingPrice] = useState(false);
+  const [missingMargin, setMissingMargin] = useState(false);
   const [page, setPage] = useState(1);
   const [bulkOp, setBulkOp] = useState<'variation' | 'discount' | 'markup' | 'active'>('variation');
   const [bulkValue, setBulkValue] = useState<string>('');
@@ -89,11 +95,26 @@ export default function CatalogPrices() {
     [rows],
   );
 
+  const productTypes = useMemo(
+    () => Array.from(new Set(rows.map(r => r.product_type).filter(Boolean) as string[])).sort(),
+    [rows],
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const pMin = priceMin === '' ? null : Number(priceMin);
+    const pMax = priceMax === '' ? null : Number(priceMax);
     return rows.filter(r => {
       if (brandFilter !== 'all' && r.brand !== brandFilter) return false;
       if (categoryFilter !== 'all' && r.category !== categoryFilter) return false;
+      if (typeFilter !== 'all' && r.product_type !== typeFilter) return false;
+      if (activeFilter === 'active' && !r.is_active) return false;
+      if (activeFilter === 'inactive' && r.is_active) return false;
+      const lp = Number(r.list_price) || 0;
+      if (pMin !== null && lp < pMin) return false;
+      if (pMax !== null && lp > pMax) return false;
+      if (missingPrice && lp > 0) return false;
+      if (missingMargin && (Number(r.markup_percentage) || 0) > 0) return false;
       if (!q) return true;
       return (
         (r.name || '').toLowerCase().includes(q) ||
@@ -101,13 +122,24 @@ export default function CatalogPrices() {
         (r.brand || '').toLowerCase().includes(q)
       );
     });
-  }, [rows, query, brandFilter, categoryFilter]);
+  }, [rows, query, brandFilter, categoryFilter, typeFilter, activeFilter, priceMin, priceMax, missingPrice, missingMargin]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const paged = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  useEffect(() => { setPage(1); }, [query, brandFilter, categoryFilter]);
+  useEffect(() => { setPage(1); }, [query, brandFilter, categoryFilter, typeFilter, activeFilter, priceMin, priceMax, missingPrice, missingMargin]);
+
+  const resetFilters = () => {
+    setQuery(''); setBrandFilter('all'); setCategoryFilter('all'); setTypeFilter('all');
+    setActiveFilter('all'); setPriceMin(''); setPriceMax(''); setMissingPrice(false); setMissingMargin(false);
+  };
+
+  const activeFilterCount =
+    (query ? 1 : 0) + (brandFilter !== 'all' ? 1 : 0) + (categoryFilter !== 'all' ? 1 : 0) +
+    (typeFilter !== 'all' ? 1 : 0) + (activeFilter !== 'all' ? 1 : 0) +
+    (priceMin ? 1 : 0) + (priceMax ? 1 : 0) + (missingPrice ? 1 : 0) + (missingMargin ? 1 : 0);
+
 
   const patchLocal = (id: string, patch: Partial<Product>) => {
     setRows(prev => prev.map(r => (r.id === id ? { ...r, ...patch } : r)));
@@ -272,10 +304,47 @@ export default function CatalogPrices() {
             {categories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={typeFilter} onValueChange={setTypeFilter}>
+          <SelectTrigger className="h-9 w-[150px]"><SelectValue placeholder="Tipo" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tutti i tipi</SelectItem>
+            {productTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Select value={activeFilter} onValueChange={(v: any) => setActiveFilter(v)}>
+          <SelectTrigger className="h-9 w-[140px]"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Attivi + Disattivi</SelectItem>
+            <SelectItem value="active">Solo attivi</SelectItem>
+            <SelectItem value="inactive">Solo disattivi</SelectItem>
+          </SelectContent>
+        </Select>
+        <Input
+          type="number" placeholder="€ min" value={priceMin}
+          onChange={e => setPriceMin(e.target.value)} className="h-9 w-[90px]"
+        />
+        <Input
+          type="number" placeholder="€ max" value={priceMax}
+          onChange={e => setPriceMax(e.target.value)} className="h-9 w-[90px]"
+        />
+        <label className="flex items-center gap-1.5 text-xs text-[#1A1008] cursor-pointer">
+          <Checkbox checked={missingPrice} onCheckedChange={(c) => setMissingPrice(!!c)} />
+          Senza prezzo
+        </label>
+        <label className="flex items-center gap-1.5 text-xs text-[#1A1008] cursor-pointer">
+          <Checkbox checked={missingMargin} onCheckedChange={(c) => setMissingMargin(!!c)} />
+          Senza margine
+        </label>
+        {activeFilterCount > 0 && (
+          <Button variant="ghost" size="sm" onClick={resetFilters} className="h-9 text-xs">
+            Azzera ({activeFilterCount})
+          </Button>
+        )}
         <div className="text-xs text-[#8A7060] ml-auto">
           {filtered.length} risultati · {selected.size} selezionati
         </div>
       </div>
+
 
       {/* Bulk bar */}
       <div className="flex flex-wrap gap-2 items-center bg-[#FEFCF6] border border-dashed border-[#C8A96E] rounded-lg p-3">
