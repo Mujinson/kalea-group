@@ -95,11 +95,26 @@ export default function CatalogPrices() {
     [rows],
   );
 
+  const productTypes = useMemo(
+    () => Array.from(new Set(rows.map(r => r.product_type).filter(Boolean) as string[])).sort(),
+    [rows],
+  );
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const pMin = priceMin === '' ? null : Number(priceMin);
+    const pMax = priceMax === '' ? null : Number(priceMax);
     return rows.filter(r => {
       if (brandFilter !== 'all' && r.brand !== brandFilter) return false;
       if (categoryFilter !== 'all' && r.category !== categoryFilter) return false;
+      if (typeFilter !== 'all' && r.product_type !== typeFilter) return false;
+      if (activeFilter === 'active' && !r.is_active) return false;
+      if (activeFilter === 'inactive' && r.is_active) return false;
+      const lp = Number(r.list_price) || 0;
+      if (pMin !== null && lp < pMin) return false;
+      if (pMax !== null && lp > pMax) return false;
+      if (missingPrice && lp > 0) return false;
+      if (missingMargin && (Number(r.markup_percentage) || 0) > 0) return false;
       if (!q) return true;
       return (
         (r.name || '').toLowerCase().includes(q) ||
@@ -107,13 +122,24 @@ export default function CatalogPrices() {
         (r.brand || '').toLowerCase().includes(q)
       );
     });
-  }, [rows, query, brandFilter, categoryFilter]);
+  }, [rows, query, brandFilter, categoryFilter, typeFilter, activeFilter, priceMin, priceMax, missingPrice, missingMargin]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const paged = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  useEffect(() => { setPage(1); }, [query, brandFilter, categoryFilter]);
+  useEffect(() => { setPage(1); }, [query, brandFilter, categoryFilter, typeFilter, activeFilter, priceMin, priceMax, missingPrice, missingMargin]);
+
+  const resetFilters = () => {
+    setQuery(''); setBrandFilter('all'); setCategoryFilter('all'); setTypeFilter('all');
+    setActiveFilter('all'); setPriceMin(''); setPriceMax(''); setMissingPrice(false); setMissingMargin(false);
+  };
+
+  const activeFilterCount =
+    (query ? 1 : 0) + (brandFilter !== 'all' ? 1 : 0) + (categoryFilter !== 'all' ? 1 : 0) +
+    (typeFilter !== 'all' ? 1 : 0) + (activeFilter !== 'all' ? 1 : 0) +
+    (priceMin ? 1 : 0) + (priceMax ? 1 : 0) + (missingPrice ? 1 : 0) + (missingMargin ? 1 : 0);
+
 
   const patchLocal = (id: string, patch: Partial<Product>) => {
     setRows(prev => prev.map(r => (r.id === id ? { ...r, ...patch } : r)));
