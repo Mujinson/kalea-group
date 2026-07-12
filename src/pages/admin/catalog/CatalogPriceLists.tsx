@@ -142,13 +142,14 @@ export default function CatalogPriceLists() {
                               <td className="p-2 font-mono">{i.product_code}</td>
                               <td className="p-2">{i.name}</td>
                               <td className="p-2 text-right text-muted-foreground">
-                                {i.previous_price != null ? `€ ${Number(i.previous_price).toFixed(2)}` : "—"}
+                                {i.old_snapshot?.list_price != null ? `€ ${Number(i.old_snapshot.list_price).toFixed(2)}` : "—"}
                               </td>
                               <td className="p-2 text-right font-medium">
-                                {i.new_price != null ? `€ ${Number(i.new_price).toFixed(2)}` : "—"}
+                                {i.list_price != null ? `€ ${Number(i.list_price).toFixed(2)}` : "—"}
                               </td>
                             </tr>
                           ))}
+
                         </tbody>
                       </table>
                       {grouped[type].length > 50 && (
