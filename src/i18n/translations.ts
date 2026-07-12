@@ -4146,6 +4146,18 @@ export const translations: Record<Language, Translations> = {
       privacyText: "Vos données seront traitées selon notre",
       privacyLink: "Politique de confidentialité",
     },
+    social: {
+      overline: "Communauté Sociale",
+      title: "Découvrez Kalēa",
+      subtitle: "Inspiration quotidienne, projets et actualités directement de nos canaux.",
+      cta: "Partagez vos projets avec",
+      follow: "Suivez-nous",
+      instagram: "Instagram",
+      facebook: "Facebook",
+      tiktok: "TikTok",
+      linkedin: "LinkedIn",
+      pinterest: "Pinterest",
+    },
     footer: {
       tagline: "Système de surfaces MgO. Sols, profilés et panneaux conçus en Italie pour l'architecture d'intérieur.",
       quickLinks: "Liens Rapides",
