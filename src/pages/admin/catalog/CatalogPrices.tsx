@@ -17,7 +17,8 @@ type Product = {
   product_code: string | null;
   name: string;
   brand: string | null;
-  category: string | null;
+  category_id: string | null;
+  category?: string | null;
   product_type: string | null;
   list_price: number | null;
   supplier_discount_percentage: number | null;
