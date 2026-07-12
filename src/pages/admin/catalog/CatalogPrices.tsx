@@ -58,14 +58,19 @@ export default function CatalogPrices() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await fetchAllRows<Product>(
-        supabase
-          .from('catalog_products')
-          .select('id,product_code,name,brand,category,product_type,list_price,supplier_discount_percentage,markup_percentage,is_active,unit_of_measure')
-          .order('brand', { ascending: true })
-          .order('name', { ascending: true }),
-      );
-      setRows(data);
+      const [data, catsRes] = await Promise.all([
+        fetchAllRows<Product>(
+          supabase
+            .from('catalog_products')
+            .select('id,product_code,name,brand,category_id,product_type,list_price,supplier_discount_percentage,markup_percentage,is_active,unit_of_measure')
+            .order('brand', { ascending: true })
+            .order('name', { ascending: true }),
+        ),
+        supabase.from('product_categories').select('id,name'),
+      ]);
+      const catMap = new Map<string, string>();
+      (catsRes.data || []).forEach((c: any) => catMap.set(c.id, c.name));
+      setRows(data.map(r => ({ ...r, category: r.category_id ? (catMap.get(r.category_id) || null) : null })));
     } catch (e: any) {
       toast.error('Errore caricamento: ' + (e?.message || 'sconosciuto'));
     } finally {
