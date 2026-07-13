@@ -9,6 +9,7 @@ import OperaioCantiereDetail from './OperaioCantiereDetail';
 import IbridoCommissioni from './IbridoCommissioni';
 import RoleProfile from './RoleProfile';
 import CreaPreventivo from '@/components/role-app/MobileQuoteWrapper';
+import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
 
 const nav = [
   { to: '/app/ibrido', label: 'Oggi', icon: <Home className="w-5 h-5" /> },
