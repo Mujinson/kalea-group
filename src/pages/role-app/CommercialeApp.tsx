@@ -19,18 +19,21 @@ const nav = [
 ];
 
 const CommercialeApp = () => (
-  <Routes>
-    <Route element={<RoleAppLayout allowedRoles={['commerciale']} navItems={nav} title="Commerciale" />}>
-      <Route index element={<CommercialeHome />} />
-      <Route path="lead" element={<CommercialeLeads />} />
-      <Route path="lead/:id" element={<CommercialeLeadDetail />} />
-      <Route path="preventivi" element={<CommercialeQuotes />} />
-      <Route path="calendario" element={<CommercialeCalendario />} />
-      <Route path="profilo" element={<RoleProfile />} />
-      <Route path="crea-preventivo" element={<CreaPreventivo />} />
-      <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
-    </Route>
-  </Routes>
+  <>
+    <Routes>
+      <Route element={<RoleAppLayout allowedRoles={['commerciale']} navItems={nav} title="Commerciale" />}>
+        <Route index element={<CommercialeHome />} />
+        <Route path="lead" element={<CommercialeLeads />} />
+        <Route path="lead/:id" element={<CommercialeLeadDetail />} />
+        <Route path="preventivi" element={<CommercialeQuotes />} />
+        <Route path="calendario" element={<CommercialeCalendario />} />
+        <Route path="profilo" element={<RoleProfile />} />
+        <Route path="crea-preventivo" element={<CreaPreventivo />} />
+        <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
+      </Route>
+    </Routes>
+    <CrmAssistantChat />
+  </>
 );
 
 export default CommercialeApp;
