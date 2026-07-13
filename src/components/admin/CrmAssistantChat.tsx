@@ -83,8 +83,9 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
         onClick={() => setOpen(true)}
         aria-label="Apri assistente CRM"
         title="Assistente CRM"
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
+        className="fixed right-6 z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
         style={{
+          bottom: bottomOffset,
           background: 'linear-gradient(135deg, #1E1B4B 0%, #2A1F5C 100%)',
           color: '#F5F1E8',
           border: '1px solid rgba(255,255,255,0.15)',
