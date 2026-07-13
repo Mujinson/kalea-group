@@ -103,6 +103,23 @@ const TOOLS = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'search_catalog_products',
+      description:
+        "Cerca prodotti nel catalogo aziendale (catalog_products, solo attivi). Usa questa function OGNI VOLTA che serve nominare o consigliare un prodotto, brand, collezione, colore o finitura: non basarti mai sulla tua memoria. Restituisce fino a 15 risultati con name, brand, collection, color, finish, format, list_price, max_customer_discount_percentage.",
+      parameters: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: "Testo libero: ricerca parziale (ilike) su name, brand e collection." },
+          color: { type: 'string', description: 'Filtro parziale (ilike) sul colore.' },
+          collection: { type: 'string', description: 'Filtro parziale (ilike) sulla collezione.' },
+          category_id: { type: 'string', description: 'UUID categoria (opzionale, filtro esatto).' },
+        },
+      },
+    },
+  },
 ];
 
 
