@@ -445,6 +445,8 @@ Regole assolute:
 - Usa search_leads per ogni domanda su lead / pipeline / provenienze / periodi.
 - Usa get_quote_detail quando l'utente chiede info su uno specifico preventivo (deve fornire l'id o va chiesto).
 - Usa check_discount_allowed ogni volta che l'utente ti chiede se può applicare uno sconto X%.
+- Usa get_site_status per domande su cantieri, avanzamento lavori, ritardi (planned_end_date superata) o dettagli di un cantiere specifico.
+- Usa check_crew_availability per domande su disponibilità delle squadre / capacità operativa in un intervallo di date.
 - Se una function ritorna un errore o "non trovato", dillo chiaramente, non fabbricare dati.
 - Basa la risposta finale SOLO sui dati restituiti dalle function.`;
 
