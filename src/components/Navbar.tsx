@@ -749,6 +749,60 @@ const Navbar = () => {
                 ))}
               </div>
 
+              {/* Mobile Social Icons */}
+              <div className="flex items-center justify-center gap-5 py-4 border-t border-[#EBE2D8]">
+                <a
+                  href="https://www.instagram.com/kalea.group/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#3F3B33]/70 hover:text-[#3F3B33] transition-all duration-200 hover:scale-110"
+                  aria-label="Instagram"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Instagram size={22} strokeWidth={1.5} />
+                </a>
+                <a
+                  href="https://www.facebook.com/people/Kalea/61585013655612/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#3F3B33]/70 hover:text-[#3F3B33] transition-all duration-200 hover:scale-110"
+                  aria-label="Facebook"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Facebook size={22} strokeWidth={1.5} />
+                </a>
+                <a
+                  href="https://it.pinterest.com/Kalea_Group/_created/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#3F3B33]/70 hover:text-[#3F3B33] transition-all duration-200 hover:scale-110"
+                  aria-label="Pinterest"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <PinterestIcon className="w-[22px] h-[22px]" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/kalea-group-4bb7583b6/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#3F3B33]/70 hover:text-[#3F3B33] transition-all duration-200 hover:scale-110"
+                  aria-label="LinkedIn"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Linkedin size={22} strokeWidth={1.5} />
+                </a>
+                <a
+                  href="#tiktok-url-needed"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#3F3B33]/70 hover:text-[#3F3B33] transition-all duration-200 hover:scale-110"
+                  aria-label="TikTok"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <TikTokIcon className="w-[22px] h-[22px]" />
+                </a>
+              </div>
+
               <Link
                 to={`/${language}/diventa-partner`}
                 onClick={() => setIsMobileMenuOpen(false)}
