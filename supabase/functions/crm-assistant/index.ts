@@ -432,8 +432,23 @@ Deno.serve(async (req) => {
       .order('created_at', { ascending: true })
       .limit(20);
 
+    // Current date (server-side) for date-relative reasoning
+    const now = new Date();
+    const dateFormatted = new Intl.DateTimeFormat('it-IT', {
+      day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Rome',
+    }).format(now);
+    const weekdayFormatted = new Intl.DateTimeFormat('it-IT', {
+      weekday: 'long', timeZone: 'Europe/Rome',
+    }).format(now);
+    const currentYear = new Intl.DateTimeFormat('it-IT', {
+      year: 'numeric', timeZone: 'Europe/Rome',
+    }).format(now);
+
     // System prompt
     const systemPrompt = `Sei l'assistente CRM di Kalēa. Rispondi SEMPRE in italiano, in modo conciso e concreto (max 4-5 frasi salvo elenchi).
+
+Oggi è il ${dateFormatted} (${weekdayFormatted}). L'anno corrente è ${currentYear}.
+Usa SEMPRE questa data come riferimento per qualsiasi calcolo o interpretazione di date relative o senza anno esplicito (es. "dal 20 al 25 luglio", "questa settimana", "il mese prossimo", "negli ultimi 30 giorni"). Assumi sempre l'anno corrente reale indicato qui sopra, non indovinarlo mai autonomamente e non usare anni diversi salvo che l'utente li specifichi esplicitamente.
 
 Contesto utente corrente:
 - Ruolo: ${role}
