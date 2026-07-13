@@ -103,6 +103,23 @@ const TOOLS = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'search_catalog_products',
+      description:
+        "Cerca prodotti nel catalogo aziendale (catalog_products, solo attivi). Usa questa function OGNI VOLTA che serve nominare o consigliare un prodotto, brand, collezione, colore o finitura: non basarti mai sulla tua memoria. Restituisce fino a 15 risultati con name, brand, collection, color, finish, format, list_price, max_customer_discount_percentage.",
+      parameters: {
+        type: 'object',
+        properties: {
+          query: { type: 'string', description: "Testo libero: ricerca parziale (ilike) su name, brand e collection." },
+          color: { type: 'string', description: 'Filtro parziale (ilike) sul colore.' },
+          collection: { type: 'string', description: 'Filtro parziale (ilike) sulla collezione.' },
+          category_id: { type: 'string', description: 'UUID categoria (opzionale, filtro esatto).' },
+        },
+      },
+    },
+  },
 ];
 
 
@@ -323,6 +340,36 @@ async function toolCheckCrewAvailability(
   };
 }
 
+async function toolSearchCatalogProducts(
+  admin: ReturnType<typeof createClient>,
+  args: { query?: string; color?: string; collection?: string; category_id?: string },
+) {
+  let q = admin
+    .from('catalog_products')
+    .select('id, name, brand, collection, color, finish, format, list_price, max_customer_discount_percentage')
+    .eq('is_active', true)
+    .limit(15);
+
+  const term = args.query?.trim();
+  if (term) {
+    const esc = term.replace(/[,()]/g, ' ');
+    q = q.or(`name.ilike.%${esc}%,brand.ilike.%${esc}%,collection.ilike.%${esc}%`);
+  }
+  if (args.color?.trim()) q = q.ilike('color', `%${args.color.trim()}%`);
+  if (args.collection?.trim()) q = q.ilike('collection', `%${args.collection.trim()}%`);
+  if (args.category_id?.trim()) q = q.eq('category_id', args.category_id.trim());
+
+  const { data, error } = await q;
+  if (error) return { error: error.message };
+  const products = data ?? [];
+  if (products.length === 0) {
+    return { total: 0, products: [], note: 'Nessun prodotto trovato con questi criteri nel catalogo.' };
+  }
+  return { total: products.length, products };
+}
+
+
+
 
 
 Deno.serve(async (req) => {
@@ -462,8 +509,10 @@ Regole assolute:
 - Usa check_discount_allowed ogni volta che l'utente ti chiede se può applicare uno sconto X%.
 - Usa get_site_status per domande su cantieri, avanzamento lavori, ritardi (planned_end_date superata) o dettagli di un cantiere specifico.
 - Usa check_crew_availability per domande su disponibilità delle squadre / capacità operativa in un intervallo di date.
+- Usa search_catalog_products ogni volta che serve nominare, consigliare o confrontare un prodotto del catalogo (per nome, brand, collezione, colore, finitura o categoria).
 - Se una function ritorna un errore o "non trovato", dillo chiaramente, non fabbricare dati.
-- Basa la risposta finale SOLO sui dati restituiti dalle function.`;
+- Basa la risposta finale SOLO sui dati restituiti dalle function.
+- REGOLA CRITICA: non menzionare MAI nomi di prodotto, sigle, brand, collezioni, colori o finiture che non provengano da una chiamata a search_catalog_products. Se l'utente chiede consigli su quale prodotto proporre per un cliente, DEVI SEMPRE chiamare search_catalog_products prima di rispondere, anche se pensi di conoscere già il catalogo aziendale. Se la function non ritorna risultati pertinenti, di' esplicitamente che non hai trovato prodotti corrispondenti nel catalogo, non proporre alternative inventate.`;
 
     const messages: any[] = [
       { role: 'system', content: systemPrompt },
@@ -541,6 +590,8 @@ Regole assolute:
             result = await toolGetSiteStatus(admin, args, { role, salespersonId });
           } else if (name === 'check_crew_availability') {
             result = await toolCheckCrewAvailability(admin, args);
+          } else if (name === 'search_catalog_products') {
+            result = await toolSearchCatalogProducts(admin, args);
           } else {
             result = { error: `Unknown tool: ${name}` };
           }
