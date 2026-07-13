@@ -6,6 +6,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import CommandPalette from '@/components/admin/CommandPalette';
 import CrmFaqDialog from '@/components/admin/CrmFaqDialog';
+import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
 import { Loader2, Search, LayoutGrid, HelpCircle, Settings, LogOut } from 'lucide-react';
 
 const TOPBAR_BG = 'linear-gradient(180deg, #1E1B4B 0%, #2A1F5C 100%)';
