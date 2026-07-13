@@ -91,11 +91,13 @@ async function toolSearchLeads(
     const since = new Date(Date.now() - args.days * 86400_000).toISOString();
     q = q.gte('created_at', since);
   }
-  // Commerciale sees only own leads (same logic as AdminLeads.tsx)
-  if (ctx.role === 'commerciale' && ctx.salespersonId) {
-    q = q.eq('assigned_salesperson_id', ctx.salespersonId);
-  } else if (ctx.role === 'commerciale' && !ctx.salespersonId) {
-    return { total: 0, leads: [], note: 'Nessun profilo commerciale collegato all\'utente.' };
+  // Non-admin sees only own leads (same logic as AdminLeads.tsx: !isAdmin && salespersonId)
+  if (ctx.role !== 'admin') {
+    if (ctx.salespersonId) {
+      q = q.eq('assigned_salesperson_id', ctx.salespersonId);
+    } else {
+      return { total: 0, leads: [], note: 'Nessun profilo commerciale collegato all\'utente.' };
+    }
   }
 
   const { data, count, error } = await q;
@@ -120,8 +122,8 @@ async function toolGetQuoteDetail(
   if (error) return { error: error.message };
   if (!quote) return { error: 'Preventivo non trovato' };
 
-  // Visibility rule: commerciale can only see quotes tied to their own leads/customers.
-  if (ctx.role === 'commerciale' && ctx.salespersonId) {
+  // Visibility rule: non-admin (commerciale/ibrido) only sees quotes tied to own leads/customers.
+  if (ctx.role !== 'admin' && ctx.role !== 'operaio' && ctx.salespersonId) {
     let allowed = false;
     if (quote.lead_id) {
       const { data: lead } = await admin
