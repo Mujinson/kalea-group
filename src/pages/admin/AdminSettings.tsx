@@ -170,6 +170,8 @@ const AdminSettings = () => {
           </Button>
         </CardContent>
       </Card>
+
+      <TestCrmAssistant />
     </div>
   );
 };
