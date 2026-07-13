@@ -71,7 +71,40 @@ const TOOLS = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'get_site_status',
+      description:
+        'Restituisce info sui cantieri: se site_id è passato, dettagli di quel cantiere; altrimenti (o se only_delayed=true) elenco dei cantieri in ritardo (planned_end_date passata e status non completato/chiuso). Per non-admin filtra automaticamente i cantieri del commerciale.',
+      parameters: {
+        type: 'object',
+        properties: {
+          site_id: { type: 'string', description: 'UUID del cantiere (opzionale)' },
+          only_delayed: { type: 'boolean', description: 'Se true, restituisce solo i cantieri in ritardo' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'check_crew_availability',
+      description:
+        "Verifica la disponibilità delle squadre in un intervallo di date. Restituisce per ogni squadra se è libera o occupata (con id cantiere e date). Se crew_id è passato, limita alla singola squadra.",
+      parameters: {
+        type: 'object',
+        properties: {
+          start_date: { type: 'string', description: 'Data inizio periodo (YYYY-MM-DD)' },
+          end_date: { type: 'string', description: 'Data fine periodo (YYYY-MM-DD)' },
+          crew_id: { type: 'string', description: 'UUID squadra (opzionale)' },
+        },
+        required: ['start_date', 'end_date'],
+      },
+    },
+  },
 ];
+
 
 // ---------- Tool implementations ----------
 async function toolSearchLeads(
@@ -198,6 +231,100 @@ function toolCheckDiscount(
   };
 }
 
+const COMPLETED_SITE_STATUSES = ['completato', 'completed', 'chiuso', 'closed', 'archiviato', 'annullato'];
+
+async function toolGetSiteStatus(
+  admin: ReturnType<typeof createClient>,
+  args: { site_id?: string; only_delayed?: boolean },
+  ctx: { role: Role; salespersonId: string | null },
+) {
+  if (args.site_id) {
+    let q = admin
+      .from('construction_sites')
+      .select('id, title, status, city, province, planned_start_date, planned_end_date, start_date, end_date, floor_sqm, priority, salesperson_id')
+      .eq('id', args.site_id);
+    if (ctx.role !== 'admin') {
+      if (!ctx.salespersonId) return { error: 'Nessun profilo commerciale collegato all\'utente.' };
+      q = q.eq('salesperson_id', ctx.salespersonId);
+    }
+    const { data, error } = await q.maybeSingle();
+    if (error) return { error: error.message };
+    if (!data) return { error: 'Cantiere non trovato o non accessibile.' };
+    return data;
+  }
+
+  // List: default = delayed
+  const today = new Date().toISOString().slice(0, 10);
+  let q = admin
+    .from('construction_sites')
+    .select('id, title, status, city, province, planned_start_date, planned_end_date, priority, salesperson_id', { count: 'exact' })
+    .lt('planned_end_date', today)
+    .not('status', 'in', `(${COMPLETED_SITE_STATUSES.map((s) => `"${s}"`).join(',')})`)
+    .order('planned_end_date', { ascending: true })
+    .limit(30);
+  if (ctx.role !== 'admin') {
+    if (!ctx.salespersonId) return { total: 0, sites: [], note: 'Nessun profilo commerciale collegato all\'utente.' };
+    q = q.eq('salesperson_id', ctx.salespersonId);
+  }
+  const { data, count, error } = await q;
+  if (error) return { error: error.message };
+  return {
+    total: count ?? data?.length ?? 0,
+    returned: data?.length ?? 0,
+    delayed_sites: data ?? [],
+  };
+}
+
+async function toolCheckCrewAvailability(
+  admin: ReturnType<typeof createClient>,
+  args: { start_date: string; end_date: string; crew_id?: string },
+) {
+  if (!args.start_date || !args.end_date) {
+    return { error: 'start_date e end_date sono obbligatorie (YYYY-MM-DD).' };
+  }
+
+  // Crews list (optionally filtered)
+  let crewsQ = admin.from('crews').select('id, name, max_workers, active');
+  if (args.crew_id) crewsQ = crewsQ.eq('id', args.crew_id);
+  const { data: crews, error: crewsErr } = await crewsQ;
+  if (crewsErr) return { error: crewsErr.message };
+  if (!crews || crews.length === 0) return { crews: [], note: 'Nessuna squadra trovata.' };
+
+  // Overlapping assignments: start_date <= end_date_req AND end_date >= start_date_req
+  let assignQ = admin
+    .from('crew_assignments')
+    .select('id, crew_id, site_id, start_date, end_date, hours_per_day')
+    .lte('start_date', args.end_date)
+    .gte('end_date', args.start_date);
+  if (args.crew_id) assignQ = assignQ.eq('crew_id', args.crew_id);
+  const { data: assignments, error: aErr } = await assignQ;
+  if (aErr) return { error: aErr.message };
+
+  const byCrew = new Map<string, any[]>();
+  for (const a of assignments ?? []) {
+    const list = byCrew.get(a.crew_id) ?? [];
+    list.push({ site_id: a.site_id, start_date: a.start_date, end_date: a.end_date, hours_per_day: a.hours_per_day });
+    byCrew.set(a.crew_id, list);
+  }
+
+  return {
+    period: { start_date: args.start_date, end_date: args.end_date },
+    crews: crews.map((c: any) => {
+      const busy = byCrew.get(c.id) ?? [];
+      return {
+        crew_id: c.id,
+        crew_name: c.name,
+        max_workers: c.max_workers,
+        active: c.active,
+        available: busy.length === 0 && c.active !== false,
+        assignments: busy,
+      };
+    }),
+  };
+}
+
+
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
@@ -318,6 +445,8 @@ Regole assolute:
 - Usa search_leads per ogni domanda su lead / pipeline / provenienze / periodi.
 - Usa get_quote_detail quando l'utente chiede info su uno specifico preventivo (deve fornire l'id o va chiesto).
 - Usa check_discount_allowed ogni volta che l'utente ti chiede se può applicare uno sconto X%.
+- Usa get_site_status per domande su cantieri, avanzamento lavori, ritardi (planned_end_date superata) o dettagli di un cantiere specifico.
+- Usa check_crew_availability per domande su disponibilità delle squadre / capacità operativa in un intervallo di date.
 - Se una function ritorna un errore o "non trovato", dillo chiaramente, non fabbricare dati.
 - Basa la risposta finale SOLO sui dati restituiti dalle function.`;
 
@@ -393,6 +522,10 @@ Regole assolute:
             result = await toolGetQuoteDetail(admin, args, { role, salespersonId, userId });
           } else if (name === 'check_discount_allowed') {
             result = toolCheckDiscount(args, { role, maxDiscount });
+          } else if (name === 'get_site_status') {
+            result = await toolGetSiteStatus(admin, args, { role, salespersonId });
+          } else if (name === 'check_crew_availability') {
+            result = await toolCheckCrewAvailability(admin, args);
           } else {
             result = { error: `Unknown tool: ${name}` };
           }
