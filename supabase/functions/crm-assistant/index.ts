@@ -122,8 +122,8 @@ async function toolGetQuoteDetail(
   if (error) return { error: error.message };
   if (!quote) return { error: 'Preventivo non trovato' };
 
-  // Visibility rule: commerciale can only see quotes tied to their own leads/customers.
-  if (ctx.role === 'commerciale' && ctx.salespersonId) {
+  // Visibility rule: non-admin (commerciale/ibrido) only sees quotes tied to own leads/customers.
+  if (ctx.role !== 'admin' && ctx.role !== 'operaio' && ctx.salespersonId) {
     let allowed = false;
     if (quote.lead_id) {
       const { data: lead } = await admin
