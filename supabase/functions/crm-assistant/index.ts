@@ -590,6 +590,8 @@ Regole assolute:
             result = await toolGetSiteStatus(admin, args, { role, salespersonId });
           } else if (name === 'check_crew_availability') {
             result = await toolCheckCrewAvailability(admin, args);
+          } else if (name === 'search_catalog_products') {
+            result = await toolSearchCatalogProducts(admin, args);
           } else {
             result = { error: `Unknown tool: ${name}` };
           }
