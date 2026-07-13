@@ -2370,6 +2370,36 @@ export type Database = {
           },
         ]
       }
+      pricing_rules: {
+        Row: {
+          created_at: string
+          id: string
+          max_discount_pct: number
+          min_margin_pct: number
+          requires_approval_above_discount: number | null
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          max_discount_pct: number
+          min_margin_pct: number
+          requires_approval_above_discount?: number | null
+          role: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          max_discount_pct?: number
+          min_margin_pct?: number
+          requires_approval_above_discount?: number | null
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_categories: {
         Row: {
           created_at: string
