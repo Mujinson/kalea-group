@@ -20,19 +20,22 @@ const nav = [
 ];
 
 const IbridoApp = () => (
-  <Routes>
-    <Route element={<RoleAppLayout allowedRoles={['ibrido']} navItems={nav} title="Posatore · Commerciale" />}>
-      <Route index element={<CommercialeHome />} />
-      <Route path="cantieri" element={<OperaioSites />} />
-      <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />
-      <Route path="lead" element={<CommercialeLeads />} />
-      <Route path="lead/:id" element={<CommercialeLeadDetail />} />
-      <Route path="commissioni" element={<IbridoCommissioni />} />
-      <Route path="profilo" element={<RoleProfile />} />
-      <Route path="crea-preventivo" element={<CreaPreventivo />} />
-      <Route path="*" element={<Navigate to="/app/ibrido" replace />} />
-    </Route>
-  </Routes>
+  <>
+    <Routes>
+      <Route element={<RoleAppLayout allowedRoles={['ibrido']} navItems={nav} title="Posatore · Commerciale" />}>
+        <Route index element={<CommercialeHome />} />
+        <Route path="cantieri" element={<OperaioSites />} />
+        <Route path="cantieri/:id" element={<OperaioCantiereDetail />} />
+        <Route path="lead" element={<CommercialeLeads />} />
+        <Route path="lead/:id" element={<CommercialeLeadDetail />} />
+        <Route path="commissioni" element={<IbridoCommissioni />} />
+        <Route path="profilo" element={<RoleProfile />} />
+        <Route path="crea-preventivo" element={<CreaPreventivo />} />
+        <Route path="*" element={<Navigate to="/app/ibrido" replace />} />
+      </Route>
+    </Routes>
+    <CrmAssistantChat />
+  </>
 );
 
 export default IbridoApp;
