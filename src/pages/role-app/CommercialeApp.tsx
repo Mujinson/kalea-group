@@ -32,7 +32,7 @@ const CommercialeApp = () => (
         <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
       </Route>
     </Routes>
-    <CrmAssistantChat />
+    <CrmAssistantChat bottomOffset={88} />
   </>
 );
 
