@@ -1,0 +1,1 @@
+ALTER TABLE public.crm_assistant_messages ADD COLUMN IF NOT EXISTS tool_calls jsonb;
