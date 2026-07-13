@@ -71,7 +71,40 @@ const TOOLS = [
       },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'get_site_status',
+      description:
+        'Restituisce info sui cantieri: se site_id è passato, dettagli di quel cantiere; altrimenti (o se only_delayed=true) elenco dei cantieri in ritardo (planned_end_date passata e status non completato/chiuso). Per non-admin filtra automaticamente i cantieri del commerciale.',
+      parameters: {
+        type: 'object',
+        properties: {
+          site_id: { type: 'string', description: 'UUID del cantiere (opzionale)' },
+          only_delayed: { type: 'boolean', description: 'Se true, restituisce solo i cantieri in ritardo' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'check_crew_availability',
+      description:
+        "Verifica la disponibilità delle squadre in un intervallo di date. Restituisce per ogni squadra se è libera o occupata (con id cantiere e date). Se crew_id è passato, limita alla singola squadra.",
+      parameters: {
+        type: 'object',
+        properties: {
+          start_date: { type: 'string', description: 'Data inizio periodo (YYYY-MM-DD)' },
+          end_date: { type: 'string', description: 'Data fine periodo (YYYY-MM-DD)' },
+          crew_id: { type: 'string', description: 'UUID squadra (opzionale)' },
+        },
+        required: ['start_date', 'end_date'],
+      },
+    },
+  },
 ];
+
 
 // ---------- Tool implementations ----------
 async function toolSearchLeads(
