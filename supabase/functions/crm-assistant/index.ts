@@ -522,6 +522,10 @@ Regole assolute:
             result = await toolGetQuoteDetail(admin, args, { role, salespersonId, userId });
           } else if (name === 'check_discount_allowed') {
             result = toolCheckDiscount(args, { role, maxDiscount });
+          } else if (name === 'get_site_status') {
+            result = await toolGetSiteStatus(admin, args, { role, salespersonId });
+          } else if (name === 'check_crew_availability') {
+            result = await toolCheckCrewAvailability(admin, args);
           } else {
             result = { error: `Unknown tool: ${name}` };
           }
