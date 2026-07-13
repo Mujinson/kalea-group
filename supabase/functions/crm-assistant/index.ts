@@ -509,8 +509,10 @@ Regole assolute:
 - Usa check_discount_allowed ogni volta che l'utente ti chiede se può applicare uno sconto X%.
 - Usa get_site_status per domande su cantieri, avanzamento lavori, ritardi (planned_end_date superata) o dettagli di un cantiere specifico.
 - Usa check_crew_availability per domande su disponibilità delle squadre / capacità operativa in un intervallo di date.
+- Usa search_catalog_products ogni volta che serve nominare, consigliare o confrontare un prodotto del catalogo (per nome, brand, collezione, colore, finitura o categoria).
 - Se una function ritorna un errore o "non trovato", dillo chiaramente, non fabbricare dati.
-- Basa la risposta finale SOLO sui dati restituiti dalle function.`;
+- Basa la risposta finale SOLO sui dati restituiti dalle function.
+- REGOLA CRITICA: non menzionare MAI nomi di prodotto, sigle, brand, collezioni, colori o finiture che non provengano da una chiamata a search_catalog_products. Se l'utente chiede consigli su quale prodotto proporre per un cliente, DEVI SEMPRE chiamare search_catalog_products prima di rispondere, anche se pensi di conoscere già il catalogo aziendale. Se la function non ritorna risultati pertinenti, di' esplicitamente che non hai trovato prodotti corrispondenti nel catalogo, non proporre alternative inventate.`;
 
     const messages: any[] = [
       { role: 'system', content: systemPrompt },
