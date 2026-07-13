@@ -8,6 +8,7 @@ import CommercialeQuotes from './CommercialeQuotes';
 import CommercialeCalendario from './CommercialeCalendario';
 import RoleProfile from './RoleProfile';
 import CreaPreventivo from '@/components/role-app/MobileQuoteWrapper';
+import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
 
 const nav = [
   { to: '/app/commerciale', label: 'Home', icon: <Home className="w-5 h-5" /> },
@@ -18,18 +19,21 @@ const nav = [
 ];
 
 const CommercialeApp = () => (
-  <Routes>
-    <Route element={<RoleAppLayout allowedRoles={['commerciale']} navItems={nav} title="Commerciale" />}>
-      <Route index element={<CommercialeHome />} />
-      <Route path="lead" element={<CommercialeLeads />} />
-      <Route path="lead/:id" element={<CommercialeLeadDetail />} />
-      <Route path="preventivi" element={<CommercialeQuotes />} />
-      <Route path="calendario" element={<CommercialeCalendario />} />
-      <Route path="profilo" element={<RoleProfile />} />
-      <Route path="crea-preventivo" element={<CreaPreventivo />} />
-      <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
-    </Route>
-  </Routes>
+  <>
+    <Routes>
+      <Route element={<RoleAppLayout allowedRoles={['commerciale']} navItems={nav} title="Commerciale" />}>
+        <Route index element={<CommercialeHome />} />
+        <Route path="lead" element={<CommercialeLeads />} />
+        <Route path="lead/:id" element={<CommercialeLeadDetail />} />
+        <Route path="preventivi" element={<CommercialeQuotes />} />
+        <Route path="calendario" element={<CommercialeCalendario />} />
+        <Route path="profilo" element={<RoleProfile />} />
+        <Route path="crea-preventivo" element={<CreaPreventivo />} />
+        <Route path="*" element={<Navigate to="/app/commerciale" replace />} />
+      </Route>
+    </Routes>
+    <CrmAssistantChat bottomOffset={88} />
+  </>
 );
 
 export default CommercialeApp;
