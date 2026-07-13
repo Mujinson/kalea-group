@@ -340,6 +340,36 @@ async function toolCheckCrewAvailability(
   };
 }
 
+async function toolSearchCatalogProducts(
+  admin: ReturnType<typeof createClient>,
+  args: { query?: string; color?: string; collection?: string; category_id?: string },
+) {
+  let q = admin
+    .from('catalog_products')
+    .select('id, name, brand, collection, color, finish, format, list_price, max_customer_discount_percentage')
+    .eq('is_active', true)
+    .limit(15);
+
+  const term = args.query?.trim();
+  if (term) {
+    const esc = term.replace(/[,()]/g, ' ');
+    q = q.or(`name.ilike.%${esc}%,brand.ilike.%${esc}%,collection.ilike.%${esc}%`);
+  }
+  if (args.color?.trim()) q = q.ilike('color', `%${args.color.trim()}%`);
+  if (args.collection?.trim()) q = q.ilike('collection', `%${args.collection.trim()}%`);
+  if (args.category_id?.trim()) q = q.eq('category_id', args.category_id.trim());
+
+  const { data, error } = await q;
+  if (error) return { error: error.message };
+  const products = data ?? [];
+  if (products.length === 0) {
+    return { total: 0, products: [], note: 'Nessun prodotto trovato con questi criteri nel catalogo.' };
+  }
+  return { total: products.length, products };
+}
+
+
+
 
 
 Deno.serve(async (req) => {
