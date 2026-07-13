@@ -34,7 +34,7 @@ const IbridoApp = () => (
         <Route path="*" element={<Navigate to="/app/ibrido" replace />} />
       </Route>
     </Routes>
-    <CrmAssistantChat />
+    <CrmAssistantChat bottomOffset={88} />
   </>
 );
 
