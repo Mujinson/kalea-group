@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown, ChevronRight, Clock } from "lucide-react";
+import { Menu, X, ChevronDown, ChevronRight, Clock, Instagram, Facebook, Linkedin } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo-kalea-cream.png";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Language } from "@/i18n/translations";
+
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.11-1.46-.01 2.31 0 4.62-.01 6.93-.01 1.27-.19 2.53-.74 3.71-.56 1.28-1.54 2.39-2.75 3.12-1.37.8-2.93 1.18-4.51 1.13-1.41-.01-2.81-.35-4.04-1.05-1.44-.81-2.58-2.09-3.11-3.66-.56-1.64-.42-3.48.33-5.01.73-1.57 2.13-2.84 3.79-3.37 1.15-.38 2.37-.47 3.56-.25v4.11c-.72-.14-1.48-.11-2.16.14-.96.34-1.74 1.09-2.09 2.03-.39 1.03-.18 2.22.5 3.06.6.76 1.55 1.2 2.51 1.22.99.03 2.01-.31 2.74-1.02.66-.67.97-1.59.97-2.52V0h-.01z" />
+  </svg>
+);
+
+const PinterestIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.966 1.406-5.966s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.261 7.929-7.261 4.164 0 7.398 2.967 7.398 6.93 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" />
+  </svg>
+);
 
 interface ProductItem {
   label: string;
