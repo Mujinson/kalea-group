@@ -12,7 +12,7 @@ type ChatMessage =
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
-export default function CrmAssistantChat() {
+export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?: number } = {}) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | undefined>();
