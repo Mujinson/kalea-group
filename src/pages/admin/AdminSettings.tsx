@@ -170,58 +170,7 @@ const AdminSettings = () => {
           </Button>
         </CardContent>
       </Card>
-
-      <TestCrmAssistant />
     </div>
-  );
-};
-
-const TestCrmAssistant = () => {
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState<any>(null);
-  const [convId, setConvId] = useState<string | undefined>();
-
-  const send = async () => {
-    if (!message.trim()) return;
-    setLoading(true);
-    const { data, error } = await supabase.functions.invoke('crm-assistant', {
-      body: { message, conversation_id: convId },
-    });
-    setLoading(false);
-    if (error) {
-      setResponse({ error: error.message });
-      return;
-    }
-    setResponse(data);
-    if (data?.conversation_id) setConvId(data.conversation_id);
-    setMessage('');
-  };
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Test CRM Assistant</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="flex gap-2">
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Scrivi un messaggio di test..."
-            onKeyDown={(e) => { if (e.key === 'Enter') send(); }}
-          />
-          <Button onClick={send} disabled={loading || !message.trim()}>
-            {loading ? '...' : 'Invia'}
-          </Button>
-        </div>
-        {response && (
-          <pre className="text-xs bg-muted p-3 rounded overflow-auto max-h-80 whitespace-pre-wrap">
-            {JSON.stringify(response, null, 2)}
-          </pre>
-        )}
-      </CardContent>
-    </Card>
   );
 };
 
