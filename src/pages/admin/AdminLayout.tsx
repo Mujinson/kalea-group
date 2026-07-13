@@ -143,6 +143,7 @@ const AdminLayout = () => {
           </main>
         </div>
         <CrmFaqDialog open={faqOpen} onOpenChange={setFaqOpen} role={role === 'admin' ? 'admin' : 'commerciale'} />
+        <CrmAssistantChat />
       </div>
     </SidebarProvider>
   );
