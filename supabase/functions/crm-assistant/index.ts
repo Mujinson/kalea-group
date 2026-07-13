@@ -91,11 +91,13 @@ async function toolSearchLeads(
     const since = new Date(Date.now() - args.days * 86400_000).toISOString();
     q = q.gte('created_at', since);
   }
-  // Commerciale sees only own leads (same logic as AdminLeads.tsx)
-  if (ctx.role === 'commerciale' && ctx.salespersonId) {
-    q = q.eq('assigned_salesperson_id', ctx.salespersonId);
-  } else if (ctx.role === 'commerciale' && !ctx.salespersonId) {
-    return { total: 0, leads: [], note: 'Nessun profilo commerciale collegato all\'utente.' };
+  // Non-admin sees only own leads (same logic as AdminLeads.tsx: !isAdmin && salespersonId)
+  if (ctx.role !== 'admin') {
+    if (ctx.salespersonId) {
+      q = q.eq('assigned_salesperson_id', ctx.salespersonId);
+    } else {
+      return { total: 0, leads: [], note: 'Nessun profilo commerciale collegato all\'utente.' };
+    }
   }
 
   const { data, count, error } = await q;
