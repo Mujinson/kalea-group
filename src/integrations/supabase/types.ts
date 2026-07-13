@@ -1183,6 +1183,7 @@ export type Database = {
           created_at: string
           id: string
           role: string
+          tool_calls: Json | null
         }
         Insert: {
           content: string
@@ -1190,6 +1191,7 @@ export type Database = {
           created_at?: string
           id?: string
           role: string
+          tool_calls?: Json | null
         }
         Update: {
           content?: string
@@ -1197,6 +1199,7 @@ export type Database = {
           created_at?: string
           id?: string
           role?: string
+          tool_calls?: Json | null
         }
         Relationships: [
           {
