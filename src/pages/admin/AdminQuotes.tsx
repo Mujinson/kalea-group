@@ -486,7 +486,13 @@ const AdminQuotes = () => {
         searchable={false}
         emptyTitle={searchTerm || statusFilter !== 'all' ? 'Nessun preventivo trovato' : 'Nessun preventivo'}
         emptyDescription="Crea un nuovo preventivo per iniziare."
-        onRowClick={(q) => navigate(`/admin/preventivi/modifica?edit=${q.id}`)}
+        onRowClick={(q) => {
+          const isContab = (q as any).quote_data?.tipo === 'contabilita_v2';
+          navigate(isContab
+            ? `/admin/preventivi/contabilita/modifica?edit=${q.id}`
+            : `/admin/preventivi/modifica?edit=${q.id}`);
+        }}
+
         columns={[
           {
             key: 'quote_number',
