@@ -107,6 +107,7 @@ import CatalogPriceLists from "./pages/admin/catalog/CatalogPriceLists";
 import CatalogAuditLog from "./pages/admin/catalog/CatalogAuditLog";
 import CatalogImport from "./pages/admin/catalog/CatalogImport";
 import CatalogPrices from "./pages/admin/catalog/CatalogPrices";
+import CatalogImportFlags from "./pages/admin/catalog/CatalogImportFlags";
 
 import WorkerDetail from "./pages/admin/cantieri/WorkerDetail";
 import CostoOperaio from "./pages/admin/strumenti/CostoOperaio";
@@ -258,6 +259,7 @@ const App = () => (
                 <Route path="catalogo/storico" element={<CatalogAuditLog />} />
 
                 <Route path="catalogo/importa" element={<CatalogImport />} />
+                <Route path="catalogo/import-flags" element={<CatalogImportFlags />} />
                 <Route path="catalogo/prezzi" element={<CatalogPrices />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="leads" element={<AdminLeads />} />

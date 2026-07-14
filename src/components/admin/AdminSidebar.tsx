@@ -43,6 +43,7 @@ import {
   Layers,
   Library,
   History,
+  AlertTriangle,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -134,6 +135,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Listini & versioni', url: '/admin/catalogo/listini', icon: FileText, adminOnly: true },
         { title: 'Storico modifiche', url: '/admin/catalogo/storico', icon: History, adminOnly: true },
         { title: 'Importa listino', url: '/admin/catalogo/importa', icon: Upload, adminOnly: true },
+        { title: 'Segnalazioni import', url: '/admin/catalogo/import-flags', icon: AlertTriangle, adminOnly: true },
       ],
     },
   },
