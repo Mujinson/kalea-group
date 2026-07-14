@@ -532,11 +532,85 @@ body:has(.admin-theme.dark) [role="dialog"] * {
   background-color: var(--crm-surface) !important;
 }
 
+/* Attribute-selector catch-all for arbitrary Tailwind color utilities with opacity
+   (e.g. bg-[#F1F5F9]/60, bg-[#F6F7FB]/40 that our escaped class selectors miss). */
+.admin-theme.dark [class*="bg-[#FFFFFF"],
+.admin-theme.dark [class*="bg-[#F6F7FB"],
+.admin-theme.dark [class*="bg-[#F8FAFC"],
+.admin-theme.dark [class*="bg-[#F1F5F9"],
+.admin-theme.dark [class*="bg-[#FAF"],
+.admin-theme.dark [class*="bg-[#FEF"],
+.admin-theme.dark [class*="bg-[#F7F1E7"],
+.admin-theme.dark [class*="bg-[#E5E7EB"],
+.admin-theme.dark [class*="bg-[#f0f2f5"],
+.admin-theme.dark [class*="bg-[#e0e3e7"] {
+  background-color: var(--crm-surface) !important;
+}
+.admin-theme.dark [class*="bg-[#0F172A"],
+.admin-theme.dark [class*="bg-[#0E0B08"],
+.admin-theme.dark [class*="bg-[#1A1008"],
+.admin-theme.dark [class*="bg-[#1a110a"],
+.admin-theme.dark [class*="bg-[#231811"],
+.admin-theme.dark [class*="bg-[#3B2314"],
+.admin-theme.dark [class*="bg-[#3a2a18"] {
+  background-color: var(--crm-surface-2) !important;
+}
+.admin-theme.dark [class*="text-[#0F172A"],
+.admin-theme.dark [class*="text-[#1A1008"],
+.admin-theme.dark [class*="text-[#1a1a1a"],
+.admin-theme.dark [class*="text-[#231811"],
+.admin-theme.dark [class*="text-[#3a2a18"],
+.admin-theme.dark [class*="text-[#8B6F4E"],
+.admin-theme.dark [class*="text-[#8b6a2a"],
+.admin-theme.dark [class*="text-[#8A7060"],
+.admin-theme.dark [class*="text-[#B0998A"] {
+  color: var(--crm-ink) !important;
+}
+.admin-theme.dark [class*="text-[#475569"],
+.admin-theme.dark [class*="text-[#64748B"],
+.admin-theme.dark [class*="text-[#667781"] {
+  color: var(--crm-ink-muted) !important;
+}
 
+/* Tables — force transparent rows/cells so the .crm-card surface shows through.
+   Rows and cells never carry a background themselves; leave header/cell text on ink token. */
+.admin-theme.dark table,
+.admin-theme.dark thead,
+.admin-theme.dark tbody,
+.admin-theme.dark tfoot,
+.admin-theme.dark tr,
+.admin-theme.dark td,
+.admin-theme.dark th {
+  background-color: transparent !important;
+  color: var(--crm-ink);
+  border-color: var(--crm-border);
+}
+.admin-theme.dark th {
+  color: var(--crm-ink-muted);
+}
+.admin-theme.dark tr:hover > td {
+  background-color: var(--crm-surface-hover) !important;
+}
 
+/* Inputs / selects in dark should not be pure white */
+.admin-theme.dark input,
+.admin-theme.dark textarea,
+.admin-theme.dark select,
+.admin-theme.dark [data-radix-select-trigger] {
+  background-color: var(--crm-bg-soft) !important;
+  color: var(--crm-ink) !important;
+  border-color: var(--crm-border) !important;
+}
+.admin-theme.dark input::placeholder,
+.admin-theme.dark textarea::placeholder {
+  color: var(--crm-ink-subtle) !important;
+}
 
-
-
+/* Skeletons */
+.admin-theme.dark .crm-shimmer,
+.admin-theme.dark [class*="skeleton"] {
+  background: linear-gradient(90deg, var(--crm-surface-2) 0%, var(--crm-surface-hover) 50%, var(--crm-surface-2) 100%) !important;
+}
 
 
 /* Inherit tokens inside portals (popovers, sheets, dialogs) opened from admin */
