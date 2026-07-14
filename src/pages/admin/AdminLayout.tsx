@@ -77,21 +77,18 @@ const AdminLayout = () => {
           <button
             onClick={() => navigate('/admin')}
             className="flex items-center gap-2 ml-1 group"
+            title="Kalēa CRM"
           >
-            <span
-              className="w-7 h-7 rounded-crm-sm inline-flex items-center justify-center font-bold text-white text-[13px]"
-              style={{
-                background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
-                boxShadow: '0 2px 8px rgba(79,70,229,0.28)',
-              }}
-            >
-              K
-            </span>
-            <span className="font-semibold text-[15px] tracking-tight text-crm-ink hidden sm:inline">
-              Kalēa<span className="text-[10px] align-top">®</span>
-              <span className="text-crm-ink-subtle font-normal ml-1">CRM</span>
+            <img
+              src={kaleaLogo.url}
+              alt="Kalēa"
+              className="h-6 md:h-7 w-auto object-contain"
+            />
+            <span className="text-crm-ink-subtle font-normal text-[13px] hidden sm:inline tracking-tight">
+              CRM
             </span>
           </button>
+
 
           {/* Search */}
           <button
