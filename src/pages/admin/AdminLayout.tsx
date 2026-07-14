@@ -7,7 +7,7 @@ import NotificationCenter from '@/components/admin/NotificationCenter';
 import CommandPalette from '@/components/admin/CommandPalette';
 import CrmFaqDialog from '@/components/admin/CrmFaqDialog';
 import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
-import { Loader2, Search, HelpCircle, Settings, LogOut } from 'lucide-react';
+import { Loader2, Search, HelpCircle, Settings, LogOut, Moon, Sun } from 'lucide-react';
 import kaleaLogo from '@/assets/kalea-logo.png.asset.json';
 
 const TopIconButton = ({
