@@ -415,10 +415,39 @@ export default function CatalogPrices() {
         >
           <Download className="w-4 h-4 mr-1" /> Esporta XLSX
         </Button>
-        <div className="text-xs text-[#8A7060] ml-auto">
-          {filtered.length} risultati · {selected.size} selezionati
+        <div className="text-xs text-[#8A7060] ml-auto flex items-center gap-2">
+          <span>
+            {filtered.length} risultati
+            {selected.size > 0 && (
+              <>
+                {' · '}
+                {allFilteredSelected
+                  ? `tutti i ${filtered.length} selezionati`
+                  : `${selected.size} selezionati`}
+              </>
+            )}
+          </span>
+          {selected.size > 0 && !allFilteredSelected && filtered.length > selected.size && (
+            <button
+              type="button"
+              onClick={selectAllFiltered}
+              className="text-[#3B2314] hover:underline font-medium"
+            >
+              Seleziona tutti i {filtered.length} risultati
+            </button>
+          )}
+          {selected.size > 0 && (
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="text-[#8A7060] hover:underline"
+            >
+              Azzera selezione
+            </button>
+          )}
         </div>
       </div>
+
 
 
       {/* Bulk bar */}
