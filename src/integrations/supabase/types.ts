@@ -267,6 +267,36 @@ export type Database = {
           },
         ]
       }
+      catalog_import_flags: {
+        Row: {
+          created_at: string
+          csv_row: Json | null
+          id: string
+          issue_note: string | null
+          product_match_hint: string | null
+          resolved: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          csv_row?: Json | null
+          id?: string
+          issue_note?: string | null
+          product_match_hint?: string | null
+          resolved?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          csv_row?: Json | null
+          id?: string
+          issue_note?: string | null
+          product_match_hint?: string | null
+          resolved?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       catalog_price_history: {
         Row: {
           change_reason: string | null
@@ -464,6 +494,9 @@ export type Database = {
           pack_per_pallet: number | null
           pallet_weight_kg: number | null
           pieces_per_pack: number | null
+          price_base_sqm: number | null
+          price_over_3_pallets_sqm: number | null
+          price_over_pallet_sqm: number | null
           product_code: string
           product_type: string
           purchase_price: number | null
@@ -511,6 +544,9 @@ export type Database = {
           pack_per_pallet?: number | null
           pallet_weight_kg?: number | null
           pieces_per_pack?: number | null
+          price_base_sqm?: number | null
+          price_over_3_pallets_sqm?: number | null
+          price_over_pallet_sqm?: number | null
           product_code: string
           product_type?: string
           purchase_price?: number | null
@@ -558,6 +594,9 @@ export type Database = {
           pack_per_pallet?: number | null
           pallet_weight_kg?: number | null
           pieces_per_pack?: number | null
+          price_base_sqm?: number | null
+          price_over_3_pallets_sqm?: number | null
+          price_over_pallet_sqm?: number | null
           product_code?: string
           product_type?: string
           purchase_price?: number | null
