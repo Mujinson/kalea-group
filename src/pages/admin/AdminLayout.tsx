@@ -8,6 +8,7 @@ import CommandPalette from '@/components/admin/CommandPalette';
 import CrmFaqDialog from '@/components/admin/CrmFaqDialog';
 import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
 import { Loader2, Search, HelpCircle, Settings, LogOut } from 'lucide-react';
+import kaleaLogo from '@/assets/kalea-logo.png.asset.json';
 
 const TopIconButton = ({
   children, onClick, title,
