@@ -5,22 +5,21 @@ import autoTable from "jspdf-autotable";
 export type ExportRow = Record<string, string | number | null | undefined>;
 
 export const exportCSV = (rows: ExportRow[], filename: string) => {
-  if (!rows.length) return;
+  if (!rows.length) return false;
   const headers = Object.keys(rows[0]);
+  const sep = ";"; // Italian Excel default
+  const escape = (v: unknown) => {
+    const s = String(v ?? "").replace(/"/g, '""');
+    return /[";\n\r]/.test(s) ? `"${s}"` : s;
+  };
   const csv = [
-    headers.join(","),
-    ...rows.map((r) =>
-      headers
-        .map((h) => {
-          const v = r[h] ?? "";
-          const s = String(v).replace(/"/g, '""');
-          return /[",\n]/.test(s) ? `"${s}"` : s;
-        })
-        .join(",")
-    ),
-  ].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    headers.join(sep),
+    ...rows.map((r) => headers.map((h) => escape(r[h])).join(sep)),
+  ].join("\r\n");
+  // UTF-8 BOM so Excel opens accented chars correctly
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
   triggerDownload(blob, `${filename}.csv`);
+  return true;
 };
 
 export const exportXLSX = (rows: ExportRow[], filename: string, sheetName = "Sheet1") => {
