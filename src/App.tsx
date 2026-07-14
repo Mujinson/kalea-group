@@ -292,8 +292,8 @@ const App = () => (
                 <Route path="impostazioni" element={<AdminSettings />} />
 
                 {/* Strumenti */}
-                <Route path="strumenti/preventivatore" element={<Preventivatore />} />
-                <Route path="strumenti/sistema-preventivi" element={<SistemaPreventivi />} />
+                <Route path="strumenti/preventivatore" element={<Navigate to="/admin/preventivi/nuovo" replace />} />
+                <Route path="strumenti/sistema-preventivi" element={<Navigate to="/admin/preventivi/nuovo" replace />} />
                 <Route path="strumenti/crea-preventivo" element={<Navigate to="/admin/preventivi/nuovo" replace />} />
                 <Route path="strumenti/costo-operaio" element={<CostoOperaio />} />
                 <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />
