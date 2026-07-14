@@ -106,7 +106,7 @@ function BigKPI({
 
   const styles: Record<Variant, React.CSSProperties> = {
     light: { background: 'var(--crm-surface)', color: 'var(--crm-ink)', border: '1px solid var(--crm-border)', boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
-    dark: { background: 'var(--crm-surface-2)', color: 'var(--crm-ink-invert, #fff)', border: '1px solid var(--crm-surface-2)', boxShadow: '0 4px 12px rgba(15,23,42,0.15)' },
+    dark: { background: '#0F172A', color: '#FFFFFF', border: '1px solid #0F172A', boxShadow: '0 4px 12px rgba(15,23,42,0.15)' },
     gold: { background: 'var(--crm-surface)', color: 'var(--crm-ink)', borderLeft: '4px solid #4F46E5', border: '1px solid var(--crm-border)', borderLeftWidth: 4, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
     semaphore: {
       background: semaphore === 'green' ? 'var(--crm-success-soft, #ECFDF5)' : semaphore === 'amber' ? 'var(--crm-warning-soft, #FFFBEB)' : 'var(--crm-danger-soft, #FEF2F2)',
