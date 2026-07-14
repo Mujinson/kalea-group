@@ -1801,6 +1801,7 @@ export default function CreaPreventivo() {
                       <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
                     </div>
                   )}
+                  </>)}
                 </div>
               </>
             ) : (
