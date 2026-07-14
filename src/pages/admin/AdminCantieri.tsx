@@ -158,7 +158,7 @@ const AdminCantieri = () => {
         title="Cantieri"
         subtitle="Gestione progetti, posa e installazioni"
         actions={
-          <Button onClick={() => { resetForm(); setCreateOpen(true); }} size="sm" className="bg-white text-[#0F172A] hover:bg-white/90">
+          <Button onClick={() => { resetForm(); setCreateOpen(true); }} size="sm" className="bg-crm-primary hover:bg-crm-primary-600 text-white shadow-crm-sm">
             <Plus className="w-4 h-4 mr-2" /> Nuovo Cantiere
           </Button>
         }
