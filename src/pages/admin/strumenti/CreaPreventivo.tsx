@@ -1763,6 +1763,12 @@ export default function CreaPreventivo() {
                   })}
                 </div>
                 <div style={{maxHeight:520,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8"}}>
+                  {prodottiLoading ? (
+                    <div style={{ padding: "24px", textAlign: "center", color: "#888", fontSize: 14 }}>
+                      Caricamento prodotti dal catalogo...
+                    </div>
+                  ) : (<>
+
                   {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                     const costoMq=p.listino*p.coeff;
                     const prezzoMq=costoMq*MARKUP;
