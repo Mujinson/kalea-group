@@ -331,7 +331,9 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
       existingId = byPhone?.id || null;
     }
 
-    const { data: created, error: createError } = existingId ? { data: null, error: null } : await supabase.from('customers').insert({
+    const { data: created, error: createError } = existingId
+      ? { data: null, error: null }
+      : await supabase.from('customers').insert({
       company_name: companyName,
       email: quote.lead.email || null,
       phone: quote.lead.phone || null,
@@ -343,7 +345,7 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
       customer_type: 'cliente_privato',
       status: 'opportunity',
       notes: `Creato automaticamente dal preventivo ${quote.quote_number || quote.id}`,
-    } as any).select('id').single()).data?.id;
+    } as any).select('id').single();
     if (createError) throw createError;
     const customerId = existingId || created?.id;
 
