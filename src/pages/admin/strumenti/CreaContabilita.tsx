@@ -730,10 +730,21 @@ export default function CreaContabilita() {
 
           </>
         ) : (
-          <div className="bg-white rounded-lg border border-gray-200 p-8 text-center text-sm text-gray-500">
-            Vista preventivo cliente — implementata nei prompt successivi.
-          </div>
+          <PreventivoClienteView
+            pdfRef={pdfRef}
+            moduli={moduli}
+            serviziComuni={serviziComuni}
+            cliente={cliente}
+            cantiere={cantiere}
+            numPrev={numPrev}
+            ivaRate={ivaRate}
+            sconto={sconto}
+            noteCliente={noteCliente}
+            totaliGlobali={totaliGlobali}
+            onDownloadPdf={generaPDF}
+          />
         )}
+
       </div>
 
       {/* BARRA TOTALI FISSA */}
