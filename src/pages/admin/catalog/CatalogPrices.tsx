@@ -186,9 +186,19 @@ export default function CatalogPrices() {
 
 
   const runBulk = async () => {
-    if (selected.size === 0) { toast.error('Nessun prodotto selezionato'); return; }
-    const ids = Array.from(selected);
-    const affected = rows.filter(r => selected.has(r.id));
+    let targetIds: string[];
+    if (selected.size > 0) {
+      targetIds = Array.from(selected);
+    } else {
+      if (filtered.length === 0) { toast.error('Nessun prodotto da modificare'); return; }
+      const ok = window.confirm(`Nessuna selezione. Applicare a tutti i ${filtered.length} risultati filtrati?`);
+      if (!ok) return;
+      targetIds = filtered.map(r => r.id);
+    }
+    const idSet = new Set(targetIds);
+    const ids = targetIds;
+    const affected = rows.filter(r => idSet.has(r.id));
+
 
     // snapshot for undo
     const snapshot = affected.map(r => ({
@@ -229,7 +239,7 @@ export default function CatalogPrices() {
           .update({ supplier_discount_percentage: v })
           .in('id', ids);
         if (error) throw error;
-        setRows(prev => prev.map(r => selected.has(r.id) ? { ...r, supplier_discount_percentage: v } : r));
+        setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, supplier_discount_percentage: v } : r));
       } else if (bulkOp === 'markup') {
         const v = Number(bulkValue);
         if (!isFinite(v)) throw new Error('Valore non valido');
@@ -238,7 +248,7 @@ export default function CatalogPrices() {
           .update({ markup_percentage: v })
           .in('id', ids);
         if (error) throw error;
-        setRows(prev => prev.map(r => selected.has(r.id) ? { ...r, markup_percentage: v } : r));
+        setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, markup_percentage: v } : r));
       } else if (bulkOp === 'active') {
         const v = bulkActive === 'true';
         const { error } = await supabase
@@ -246,7 +256,7 @@ export default function CatalogPrices() {
           .update({ is_active: v })
           .in('id', ids);
         if (error) throw error;
-        setRows(prev => prev.map(r => selected.has(r.id) ? { ...r, is_active: v } : r));
+        setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, is_active: v } : r));
       }
       setUndoStack(prev => [...prev, snapshot]);
       toast.success(`Bulk applicato a ${ids.length} prodotti`);
@@ -480,9 +490,10 @@ export default function CatalogPrices() {
             className="h-9 w-[140px]"
           />
         )}
-        <Button onClick={runBulk} disabled={bulkBusy || selected.size === 0} size="sm">
+        <Button onClick={runBulk} disabled={bulkBusy || (bulkOp !== 'active' && bulkValue.trim() === '')} size="sm">
           {bulkBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Applica'}
         </Button>
+
         <Button variant="outline" size="sm" onClick={undoLast} disabled={bulkBusy || undoStack.length === 0}>
           <Undo2 className="w-4 h-4 mr-1" /> Annulla ultima
         </Button>
