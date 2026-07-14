@@ -277,8 +277,56 @@ export default function CatalogPrices() {
     }
   };
 
-  return (
-    <div className="p-6 space-y-4">
+  const buildExportRows = () =>
+    filtered.map((r) => ({
+      name: r.name ?? '',
+      brand: r.brand ?? '',
+      collection: r.collection ?? '',
+      list_price: r.list_price ?? null,
+      format: r.format ?? '',
+    }));
+
+  const runExport = async (
+    format: 'csv' | 'xlsx',
+    attempt = 1,
+  ): Promise<void> => {
+    if (filtered.length === 0) {
+      toast.error('Nessun prodotto da esportare');
+      return;
+    }
+    const filename = `catalogo-prezzi-${new Date().toISOString().slice(0, 10)}`;
+    try {
+      if (format === 'csv') {
+        const ok = exportCSV(
+          buildExportRows().map((r) => ({ ...r, list_price: r.list_price ?? '' })),
+          filename,
+        );
+        if (!ok) throw new Error('Generazione CSV non riuscita');
+      } else {
+        exportXLSX(buildExportRows(), filename, 'Catalogo');
+      }
+      toast.success(`Esportati ${filtered.length} prodotti (${format.toUpperCase()})`);
+    } catch (e: any) {
+      const msg = e?.message || 'errore sconosciuto';
+      if (attempt === 1) {
+        // Auto-retry once after a short delay
+        toast.error(`Export ${format.toUpperCase()} fallito, nuovo tentativo…`, {
+          description: msg,
+        });
+        setTimeout(() => { void runExport(format, 2); }, 600);
+      } else {
+        toast.error(`Export ${format.toUpperCase()} non riuscito`, {
+          description: msg,
+          action: {
+            label: 'Riprova',
+            onClick: () => { void runExport(format, 1); },
+          },
+        });
+      }
+    }
+  };
+
+
       <div>
         <h1 className="text-2xl font-semibold text-[#1A1008]">Prezzi & Margini</h1>
         <p className="text-sm text-[#8A7060]">
