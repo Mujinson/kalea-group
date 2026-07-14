@@ -578,7 +578,7 @@ const AdminOverview = () => {
           <BigKPI
             label="Venduto" value={revenuePeriod} format="eur" variant="dark"
             delta={revenueDelta} sub={`Preventivi accettati · vs ${eurShort(revenuePrev)}`}
-            icon={TrendingUp} onClick={() => navigate('/admin/quotes')}
+            icon={TrendingUp} onClick={() => navigate('/admin/preventivi')}
           />
           <BigKPI
             label="Fatturato" value={financials.fatturato} format="eur" variant="light"
@@ -605,7 +605,7 @@ const AdminOverview = () => {
           <BigKPI
             label="Preventivi" value={preventiviPeriod.tot} variant="light"
             sub={`${preventiviPeriod.acc} acc · ${preventiviPeriod.rif} rif · ${preventiviPeriod.att} att`}
-            icon={FileText} onClick={() => navigate('/admin/quotes')}
+            icon={FileText} onClick={() => navigate('/admin/preventivi')}
           />
         )}
         {showCan && (
