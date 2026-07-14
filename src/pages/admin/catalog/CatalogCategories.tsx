@@ -112,7 +112,7 @@ export default function CatalogCategories() {
         title="Categorie"
         subtitle="Gerarchia categorie con macro-categoria: Articoli, Accessori, Servizi."
         actions={
-          <Button size="sm" onClick={openNew} className="bg-white text-[#1E1B4B] hover:bg-white/90">
+          <Button size="sm" onClick={openNew} className="bg-white text-[#0F172A] hover:bg-white/90">
             <Plus className="w-4 h-4 mr-2" /> Nuova categoria
           </Button>
         }

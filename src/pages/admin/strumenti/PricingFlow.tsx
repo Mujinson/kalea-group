@@ -151,14 +151,14 @@ export default function PricingFlow() {
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.7 }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.7 }}>
               Sconto attivo: <strong style={{ color: "#1A1A1A" }}>{SCONTI[scontoIdx].label}</strong> · Coefficiente: <strong>{coeff.toFixed(3)}</strong><br />
               Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino Flow
             </div>
           </div>
           <div>
             <Slider label="Markup Kalēa sul tuo costo" min={20} max={130} value={markup} step={5} onChange={(v: number) => update({ markup: v })} format={(v: number) => v + "%"} />
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.7 }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.7 }}>
               Esempio: Flow 55 Wood (49€ listino) → costi <strong>{fmt2(49 * coeff)}</strong> → vendi a <strong>{fmt2(49 * coeff * (1 + mkCoeff))}</strong><br />
               Margine sul venduto: <strong>{fmtP(((49 * coeff * mkCoeff) / (49 * coeff * (1 + mkCoeff))) * 100)}</strong>
             </div>
@@ -173,7 +173,7 @@ export default function PricingFlow() {
           { label: "Tuo prezzo medio",      value: fmt2(avgPrezzo)  + "/mq", color: "#27500A" },
           { label: "Margine medio",         value: fmtP(avgMargine),         color: "#27500A" },
         ].map(k => (
-          <div key={k.label} style={{ background: "#F0EDE8", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
+          <div key={k.label} style={{ background: "#F1F5F9", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#6B6860", marginBottom: 6 }}>{k.label}</div>
             <div style={{ fontSize: 19, fontWeight: 300, color: k.color }}>{k.value}</div>
           </div>
@@ -337,7 +337,7 @@ export default function PricingFlow() {
       )}
 
       {!selected && (
-        <div style={{ background: "#F0EDE8", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13, marginTop: 8 }}>
+        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13, marginTop: 8 }}>
           ↑ Clicca un prodotto nella tabella per aprire il calcolatore preventivo
         </div>
       )}

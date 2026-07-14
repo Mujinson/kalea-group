@@ -92,7 +92,7 @@ function CatBadge({ cat }: { cat: string }) {
     "Arrow":              { bg: "#E6F1FB", color: "#0C447C" },
     "Rovere Recupero":    { bg: "#F3E5F5", color: "#6A1B9A" },
   };
-  const s = map[cat] || { bg: "#F0EDE8", color: "#5F5E5A" };
+  const s = map[cat] || { bg: "#F1F5F9", color: "#5F5E5A" };
   return <span style={{ display: "inline-block", fontSize: 10, padding: "2px 6px", borderRadius: 3, fontWeight: 500, background: s.bg, color: s.color, whiteSpace: "nowrap" }}>{cat}</span>;
 }
 
@@ -153,7 +153,7 @@ export default function PricingSignature() {
           { label: "Tuo costo medio", value: fmt2(avgListino * coeff) + "/mq", color: "#0C447C" },
           { label: "Tuo prezzo medio", value: fmt2(avgListino * coeff * (1 + mkCoeff)) + "/mq", color: "#7B3A10" },
         ].map(k => (
-          <div key={k.label} style={{ background: "#F0EDE8", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
+          <div key={k.label} style={{ background: "#F1F5F9", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#6B6860", marginBottom: 6 }}>{k.label}</div>
             <div style={{ fontSize: 18, fontWeight: 300, color: k.color }}>{k.value}</div>
           </div>
@@ -176,7 +176,7 @@ export default function PricingSignature() {
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
               Coeff. <strong>{coeff.toFixed(3)}</strong> · Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino<br />
               Attenzione: Signature ha consegne 7–8 settimane — verificare disponibilità
             </div>
@@ -293,7 +293,7 @@ export default function PricingSignature() {
         </div>
       )}
       {!selected && (
-        <div style={{ background: "#F0EDE8", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13 }}>
+        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13 }}>
           ↑ Clicca un articolo nella tabella per aprire il calcolatore preventivo
         </div>
       )}

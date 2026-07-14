@@ -326,7 +326,7 @@ export default function SistemaPreventivi() {
         </div>
       </div>
 
-      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F0EDE8",borderRadius:10,padding:4,width:"fit-content"}}>
+      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F1F5F9",borderRadius:10,padding:4,width:"fit-content"}}>
         {[["1","Calcolo & Verifica"],["2","Intestazione & Note"],["3","Anteprima & PDF"]].map(([n,l])=>(
           <button key={n} onClick={()=>setStep(Number(n))}
             style={{padding:"8px 20px",borderRadius:8,border:"none",cursor:"pointer",fontSize:13,fontWeight:step===Number(n)?500:400,
@@ -368,7 +368,7 @@ export default function SistemaPreventivi() {
                 const costoMq=p.listino*p.coeff;
                 const prezzoMq=costoMq*MARKUP;
                 const isSel=prodotto?.id===p.id;
-                const fc=FORN_STYLE[p.fornitore]||{bg:"#F0EDE8",c:"#5F5E5A"};
+                const fc=FORN_STYLE[p.fornitore]||{bg:"#F1F5F9",c:"#5F5E5A"};
                 return(
                   <div key={p.id} onClick={()=>setProdotto(p)}
                     style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",cursor:"pointer",
@@ -388,7 +388,7 @@ export default function SistemaPreventivi() {
               })}
               {!showAll && filtered.length>25 &&(
                 <div style={{padding:10,textAlign:"center"}}>
-                  <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F0EDE8",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
+                  <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
                     Mostra tutti i {filtered.length} risultati
                   </button>
                 </div>
@@ -413,7 +413,7 @@ export default function SistemaPreventivi() {
                     {l:"Tuo costo",v:euro(prodotto.listino*prodotto.coeff)+"/mq",c:"#A32D2D"},
                     {l:"Tuo prezzo mat.",v:euro(prodotto.listino*prodotto.coeff*MARKUP)+"/mq",c:"#27500A"},
                   ].map(k=>(
-                    <div key={k.l} style={{background:"#F0EDE8",borderRadius:6,padding:"8px",textAlign:"center"}}>
+                    <div key={k.l} style={{background:"#F1F5F9",borderRadius:6,padding:"8px",textAlign:"center"}}>
                       <div style={{fontSize:10,color:"#9A9890",marginBottom:2}}>{k.l}</div>
                       <div style={{fontSize:12,fontWeight:500,color:k.c}}>{k.v}</div>
                     </div>
@@ -431,7 +431,7 @@ export default function SistemaPreventivi() {
                   {[["semplice","Semplice","Ambienti aperti, posa dritta","20€/mq"],["media","Media","Più ambienti, qualche angolo","27€/mq"],["complessa","Complessa","Molti tagli, angoli, disegni","35€/mq"]].map(([k,l,d,p])=>(
                     <div key={k} onClick={()=>setComplessita(k)} style={{
                       padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
-                      background:complessita===k?"#1A1A2E":"#F0EDE8",
+                      background:complessita===k?"#1A1A2E":"#F1F5F9",
                       borderColor:complessita===k?"#1A1A2E":"#E0DDD8",
                       color:complessita===k?"#fff":"#1A1A1A"}}>
                       <div style={{fontWeight:500,fontSize:13,marginBottom:2}}>{l}</div>
@@ -505,7 +505,7 @@ export default function SistemaPreventivi() {
                     {l:"Margine lordo €",v:euro(calc.margineE),c:calc.margineE>0?"#27500A":"#A32D2D"},
                     {l:"Prezzo tutto incluso /mq",v:euro(calc.prezzoMqTot)+"/mq",c:"#1A1A2E"},
                   ].map(k=>(
-                    <div key={k.l} style={{background:"#F0EDE8",borderRadius:8,padding:"10px 12px"}}>
+                    <div key={k.l} style={{background:"#F1F5F9",borderRadius:8,padding:"10px 12px"}}>
                       <div style={{fontSize:11,color:"#9A9890",marginBottom:3}}>{k.l}</div>
                       <div style={{fontSize:16,fontWeight:600,color:k.c}}>{k.v}</div>
                     </div>
@@ -608,7 +608,7 @@ export default function SistemaPreventivi() {
             <div style={card}>
               <div style={sectionTitle}>Condizioni di pagamento</div>
               {pagamenti.map((p,i)=>(
-                <div key={i} style={{marginBottom:12,padding:"10px 12px",background:"#F0EDE8",borderRadius:8}}>
+                <div key={i} style={{marginBottom:12,padding:"10px 12px",background:"#F1F5F9",borderRadius:8}}>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 70px 1fr",gap:8,marginBottom:6}}>
                     <input value={p.label} onChange={e=>{const pg=[...pagamenti];pg[i].label=e.target.value;setPagamenti(pg);}} placeholder="Descrizione"
                       style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,outline:"none"}}/>
@@ -793,7 +793,7 @@ export default function SistemaPreventivi() {
             </div>
 
             {noteCliente && (
-              <div style={{marginTop:20,padding:"12px 16px",background:"#F0EDE8",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
+              <div style={{marginTop:20,padding:"12px 16px",background:"#F1F5F9",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
                 <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
                 {noteCliente}
               </div>

@@ -156,13 +156,13 @@ export default function PricingExterno() {
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
               Coeff. <strong>{coeff.toFixed(3)}</strong> · Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino
             </div>
           </div>
           <div>
             <SliderRow label="Markup Kalēa sul tuo costo" min={20} max={130} value={markup} step={5} onChange={(v: number) => update({ markup: v })} format={(v: number) => v + "%"} />
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
               SKUDO (94,40€ listino) → costo <strong>{fmt2(94.40 * coeff)}</strong> → vendi <strong>{fmt2(94.40 * coeff * (1 + markup / 100))}</strong>
             </div>
           </div>
@@ -176,7 +176,7 @@ export default function PricingExterno() {
           { label: "TRADITIONAL — tuo costo", value: fmt2(79.70 * coeff) + "/mq", color: "#0C447C" },
           { label: "TRADITIONAL — tuo prezzo", value: fmt2(79.70 * coeff * (1 + markup / 100)) + "/mq", color: "#27500A" },
         ].map(k => (
-          <div key={k.label} style={{ background: "#F0EDE8", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
+          <div key={k.label} style={{ background: "#F1F5F9", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#6B6860", marginBottom: 6 }}>{k.label}</div>
             <div style={{ fontSize: 18, fontWeight: 300, color: k.color }}>{k.value}</div>
           </div>
@@ -202,7 +202,7 @@ export default function PricingExterno() {
                 <div style={{ fontWeight: 500, fontSize: 15, marginBottom: 4 }}>{p.nome}</div>
                 <div style={{ fontSize: 12, color: "#9A9890", marginBottom: 12 }}>{p.dims} · {p.note}</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-                  <div style={{ background: "#F0EDE8", borderRadius: 6, padding: "8px", textAlign: "center" }}>
+                  <div style={{ background: "#F1F5F9", borderRadius: 6, padding: "8px", textAlign: "center" }}>
                     <div style={{ fontSize: 10, color: "#9A9890" }}>Listino</div>
                     <div style={{ fontSize: 14, fontWeight: 500 }}>{fmt2(p.listino)}</div>
                   </div>
@@ -303,7 +303,7 @@ export default function PricingExterno() {
         </div>
       )}
       {!selected && (
-        <div style={{ background: "#F0EDE8", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13 }}>
+        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13 }}>
           ↑ Clicca un pavimento per aprire il calcolatore preventivo
         </div>
       )}

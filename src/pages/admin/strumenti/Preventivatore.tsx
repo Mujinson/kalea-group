@@ -143,7 +143,7 @@ function Slider({ label, min, max, value, step, onChange, format }: any) {
 }
 
 function MargBadge({ pct }: { pct: number }) {
-  const bg    = pct > 35 ? "#EAF3DE" : pct > 20 ? "#FAEEDA" : pct > 0 ? "#FCEBEB" : "#F0EDE8";
+  const bg    = pct > 35 ? "#EAF3DE" : pct > 20 ? "#FAEEDA" : pct > 0 ? "#FCEBEB" : "#F1F5F9";
   const color = pct > 35 ? "#27500A" : pct > 20 ? "#633806" : pct > 0 ? "#A32D2D" : "#9A9890";
   return <span style={{ display:"inline-block", padding:"3px 9px", borderRadius:5, fontWeight:500, fontSize:12, background:bg, color }}>{fmtP(pct)}</span>;
 }
@@ -213,7 +213,7 @@ export default function Preventivatore() {
     };
   }
 
-  const fColors = selected ? (FORN_COLORS[selected.fornitore] || { bg: "#F0EDE8", color: "#5F5E5A" }) : { bg: "", color: "" };
+  const fColors = selected ? (FORN_COLORS[selected.fornitore] || { bg: "#F1F5F9", color: "#5F5E5A" }) : { bg: "", color: "" };
 
   return (
     <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif", color: "#1A1A1A", maxWidth: 1280, margin: "0 auto", padding: "8px 4px" }}>
@@ -230,7 +230,7 @@ export default function Preventivatore() {
           <div>
             <Slider label="Markup Kalēa sui materiali" min={20} max={130} value={markup} step={5} onChange={setMarkup} format={(v: number) => v + "%"} />
           </div>
-          <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "12px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.8 }}>
+          <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "12px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.8 }}>
             <strong>Costi posa fissi:</strong><br />
             Posa pavimento: <strong>18,00 €/mq</strong><br />
             Posa tappetino/materassino: <strong>1,50 €/mq</strong><br />
@@ -241,14 +241,14 @@ export default function Preventivatore() {
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <button onClick={() => setIncPosa(!incPosa)}
                 style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid", cursor: "pointer", fontSize: 12, textAlign: "left",
-                  background: incPosa ? "#1A1A2E" : "#F0EDE8",
+                  background: incPosa ? "#1A1A2E" : "#F1F5F9",
                   color: incPosa ? "#fff" : "#6B6860",
                   borderColor: incPosa ? "#1A1A2E" : "#E0DDD8" }}>
                 {incPosa ? "✓" : "○"} Posa pavimento (18 €/mq)
               </button>
               <button onClick={() => setIncTapp(!incTapp)}
                 style={{ padding: "6px 14px", borderRadius: 8, border: "1px solid", cursor: "pointer", fontSize: 12, textAlign: "left",
-                  background: incTapp ? "#1A1A2E" : "#F0EDE8",
+                  background: incTapp ? "#1A1A2E" : "#F1F5F9",
                   color: incTapp ? "#fff" : "#6B6860",
                   borderColor: incTapp ? "#1A1A2E" : "#E0DDD8" }}>
                 {incTapp ? "✓" : "○"} Tappetino/materassino (1,50 €/mq)
@@ -281,7 +281,7 @@ export default function Preventivatore() {
 
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
               {FORNITORI.map(f => {
-                const fc = FORN_COLORS[f] || { bg: "#F0EDE8", color: "#5F5E5A" };
+                const fc = FORN_COLORS[f] || { bg: "#F1F5F9", color: "#5F5E5A" };
                 return (
                   <button key={f} onClick={() => { setFornitore(f); setShowAll(false); }}
                     style={{ padding: "4px 12px", borderRadius: 16, border: "1px solid", cursor: "pointer", fontSize: 11, fontWeight: 500,
@@ -308,7 +308,7 @@ export default function Preventivatore() {
                     const prezzoMq = costoMq * (1 + markup / 100);
                     const margPct  = ((prezzoMq - costoMq) / prezzoMq) * 100;
                     const isSel    = p.id === selectedId;
-                    const fc       = FORN_COLORS[p.fornitore] || { bg: "#F0EDE8", color: "#5F5E5A" };
+                    const fc       = FORN_COLORS[p.fornitore] || { bg: "#F1F5F9", color: "#5F5E5A" };
                     return (
                       <div key={p.id} onClick={() => setSelectedId(p.id)}
                         style={{
@@ -342,7 +342,7 @@ export default function Preventivatore() {
                   {filtered.length > 30 && !showAll && (
                     <div style={{ padding: "12px", textAlign: "center" }}>
                       <button onClick={() => setShowAll(true)}
-                        style={{ padding: "6px 18px", borderRadius: 8, border: "1px solid #E0DDD8", background: "#F0EDE8", cursor: "pointer", fontSize: 12, color: "#6B6860" }}>
+                        style={{ padding: "6px 18px", borderRadius: 8, border: "1px solid #E0DDD8", background: "#F1F5F9", cursor: "pointer", fontSize: 12, color: "#6B6860" }}>
                         Mostra tutti i {filtered.length} risultati
                       </button>
                     </div>
@@ -355,7 +355,7 @@ export default function Preventivatore() {
 
         <div>
           {!selected ? (
-            <div style={{ background: "#F0EDE8", borderRadius: 12, padding: "40px 24px", textAlign: "center", color: "#9A9890" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "40px 24px", textAlign: "center", color: "#9A9890" }}>
               <div style={{ fontSize: 32, marginBottom: 12 }}>←</div>
               <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 6 }}>Seleziona un prodotto</div>
               <div style={{ fontSize: 13 }}>Clicca qualsiasi articolo nella lista per calcolare il preventivo</div>
@@ -376,7 +376,7 @@ export default function Preventivatore() {
                     { l: "Tuo costo acquisto", v: fmt2(selected.listino * selected.coeff) + "/mq", c: "#A32D2D" },
                     { l: "Tuo prezzo materiale", v: fmt2(selected.listino * selected.coeff * (1 + markup / 100)) + "/mq", c: "#27500A" },
                   ].map(k => (
-                    <div key={k.l} style={{ background: "#F0EDE8", borderRadius: 6, padding: "8px 10px", textAlign: "center" }}>
+                    <div key={k.l} style={{ background: "#F1F5F9", borderRadius: 6, padding: "8px 10px", textAlign: "center" }}>
                       <div style={{ fontSize: 10, color: "#9A9890", marginBottom: 3 }}>{k.l}</div>
                       <div style={{ fontSize: 13, fontWeight: 500, color: k.c }}>{k.v}</div>
                     </div>
@@ -400,7 +400,7 @@ export default function Preventivatore() {
                   </div>
                 )}
                 {selected.tappetino === "mai" && (
-                  <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#9A9890", marginTop: 4 }}>
+                  <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "8px 12px", fontSize: 12, color: "#9A9890", marginTop: 4 }}>
                     Tappetino non applicabile per questo prodotto
                   </div>
                 )}

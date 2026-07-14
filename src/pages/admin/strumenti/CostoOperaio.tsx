@@ -56,7 +56,7 @@ function MetricCard({
   return (
     <div
       style={{
-        background: '#F0EDE8',
+        background: '#F1F5F9',
         borderRadius: 10,
         padding: '14px 16px',
         textAlign: 'center',
