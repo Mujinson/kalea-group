@@ -105,24 +105,24 @@ function BigKPI({
     Math.round(animated).toLocaleString('it-IT');
 
   const styles: Record<Variant, React.CSSProperties> = {
-    light: { background: '#FFFFFF', color: '#1A1A2E', border: '1px solid rgba(26,26,46,0.08)' },
-    dark: { background: '#1A1A2E', color: '#FFFFFF', border: '1px solid #1A1A2E' },
-    gold: { background: '#FFFFFF', color: '#1A1A2E', borderLeft: '4px solid #C4A882', border: '1px solid rgba(196,168,130,0.30)', borderLeftWidth: 4 },
+    light: { background: '#FFFFFF', color: '#0F172A', border: '1px solid #E5E7EB', boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
+    dark: { background: '#0F172A', color: '#FFFFFF', border: '1px solid #0F172A', boxShadow: '0 4px 12px rgba(15,23,42,0.15)' },
+    gold: { background: '#FFFFFF', color: '#0F172A', borderLeft: '4px solid #4F46E5', border: '1px solid #E5E7EB', borderLeftWidth: 4, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
     semaphore: {
-      background: semaphore === 'green' ? '#EAF5EE' : semaphore === 'amber' ? '#FDF4E3' : '#FBEAEA',
-      color: '#1A1A2E',
-      border: `1px solid ${semaphore === 'green' ? '#A8D5B5' : semaphore === 'amber' ? '#E8C97A' : '#E5A5A5'}`,
+      background: semaphore === 'green' ? '#ECFDF5' : semaphore === 'amber' ? '#FFFBEB' : '#FEF2F2',
+      color: '#0F172A',
+      border: `1px solid ${semaphore === 'green' ? '#A7F3D0' : semaphore === 'amber' ? '#FDE68A' : '#FECACA'}`,
     },
-    danger: { background: '#FFF0F0', color: '#1A1A2E', borderLeft: '4px solid #C0392B', border: '1px solid #F5C5C5', borderLeftWidth: 4 },
+    danger: { background: '#FEF2F2', color: '#0F172A', borderLeft: '4px solid #E44258', border: '1px solid #FECACA', borderLeftWidth: 4 },
   };
-  const labelColor = variant === 'dark' ? '#C8B8A0' : '#9A9890';
-  const subColor = variant === 'dark' ? 'rgba(255,255,255,0.65)' : '#6B6760';
+  const labelColor = variant === 'dark' ? 'rgba(255,255,255,0.65)' : '#64748B';
+  const subColor = variant === 'dark' ? 'rgba(255,255,255,0.70)' : '#475569';
 
   return (
     <div
       onClick={onClick}
-      className={`relative px-4 py-3 transition-all ${onClick ? 'cursor-pointer hover:translate-y-[-1px]' : ''}`}
-      style={{ ...styles[variant], borderRadius: 4 }}
+      className={`relative px-4 py-3 transition-all ${onClick ? 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md' : ''}`}
+      style={{ ...styles[variant], borderRadius: 12 }}
     >
       <div className="flex items-center justify-between mb-1">
         <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, color: labelColor }}>
@@ -160,7 +160,7 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
     <div className="flex flex-col items-center justify-center">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size / 2} cy={size / 2} r={r} stroke="#EEEAE2" strokeWidth={10} fill="none" />
+          <circle cx={size / 2} cy={size / 2} r={r} stroke="#F1F5F9" strokeWidth={10} fill="none" />
           <circle
             cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={10} fill="none"
             strokeLinecap="round"
@@ -170,13 +170,13 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: '#1A1A2E', lineHeight: 1 }}>
+          <span className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>
             {pctVal.toFixed(0)}%
           </span>
-          {sub && <span className="mt-0.5" style={{ fontSize: 9, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{sub}</span>}
+          {sub && <span className="mt-0.5" style={{ fontSize: 9, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{sub}</span>}
         </div>
       </div>
-      <div className="mt-2 text-center" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6760', fontWeight: 600 }}>
+      <div className="mt-2 text-center" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', fontWeight: 600 }}>
         {label}
       </div>
     </div>
@@ -186,10 +186,10 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
 // ─── Panel wrapper ────────────────────────────────────────────
 function Panel({ title, right, children, className = '' }: { title?: string; right?: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-white ${className}`} style={{ border: '1px solid rgba(26,26,46,0.08)', borderRadius: 4 }}>
+    <div className={`bg-white ${className}`} style={{ border: '1px solid #E5E7EB', borderRadius: 12, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' }}>
       {title && (
-        <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: 'rgba(26,26,46,0.06)' }}>
-          <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1A1A2E' }}>{title}</h3>
+        <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: '#F1F5F9' }}>
+          <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#0F172A' }}>{title}</h3>
           {right}
         </div>
       )}
@@ -199,7 +199,7 @@ function Panel({ title, right, children, className = '' }: { title?: string; rig
 }
 
 const Empty = ({ msg = 'Nessun dato per il periodo' }: { msg?: string }) => (
-  <div className="flex items-center justify-center h-32 text-xs italic" style={{ color: '#B0998A' }}>{msg}</div>
+  <div className="flex items-center justify-center h-32 text-xs italic" style={{ color: '#94A3B8' }}>{msg}</div>
 );
 
 // ─── Main ─────────────────────────────────────────────────────
@@ -215,7 +215,7 @@ const STAGE_LABEL: Record<string, string> = {
   nuovo: 'Nuovo', contattato: 'Contattato', in_trattativa: 'Trattativa',
   preventivo_inviato: 'Prev. inviato', cliente: 'Cliente', perso: 'Perso',
 };
-const STAGE_COLORS = ['#E5E1DA', '#CFC7BA', '#A89A82', '#8C7B6B', '#5E8A4D', '#C0392B'];
+const STAGE_COLORS = ['#94A3B8', '#0086C0', '#A25DDC', '#FDAB3D', '#00C875', '#E44258'];
 
 const AdminOverview = () => {
   const navigate = useNavigate();
@@ -479,7 +479,7 @@ const AdminOverview = () => {
     sites.forEach(c => {
       if (c.start_date) {
         const d = new Date(c.start_date);
-        if (byDay[key(d)]) byDay[key(d)].push({ type: 'cantiere', label: `▶ ${c.title}`, color: '#C4A882' });
+        if (byDay[key(d)]) byDay[key(d)].push({ type: 'cantiere', label: `▶ ${c.title}`, color: '#4F46E5' });
       }
     });
     paymentSchedules.forEach(p => {
@@ -527,29 +527,30 @@ const AdminOverview = () => {
   return (
     <div className="space-y-3 pb-12" style={{ fontFamily: 'inherit' }}>
       {/* TOP BAR */}
-      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-[#F5F4F1]/95 backdrop-blur border-b" style={{ borderColor: 'rgba(26,26,46,0.10)' }}>
+      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-white/95 backdrop-blur border-b" style={{ borderColor: '#E5E7EB' }}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-baseline gap-3">
-            <h1 style={{ fontSize: 18, fontWeight: 800, color: '#1A1A2E', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
-            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#9A9890', fontWeight: 600 }}>
+            <h1 style={{ fontSize: 18, fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
+            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#94A3B8', fontWeight: 600 }}>
               {range.label}
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex" style={{ border: '1px solid rgba(26,26,46,0.10)', borderRadius: 4 }}>
+            <div className="flex overflow-hidden" style={{ border: '1px solid #E5E7EB', borderRadius: 10 }}>
               {(Object.keys(PERIOD_LABELS) as PeriodKey[]).map(k => (
                 <button key={k} onClick={() => setPeriod(k)}
                   style={{
-                    padding: '5px 10px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
-                    background: period === k ? '#1A1A2E' : '#FFFFFF',
-                    color: period === k ? '#FFFFFF' : '#6B6760',
+                    padding: '6px 12px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+                    background: period === k ? '#4F46E5' : '#FFFFFF',
+                    color: period === k ? '#FFFFFF' : '#64748B',
+                    transition: 'all 0.15s',
                   }}>
                   {PERIOD_LABELS[k]}
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: '#6B6760', fontWeight: 600, letterSpacing: '0.05em' }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: '#64748B', fontWeight: 600, letterSpacing: '0.05em' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               LIVE · {format(lastSync, 'HH:mm:ss')}
             </div>
           </div>
@@ -561,8 +562,9 @@ const AdminOverview = () => {
             <button key={k} onClick={() => setTab(k)}
               style={{
                 padding: '8px 14px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em',
-                color: tab === k ? '#1A1A2E' : '#9A9890',
-                borderBottom: tab === k ? '2px solid #C4A882' : '2px solid transparent',
+                color: tab === k ? '#4F46E5' : '#94A3B8',
+                borderBottom: tab === k ? '2px solid #4F46E5' : '2px solid transparent',
+                transition: 'all 0.15s',
               }}>
               {TAB_LABELS[k]}
             </button>
@@ -624,26 +626,26 @@ const AdminOverview = () => {
 
       {/* CHART + GAUGES (above the fold) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
-        <Panel title="Fatturato · 12 mesi" right={<span className="text-[10px] tabular-nums" style={{ color: '#9A9890' }}>{eur(months12.reduce((s, x) => s + x.fatturato, 0))} totale</span>} className="lg:col-span-2">
+        <Panel title="Fatturato · 12 mesi" right={<span className="text-[10px] tabular-nums" style={{ color: '#94A3B8' }}>{eur(months12.reduce((s, x) => s + x.fatturato, 0))} totale</span>} className="lg:col-span-2">
           {months12.some(m => m.fatturato > 0) ? (
             <ResponsiveContainer width="100%" height={240}>
               <AreaChart data={months12} margin={{ top: 5, right: 5, bottom: 0, left: -10 }}>
                 <defs>
                   <linearGradient id="gradFatt" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#C4A882" stopOpacity={0.9} />
-                    <stop offset="100%" stopColor="#C4A882" stopOpacity={0.05} />
+                    <stop offset="0%" stopColor="#4F46E5" stopOpacity={0.9} />
+                    <stop offset="100%" stopColor="#4F46E5" stopOpacity={0.05} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="2 4" stroke="#EEEAE2" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false}
+                <CartesianGrid strokeDasharray="2 4" stroke="#F1F5F9" vertical={false} />
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false}
                   tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v} />
                 <Tooltip
-                  contentStyle={{ background: '#1A1A2E', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }}
-                  labelStyle={{ color: '#C4A882', fontWeight: 700 }}
+                  contentStyle={{ background: '#0F172A', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }}
+                  labelStyle={{ color: '#4F46E5', fontWeight: 700 }}
                   formatter={(v: any) => eur(v)}
                 />
-                <Area type="monotone" dataKey="fatturato" stroke="#C4A882" strokeWidth={2} fill="url(#gradFatt)" />
+                <Area type="monotone" dataKey="fatturato" stroke="#4F46E5" strokeWidth={2} fill="url(#gradFatt)" />
               </AreaChart>
             </ResponsiveContainer>
           ) : <Empty />}
@@ -653,16 +655,16 @@ const AdminOverview = () => {
           <div className="grid grid-cols-3 gap-2">
             <Gauge value={convRate} label="Conversione" sub="Lead→Cliente" color="#3b82f6" size={108} />
             <Gauge value={margine.avg} label="Margine" sub="Medio %" color={margineColor} size={108} />
-            <Gauge value={goalPct} max={100} label="Obiettivo" sub={`/${eurShort(goal)}`} color="#C4A882" size={108} />
+            <Gauge value={goalPct} max={100} label="Obiettivo" sub={`/${eurShort(goal)}`} color="#4F46E5" size={108} />
           </div>
-          <div className="mt-3 pt-3 border-t" style={{ borderColor: 'rgba(26,26,46,0.06)' }}>
-            <div className="flex justify-between" style={{ fontSize: 10, color: '#6B6760', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          <div className="mt-3 pt-3 border-t" style={{ borderColor: '#F1F5F9' }}>
+            <div className="flex justify-between" style={{ fontSize: 10, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               <span>YTD</span>
-              <span className="tabular-nums" style={{ color: '#1A1A2E', fontWeight: 700 }}>{eur(revenueYTD)}</span>
+              <span className="tabular-nums" style={{ color: '#0F172A', fontWeight: 700 }}>{eur(revenueYTD)}</span>
             </div>
-            <div className="flex justify-between mt-1" style={{ fontSize: 10, color: '#6B6760', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <div className="flex justify-between mt-1" style={{ fontSize: 10, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               <span>Mancano</span>
-              <span className="tabular-nums" style={{ color: '#1A1A2E', fontWeight: 700 }}>{eur(Math.max(0, goal - revenueYTD))}</span>
+              <span className="tabular-nums" style={{ color: '#0F172A', fontWeight: 700 }}>{eur(Math.max(0, goal - revenueYTD))}</span>
             </div>
           </div>
         </Panel>
@@ -674,7 +676,7 @@ const AdminOverview = () => {
           <BigKPI label="Lead Pipeline" value={leadPipeline.total} variant="light"
             sub={`${leadPipeline.counts.in_trattativa || 0} in trattativa`}
             icon={Users} onClick={() => navigate('/admin/leads')}>
-            <div className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-[#EEEAE2]">
+            <div className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-[#F1F5F9]">
               {PIPELINE_STAGES.map((s, i) => {
                 const v = leadPipeline.counts[s] || 0;
                 const w = leadPipeline.total > 0 ? (v / leadPipeline.total) * 100 : 0;
@@ -687,8 +689,8 @@ const AdminOverview = () => {
         {showFin && (
           <BigKPI label="Fatturato YTD" value={revenueYTD} format="eur" variant="light"
             sub={`${goalPct.toFixed(0)}% obiettivo`} icon={TrendingUp}>
-            <div className="mt-2 h-1.5 rounded-full bg-[#EEEAE2] overflow-hidden">
-              <div className="h-full" style={{ width: `${Math.min(100, goalPct)}%`, background: '#C4A882', transition: 'width 1s ease-out' }} />
+            <div className="mt-2 h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+              <div className="h-full" style={{ width: `${Math.min(100, goalPct)}%`, background: '#4F46E5', transition: 'width 1s ease-out' }} />
             </div>
           </BigKPI>
         )}
@@ -713,10 +715,10 @@ const AdminOverview = () => {
             {stato6.some(m => m.accettati + m.attesa + m.rifiutati > 0) ? (
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={stato6} margin={{ top: 5, right: 5, bottom: 0, left: -10 }}>
-                  <CartesianGrid strokeDasharray="2 4" stroke="#EEEAE2" vertical={false} />
-                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: '#9A9890' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: '#1A1A2E', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }} />
+                  <CartesianGrid strokeDasharray="2 4" stroke="#F1F5F9" vertical={false} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: '#0F172A', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }} />
                   <Legend wrapperStyle={{ fontSize: 10 }} iconSize={8} />
                   <Bar dataKey="accettati" stackId="a" fill="#16a34a" />
                   <Bar dataKey="attesa" stackId="a" fill="#eab308" />
@@ -734,10 +736,10 @@ const AdminOverview = () => {
                   const w = leadPipeline.total > 0 ? (v / leadPipeline.total) * 100 : 0;
                   return (
                     <div key={s} className="flex items-center gap-2">
-                      <span style={{ fontSize: 10, width: 90, color: '#6B6760', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{STAGE_LABEL[s]}</span>
-                      <div className="flex-1 h-5 bg-[#F5F4F1] overflow-hidden" style={{ borderRadius: 2 }}>
+                      <span style={{ fontSize: 10, width: 90, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{STAGE_LABEL[s]}</span>
+                      <div className="flex-1 h-5 bg-[#F6F7FB] overflow-hidden" style={{ borderRadius: 2 }}>
                         <div className="h-full flex items-center justify-end pr-2" style={{ width: `${Math.max(w, 6)}%`, background: STAGE_COLORS[i], transition: 'width 1s ease-out' }}>
-                          <span style={{ fontSize: 10, fontWeight: 700, color: i >= 3 ? '#fff' : '#1A1A2E' }}>{v}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: i >= 3 ? '#fff' : '#0F172A' }}>{v}</span>
                         </div>
                       </div>
                     </div>
@@ -752,18 +754,18 @@ const AdminOverview = () => {
       {/* LIVE TABLES */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
         {showCom && (
-          <Panel title="Ultimi preventivi" right={<button onClick={() => navigate('/admin/preventivi')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#C4A882' }}>Tutti →</button>}>
+          <Panel title="Ultimi preventivi" right={<button onClick={() => navigate('/admin/preventivi')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#4F46E5' }}>Tutti →</button>}>
             {preventivi.length ? (
               <div className="divide-y" style={{ borderColor: 'rgba(26,26,46,0.04)' }}>
                 {preventivi.slice(0, 5).map(p => (
                   <button key={p.id} onClick={() => navigate(`/admin/strumenti/crea-preventivo?id=${p.id}`)}
-                    className="w-full text-left py-2 hover:bg-[#F5F4F1] flex justify-between items-center gap-2 px-1">
+                    className="w-full text-left py-2 hover:bg-[#F6F7FB] flex justify-between items-center gap-2 px-1">
                     <div className="min-w-0">
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{p.numero_preventivo}</div>
-                      <div style={{ fontSize: 10, color: '#9A9890' }} className="truncate">{p.cliente_nome || '—'}</div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{p.numero_preventivo}</div>
+                      <div style={{ fontSize: 10, color: '#94A3B8' }} className="truncate">{p.cliente_nome || '—'}</div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="tabular-nums" style={{ fontSize: 12, fontWeight: 700, color: '#1A1A2E' }}>{eurShort(Number(p.importo_totale || 0))}</div>
+                      <div className="tabular-nums" style={{ fontSize: 12, fontWeight: 700, color: '#0F172A' }}>{eurShort(Number(p.importo_totale || 0))}</div>
                       <StatoBadge stato={p.stato} />
                     </div>
                   </button>
@@ -774,7 +776,7 @@ const AdminOverview = () => {
         )}
 
         {showCan && (
-          <Panel title="Cantieri in corso" right={<button onClick={() => navigate('/admin/cantieri')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#C4A882' }}>Tutti →</button>}>
+          <Panel title="Cantieri in corso" right={<button onClick={() => navigate('/admin/cantieri')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#4F46E5' }}>Tutti →</button>}>
             {sites.filter(s => s.status === 'attivo' || s.status === 'in_corso').length ? (
               <div className="space-y-2.5">
                 {sites.filter(s => s.status === 'attivo' || s.status === 'in_corso').slice(0, 5).map(c => {
@@ -791,14 +793,14 @@ const AdminOverview = () => {
                   return (
                     <button key={c.id} onClick={() => navigate(`/admin/cantieri/${c.id}`)} className="w-full text-left">
                       <div className="flex justify-between mb-1">
-                        <span style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{c.title}</span>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{c.title}</span>
                         {ritardo && <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', background: '#C0392B', padding: '1px 5px', borderRadius: 2 }}>RITARDO</span>}
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 h-1 bg-[#EEEAE2] overflow-hidden" style={{ borderRadius: 1 }}>
-                          <div className="h-full" style={{ width: `${p}%`, background: ritardo ? '#C0392B' : '#C4A882', transition: 'width 1s ease-out' }} />
+                        <div className="flex-1 h-1 bg-[#F1F5F9] overflow-hidden" style={{ borderRadius: 1 }}>
+                          <div className="h-full" style={{ width: `${p}%`, background: ritardo ? '#C0392B' : '#4F46E5', transition: 'width 1s ease-out' }} />
                         </div>
-                        <span className="tabular-nums" style={{ fontSize: 10, color: '#9A9890', width: 28, textAlign: 'right' }}>{Math.round(p)}%</span>
+                        <span className="tabular-nums" style={{ fontSize: 10, color: '#94A3B8', width: 28, textAlign: 'right' }}>{Math.round(p)}%</span>
                       </div>
                     </button>
                   );
@@ -815,8 +817,8 @@ const AdminOverview = () => {
                 {debiti.open.slice(0, 6).map((d, i) => (
                   <div key={i} className="flex justify-between items-center py-2 px-1">
                     <div className="min-w-0">
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{d.name}</div>
-                      {d.lastDate && <div style={{ fontSize: 10, color: '#9A9890' }}>Ultimo: {format(new Date(d.lastDate), 'dd MMM', { locale: it })}</div>}
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{d.name}</div>
+                      {d.lastDate && <div style={{ fontSize: 10, color: '#94A3B8' }}>Ultimo: {format(new Date(d.lastDate), 'dd MMM', { locale: it })}</div>}
                     </div>
                     <div className="tabular-nums shrink-0" style={{ fontSize: 12, fontWeight: 800, color: '#C0392B' }}>{eurShort(d.residuo)}</div>
                   </div>
@@ -835,21 +837,21 @@ const AdminOverview = () => {
               {activityFeed.map((a, i) => {
                 const cfg = {
                   preventivo: { icon: FileText, color: '#3b82f6', bg: '#dbeafe' },
-                  cantiere: { icon: HardHat, color: '#C4A882', bg: '#F5EFE3' },
+                  cantiere: { icon: HardHat, color: '#4F46E5', bg: '#F5EFE3' },
                   pagamento: { icon: CreditCard, color: '#C0392B', bg: '#FBEAEA' },
                   lead: { icon: UserPlus, color: '#16a34a', bg: '#EAF5EE' },
                 }[a.type];
                 const Icon = cfg.icon;
                 return (
-                  <button key={i} onClick={a.onClick} className="w-full text-left flex items-center gap-2.5 py-1 hover:bg-[#F5F4F1] px-1 rounded">
+                  <button key={i} onClick={a.onClick} className="w-full text-left flex items-center gap-2.5 py-1 hover:bg-[#F6F7FB] px-1 rounded">
                     <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: cfg.bg }}>
                       <Icon className="w-3.5 h-3.5" style={{ color: cfg.color }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#1A1A2E' }} className="truncate">{a.title}</div>
-                      <div style={{ fontSize: 10, color: '#9A9890' }} className="truncate">{a.sub}</div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{a.title}</div>
+                      <div style={{ fontSize: 10, color: '#94A3B8' }} className="truncate">{a.sub}</div>
                     </div>
-                    <div className="shrink-0 tabular-nums" style={{ fontSize: 9, color: '#B0998A' }}>{format(a.date, 'dd/MM HH:mm')}</div>
+                    <div className="shrink-0 tabular-nums" style={{ fontSize: 9, color: '#94A3B8' }}>{format(a.date, 'dd/MM HH:mm')}</div>
                   </button>
                 );
               })}
@@ -869,18 +871,18 @@ const AdminOverview = () => {
               const events = calendarEvents[key] || [];
               const isToday = isSameDay(d, new Date());
               return (
-                <div key={key} className="flex flex-col" style={{ border: isToday ? '1px solid #C4A882' : '1px solid rgba(26,26,46,0.05)', borderRadius: 2, background: isToday ? '#FBF7EE' : '#fff', minHeight: 130 }}>
+                <div key={key} className="flex flex-col" style={{ border: isToday ? '1px solid #4F46E5' : '1px solid rgba(26,26,46,0.05)', borderRadius: 2, background: isToday ? '#FBF7EE' : '#fff', minHeight: 130 }}>
                   <div className="px-1.5 py-1 border-b" style={{ borderColor: 'rgba(26,26,46,0.05)' }}>
-                    <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#9A9890', fontWeight: 600 }}>{format(d, 'EEE', { locale: it })}</div>
-                    <div className="tabular-nums" style={{ fontSize: 14, fontWeight: 800, color: isToday ? '#C4A882' : '#1A1A2E' }}>{format(d, 'd')}</div>
+                    <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94A3B8', fontWeight: 600 }}>{format(d, 'EEE', { locale: it })}</div>
+                    <div className="tabular-nums" style={{ fontSize: 14, fontWeight: 800, color: isToday ? '#4F46E5' : '#0F172A' }}>{format(d, 'd')}</div>
                   </div>
                   <div className="p-1 space-y-0.5 flex-1 overflow-hidden">
                     {events.slice(0, 4).map((ev, i) => (
-                      <div key={i} className="truncate" style={{ fontSize: 9, padding: '2px 4px', borderLeft: `2px solid ${ev.color}`, background: `${ev.color}10`, color: '#1A1A2E', fontWeight: 600 }} title={ev.label}>
+                      <div key={i} className="truncate" style={{ fontSize: 9, padding: '2px 4px', borderLeft: `2px solid ${ev.color}`, background: `${ev.color}10`, color: '#0F172A', fontWeight: 600 }} title={ev.label}>
                         {ev.label}
                       </div>
                     ))}
-                    {events.length > 4 && <div style={{ fontSize: 9, color: '#9A9890' }} className="px-1">+{events.length - 4}</div>}
+                    {events.length > 4 && <div style={{ fontSize: 9, color: '#94A3B8' }} className="px-1">+{events.length - 4}</div>}
                   </div>
                 </div>
               );
@@ -891,11 +893,11 @@ const AdminOverview = () => {
 
       {/* ADMIN ONLY */}
       {isAdmin && (
-        <Panel title="Performance commerciali" right={<Briefcase className="w-3.5 h-3.5" style={{ color: '#9A9890' }} />}>
+        <Panel title="Performance commerciali" right={<Briefcase className="w-3.5 h-3.5" style={{ color: '#94A3B8' }} />}>
           {performanceAgenti.length ? (
             <table className="w-full" style={{ fontSize: 11 }}>
               <thead>
-                <tr style={{ color: '#9A9890', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 9 }}>
+                <tr style={{ color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 9 }}>
                   <th className="text-left py-1.5 px-1 font-bold">Nome</th>
                   <th className="text-right py-1.5 px-1 font-bold">Lead</th>
                   <th className="text-right py-1.5 px-1 font-bold">Preventivi</th>
