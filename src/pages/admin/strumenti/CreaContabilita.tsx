@@ -1082,3 +1082,359 @@ function ServiziComuniSection({
   );
 }
 
+
+// ─── Header condiviso moduli specialistici ───────────────────────────────────
+
+function SpecialHeader({
+  color, titolo, onTitleChange, badge, collapsed, onToggleCollapse, onDelete,
+}: {
+  color: string;
+  titolo: string;
+  onTitleChange: (v: string) => void;
+  badge?: string;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-3 p-4 border-b border-gray-100 flex-wrap">
+      <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: color }} />
+      <input
+        type="text"
+        value={titolo}
+        onChange={(e) => onTitleChange(e.target.value)}
+        className="flex-1 min-w-[200px] border-0 border-b border-transparent hover:border-gray-200 focus:border-blue-400 focus:outline-none text-base font-medium py-1 bg-transparent"
+        style={{ color: "#3B2314" }}
+      />
+      {badge && (
+        <span className="text-xs bg-blue-50 text-blue-700 rounded px-2 py-1 font-medium">{badge}</span>
+      )}
+      <button onClick={onToggleCollapse} className="text-gray-500 hover:text-gray-800 px-2">
+        {collapsed ? "▸" : "▾"}
+      </button>
+      <button
+        onClick={() => { if (confirm(`Eliminare "${titolo}"?`)) onDelete(); }}
+        className="text-gray-400 hover:text-red-600 px-2"
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
+function ReadonlyCell({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">{label}</div>
+      <div className="bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm tabular-nums text-gray-800">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function LabeledInput({
+  label, type = "number", value, onChange, step, min, max, placeholder,
+}: {
+  label: string;
+  type?: string;
+  value: string | number;
+  onChange: (v: string) => void;
+  step?: number;
+  min?: number;
+  max?: number;
+  placeholder?: string;
+}) {
+  return (
+    <div>
+      <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">{label}</div>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        step={step}
+        min={min}
+        max={max}
+        placeholder={placeholder}
+        className="w-full border border-gray-200 rounded px-3 py-2 text-sm"
+      />
+    </div>
+  );
+}
+
+// ─── ModuloLevigaturaSection ─────────────────────────────────────────────────
+
+function ModuloLevigaturaSection({
+  modulo, onChange, onDelete,
+}: { modulo: Modulo; onChange: (m: Modulo) => void; onDelete: () => void }) {
+  const c = modulo.confLevigatura ?? { mq: 0, tipo: "fine" as const, passate: 3, costoInternoMq: COSTO_LEVIGATURA["fine"], ricarico: 80 };
+  const update = (patch: Partial<ModuloLevigatura>) =>
+    onChange({ ...modulo, confLevigatura: { ...c, ...patch } });
+
+  const prezzoMq = c.costoInternoMq * (1 + c.ricarico / 100);
+  const totale = prezzoMq * c.mq;
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200">
+      <SpecialHeader
+        color="#F59E0B"
+        titolo={modulo.titolo}
+        onTitleChange={(v) => onChange({ ...modulo, titolo: v })}
+        badge={c.mq > 0 ? `${eur(prezzoMq)}/mq` : undefined}
+        collapsed={modulo.collapsed}
+        onToggleCollapse={() => onChange({ ...modulo, collapsed: !modulo.collapsed })}
+        onDelete={onDelete}
+      />
+      {!modulo.collapsed && (
+        <div className="p-5 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <LabeledInput label="mq da levigare" value={c.mq || ""} onChange={(v) => update({ mq: Number(v) || 0 })} step={0.1} min={0} />
+            <div>
+              <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">Tipo levigatura</div>
+              <select
+                value={c.tipo}
+                onChange={(e) => {
+                  const t = e.target.value as ModuloLevigatura["tipo"];
+                  update({ tipo: t, costoInternoMq: COSTO_LEVIGATURA[t] });
+                }}
+                className="w-full border border-gray-200 rounded px-3 py-2 text-sm"
+              >
+                <option value="rustica">Rustica</option>
+                <option value="fine">Fine</option>
+                <option value="superfine">Superfine</option>
+              </select>
+            </div>
+            <LabeledInput label="N. passate" value={c.passate} onChange={(v) => update({ passate: Number(v) || 0 })} min={1} />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t border-gray-100">
+            <ReadonlyCell label="Costo interno" value={`${eur(c.costoInternoMq)}/mq`} />
+            <LabeledInput label="Ricarico %" value={c.ricarico} onChange={(v) => update({ ricarico: Number(v) || 0 })} />
+            <ReadonlyCell label="Prezzo cliente/mq" value={eur(prezzoMq)} />
+            <ReadonlyCell label="Totale cliente" value={eur(totale)} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── ModuloVerniciaturaPuliziaSection ────────────────────────────────────────
+
+const TIPI_PRODOTTO_VERNICE = [
+  "Olio naturale", "Olio colorato", "Lacca satinata", "Lacca opaca", "Cera", "Prodotto cliente",
+];
+
+function ModuloVerniciaturaPuliziaSection({
+  modulo, onChange, onDelete,
+}: { modulo: Modulo; onChange: (m: Modulo) => void; onDelete: () => void }) {
+  const c = modulo.confVerniciatura ?? {
+    mq: 0, tipoProdotto: "Olio naturale", mani: 2, includePulizia: false,
+    costoInternoMq: COSTO_VERNICIATURA_INTERNO, ricarico: 100,
+    costoInternoPuliziaMq: COSTO_PULIZIA_INTERNO, ricaricoPulizia: 100,
+  };
+  const update = (patch: Partial<ModuloVerniciatura>) =>
+    onChange({ ...modulo, confVerniciatura: { ...c, ...patch } });
+
+  const prezzoVernMq = c.costoInternoMq * (1 + c.ricarico / 100);
+  const totVern = prezzoVernMq * c.mq;
+  const prezzoPulMq = c.costoInternoPuliziaMq * (1 + c.ricaricoPulizia / 100);
+  const totPul = c.includePulizia ? prezzoPulMq * c.mq : 0;
+  const totale = totVern + totPul;
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200">
+      <SpecialHeader
+        color="#A855F7"
+        titolo={modulo.titolo}
+        onTitleChange={(v) => onChange({ ...modulo, titolo: v })}
+        badge={c.mq > 0 ? `Tot ${eur(totale)}` : undefined}
+        collapsed={modulo.collapsed}
+        onToggleCollapse={() => onChange({ ...modulo, collapsed: !modulo.collapsed })}
+        onDelete={onDelete}
+      />
+      {!modulo.collapsed && (
+        <div className="p-5 space-y-5">
+          {/* Blocco A — verniciatura */}
+          <div>
+            <div className="text-xs uppercase tracking-wider text-purple-700 mb-2 font-medium">Verniciatura</div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <LabeledInput label="mq" value={c.mq || ""} onChange={(v) => update({ mq: Number(v) || 0 })} step={0.1} min={0} />
+              <div>
+                <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">Tipo prodotto</div>
+                <select
+                  value={c.tipoProdotto}
+                  onChange={(e) => update({ tipoProdotto: e.target.value })}
+                  className="w-full border border-gray-200 rounded px-3 py-2 text-sm"
+                >
+                  {TIPI_PRODOTTO_VERNICE.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+              <LabeledInput label="N. mani" value={c.mani} onChange={(v) => update({ mani: Number(v) || 0 })} min={1} />
+              <LabeledInput label="Ricarico %" value={c.ricarico} onChange={(v) => update({ ricarico: Number(v) || 0 })} />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+              <ReadonlyCell label="Costo interno/mq" value={eur(c.costoInternoMq)} />
+              <ReadonlyCell label="Prezzo cliente/mq" value={eur(prezzoVernMq)} />
+              <ReadonlyCell label="Totale cliente" value={eur(totVern)} />
+            </div>
+          </div>
+
+          {/* Blocco B — pulizia */}
+          <div className="pt-4 border-t border-gray-100">
+            <label className="flex items-center gap-2 mb-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={c.includePulizia}
+                onChange={(e) => update({ includePulizia: e.target.checked })}
+                className="w-4 h-4"
+              />
+              <span className="text-xs uppercase tracking-wider text-purple-700 font-medium">
+                Pulizia fine cantiere
+              </span>
+            </label>
+            {c.includePulizia && (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <ReadonlyCell label="mq (=verniciatura)" value={c.mq.toString()} />
+                <LabeledInput label="Ricarico %" value={c.ricaricoPulizia} onChange={(v) => update({ ricaricoPulizia: Number(v) || 0 })} />
+                <ReadonlyCell label="Prezzo cliente/mq" value={eur(prezzoPulMq)} />
+                <ReadonlyCell label="Totale pulizia" value={eur(totPul)} />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── ModuloSubappaltoSection ─────────────────────────────────────────────────
+
+function ModuloSubappaltoSection({
+  modulo, onChange, onDelete,
+}: { modulo: Modulo; onChange: (m: Modulo) => void; onDelete: () => void }) {
+  const c = modulo.confSubappalto ?? {
+    modalita: "ore" as const, ore: 0, persone: 1, tariffaOra: 35, forfait: 0, ricarico: 30, desc: "",
+  };
+  const update = (patch: Partial<ModuloSubappalto>) =>
+    onChange({ ...modulo, confSubappalto: { ...c, ...patch } });
+
+  const costo = c.modalita === "ore" ? c.ore * c.persone * c.tariffaOra : c.forfait;
+  const ricaricoE = costo * (c.ricarico / 100);
+  const totale = costo + ricaricoE;
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200">
+      <SpecialHeader
+        color="#991B1B"
+        titolo={modulo.titolo}
+        onTitleChange={(v) => onChange({ ...modulo, titolo: v })}
+        badge={totale > 0 ? `Tot ${eur(totale)}` : undefined}
+        collapsed={modulo.collapsed}
+        onToggleCollapse={() => onChange({ ...modulo, collapsed: !modulo.collapsed })}
+        onDelete={onDelete}
+      />
+      {!modulo.collapsed && (
+        <div className="p-5 space-y-4">
+          {/* Toggle modalità */}
+          <div className="flex gap-1 bg-gray-100 rounded p-1 w-fit">
+            {[
+              { k: "ore", label: "Ore × Persone × Tariffa" },
+              { k: "forfait", label: "Forfait" },
+            ].map(m => (
+              <button
+                key={m.k}
+                onClick={() => update({ modalita: m.k as "ore" | "forfait" })}
+                className={`px-3 py-1.5 rounded text-xs font-medium transition ${
+                  c.modalita === m.k ? "bg-white shadow-sm text-gray-900" : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+
+          <div>
+            <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">Descrizione lavoro</div>
+            <input
+              type="text"
+              value={c.desc}
+              onChange={(e) => update({ desc: e.target.value })}
+              placeholder="Es. Rimozione vecchio pavimento e preparazione fondo"
+              className="w-full border border-gray-200 rounded px-3 py-2 text-sm"
+            />
+          </div>
+
+          {c.modalita === "ore" ? (
+            <>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <LabeledInput label="Ore tot" value={c.ore || ""} onChange={(v) => update({ ore: Number(v) || 0 })} step={0.5} min={0} />
+                <LabeledInput label="Persone" value={c.persone} onChange={(v) => update({ persone: Number(v) || 0 })} min={1} />
+                <LabeledInput label="€/ora" value={c.tariffaOra} onChange={(v) => update({ tariffaOra: Number(v) || 0 })} step={0.5} min={0} />
+                <LabeledInput label="Ricarico %" value={c.ricarico} onChange={(v) => update({ ricarico: Number(v) || 0 })} />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-gray-100">
+                <ReadonlyCell label="Costo manodopera" value={eur(costo)} />
+                <ReadonlyCell label="Ricarico €" value={eur(ricaricoE)} />
+                <ReadonlyCell label="Totale cliente" value={eur(totale)} />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <LabeledInput label="Forfait €" value={c.forfait || ""} onChange={(v) => update({ forfait: Number(v) || 0 })} step={10} min={0} />
+                <LabeledInput label="Ricarico %" value={c.ricarico} onChange={(v) => update({ ricarico: Number(v) || 0 })} />
+              </div>
+              <div className="pt-2 border-t border-gray-100">
+                <ReadonlyCell label="Totale cliente" value={eur(totale)} />
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── AggiungiModuloButton (popup) ────────────────────────────────────────────
+
+function AggiungiModuloButton({ onAdd }: { onAdd: (t: TipoModulo) => void }) {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return (
+    <div className="relative pt-2" ref={wrapRef}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="bg-white border-2 border-dashed border-blue-300 text-blue-700 rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-50 transition w-full md:w-auto"
+      >
+        + Aggiungi modulo
+      </button>
+      {open && (
+        <div className="absolute z-40 mt-1 w-[360px] max-w-[90vw] bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+          {TIPI_INFO.map(info => (
+            <button
+              key={info.tipo}
+              onClick={() => { onAdd(info.tipo); setOpen(false); }}
+              className="w-full text-left px-4 py-3 hover:bg-gray-50 border-b border-gray-50 last:border-0 flex items-start gap-3"
+            >
+              <span className="text-xl">{info.icona}</span>
+              <div className="min-w-0">
+                <div className="text-sm font-medium" style={{ color: "#3B2314" }}>{info.titolo}</div>
+                <div className="text-[11px] text-gray-500 leading-snug">{info.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
