@@ -490,9 +490,10 @@ export default function CatalogPrices() {
             className="h-9 w-[140px]"
           />
         )}
-        <Button onClick={runBulk} disabled={bulkBusy || selected.size === 0} size="sm">
+        <Button onClick={runBulk} disabled={bulkBusy || (bulkOp !== 'active' && bulkValue.trim() === '')} size="sm">
           {bulkBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Applica'}
         </Button>
+
         <Button variant="outline" size="sm" onClick={undoLast} disabled={bulkBusy || undoStack.length === 0}>
           <Undo2 className="w-4 h-4 mr-1" /> Annulla ultima
         </Button>
