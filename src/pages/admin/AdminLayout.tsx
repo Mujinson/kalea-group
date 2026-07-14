@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AdminSidebar from '@/components/admin/AdminSidebar';
@@ -7,20 +7,15 @@ import NotificationCenter from '@/components/admin/NotificationCenter';
 import CommandPalette from '@/components/admin/CommandPalette';
 import CrmFaqDialog from '@/components/admin/CrmFaqDialog';
 import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
-import { Loader2, Search, LayoutGrid, HelpCircle, Settings, LogOut } from 'lucide-react';
+import { Loader2, Search, HelpCircle, Settings, LogOut } from 'lucide-react';
 
-const TOPBAR_BG = 'linear-gradient(180deg, #1E1B4B 0%, #2A1F5C 100%)';
-const TOPBAR_BORDER = 'rgba(255,255,255,0.08)';
-const TOPBAR_ICON = 'rgba(226,222,255,0.78)';
-
-const TopIconButton = ({ children, onClick, title }: { children: React.ReactNode; onClick?: () => void; title?: string }) => (
+const TopIconButton = ({
+  children, onClick, title,
+}: { children: React.ReactNode; onClick?: () => void; title?: string }) => (
   <button
     onClick={onClick}
     title={title}
-    className="w-9 h-9 inline-flex items-center justify-center rounded-md transition-colors"
-    style={{ color: TOPBAR_ICON, background: 'transparent' }}
-    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#FFFFFF'; }}
-    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = TOPBAR_ICON; }}
+    className="w-9 h-9 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
   >
     {children}
   </button>
@@ -29,6 +24,7 @@ const TopIconButton = ({ children, onClick, title }: { children: React.ReactNode
 const AdminLayout = () => {
   const { user, isAdmin, role, loading, signOut } = useAdminAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [faqOpen, setFaqOpen] = useState(false);
 
   useEffect(() => {
@@ -40,7 +36,6 @@ const AdminLayout = () => {
       } else if (role === 'ibrido') {
         navigate('/app/ibrido');
       } else if (role === 'commerciale') {
-        // commerciale uses the mobile app, NOT admin shell
         navigate('/app/commerciale');
       } else if (!isAdmin) {
         navigate('/admin/login');
@@ -50,8 +45,8 @@ const AdminLayout = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/30">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-[#F6F7FB]">
+        <Loader2 className="w-8 h-8 animate-spin text-crm-primary" />
       </div>
     );
   }
@@ -72,60 +67,60 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex flex-col w-full admin-theme" style={{ background: '#F5F0EA' }}>
-        {/* TOP BAR — Creatio style, full width */}
-        <header
-          className="h-12 flex items-center px-3 md:px-4 gap-2 shrink-0"
-          style={{ background: TOPBAR_BG, borderBottom: `1px solid ${TOPBAR_BORDER}` }}
-        >
-          <SidebarTrigger className="text-white/80 hover:bg-white/10 hover:text-white" />
-          <span className="font-heading font-semibold text-[16px] tracking-tight ml-1" style={{ color: '#F5F1E8' }}>
-            Kalēa<span className="text-[11px] align-top">®</span>
-          </span>
+      <div className="min-h-screen flex flex-col w-full admin-theme bg-[#F6F7FB]">
+        {/* TOP BAR — Monday/Attio bright, sticky */}
+        <header className="h-14 flex items-center px-3 md:px-5 gap-2 shrink-0 bg-white border-b border-crm-border sticky top-0 z-30">
+          <SidebarTrigger className="text-crm-ink-muted hover:bg-crm-bg-soft hover:text-crm-ink" />
+
+          {/* Brand */}
+          <button
+            onClick={() => navigate('/admin')}
+            className="flex items-center gap-2 ml-1 group"
+          >
+            <span
+              className="w-7 h-7 rounded-crm-sm inline-flex items-center justify-center font-bold text-white text-[13px]"
+              style={{
+                background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
+                boxShadow: '0 2px 8px rgba(79,70,229,0.28)',
+              }}
+            >
+              K
+            </span>
+            <span className="font-semibold text-[15px] tracking-tight text-crm-ink hidden sm:inline">
+              Kalēa<span className="text-[10px] align-top">®</span>
+              <span className="text-crm-ink-subtle font-normal ml-1">CRM</span>
+            </span>
+          </button>
 
           {/* Search */}
           <button
             onClick={openSearch}
-            className="ml-4 hidden md:flex items-center gap-2 h-8 px-3 rounded-md text-[12px] transition-colors w-[280px]"
-            style={{
-              background: 'rgba(255,255,255,0.08)',
-              color: 'rgba(226,222,255,0.75)',
-              border: '1px solid rgba(255,255,255,0.05)',
-            }}
+            className="ml-4 hidden md:flex items-center gap-2 h-9 px-3 rounded-crm-sm text-[13px] w-[320px] bg-crm-bg-soft border border-crm-border text-crm-ink-muted hover:border-crm-border-strong hover:bg-white transition"
             title="Cerca (⌘K)"
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
           >
             <Search className="w-3.5 h-3.5" />
-            <span>Cerca…</span>
-            <kbd className="ml-auto px-1.5 py-0.5 text-[10px] rounded bg-white/10 text-white/70">⌘K</kbd>
+            <span>Cerca clienti, lead, prodotti…</span>
+            <kbd className="ml-auto px-1.5 py-0.5 text-[10px] rounded bg-white border border-crm-border text-crm-ink-subtle font-medium">⌘K</kbd>
           </button>
 
           <div className="flex-1" />
 
           {/* Right actions */}
-          <TopIconButton title="Dashboard" onClick={() => navigate('/admin')}>
-            <LayoutGrid className="w-4 h-4" />
-          </TopIconButton>
-          <div className="text-white/80 [&_button]:text-white/80 [&_button:hover]:text-white">
-            <NotificationCenter />
-          </div>
+          <NotificationCenter />
           <TopIconButton title="Guida / FAQ" onClick={() => setFaqOpen(true)}>
             <HelpCircle className="w-4 h-4" />
           </TopIconButton>
           <TopIconButton title="Impostazioni" onClick={() => navigate('/admin/impostazioni')}>
             <Settings className="w-4 h-4" />
           </TopIconButton>
-          <TopIconButton title="Esci" onClick={handleSignOut}><LogOut className="w-4 h-4" /></TopIconButton>
+          <TopIconButton title="Esci" onClick={handleSignOut}>
+            <LogOut className="w-4 h-4" />
+          </TopIconButton>
 
           {/* Avatar */}
           <div
-            className="ml-1 w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-semibold"
-            style={{
-              background: 'linear-gradient(135deg, #C4A882 0%, #8B6F4E 100%)',
-              color: '#1E1B4B',
-              border: '2px solid rgba(255,255,255,0.15)',
-            }}
+            className="ml-1 w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-semibold text-white ring-2 ring-white shadow-crm-sm"
+            style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #A25DDC 100%)' }}
             title={user?.email || ''}
           >
             {initial}
@@ -137,7 +132,10 @@ const AdminLayout = () => {
           <AdminSidebar />
           <main className="flex-1 flex flex-col min-w-0">
             <CommandPalette />
-            <div className="flex-1 p-3 md:p-6 overflow-auto" style={{ background: '#F5F0EA' }}>
+            <div
+              key={location.pathname}
+              className="flex-1 p-3 md:p-6 overflow-auto bg-[#F6F7FB] animate-crm-fade-up"
+            >
               <Outlet />
             </div>
           </main>
