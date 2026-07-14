@@ -70,7 +70,7 @@ export default function AdminFatturazione() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('quotes')
-        .select('id, quote_number, project_name, total_amount, vat_amount, vat_rate, status, customer_id, client_name, lead_id, customer:customers(id, first_name, last_name, company_name), lead:leads(id, name, company_name), created_at')
+        .select('id, quote_number, project_name, total_amount, vat_amount, vat_rate, status, customer_id, client_name, lead_id, customer:customers(id, first_name, last_name, company_name), lead:leads(id, name, company_name, email, phone, address, city, province, region, country), created_at')
         .in('status', ['accettato', 'accepted', 'approved', 'approvato'])
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -314,13 +314,46 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
     }
   };
 
+  const ensureCustomerId = async () => {
+    if (quote.customer_id) return quote.customer_id;
+    if (!quote.lead_id || !quote.lead) return null;
+
+    const companyName = quote.lead.company_name || quote.lead.name || quote.client_name || 'Cliente da preventivo';
+    const { data: existing } = await supabase
+      .from('customers')
+      .select('id')
+      .or(`company_name.eq.${companyName},email.eq.${quote.lead.email || ''},phone.eq.${quote.lead.phone || ''}`)
+      .limit(1)
+      .maybeSingle();
+
+    const customerId = existing?.id || (await supabase.from('customers').insert({
+      company_name: companyName,
+      email: quote.lead.email || null,
+      phone: quote.lead.phone || null,
+      address: quote.lead.address || null,
+      city: quote.lead.city || null,
+      province: quote.lead.province || null,
+      region: quote.lead.region || null,
+      country: quote.lead.country || 'Italia',
+      customer_type: 'cliente_privato',
+      status: 'opportunity',
+      notes: `Creato automaticamente dal preventivo ${quote.quote_number || quote.id}`,
+    } as any).select('id').single()).data?.id;
+
+    if (customerId) {
+      await supabase.from('quotes').update({ customer_id: customerId, client_name: companyName }).eq('id', quote.id);
+    }
+    return customerId || null;
+  };
+
   const save = async () => {
     if (!quote) return;
-    if (!quote.customer_id) { toast.error('Preventivo senza cliente CRM collegato'); return; }
     setSaving(true);
+    const customerId = await ensureCustomerId();
+    if (!customerId) { setSaving(false); toast.error('Preventivo senza cliente CRM collegato'); return; }
     const { data: user } = await supabase.auth.getUser();
     const { error } = await supabase.from('customer_invoices' as any).insert({
-      customer_id: quote.customer_id,
+      customer_id: customerId,
       quote_id: quote.id,
       description: description || `${quote.project_name || quote.quote_number} — ${trancheType}`,
       subtotal,
