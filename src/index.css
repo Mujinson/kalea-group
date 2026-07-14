@@ -170,126 +170,208 @@ All colors MUST be HSL.
 }
 
 /* ==========================================================================
-   Admin / CRM Theme — Editorial luxury palette
-   Cream background, white cards, warm brown text, gold accents.
-   Scoped to .admin-theme so the public site is unaffected.
+   Admin / CRM Theme v2 — Monday/Linear premium SaaS
+   Bright off-white background, white cards with soft shadows,
+   indigo primary, vivid status colors. Scoped to .admin-theme
+   so the public Kalēa site is completely unaffected.
    ========================================================================== */
-.admin-theme,
-.admin-theme [data-radix-popper-content-wrapper] *,
-body:has(.admin-theme) [role="dialog"] {
-  /* Crm tokens (raw values for arbitrary use) */
-  --crm-bg-main: #F5F0EA;
-  --crm-bg-card: #FFFFFF;
-  --crm-border: rgba(59, 35, 20, 0.10);
-  --crm-border-strong: rgba(59, 35, 20, 0.18);
-  --crm-text-primary: #1A1008;
-  --crm-text-secondary: #8A7060;
-  --crm-text-label: #B0998A;
-  --crm-accent-gold: #C8A96E;
-  --crm-accent-gold-soft: rgba(200, 169, 110, 0.10);
-  --crm-accent-gold-hover: rgba(200, 169, 110, 0.05);
-  --crm-accent-brown: #3B2314;
-  --crm-accent-brown-hover: #2A1A0E;
-  --crm-danger: #C0392B;
-  --crm-success: #2E7D5A;
-  --crm-warning: #C8860A;
-
-  /* Override shadcn HSL tokens to match the warm palette */
-  --background: 36 35% 94%;          /* #F5F0EA */
-  --foreground: 25 50% 6%;            /* #1A1008 */
-  --card: 0 0% 100%;
-  --card-foreground: 25 50% 6%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 25 50% 6%;
-  --muted: 36 35% 94%;
-  --muted-foreground: 26 18% 36%;     /* AA contrast on cream bg */
-  --border: 25 35% 18% / 0.10;        /* warm brown 10% */
-  --input: 25 30% 85%;
-  --ring: 36 47% 60%;                 /* gold */
-  --primary: 25 53% 16%;              /* brown */
-  --primary-foreground: 0 0% 100%;
-  --accent: 36 47% 92%;
-  --accent-foreground: 25 53% 16%;
-  --secondary: 36 35% 92%;
-  --secondary-foreground: 25 53% 16%;
-  --sidebar-background: 0 0% 100%;
-  --sidebar-foreground: 26 17% 46%;
-  --sidebar-accent: 36 47% 95%;
-  --sidebar-accent-foreground: 25 53% 16%;
-  --sidebar-border: 25 35% 18% / 0.10;
-  --sidebar-ring: 36 47% 60%;
-  color: var(--crm-text-primary);
-}
-
-/* Page surface */
 .admin-theme {
-  --background: 36 35% 94%;
-  background: var(--crm-bg-main);
+  /* ---- CRM Design Tokens (public, use directly) ---- */
+  /* Surfaces */
+  --crm-bg:            #F6F7FB;  /* page background: cool lavender-white */
+  --crm-bg-soft:       #F9FAFC;
+  --crm-surface:       #FFFFFF;
+  --crm-surface-2:     #FAFBFD;
+  --crm-surface-hover: #F4F5F9;
+
+  /* Text */
+  --crm-ink:           #0F172A;  /* slate-900 */
+  --crm-ink-strong:    #0B1220;
+  --crm-ink-muted:     #64748B;  /* slate-500 */
+  --crm-ink-subtle:    #94A3B8;  /* slate-400 */
+  --crm-ink-label:     #94A3B8;
+
+  /* Borders */
+  --crm-border:        #EEF0F4;
+  --crm-border-strong: #E2E6EE;
+  --crm-border-focus:  #C7D2FE;  /* indigo-200 */
+
+  /* Brand */
+  --crm-primary:       #4F46E5;  /* indigo-600 */
+  --crm-primary-600:   #4338CA;
+  --crm-primary-700:   #3730A3;
+  --crm-primary-soft:  #EEF2FF;
+  --crm-primary-glow:  rgba(79, 70, 229, 0.14);
+
+  /* Semantic Monday-style */
+  --crm-success:       #00C875;
+  --crm-success-soft:  #D6F5E5;
+  --crm-warning:       #FDAB3D;
+  --crm-warning-soft:  #FFE9CB;
+  --crm-danger:        #E44258;
+  --crm-danger-soft:   #FCD9DE;
+  --crm-info:          #0086C0;
+  --crm-info-soft:     #CFEBF7;
+  --crm-purple:        #A25DDC;
+  --crm-purple-soft:   #EEDCFB;
+  --crm-teal:          #00A3BF;
+  --crm-teal-soft:     #CFEEF3;
+
+  /* Shadows */
+  --crm-shadow-xs:  0 1px 2px rgba(15, 23, 42, 0.04);
+  --crm-shadow-sm:  0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
+  --crm-shadow-md:  0 4px 20px -8px rgba(15, 23, 42, 0.10), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+  --crm-shadow-lg:  0 20px 40px -12px rgba(15, 23, 42, 0.18), 0 6px 12px -4px rgba(15, 23, 42, 0.06);
+  --crm-shadow-xl:  0 30px 60px -12px rgba(15, 23, 42, 0.25);
+  --crm-shadow-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  /* Radius */
+  --crm-radius-sm:  8px;
+  --crm-radius:     12px;
+  --crm-radius-lg:  16px;
+  --crm-radius-xl:  20px;
+  --crm-radius-2xl: 24px;
+
+  /* Motion */
+  --crm-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --crm-dur-fast: 140ms;
+  --crm-dur:      200ms;
+  --crm-dur-slow: 320ms;
+
+  /* --- Legacy aliases (kept so existing components don't break) --- */
+  --crm-bg-main:            var(--crm-bg);
+  --crm-bg-card:            var(--crm-surface);
+  --crm-text-primary:       var(--crm-ink);
+  --crm-text-secondary:     var(--crm-ink-muted);
+  --crm-text-label:         var(--crm-ink-label);
+  --crm-accent-gold:        var(--crm-primary);
+  --crm-accent-gold-soft:   var(--crm-primary-soft);
+  --crm-accent-gold-hover:  #F4F5F9;
+  --crm-accent-brown:       var(--crm-primary);
+  --crm-accent-brown-hover: var(--crm-primary-600);
+
+  /* Override shadcn HSL tokens to match the Monday palette */
+  --background: 220 25% 97%;                /* #F6F7FB */
+  --foreground: 222 47% 11%;                 /* slate-900 */
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --muted: 220 25% 97%;
+  --muted-foreground: 215 16% 47%;
+  --border: 220 20% 94%;
+  --input: 220 20% 90%;
+  --ring: 239 84% 67%;                       /* indigo-500 */
+  --primary: 239 84% 60%;                    /* indigo-600 */
+  --primary-foreground: 0 0% 100%;
+  --accent: 226 100% 96%;                    /* indigo-50 */
+  --accent-foreground: 239 84% 60%;
+  --secondary: 220 25% 97%;
+  --secondary-foreground: 222 47% 11%;
+  --destructive: 350 76% 58%;
+  --destructive-foreground: 0 0% 100%;
+  --radius: 0.75rem;                         /* 12px */
+
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 215 16% 47%;
+  --sidebar-accent: 220 25% 97%;
+  --sidebar-accent-foreground: 222 47% 11%;
+  --sidebar-border: 220 20% 94%;
+  --sidebar-ring: 239 84% 67%;
+
+  color: var(--crm-ink);
+  background: var(--crm-bg);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
 }
 
-/* Typography refinements inside admin */
-.admin-theme h1,
-.admin-theme h2 {
-  color: var(--crm-text-primary);
+/* Inherit tokens inside portals (popovers, sheets, dialogs) opened from admin */
+body:has(.admin-theme) [data-radix-popper-content-wrapper],
+body:has(.admin-theme) [role="dialog"] {
+  --crm-bg: #F6F7FB;
+  --crm-surface: #FFFFFF;
+  --crm-ink: #0F172A;
+  --crm-ink-muted: #64748B;
+  --crm-border: #EEF0F4;
+  --crm-primary: #4F46E5;
+  --crm-radius: 12px;
+  --crm-radius-lg: 16px;
+  --crm-radius-xl: 20px;
+  --crm-shadow-lg: 0 20px 40px -12px rgba(15, 23, 42, 0.18);
+  --background: 0 0% 100%;
+  --popover: 0 0% 100%;
+  --border: 220 20% 94%;
+  --ring: 239 84% 67%;
+  --primary: 239 84% 60%;
+  --primary-foreground: 0 0% 100%;
+  color: var(--crm-ink);
+}
+
+/* ---- Typography ---- */
+.admin-theme {
+  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'New Order', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.admin-theme h1 {
+  color: var(--crm-ink);
   font-size: 24px;
   line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+.admin-theme h2 {
+  color: var(--crm-ink);
+  font-size: 18px;
+  line-height: 1.25;
   letter-spacing: -0.01em;
-  font-weight: 700;
+  font-weight: 600;
 }
 .admin-theme h3 {
-  color: var(--crm-text-primary);
-  font-size: 16px;
+  color: var(--crm-ink);
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.005em;
 }
 
-/* Cards: white surface, subtle warm border, soft radius, gold hover */
-.admin-theme .rounded-2xl,
-.admin-theme .rounded-xl {
-  border-radius: 8px !important;
-}
-.admin-theme [data-card],
-.admin-theme .rounded-2xl,
-.admin-theme .rounded-xl,
-.admin-theme [class*="bg-white"] {
-  border-color: var(--crm-border);
-}
-
-/* Buttons — kill pill rounded-full, restrict radius */
+/* ---- Buttons: subtle refinements (Button component owns full variants) ---- */
 .admin-theme button,
 .admin-theme [role="button"],
 .admin-theme a.button,
 .admin-theme .btn {
-  border-radius: 6px;
-}
-.admin-theme button.rounded-full,
-.admin-theme [role="button"].rounded-full {
-  border-radius: 6px !important;
+  font-family: inherit;
 }
 
-/* Primary action buttons (shadcn default variant) */
+/* Primary shadcn buttons → indigo, no more brown */
 .admin-theme button[class*="bg-primary"]:not([class*="bg-primary/"]) {
-  background: var(--crm-accent-brown);
+  background: var(--crm-primary);
   color: #fff;
+  box-shadow: 0 1px 2px rgba(79, 70, 229, 0.24), inset 0 1px 0 rgba(255,255,255,0.14);
+  transition: background var(--crm-dur) var(--crm-ease), transform var(--crm-dur-fast) var(--crm-ease), box-shadow var(--crm-dur) var(--crm-ease);
 }
 .admin-theme button[class*="bg-primary"]:not([class*="bg-primary/"]):hover {
-  background: var(--crm-accent-brown-hover);
+  background: var(--crm-primary-600);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.30), inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.admin-theme button[class*="bg-primary"]:not([class*="bg-primary/"]):active {
+  transform: translateY(0);
 }
 
-/* Inputs — warm border, gold focus ring (no blue) */
+/* ---- Inputs: crisp, indigo focus ring ---- */
 .admin-theme input,
 .admin-theme textarea,
 .admin-theme select,
 .admin-theme [data-radix-select-trigger] {
-  border-radius: 6px;
+  border-radius: var(--crm-radius-sm);
   border-color: var(--crm-border-strong);
   background: #fff;
-  color: var(--crm-text-primary);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  color: var(--crm-ink);
+  transition: border-color var(--crm-dur) var(--crm-ease), box-shadow var(--crm-dur) var(--crm-ease);
 }
 .admin-theme input::placeholder,
 .admin-theme textarea::placeholder {
-  color: var(--crm-text-label);
+  color: var(--crm-ink-subtle);
 }
 .admin-theme input:focus,
 .admin-theme input:focus-visible,
@@ -298,63 +380,59 @@ body:has(.admin-theme) [role="dialog"] {
 .admin-theme select:focus,
 .admin-theme [data-radix-select-trigger]:focus,
 .admin-theme [data-radix-select-trigger]:focus-visible {
-  border-color: var(--crm-accent-gold) !important;
-  box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.15) !important;
+  border-color: var(--crm-primary) !important;
+  box-shadow: 0 0 0 3px var(--crm-primary-glow) !important;
   outline: none !important;
   --tw-ring-color: transparent !important;
   --tw-ring-shadow: 0 0 0 transparent !important;
 }
-
-/* Override Tailwind ring utilities globally inside admin */
 .admin-theme *:focus-visible {
   outline: none;
-  --tw-ring-color: rgba(200, 169, 110, 0.35) !important;
+  --tw-ring-color: var(--crm-primary-glow) !important;
 }
 
-/* Tables */
+/* ---- Tables: clean, roomy, hover ---- */
 .admin-theme table thead tr,
 .admin-theme table thead th {
-  background: var(--crm-bg-main);
-  color: var(--crm-text-label);
+  background: var(--crm-bg-soft);
+  color: var(--crm-ink-muted);
   font-size: 11px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 600;
   border-color: var(--crm-border);
+  height: 40px;
 }
 .admin-theme table tbody tr {
   background: #fff;
   border-bottom: 1px solid var(--crm-border);
-  transition: background-color 0.15s ease;
+  transition: background-color var(--crm-dur-fast) var(--crm-ease);
 }
 .admin-theme table tbody tr:hover {
-  background: var(--crm-accent-gold-hover);
+  background: var(--crm-surface-hover);
 }
 .admin-theme table tbody tr[data-state="selected"] {
-  background: var(--crm-accent-gold-soft);
-  box-shadow: inset 3px 0 0 0 var(--crm-accent-gold);
+  background: var(--crm-primary-soft);
+  box-shadow: inset 3px 0 0 0 var(--crm-primary);
+}
+.admin-theme table tbody td {
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
-/* Badges — outlined editorial style instead of filled pills */
-.admin-theme [class*="bg-green-100"],
-.admin-theme [class*="bg-blue-100"],
-.admin-theme [class*="bg-orange-100"],
-.admin-theme [class*="bg-amber-100"],
-.admin-theme [class*="bg-red-100"],
-.admin-theme [class*="bg-purple-100"],
-.admin-theme [class*="bg-emerald-100"],
-.admin-theme [class*="bg-pink-100"],
-.admin-theme [class*="bg-indigo-100"] {
-  /* Soften legacy pastel chips: keep subtle wash */
-  background: rgba(200, 169, 110, 0.06) !important;
-  color: var(--crm-text-secondary) !important;
+/* Card surfaces: keep default Tailwind bg-white intact, add soft border */
+.admin-theme [data-card] {
+  background: #fff;
+  border: 1px solid var(--crm-border);
+  border-radius: var(--crm-radius-lg);
+  box-shadow: var(--crm-shadow-sm);
 }
 
-/* Section/page background */
+/* Page background */
 .admin-theme .bg-muted\/30,
 .admin-theme .bg-muted\/40,
 .admin-theme .bg-muted\/50 {
-  background: var(--crm-bg-main) !important;
+  background: var(--crm-bg) !important;
 }
 
 /* Sidebar shell */
@@ -367,45 +445,77 @@ body:has(.admin-theme) [role="dialog"] {
   background: #FFFFFF;
 }
 
-/* ----- Dialog styling, kept warm ----- */
+/* ---- Dialog styling ---- */
 body:has(.admin-theme) [role="dialog"] {
-  --background: 0 0% 100%;
-  border-radius: 10px;
-  border-color: var(--crm-border);
-  box-shadow: 0 25px 60px -12px rgba(59, 35, 20, 0.18);
+  border-radius: var(--crm-radius-xl);
+  border: 1px solid var(--crm-border);
+  box-shadow: var(--crm-shadow-xl);
 }
 body:has(.admin-theme) [role="dialog"] input,
 body:has(.admin-theme) [role="dialog"] textarea,
 body:has(.admin-theme) [role="dialog"] [data-radix-select-trigger] {
-  border-radius: 6px;
+  border-radius: var(--crm-radius-sm);
   border-color: var(--crm-border-strong);
   background: #fff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color var(--crm-dur) var(--crm-ease), box-shadow var(--crm-dur) var(--crm-ease);
 }
 body:has(.admin-theme) [role="dialog"] input:focus,
 body:has(.admin-theme) [role="dialog"] textarea:focus,
 body:has(.admin-theme) [role="dialog"] [data-radix-select-trigger]:focus {
-  border-color: var(--crm-accent-gold);
-  box-shadow: 0 0 0 3px rgba(200, 169, 110, 0.15);
+  border-color: var(--crm-primary);
+  box-shadow: 0 0 0 3px var(--crm-primary-glow);
 }
-body:has(.admin-theme) [data-radix-select-content] {
-  --background: 0 0% 100%;
-  --popover: 0 0% 100%;
-  border-radius: 8px;
-  border-color: var(--crm-border);
+body:has(.admin-theme) [data-radix-select-content],
+body:has(.admin-theme) [data-radix-popover-content],
+body:has(.admin-theme) [data-radix-dropdown-menu-content] {
+  border-radius: var(--crm-radius);
+  border: 1px solid var(--crm-border);
+  box-shadow: var(--crm-shadow-lg);
+  background: #fff;
 }
 
-/* Section title with gold left-accent — opt-in via .crm-section-title */
+/* Section title with indigo left-accent — opt-in via .crm-section-title */
 .admin-theme .crm-section-title {
   display: inline-block;
   padding-left: 10px;
-  border-left: 2px solid var(--crm-accent-gold);
+  border-left: 2px solid var(--crm-primary);
   font-size: 11px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: var(--crm-text-label);
+  color: var(--crm-ink-muted);
   font-weight: 600;
 }
+
+/* Utility classes for the design system */
+.crm-card {
+  background: #fff;
+  border: 1px solid var(--crm-border);
+  border-radius: var(--crm-radius-lg);
+  box-shadow: var(--crm-shadow-sm);
+  transition: box-shadow var(--crm-dur) var(--crm-ease), transform var(--crm-dur) var(--crm-ease);
+}
+.crm-card-hover:hover {
+  box-shadow: var(--crm-shadow-md);
+  transform: translateY(-2px);
+}
+.crm-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Shimmer for skeletons */
+@keyframes crm-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.admin-theme .crm-shimmer {
+  background: linear-gradient(90deg, #EEF0F4 0%, #F8F9FC 50%, #EEF0F4 100%);
+  background-size: 800px 100%;
+  animation: crm-shimmer 1.4s linear infinite;
+}
+
 
 @layer base {
   * {
