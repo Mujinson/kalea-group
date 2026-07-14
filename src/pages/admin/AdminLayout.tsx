@@ -7,7 +7,7 @@ import NotificationCenter from '@/components/admin/NotificationCenter';
 import CommandPalette from '@/components/admin/CommandPalette';
 import CrmFaqDialog from '@/components/admin/CrmFaqDialog';
 import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
-import { Loader2, Search, HelpCircle, Settings, LogOut } from 'lucide-react';
+import { Loader2, Search, HelpCircle, Settings, LogOut, Moon, Sun } from 'lucide-react';
 import kaleaLogo from '@/assets/kalea-logo.png.asset.json';
 
 const TopIconButton = ({
@@ -27,6 +27,16 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [faqOpen, setFaqOpen] = useState(false);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('kalea-crm-theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('kalea-crm-theme', isDark ? 'dark' : 'light');
+    }
+  }, [isDark]);
 
   useEffect(() => {
     if (!loading) {
@@ -68,9 +78,9 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex flex-col w-full admin-theme bg-[#F6F7FB]">
+      <div className={`min-h-screen flex flex-col w-full admin-theme ${isDark ? 'dark' : ''}`} style={{ background: 'var(--crm-bg)' }}>
         {/* TOP BAR — Monday/Attio bright, sticky */}
-        <header className="h-14 flex items-center px-3 md:px-5 gap-2 shrink-0 bg-white border-b border-crm-border sticky top-0 z-30">
+        <header className="h-14 flex items-center px-3 md:px-5 gap-2 shrink-0 bg-crm-surface border-b border-crm-border sticky top-0 z-30">
           <SidebarTrigger className="text-crm-ink-muted hover:bg-crm-bg-soft hover:text-crm-ink" />
 
           {/* Brand */}
@@ -105,6 +115,9 @@ const AdminLayout = () => {
 
           {/* Right actions */}
           <NotificationCenter />
+          <TopIconButton title={isDark ? 'Tema chiaro' : 'Tema scuro'} onClick={() => setIsDark((v) => !v)}>
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </TopIconButton>
           <TopIconButton title="Guida / FAQ" onClick={() => setFaqOpen(true)}>
             <HelpCircle className="w-4 h-4" />
           </TopIconButton>
@@ -132,7 +145,8 @@ const AdminLayout = () => {
             <CommandPalette />
             <div
               key={location.pathname}
-              className="flex-1 p-3 md:p-6 overflow-auto bg-[#F6F7FB] animate-crm-fade-up"
+              className="flex-1 p-3 md:p-6 overflow-auto animate-crm-fade-up"
+              style={{ background: 'var(--crm-bg)' }}
             >
               <Outlet />
             </div>
