@@ -215,7 +215,7 @@ const STAGE_LABEL: Record<string, string> = {
   nuovo: 'Nuovo', contattato: 'Contattato', in_trattativa: 'Trattativa',
   preventivo_inviato: 'Prev. inviato', cliente: 'Cliente', perso: 'Perso',
 };
-const STAGE_COLORS = ['#E5E1DA', '#CFC7BA', '#A89A82', '#8C7B6B', '#5E8A4D', '#C0392B'];
+const STAGE_COLORS = ['#94A3B8', '#0086C0', '#A25DDC', '#FDAB3D', '#00C875', '#E44258'];
 
 const AdminOverview = () => {
   const navigate = useNavigate();
