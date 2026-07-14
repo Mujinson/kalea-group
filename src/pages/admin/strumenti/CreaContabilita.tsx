@@ -323,6 +323,195 @@ export default function CreaContabilita() {
     totaliGlobali.marginePct >= 10 ? "text-amber-600" :
     "text-red-600";
 
+  // ─── PDF ────────────────────────────────────────────────────────────────────
+  const pdfRef = useRef<HTMLDivElement>(null);
+
+  const generaPDF = async () => {
+    if (!pdfRef.current) return;
+    try {
+      toast.loading("Generazione PDF...", { id: "pdf" });
+      const canvas = await html2canvas(pdfRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const ratio = canvas.width / canvas.height;
+      const imgW = pageW - 20;
+      const imgH = imgW / ratio;
+
+      if (imgH <= pageH - 20) {
+        pdf.addImage(imgData, "PNG", 10, 10, imgW, imgH);
+      } else {
+        let remaining = imgH;
+        let srcY = 0;
+        while (remaining > 0) {
+          const sliceH = Math.min(remaining, pageH - 20);
+          pdf.addImage(imgData, "PNG", 10, 10, imgW, imgH, "", "FAST", 0, -srcY);
+          remaining -= sliceH;
+          srcY += sliceH;
+          if (remaining > 0) pdf.addPage();
+        }
+      }
+      const nomeFile = `Preventivo_${numPrev || "bozza"}_${(cliente.nome || "cliente").replace(/\s+/g, "_")}.pdf`;
+      pdf.save(nomeFile);
+      toast.success("PDF scaricato", { id: "pdf" });
+    } catch {
+      toast.error("Errore PDF", { id: "pdf" });
+    }
+  };
+
+  // ─── Salvataggio ────────────────────────────────────────────────────────────
+  const salva = async () => {
+    if (!cliente.nome && moduli.length === 0) {
+      toast.error("Aggiungi almeno un modulo e il nome cliente");
+      return;
+    }
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Non autenticato");
+
+      let num = numPrev;
+      if (!num) {
+        const year = new Date().getFullYear();
+        const prefix = `KAL-${year}-`;
+        const { data: last } = await supabase
+          .from("quotes")
+          .select("quote_number")
+          .like("quote_number", `${prefix}%`)
+          .order("quote_number", { ascending: false })
+          .limit(1);
+        const lastNum = last?.[0]?.quote_number;
+        const lastN = lastNum ? parseInt(lastNum.replace(prefix, "")) || 0 : 0;
+        num = `${prefix}${String(lastN + 1).padStart(3, "0")}`;
+        setNumPrev(num);
+      }
+
+      const statusMap: Record<string, string> = {
+        bozza: "draft", inviato: "sent", accettato: "accepted", rifiutato: "rejected",
+      };
+
+      const items: any[] = [];
+      moduli.forEach(m => {
+        if (m.tipo === "fornitura_posa" || m.tipo === "solo_fornitura") {
+          m.righe.forEach(r => {
+            items.push({
+              type: m.tipo,
+              modulo_id: m.id,
+              modulo_titolo: m.titolo,
+              descrizione: r.desc,
+              um: r.um,
+              qta: r.qt,
+              prezzo_un: prezzoClienteRiga(r),
+              importo: totalClienteRiga(r),
+              badge: r.badge,
+            });
+          });
+        } else {
+          const t = totaliModulo(m);
+          items.push({
+            type: m.tipo,
+            modulo_id: m.id,
+            modulo_titolo: m.titolo,
+            importo: t.ricavi,
+            conf: m.confLevigatura || m.confVerniciatura || m.confSubappalto,
+          });
+        }
+      });
+      serviziComuni.forEach(r => {
+        items.push({
+          type: "servizio_comune",
+          descrizione: r.desc,
+          um: r.um,
+          qta: r.qt,
+          prezzo_un: prezzoClienteRiga(r),
+          importo: totalClienteRiga(r),
+        });
+      });
+
+      const tot = totaliGlobali;
+      const quotePayload: any = {
+        quote_number: num,
+        status: statusMap[stato] || "draft",
+        client_name: cliente.nome || null,
+        project_name: cantiere || null,
+        total_amount: Math.round(tot.totaleIva * 100) / 100,
+        vat_amount: Math.round(tot.iva * 100) / 100,
+        vat_rate: ivaRate / 100,
+        vat_included: true,
+        notes: noteCliente || null,
+        items,
+        created_by: user.email || user.id,
+        quote_data: {
+          tipo: "contabilita_v2",
+          moduli,
+          serviziComuni,
+          cliente,
+          cantiere,
+          ivaRate,
+          sconto,
+          acconto,
+          noteCliente,
+          noteInterne,
+        },
+      };
+
+      if (preventivoId) {
+        const { error } = await supabase.from("quotes").update(quotePayload).eq("id", preventivoId);
+        if (error) throw error;
+        toast.success("Preventivo aggiornato");
+      } else {
+        const { data, error } = await supabase.from("quotes").insert(quotePayload).select("id").single();
+        if (error) throw error;
+        setPreventivoId(data.id);
+        toast.success("Preventivo salvato");
+      }
+    } catch (e: any) {
+      toast.error("Errore: " + (e?.message || ""));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // ─── Caricamento in edit mode ───────────────────────────────────────────────
+  useEffect(() => {
+    if (!editId) return;
+    (async () => {
+      const { data: q } = await supabase
+        .from("quotes")
+        .select("*")
+        .eq("id", editId)
+        .maybeSingle();
+      if (!q) return;
+      setPreventivoId(q.id);
+      setNumPrev(q.quote_number || "");
+      if (q.status) setStato(normalizeStatus(q.status));
+      if (q.project_name) setCantiere(q.project_name);
+      const d = q.quote_data as any;
+      if (d?.tipo === "contabilita_v2") {
+        if (Array.isArray(d.moduli)) setModuli(d.moduli);
+        if (Array.isArray(d.serviziComuni)) setServiziComuni(d.serviziComuni);
+        if (d.cliente) setCliente(d.cliente);
+        if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
+        if (typeof d.sconto === "number") setSconto(d.sconto);
+        if (typeof d.acconto === "number") setAcconto(d.acconto);
+        if (d.noteCliente) setNoteCliente(d.noteCliente);
+        if (d.noteInterne) setNoteInterne(d.noteInterne);
+        setFase("lavoro");
+      } else {
+        setCliente({ nome: q.client_name || "", indirizzo: "", citta: "", telefono: "", email: "" });
+        setFase("lavoro");
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId]);
+
+
+
   // ─── FASE SELETTORE ─────────────────────────────────────────────────────────
   if (fase === "selettore") {
     return (
