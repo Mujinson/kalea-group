@@ -497,25 +497,36 @@ export default function CreaContabilita() {
       <div className="max-w-6xl mx-auto p-4 space-y-4">
         {activeTab === "contabilita" ? (
           <>
-            {moduli.map((m) => (
-              <div key={m.id} className="bg-white rounded-lg border border-gray-200 p-5">
-                <h3 className="font-heading text-lg mb-2" style={{ color: "#3B2314" }}>
-                  {m.titolo}
-                </h3>
-                <p className="text-xs text-gray-500">
-                  Modulo <code>{m.tipo}</code> — griglia righe implementata nei prompt successivi.
-                </p>
-              </div>
-            ))}
+            {moduli.map((modulo, idx) => {
+              if (modulo.tipo === "fornitura_posa" || modulo.tipo === "solo_fornitura") {
+                return (
+                  <ModuloFornituraSection
+                    key={modulo.id}
+                    modulo={modulo}
+                    catalogProdotti={catalogProdotti}
+                    onChange={(updated) =>
+                      setModuli(prev => prev.map((m, i) => i === idx ? updated : m))
+                    }
+                    onDelete={() =>
+                      setModuli(prev => prev.filter((_, i) => i !== idx))
+                    }
+                  />
+                );
+              }
+              return (
+                <div key={modulo.id} style={{ border: "1px dashed #ccc", borderRadius: 8, padding: 16 }}>
+                  <div className="text-sm font-medium mb-1" style={{ color: "#3B2314" }}>{modulo.titolo}</div>
+                  <div className="text-xs text-gray-500">Modulo <code>{modulo.tipo}</code> — da implementare</div>
+                </div>
+              );
+            })}
 
-            <div className="bg-white rounded-lg border border-gray-200 p-5">
-              <h3 className="font-heading text-lg mb-2" style={{ color: "#3B2314" }}>
-                Servizi comuni
-              </h3>
-              <p className="text-xs text-gray-500">
-                Trasporto, sopralluogo, smaltimento — implementati nei prompt successivi.
-              </p>
-            </div>
+            <ServiziComuniSection
+              righe={serviziComuni}
+              onChange={setServiziComuni}
+              catalogProdotti={catalogProdotti}
+            />
+
 
             <div className="flex flex-wrap gap-2 pt-2">
               <span className="text-sm text-gray-600 self-center">+ Aggiungi modulo:</span>
