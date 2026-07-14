@@ -14,39 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      _import_stg_prices: {
-        Row: {
-          brand: string | null
-          csv_row: Json | null
-          flag_note: string | null
-          format: string | null
-          name: string | null
-          p1: number | null
-          p2: number | null
-          p3: number | null
-        }
-        Insert: {
-          brand?: string | null
-          csv_row?: Json | null
-          flag_note?: string | null
-          format?: string | null
-          name?: string | null
-          p1?: number | null
-          p2?: number | null
-          p3?: number | null
-        }
-        Update: {
-          brand?: string | null
-          csv_row?: Json | null
-          flag_note?: string | null
-          format?: string | null
-          name?: string | null
-          p1?: number | null
-          p2?: number | null
-          p3?: number | null
-        }
-        Relationships: []
-      }
       app_settings: {
         Row: {
           key: string

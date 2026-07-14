@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS public._import_stg_prices;
