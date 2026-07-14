@@ -323,17 +323,17 @@ function CreateProductDialog({
     }
     setSaving(true);
     const priceBase = num(p1);
-    const insertRes = await supabase.from("catalog_products").insert({
+    const insertRes = await supabase.from("catalog_products").insert([{
       brand: brand.trim(),
       name: name.trim(),
       format: format.trim() || null,
       price_base_sqm: priceBase,
       price_over_pallet_sqm: num(p2),
       price_over_3_pallets_sqm: num(p3),
-      list_price: priceBase, // keep list_price coerente per retrocompatibilità
+      list_price: priceBase,
       is_active: true,
       unit_of_measure: "mq",
-    });
+    } as any]);
     if (insertRes.error) {
       toast.error("Errore: " + insertRes.error.message);
       setSaving(false);
