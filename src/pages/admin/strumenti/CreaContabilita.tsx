@@ -251,6 +251,30 @@ export default function CreaContabilita() {
 
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"contabilita" | "preventivo">("contabilita");
+  const [catalogProdotti, setCatalogProdotti] = useState<CatalogProdotto[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("catalog_products")
+      .select("product_code, name, collection, format, list_price, supplier_discount_percentage, is_active, catalog_brands(name)")
+      .eq("is_active", true)
+      .gt("list_price", 0)
+      .order("name")
+      .then(({ data }) => {
+        if (data) {
+          setCatalogProdotti(data.map((p: any) => ({
+            product_code: p.product_code,
+            name: p.name,
+            collection: p.collection ?? "",
+            format: p.format ?? "",
+            list_price: Number(p.list_price) || 0,
+            supplier_discount_percentage: Number(p.supplier_discount_percentage) || 0,
+            brand_name: (p.catalog_brands as any)?.name ?? "Altro",
+          })));
+        }
+      });
+  }, []);
+
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("edit");
   const navigate = useNavigate();
