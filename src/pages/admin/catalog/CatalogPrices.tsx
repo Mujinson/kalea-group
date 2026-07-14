@@ -326,6 +326,8 @@ export default function CatalogPrices() {
     }
   };
 
+  return (
+    <div className="p-6 space-y-4">
 
       <div>
         <h1 className="text-2xl font-semibold text-[#1A1008]">Prezzi & Margini</h1>
