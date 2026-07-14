@@ -198,13 +198,13 @@ const menuStructure: MenuEntry[] = [
   },
 ];
 
-// Sidebar palette — Monday/Linear bright white with colored group accents
-const SIDEBAR_BG = '#FFFFFF';
-const TEXT_DEFAULT = '#64748B';         // ink-muted
-const TEXT_ACTIVE = '#0F172A';           // ink
-const HOVER_BG = '#F4F5F9';              // surface-hover
-const ACTIVE_BG = '#EEF2FF';             // primary-soft
-const BORDER_COL = '#EEF0F4';
+// Sidebar palette — uses CRM tokens so dark/light theme switches automatically
+const SIDEBAR_BG = 'var(--crm-surface)';
+const TEXT_DEFAULT = 'var(--crm-ink-muted)';
+const TEXT_ACTIVE = 'var(--crm-ink)';
+const HOVER_BG = 'var(--crm-surface-hover)';
+const ACTIVE_BG = 'var(--crm-primary-soft)';
+const BORDER_COL = 'var(--crm-border)';
 
 const ColorTile = ({
   icon: Icon, color, active,
@@ -374,7 +374,7 @@ const AdminSidebar = () => {
 
       <SidebarFooter
         className="p-3"
-        style={{ borderTop: `1px solid ${BORDER_COL}`, background: '#FFFFFF' }}
+        style={{ borderTop: `1px solid ${BORDER_COL}`, background: SIDEBAR_BG }}
       >
         <div className="flex items-center gap-2 px-1 group-data-[collapsible=icon]:hidden">
           <div
