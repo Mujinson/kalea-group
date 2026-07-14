@@ -346,18 +346,24 @@ export default function CatalogPrices() {
         <Button
           variant="outline"
           size="sm"
-          onClick={() =>
-            exportCSV(
+          disabled={filtered.length === 0}
+          onClick={() => {
+            if (filtered.length === 0) {
+              toast.error('Nessun prodotto da esportare');
+              return;
+            }
+            const ok = exportCSV(
               filtered.map((r) => ({
-                name: r.name,
-                brand: r.brand,
-                collection: r.collection,
-                list_price: r.list_price,
-                format: r.format,
+                name: r.name ?? '',
+                brand: r.brand ?? '',
+                collection: r.collection ?? '',
+                list_price: r.list_price ?? '',
+                format: r.format ?? '',
               })),
               `catalogo-prezzi-${new Date().toISOString().slice(0, 10)}`,
-            )
-          }
+            );
+            if (ok) toast.success(`Esportati ${filtered.length} prodotti`);
+          }}
           className="h-9 text-xs"
         >
           <Download className="w-4 h-4 mr-1" /> Esporta CSV
