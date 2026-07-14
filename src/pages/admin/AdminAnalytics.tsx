@@ -231,7 +231,7 @@ const AdminAnalytics = () => {
         subtitle="Margini, ricavi e performance"
         actions={
           <Select value={period} onValueChange={setPeriod}>
-            <SelectTrigger className="w-[180px] bg-white/15 border-0 text-white">
+            <SelectTrigger className="w-[180px] border-crm-border text-crm-ink bg-white">
               <Calendar className="w-4 h-4 mr-2" />
               <SelectValue placeholder="Periodo" />
             </SelectTrigger>
