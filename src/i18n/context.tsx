@@ -110,7 +110,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
         // Update URL with detected language
         const currentPath = window.location.pathname;
         const pathWithoutLang = currentPath.replace(/^\/(it|en|de|fr)/, '');
-        const newPath = `/${detectedLang}${pathWithoutLang || '/'}`;
+        const newPath = `/${detectedLang}${pathWithoutLang || '/'}${window.location.search}${window.location.hash}`;
         navigate(newPath, { replace: true });
       }
       setInitialized(true);
@@ -128,7 +128,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
     // Update URL with language prefix
     const currentPath = window.location.pathname;
     const pathWithoutLang = currentPath.replace(/^\/(it|en|de|fr)/, '');
-    const newPath = `/${lang}${pathWithoutLang || '/'}`;
+    const newPath = `/${lang}${pathWithoutLang || '/'}${window.location.search}${window.location.hash}`;
     navigate(newPath);
   };
 
