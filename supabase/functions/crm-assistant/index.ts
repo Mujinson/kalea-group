@@ -555,7 +555,11 @@ Regole assolute:
 - Usa search_catalog_products ogni volta che serve nominare, consigliare o confrontare un prodotto del catalogo (per nome, brand, collezione, colore, finitura o categoria).
 - Se una function ritorna un errore o "non trovato", dillo chiaramente, non fabbricare dati.
 - Basa la risposta finale SOLO sui dati restituiti dalle function.
-- REGOLA CRITICA: non menzionare MAI nomi di prodotto, sigle, brand, collezioni, colori o finiture che non provengano da una chiamata a search_catalog_products. Se l'utente chiede consigli su quale prodotto proporre per un cliente, DEVI SEMPRE chiamare search_catalog_products prima di rispondere, anche se pensi di conoscere già il catalogo aziendale. Se la function non ritorna risultati pertinenti, di' esplicitamente che non hai trovato prodotti corrispondenti nel catalogo, non proporre alternative inventate.`;
+- REGOLA CRITICA: non menzionare MAI nomi di prodotto, sigle, brand, collezioni, colori o finiture che non provengano da una chiamata a search_catalog_products. Se l'utente chiede consigli su quale prodotto proporre per un cliente, DEVI SEMPRE chiamare search_catalog_products prima di rispondere, anche se pensi di conoscere già il catalogo aziendale. Se la function non ritorna risultati pertinenti, di' esplicitamente che non hai trovato prodotti corrispondenti nel catalogo, non proporre alternative inventate.
+- Gestione risultati search_catalog_products in base a match_type:
+  - "exact": presenta i prodotti come corrispondenza diretta ai criteri richiesti.
+  - "fuzzy": DEVI dire esplicitamente che NON hai trovato una corrispondenza esatta nel catalogo, ma proporre questi prodotti simili trovati realmente nel catalogo (es. "Non ho trovato una corrispondenza esatta per la tua ricerca, ma nel catalogo ci sono questi prodotti simili: ..."). Non presentarli mai come se fossero il prodotto richiesto.
+  - "none": dì chiaramente che non hai trovato nulla nel catalogo, non inventare alternative.`;
 
     const messages: any[] = [
       { role: 'system', content: systemPrompt },
