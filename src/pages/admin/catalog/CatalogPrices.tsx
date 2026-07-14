@@ -11,7 +11,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, Undo2, Loader2, Download } from 'lucide-react';
-import { exportCSV } from '@/lib/exports';
+import { exportCSV, exportXLSX } from '@/lib/exports';
 
 type Product = {
   id: string;
@@ -367,6 +367,36 @@ export default function CatalogPrices() {
           className="h-9 text-xs"
         >
           <Download className="w-4 h-4 mr-1" /> Esporta CSV
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={filtered.length === 0}
+          onClick={() => {
+            if (filtered.length === 0) {
+              toast.error('Nessun prodotto da esportare');
+              return;
+            }
+            try {
+              exportXLSX(
+                filtered.map((r) => ({
+                  name: r.name ?? '',
+                  brand: r.brand ?? '',
+                  collection: r.collection ?? '',
+                  list_price: r.list_price ?? null,
+                  format: r.format ?? '',
+                })),
+                `catalogo-prezzi-${new Date().toISOString().slice(0, 10)}`,
+                'Catalogo',
+              );
+              toast.success(`Esportati ${filtered.length} prodotti`);
+            } catch (e: any) {
+              toast.error('Export XLSX fallito: ' + (e?.message || 'errore'));
+            }
+          }}
+          className="h-9 text-xs"
+        >
+          <Download className="w-4 h-4 mr-1" /> Esporta XLSX
         </Button>
         <div className="text-xs text-[#8A7060] ml-auto">
           {filtered.length} risultati · {selected.size} selezionati
