@@ -121,8 +121,8 @@ function BigKPI({
   return (
     <div
       onClick={onClick}
-      className={`relative px-4 py-3 transition-all ${onClick ? 'cursor-pointer hover:translate-y-[-1px]' : ''}`}
-      style={{ ...styles[variant], borderRadius: 4 }}
+      className={`relative px-4 py-3 transition-all ${onClick ? 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md' : ''}`}
+      style={{ ...styles[variant], borderRadius: 12 }}
     >
       <div className="flex items-center justify-between mb-1">
         <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, color: labelColor }}>
