@@ -234,30 +234,40 @@ export default function CatalogPrices() {
       } else if (bulkOp === 'discount') {
         const v = Number(bulkValue);
         if (!isFinite(v)) throw new Error('Valore non valido');
-        const { error } = await supabase
-          .from('catalog_products')
-          .update({ supplier_discount_percentage: v })
-          .in('id', ids);
-        if (error) throw error;
+        for (let i = 0; i < ids.length; i += 100) {
+          const chunk = ids.slice(i, i + 100);
+          const { error } = await supabase
+            .from('catalog_products')
+            .update({ supplier_discount_percentage: v })
+            .in('id', chunk);
+          if (error) throw error;
+        }
         setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, supplier_discount_percentage: v } : r));
       } else if (bulkOp === 'markup') {
         const v = Number(bulkValue);
         if (!isFinite(v)) throw new Error('Valore non valido');
-        const { error } = await supabase
-          .from('catalog_products')
-          .update({ markup_percentage: v })
-          .in('id', ids);
-        if (error) throw error;
+        for (let i = 0; i < ids.length; i += 100) {
+          const chunk = ids.slice(i, i + 100);
+          const { error } = await supabase
+            .from('catalog_products')
+            .update({ markup_percentage: v })
+            .in('id', chunk);
+          if (error) throw error;
+        }
         setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, markup_percentage: v } : r));
       } else if (bulkOp === 'active') {
         const v = bulkActive === 'true';
-        const { error } = await supabase
-          .from('catalog_products')
-          .update({ is_active: v })
-          .in('id', ids);
-        if (error) throw error;
+        for (let i = 0; i < ids.length; i += 100) {
+          const chunk = ids.slice(i, i + 100);
+          const { error } = await supabase
+            .from('catalog_products')
+            .update({ is_active: v })
+            .in('id', chunk);
+          if (error) throw error;
+        }
         setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, is_active: v } : r));
       }
+
       setUndoStack(prev => [...prev, snapshot]);
       toast.success(`Bulk applicato a ${ids.length} prodotti`);
     } catch (e: any) {
@@ -462,7 +472,18 @@ export default function CatalogPrices() {
 
       {/* Bulk bar */}
       <div className="flex flex-wrap gap-2 items-center bg-[#FEFCF6] border border-dashed border-[#C8A96E] rounded-lg p-3">
-        <span className="text-xs font-semibold text-[#1A1008]">Azioni bulk sui selezionati:</span>
+        <span className="text-xs font-semibold text-[#1A1008]">Azioni bulk:</span>
+        <Button
+          type="button"
+          size="sm"
+          variant={allFilteredSelected ? 'default' : 'outline'}
+          onClick={allFilteredSelected ? clearSelection : selectAllFiltered}
+        >
+          {allFilteredSelected
+            ? `Deseleziona tutti (${filtered.length})`
+            : `Seleziona tutti (${filtered.length})`}
+        </Button>
+        <span className="text-xs text-[#8A7060]">{selected.size} selezionati</span>
         <Select value={bulkOp} onValueChange={(v: any) => setBulkOp(v)}>
           <SelectTrigger className="h-9 w-[220px]"><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -498,6 +519,7 @@ export default function CatalogPrices() {
           <Undo2 className="w-4 h-4 mr-1" /> Annulla ultima
         </Button>
       </div>
+
 
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
