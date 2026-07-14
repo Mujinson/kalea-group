@@ -347,23 +347,7 @@ export default function CatalogPrices() {
           variant="outline"
           size="sm"
           disabled={filtered.length === 0}
-          onClick={() => {
-            if (filtered.length === 0) {
-              toast.error('Nessun prodotto da esportare');
-              return;
-            }
-            const ok = exportCSV(
-              filtered.map((r) => ({
-                name: r.name ?? '',
-                brand: r.brand ?? '',
-                collection: r.collection ?? '',
-                list_price: r.list_price ?? '',
-                format: r.format ?? '',
-              })),
-              `catalogo-prezzi-${new Date().toISOString().slice(0, 10)}`,
-            );
-            if (ok) toast.success(`Esportati ${filtered.length} prodotti`);
-          }}
+          onClick={() => runExport('csv')}
           className="h-9 text-xs"
         >
           <Download className="w-4 h-4 mr-1" /> Esporta CSV
@@ -372,28 +356,7 @@ export default function CatalogPrices() {
           variant="outline"
           size="sm"
           disabled={filtered.length === 0}
-          onClick={() => {
-            if (filtered.length === 0) {
-              toast.error('Nessun prodotto da esportare');
-              return;
-            }
-            try {
-              exportXLSX(
-                filtered.map((r) => ({
-                  name: r.name ?? '',
-                  brand: r.brand ?? '',
-                  collection: r.collection ?? '',
-                  list_price: r.list_price ?? null,
-                  format: r.format ?? '',
-                })),
-                `catalogo-prezzi-${new Date().toISOString().slice(0, 10)}`,
-                'Catalogo',
-              );
-              toast.success(`Esportati ${filtered.length} prodotti`);
-            } catch (e: any) {
-              toast.error('Export XLSX fallito: ' + (e?.message || 'errore'));
-            }
-          }}
+          onClick={() => runExport('xlsx')}
           className="h-9 text-xs"
         >
           <Download className="w-4 h-4 mr-1" /> Esporta XLSX
