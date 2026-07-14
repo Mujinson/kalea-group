@@ -148,7 +148,7 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
               if (m.role === 'assistant') {
                 return (
                   <div key={m.id} className="flex justify-start">
-                    <div className="max-w-[85%] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm whitespace-pre-wrap break-words bg-white text-[#0F172A] border border-black/5 shadow-sm">
+                    <div className="max-w-[85%] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm whitespace-pre-wrap break-words bg-crm-primary text-white shadow-crm-sm border border-black/5 shadow-sm">
                       {m.content}
                     </div>
                   </div>

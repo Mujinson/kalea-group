@@ -415,7 +415,7 @@ function TypeButton({ active, onClick, icon, label }: { active: boolean; onClick
       type="button"
       onClick={onClick}
       className={`inline-flex items-center gap-2 px-4 h-10 rounded-lg border text-[13px] font-medium transition ${
-        active ? 'bg-[#0F172A] text-white border-[#0F172A]' : 'bg-white text-[#0F172A] border-[#E5E7EB] hover:border-[#0F172A]'
+        active ? 'bg-[#0F172A] text-white border-[#0F172A]' : 'bg-crm-primary text-white shadow-crm-sm border-[#E5E7EB] hover:border-[#0F172A]'
       }`}
     >
       {icon} {label}

@@ -119,7 +119,7 @@ export default function CatalogCollections() {
         title="Collezioni"
         subtitle="Raggruppa i prodotti per collezione, con associazione alla marca."
         actions={
-          <Button size="sm" onClick={openNew} className="bg-white text-[#0F172A] hover:bg-white/90">
+          <Button size="sm" onClick={openNew} className="bg-crm-primary text-white shadow-crm-sm hover:bg-white/90">
             <Plus className="w-4 h-4 mr-2" /> Nuova collezione
           </Button>
         }
