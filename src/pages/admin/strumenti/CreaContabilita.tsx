@@ -201,6 +201,32 @@ const TIPI_INFO: { tipo: TipoModulo; titolo: string; desc: string; icona: string
 const eur = (n: number) =>
   new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(Number.isFinite(n) ? n : 0);
 
+// ─── Catalogo ─────────────────────────────────────────────────────────────────
+
+export type CatalogProdotto = {
+  product_code: string;
+  name: string;
+  collection: string;
+  format: string;
+  list_price: number;
+  supplier_discount_percentage: number;
+  brand_name: string;
+};
+
+const BADGE_STYLES: Record<string, { bg: string; fg: string }> = {
+  "Flow": { bg: "#E6F1FB", fg: "#0C447C" },
+  "Kronos": { bg: "#FCE4EC", fg: "#880E4F" },
+  "Kronos Ceramiche": { bg: "#FCE4EC", fg: "#880E4F" },
+  "BerryAlloc": { bg: "#FAEEDA", fg: "#633806" },
+  "WoodCo": { bg: "#FFF3E0", fg: "#7B3A10" },
+  "Parquet Woodco": { bg: "#FFF3E0", fg: "#7B3A10" },
+  "Interno": { bg: "#EAF3DE", fg: "#27500A" },
+  "Manuale": { bg: "#F1EFE8", fg: "#444441" },
+};
+const badgeStyle = (badge: string) =>
+  BADGE_STYLES[badge] ?? { bg: "#F1EFE8", fg: "#444441" };
+
+
 // ─── Componente ──────────────────────────────────────────────────────────────
 
 export default function CreaContabilita() {
