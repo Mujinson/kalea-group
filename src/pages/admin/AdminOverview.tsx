@@ -105,18 +105,18 @@ function BigKPI({
     Math.round(animated).toLocaleString('it-IT');
 
   const styles: Record<Variant, React.CSSProperties> = {
-    light: { background: '#FFFFFF', color: '#0F172A', border: '1px solid #E5E7EB', boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
-    dark: { background: '#0F172A', color: '#FFFFFF', border: '1px solid #0F172A', boxShadow: '0 4px 12px rgba(15,23,42,0.15)' },
-    gold: { background: '#FFFFFF', color: '#0F172A', borderLeft: '4px solid #4F46E5', border: '1px solid #E5E7EB', borderLeftWidth: 4, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
+    light: { background: 'var(--crm-surface)', color: 'var(--crm-ink)', border: '1px solid var(--crm-border)', boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
+    dark: { background: 'var(--crm-surface-2)', color: 'var(--crm-ink-invert, #fff)', border: '1px solid var(--crm-surface-2)', boxShadow: '0 4px 12px rgba(15,23,42,0.15)' },
+    gold: { background: 'var(--crm-surface)', color: 'var(--crm-ink)', borderLeft: '4px solid #4F46E5', border: '1px solid var(--crm-border)', borderLeftWidth: 4, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
     semaphore: {
-      background: semaphore === 'green' ? '#ECFDF5' : semaphore === 'amber' ? '#FFFBEB' : '#FEF2F2',
-      color: '#0F172A',
+      background: semaphore === 'green' ? 'var(--crm-success-soft, #ECFDF5)' : semaphore === 'amber' ? 'var(--crm-warning-soft, #FFFBEB)' : 'var(--crm-danger-soft, #FEF2F2)',
+      color: 'var(--crm-ink)',
       border: `1px solid ${semaphore === 'green' ? '#A7F3D0' : semaphore === 'amber' ? '#FDE68A' : '#FECACA'}`,
     },
-    danger: { background: '#FEF2F2', color: '#0F172A', borderLeft: '4px solid #E44258', border: '1px solid #FECACA', borderLeftWidth: 4 },
+    danger: { background: 'var(--crm-danger-soft, #FEF2F2)', color: 'var(--crm-ink)', borderLeft: '4px solid #E44258', border: '1px solid #FECACA', borderLeftWidth: 4 },
   };
-  const labelColor = variant === 'dark' ? 'rgba(255,255,255,0.65)' : '#64748B';
-  const subColor = variant === 'dark' ? 'rgba(255,255,255,0.70)' : '#475569';
+  const labelColor = variant === 'dark' ? 'rgba(255,255,255,0.65)' : 'var(--crm-ink-muted)';
+  const subColor = variant === 'dark' ? 'rgba(255,255,255,0.70)' : 'var(--crm-ink-muted)';
 
   return (
     <div
