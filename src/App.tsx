@@ -118,8 +118,6 @@ import PricingBerryAlloc from "./pages/admin/strumenti/PricingBerryAlloc";
 import PricingParquet from "./pages/admin/strumenti/PricingParquet";
 import PricingSignature from "./pages/admin/strumenti/PricingSignature";
 import PricingExterno from "./pages/admin/strumenti/PricingExterno";
-import Preventivatore from "./pages/admin/strumenti/Preventivatore";
-import SistemaPreventivi from "./pages/admin/strumenti/SistemaPreventivi";
 import CreaPreventivo from "./pages/admin/strumenti/CreaPreventivo";
 import CommercialeApp from "./pages/role-app/CommercialeApp";
 import OperaioApp from "./pages/role-app/OperaioApp";
@@ -292,8 +290,8 @@ const App = () => (
                 <Route path="impostazioni" element={<AdminSettings />} />
 
                 {/* Strumenti */}
-                <Route path="strumenti/preventivatore" element={<Preventivatore />} />
-                <Route path="strumenti/sistema-preventivi" element={<SistemaPreventivi />} />
+                <Route path="strumenti/preventivatore" element={<Navigate to="/admin/preventivi/nuovo" replace />} />
+                <Route path="strumenti/sistema-preventivi" element={<Navigate to="/admin/preventivi/nuovo" replace />} />
                 <Route path="strumenti/crea-preventivo" element={<Navigate to="/admin/preventivi/nuovo" replace />} />
                 <Route path="strumenti/costo-operaio" element={<CostoOperaio />} />
                 <Route path="strumenti/sostenibilita" element={<Sostenibilita />} />

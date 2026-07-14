@@ -20,65 +20,17 @@ const SUPPL_TRASFERTA_POSA: Record<string, number> = { semplice: 3, media: 7, co
 const MARGINE_ALERT = 25;
 const MARGINE_BLOCCO = 10;
 
-// ─── PRODOTTI ────────────────────────────────────────────────
-const PRODOTTI = [
-  { id:"fl-40", nome:"Flow 40", fornitore:"Flow", categoria:"SPC a secco", dims:"1524×228×4+1mm", listino:43.80, coeff:0.45, tappetino:"mai" },
-  { id:"fl-55w", nome:"Flow 55 Wood", fornitore:"Flow", categoria:"SPC a secco", dims:"1524×228×4,5+1mm", listino:49.00, coeff:0.45, tappetino:"mai" },
-  { id:"fl-55c", nome:"Flow 55 Cement", fornitore:"Flow", categoria:"SPC a secco", dims:"920×460×5,5+1mm", listino:52.70, coeff:0.45, tappetino:"mai" },
-  { id:"fl-xl", nome:"Flow XL", fornitore:"Flow", categoria:"SPC a secco", dims:"1800×228×5+1mm", listino:53.00, coeff:0.45, tappetino:"mai" },
-  { id:"fl-spina", nome:"Flow Spina Ande", fornitore:"Flow", categoria:"SPC a secco", dims:"640×128×4,5+1mm", listino:51.20, coeff:0.45, tappetino:"mai" },
-  { id:"fl-pxlw", nome:"Flow+ XL Wood", fornitore:"Flow", categoria:"SPC a secco", dims:"1800×228,6×5,5+1mm", listino:54.10, coeff:0.45, tappetino:"mai" },
-  { id:"fl-pxlt", nome:"Flow+ XL Tile", fornitore:"Flow", categoria:"SPC a secco", dims:"1200×600×5,5+1mm", listino:55.30, coeff:0.45, tappetino:"mai" },
-  { id:"fl-pspita", nome:"Flow+ Spina Italiana", fornitore:"Flow", categoria:"SPC a secco", dims:"640×128×5,5+1mm", listino:54.40, coeff:0.45, tappetino:"mai" },
-  { id:"fl-pspfr", nome:"Flow+ Spina Francese", fornitore:"Flow", categoria:"SPC a secco", dims:"625×127×5,5+1mm", listino:61.80, coeff:0.45, tappetino:"mai" },
-  { id:"fl-55gdw", nome:"Flow 55 GD Wood", fornitore:"Flow", categoria:"Vinilico colla", dims:"1500×230×2,5mm", listino:32.10, coeff:0.45, tappetino:"mai" },
-  { id:"fl-55gdc", nome:"Flow 55 GD Cement", fornitore:"Flow", categoria:"Vinilico colla", dims:"914,4×457,2×2,5mm", listino:31.40, coeff:0.45, tappetino:"mai" },
-  { id:"kp-pv120x280", nome:"Kronos Pierre Vive 120×280", fornitore:"Kronos", categoria:"Gres Fine", dims:"120×280 rett.", listino:132, coeff:0.36, tappetino:"mai" },
-  { id:"kp-pv120x120", nome:"Kronos Pierre Vive 120×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"120×120 rett.", listino:95, coeff:0.36, tappetino:"mai" },
-  { id:"kp-pv60x120", nome:"Kronos Pierre Vive 60×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"60×120 rett.", listino:87, coeff:0.36, tappetino:"mai" },
-  { id:"kp-pv60x120g", nome:"Kronos Pierre Vive Grip 60×120", fornitore:"Kronos", categoria:"Gres Fine Grip", dims:"60×120 rett.", listino:90, coeff:0.36, tappetino:"mai" },
-  { id:"kp-pv60x60", nome:"Kronos Pierre Vive 60×60", fornitore:"Kronos", categoria:"Gres Fine", dims:"60×60 rett.", listino:70, coeff:0.36, tappetino:"mai" },
-  { id:"kp-ma120x280", nome:"Kronos Materia 120×280", fornitore:"Kronos", categoria:"Gres Fine", dims:"120×280 rett.", listino:132, coeff:0.36, tappetino:"mai" },
-  { id:"kp-ma120x120", nome:"Kronos Materia 120×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"120×120 rett.", listino:105, coeff:0.36, tappetino:"mai" },
-  { id:"kp-ma60x120", nome:"Kronos Materia 60×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"60×120 rett.", listino:105, coeff:0.36, tappetino:"mai" },
-  { id:"kp-ps60x120", nome:"Kronos Piasentina Stone 60×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"60×120 rett.", listino:87, coeff:0.36, tappetino:"mai" },
-  { id:"kp-na60x120", nome:"Kronos Nativa Vena 60×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"60×120 rett.", listino:95, coeff:0.36, tappetino:"mai" },
-  { id:"kp-me120x280", nome:"Kronos Metallique 120×280", fornitore:"Kronos", categoria:"Gres Fine", dims:"120×280 rett.", listino:132, coeff:0.36, tappetino:"mai" },
-  { id:"kp-me60x120", nome:"Kronos Metallique 60×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"60×120 rett.", listino:87, coeff:0.36, tappetino:"mai" },
-  { id:"kp-lr150", nome:"Kronos Le Reverse Chevron", fornitore:"Kronos", categoria:"Decorato", dims:"varie", listino:150, coeff:0.36, tappetino:"mai" },
-  { id:"kp-ws240", nome:"Kronos Wood Side Mosaico", fornitore:"Kronos", categoria:"Effetto Legno", dims:"29×120", listino:240, coeff:0.36, tappetino:"mai" },
-  { id:"kp-out95", nome:"Kronos Outdoor SKE 2.0 60×120", fornitore:"Kronos", categoria:"Outdoor 20mm", dims:"60×120×2cm", listino:95, coeff:0.36, tappetino:"mai" },
-  { id:"kp-rk102", nome:"Kronos Rocks 60×120", fornitore:"Kronos", categoria:"Gres Fine", dims:"60×120 rett.", listino:102, coeff:0.36, tappetino:"mai" },
-  { id:"ex-skudo", nome:"Externo SKUDO", fornitore:"Externo", categoria:"WPC Outdoor", dims:"2000×138×23mm", listino:94.40, coeff:0.45, tappetino:"mai" },
-  { id:"ex-trad", nome:"Externo TRADITIONAL", fornitore:"Externo", categoria:"WPC Outdoor", dims:"2000×140×25mm", listino:79.70, coeff:0.45, tappetino:"mai" },
-  { id:"ba-ocean8v4", nome:"BerryAlloc Ocean 8 V4", fornitore:"BerryAlloc", categoria:"Laminato DPL", dims:"1288×190×8mm", listino:34.20, coeff:0.45, tappetino:"sempre" },
-  { id:"ba-ocean12v4", nome:"BerryAlloc Ocean 12 V4", fornitore:"BerryAlloc", categoria:"Laminato DPL", dims:"1288×190×12mm", listino:60.80, coeff:0.45, tappetino:"sempre" },
-  { id:"ba-ocean8xl", nome:"BerryAlloc Ocean 8 XL", fornitore:"BerryAlloc", categoria:"Laminato DPL", dims:"2038×241×8mm", listino:39.90, coeff:0.45, tappetino:"sempre" },
-  { id:"ba-chateau", nome:"BerryAlloc Chateau+", fornitore:"BerryAlloc", categoria:"Laminato DPL", dims:"504×84×8mm spina", listino:57.90, coeff:0.45, tappetino:"sempre" },
-  { id:"ba-cadenza", nome:"BerryAlloc Cadenza", fornitore:"BerryAlloc", categoria:"Laminato DPL", dims:"1383×214×8mm", listino:30.70, coeff:0.45, tappetino:"sempre" },
-  { id:"ba-origcomp", nome:"BerryAlloc Original Comfort HPF", fornitore:"BerryAlloc", categoria:"Laminato HPF", dims:"1207×198×9+2mm", listino:69.90, coeff:0.45, tappetino:"sempre" },
-  { id:"ba-grandav", nome:"BerryAlloc Grand Avenue Comfort", fornitore:"BerryAlloc", categoria:"Laminato HPF", dims:"2410×241×10,3+2mm", listino:73.70, coeff:0.45, tappetino:"sempre" },
-  { id:"ba-parqxl", nome:"BerryAlloc Parqwood XL", fornitore:"BerryAlloc", categoria:"Parquet Legno", dims:"1190×185×10mm", listino:75.10, coeff:0.45, tappetino:"opzionale" },
-  { id:"ba-parqherr", nome:"BerryAlloc Parqwood Herringbone", fornitore:"BerryAlloc", categoria:"Parquet Legno", dims:"504×84×9,5mm", listino:111.80, coeff:0.45, tappetino:"opzionale" },
-  { id:"ba-zenn55p", nome:"BerryAlloc Zenn RigidClick 55", fornitore:"BerryAlloc", categoria:"Vinilico SPC", dims:"1219×178×5+1mm", listino:57.90, coeff:0.45, tappetino:"mai" },
-  { id:"ba-zenn30p", nome:"BerryAlloc Zenn RigidClick 30", fornitore:"BerryAlloc", categoria:"Vinilico SPC", dims:"1219×178×4+1mm", listino:43.80, coeff:0.45, tappetino:"mai" },
-  { id:"ba-spirit55", nome:"BerryAlloc Spirit Soul 55", fornitore:"BerryAlloc", categoria:"Vinilico SPC", dims:"1524×228×5+1mm", listino:61.70, coeff:0.45, tappetino:"mai" },
-  { id:"ba-zenngd55", nome:"BerryAlloc Zenn GD 55", fornitore:"BerryAlloc", categoria:"Vinilico colla", dims:"1219×178×2,5mm", listino:37.80, coeff:0.45, tappetino:"mai" },
-  { id:"pq-dream", nome:"Parquet Dream", fornitore:"Parquet Woodco", categoria:"Parquet Dream", dims:"160×1200/2200 14mm", listino:152.20, coeff:0.45, tappetino:"opzionale" },
-  { id:"pq-ground", nome:"Parquet Ground", fornitore:"Parquet Woodco", categoria:"Parquet Ground", dims:"—", listino:0, coeff:0.45, tappetino:"opzionale" },
-  { id:"pq-kalika", nome:"Parquet Kalika", fornitore:"Parquet Woodco", categoria:"Parquet Kalika", dims:"—", listino:0, coeff:0.45, tappetino:"opzionale" },
-  { id:"pq-element", nome:"Parquet Element", fornitore:"Parquet Woodco", categoria:"Parquet Element", dims:"—", listino:0, coeff:0.45, tappetino:"opzionale" },
-  { id:"pq-sense", nome:"Parquet Sense", fornitore:"Parquet Woodco", categoria:"Parquet Sense", dims:"—", listino:0, coeff:0.45, tappetino:"opzionale" },
-  { id:"pq-star", nome:"Parquet Star", fornitore:"Parquet Woodco", categoria:"Parquet Star", dims:"—", listino:98.80, coeff:0.45, tappetino:"mai" },
-  { id:"pq-him", nome:"Parquet Him", fornitore:"Parquet Woodco", categoria:"Parquet Him", dims:"—", listino:0, coeff:0.45, tappetino:"mai" },
-  { id:"pq-her", nome:"Parquet Her", fornitore:"Parquet Woodco", categoria:"Parquet Her", dims:"—", listino:86.10, coeff:0.45, tappetino:"mai" },
-  { id:"sg-s45nat", nome:"Signature Spina 45 Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"180×620mm", listino:223.00, coeff:0.45, tappetino:"mai" },
-  { id:"sg-s45crema", nome:"Signature Spina 45 Rovere Crema", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"180×620mm", listino:242.30, coeff:0.45, tappetino:"mai" },
-  { id:"sg-escnat", nome:"Signature Esagono Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"200×231mm", listino:281.10, coeff:0.45, tappetino:"mai" },
-  { id:"sg-q1nat", nome:"Signature Q1 Rovere Naturale", fornitore:"Parquet Woodco", categoria:"Parquet Premium", dims:"600×600mm", listino:316.40, coeff:0.45, tappetino:"mai" },
-  // ─── Biomag (kalea.space/it/biomag-floor) — produzione Kalēa, gestito a magazzino ───
-  { id:"bm-mgo", nome:"Biomag Floor MgO", fornitore:"Biomag", categoria:"Pannello MgO", dims:"1220×2440×6mm", listino:50.00, coeff:0.30, tappetino:"mai", magazzino:true, magazzinoProductType:"MgO" },
-];
+// ─── PRODOTTI ─── caricati dinamicamente da catalog_products ───
+type ProdottoCalcolo = {
+  id: string;
+  nome: string;
+  fornitore: string;
+  categoria: string;
+  dims: string;
+  listino: number;
+  coeff: number;
+  tappetino: "mai" | "sempre" | "opzionale";
+};
 
 const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Biomag"];
 const FORN_STYLE: Record<string, { bg: string; c: string }> = {
@@ -1070,6 +1022,72 @@ const T: any = {
 
 export default function CreaPreventivo() {
   const [step, setStep] = useState(1);
+  const [PRODOTTI, setPRODOTTI] = useState<ProdottoCalcolo[]>([]);
+  const [prodottiLoading, setProdottiLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProdotti = async () => {
+      setProdottiLoading(true);
+      const { data, error } = await supabase
+        .from("catalog_products")
+        .select(`
+          product_code,
+          name,
+          collection,
+          format,
+          list_price,
+          supplier_discount_percentage,
+          unit_of_measure,
+          is_active,
+          catalog_brands ( name )
+        `)
+        .eq("is_active", true)
+        .gt("list_price", 0)
+        .order("name");
+
+      if (!error && data) {
+        const mapped: ProdottoCalcolo[] = data.map((p: any) => {
+          const brandName: string = p.catalog_brands?.name ?? "Altro";
+          const disc = p.supplier_discount_percentage ?? 0;
+          const coeff = parseFloat(((100 - disc) / 100).toFixed(4));
+          const collezione = (p.collection ?? "").toLowerCase();
+          const brand = brandName.toLowerCase();
+
+          let tappetino: "mai" | "sempre" | "opzionale" = "mai";
+          if (collezione.includes("laminato") || collezione.includes("laminate")) {
+            tappetino = "sempre";
+          } else if (
+            collezione.includes("parquet") ||
+            collezione.includes("dream") ||
+            collezione.includes("spine") ||
+            collezione.includes("quadrotte") ||
+            collezione.includes("arrow") ||
+            collezione.includes("slim") ||
+            collezione.includes("sense") ||
+            collezione.includes("rovere recupero") ||
+            brand.includes("woodco")
+          ) {
+            tappetino = "opzionale";
+          }
+
+          return {
+            id: p.product_code ?? `prod-${Math.random()}`,
+            nome: p.name ?? "",
+            fornitore: brandName,
+            categoria: p.collection ?? "",
+            dims: p.format ?? "",
+            listino: p.list_price ?? 0,
+            coeff,
+            tappetino,
+          };
+        });
+        setPRODOTTI(mapped);
+      }
+      setProdottiLoading(false);
+    };
+    loadProdotti();
+  }, []);
+
 
   // CALCOLO
   const [search, setSearch] = useState("");
@@ -1745,6 +1763,12 @@ export default function CreaPreventivo() {
                   })}
                 </div>
                 <div style={{maxHeight:520,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8"}}>
+                  {prodottiLoading ? (
+                    <div style={{ padding: "24px", textAlign: "center", color: "#888", fontSize: 14 }}>
+                      Caricamento prodotti dal catalogo...
+                    </div>
+                  ) : (<>
+
                   {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                     const costoMq=p.listino*p.coeff;
                     const prezzoMq=costoMq*MARKUP;
@@ -1777,6 +1801,7 @@ export default function CreaPreventivo() {
                       <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
                     </div>
                   )}
+                  </>)}
                 </div>
               </>
             ) : (
