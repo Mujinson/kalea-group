@@ -1098,6 +1098,13 @@ export default function CreaPreventivo() {
   // CALCOLO
   const [search, setSearch] = useState("");
   const [fornFilt, setFornFilt] = useState("Tutti");
+
+  const FORNITORI_LIST = useMemo(() => {
+    const unique = Array.from(new Set(PRODOTTI.map((p) => p.fornitore)))
+      .filter(Boolean)
+      .sort();
+    return ["Tutti", ...unique];
+  }, [PRODOTTI]);
   const [prodotto, setProdotto] = useState<any>(null);
   const [complessita, setComplessita] = useState<"semplice"|"media"|"complessa">("media");
   const [mqPrev, setMqPrev] = useState(50);
