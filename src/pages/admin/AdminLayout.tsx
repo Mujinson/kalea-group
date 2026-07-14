@@ -27,6 +27,16 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [faqOpen, setFaqOpen] = useState(false);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('kalea-crm-theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('kalea-crm-theme', isDark ? 'dark' : 'light');
+    }
+  }, [isDark]);
 
   useEffect(() => {
     if (!loading) {
