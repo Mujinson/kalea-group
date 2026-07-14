@@ -1643,3 +1643,272 @@ function AggiungiModuloButton({ onAdd }: { onAdd: (t: TipoModulo) => void }) {
     </div>
   );
 }
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function normalizeStatus(s: string): "bozza" | "inviato" | "accettato" | "rifiutato" {
+  const m: Record<string, "bozza" | "inviato" | "accettato" | "rifiutato"> = {
+    draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato",
+    bozza: "bozza", inviato: "inviato", accettato: "accettato", rifiutato: "rifiutato",
+  };
+  return m[s] || "bozza";
+}
+
+// ─── Vista Preventivo Cliente ────────────────────────────────────────────────
+
+type ClienteRow = {
+  desc: string;
+  um: string;
+  qta: number | string;
+  prezzoUn: number | null;
+  totale: number;
+  sub?: string;
+};
+
+type ClienteSection = {
+  titolo: string;
+  righe: ClienteRow[];
+};
+
+function buildClienteSections(moduli: Modulo[], serviziComuni: RigaContabilita[]): ClienteSection[] {
+  const sections: ClienteSection[] = [];
+
+  moduli.forEach(m => {
+    if (m.tipo === "fornitura_posa") {
+      const conf = m.confFornitura;
+      const totRighe = m.righe.reduce((s, r) => s + totalClienteRiga(r), 0);
+      if (conf && conf.mqRiferimento > 0) {
+        const incidenza = totRighe / conf.mqRiferimento;
+        const compreso = m.righe.map(r => r.desc).filter(Boolean).join(", ");
+        sections.push({
+          titolo: m.titolo,
+          righe: [{
+            desc: `Fornitura e posa — ${m.titolo}`,
+            um: "Mq",
+            qta: conf.mqRiferimento,
+            prezzoUn: incidenza,
+            totale: totRighe,
+            sub: compreso ? `Comprensivo di: ${compreso}` : undefined,
+          }],
+        });
+      } else {
+        sections.push({
+          titolo: m.titolo,
+          righe: m.righe.map(r => ({
+            desc: r.desc, um: r.um, qta: r.qt,
+            prezzoUn: prezzoClienteRiga(r), totale: totalClienteRiga(r),
+          })),
+        });
+      }
+    } else if (m.tipo === "solo_fornitura") {
+      sections.push({
+        titolo: m.titolo,
+        righe: m.righe.map(r => ({
+          desc: r.desc, um: r.um, qta: r.qt,
+          prezzoUn: prezzoClienteRiga(r), totale: totalClienteRiga(r),
+        })),
+      });
+    } else if (m.tipo === "levigatura" && m.confLevigatura) {
+      const c = m.confLevigatura;
+      const prMq = c.costoInternoMq * (1 + c.ricarico / 100);
+      sections.push({
+        titolo: m.titolo,
+        righe: [{
+          desc: `Levigatura ${c.tipo} pavimento`,
+          um: "Mq", qta: c.mq, prezzoUn: prMq, totale: prMq * c.mq,
+        }],
+      });
+    } else if (m.tipo === "verniciatura_pulizia" && m.confVerniciatura) {
+      const c = m.confVerniciatura;
+      const prV = c.costoInternoMq * (1 + c.ricarico / 100);
+      const righe: ClienteRow[] = [{
+        desc: `Verniciatura ${c.tipoProdotto} — ${c.mani} mani`,
+        um: "Mq", qta: c.mq, prezzoUn: prV, totale: prV * c.mq,
+      }];
+      if (c.includePulizia) {
+        const prP = c.costoInternoPuliziaMq * (1 + c.ricaricoPulizia / 100);
+        righe.push({
+          desc: "Pulizia fine cantiere",
+          um: "Mq", qta: c.mq, prezzoUn: prP, totale: prP * c.mq,
+        });
+      }
+      sections.push({ titolo: m.titolo, righe });
+    } else if (m.tipo === "subappalto" && m.confSubappalto) {
+      const c = m.confSubappalto;
+      const base = c.modalita === "ore" ? c.ore * c.persone * c.tariffaOra : c.forfait;
+      const tot = base * (1 + c.ricarico / 100);
+      sections.push({
+        titolo: m.titolo,
+        righe: [{
+          desc: c.desc || "Prestazione manodopera",
+          um: "a corpo", qta: 1, prezzoUn: null, totale: tot,
+        }],
+      });
+    }
+  });
+
+  if (serviziComuni.length > 0) {
+    sections.push({
+      titolo: "Servizi comuni",
+      righe: serviziComuni.map(r => ({
+        desc: r.desc, um: r.um, qta: r.qt,
+        prezzoUn: prezzoClienteRiga(r), totale: totalClienteRiga(r),
+      })),
+    });
+  }
+
+  return sections;
+}
+
+function PreventivoClienteView({
+  pdfRef, moduli, serviziComuni, cliente, cantiere, numPrev,
+  ivaRate, sconto, noteCliente, totaliGlobali, onDownloadPdf,
+}: {
+  pdfRef: React.RefObject<HTMLDivElement>;
+  moduli: Modulo[];
+  serviziComuni: RigaContabilita[];
+  cliente: ClienteSnap;
+  cantiere: string;
+  numPrev: string;
+  ivaRate: number;
+  sconto: number;
+  noteCliente: string;
+  totaliGlobali: { ricaviLordi: number; imponibile: number; iva: number; totaleIva: number };
+  onDownloadPdf: () => void;
+}) {
+  const sections = useMemo(() => buildClienteSections(moduli, serviziComuni), [moduli, serviziComuni]);
+  const today = new Date();
+  const validoFino = new Date(today.getTime() + 30 * 86400000);
+  const fmtDate = (d: Date) => d.toLocaleDateString("it-IT");
+  const scontoAmt = totaliGlobali.ricaviLordi * (sconto / 100);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <button
+          onClick={onDownloadPdf}
+          className="bg-blue-600 text-white rounded px-4 py-2 text-sm hover:bg-blue-700 transition"
+        >
+          ⬇ Scarica PDF
+        </button>
+      </div>
+
+      <div ref={pdfRef} className="bg-white p-8 max-w-4xl mx-auto shadow-sm" style={{ color: "#3B2314" }}>
+        {/* Intestazione */}
+        <div className="flex items-start justify-between mb-8 pb-4 border-b" style={{ borderColor: "#3B231420" }}>
+          <div>
+            <div className="font-heading text-2xl mb-1">Kalēa®</div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>General Contractor · Luxury Supply Hub</div>
+          </div>
+          <div className="text-right text-sm">
+            <div className="font-heading text-lg mb-1">Preventivo</div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>N° <span className="font-mono">{numPrev || "—"}</span></div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>Data: {fmtDate(today)}</div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>Valido fino al: {fmtDate(validoFino)}</div>
+          </div>
+        </div>
+
+        {/* Cliente */}
+        <div className="grid grid-cols-2 gap-6 mb-8">
+          <div>
+            <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "#8A7060" }}>Cliente</div>
+            <div className="text-sm font-medium">{cliente.nome || "—"}</div>
+            {cliente.indirizzo && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.indirizzo}</div>}
+            {cliente.citta && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.citta}</div>}
+            {cliente.email && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.email}</div>}
+            {cliente.telefono && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.telefono}</div>}
+          </div>
+          <div>
+            <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "#8A7060" }}>Cantiere / Riferimento</div>
+            <div className="text-sm font-medium">{cantiere || "—"}</div>
+          </div>
+        </div>
+
+        {/* Sezioni */}
+        {sections.length === 0 ? (
+          <div className="text-center text-sm py-8" style={{ color: "#8A7060" }}>
+            Nessuna voce da mostrare. Aggiungi moduli nella scheda "Contabilità interna".
+          </div>
+        ) : (
+          <div className="space-y-6 mb-8">
+            {sections.map((sec, i) => (
+              <div key={i}>
+                <div className="text-xs uppercase tracking-wider font-medium mb-2 pb-1 border-b" style={{ color: "#8A7060", borderColor: "#3B231410" }}>
+                  {sec.titolo}
+                </div>
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-[10px] uppercase tracking-wider" style={{ color: "#8A7060" }}>
+                      <th className="text-left pb-2 font-normal">Descrizione</th>
+                      <th className="text-right pb-2 font-normal w-16">UM</th>
+                      <th className="text-right pb-2 font-normal w-20">Qt</th>
+                      <th className="text-right pb-2 font-normal w-24">€/unità</th>
+                      <th className="text-right pb-2 font-normal w-28">Totale</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sec.righe.map((r, j) => (
+                      <tr key={j} className="border-t" style={{ borderColor: "#3B231410" }}>
+                        <td className="py-2 pr-2">
+                          <div>{r.desc}</div>
+                          {r.sub && <div className="text-[11px] italic mt-0.5" style={{ color: "#8A7060" }}>{r.sub}</div>}
+                        </td>
+                        <td className="py-2 text-right">{r.um}</td>
+                        <td className="py-2 text-right tabular-nums">
+                          {typeof r.qta === "number" ? r.qta.toLocaleString("it-IT", { maximumFractionDigits: 2 }) : r.qta}
+                        </td>
+                        <td className="py-2 text-right tabular-nums">
+                          {r.prezzoUn === null ? "—" : eur(r.prezzoUn)}
+                        </td>
+                        <td className="py-2 text-right tabular-nums font-medium">{eur(r.totale)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Totali */}
+        <div className="ml-auto max-w-sm border rounded-lg p-4 space-y-2" style={{ borderColor: "#3B231420", background: "#FAF7F1" }}>
+          {sconto > 0 && (
+            <>
+              <div className="flex justify-between text-xs">
+                <span style={{ color: "#8A7060" }}>Totale lordo</span>
+                <span className="tabular-nums">{eur(totaliGlobali.ricaviLordi)}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span style={{ color: "#8A7060" }}>Sconto {sconto}%</span>
+                <span className="tabular-nums text-red-700">-{eur(scontoAmt)}</span>
+              </div>
+            </>
+          )}
+          <div className="flex justify-between text-sm">
+            <span style={{ color: "#8A7060" }}>Sub-totale (imponibile)</span>
+            <span className="tabular-nums font-medium">{eur(totaliGlobali.imponibile)}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span style={{ color: "#8A7060" }}>IVA {ivaRate}%</span>
+            <span className="tabular-nums">{eur(totaliGlobali.iva)}</span>
+          </div>
+          <div className="flex justify-between text-base font-heading pt-2 border-t" style={{ borderColor: "#3B231420" }}>
+            <span>Totale preventivo</span>
+            <span className="tabular-nums">{eur(totaliGlobali.totaleIva)}</span>
+          </div>
+        </div>
+
+        {noteCliente && (
+          <div className="mt-6 text-sm">
+            <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "#8A7060" }}>Note</div>
+            <div className="whitespace-pre-wrap">{noteCliente}</div>
+          </div>
+        )}
+
+        <div className="mt-8 pt-4 border-t text-[11px] text-center" style={{ borderColor: "#3B231410", color: "#8A7060" }}>
+          Prezzi IVA esclusa dove indicato. Offerta valida 30 giorni dalla data di emissione.
+        </div>
+      </div>
+    </div>
+  );
+}
