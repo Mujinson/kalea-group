@@ -440,10 +440,16 @@ const AdminQuotes = () => {
         title="Preventivi"
         subtitle="Pipeline offerte e trattative"
         actions={
-          <Button onClick={() => navigate('/admin/preventivi/nuovo')} size="sm" className="bg-crm-primary hover:bg-crm-primary-600 text-white shadow-crm-sm">
-            <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => navigate('/admin/preventivi/contabilita')} size="sm" variant="outline">
+              <Plus className="w-4 h-4 mr-2" />Contabilità
+            </Button>
+            <Button onClick={() => navigate('/admin/preventivi/nuovo')} size="sm" className="bg-crm-primary hover:bg-crm-primary-600 text-white shadow-crm-sm">
+              <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
+            </Button>
+          </div>
         }
+
       />
 
       <CrmKpiRow cols={7}>
