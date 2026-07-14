@@ -498,27 +498,32 @@ export default function CreaContabilita() {
         {activeTab === "contabilita" ? (
           <>
             {moduli.map((modulo, idx) => {
+              const updateModulo = (updated: Modulo) =>
+                setModuli(prev => prev.map((m, i) => i === idx ? updated : m));
+              const deleteModulo = () =>
+                setModuli(prev => prev.filter((_, i) => i !== idx));
+
               if (modulo.tipo === "fornitura_posa" || modulo.tipo === "solo_fornitura") {
                 return (
                   <ModuloFornituraSection
                     key={modulo.id}
                     modulo={modulo}
                     catalogProdotti={catalogProdotti}
-                    onChange={(updated) =>
-                      setModuli(prev => prev.map((m, i) => i === idx ? updated : m))
-                    }
-                    onDelete={() =>
-                      setModuli(prev => prev.filter((_, i) => i !== idx))
-                    }
+                    onChange={updateModulo}
+                    onDelete={deleteModulo}
                   />
                 );
               }
-              return (
-                <div key={modulo.id} style={{ border: "1px dashed #ccc", borderRadius: 8, padding: 16 }}>
-                  <div className="text-sm font-medium mb-1" style={{ color: "#3B2314" }}>{modulo.titolo}</div>
-                  <div className="text-xs text-gray-500">Modulo <code>{modulo.tipo}</code> — da implementare</div>
-                </div>
-              );
+              if (modulo.tipo === "levigatura") {
+                return <ModuloLevigaturaSection key={modulo.id} modulo={modulo} onChange={updateModulo} onDelete={deleteModulo} />;
+              }
+              if (modulo.tipo === "verniciatura_pulizia") {
+                return <ModuloVerniciaturaPuliziaSection key={modulo.id} modulo={modulo} onChange={updateModulo} onDelete={deleteModulo} />;
+              }
+              if (modulo.tipo === "subappalto") {
+                return <ModuloSubappaltoSection key={modulo.id} modulo={modulo} onChange={updateModulo} onDelete={deleteModulo} />;
+              }
+              return null;
             })}
 
             <ServiziComuniSection
@@ -527,19 +532,8 @@ export default function CreaContabilita() {
               catalogProdotti={catalogProdotti}
             />
 
+            <AggiungiModuloButton onAdd={aggiungiModulo} />
 
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="text-sm text-gray-600 self-center">+ Aggiungi modulo:</span>
-              {TIPI_INFO.map((info) => (
-                <button
-                  key={info.tipo}
-                  onClick={() => aggiungiModulo(info.tipo)}
-                  className="text-xs bg-white border border-gray-200 rounded px-3 py-1.5 hover:border-blue-400 hover:text-blue-600 transition"
-                >
-                  {info.icona} {info.titolo}
-                </button>
-              ))}
-            </div>
           </>
         ) : (
           <div className="bg-white rounded-lg border border-gray-200 p-8 text-center text-sm text-gray-500">
