@@ -54,6 +54,12 @@ const getLangFromPath = (pathname: string): Language | null => {
   return match ? (match[1] as Language) : null;
 };
 
+const isAppRoute = (pathname: string) =>
+  pathname === '/admin' || pathname.startsWith('/admin/') ||
+  pathname === '/app' || pathname.startsWith('/app/') ||
+  pathname === '/cantieri-app' || pathname.startsWith('/cantieri-app/') ||
+  pathname.startsWith('/.lovable/');
+
 export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -90,7 +96,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
       const fromUrl = getLangFromPath(window.location.pathname);
 
       // If URL already has a language, skip IP detection
-      if (fromUrl) {
+      if (fromUrl || isAppRoute(window.location.pathname)) {
         setInitialized(true);
         return;
       }
@@ -117,6 +123,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+    if (isAppRoute(window.location.pathname)) return;
     
     // Update URL with language prefix
     const currentPath = window.location.pathname;
@@ -142,8 +149,9 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
     if (!initialized) return;
     
     const currentPath = window.location.pathname;
+    if (isAppRoute(currentPath)) return;
     if (!currentPath.match(/^\/(it|en|de|fr)/)) {
-      const newPath = `/${language}${currentPath}`;
+      const newPath = `/${language}${currentPath}${window.location.search}${window.location.hash}`;
       navigate(newPath, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
