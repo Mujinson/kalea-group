@@ -95,7 +95,7 @@ function CatBadge({ cat }: { cat: string }) {
     "Ground/Impression":       { bg: "#FCE4EC", color: "#880E4F" },
     "Star/Her/Him":            { bg: "#F3E5F5", color: "#6A1B9A" },
   };
-  const s = map[cat] || { bg: "#F0EDE8", color: "#5F5E5A" };
+  const s = map[cat] || { bg: "#F1F5F9", color: "#5F5E5A" };
   return <span style={{ display: "inline-block", fontSize: 10, padding: "2px 6px", borderRadius: 3, fontWeight: 500, background: s.bg, color: s.color, whiteSpace: "nowrap" }}>{cat}</span>;
 }
 
@@ -164,13 +164,13 @@ export default function PricingParquet() {
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
               Coeff. <strong>{coeff.toFixed(3)}</strong> · Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino
             </div>
           </div>
           <div>
             <SliderRow label="Markup Kalēa sul tuo costo" min={20} max={130} value={settings.markup} step={5} onChange={(v: number) => update({ markup: v })} format={(v: number) => v + "%"} />
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
               Range prezzi: Dream 73–315€/mq · Slim 91–169€/mq · Sense 65–116€/mq · Ground 77–144€/mq<br />
               Tuo costo medio: <strong>{fmt2(avgListino * coeff)}/mq</strong> · Tuo prezzo medio: <strong>{fmt2(avgListino * coeff * (1 + mkCoeff))}/mq</strong>
             </div>
@@ -292,7 +292,7 @@ export default function PricingParquet() {
         </div>
       )}
       {!selected && (
-        <div style={{ background: "#F0EDE8", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13 }}>
+        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13 }}>
           ↑ Clicca un articolo nella tabella per aprire il calcolatore preventivo
         </div>
       )}

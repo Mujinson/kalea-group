@@ -84,7 +84,7 @@ function TipoBadge({ tipo }: { tipo: string }) {
     "Decorato":         { bg: "#EEEDFE", color: "#3C3489" },
     "Decorato Lappato": { bg: "#EEEDFE", color: "#3C3489" },
     "Effetto Legno":    { bg: "#FFF3E0", color: "#7B3A10" },
-    "Battiscopa":       { bg: "#F0EDE8", color: "#5F5E5A" },
+    "Battiscopa":       { bg: "#F1F5F9", color: "#5F5E5A" },
   };
   const s = map[tipo] || { bg: "#E6F1FB", color: "#0C447C" };
   return <span style={{ display: "inline-block", fontSize: 10, padding: "2px 6px", borderRadius: 3, fontWeight: 500, background: s.bg, color: s.color }}>{tipo}</span>;
@@ -178,7 +178,7 @@ export default function PricingKronos() {
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F0EDE8", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.7 }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.7 }}>
               <strong style={{ color: "#1A1A1A" }}>{SCONTI[scontoIdx].label}</strong> · Coefficiente: <strong>{coeff.toFixed(3)}</strong><br />
               Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino Kronos<br />
               Esempio 100€/mq listino → tuo costo <strong>{fmt2(100 * coeff)}</strong>
@@ -208,7 +208,7 @@ export default function PricingKronos() {
           { label: "Tuo prezzo medio",     value: fmt2(avgPrezzo)+"/mq",  color: "#27500A" },
           { label: "Margine medio",        value: fmtP(avgMarg),          color: "#27500A" },
         ].map(k => (
-          <div key={k.label} style={{ background: "#F0EDE8", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
+          <div key={k.label} style={{ background: "#F1F5F9", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
             <div style={{ fontSize: 11, color: "#6B6860", marginBottom: 6 }}>{k.label}</div>
             <div style={{ fontSize: 19, fontWeight: 300, color: k.color }}>{k.value}</div>
           </div>
@@ -357,7 +357,7 @@ export default function PricingKronos() {
       )}
 
       {!selected && (
-        <div style={{ background: "#F0EDE8", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13, marginTop: 8 }}>
+        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13, marginTop: 8 }}>
           ↑ Clicca un prodotto nella tabella per aprire il calcolatore preventivo
         </div>
       )}

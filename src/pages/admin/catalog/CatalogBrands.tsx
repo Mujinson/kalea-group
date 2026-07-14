@@ -106,7 +106,7 @@ export default function CatalogBrands() {
         title="Marche"
         subtitle="Anagrafica marche fornitori. Ogni prodotto può essere collegato a una marca."
         actions={
-          <Button size="sm" onClick={openNew} className="bg-white text-[#1E1B4B] hover:bg-white/90">
+          <Button size="sm" onClick={openNew} className="bg-crm-primary text-white shadow-crm-sm hover:bg-white/90">
             <Plus className="w-4 h-4 mr-2" /> Nuova marca
           </Button>
         }

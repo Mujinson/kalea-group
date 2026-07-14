@@ -87,7 +87,7 @@ const FORN_STYLE: Record<string, { bg: string; c: string }> = {
   "Parquet Woodco":{bg:"#FFF3E0",c:"#7B3A10"},"Signature":{bg:"#EEEDFE",c:"#3C3489"},
   "Biomag":{bg:"#EAF3DE",c:"#27500A"},
 };
-const prodStyle = (p: any) => FORN_STYLE[p.nome?.startsWith("Signature") ? "Signature" : p.fornitore] || {bg:"#F0EDE8",c:"#5F5E5A"};
+const prodStyle = (p: any) => FORN_STYLE[p.nome?.startsWith("Signature") ? "Signature" : p.fornitore] || {bg:"#F1F5F9",c:"#5F5E5A"};
 const prodBadgeLabel = (p: any) => p.nome?.startsWith("Signature") ? "Signature" : p.fornitore;
 
 // ─── TONALITÀ per prodotto (datalist suggestion, input libero comunque consentito) ─
@@ -1574,7 +1574,7 @@ export default function CreaPreventivo() {
         </div>
       </div>
 
-      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F0EDE8",borderRadius:10,padding:4,width:"fit-content",alignItems:"center"}}>
+      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F1F5F9",borderRadius:10,padding:4,width:"fit-content",alignItems:"center"}}>
         {([["1","Calcolo & Verifica"],["2","Intestazione & Cliente"],["3","Anteprima & PDF"]] as const)
           .filter(([n]) => stato !== "accettato" || n === "3")
           .map(([n,l])=>(
@@ -1649,7 +1649,7 @@ export default function CreaPreventivo() {
                   })}
                   {!showAll && filtered.length>25 && (
                     <div style={{padding:10,textAlign:"center"}}>
-                      <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F0EDE8",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
+                      <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
                     </div>
                   )}
                 </div>
@@ -1728,7 +1728,7 @@ export default function CreaPreventivo() {
                       })}
                       {!showAll && filtered.length>25 && (
                         <div style={{padding:8,textAlign:"center"}}>
-                          <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F0EDE8",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
+                          <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
                         </div>
                       )}
                     </div>
@@ -1791,7 +1791,7 @@ export default function CreaPreventivo() {
                       );
                     })}
                     {tonalita.length > 0 && (
-                      <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F0EDE8",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#6B6860"}}>
+                      <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F1F5F9",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#6B6860"}}>
                         Totale tonalità: <b style={{color:hasOverstock?"#A32D2D":"#1A1A2E"}}>{tonMqTot} mq</b>
                         <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
                         {hasOverstock && (
@@ -1947,7 +1947,7 @@ export default function CreaPreventivo() {
                     return (
                     <div key={k} onClick={()=>{ setComplessita(k); resetOv("posaMq"); }} style={{
                       padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
-                      background:active?"#1A1A2E":"#F0EDE8",
+                      background:active?"#1A1A2E":"#F1F5F9",
                       borderColor:active?"#1A1A2E":"#E0DDD8",
                       color:active?"#fff":"#1A1A1A"}}>
                       <div style={{fontWeight:500,fontSize:13,textTransform:"capitalize"}}>{k}</div>
@@ -1960,7 +1960,7 @@ export default function CreaPreventivo() {
                     return (
                       <div onClick={()=>{ if (!isCustom) setOv("posaMq", PREZZI_POSA[complessita]); }} style={{
                         padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
-                        background:isCustom?"#C8A96E":"#F0EDE8",
+                        background:isCustom?"#C8A96E":"#F1F5F9",
                         borderColor:isCustom?"#C8A96E":"#E0DDD8",
                         color:isCustom?"#fff":"#1A1A1A"}}>
                         <div style={{fontWeight:500,fontSize:13}}>Personalizzato</div>
@@ -2106,7 +2106,7 @@ export default function CreaPreventivo() {
                     {l:"Margine €",v:euro(calc.margineE),c:calc.margineE>0?"#27500A":"#A32D2D"},
                     {l:"Margine %",v:pct(calc.marginePct),c:calc.marginePct>MARGINE_ALERT?"#27500A":calc.marginePct>MARGINE_BLOCCO?"#633806":"#A32D2D"},
                   ].map(k=>(
-                    <div key={k.l} style={{background:"#F0EDE8",borderRadius:8,padding:"10px 12px"}}>
+                    <div key={k.l} style={{background:"#F1F5F9",borderRadius:8,padding:"10px 12px"}}>
                       <div style={{fontSize:11,color:"#9A9890"}}>{k.l}</div>
                       <div style={{fontSize:16,fontWeight:600,color:k.c}}>{k.v}</div>
                     </div>
@@ -2214,7 +2214,7 @@ export default function CreaPreventivo() {
             <div style={card}>
               <div style={sectionTitle}>{t.pagamenti}</div>
               {pagamenti.map((p,i)=>(
-                <div key={i} style={{marginBottom:12,padding:"10px 12px",background:"#F0EDE8",borderRadius:8}}>
+                <div key={i} style={{marginBottom:12,padding:"10px 12px",background:"#F1F5F9",borderRadius:8}}>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 70px 1fr",gap:8}}>
                     <input value={p.label} onChange={e=>{const pg=[...pagamenti];pg[i].label=e.target.value;setPagamenti(pg);}} placeholder="Descrizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
                     <input value={p.pct} type="number" onChange={e=>{const pg=[...pagamenti];pg[i].pct=Number(e.target.value);setPagamenti(pg);}} style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
@@ -2462,7 +2462,7 @@ export default function CreaPreventivo() {
 
             {/* Note cliente */}
             {noteCliente && (
-              <div style={{marginTop:20,padding:"12px 16px",background:"#F0EDE8",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
+              <div style={{marginTop:20,padding:"12px 16px",background:"#F1F5F9",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
                 <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
                 {noteCliente}
               </div>

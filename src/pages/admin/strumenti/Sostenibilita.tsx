@@ -52,7 +52,7 @@ function MetricCard({
   color?: string;
 }) {
   return (
-    <div style={{ background: '#F0EDE8', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
+    <div style={{ background: '#F1F5F9', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
       <div style={{ fontSize: 11, color: '#6B6860', marginBottom: 6, lineHeight: 1.4 }}>{label}</div>
       <div style={{ fontSize: 21, fontWeight: 300, color }}>{value}</div>
       {sub && <div style={{ fontSize: 11, color: '#9A9890', marginTop: 4 }}>{sub}</div>}
@@ -401,7 +401,7 @@ export default function Sostenibilita() {
           <MkCard label="Markup target" value={fmtP(mkTarget)} sub={'Costi + accantonamento 15%\nsostenibile nel lungo periodo'} bg="#FAEEDA" color="#633806" />
           <MkCard label="Markup sano" value={fmtP(mkSano)} sub={"Costi + accantonamento + utile\nquesto è l'obiettivo"} bg="#EAF3DE" color="#27500A" />
         </div>
-        <div style={{ background: '#F0EDE8', borderRadius: 8, padding: '14px 16px', fontSize: 13, color: '#6B6860', lineHeight: 1.8 }}>
+        <div style={{ background: '#F1F5F9', borderRadius: 8, padding: '14px 16px', fontSize: 13, color: '#6B6860', lineHeight: 1.8 }}>
           Con i tuoi costi fissi di <strong style={{ color: '#1A1A1A' }}>{fmt(cfMese)}/mese</strong> e{' '}
           <strong style={{ color: '#1A1A1A' }}>{s.mqForn} mq di fornitura al mese</strong>, il markup minimo è{' '}
           <strong style={{ color: '#A32D2D' }}>{fmtP(mkMin)}</strong>. Per stare bene ti serve tra{' '}
@@ -438,7 +438,7 @@ export default function Sostenibilita() {
                 'Un cliente che paga tardi. Un errore su un cantiere. Un operaio malato 3 settimane. Senza cuscinetto, ogni imprevisto diventa una crisi.',
             },
           ].map((b) => (
-            <div key={b.titolo} style={{ background: '#F0EDE8', borderRadius: 8, padding: 14 }}>
+            <div key={b.titolo} style={{ background: '#F1F5F9', borderRadius: 8, padding: 14 }}>
               <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 8 }}>{b.titolo}</div>
               <div style={{ fontSize: 13, color: '#6B6860', lineHeight: 1.7 }}>{b.testo}</div>
             </div>
