@@ -186,10 +186,10 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
 // ─── Panel wrapper ────────────────────────────────────────────
 function Panel({ title, right, children, className = '' }: { title?: string; right?: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-white ${className}`} style={{ border: '1px solid rgba(26,26,46,0.08)', borderRadius: 4 }}>
+    <div className={`bg-white ${className}`} style={{ border: '1px solid #E5E7EB', borderRadius: 12, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' }}>
       {title && (
-        <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: 'rgba(26,26,46,0.06)' }}>
-          <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1A1A2E' }}>{title}</h3>
+        <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: '#F1F5F9' }}>
+          <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#0F172A' }}>{title}</h3>
           {right}
         </div>
       )}
@@ -199,7 +199,7 @@ function Panel({ title, right, children, className = '' }: { title?: string; rig
 }
 
 const Empty = ({ msg = 'Nessun dato per il periodo' }: { msg?: string }) => (
-  <div className="flex items-center justify-center h-32 text-xs italic" style={{ color: '#B0998A' }}>{msg}</div>
+  <div className="flex items-center justify-center h-32 text-xs italic" style={{ color: '#94A3B8' }}>{msg}</div>
 );
 
 // ─── Main ─────────────────────────────────────────────────────
