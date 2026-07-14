@@ -1022,6 +1022,72 @@ const T: any = {
 
 export default function CreaPreventivo() {
   const [step, setStep] = useState(1);
+  const [PRODOTTI, setPRODOTTI] = useState<ProdottoCalcolo[]>([]);
+  const [prodottiLoading, setProdottiLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProdotti = async () => {
+      setProdottiLoading(true);
+      const { data, error } = await supabase
+        .from("catalog_products")
+        .select(`
+          product_code,
+          name,
+          collection,
+          format,
+          list_price,
+          supplier_discount_percentage,
+          unit_of_measure,
+          is_active,
+          catalog_brands ( name )
+        `)
+        .eq("is_active", true)
+        .gt("list_price", 0)
+        .order("name");
+
+      if (!error && data) {
+        const mapped: ProdottoCalcolo[] = data.map((p: any) => {
+          const brandName: string = p.catalog_brands?.name ?? "Altro";
+          const disc = p.supplier_discount_percentage ?? 0;
+          const coeff = parseFloat(((100 - disc) / 100).toFixed(4));
+          const collezione = (p.collection ?? "").toLowerCase();
+          const brand = brandName.toLowerCase();
+
+          let tappetino: "mai" | "sempre" | "opzionale" = "mai";
+          if (collezione.includes("laminato") || collezione.includes("laminate")) {
+            tappetino = "sempre";
+          } else if (
+            collezione.includes("parquet") ||
+            collezione.includes("dream") ||
+            collezione.includes("spine") ||
+            collezione.includes("quadrotte") ||
+            collezione.includes("arrow") ||
+            collezione.includes("slim") ||
+            collezione.includes("sense") ||
+            collezione.includes("rovere recupero") ||
+            brand.includes("woodco")
+          ) {
+            tappetino = "opzionale";
+          }
+
+          return {
+            id: p.product_code ?? `prod-${Math.random()}`,
+            nome: p.name ?? "",
+            fornitore: brandName,
+            categoria: p.collection ?? "",
+            dims: p.format ?? "",
+            listino: p.list_price ?? 0,
+            coeff,
+            tappetino,
+          };
+        });
+        setPRODOTTI(mapped);
+      }
+      setProdottiLoading(false);
+    };
+    loadProdotti();
+  }, []);
+
 
   // CALCOLO
   const [search, setSearch] = useState("");
