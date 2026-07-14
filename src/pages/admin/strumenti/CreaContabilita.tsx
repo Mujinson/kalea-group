@@ -2,6 +2,9 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
 
 // ─── Tipi ────────────────────────────────────────────────────────────────────
 
