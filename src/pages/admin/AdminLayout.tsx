@@ -145,7 +145,8 @@ const AdminLayout = () => {
             <CommandPalette />
             <div
               key={location.pathname}
-              className="flex-1 p-3 md:p-6 overflow-auto bg-[#F6F7FB] animate-crm-fade-up"
+              className="flex-1 p-3 md:p-6 overflow-auto animate-crm-fade-up"
+              style={{ background: 'var(--crm-bg)' }}
             >
               <Outlet />
             </div>
