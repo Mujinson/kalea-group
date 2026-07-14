@@ -32,11 +32,17 @@ type ProdottoCalcolo = {
   tappetino: "mai" | "sempre" | "opzionale";
 };
 
-const FORNITORI_LIST = ["Tutti","Flow","Kronos","Externo","BerryAlloc","Parquet Woodco","Biomag"];
 const FORN_STYLE: Record<string, { bg: string; c: string }> = {
-  "Flow":{bg:"#E6F1FB",c:"#0C447C"},"Kronos":{bg:"#FCE4EC",c:"#880E4F"},
-  "Externo":{bg:"#E1F5EE",c:"#085041"},"BerryAlloc":{bg:"#FAEEDA",c:"#633806"},
-  "Parquet Woodco":{bg:"#FFF3E0",c:"#7B3A10"},"Signature":{bg:"#EEEDFE",c:"#3C3489"},
+  "Flow":{bg:"#E6F1FB",c:"#0C447C"},
+  "Kronos":{bg:"#FCE4EC",c:"#880E4F"},
+  "Kronos Ceramiche":{bg:"#FCE4EC",c:"#880E4F"},
+  "Externo":{bg:"#E1F5EE",c:"#085041"},
+  "BerryAlloc":{bg:"#FAEEDA",c:"#633806"},
+  "Parquet Woodco":{bg:"#FFF3E0",c:"#7B3A10"},
+  "WoodCo":{bg:"#FFF3E0",c:"#7B3A10"},
+  "WoodCo Parquet":{bg:"#FFF3E0",c:"#7B3A10"},
+  "WoodCo Signature":{bg:"#EEEDFE",c:"#3C3489"},
+  "Signature":{bg:"#EEEDFE",c:"#3C3489"},
   "Biomag":{bg:"#EAF3DE",c:"#27500A"},
 };
 const prodStyle = (p: any) => FORN_STYLE[p.nome?.startsWith("Signature") ? "Signature" : p.fornitore] || {bg:"#F1F5F9",c:"#5F5E5A"};
@@ -1092,6 +1098,13 @@ export default function CreaPreventivo() {
   // CALCOLO
   const [search, setSearch] = useState("");
   const [fornFilt, setFornFilt] = useState("Tutti");
+
+  const FORNITORI_LIST = useMemo(() => {
+    const unique = Array.from(new Set(PRODOTTI.map((p) => p.fornitore)))
+      .filter(Boolean)
+      .sort();
+    return ["Tutti", ...unique];
+  }, [PRODOTTI]);
   const [prodotto, setProdotto] = useState<any>(null);
   const [complessita, setComplessita] = useState<"semplice"|"media"|"complessa">("media");
   const [mqPrev, setMqPrev] = useState(50);
