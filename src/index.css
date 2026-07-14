@@ -284,6 +284,88 @@ All colors MUST be HSL.
   font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
 }
 
+/* ---- Admin Dark Mode ---- */
+.admin-theme.dark {
+  --crm-bg:            #0B1220;
+  --crm-bg-soft:       #111A2E;
+  --crm-surface:       #131C31;
+  --crm-surface-2:     #172038;
+  --crm-surface-hover: #1B2540;
+
+  --crm-ink:           #F1F5F9;
+  --crm-ink-strong:    #FFFFFF;
+  --crm-ink-muted:     #94A3B8;
+  --crm-ink-subtle:    #64748B;
+  --crm-ink-label:     #64748B;
+
+  --crm-border:        #1F2A44;
+  --crm-border-strong: #2A3757;
+  --crm-border-focus:  #4F46E5;
+
+  --crm-primary-soft:  #1E1B4B;
+  --crm-primary-glow:  rgba(129, 140, 248, 0.22);
+
+  --crm-success-soft:  #052E1B;
+  --crm-warning-soft:  #3A2708;
+  --crm-danger-soft:   #3A0F17;
+  --crm-info-soft:     #062A3A;
+  --crm-purple-soft:   #2A1247;
+  --crm-teal-soft:     #052A31;
+
+  --crm-shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.4);
+  --crm-shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --crm-shadow-md:  0 4px 20px -8px rgba(0, 0, 0, 0.55), 0 2px 6px -2px rgba(0, 0, 0, 0.35);
+  --crm-shadow-lg:  0 20px 40px -12px rgba(0, 0, 0, 0.7), 0 6px 12px -4px rgba(0, 0, 0, 0.4);
+  --crm-shadow-xl:  0 30px 60px -12px rgba(0, 0, 0, 0.75);
+
+  --background: 222 45% 8%;
+  --foreground: 210 40% 96%;
+  --card: 222 40% 13%;
+  --card-foreground: 210 40% 96%;
+  --popover: 222 40% 13%;
+  --popover-foreground: 210 40% 96%;
+  --muted: 222 35% 16%;
+  --muted-foreground: 215 20% 65%;
+  --border: 222 30% 20%;
+  --input: 222 30% 22%;
+  --ring: 239 84% 67%;
+  --primary: 239 84% 67%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 239 45% 22%;
+  --accent-foreground: 210 40% 96%;
+  --secondary: 222 35% 16%;
+  --secondary-foreground: 210 40% 96%;
+  --destructive: 350 76% 58%;
+  --destructive-foreground: 0 0% 100%;
+
+  --sidebar-background: 222 42% 11%;
+  --sidebar-foreground: 215 20% 65%;
+  --sidebar-accent: 222 35% 16%;
+  --sidebar-accent-foreground: 210 40% 96%;
+  --sidebar-border: 222 30% 20%;
+  --sidebar-ring: 239 84% 67%;
+}
+
+body:has(.admin-theme.dark) [data-radix-popper-content-wrapper],
+body:has(.admin-theme.dark) [role="dialog"] {
+  --crm-bg: #0B1220;
+  --crm-surface: #131C31;
+  --crm-ink: #F1F5F9;
+  --crm-ink-muted: #94A3B8;
+  --crm-border: #1F2A44;
+  --background: 222 40% 13%;
+  --popover: 222 40% 13%;
+  --card: 222 40% 13%;
+  --foreground: 210 40% 96%;
+  --popover-foreground: 210 40% 96%;
+  --card-foreground: 210 40% 96%;
+  --muted: 222 35% 16%;
+  --muted-foreground: 215 20% 65%;
+  --border: 222 30% 20%;
+  --input: 222 30% 22%;
+  color: var(--crm-ink);
+
+
 /* Inherit tokens inside portals (popovers, sheets, dialogs) opened from admin */
 body:has(.admin-theme) [data-radix-popper-content-wrapper],
 body:has(.admin-theme) [role="dialog"] {
