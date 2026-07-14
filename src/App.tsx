@@ -249,7 +249,10 @@ const App = () => (
                 <Route path="preventivi" element={<AdminQuotes />} />
                 <Route path="preventivi/nuovo" element={<CreaPreventivo />} />
                 <Route path="preventivi/modifica" element={<CreaPreventivo />} />
+                <Route path="preventivi/contabilita" element={<CreaContabilita />} />
+                <Route path="preventivi/contabilita/modifica" element={<CreaContabilita />} />
                 <Route path="clienti" element={<AdminCustomers />} />
+
                 <Route path="magazzino" element={<AdminInventory />} />
                 <Route path="catalogo" element={<AdminCatalog />} />
                 <Route path="catalogo/marche" element={<CatalogBrands />} />
