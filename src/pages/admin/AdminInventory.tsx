@@ -220,7 +220,7 @@ const AdminInventory = () => {
         actions={
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+              <Button size="sm" className="bg-white text-[#0F172A] hover:bg-white/90">
                 <Plus className="w-4 h-4 mr-2" />
                 Nuovo Movimento
               </Button>

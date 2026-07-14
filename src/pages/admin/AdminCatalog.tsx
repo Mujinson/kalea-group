@@ -242,7 +242,7 @@ const AdminCatalog = () => {
             <Button variant="secondary" size="sm" onClick={() => setOpenSupplierDialog(true)} className="bg-white/15 hover:bg-white/25 text-white border-0">
               <Building2 className="w-4 h-4 mr-2" /> Nuovo fornitore
             </Button>
-            <Button size="sm" onClick={openNew} className="bg-white text-[#1E1B4B] hover:bg-white/90">
+            <Button size="sm" onClick={openNew} className="bg-white text-[#0F172A] hover:bg-white/90">
               <Plus className="w-4 h-4 mr-2" /> Nuovo prodotto
             </Button>
           </>
@@ -309,7 +309,7 @@ const AdminCatalog = () => {
               return (
                 <TableRow key={p.id}>
                   <TableCell className="font-mono text-xs">{p.product_code}</TableCell>
-                  <TableCell className="text-sm whitespace-nowrap font-medium" style={{ color: "#8C7B6B" }}>{p.brand || "—"}</TableCell>
+                  <TableCell className="text-sm whitespace-nowrap font-medium" style={{ color: "#64748B" }}>{p.brand || "—"}</TableCell>
                   <TableCell>
                     <div className="font-medium">{p.name}</div>
                     {p.product_categories?.name && <div className="text-xs" style={{ color: "#8A7060" }}>{p.product_categories.name}</div>}

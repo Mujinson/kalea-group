@@ -672,7 +672,7 @@ const AdminSales = () => {
         actions={
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90"><Plus className="w-4 h-4 mr-2" />Nuova Vendita</Button>
+              <Button size="sm" className="bg-white text-[#0F172A] hover:bg-white/90"><Plus className="w-4 h-4 mr-2" />Nuova Vendita</Button>
             </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>

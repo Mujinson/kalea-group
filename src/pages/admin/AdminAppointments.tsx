@@ -136,7 +136,7 @@ const AdminAppointments = () => {
         title="Appuntamenti"
         subtitle="Chiamate, videochiamate e visite"
         actions={
-          <Button onClick={() => setCreateOpen(true)} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+          <Button onClick={() => setCreateOpen(true)} size="sm" className="bg-white text-[#0F172A] hover:bg-white/90">
             <Plus className="w-4 h-4 mr-2" /> Nuovo Appuntamento
           </Button>
         }

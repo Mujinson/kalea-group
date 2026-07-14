@@ -158,14 +158,14 @@ const AdminCantieri = () => {
         title="Cantieri"
         subtitle="Gestione progetti, posa e installazioni"
         actions={
-          <Button onClick={() => { resetForm(); setCreateOpen(true); }} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+          <Button onClick={() => { resetForm(); setCreateOpen(true); }} size="sm" className="bg-white text-[#0F172A] hover:bg-white/90">
             <Plus className="w-4 h-4 mr-2" /> Nuovo Cantiere
           </Button>
         }
       />
 
       <CrmKpiRow cols={4}>
-        <div onClick={() => setStatusFilter("all")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "all" ? "ring-2 ring-[#1E1B4B]/40" : "hover:scale-[1.01]"}`}>
+        <div onClick={() => setStatusFilter("all")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "all" ? "ring-2 ring-[#0F172A]/40" : "hover:scale-[1.01]"}`}>
           <CrmKpiTile label="Totale" value={sites?.length || 0} color="indigo" icon={<HardHat className="w-4 h-4" />} />
         </div>
         <div onClick={() => setStatusFilter("attivo")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "attivo" ? "ring-2 ring-green-500/50" : "hover:scale-[1.01]"}`}>
@@ -189,7 +189,7 @@ const AdminCantieri = () => {
             placeholder="Cerca per nome, città, modello…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 border-0 bg-[#F5F0EA]/60"
+            className="pl-10 border-0 bg-[#F1F5F9]/60"
           />
         </div>
       </CrmFilterBar>
@@ -197,7 +197,7 @@ const AdminCantieri = () => {
       <CrmTableCard>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#F5F0EA]/50 border-b border-[#E7E3DA]">
+            <thead className="bg-[#F1F5F9]/50 border-b border-[#E7E3DA]">
               <tr className="text-left">
                 <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">Titolo</th>
                 <th className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#8A7060]">Tipologia</th>

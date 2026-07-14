@@ -229,7 +229,7 @@ const CommercialiSection = () => {
   }[r]);
 
   const roleBadgeBg = (r: Role) => ({
-    admin: '#1E1B4B',
+    admin: '#0F172A',
     commerciale: '#3B82F6',
     operaio: '#8B6F4E',
     ibrido: '#9333EA',
@@ -395,7 +395,7 @@ const CommercialiSection = () => {
                         className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
                         style={u.source === 'salespeople'
                           ? getSalespersonBadgeStyle(u.id)
-                          : { background: '#F0EDE7', color: '#1E1B4B' }}
+                          : { background: '#F0EDE7', color: '#0F172A' }}
                       >
                         {u.first_name} {u.last_name}
                       </span>

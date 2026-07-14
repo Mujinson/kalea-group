@@ -440,7 +440,7 @@ const AdminQuotes = () => {
         title="Preventivi"
         subtitle="Pipeline offerte e trattative"
         actions={
-          <Button onClick={() => navigate('/admin/preventivi/nuovo')} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+          <Button onClick={() => navigate('/admin/preventivi/nuovo')} size="sm" className="bg-white text-[#0F172A] hover:bg-white/90">
             <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
           </Button>
         }
@@ -460,10 +460,10 @@ const AdminQuotes = () => {
       <CrmFilterBar>
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Cerca per cliente o codice…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F5F0EA]/60" />
+          <Input placeholder="Cerca per cliente o codice…" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F1F5F9]/60" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px] border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
+          <SelectTrigger className="w-[180px] border-0 bg-[#F1F5F9]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tutti gli stati</SelectItem>
             {QUOTE_STATUSES.map(s => (

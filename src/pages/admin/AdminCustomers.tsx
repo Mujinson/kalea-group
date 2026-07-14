@@ -236,7 +236,7 @@ const AdminCustomers = () => {
         actions={
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90"><Plus className="w-4 h-4 mr-2" />Nuovo Cliente</Button>
+              <Button size="sm" className="bg-white text-[#0F172A] hover:bg-white/90"><Plus className="w-4 h-4 mr-2" />Nuovo Cliente</Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
@@ -372,17 +372,17 @@ const AdminCustomers = () => {
       <CrmFilterBar>
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input placeholder="Cerca cliente, email, città…" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F5F0EA]/60" />
+          <Input placeholder="Cerca cliente, email, città…" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 border-0 bg-[#F1F5F9]/60" />
         </div>
         <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-full sm:w-40 border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Tipo" /></SelectTrigger>
+          <SelectTrigger className="w-full sm:w-40 border-0 bg-[#F1F5F9]/60"><SelectValue placeholder="Tipo" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tutti i tipi</SelectItem>
             {CUSTOMER_TYPES.map(type => (<SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>))}
           </SelectContent>
         </Select>
         <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-full sm:w-32 border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
+          <SelectTrigger className="w-full sm:w-32 border-0 bg-[#F1F5F9]/60"><SelectValue placeholder="Stato" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Tutti</SelectItem>
             {CUSTOMER_STATUSES.map(s => (<SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>))}
@@ -390,7 +390,7 @@ const AdminCustomers = () => {
         </Select>
         {regions.length > 0 && (
           <Select value={filterRegion} onValueChange={setFilterRegion}>
-            <SelectTrigger className="w-full sm:w-32 border-0 bg-[#F5F0EA]/60"><SelectValue placeholder="Regione" /></SelectTrigger>
+            <SelectTrigger className="w-full sm:w-32 border-0 bg-[#F1F5F9]/60"><SelectValue placeholder="Regione" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tutte</SelectItem>
               {regions.map(r => (<SelectItem key={r} value={r!}>{r}</SelectItem>))}

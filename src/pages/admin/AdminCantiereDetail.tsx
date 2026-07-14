@@ -375,7 +375,7 @@ const AdminCantiereDetail = () => {
       </div>
 
       {/* Riepilogo economico */}
-      <Card className="bg-gradient-to-br from-[#1E1B4B] to-[#312E81] text-white border-0">
+      <Card className="bg-gradient-to-br from-[#0F172A] to-[#312E81] text-white border-0">
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-4">
             <div>

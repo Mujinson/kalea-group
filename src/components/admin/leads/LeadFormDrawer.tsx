@@ -181,16 +181,16 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
       <SheetContent side="right" className="w-full sm:max-w-3xl overflow-y-auto p-0">
-        <div className="sticky top-0 z-20 bg-white border-b border-[#E5E2DD] px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 z-20 bg-white border-b border-[#E5E7EB] px-6 py-4 flex items-center justify-between">
           <div>
-            <div className="text-[11px] uppercase tracking-widest text-[#8C7B6B]">Lead · {isEdit ? 'Modifica' : 'Nuovo'}</div>
-            <SheetTitle className="text-[22px] font-semibold text-[#1E1B4B] mt-0.5">
+            <div className="text-[11px] uppercase tracking-widest text-[#64748B]">Lead · {isEdit ? 'Modifica' : 'Nuovo'}</div>
+            <SheetTitle className="text-[22px] font-semibold text-[#0F172A] mt-0.5">
               {isEdit ? computedName() : 'Nuovo Lead'}
             </SheetTitle>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={onClose}>Annulla</Button>
-            <Button size="sm" onClick={save} disabled={saving || loading} className="bg-[#1E1B4B] hover:bg-[#1E1B4B]/90">
+            <Button size="sm" onClick={save} disabled={saving || loading} className="bg-[#0F172A] hover:bg-[#0F172A]/90">
               {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
               Salva
             </Button>
@@ -198,11 +198,11 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-[#1E1B4B]" /></div>
+          <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-[#0F172A]" /></div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-0">
             {/* MAIN */}
-            <div className="p-6 space-y-6 border-r border-[#E5E2DD]">
+            <div className="p-6 space-y-6 border-r border-[#E5E7EB]">
               {/* Provenienza & lingua */}
               <section className="space-y-3">
                 <SectionTitle>Provenienza</SectionTitle>
@@ -287,7 +287,7 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
 
                 <label className="flex items-center gap-3 pt-2">
                   <Switch checked={!!form.visited_showroom} onCheckedChange={(v) => set('visited_showroom', v)} />
-                  <span className="text-sm text-[#1E1B4B]">Ha visitato la sala mostra</span>
+                  <span className="text-sm text-[#0F172A]">Ha visitato la sala mostra</span>
                 </label>
               </section>
 
@@ -298,13 +298,13 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
                   <Input value={form.project_name || ''} onChange={(e) => set('project_name', e.target.value)} />
                 </Field>
 
-                <div className="space-y-2 border border-[#E5E2DD] rounded-lg p-4">
-                  <div className="text-[13px] font-medium text-[#1E1B4B]">Indirizzo cantiere</div>
+                <div className="space-y-2 border border-[#E5E7EB] rounded-lg p-4">
+                  <div className="text-[13px] font-medium text-[#0F172A]">Indirizzo cantiere</div>
                   <AddressGrid prefix="site_" form={form} set={set} />
                   <button
                     type="button"
                     onClick={copyContactToSite}
-                    className="inline-flex items-center gap-1.5 text-[13px] text-[#1E1B4B] hover:text-[#1E1B4B]/70 mt-1"
+                    className="inline-flex items-center gap-1.5 text-[13px] text-[#0F172A] hover:text-[#0F172A]/70 mt-1"
                   >
                     <Copy className="w-3.5 h-3.5" /> Copia indirizzo dal contatto
                   </button>
@@ -316,7 +316,7 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
 
                 <label className="flex items-center gap-3">
                   <Switch checked={!!form.has_thermal_insulation} onCheckedChange={(v) => set('has_thermal_insulation', v)} />
-                  <span className="text-sm text-[#1E1B4B]">Ha un isolamento termico</span>
+                  <span className="text-sm text-[#0F172A]">Ha un isolamento termico</span>
                 </label>
               </section>
 
@@ -327,9 +327,9 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
             </div>
 
             {/* SIDEBAR */}
-            <div className="p-6 space-y-5 bg-[#FAF7F2]">
+            <div className="p-6 space-y-5 bg-[#F8FAFC]">
               <div className="space-y-2">
-                <div className="text-[11px] uppercase tracking-widest text-[#8C7B6B]">Stato <span className="text-red-500">*</span></div>
+                <div className="text-[11px] uppercase tracking-widest text-[#64748B]">Stato <span className="text-red-500">*</span></div>
                 <Select value={form.status} onValueChange={(v) => set('status', v)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -346,7 +346,7 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
               </div>
 
               <div className="space-y-2">
-                <div className="text-[11px] uppercase tracking-widest text-[#8C7B6B]">Segnalatore</div>
+                <div className="text-[11px] uppercase tracking-widest text-[#64748B]">Segnalatore</div>
                 <Select value={form.referrer_id || ''} onValueChange={(v) => set('referrer_id', v === '__none' ? '' : v)}>
                   <SelectTrigger><SelectValue placeholder="Seleziona un'opzione" /></SelectTrigger>
                   <SelectContent>
@@ -359,7 +359,7 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
               </div>
 
               <div className="space-y-2">
-                <div className="text-[11px] uppercase tracking-widest text-[#8C7B6B]">Responsabile <span className="text-red-500">*</span></div>
+                <div className="text-[11px] uppercase tracking-widest text-[#64748B]">Responsabile <span className="text-red-500">*</span></div>
                 <Select value={form.assigned_salesperson_id || ''} onValueChange={(v) => set('assigned_salesperson_id', v === '__none' ? '' : v)}>
                   <SelectTrigger><SelectValue placeholder="Seleziona" /></SelectTrigger>
                   <SelectContent>
@@ -372,7 +372,7 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
               </div>
 
               <div className="space-y-2">
-                <div className="text-[11px] uppercase tracking-widest text-[#8C7B6B]">Assegna a utente</div>
+                <div className="text-[11px] uppercase tracking-widest text-[#64748B]">Assegna a utente</div>
                 <Select value={form.assigned_user_id || ''} onValueChange={(v) => set('assigned_user_id', v === '__none' ? '' : v)}>
                   <SelectTrigger><SelectValue placeholder="Nessuno" /></SelectTrigger>
                   <SelectContent>
@@ -382,7 +382,7 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-[11px] text-[#8C7B6B]">Riceverà una notifica.</p>
+                <p className="text-[11px] text-[#64748B]">Riceverà una notifica.</p>
               </div>
             </div>
           </div>
@@ -394,14 +394,14 @@ export default function LeadFormDrawer({ open, onClose, leadId, onSaved }: Props
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="text-[15px] font-semibold text-[#1E1B4B] border-b border-[#E5E2DD] pb-2">{children}</h3>
+    <h3 className="text-[15px] font-semibold text-[#0F172A] border-b border-[#E5E7EB] pb-2">{children}</h3>
   );
 }
 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-[13px] text-[#1E1B4B]">
+      <Label className="text-[13px] text-[#0F172A]">
         {label}{required && <span className="text-red-500 ml-0.5">*</span>}
       </Label>
       {children}
@@ -415,7 +415,7 @@ function TypeButton({ active, onClick, icon, label }: { active: boolean; onClick
       type="button"
       onClick={onClick}
       className={`inline-flex items-center gap-2 px-4 h-10 rounded-lg border text-[13px] font-medium transition ${
-        active ? 'bg-[#1E1B4B] text-white border-[#1E1B4B]' : 'bg-white text-[#1E1B4B] border-[#E5E2DD] hover:border-[#1E1B4B]'
+        active ? 'bg-[#0F172A] text-white border-[#0F172A]' : 'bg-white text-[#0F172A] border-[#E5E7EB] hover:border-[#0F172A]'
       }`}
     >
       {icon} {label}

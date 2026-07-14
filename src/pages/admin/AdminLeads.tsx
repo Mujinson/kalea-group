@@ -190,7 +190,7 @@ export default function AdminLeads() {
             <Button onClick={exportCsv} size="sm" variant="secondary" className="bg-white/15 hover:bg-white/25 text-white border-0">
               <Download className="w-4 h-4 mr-2" />Esporta
             </Button>
-            <Button onClick={() => { setEditingId(null); setFormOpen(true); }} size="sm" className="bg-white text-[#1E1B4B] hover:bg-white/90">
+            <Button onClick={() => { setEditingId(null); setFormOpen(true); }} size="sm" className="bg-white text-[#0F172A] hover:bg-white/90">
               <Plus className="w-4 h-4 mr-2" />Nuovo
             </Button>
           </>
@@ -207,10 +207,10 @@ export default function AdminLeads() {
 
       <CrmTableCard>
         {/* Toolbar */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E5E2DD]">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E5E7EB]">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8C7B6B]" />
-            <Input placeholder="Cerca codice, nome, email, città…" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 bg-[#F5F0EA]/60 border-0" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#64748B]" />
+            <Input placeholder="Cerca codice, nome, email, città…" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 bg-[#F1F5F9]/60 border-0" />
           </div>
 
           {/* Filter popover */}
@@ -219,13 +219,13 @@ export default function AdminLeads() {
               <Button variant="outline" size="sm" className="relative">
                 <FilterIcon className="w-4 h-4 mr-2" />Filtri
                 {activeFilterCount > 0 && (
-                  <span className="ml-2 inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-[#1E1B4B] text-white text-[10px]">{activeFilterCount}</span>
+                  <span className="ml-2 inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-[#0F172A] text-white text-[10px]">{activeFilterCount}</span>
                 )}
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-[520px] p-4">
               <div className="flex items-center justify-between mb-3">
-                <div className="text-[14px] font-semibold text-[#1E1B4B]">Filtri</div>
+                <div className="text-[14px] font-semibold text-[#0F172A]">Filtri</div>
                 <button onClick={resetFilters} className="text-[12px] text-[#DC2626] hover:underline">Reimposta</button>
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -295,12 +295,12 @@ export default function AdminLeads() {
               <Button variant="outline" size="sm"><Columns3 className="w-4 h-4 mr-2" />Colonne</Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-64 p-3">
-              <div className="text-[13px] font-semibold text-[#1E1B4B] mb-2">Colonne visibili</div>
+              <div className="text-[13px] font-semibold text-[#0F172A] mb-2">Colonne visibili</div>
               <div className="space-y-1.5 max-h-[320px] overflow-y-auto">
                 {ALL_COLUMNS.map((c) => (
-                  <label key={c.key} className="flex items-center gap-2 py-1 px-2 rounded hover:bg-[#F5F0EA] cursor-pointer">
+                  <label key={c.key} className="flex items-center gap-2 py-1 px-2 rounded hover:bg-[#F1F5F9] cursor-pointer">
                     <Checkbox checked={visibleCols.includes(c.key)} onCheckedChange={() => toggleCol(c.key)} disabled={c.sticky} />
-                    <span className="text-[13px] text-[#1E1B4B]">{c.label}</span>
+                    <span className="text-[13px] text-[#0F172A]">{c.label}</span>
                   </label>
                 ))}
               </div>
@@ -312,45 +312,45 @@ export default function AdminLeads() {
         <div className="overflow-x-auto">
           <table className="w-full text-[13px]">
             <thead>
-              <tr className="border-b border-[#E5E2DD] bg-[#FAF7F2]">
+              <tr className="border-b border-[#E5E7EB] bg-[#F8FAFC]">
                 {ALL_COLUMNS.filter((c) => visibleCols.includes(c.key)).map((c) => (
-                  <th key={c.key} className="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-[#8C7B6B] font-semibold">{c.label}</th>
+                  <th key={c.key} className="text-left px-4 py-3 text-[11px] uppercase tracking-wider text-[#64748B] font-semibold">{c.label}</th>
                 ))}
                 <th className="w-10" />
               </tr>
             </thead>
             <tbody>
               {isLoading && (
-                <tr><td colSpan={visibleCols.length + 1} className="text-center py-12 text-[#8C7B6B]">Caricamento…</td></tr>
+                <tr><td colSpan={visibleCols.length + 1} className="text-center py-12 text-[#64748B]">Caricamento…</td></tr>
               )}
               {!isLoading && filtered.length === 0 && (
-                <tr><td colSpan={visibleCols.length + 1} className="text-center py-12 text-[#8C7B6B]">Nessun lead trovato con i filtri correnti.</td></tr>
+                <tr><td colSpan={visibleCols.length + 1} className="text-center py-12 text-[#64748B]">Nessun lead trovato con i filtri correnti.</td></tr>
               )}
               {filtered.map((l: any) => {
                 const display = l.contact_type === 'privato'
                   ? `${l.first_name || ''} ${l.last_name || ''}`.trim() || l.name
                   : l.name;
                 return (
-                  <tr key={l.id} className="border-b border-[#F0EDE8] hover:bg-[#FAF7F2] cursor-pointer" onClick={() => setDetailId(l.id)}>
-                    {visibleCols.includes('code') && <td className="px-4 py-3"><span className="inline-flex items-center px-2 py-0.5 rounded bg-[#F5F0EA] text-[11px] font-mono text-[#1E1B4B]">{l.code || '—'}</span></td>}
-                    {visibleCols.includes('name') && <td className="px-4 py-3 font-medium text-[#1E1B4B]">{display}</td>}
-                    {visibleCols.includes('company_name') && <td className="px-4 py-3 text-[#6B6258]">{l.company_name || '—'}</td>}
+                  <tr key={l.id} className="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] cursor-pointer" onClick={() => setDetailId(l.id)}>
+                    {visibleCols.includes('code') && <td className="px-4 py-3"><span className="inline-flex items-center px-2 py-0.5 rounded bg-[#F1F5F9] text-[11px] font-mono text-[#0F172A]">{l.code || '—'}</span></td>}
+                    {visibleCols.includes('name') && <td className="px-4 py-3 font-medium text-[#0F172A]">{display}</td>}
+                    {visibleCols.includes('company_name') && <td className="px-4 py-3 text-[#475569]">{l.company_name || '—'}</td>}
                     {visibleCols.includes('status') && <td className="px-4 py-3"><LeadStatusBadge status={l.status} /></td>}
                     {visibleCols.includes('responsibile') && (
                       <td className="px-4 py-3">
                         {l.assigned_salesperson_id
                           ? <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium" style={getSalespersonBadgeStyle(l.assigned_salesperson_id)}>{spName(l.assigned_salesperson_id)}</span>
-                          : <span className="text-[#8C7B6B]">—</span>}
+                          : <span className="text-[#64748B]">—</span>}
                       </td>
                     )}
-                    {visibleCols.includes('created_at') && <td className="px-4 py-3 text-[#8C7B6B]">{format(new Date(l.created_at), 'd MMM yyyy · HH:mm', { locale: it })}</td>}
-                    {visibleCols.includes('email') && <td className="px-4 py-3 text-[#6B6258]">{l.email || '—'}</td>}
-                    {visibleCols.includes('phone') && <td className="px-4 py-3 text-[#6B6258]">{l.phone || '—'}</td>}
-                    {visibleCols.includes('contact_type') && <td className="px-4 py-3 text-[#6B6258] capitalize">{l.contact_type || '—'}</td>}
-                    {visibleCols.includes('city') && <td className="px-4 py-3 text-[#6B6258]">{l.city || '—'}</td>}
-                    {visibleCols.includes('source') && <td className="px-4 py-3 text-[#6B6258]">{sourceLabel(l.source)}</td>}
-                    {visibleCols.includes('project_name') && <td className="px-4 py-3 text-[#6B6258]">{l.project_name || '—'}</td>}
-                    {visibleCols.includes('last_interaction_at') && <td className="px-4 py-3 text-[#8C7B6B]">{l.last_interaction_at ? format(new Date(l.last_interaction_at), 'd MMM yyyy', { locale: it }) : '—'}</td>}
+                    {visibleCols.includes('created_at') && <td className="px-4 py-3 text-[#64748B]">{format(new Date(l.created_at), 'd MMM yyyy · HH:mm', { locale: it })}</td>}
+                    {visibleCols.includes('email') && <td className="px-4 py-3 text-[#475569]">{l.email || '—'}</td>}
+                    {visibleCols.includes('phone') && <td className="px-4 py-3 text-[#475569]">{l.phone || '—'}</td>}
+                    {visibleCols.includes('contact_type') && <td className="px-4 py-3 text-[#475569] capitalize">{l.contact_type || '—'}</td>}
+                    {visibleCols.includes('city') && <td className="px-4 py-3 text-[#475569]">{l.city || '—'}</td>}
+                    {visibleCols.includes('source') && <td className="px-4 py-3 text-[#475569]">{sourceLabel(l.source)}</td>}
+                    {visibleCols.includes('project_name') && <td className="px-4 py-3 text-[#475569]">{l.project_name || '—'}</td>}
+                    {visibleCols.includes('last_interaction_at') && <td className="px-4 py-3 text-[#64748B]">{l.last_interaction_at ? format(new Date(l.last_interaction_at), 'd MMM yyyy', { locale: it }) : '—'}</td>}
                     <td className="px-2 py-3" onClick={(e) => e.stopPropagation()}>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -399,7 +399,7 @@ export default function AdminLeads() {
 function FilterField({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1">
-      <div className="text-[12px] text-[#8C7B6B]">{label}</div>
+      <div className="text-[12px] text-[#64748B]">{label}</div>
       {children}
     </div>
   );
