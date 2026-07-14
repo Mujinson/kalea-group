@@ -467,6 +467,73 @@ body:has(.admin-theme.dark) [role="dialog"] * {
   border-color: var(--crm-border);
 }
 
+/* Broader dark text mapping — swap only near-black/near-white text, keep colored text (green/red/blue/etc.) */
+.admin-theme.dark .text-black,
+.admin-theme.dark .text-slate-900,
+.admin-theme.dark .text-slate-800,
+.admin-theme.dark .text-gray-900,
+.admin-theme.dark .text-gray-800,
+.admin-theme.dark .text-neutral-900,
+.admin-theme.dark .text-neutral-800,
+.admin-theme.dark .text-zinc-900,
+.admin-theme.dark .text-zinc-800,
+.admin-theme.dark .text-stone-900,
+.admin-theme.dark .text-stone-800,
+.admin-theme.dark .text-foreground {
+  color: var(--crm-ink) !important;
+}
+.admin-theme.dark .text-slate-700,
+.admin-theme.dark .text-slate-600,
+.admin-theme.dark .text-gray-700,
+.admin-theme.dark .text-gray-600,
+.admin-theme.dark .text-neutral-700,
+.admin-theme.dark .text-neutral-600,
+.admin-theme.dark .text-zinc-700,
+.admin-theme.dark .text-zinc-600,
+.admin-theme.dark .text-muted-foreground {
+  color: var(--crm-ink-muted) !important;
+}
+
+/* Broader dark surface mapping — light neutral backgrounds → dark surfaces */
+.admin-theme.dark .bg-slate-50,
+.admin-theme.dark .bg-slate-100,
+.admin-theme.dark .bg-gray-50,
+.admin-theme.dark .bg-gray-100,
+.admin-theme.dark .bg-neutral-50,
+.admin-theme.dark .bg-neutral-100,
+.admin-theme.dark .bg-zinc-50,
+.admin-theme.dark .bg-zinc-100,
+.admin-theme.dark .bg-stone-50,
+.admin-theme.dark .bg-stone-100,
+.admin-theme.dark .bg-background,
+.admin-theme.dark .bg-card,
+.admin-theme.dark .bg-popover,
+.admin-theme.dark .bg-muted {
+  background-color: var(--crm-surface) !important;
+}
+
+/* Broader dark border mapping */
+.admin-theme.dark .border-slate-200,
+.admin-theme.dark .border-slate-100,
+.admin-theme.dark .border-gray-200,
+.admin-theme.dark .border-gray-100,
+.admin-theme.dark .border-neutral-200,
+.admin-theme.dark .border-neutral-100,
+.admin-theme.dark .border-border,
+.admin-theme.dark .border-input {
+  border-color: var(--crm-border) !important;
+}
+
+/* Sidebar footer/content force */
+.admin-theme.dark [data-sidebar],
+.admin-theme.dark [data-sidebar="content"],
+.admin-theme.dark [data-sidebar="footer"],
+.admin-theme.dark [data-sidebar="header"] {
+  background-color: var(--crm-surface) !important;
+}
+
+
+
 
 
 
