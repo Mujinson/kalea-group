@@ -119,6 +119,8 @@ import PricingParquet from "./pages/admin/strumenti/PricingParquet";
 import PricingSignature from "./pages/admin/strumenti/PricingSignature";
 import PricingExterno from "./pages/admin/strumenti/PricingExterno";
 import CreaPreventivo from "./pages/admin/strumenti/CreaPreventivo";
+import CreaContabilita from "./pages/admin/strumenti/CreaContabilita";
+
 import CommercialeApp from "./pages/role-app/CommercialeApp";
 import OperaioApp from "./pages/role-app/OperaioApp";
 import IbridoApp from "./pages/role-app/IbridoApp";
