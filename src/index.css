@@ -364,6 +364,9 @@ body:has(.admin-theme.dark) [role="dialog"] {
   --border: 222 30% 20%;
   --input: 222 30% 22%;
   color: var(--crm-ink);
+}
+
+
 
 
 /* Inherit tokens inside portals (popovers, sheets, dialogs) opened from admin */
