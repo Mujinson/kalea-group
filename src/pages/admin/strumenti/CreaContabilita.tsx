@@ -201,6 +201,32 @@ const TIPI_INFO: { tipo: TipoModulo; titolo: string; desc: string; icona: string
 const eur = (n: number) =>
   new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(Number.isFinite(n) ? n : 0);
 
+// ─── Catalogo ─────────────────────────────────────────────────────────────────
+
+export type CatalogProdotto = {
+  product_code: string;
+  name: string;
+  collection: string;
+  format: string;
+  list_price: number;
+  supplier_discount_percentage: number;
+  brand_name: string;
+};
+
+const BADGE_STYLES: Record<string, { bg: string; fg: string }> = {
+  "Flow": { bg: "#E6F1FB", fg: "#0C447C" },
+  "Kronos": { bg: "#FCE4EC", fg: "#880E4F" },
+  "Kronos Ceramiche": { bg: "#FCE4EC", fg: "#880E4F" },
+  "BerryAlloc": { bg: "#FAEEDA", fg: "#633806" },
+  "WoodCo": { bg: "#FFF3E0", fg: "#7B3A10" },
+  "Parquet Woodco": { bg: "#FFF3E0", fg: "#7B3A10" },
+  "Interno": { bg: "#EAF3DE", fg: "#27500A" },
+  "Manuale": { bg: "#F1EFE8", fg: "#444441" },
+};
+const badgeStyle = (badge: string) =>
+  BADGE_STYLES[badge] ?? { bg: "#F1EFE8", fg: "#444441" };
+
+
 // ─── Componente ──────────────────────────────────────────────────────────────
 
 export default function CreaContabilita() {
@@ -225,6 +251,30 @@ export default function CreaContabilita() {
 
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"contabilita" | "preventivo">("contabilita");
+  const [catalogProdotti, setCatalogProdotti] = useState<CatalogProdotto[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("catalog_products")
+      .select("product_code, name, collection, format, list_price, supplier_discount_percentage, is_active, catalog_brands(name)")
+      .eq("is_active", true)
+      .gt("list_price", 0)
+      .order("name")
+      .then(({ data }) => {
+        if (data) {
+          setCatalogProdotti(data.map((p: any) => ({
+            product_code: p.product_code,
+            name: p.name,
+            collection: p.collection ?? "",
+            format: p.format ?? "",
+            list_price: Number(p.list_price) || 0,
+            supplier_discount_percentage: Number(p.supplier_discount_percentage) || 0,
+            brand_name: (p.catalog_brands as any)?.name ?? "Altro",
+          })));
+        }
+      });
+  }, []);
+
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("edit");
   const navigate = useNavigate();
@@ -447,25 +497,36 @@ export default function CreaContabilita() {
       <div className="max-w-6xl mx-auto p-4 space-y-4">
         {activeTab === "contabilita" ? (
           <>
-            {moduli.map((m) => (
-              <div key={m.id} className="bg-white rounded-lg border border-gray-200 p-5">
-                <h3 className="font-heading text-lg mb-2" style={{ color: "#3B2314" }}>
-                  {m.titolo}
-                </h3>
-                <p className="text-xs text-gray-500">
-                  Modulo <code>{m.tipo}</code> — griglia righe implementata nei prompt successivi.
-                </p>
-              </div>
-            ))}
+            {moduli.map((modulo, idx) => {
+              if (modulo.tipo === "fornitura_posa" || modulo.tipo === "solo_fornitura") {
+                return (
+                  <ModuloFornituraSection
+                    key={modulo.id}
+                    modulo={modulo}
+                    catalogProdotti={catalogProdotti}
+                    onChange={(updated) =>
+                      setModuli(prev => prev.map((m, i) => i === idx ? updated : m))
+                    }
+                    onDelete={() =>
+                      setModuli(prev => prev.filter((_, i) => i !== idx))
+                    }
+                  />
+                );
+              }
+              return (
+                <div key={modulo.id} style={{ border: "1px dashed #ccc", borderRadius: 8, padding: 16 }}>
+                  <div className="text-sm font-medium mb-1" style={{ color: "#3B2314" }}>{modulo.titolo}</div>
+                  <div className="text-xs text-gray-500">Modulo <code>{modulo.tipo}</code> — da implementare</div>
+                </div>
+              );
+            })}
 
-            <div className="bg-white rounded-lg border border-gray-200 p-5">
-              <h3 className="font-heading text-lg mb-2" style={{ color: "#3B2314" }}>
-                Servizi comuni
-              </h3>
-              <p className="text-xs text-gray-500">
-                Trasporto, sopralluogo, smaltimento — implementati nei prompt successivi.
-              </p>
-            </div>
+            <ServiziComuniSection
+              righe={serviziComuni}
+              onChange={setServiziComuni}
+              catalogProdotti={catalogProdotti}
+            />
+
 
             <div className="flex flex-wrap gap-2 pt-2">
               <span className="text-sm text-gray-600 self-center">+ Aggiungi modulo:</span>
@@ -527,3 +588,503 @@ function Metric({ label, value, valueClass = "text-gray-900" }: { label: string;
     </div>
   );
 }
+
+// ─── ModuloFornituraSection ──────────────────────────────────────────────────
+
+type ModuloFornituraProps = {
+  modulo: Modulo;
+  onChange: (updated: Modulo) => void;
+  onDelete: () => void;
+  catalogProdotti: CatalogProdotto[];
+};
+
+function ModuloFornituraSection({ modulo, onChange, onDelete, catalogProdotti }: ModuloFornituraProps) {
+  const isFP = modulo.tipo === "fornitura_posa";
+  const conf = modulo.confFornitura ?? { mqRiferimento: 0, sfrido: 5 };
+
+  const updateRiga = (idx: number, patch: Partial<RigaContabilita>) => {
+    onChange({
+      ...modulo,
+      righe: modulo.righe.map((r, i) => i === idx ? { ...r, ...patch } : r),
+    });
+  };
+  const deleteRiga = (idx: number) => {
+    onChange({ ...modulo, righe: modulo.righe.filter((_, i) => i !== idx) });
+  };
+  const addRiga = (r: Omit<RigaContabilita, "id">) => {
+    onChange({ ...modulo, righe: [...modulo.righe, { id: genId(), ...r }] });
+  };
+
+  const totaleClienteRighe = modulo.righe.reduce((s, r) => s + totalClienteRiga(r), 0);
+  const incidenza = isFP && conf.mqRiferimento > 0 ? totaleClienteRighe / conf.mqRiferimento : 0;
+
+  const handleDelete = () => {
+    if (confirm(`Eliminare il modulo "${modulo.titolo}"?`)) onDelete();
+  };
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 overflow-visible">
+      {/* Header */}
+      <div className="flex items-center gap-3 p-4 border-b border-gray-100 flex-wrap">
+        <span
+          className="w-3 h-3 rounded-full flex-shrink-0"
+          style={{ background: isFP ? "#3B82F6" : "#9CA3AF" }}
+        />
+        <input
+          type="text"
+          value={modulo.titolo}
+          onChange={(e) => onChange({ ...modulo, titolo: e.target.value })}
+          className="flex-1 min-w-[200px] border-0 border-b border-transparent hover:border-gray-200 focus:border-blue-400 focus:outline-none text-base font-medium py-1 bg-transparent"
+          style={{ color: "#3B2314" }}
+        />
+        {isFP && (
+          <>
+            <label className="text-xs text-gray-500 flex items-center gap-1">
+              mq
+              <input
+                type="number"
+                value={conf.mqRiferimento || ""}
+                onChange={(e) => onChange({ ...modulo, confFornitura: { ...conf, mqRiferimento: Number(e.target.value) || 0 } })}
+                className="w-20 border border-gray-200 rounded px-2 py-1 text-sm"
+                placeholder="0"
+                step="0.1"
+              />
+            </label>
+            <label className="text-xs text-gray-500 flex items-center gap-1">
+              sfrido %
+              <input
+                type="number"
+                value={conf.sfrido}
+                onChange={(e) => onChange({ ...modulo, confFornitura: { ...conf, sfrido: Number(e.target.value) || 0 } })}
+                className="w-16 border border-gray-200 rounded px-2 py-1 text-sm"
+              />
+            </label>
+          </>
+        )}
+        {isFP && conf.mqRiferimento > 0 && (
+          <span className="text-xs bg-blue-50 text-blue-700 rounded px-2 py-1 font-medium">
+            Incidenza: {eur(incidenza)}/mq
+          </span>
+        )}
+        <button
+          onClick={() => onChange({ ...modulo, collapsed: !modulo.collapsed })}
+          className="text-gray-500 hover:text-gray-800 px-2"
+          title={modulo.collapsed ? "Espandi" : "Riduci"}
+        >
+          {modulo.collapsed ? "▸" : "▾"}
+        </button>
+        <button
+          onClick={handleDelete}
+          className="text-gray-400 hover:text-red-600 px-2"
+          title="Elimina modulo"
+        >
+          ×
+        </button>
+      </div>
+
+      {!modulo.collapsed && (
+        <div className="p-4">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm" style={{ tableLayout: "fixed" }}>
+              <colgroup>
+                <col style={{ width: "24%" }} />
+                <col style={{ width: "5%" }} />
+                <col style={{ width: "6%" }} />
+                <col style={{ width: "8%" }} />
+                <col style={{ width: "5%" }} />
+                <col style={{ width: "8%" }} />
+                <col style={{ width: "8%" }} />
+                <col style={{ width: "5%" }} />
+                <col style={{ width: "8%" }} />
+                <col style={{ width: "9%" }} />
+                <col style={{ width: "4%" }} />
+              </colgroup>
+              <thead>
+                <tr className="text-[10px] uppercase tracking-wider text-gray-500">
+                  <th className="text-left pb-2 pr-2">Descrizione</th>
+                  <th className="text-right pb-2 px-1">UM</th>
+                  <th className="text-right pb-2 px-1">Qt</th>
+                  <th className="text-right pb-2 px-1">Listino €</th>
+                  <th className="text-right pb-2 px-1">Sc%</th>
+                  <th className="text-right pb-2 px-1">C. netto</th>
+                  <th className="text-right pb-2 px-1">Spese Kalēa</th>
+                  <th className="text-right pb-2 px-1">Ric%</th>
+                  <th className="text-right pb-2 px-1">Pr.cliente</th>
+                  <th className="text-right pb-2 px-1">Tot.cliente</th>
+                  <th className="pb-2"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {modulo.righe.map((r, idx) => {
+                  const bs = badgeStyle(r.badge);
+                  const cn = costoNettoRiga(r);
+                  const sp = speseTotRiga(r);
+                  const pc = prezzoClienteRiga(r);
+                  const tc = totalClienteRiga(r);
+                  return (
+                    <tr key={r.id} className="border-t border-gray-100">
+                      <td className="py-1 pr-2">
+                        <div className="flex items-center gap-1">
+                          <span
+                            className="text-[9px] px-1.5 py-0.5 rounded font-medium flex-shrink-0"
+                            style={{ background: bs.bg, color: bs.fg }}
+                          >
+                            {r.badge}
+                          </span>
+                          <input
+                            type="text"
+                            value={r.desc}
+                            onChange={(e) => updateRiga(idx, { desc: e.target.value })}
+                            className="flex-1 min-w-0 border border-gray-200 rounded px-2 py-1 text-xs"
+                          />
+                        </div>
+                      </td>
+                      <td className="py-1 px-1">
+                        <select
+                          value={r.um}
+                          onChange={(e) => updateRiga(idx, { um: e.target.value })}
+                          className="w-full border border-gray-200 rounded px-1 py-1 text-xs"
+                        >
+                          {["Mq", "Ml", "Kg", "N", "Km", "Ora", "Giorno"].map(u => (
+                            <option key={u} value={u}>{u}</option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="py-1 px-1">
+                        <input
+                          type="number"
+                          value={r.qt}
+                          min={0}
+                          step={0.1}
+                          onChange={(e) => updateRiga(idx, { qt: Number(e.target.value) || 0 })}
+                          className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right"
+                        />
+                      </td>
+                      <td className="py-1 px-1">
+                        <input
+                          type="number"
+                          value={r.listino}
+                          min={0}
+                          step={0.01}
+                          onChange={(e) => updateRiga(idx, { listino: Number(e.target.value) || 0 })}
+                          className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right"
+                        />
+                      </td>
+                      <td className="py-1 px-1">
+                        <input
+                          type="number"
+                          value={r.sconto}
+                          min={0}
+                          max={100}
+                          onChange={(e) => updateRiga(idx, { sconto: Number(e.target.value) || 0 })}
+                          className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right"
+                        />
+                      </td>
+                      <td className="py-1 px-1">
+                        <div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums text-gray-700">
+                          {cn.toFixed(2)}
+                        </div>
+                      </td>
+                      <td className="py-1 px-1">
+                        <div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums text-gray-700">
+                          {sp.toFixed(2)}
+                        </div>
+                      </td>
+                      <td className="py-1 px-1">
+                        <input
+                          type="number"
+                          value={r.ricarico}
+                          onChange={(e) => updateRiga(idx, { ricarico: Number(e.target.value) || 0 })}
+                          className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right"
+                        />
+                      </td>
+                      <td className="py-1 px-1">
+                        <div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums text-gray-700">
+                          {pc.toFixed(2)}
+                        </div>
+                      </td>
+                      <td className="py-1 px-1">
+                        <div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums font-semibold text-gray-900">
+                          {tc.toFixed(2)}
+                        </div>
+                      </td>
+                      <td className="py-1 text-center">
+                        <button
+                          onClick={() => deleteRiga(idx)}
+                          className="text-gray-300 hover:text-red-600 text-sm"
+                          title="Elimina riga"
+                        >
+                          ×
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {modulo.righe.length === 0 && (
+                  <tr>
+                    <td colSpan={11} className="text-center text-xs text-gray-400 py-4">
+                      Nessuna riga. Aggiungi dal catalogo o manualmente.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pulsanti aggiungi riga */}
+          <div className="flex flex-wrap gap-2 mt-3">
+            <CatalogPickerButton
+              catalogProdotti={catalogProdotti}
+              onPick={(p) => addRiga({
+                desc: p.name + (p.format ? ` ${p.format}` : ""),
+                badge: p.brand_name,
+                badgeColor: "auto",
+                um: "Mq",
+                qt: isFP ? (conf.mqRiferimento * (1 + conf.sfrido / 100) || 1) : 1,
+                listino: p.list_price,
+                sconto: p.supplier_discount_percentage,
+                ricarico: 100,
+              })}
+            />
+            <AddRowBtn onClick={() => addRiga({ desc: "", badge: "Manuale", badgeColor: "gray", um: "Mq", qt: 1, listino: 0, sconto: 0, ricarico: 30 })}>
+              + Riga manuale
+            </AddRowBtn>
+            {isFP && (
+              <>
+                <AddRowBtn onClick={() => addRiga({ desc: "Posa", badge: "Interno", badgeColor: "green", um: "Mq", qt: conf.mqRiferimento || 1, listino: 9, sconto: 0, ricarico: 122 })}>
+                  + Posa
+                </AddRowBtn>
+                <AddRowBtn onClick={() => addRiga({ desc: "Tappetino", badge: "Interno", badgeColor: "green", um: "Mq", qt: conf.mqRiferimento || 1, listino: 1.5, sconto: 0, ricarico: 100 })}>
+                  + Tappetino
+                </AddRowBtn>
+              </>
+            )}
+            <AddRowBtn onClick={() => addRiga({ desc: "Collante", badge: "Manuale", badgeColor: "gray", um: "Kg", qt: 1, listino: 2.3, sconto: 55, ricarico: 30 })}>
+              + Collante
+            </AddRowBtn>
+            <AddRowBtn onClick={() => addRiga({ desc: "Battiscopa", badge: "Manuale", badgeColor: "gray", um: "Ml", qt: 1, listino: 6.3, sconto: 55, ricarico: 30 })}>
+              + Battiscopa
+            </AddRowBtn>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AddRowBtn({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="text-xs border border-dashed border-gray-300 rounded px-3 py-1.5 text-gray-600 hover:border-blue-400 hover:text-blue-600 transition"
+    >
+      {children}
+    </button>
+  );
+}
+
+// ─── CatalogPicker ────────────────────────────────────────────────────────────
+
+function CatalogPickerButton({
+  catalogProdotti,
+  onPick,
+}: {
+  catalogProdotti: CatalogProdotto[];
+  onPick: (p: CatalogProdotto) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  const filtered = useMemo(() => {
+    const s = q.trim().toLowerCase();
+    if (!s) return catalogProdotti.slice(0, 50);
+    return catalogProdotti.filter(p =>
+      p.name.toLowerCase().includes(s) ||
+      p.collection.toLowerCase().includes(s) ||
+      p.brand_name.toLowerCase().includes(s)
+    ).slice(0, 80);
+  }, [q, catalogProdotti]);
+
+  return (
+    <div className="relative" ref={wrapRef}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="text-xs border border-dashed border-blue-300 rounded px-3 py-1.5 text-blue-700 hover:bg-blue-50 transition"
+      >
+        + Dal catalogo…
+      </button>
+      {open && (
+        <div className="absolute z-40 mt-1 w-[420px] max-w-[90vw] bg-white border border-gray-200 rounded-lg shadow-lg">
+          <div className="p-2 border-b border-gray-100">
+            <input
+              autoFocus
+              type="text"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Cerca prodotto, collezione o brand…"
+              className="w-full border border-gray-200 rounded px-2 py-1.5 text-sm"
+            />
+          </div>
+          <div className="max-h-80 overflow-y-auto">
+            {filtered.length === 0 ? (
+              <div className="p-4 text-xs text-gray-400 text-center">Nessun prodotto trovato</div>
+            ) : (
+              filtered.map((p, i) => {
+                const bs = badgeStyle(p.brand_name);
+                return (
+                  <button
+                    key={`${p.product_code}-${i}`}
+                    onClick={() => { onPick(p); setOpen(false); setQ(""); }}
+                    className="w-full text-left px-3 py-2 hover:bg-gray-50 border-b border-gray-50 last:border-0"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="text-[9px] px-1.5 py-0.5 rounded font-medium"
+                        style={{ background: bs.bg, color: bs.fg }}
+                      >
+                        {p.brand_name}
+                      </span>
+                      <span className="text-sm font-medium truncate flex-1" style={{ color: "#3B2314" }}>
+                        {p.name}
+                      </span>
+                      <span className="text-xs text-gray-600 tabular-nums">
+                        {eur(p.list_price)}/mq
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-gray-500 mt-0.5">
+                      {[p.collection, p.format].filter(Boolean).join(" · ")}
+                      {p.supplier_discount_percentage > 0 && ` · sc ${p.supplier_discount_percentage}%`}
+                    </div>
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── ServiziComuniSection ────────────────────────────────────────────────────
+
+function ServiziComuniSection({
+  righe,
+  onChange,
+  catalogProdotti,
+}: {
+  righe: RigaContabilita[];
+  onChange: (r: RigaContabilita[]) => void;
+  catalogProdotti: CatalogProdotto[];
+}) {
+  const updateRiga = (idx: number, patch: Partial<RigaContabilita>) =>
+    onChange(righe.map((r, i) => i === idx ? { ...r, ...patch } : r));
+  const deleteRiga = (idx: number) => onChange(righe.filter((_, i) => i !== idx));
+  const addRiga = (r: Omit<RigaContabilita, "id">) =>
+    onChange([...righe, { id: genId(), ...r }]);
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="w-3 h-3 rounded-full" style={{ background: "#8A7060" }} />
+        <h3 className="font-medium" style={{ color: "#3B2314" }}>Servizi comuni</h3>
+        <span className="text-xs text-gray-500">Trasporto, sopralluogo, smaltimento…</span>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm" style={{ tableLayout: "fixed" }}>
+          <colgroup>
+            <col style={{ width: "24%" }} />
+            <col style={{ width: "5%" }} />
+            <col style={{ width: "6%" }} />
+            <col style={{ width: "8%" }} />
+            <col style={{ width: "5%" }} />
+            <col style={{ width: "8%" }} />
+            <col style={{ width: "8%" }} />
+            <col style={{ width: "5%" }} />
+            <col style={{ width: "8%" }} />
+            <col style={{ width: "9%" }} />
+            <col style={{ width: "4%" }} />
+          </colgroup>
+          <thead>
+            <tr className="text-[10px] uppercase tracking-wider text-gray-500">
+              <th className="text-left pb-2 pr-2">Descrizione</th>
+              <th className="text-right pb-2 px-1">UM</th>
+              <th className="text-right pb-2 px-1">Qt</th>
+              <th className="text-right pb-2 px-1">Listino €</th>
+              <th className="text-right pb-2 px-1">Sc%</th>
+              <th className="text-right pb-2 px-1">C. netto</th>
+              <th className="text-right pb-2 px-1">Spese Kalēa</th>
+              <th className="text-right pb-2 px-1">Ric%</th>
+              <th className="text-right pb-2 px-1">Pr.cliente</th>
+              <th className="text-right pb-2 px-1">Tot.cliente</th>
+              <th className="pb-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {righe.map((r, idx) => {
+              const bs = badgeStyle(r.badge);
+              return (
+                <tr key={r.id} className="border-t border-gray-100">
+                  <td className="py-1 pr-2">
+                    <div className="flex items-center gap-1">
+                      <span className="text-[9px] px-1.5 py-0.5 rounded font-medium flex-shrink-0" style={{ background: bs.bg, color: bs.fg }}>{r.badge}</span>
+                      <input type="text" value={r.desc} onChange={(e) => updateRiga(idx, { desc: e.target.value })} className="flex-1 min-w-0 border border-gray-200 rounded px-2 py-1 text-xs" />
+                    </div>
+                  </td>
+                  <td className="py-1 px-1">
+                    <select value={r.um} onChange={(e) => updateRiga(idx, { um: e.target.value })} className="w-full border border-gray-200 rounded px-1 py-1 text-xs">
+                      {["Mq", "Ml", "Kg", "N", "Km", "Ora", "Giorno"].map(u => <option key={u} value={u}>{u}</option>)}
+                    </select>
+                  </td>
+                  <td className="py-1 px-1"><input type="number" value={r.qt} min={0} step={0.1} onChange={(e) => updateRiga(idx, { qt: Number(e.target.value) || 0 })} className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right" /></td>
+                  <td className="py-1 px-1"><input type="number" value={r.listino} min={0} step={0.01} onChange={(e) => updateRiga(idx, { listino: Number(e.target.value) || 0 })} className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right" /></td>
+                  <td className="py-1 px-1"><input type="number" value={r.sconto} min={0} max={100} onChange={(e) => updateRiga(idx, { sconto: Number(e.target.value) || 0 })} className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right" /></td>
+                  <td className="py-1 px-1"><div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums text-gray-700">{costoNettoRiga(r).toFixed(2)}</div></td>
+                  <td className="py-1 px-1"><div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums text-gray-700">{speseTotRiga(r).toFixed(2)}</div></td>
+                  <td className="py-1 px-1"><input type="number" value={r.ricarico} onChange={(e) => updateRiga(idx, { ricarico: Number(e.target.value) || 0 })} className="w-full border border-gray-200 rounded px-1 py-1 text-xs text-right" /></td>
+                  <td className="py-1 px-1"><div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums text-gray-700">{prezzoClienteRiga(r).toFixed(2)}</div></td>
+                  <td className="py-1 px-1"><div className="bg-gray-50 border border-gray-200 rounded px-1 py-1 text-xs text-right tabular-nums font-semibold text-gray-900">{totalClienteRiga(r).toFixed(2)}</div></td>
+                  <td className="py-1 text-center">
+                    <button onClick={() => deleteRiga(idx)} className="text-gray-300 hover:text-red-600 text-sm">×</button>
+                  </td>
+                </tr>
+              );
+            })}
+            {righe.length === 0 && (
+              <tr><td colSpan={11} className="text-center text-xs text-gray-400 py-3">Nessun servizio comune.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+      <div className="flex flex-wrap gap-2 mt-3">
+        <CatalogPickerButton
+          catalogProdotti={catalogProdotti}
+          onPick={(p) => addRiga({
+            desc: p.name + (p.format ? ` ${p.format}` : ""),
+            badge: p.brand_name,
+            badgeColor: "auto",
+            um: "Mq",
+            qt: 1,
+            listino: p.list_price,
+            sconto: p.supplier_discount_percentage,
+            ricarico: 100,
+          })}
+        />
+        <AddRowBtn onClick={() => addRiga({ desc: "", badge: "Manuale", badgeColor: "gray", um: "N", qt: 1, listino: 0, sconto: 0, ricarico: 30 })}>
+          + Riga manuale
+        </AddRowBtn>
+      </div>
+    </div>
+  );
+}
+
