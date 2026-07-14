@@ -70,8 +70,8 @@ const AdminPipeline = () => {
         title="Pipeline Lead"
         subtitle="Gestione fasi di qualificazione"
         actions={
-          <div className="flex items-center gap-1.5 text-sm text-white/85 bg-white/10 rounded-lg px-3 py-1.5">
-            <Thermometer className="w-4 h-4" /> {leads?.length || 0} lead totali
+          <div className="flex items-center gap-1.5 text-[13px] font-medium text-crm-ink-muted bg-crm-bg-soft border border-crm-border rounded-crm-sm px-3 py-1.5">
+            <Thermometer className="w-4 h-4 text-crm-primary" /> {leads?.length || 0} lead totali
           </div>
         }
       />
