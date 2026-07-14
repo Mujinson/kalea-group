@@ -252,7 +252,7 @@ const AdminSidebar = () => {
     items.filter((i) => isAdminRole || !i.adminOnly);
 
   return (
-    <Sidebar collapsible="icon" className="border-r" style={{ borderColor: BORDER_COL }}>
+    <Sidebar collapsible="icon" className="border-r md:!top-14 md:!h-[calc(100svh-3.5rem)]" style={{ borderColor: BORDER_COL }}>
       <SidebarContent
         className="pt-3 overflow-y-auto"
         style={{ background: SIDEBAR_BG }}
