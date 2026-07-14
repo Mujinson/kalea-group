@@ -374,7 +374,7 @@ const AdminSidebar = () => {
 
       <SidebarFooter
         className="p-3"
-        style={{ borderTop: `1px solid ${BORDER_COL}`, background: '#FFFFFF' }}
+        style={{ borderTop: `1px solid ${BORDER_COL}`, background: SIDEBAR_BG }}
       >
         <div className="flex items-center gap-2 px-1 group-data-[collapsible=icon]:hidden">
           <div
