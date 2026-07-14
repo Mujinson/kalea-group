@@ -145,13 +145,17 @@ export default function AdminFatturazione() {
                 </thead>
                 <tbody>
                   {daFatturare.map((q) => (
-                    <tr key={q.id} className="border-t hover:bg-muted/20">
+                    <tr
+                      key={q.id}
+                      className="border-t hover:bg-muted/20 cursor-pointer"
+                      onClick={() => navigate(`/admin/preventivi/modifica?edit=${q.id}`)}
+                    >
                       <td className="p-3 font-medium">{q.quote_number || '—'}<div className="text-xs text-muted-foreground">{q.project_name}</div></td>
                       <td className="p-3">{customerName(q.customer)}</td>
                       <td className="p-3 text-right tabular-nums">{eur(q.total_amount)}</td>
                       <td className="p-3 text-right tabular-nums text-muted-foreground">{eur(q.invoicedTotal)}</td>
                       <td className="p-3 text-right tabular-nums font-semibold">{eur(q.residuo)}</td>
-                      <td className="p-3 text-right">
+                      <td className="p-3 text-right" onClick={(e) => e.stopPropagation()}>
                         <Button size="sm" onClick={() => setInvoiceDialog({ open: true, quote: q })}>
                           <Plus className="w-3 h-3 mr-1" /> Emetti fattura
                         </Button>
