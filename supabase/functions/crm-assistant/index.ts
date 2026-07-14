@@ -352,8 +352,16 @@ async function toolSearchCatalogProducts(
 
   const term = args.query?.trim();
   if (term) {
-    const esc = term.replace(/[,()]/g, ' ');
-    q = q.or(`name.ilike.%${esc}%,brand.ilike.%${esc}%,collection.ilike.%${esc}%`);
+    const words = term
+      .replace(/[,()]/g, ' ')
+      .split(/\s+/)
+      .map((w) => w.trim())
+      .filter((w) => w.length > 0);
+    const fields = ['name', 'brand', 'collection', 'format', 'color', 'finish'];
+    for (const word of words) {
+      const esc = word.replace(/[%,()]/g, ' ');
+      q = q.or(fields.map((f) => `${f}.ilike.%${esc}%`).join(','));
+    }
   }
   if (args.color?.trim()) q = q.ilike('color', `%${args.color.trim()}%`);
   if (args.collection?.trim()) q = q.ilike('collection', `%${args.collection.trim()}%`);
