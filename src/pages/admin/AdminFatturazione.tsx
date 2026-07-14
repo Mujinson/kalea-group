@@ -319,14 +319,19 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
     if (!quote.lead_id || !quote.lead) return null;
 
     const companyName = quote.lead.company_name || quote.lead.name || quote.client_name || 'Cliente da preventivo';
-    const { data: existing } = await supabase
-      .from('customers')
-      .select('id')
-      .or(`company_name.eq.${companyName},email.eq.${quote.lead.email || ''},phone.eq.${quote.lead.phone || ''}`)
-      .limit(1)
-      .maybeSingle();
+    let existingId: string | null = null;
+    const { data: byName } = await supabase.from('customers').select('id').eq('company_name', companyName).maybeSingle();
+    existingId = byName?.id || null;
+    if (!existingId && quote.lead.email) {
+      const { data: byEmail } = await supabase.from('customers').select('id').eq('email', quote.lead.email).maybeSingle();
+      existingId = byEmail?.id || null;
+    }
+    if (!existingId && quote.lead.phone) {
+      const { data: byPhone } = await supabase.from('customers').select('id').eq('phone', quote.lead.phone).maybeSingle();
+      existingId = byPhone?.id || null;
+    }
 
-    const customerId = existing?.id || (await supabase.from('customers').insert({
+    const { data: created, error: createError } = existingId ? { data: null, error: null } : await supabase.from('customers').insert({
       company_name: companyName,
       email: quote.lead.email || null,
       phone: quote.lead.phone || null,
@@ -339,6 +344,8 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
       status: 'opportunity',
       notes: `Creato automaticamente dal preventivo ${quote.quote_number || quote.id}`,
     } as any).select('id').single()).data?.id;
+    if (createError) throw createError;
+    const customerId = existingId || created?.id;
 
     if (customerId) {
       await supabase.from('quotes').update({ customer_id: customerId, client_name: companyName }).eq('id', quote.id);
