@@ -239,10 +239,10 @@ const AdminCatalog = () => {
         subtitle="Listini fornitori, prezzi vendita e regole anti-perdita"
         actions={
           <>
-            <Button variant="secondary" size="sm" onClick={() => setOpenSupplierDialog(true)} className="bg-white/15 hover:bg-white/25 text-white border-0">
+            <Button variant="outline" size="sm" onClick={() => setOpenSupplierDialog(true)} className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
               <Building2 className="w-4 h-4 mr-2" /> Nuovo fornitore
             </Button>
-            <Button size="sm" onClick={openNew} className="bg-white text-[#0F172A] hover:bg-white/90">
+            <Button size="sm" onClick={openNew} className="bg-crm-primary hover:bg-crm-primary-600 text-white shadow-crm-sm">
               <Plus className="w-4 h-4 mr-2" /> Nuovo prodotto
             </Button>
           </>
