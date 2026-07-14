@@ -184,13 +184,13 @@ export default function AdminLeads() {
         subtitle={`${filtered.length} contatt${filtered.length === 1 ? 'o' : 'i'} · pipeline aggiornata`}
         actions={
           <>
-            <Button onClick={() => navigate('/admin/map?layer=leads')} size="sm" variant="secondary" className="bg-white/15 hover:bg-white/25 text-white border-0">
+            <Button onClick={() => navigate('/admin/map?layer=leads')} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
               <MapPin className="w-4 h-4 mr-2" />Mappa
             </Button>
-            <Button onClick={exportCsv} size="sm" variant="secondary" className="bg-white/15 hover:bg-white/25 text-white border-0">
+            <Button onClick={exportCsv} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
               <Download className="w-4 h-4 mr-2" />Esporta
             </Button>
-            <Button onClick={() => { setEditingId(null); setFormOpen(true); }} size="sm" className="bg-white text-[#0F172A] hover:bg-white/90">
+            <Button onClick={() => { setEditingId(null); setFormOpen(true); }} size="sm" className="bg-crm-primary hover:bg-crm-primary-600 text-white shadow-crm-sm">
               <Plus className="w-4 h-4 mr-2" />Nuovo
             </Button>
           </>
