@@ -286,8 +286,22 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
   const [dueDate, setDueDate] = useState('');
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (!open || !quote) return;
+    const rawRate = Number(quote.vat_rate);
+    const derivedRate = Number(quote.total_amount) > 0 && Number(quote.vat_amount) > 0
+      ? (Number(quote.vat_amount) / (Number(quote.total_amount) - Number(quote.vat_amount))) * 100
+      : 22;
+    setVatRate(Number.isFinite(rawRate) && rawRate > 0 ? (rawRate <= 1 ? rawRate * 100 : rawRate) : derivedRate);
+    setScheme('100_anticipo');
+    setTrancheType('unico');
+    setPct(100);
+    setDescription('');
+    setDueDate('');
+  }, [open, quote?.id]);
+
   const baseAmount = Number(quote?.total_amount || 0);
-  const subtotal = Math.round((baseAmount * pct) / 100 * 100) / 100;
+  const subtotal = Math.round(((baseAmount / (1 + (Number(vatRate) || 0) / 100)) * pct) / 100 * 100) / 100;
   const vatAmount = Math.round((subtotal * vatRate) / 100 * 100) / 100;
   const total = subtotal + vatAmount;
 
@@ -302,6 +316,7 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
 
   const save = async () => {
     if (!quote) return;
+    if (!quote.customer_id) { toast.error('Preventivo senza cliente CRM collegato'); return; }
     setSaving(true);
     const { data: user } = await supabase.auth.getUser();
     const { error } = await supabase.from('customer_invoices' as any).insert({
