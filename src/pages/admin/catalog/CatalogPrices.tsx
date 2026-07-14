@@ -186,9 +186,19 @@ export default function CatalogPrices() {
 
 
   const runBulk = async () => {
-    if (selected.size === 0) { toast.error('Nessun prodotto selezionato'); return; }
-    const ids = Array.from(selected);
-    const affected = rows.filter(r => selected.has(r.id));
+    let targetIds: string[];
+    if (selected.size > 0) {
+      targetIds = Array.from(selected);
+    } else {
+      if (filtered.length === 0) { toast.error('Nessun prodotto da modificare'); return; }
+      const ok = window.confirm(`Nessuna selezione. Applicare a tutti i ${filtered.length} risultati filtrati?`);
+      if (!ok) return;
+      targetIds = filtered.map(r => r.id);
+    }
+    const idSet = new Set(targetIds);
+    const ids = targetIds;
+    const affected = rows.filter(r => idSet.has(r.id));
+
 
     // snapshot for undo
     const snapshot = affected.map(r => ({
