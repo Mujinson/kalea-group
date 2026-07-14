@@ -78,9 +78,9 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex flex-col w-full admin-theme bg-[#F6F7FB]">
+      <div className={`min-h-screen flex flex-col w-full admin-theme ${isDark ? 'dark' : ''}`} style={{ background: 'var(--crm-bg)' }}>
         {/* TOP BAR — Monday/Attio bright, sticky */}
-        <header className="h-14 flex items-center px-3 md:px-5 gap-2 shrink-0 bg-white border-b border-crm-border sticky top-0 z-30">
+        <header className="h-14 flex items-center px-3 md:px-5 gap-2 shrink-0 bg-crm-surface border-b border-crm-border sticky top-0 z-30">
           <SidebarTrigger className="text-crm-ink-muted hover:bg-crm-bg-soft hover:text-crm-ink" />
 
           {/* Brand */}
