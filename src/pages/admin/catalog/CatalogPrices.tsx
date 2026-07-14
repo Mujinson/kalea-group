@@ -11,7 +11,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search, Undo2, Loader2, Download } from 'lucide-react';
-import { exportCSV } from '@/lib/exports';
+import { exportCSV, exportXLSX } from '@/lib/exports';
 
 type Product = {
   id: string;
