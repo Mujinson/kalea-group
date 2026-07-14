@@ -241,6 +241,85 @@ type CrmRecord = {
   email: string;
 };
 
+const emptyCliente = () => ({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+const defaultPagamenti = () => ([
+  { label:"Acconto", pct:30, data:"", note:"" },
+  { label:"A metà lavori", pct:40, data:"", note:"" },
+  { label:"Saldo finale", pct:30, data:"", note:"" },
+]);
+
+const crmNameFromCustomer = (c: any) => (c?.company_name || `${c?.first_name || ""} ${c?.last_name || ""}`.trim() || "").trim();
+const crmNameFromLead = (l: any) => (l?.company_name || l?.name || "").trim();
+
+const crmRecordFromQuote = (q: any): CrmRecord | null => {
+  if (q?.customer_id && q.customer) {
+    const nome = crmNameFromCustomer(q.customer);
+    return {
+      source: "customer",
+      id: q.customer_id,
+      label: nome || q.client_name || "—",
+      sub: [q.customer.email, q.customer.phone, q.customer.city].filter(Boolean).join(" · "),
+      nome: nome || q.client_name || "",
+      indirizzo: q.customer.address || "",
+      citta: q.customer.city || "",
+      telefono: q.customer.phone || "",
+      email: q.customer.email || "",
+    };
+  }
+  if (q?.lead_id && q.lead) {
+    const nome = crmNameFromLead(q.lead);
+    return {
+      source: "lead",
+      id: q.lead_id,
+      label: nome || q.client_name || "—",
+      sub: [q.lead.email, q.lead.phone, q.lead.city].filter(Boolean).join(" · "),
+      nome: nome || q.client_name || "",
+      indirizzo: q.lead.address || "",
+      citta: q.lead.city || "",
+      telefono: q.lead.phone || "",
+      email: q.lead.email || "",
+    };
+  }
+  return null;
+};
+
+const normalizeQuoteStatus = (status: string | null | undefined) => {
+  const s = String(status || "").toLowerCase();
+  const statusMapRev: any = {
+    draft: "bozza", bozza: "bozza",
+    sent: "inviato", inviato: "inviato",
+    accepted: "accettato", accettato: "accettato", approved: "accettato", approvato: "accettato", converted: "accettato",
+    rejected: "rifiutato", rifiutato: "rifiutato", expired: "rifiutato",
+  };
+  return statusMapRev[s] || "bozza";
+};
+
+const syncRowsWithCanonicalTotal = (rows: any[], quoteData: any, q: any, ivaRate: number, sconto: number) => {
+  const tableTotal = Number(q?.total_amount || 0);
+  const payloadTotal = Number(quoteData?.calc?.totaleIva || 0);
+  if (!tableTotal || !payloadTotal || Math.abs(tableTotal - payloadTotal) < 0.01) return rows;
+  if (rows.some((r: any) => r?.__crmTotalAdjustment || r?.__adjustment)) return rows;
+
+  const factor = (1 - (Number(sconto) || 0) / 100) * (1 + (Number(ivaRate) || 0) / 100);
+  const deltaLordo = factor > 0 ? (tableTotal - payloadTotal) / factor : (tableTotal - payloadTotal);
+  const rounded = Math.round(deltaLordo * 100) / 100;
+  if (Math.abs(rounded) < 0.01) return rows;
+
+  return [...rows, {
+    id: Date.now() + Math.random(),
+    desc: "Adeguamento commerciale per totale CRM",
+    qta: 1,
+    unita: "a corpo",
+    costoUn: 0,
+    prezzoUn: rounded,
+    sfridoPct: 0,
+    scontoPct: 0,
+    scontoEur: null,
+    __adjustment: true,
+    __crmTotalAdjustment: true,
+  }];
+};
+
 function ClienteSearch({ onSelect, selected, onClear }: {
   onSelect: (r: CrmRecord) => void;
   selected: CrmRecord | null;
@@ -1102,7 +1181,7 @@ export default function CreaPreventivo() {
   const t = T[lingua];
   const [numPrev, setNumPrev] = useState("");
   const [dataPrev, setDataPrev] = useState(today());
-  const [cliente, setCliente] = useState({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+  const [cliente, setCliente] = useState(emptyCliente());
   const [crmLink, setCrmLink] = useState<CrmRecord | null>(null);
   const [cantiere, setCantiere] = useState("");
   const [noteCliente, setNoteCliente] = useState("");
@@ -1114,11 +1193,7 @@ export default function CreaPreventivo() {
   const hasErr = (k: string) => errors.has(k);
   const errStyle = (k: string) => hasErr(k) ? { borderColor: "#DC2626", boxShadow: "0 0 0 2px rgba(220,38,38,.15)" } : {};
 
-  const [pagamenti, setPagamenti] = useState<any[]>([
-    { label:"Acconto", pct:30, data:"", note:"" },
-    { label:"A metà lavori", pct:40, data:"", note:"" },
-    { label:"Saldo finale", pct:30, data:"", note:"" },
-  ]);
+  const [pagamenti, setPagamenti] = useState<any[]>(defaultPagamenti());
 
   // CONDIZIONI DI FORNITURA
   const [ivaRate, setIvaRate] = useState<number>(22);
@@ -1133,12 +1208,30 @@ export default function CreaPreventivo() {
       // Nuovo preventivo: reset stato per evitare di ereditare dati precedenti
       setPreventivoId(null);
       setNumPrev("");
-      setCliente({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+      setCliente(emptyCliente());
       setCrmLink(null);
       setCantiere("");
       setProdotto(null);
+      setComplessita("media");
+      setMqPrev(50);
+      setSfrido(10);
+      setIncPosa(true);
+      setIncTapp(false);
+      setIncTrasporto(false);
+      setKmDist(0);
+      setSconto(0);
       setRigheMat([]);
+      setArticoli([]);
+      setAccessori([]);
+      setServizi([]);
       setOverrides({});
+      setTonalita([]);
+      setWcSel(emptyWoodcoSelection);
+      setPagamenti(defaultPagamenti());
+      setIvaRate(22);
+      setMetodoTrasporto("Trasporto a cura Kalēa");
+      setTempiConsegna("");
+      setTipoPagamento("Bonifico bancario");
       setNoteCliente("");
       setNoteInterne("");
       setStato("bozza");
@@ -1228,28 +1321,54 @@ export default function CreaPreventivo() {
         // Reset stato prima di popolare col nuovo preventivo (evita mix con quello precedente)
         setPreventivoId(null);
         setProdotto(null);
+        setComplessita("media");
+        setMqPrev(50);
+        setSfrido(10);
+        setIncPosa(true);
+        setIncTapp(false);
+        setIncTrasporto(false);
+        setKmDist(0);
+        setSconto(0);
         setRigheMat([]);
+        setArticoli([]);
+        setAccessori([]);
+        setServizi([]);
         setOverrides({});
         setCrmLink(null);
-        setCliente({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+        setCliente(emptyCliente());
         setCantiere("");
+        setTonalita([]);
+        setWcSel(emptyWoodcoSelection);
+        setPagamenti(defaultPagamenti());
+        setIvaRate(22);
+        setMetodoTrasporto("Trasporto a cura Kalēa");
+        setTempiConsegna("");
+        setTipoPagamento("Bonifico bancario");
         setNoteCliente("");
         setNoteInterne("");
 
-        const { data: q } = await supabase.from("quotes").select("*").eq("id", editId).maybeSingle();
+        const { data: q } = await supabase
+          .from("quotes")
+          .select("*, customer:customers(id,first_name,last_name,company_name,email,phone,address,city), lead:leads(id,name,company_name,email,phone,address,city)")
+          .eq("id", editId)
+          .maybeSingle();
         if (cancelled) return;
         if (!q) {
           toast.error("Preventivo non trovato", { id: tId });
           return;
         }
-        const statusMapRev: any = { draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato" };
+        const linkedCrm = crmRecordFromQuote(q);
         setPreventivoId(q.id);
         setNumPrev(q.quote_number || "");
-        if (q.status) { const st = statusMapRev[q.status] || "bozza"; setStato(st); if (st === "accettato") setStep(3); else setStep(1); }
+        if (q.status) { const st = normalizeQuoteStatus(q.status); setStato(st); if (st === "accettato") setStep(3); else setStep(1); }
         if (q.project_name) setCantiere(q.project_name);
         const d: any = q.quote_data || {};
         if (d.lingua) setLingua(d.lingua);
-        if (d.cliente) setCliente(d.cliente);
+        const canonicalCliente = linkedCrm
+          ? { ...emptyCliente(), ...(d.cliente || {}), nome: linkedCrm.nome, indirizzo: linkedCrm.indirizzo, citta: linkedCrm.citta, telefono: linkedCrm.telefono, email: linkedCrm.email }
+          : { ...emptyCliente(), ...(d.cliente || {}), nome: (q.client_name || d?.cliente?.nome || "") };
+        setCliente(canonicalCliente);
+        setCrmLink(linkedCrm);
         if (d.prodotto) setProdotto(d.prodotto);
         if (d.complessita) setComplessita(d.complessita);
         if (typeof d.mqPrev === "number") setMqPrev(d.mqPrev);
@@ -1259,14 +1378,17 @@ export default function CreaPreventivo() {
         if (typeof d.incTapp === "boolean") setIncTapp(d.incTapp);
         if (typeof d.incTrasporto === "boolean") setIncTrasporto(d.incTrasporto);
         if (typeof d.kmDist === "number") setKmDist(d.kmDist);
-        if (Array.isArray(d.righeMat)) setRigheMat(d.righeMat);
+        const loadedIvaRate = typeof d.ivaRate === "number" ? d.ivaRate : (q.vat_rate ? Number(q.vat_rate) * 100 : 22);
+        const loadedSconto = typeof d.sconto === "number" ? d.sconto : 0;
+        const loadedRows = syncRowsWithCanonicalTotal(Array.isArray(d.righeMat) ? d.righeMat : [], d, q, loadedIvaRate, loadedSconto);
+        setRigheMat(loadedRows);
         if (d.catalog) {
           if (Array.isArray(d.catalog.articoli)) setArticoli(d.catalog.articoli);
           if (Array.isArray(d.catalog.accessori)) setAccessori(d.catalog.accessori);
           if (Array.isArray(d.catalog.servizi)) setServizi(d.catalog.servizi);
         }
         if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
-        if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
+        setIvaRate(loadedIvaRate);
         if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
         if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
         if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
@@ -1419,9 +1541,12 @@ export default function CreaPreventivo() {
       if (!numPrev) setNumPrev(num);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Devi effettuare il login per salvare il preventivo");
+      const clienteSnapshot = crmLink
+        ? { ...cliente, nome: crmLink.nome || crmLink.label || cliente.nome, indirizzo: crmLink.indirizzo || cliente.indirizzo, citta: crmLink.citta || cliente.citta, telefono: crmLink.telefono || cliente.telefono, email: crmLink.email || cliente.email }
+        : cliente;
       // Dettaglio completo del preventivo, salvato dentro quotes.quote_data
       const quoteData: any = {
-        cliente, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
+        cliente: clienteSnapshot, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
         ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
@@ -1485,14 +1610,14 @@ export default function CreaPreventivo() {
         ].filter(Boolean),
         created_by: user.email || user.id,
         project_name: cantiere || null,
-        site_address: cliente.indirizzo || null,
-        site_city: cliente.citta || null,
+        site_address: clienteSnapshot.indirizzo || null,
+        site_city: clienteSnapshot.citta || null,
         transport_method: metodoTrasporto || null,
         delivery_time: tempiConsegna || null,
         payment_type: tipoPagamento || null,
         payment_terms_text: (pagamenti || []).map((p: any) => `${p.label}: ${p.pct}%`).join(" · ") || null,
         subject: prodotto ? `${prodotto.fornitore} — ${prodotto.nome}` : null,
-        client_name: (crmLink?.label || crmLink?.nome || cliente.nome) || null,
+        client_name: (crmLink?.label || crmLink?.nome || clienteSnapshot.nome) || null,
         quote_data: quoteData,
       };
 

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -70,7 +70,7 @@ export default function AdminFatturazione() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('quotes')
-        .select('id, quote_number, project_name, total_amount, status, customer_id, customer:customers(id, first_name, last_name, company_name), created_at')
+        .select('id, quote_number, project_name, total_amount, vat_amount, vat_rate, status, customer_id, client_name, lead_id, customer:customers(id, first_name, last_name, company_name), lead:leads(id, name, company_name, email, phone, address, city, province, region, country), created_at')
         .in('status', ['accettato', 'accepted', 'approved', 'approvato'])
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -104,6 +104,9 @@ export default function AdminFatturazione() {
   }, [acceptedQuotes, invoices]);
 
   const customerName = (c: any) => c?.company_name || `${c?.first_name || ''} ${c?.last_name || ''}`.trim() || '—';
+  const quoteCustomerName = (q: any) => customerName(q?.customer) !== '—'
+    ? customerName(q.customer)
+    : (q?.lead?.company_name || q?.lead?.name || q?.client_name || '—');
 
   return (
     <div className="space-y-4">
@@ -151,7 +154,7 @@ export default function AdminFatturazione() {
                       onClick={() => navigate(`/admin/preventivi/modifica?edit=${q.id}`)}
                     >
                       <td className="p-3 font-medium">{q.quote_number || '—'}<div className="text-xs text-muted-foreground">{q.project_name}</div></td>
-                      <td className="p-3">{customerName(q.customer)}</td>
+                      <td className="p-3">{quoteCustomerName(q)}</td>
                       <td className="p-3 text-right tabular-nums">{eur(q.total_amount)}</td>
                       <td className="p-3 text-right tabular-nums text-muted-foreground">{eur(q.invoicedTotal)}</td>
                       <td className="p-3 text-right tabular-nums font-semibold">{eur(q.residuo)}</td>
@@ -251,7 +254,11 @@ export default function AdminFatturazione() {
         open={invoiceDialog.open}
         quote={invoiceDialog.quote}
         onClose={() => setInvoiceDialog({ open: false })}
-        onSaved={() => { qc.invalidateQueries({ queryKey: ['customer_invoices'] }); }}
+        onSaved={() => {
+          qc.invalidateQueries({ queryKey: ['customer_invoices'] });
+          qc.invalidateQueries({ queryKey: ['customer_payments'] });
+          qc.invalidateQueries({ queryKey: ['accepted_quotes_for_invoicing'] });
+        }}
       />
       <PaymentDialog
         open={paymentDialog.open}
@@ -260,6 +267,7 @@ export default function AdminFatturazione() {
         onSaved={() => {
           qc.invalidateQueries({ queryKey: ['customer_invoices'] });
           qc.invalidateQueries({ queryKey: ['customer_payments'] });
+          qc.invalidateQueries({ queryKey: ['accepted_quotes_for_invoicing'] });
         }}
       />
     </div>
@@ -278,8 +286,22 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
   const [dueDate, setDueDate] = useState('');
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (!open || !quote) return;
+    const rawRate = Number(quote.vat_rate);
+    const derivedRate = Number(quote.total_amount) > 0 && Number(quote.vat_amount) > 0
+      ? (Number(quote.vat_amount) / (Number(quote.total_amount) - Number(quote.vat_amount))) * 100
+      : 22;
+    setVatRate(Number.isFinite(rawRate) && rawRate > 0 ? (rawRate <= 1 ? rawRate * 100 : rawRate) : derivedRate);
+    setScheme('100_anticipo');
+    setTrancheType('unico');
+    setPct(100);
+    setDescription('');
+    setDueDate('');
+  }, [open, quote?.id]);
+
   const baseAmount = Number(quote?.total_amount || 0);
-  const subtotal = Math.round((baseAmount * pct) / 100 * 100) / 100;
+  const subtotal = Math.round(((baseAmount / (1 + (Number(vatRate) || 0) / 100)) * pct) / 100 * 100) / 100;
   const vatAmount = Math.round((subtotal * vatRate) / 100 * 100) / 100;
   const total = subtotal + vatAmount;
 
@@ -292,12 +314,55 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
     }
   };
 
+  const ensureCustomerId = async () => {
+    if (quote.customer_id) return quote.customer_id;
+    if (!quote.lead_id || !quote.lead) return null;
+
+    const companyName = quote.lead.company_name || quote.lead.name || quote.client_name || 'Cliente da preventivo';
+    let existingId: string | null = null;
+    const { data: byName } = await supabase.from('customers').select('id').eq('company_name', companyName).maybeSingle();
+    existingId = byName?.id || null;
+    if (!existingId && quote.lead.email) {
+      const { data: byEmail } = await supabase.from('customers').select('id').eq('email', quote.lead.email).maybeSingle();
+      existingId = byEmail?.id || null;
+    }
+    if (!existingId && quote.lead.phone) {
+      const { data: byPhone } = await supabase.from('customers').select('id').eq('phone', quote.lead.phone).maybeSingle();
+      existingId = byPhone?.id || null;
+    }
+
+    const { data: created, error: createError } = existingId
+      ? { data: null, error: null }
+      : await supabase.from('customers').insert({
+      company_name: companyName,
+      email: quote.lead.email || null,
+      phone: quote.lead.phone || null,
+      address: quote.lead.address || null,
+      city: quote.lead.city || null,
+      province: quote.lead.province || null,
+      region: quote.lead.region || null,
+      country: quote.lead.country || 'Italia',
+      customer_type: 'cliente_privato',
+      status: 'opportunity',
+      notes: `Creato automaticamente dal preventivo ${quote.quote_number || quote.id}`,
+    } as any).select('id').single();
+    if (createError) throw createError;
+    const customerId = existingId || created?.id;
+
+    if (customerId) {
+      await supabase.from('quotes').update({ customer_id: customerId, client_name: companyName }).eq('id', quote.id);
+    }
+    return customerId || null;
+  };
+
   const save = async () => {
     if (!quote) return;
     setSaving(true);
+    const customerId = await ensureCustomerId();
+    if (!customerId) { setSaving(false); toast.error('Preventivo senza cliente CRM collegato'); return; }
     const { data: user } = await supabase.auth.getUser();
     const { error } = await supabase.from('customer_invoices' as any).insert({
-      customer_id: quote.customer_id,
+      customer_id: customerId,
       quote_id: quote.id,
       description: description || `${quote.project_name || quote.quote_number} — ${trancheType}`,
       subtotal,
