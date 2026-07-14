@@ -2,6 +2,9 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
 
 // ─── Tipi ────────────────────────────────────────────────────────────────────
 
@@ -320,6 +323,195 @@ export default function CreaContabilita() {
     totaliGlobali.marginePct >= 10 ? "text-amber-600" :
     "text-red-600";
 
+  // ─── PDF ────────────────────────────────────────────────────────────────────
+  const pdfRef = useRef<HTMLDivElement>(null);
+
+  const generaPDF = async () => {
+    if (!pdfRef.current) return;
+    try {
+      toast.loading("Generazione PDF...", { id: "pdf" });
+      const canvas = await html2canvas(pdfRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const ratio = canvas.width / canvas.height;
+      const imgW = pageW - 20;
+      const imgH = imgW / ratio;
+
+      if (imgH <= pageH - 20) {
+        pdf.addImage(imgData, "PNG", 10, 10, imgW, imgH);
+      } else {
+        let remaining = imgH;
+        let srcY = 0;
+        while (remaining > 0) {
+          const sliceH = Math.min(remaining, pageH - 20);
+          (pdf as any).addImage(imgData, "PNG", 10, 10, imgW, imgH, "", "FAST", 0, -srcY);
+          remaining -= sliceH;
+          srcY += sliceH;
+          if (remaining > 0) pdf.addPage();
+        }
+      }
+      const nomeFile = `Preventivo_${numPrev || "bozza"}_${(cliente.nome || "cliente").replace(/\s+/g, "_")}.pdf`;
+      pdf.save(nomeFile);
+      toast.success("PDF scaricato", { id: "pdf" });
+    } catch {
+      toast.error("Errore PDF", { id: "pdf" });
+    }
+  };
+
+  // ─── Salvataggio ────────────────────────────────────────────────────────────
+  const salva = async () => {
+    if (!cliente.nome && moduli.length === 0) {
+      toast.error("Aggiungi almeno un modulo e il nome cliente");
+      return;
+    }
+    setSaving(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Non autenticato");
+
+      let num = numPrev;
+      if (!num) {
+        const year = new Date().getFullYear();
+        const prefix = `KAL-${year}-`;
+        const { data: last } = await supabase
+          .from("quotes")
+          .select("quote_number")
+          .like("quote_number", `${prefix}%`)
+          .order("quote_number", { ascending: false })
+          .limit(1);
+        const lastNum = last?.[0]?.quote_number;
+        const lastN = lastNum ? parseInt(lastNum.replace(prefix, "")) || 0 : 0;
+        num = `${prefix}${String(lastN + 1).padStart(3, "0")}`;
+        setNumPrev(num);
+      }
+
+      const statusMap: Record<string, string> = {
+        bozza: "draft", inviato: "sent", accettato: "accepted", rifiutato: "rejected",
+      };
+
+      const items: any[] = [];
+      moduli.forEach(m => {
+        if (m.tipo === "fornitura_posa" || m.tipo === "solo_fornitura") {
+          m.righe.forEach(r => {
+            items.push({
+              type: m.tipo,
+              modulo_id: m.id,
+              modulo_titolo: m.titolo,
+              descrizione: r.desc,
+              um: r.um,
+              qta: r.qt,
+              prezzo_un: prezzoClienteRiga(r),
+              importo: totalClienteRiga(r),
+              badge: r.badge,
+            });
+          });
+        } else {
+          const t = totaliModulo(m);
+          items.push({
+            type: m.tipo,
+            modulo_id: m.id,
+            modulo_titolo: m.titolo,
+            importo: t.ricavi,
+            conf: m.confLevigatura || m.confVerniciatura || m.confSubappalto,
+          });
+        }
+      });
+      serviziComuni.forEach(r => {
+        items.push({
+          type: "servizio_comune",
+          descrizione: r.desc,
+          um: r.um,
+          qta: r.qt,
+          prezzo_un: prezzoClienteRiga(r),
+          importo: totalClienteRiga(r),
+        });
+      });
+
+      const tot = totaliGlobali;
+      const quotePayload: any = {
+        quote_number: num,
+        status: statusMap[stato] || "draft",
+        client_name: cliente.nome || null,
+        project_name: cantiere || null,
+        total_amount: Math.round(tot.totaleIva * 100) / 100,
+        vat_amount: Math.round(tot.iva * 100) / 100,
+        vat_rate: ivaRate / 100,
+        vat_included: true,
+        notes: noteCliente || null,
+        items,
+        created_by: user.email || user.id,
+        quote_data: {
+          tipo: "contabilita_v2",
+          moduli,
+          serviziComuni,
+          cliente,
+          cantiere,
+          ivaRate,
+          sconto,
+          acconto,
+          noteCliente,
+          noteInterne,
+        },
+      };
+
+      if (preventivoId) {
+        const { error } = await supabase.from("quotes").update(quotePayload).eq("id", preventivoId);
+        if (error) throw error;
+        toast.success("Preventivo aggiornato");
+      } else {
+        const { data, error } = await supabase.from("quotes").insert(quotePayload).select("id").single();
+        if (error) throw error;
+        setPreventivoId(data.id);
+        toast.success("Preventivo salvato");
+      }
+    } catch (e: any) {
+      toast.error("Errore: " + (e?.message || ""));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // ─── Caricamento in edit mode ───────────────────────────────────────────────
+  useEffect(() => {
+    if (!editId) return;
+    (async () => {
+      const { data: q } = await supabase
+        .from("quotes")
+        .select("*")
+        .eq("id", editId)
+        .maybeSingle();
+      if (!q) return;
+      setPreventivoId(q.id);
+      setNumPrev(q.quote_number || "");
+      if (q.status) setStato(normalizeStatus(q.status));
+      if (q.project_name) setCantiere(q.project_name);
+      const d = q.quote_data as any;
+      if (d?.tipo === "contabilita_v2") {
+        if (Array.isArray(d.moduli)) setModuli(d.moduli);
+        if (Array.isArray(d.serviziComuni)) setServiziComuni(d.serviziComuni);
+        if (d.cliente) setCliente(d.cliente);
+        if (typeof d.ivaRate === "number") setIvaRate(d.ivaRate);
+        if (typeof d.sconto === "number") setSconto(d.sconto);
+        if (typeof d.acconto === "number") setAcconto(d.acconto);
+        if (d.noteCliente) setNoteCliente(d.noteCliente);
+        if (d.noteInterne) setNoteInterne(d.noteInterne);
+        setFase("lavoro");
+      } else {
+        setCliente({ nome: q.client_name || "", indirizzo: "", citta: "", telefono: "", email: "" });
+        setFase("lavoro");
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editId]);
+
+
+
   // ─── FASE SELETTORE ─────────────────────────────────────────────────────────
   if (fase === "selettore") {
     return (
@@ -430,11 +622,13 @@ export default function CreaContabilita() {
           </select>
         </div>
         <button
+          onClick={salva}
           disabled={saving}
-          className="bg-blue-600 text-white rounded px-4 py-2 text-sm disabled:opacity-50"
+          className="bg-blue-600 text-white rounded px-4 py-2 text-sm disabled:opacity-50 hover:bg-blue-700 transition"
         >
-          Salva
+          {saving ? "Salvataggio…" : "Salva"}
         </button>
+
       </div>
 
       {/* BARRA CLIENTE */}
@@ -536,10 +730,21 @@ export default function CreaContabilita() {
 
           </>
         ) : (
-          <div className="bg-white rounded-lg border border-gray-200 p-8 text-center text-sm text-gray-500">
-            Vista preventivo cliente — implementata nei prompt successivi.
-          </div>
+          <PreventivoClienteView
+            pdfRef={pdfRef}
+            moduli={moduli}
+            serviziComuni={serviziComuni}
+            cliente={cliente}
+            cantiere={cantiere}
+            numPrev={numPrev}
+            ivaRate={ivaRate}
+            sconto={sconto}
+            noteCliente={noteCliente}
+            totaliGlobali={totaliGlobali}
+            onDownloadPdf={generaPDF}
+          />
         )}
+
       </div>
 
       {/* BARRA TOTALI FISSA */}
@@ -1435,6 +1640,275 @@ function AggiungiModuloButton({ onAdd }: { onAdd: (t: TipoModulo) => void }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function normalizeStatus(s: string): "bozza" | "inviato" | "accettato" | "rifiutato" {
+  const m: Record<string, "bozza" | "inviato" | "accettato" | "rifiutato"> = {
+    draft: "bozza", sent: "inviato", accepted: "accettato", rejected: "rifiutato",
+    bozza: "bozza", inviato: "inviato", accettato: "accettato", rifiutato: "rifiutato",
+  };
+  return m[s] || "bozza";
+}
+
+// ─── Vista Preventivo Cliente ────────────────────────────────────────────────
+
+type ClienteRow = {
+  desc: string;
+  um: string;
+  qta: number | string;
+  prezzoUn: number | null;
+  totale: number;
+  sub?: string;
+};
+
+type ClienteSection = {
+  titolo: string;
+  righe: ClienteRow[];
+};
+
+function buildClienteSections(moduli: Modulo[], serviziComuni: RigaContabilita[]): ClienteSection[] {
+  const sections: ClienteSection[] = [];
+
+  moduli.forEach(m => {
+    if (m.tipo === "fornitura_posa") {
+      const conf = m.confFornitura;
+      const totRighe = m.righe.reduce((s, r) => s + totalClienteRiga(r), 0);
+      if (conf && conf.mqRiferimento > 0) {
+        const incidenza = totRighe / conf.mqRiferimento;
+        const compreso = m.righe.map(r => r.desc).filter(Boolean).join(", ");
+        sections.push({
+          titolo: m.titolo,
+          righe: [{
+            desc: `Fornitura e posa — ${m.titolo}`,
+            um: "Mq",
+            qta: conf.mqRiferimento,
+            prezzoUn: incidenza,
+            totale: totRighe,
+            sub: compreso ? `Comprensivo di: ${compreso}` : undefined,
+          }],
+        });
+      } else {
+        sections.push({
+          titolo: m.titolo,
+          righe: m.righe.map(r => ({
+            desc: r.desc, um: r.um, qta: r.qt,
+            prezzoUn: prezzoClienteRiga(r), totale: totalClienteRiga(r),
+          })),
+        });
+      }
+    } else if (m.tipo === "solo_fornitura") {
+      sections.push({
+        titolo: m.titolo,
+        righe: m.righe.map(r => ({
+          desc: r.desc, um: r.um, qta: r.qt,
+          prezzoUn: prezzoClienteRiga(r), totale: totalClienteRiga(r),
+        })),
+      });
+    } else if (m.tipo === "levigatura" && m.confLevigatura) {
+      const c = m.confLevigatura;
+      const prMq = c.costoInternoMq * (1 + c.ricarico / 100);
+      sections.push({
+        titolo: m.titolo,
+        righe: [{
+          desc: `Levigatura ${c.tipo} pavimento`,
+          um: "Mq", qta: c.mq, prezzoUn: prMq, totale: prMq * c.mq,
+        }],
+      });
+    } else if (m.tipo === "verniciatura_pulizia" && m.confVerniciatura) {
+      const c = m.confVerniciatura;
+      const prV = c.costoInternoMq * (1 + c.ricarico / 100);
+      const righe: ClienteRow[] = [{
+        desc: `Verniciatura ${c.tipoProdotto} — ${c.mani} mani`,
+        um: "Mq", qta: c.mq, prezzoUn: prV, totale: prV * c.mq,
+      }];
+      if (c.includePulizia) {
+        const prP = c.costoInternoPuliziaMq * (1 + c.ricaricoPulizia / 100);
+        righe.push({
+          desc: "Pulizia fine cantiere",
+          um: "Mq", qta: c.mq, prezzoUn: prP, totale: prP * c.mq,
+        });
+      }
+      sections.push({ titolo: m.titolo, righe });
+    } else if (m.tipo === "subappalto" && m.confSubappalto) {
+      const c = m.confSubappalto;
+      const base = c.modalita === "ore" ? c.ore * c.persone * c.tariffaOra : c.forfait;
+      const tot = base * (1 + c.ricarico / 100);
+      sections.push({
+        titolo: m.titolo,
+        righe: [{
+          desc: c.desc || "Prestazione manodopera",
+          um: "a corpo", qta: 1, prezzoUn: null, totale: tot,
+        }],
+      });
+    }
+  });
+
+  if (serviziComuni.length > 0) {
+    sections.push({
+      titolo: "Servizi comuni",
+      righe: serviziComuni.map(r => ({
+        desc: r.desc, um: r.um, qta: r.qt,
+        prezzoUn: prezzoClienteRiga(r), totale: totalClienteRiga(r),
+      })),
+    });
+  }
+
+  return sections;
+}
+
+function PreventivoClienteView({
+  pdfRef, moduli, serviziComuni, cliente, cantiere, numPrev,
+  ivaRate, sconto, noteCliente, totaliGlobali, onDownloadPdf,
+}: {
+  pdfRef: React.RefObject<HTMLDivElement>;
+  moduli: Modulo[];
+  serviziComuni: RigaContabilita[];
+  cliente: ClienteSnap;
+  cantiere: string;
+  numPrev: string;
+  ivaRate: number;
+  sconto: number;
+  noteCliente: string;
+  totaliGlobali: { ricaviLordi: number; imponibile: number; iva: number; totaleIva: number };
+  onDownloadPdf: () => void;
+}) {
+  const sections = useMemo(() => buildClienteSections(moduli, serviziComuni), [moduli, serviziComuni]);
+  const today = new Date();
+  const validoFino = new Date(today.getTime() + 30 * 86400000);
+  const fmtDate = (d: Date) => d.toLocaleDateString("it-IT");
+  const scontoAmt = totaliGlobali.ricaviLordi * (sconto / 100);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <button
+          onClick={onDownloadPdf}
+          className="bg-blue-600 text-white rounded px-4 py-2 text-sm hover:bg-blue-700 transition"
+        >
+          ⬇ Scarica PDF
+        </button>
+      </div>
+
+      <div ref={pdfRef} className="bg-white p-8 max-w-4xl mx-auto shadow-sm" style={{ color: "#3B2314" }}>
+        {/* Intestazione */}
+        <div className="flex items-start justify-between mb-8 pb-4 border-b" style={{ borderColor: "#3B231420" }}>
+          <div>
+            <div className="font-heading text-2xl mb-1">Kalēa®</div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>General Contractor · Luxury Supply Hub</div>
+          </div>
+          <div className="text-right text-sm">
+            <div className="font-heading text-lg mb-1">Preventivo</div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>N° <span className="font-mono">{numPrev || "—"}</span></div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>Data: {fmtDate(today)}</div>
+            <div className="text-xs" style={{ color: "#8A7060" }}>Valido fino al: {fmtDate(validoFino)}</div>
+          </div>
+        </div>
+
+        {/* Cliente */}
+        <div className="grid grid-cols-2 gap-6 mb-8">
+          <div>
+            <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "#8A7060" }}>Cliente</div>
+            <div className="text-sm font-medium">{cliente.nome || "—"}</div>
+            {cliente.indirizzo && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.indirizzo}</div>}
+            {cliente.citta && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.citta}</div>}
+            {cliente.email && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.email}</div>}
+            {cliente.telefono && <div className="text-xs" style={{ color: "#8A7060" }}>{cliente.telefono}</div>}
+          </div>
+          <div>
+            <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "#8A7060" }}>Cantiere / Riferimento</div>
+            <div className="text-sm font-medium">{cantiere || "—"}</div>
+          </div>
+        </div>
+
+        {/* Sezioni */}
+        {sections.length === 0 ? (
+          <div className="text-center text-sm py-8" style={{ color: "#8A7060" }}>
+            Nessuna voce da mostrare. Aggiungi moduli nella scheda "Contabilità interna".
+          </div>
+        ) : (
+          <div className="space-y-6 mb-8">
+            {sections.map((sec, i) => (
+              <div key={i}>
+                <div className="text-xs uppercase tracking-wider font-medium mb-2 pb-1 border-b" style={{ color: "#8A7060", borderColor: "#3B231410" }}>
+                  {sec.titolo}
+                </div>
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-[10px] uppercase tracking-wider" style={{ color: "#8A7060" }}>
+                      <th className="text-left pb-2 font-normal">Descrizione</th>
+                      <th className="text-right pb-2 font-normal w-16">UM</th>
+                      <th className="text-right pb-2 font-normal w-20">Qt</th>
+                      <th className="text-right pb-2 font-normal w-24">€/unità</th>
+                      <th className="text-right pb-2 font-normal w-28">Totale</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sec.righe.map((r, j) => (
+                      <tr key={j} className="border-t" style={{ borderColor: "#3B231410" }}>
+                        <td className="py-2 pr-2">
+                          <div>{r.desc}</div>
+                          {r.sub && <div className="text-[11px] italic mt-0.5" style={{ color: "#8A7060" }}>{r.sub}</div>}
+                        </td>
+                        <td className="py-2 text-right">{r.um}</td>
+                        <td className="py-2 text-right tabular-nums">
+                          {typeof r.qta === "number" ? r.qta.toLocaleString("it-IT", { maximumFractionDigits: 2 }) : r.qta}
+                        </td>
+                        <td className="py-2 text-right tabular-nums">
+                          {r.prezzoUn === null ? "—" : eur(r.prezzoUn)}
+                        </td>
+                        <td className="py-2 text-right tabular-nums font-medium">{eur(r.totale)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Totali */}
+        <div className="ml-auto max-w-sm border rounded-lg p-4 space-y-2" style={{ borderColor: "#3B231420", background: "#FAF7F1" }}>
+          {sconto > 0 && (
+            <>
+              <div className="flex justify-between text-xs">
+                <span style={{ color: "#8A7060" }}>Totale lordo</span>
+                <span className="tabular-nums">{eur(totaliGlobali.ricaviLordi)}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span style={{ color: "#8A7060" }}>Sconto {sconto}%</span>
+                <span className="tabular-nums text-red-700">-{eur(scontoAmt)}</span>
+              </div>
+            </>
+          )}
+          <div className="flex justify-between text-sm">
+            <span style={{ color: "#8A7060" }}>Sub-totale (imponibile)</span>
+            <span className="tabular-nums font-medium">{eur(totaliGlobali.imponibile)}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span style={{ color: "#8A7060" }}>IVA {ivaRate}%</span>
+            <span className="tabular-nums">{eur(totaliGlobali.iva)}</span>
+          </div>
+          <div className="flex justify-between text-base font-heading pt-2 border-t" style={{ borderColor: "#3B231420" }}>
+            <span>Totale preventivo</span>
+            <span className="tabular-nums">{eur(totaliGlobali.totaleIva)}</span>
+          </div>
+        </div>
+
+        {noteCliente && (
+          <div className="mt-6 text-sm">
+            <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "#8A7060" }}>Note</div>
+            <div className="whitespace-pre-wrap">{noteCliente}</div>
+          </div>
+        )}
+
+        <div className="mt-8 pt-4 border-t text-[11px] text-center" style={{ borderColor: "#3B231410", color: "#8A7060" }}>
+          Prezzi IVA esclusa dove indicato. Offerta valida 30 giorni dalla data di emissione.
+        </div>
+      </div>
     </div>
   );
 }

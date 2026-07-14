@@ -440,10 +440,16 @@ const AdminQuotes = () => {
         title="Preventivi"
         subtitle="Pipeline offerte e trattative"
         actions={
-          <Button onClick={() => navigate('/admin/preventivi/nuovo')} size="sm" className="bg-crm-primary hover:bg-crm-primary-600 text-white shadow-crm-sm">
-            <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => navigate('/admin/preventivi/contabilita')} size="sm" variant="outline">
+              <Plus className="w-4 h-4 mr-2" />Contabilità
+            </Button>
+            <Button onClick={() => navigate('/admin/preventivi/nuovo')} size="sm" className="bg-crm-primary hover:bg-crm-primary-600 text-white shadow-crm-sm">
+              <Plus className="w-4 h-4 mr-2" />Nuovo Preventivo
+            </Button>
+          </div>
         }
+
       />
 
       <CrmKpiRow cols={7}>
@@ -480,7 +486,13 @@ const AdminQuotes = () => {
         searchable={false}
         emptyTitle={searchTerm || statusFilter !== 'all' ? 'Nessun preventivo trovato' : 'Nessun preventivo'}
         emptyDescription="Crea un nuovo preventivo per iniziare."
-        onRowClick={(q) => navigate(`/admin/preventivi/modifica?edit=${q.id}`)}
+        onRowClick={(q) => {
+          const isContab = (q as any).quote_data?.tipo === 'contabilita_v2';
+          navigate(isContab
+            ? `/admin/preventivi/contabilita/modifica?edit=${q.id}`
+            : `/admin/preventivi/modifica?edit=${q.id}`);
+        }}
+
         columns={[
           {
             key: 'quote_number',
@@ -540,11 +552,17 @@ const AdminQuotes = () => {
                   <DropdownMenuItem onClick={(e) => { e.stopPropagation(); navigate(`/admin/preventivi/modifica?edit=${quote.id}`); }}>
                     <Eye className="w-4 h-4 mr-2" />Apri
                   </DropdownMenuItem>
+                  {(quote as any).quote_data?.tipo === 'contabilita_v2' && (
+                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); navigate(`/admin/preventivi/contabilita/modifica?edit=${quote.id}`); }}>
+                      <Eye className="w-4 h-4 mr-2" />Modifica (Contabilità)
+                    </DropdownMenuItem>
+                  )}
                   {quote.status === 'draft' && (
                     <DropdownMenuItem onClick={(e) => { e.stopPropagation(); sendQuoteByEmail(quote); }}>
                       <Send className="w-4 h-4 mr-2" />Invia
                     </DropdownMenuItem>
                   )}
+
                   <DropdownMenuSeparator />
                   {QUOTE_STATUSES.filter(s => s.value !== quote.status).map(s => (
                     <DropdownMenuItem key={s.value} onClick={(e) => {
