@@ -462,7 +462,18 @@ export default function CatalogPrices() {
 
       {/* Bulk bar */}
       <div className="flex flex-wrap gap-2 items-center bg-[#FEFCF6] border border-dashed border-[#C8A96E] rounded-lg p-3">
-        <span className="text-xs font-semibold text-[#1A1008]">Azioni bulk sui selezionati:</span>
+        <span className="text-xs font-semibold text-[#1A1008]">Azioni bulk:</span>
+        <Button
+          type="button"
+          size="sm"
+          variant={allFilteredSelected ? 'default' : 'outline'}
+          onClick={allFilteredSelected ? clearSelection : selectAllFiltered}
+        >
+          {allFilteredSelected
+            ? `Deseleziona tutti (${filtered.length})`
+            : `Seleziona tutti (${filtered.length})`}
+        </Button>
+        <span className="text-xs text-[#8A7060]">{selected.size} selezionati</span>
         <Select value={bulkOp} onValueChange={(v: any) => setBulkOp(v)}>
           <SelectTrigger className="h-9 w-[220px]"><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -498,6 +509,7 @@ export default function CatalogPrices() {
           <Undo2 className="w-4 h-4 mr-1" /> Annulla ultima
         </Button>
       </div>
+
 
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
