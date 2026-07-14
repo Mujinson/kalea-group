@@ -36,6 +36,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function AdminFatturazione() {
   const qc = useQueryClient();
+  const navigate = useNavigate();
   const [tab, setTab] = useState('da-fatturare');
   const [invoiceDialog, setInvoiceDialog] = useState<{ open: boolean; quote?: any }>({ open: false });
   const [paymentDialog, setPaymentDialog] = useState<{ open: boolean; invoice?: any }>({ open: false });
