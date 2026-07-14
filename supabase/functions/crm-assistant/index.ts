@@ -344,24 +344,27 @@ async function toolSearchCatalogProducts(
   admin: ReturnType<typeof createClient>,
   args: { query?: string; color?: string; collection?: string; category_id?: string },
 ) {
+  const fields = ['name', 'brand', 'collection', 'format', 'color', 'finish'];
+  const baseSelect = 'id, name, brand, collection, color, finish, format, list_price, max_customer_discount_percentage';
+
+  const term = args.query?.trim();
+  const words = term
+    ? term
+        .replace(/[,()]/g, ' ')
+        .split(/\s+/)
+        .map((w) => w.trim())
+        .filter((w) => w.length > 0)
+        .map((w) => w.replace(/[%,()]/g, ' '))
+    : [];
+
   let q = admin
     .from('catalog_products')
-    .select('id, name, brand, collection, color, finish, format, list_price, max_customer_discount_percentage')
+    .select(baseSelect)
     .eq('is_active', true)
     .limit(15);
 
-  const term = args.query?.trim();
-  if (term) {
-    const words = term
-      .replace(/[,()]/g, ' ')
-      .split(/\s+/)
-      .map((w) => w.trim())
-      .filter((w) => w.length > 0);
-    const fields = ['name', 'brand', 'collection', 'format', 'color', 'finish'];
-    for (const word of words) {
-      const esc = word.replace(/[%,()]/g, ' ');
-      q = q.or(fields.map((f) => `${f}.ilike.%${esc}%`).join(','));
-    }
+  for (const word of words) {
+    q = q.or(fields.map((f) => `${f}.ilike.%${word}%`).join(','));
   }
   if (args.color?.trim()) q = q.ilike('color', `%${args.color.trim()}%`);
   if (args.collection?.trim()) q = q.ilike('collection', `%${args.collection.trim()}%`);
@@ -370,11 +373,43 @@ async function toolSearchCatalogProducts(
   const { data, error } = await q;
   if (error) return { error: error.message };
   const products = data ?? [];
-  if (products.length === 0) {
-    return { total: 0, products: [], note: 'Nessun prodotto trovato con questi criteri nel catalogo.' };
+  if (products.length > 0) {
+    return { match_type: 'exact', total: products.length, products };
   }
-  return { total: products.length, products };
+
+  // Fallback: OR across words (at least one word must match any field)
+  if (words.length > 0) {
+    let fq = admin
+      .from('catalog_products')
+      .select(baseSelect)
+      .eq('is_active', true)
+      .limit(8);
+    if (args.color?.trim()) fq = fq.ilike('color', `%${args.color.trim()}%`);
+    if (args.collection?.trim()) fq = fq.ilike('collection', `%${args.collection.trim()}%`);
+    if (args.category_id?.trim()) fq = fq.eq('category_id', args.category_id.trim());
+
+    const orParts: string[] = [];
+    for (const word of words) {
+      for (const f of fields) orParts.push(`${f}.ilike.%${word}%`);
+    }
+    fq = fq.or(orParts.join(','));
+
+    const { data: fData, error: fErr } = await fq;
+    if (fErr) return { error: fErr.message };
+    const fProducts = fData ?? [];
+    if (fProducts.length > 0) {
+      return {
+        match_type: 'fuzzy',
+        total: fProducts.length,
+        products: fProducts,
+        note: 'Nessuna corrispondenza esatta. Questi prodotti nel catalogo sono simili ai termini cercati.',
+      };
+    }
+  }
+
+  return { match_type: 'none', total: 0, products: [] };
 }
+
 
 
 
