@@ -96,12 +96,12 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   return (
-    <div className="bg-white rounded-lg border" style={{ borderColor: 'rgba(59,35,20,0.10)' }}>
+    <div className="crm-card overflow-hidden">
       {(searchable || toolbar) && (
-        <div className="flex items-center gap-3 p-3 border-b" style={{ borderColor: 'rgba(59,35,20,0.08)' }}>
+        <div className="flex items-center gap-3 p-3 border-b border-crm-border">
           {searchable && (
             <div className="relative flex-1 max-w-sm">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B0998A]" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-crm-ink-subtle pointer-events-none" />
               <Input
                 placeholder={searchPlaceholder}
                 value={query}
@@ -109,7 +109,7 @@ export function DataTable<T extends Record<string, any>>({
                   setQuery(e.target.value);
                   setPage(1);
                 }}
-                className="pl-9 h-9 bg-white border-[rgba(59,35,20,0.12)]"
+                className="pl-9 h-9 bg-white border-crm-border"
               />
             </div>
           )}
@@ -124,8 +124,8 @@ export function DataTable<T extends Record<string, any>>({
               <TableHead
                 key={c.key}
                 className={cn(
-                  'text-[11px] uppercase tracking-wider text-[#8A7060] font-semibold',
-                  c.sortable && 'cursor-pointer select-none',
+                  "text-[11px] uppercase tracking-wider text-crm-ink-muted font-semibold",
+                  c.sortable && "cursor-pointer select-none",
                   c.className,
                 )}
                 onClick={() => c.sortable && toggleSort(c.key)}
@@ -136,9 +136,9 @@ export function DataTable<T extends Record<string, any>>({
                     (sortKey !== c.key ? (
                       <ArrowUpDown className="w-3 h-3 opacity-50" />
                     ) : sortDir === 'asc' ? (
-                      <ArrowUp className="w-3 h-3" />
+                      <ArrowUp className="w-3 h-3 text-crm-primary" />
                     ) : (
-                      <ArrowDown className="w-3 h-3" />
+                      <ArrowDown className="w-3 h-3 text-crm-primary" />
                     ))}
                 </span>
               </TableHead>
@@ -170,7 +170,7 @@ export function DataTable<T extends Record<string, any>>({
                 onClick={() => onRowClick?.(row)}
               >
                 {columns.map((c) => (
-                  <TableCell key={c.key} className={cn('text-[13px] text-[#1A1008]', c.className)}>
+                  <TableCell key={c.key} className={cn('text-[13px] text-crm-ink', c.className)}>
                     {c.cell ? c.cell(row) : (c.accessor ? (c.accessor(row) as ReactNode) : (get(row, c.key) as ReactNode)) ?? '—'}
                   </TableCell>
                 ))}
@@ -181,23 +181,23 @@ export function DataTable<T extends Record<string, any>>({
       </Table>
 
       {!loading && sorted.length > pageSize && (
-        <div className="flex items-center justify-between px-4 py-3 border-t" style={{ borderColor: 'rgba(59,35,20,0.08)' }}>
-          <span className="text-[12px] text-[#8A7060]">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-crm-border bg-crm-bg-soft">
+          <span className="text-[12px] text-crm-ink-muted">
             {(safePage - 1) * pageSize + 1}–{Math.min(safePage * pageSize, sorted.length)} di {sorted.length}
           </span>
           <div className="flex items-center gap-2">
             <button
-              className="px-3 h-8 text-[12px] rounded border border-[rgba(59,35,20,0.12)] disabled:opacity-40 hover:bg-[rgba(200,169,110,0.08)]"
+              className="px-3 h-8 text-[12px] rounded-crm-sm border border-crm-border bg-white text-crm-ink-muted hover:text-crm-ink hover:border-crm-border-strong hover:bg-crm-bg-soft disabled:opacity-40 disabled:pointer-events-none transition"
               disabled={safePage === 1}
               onClick={() => setPage((p) => p - 1)}
             >
               Prec
             </button>
-            <span className="text-[12px] text-[#8A7060]">
+            <span className="text-[12px] text-crm-ink-muted tabular-nums">
               {safePage} / {totalPages}
             </span>
             <button
-              className="px-3 h-8 text-[12px] rounded border border-[rgba(59,35,20,0.12)] disabled:opacity-40 hover:bg-[rgba(200,169,110,0.08)]"
+              className="px-3 h-8 text-[12px] rounded-crm-sm border border-crm-border bg-white text-crm-ink-muted hover:text-crm-ink hover:border-crm-border-strong hover:bg-crm-bg-soft disabled:opacity-40 disabled:pointer-events-none transition"
               disabled={safePage === totalPages}
               onClick={() => setPage((p) => p + 1)}
             >
@@ -211,3 +211,4 @@ export function DataTable<T extends Record<string, any>>({
 }
 
 export default DataTable;
+
