@@ -527,29 +527,30 @@ const AdminOverview = () => {
   return (
     <div className="space-y-3 pb-12" style={{ fontFamily: 'inherit' }}>
       {/* TOP BAR */}
-      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-[#F5F4F1]/95 backdrop-blur border-b" style={{ borderColor: 'rgba(26,26,46,0.10)' }}>
+      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-white/95 backdrop-blur border-b" style={{ borderColor: '#E5E7EB' }}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-baseline gap-3">
-            <h1 style={{ fontSize: 18, fontWeight: 800, color: '#1A1A2E', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
-            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#9A9890', fontWeight: 600 }}>
+            <h1 style={{ fontSize: 18, fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
+            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#94A3B8', fontWeight: 600 }}>
               {range.label}
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex" style={{ border: '1px solid rgba(26,26,46,0.10)', borderRadius: 4 }}>
+            <div className="flex overflow-hidden" style={{ border: '1px solid #E5E7EB', borderRadius: 10 }}>
               {(Object.keys(PERIOD_LABELS) as PeriodKey[]).map(k => (
                 <button key={k} onClick={() => setPeriod(k)}
                   style={{
-                    padding: '5px 10px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
-                    background: period === k ? '#1A1A2E' : '#FFFFFF',
-                    color: period === k ? '#FFFFFF' : '#6B6760',
+                    padding: '6px 12px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+                    background: period === k ? '#4F46E5' : '#FFFFFF',
+                    color: period === k ? '#FFFFFF' : '#64748B',
+                    transition: 'all 0.15s',
                   }}>
                   {PERIOD_LABELS[k]}
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: '#6B6760', fontWeight: 600, letterSpacing: '0.05em' }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: '#64748B', fontWeight: 600, letterSpacing: '0.05em' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               LIVE · {format(lastSync, 'HH:mm:ss')}
             </div>
           </div>
@@ -561,8 +562,9 @@ const AdminOverview = () => {
             <button key={k} onClick={() => setTab(k)}
               style={{
                 padding: '8px 14px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em',
-                color: tab === k ? '#1A1A2E' : '#9A9890',
-                borderBottom: tab === k ? '2px solid #C4A882' : '2px solid transparent',
+                color: tab === k ? '#4F46E5' : '#94A3B8',
+                borderBottom: tab === k ? '2px solid #4F46E5' : '2px solid transparent',
+                transition: 'all 0.15s',
               }}>
               {TAB_LABELS[k]}
             </button>
