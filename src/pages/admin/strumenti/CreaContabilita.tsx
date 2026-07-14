@@ -622,11 +622,13 @@ export default function CreaContabilita() {
           </select>
         </div>
         <button
+          onClick={salva}
           disabled={saving}
-          className="bg-blue-600 text-white rounded px-4 py-2 text-sm disabled:opacity-50"
+          className="bg-blue-600 text-white rounded px-4 py-2 text-sm disabled:opacity-50 hover:bg-blue-700 transition"
         >
-          Salva
+          {saving ? "Salvataggio…" : "Salva"}
         </button>
+
       </div>
 
       {/* BARRA CLIENTE */}
