@@ -239,7 +239,7 @@ export default function CatalogPrices() {
           .update({ supplier_discount_percentage: v })
           .in('id', ids);
         if (error) throw error;
-        setRows(prev => prev.map(r => selected.has(r.id) ? { ...r, supplier_discount_percentage: v } : r));
+        setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, supplier_discount_percentage: v } : r));
       } else if (bulkOp === 'markup') {
         const v = Number(bulkValue);
         if (!isFinite(v)) throw new Error('Valore non valido');
@@ -248,7 +248,7 @@ export default function CatalogPrices() {
           .update({ markup_percentage: v })
           .in('id', ids);
         if (error) throw error;
-        setRows(prev => prev.map(r => selected.has(r.id) ? { ...r, markup_percentage: v } : r));
+        setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, markup_percentage: v } : r));
       } else if (bulkOp === 'active') {
         const v = bulkActive === 'true';
         const { error } = await supabase
@@ -256,7 +256,7 @@ export default function CatalogPrices() {
           .update({ is_active: v })
           .in('id', ids);
         if (error) throw error;
-        setRows(prev => prev.map(r => selected.has(r.id) ? { ...r, is_active: v } : r));
+        setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, is_active: v } : r));
       }
       setUndoStack(prev => [...prev, snapshot]);
       toast.success(`Bulk applicato a ${ids.length} prodotti`);
