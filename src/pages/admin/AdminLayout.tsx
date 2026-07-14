@@ -115,6 +115,9 @@ const AdminLayout = () => {
 
           {/* Right actions */}
           <NotificationCenter />
+          <TopIconButton title={isDark ? 'Tema chiaro' : 'Tema scuro'} onClick={() => setIsDark((v) => !v)}>
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </TopIconButton>
           <TopIconButton title="Guida / FAQ" onClick={() => setFaqOpen(true)}>
             <HelpCircle className="w-4 h-4" />
           </TopIconButton>
