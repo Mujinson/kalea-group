@@ -350,7 +350,7 @@ export default function CreaContabilita() {
         let srcY = 0;
         while (remaining > 0) {
           const sliceH = Math.min(remaining, pageH - 20);
-          pdf.addImage(imgData, "PNG", 10, 10, imgW, imgH, "", "FAST", 0, -srcY);
+          (pdf as any).addImage(imgData, "PNG", 10, 10, imgW, imgH, "", "FAST", 0, -srcY);
           remaining -= sliceH;
           srcY += sliceH;
           if (remaining > 0) pdf.addPage();
