@@ -366,6 +366,109 @@ body:has(.admin-theme.dark) [role="dialog"] {
   color: var(--crm-ink);
 }
 
+/* ---- Dark-mode blanket overrides for hardcoded utility colors ---- */
+/* Surfaces / cards */
+.admin-theme.dark .bg-white,
+.admin-theme.dark .\[bg-white\],
+.admin-theme.dark .bg-\[\#FFFFFF\],
+.admin-theme.dark .bg-\[\#F6F7FB\],
+.admin-theme.dark .bg-\[\#F8FAFC\],
+.admin-theme.dark .bg-\[\#F1F5F9\],
+.admin-theme.dark .bg-\[\#FAF9F6\],
+.admin-theme.dark .bg-\[\#FAF6EF\],
+.admin-theme.dark .bg-\[\#FEFCF6\],
+.admin-theme.dark .bg-\[\#F7F1E7\],
+.admin-theme.dark .bg-\[\#f0f2f5\],
+.admin-theme.dark .bg-\[\#e0e3e7\] {
+  background-color: var(--crm-surface) !important;
+}
+
+.admin-theme.dark .bg-crm-bg,
+.admin-theme.dark .bg-crm-bg-soft,
+.admin-theme.dark .bg-crm-surface,
+.admin-theme.dark .bg-crm-surface-2 {
+  background-color: var(--crm-bg-soft) !important;
+}
+
+/* Dark-on-light pills become soft dark surfaces */
+.admin-theme.dark .bg-\[\#0F172A\],
+.admin-theme.dark .bg-\[\#0E0B08\],
+.admin-theme.dark .bg-\[\#1A1008\],
+.admin-theme.dark .bg-\[\#1a110a\],
+.admin-theme.dark .bg-\[\#231811\],
+.admin-theme.dark .bg-\[\#3B2314\],
+.admin-theme.dark .bg-\[\#3a2a18\] {
+  background-color: var(--crm-surface-2) !important;
+}
+
+/* Dark text on light bg → light text */
+.admin-theme.dark .text-\[\#0F172A\],
+.admin-theme.dark .text-\[\#1A1008\],
+.admin-theme.dark .text-\[\#1a1a1a\],
+.admin-theme.dark .text-\[\#231811\],
+.admin-theme.dark .text-\[\#3a2a18\],
+.admin-theme.dark .text-\[\#8B6F4E\],
+.admin-theme.dark .text-\[\#8b6a2a\],
+.admin-theme.dark .text-\[\#8A7060\],
+.admin-theme.dark .text-\[\#B0998A\] {
+  color: var(--crm-ink) !important;
+}
+.admin-theme.dark .text-\[\#475569\],
+.admin-theme.dark .text-\[\#64748B\],
+.admin-theme.dark .text-\[\#667781\] {
+  color: var(--crm-ink-muted) !important;
+}
+.admin-theme.dark .text-\[\#F7F1E7\],
+.admin-theme.dark .text-\[\#F4ECDD\] {
+  color: var(--crm-ink) !important;
+}
+
+/* Borders */
+.admin-theme.dark .border-\[\#E5E7EB\],
+.admin-theme.dark .border-\[\#E7E3DA\],
+.admin-theme.dark .border-\[\#F0EBE0\],
+.admin-theme.dark .border-\[\#F1F5F9\],
+.admin-theme.dark .border-\[\#0F172A\],
+.admin-theme.dark .border-\[\#231811\],
+.admin-theme.dark .border-\[\#3a2a18\] {
+  border-color: var(--crm-border) !important;
+}
+.admin-theme.dark .border-crm-border,
+.admin-theme.dark .border-crm-border-strong {
+  border-color: var(--crm-border) !important;
+}
+
+/* Gradients: neutralize warm/light gradients */
+.admin-theme.dark .from-\[\#0E0B08\],
+.admin-theme.dark .from-\[\#0F172A\] { --tw-gradient-from: var(--crm-surface) !important; }
+.admin-theme.dark .to-\[\#0E0B08\],
+.admin-theme.dark .to-\[\#312E81\] { --tw-gradient-to: var(--crm-surface-2) !important; }
+
+/* Sidebar white background */
+.admin-theme.dark [data-sidebar="sidebar"],
+.admin-theme.dark aside[class*="sidebar"] {
+  background-color: var(--crm-surface) !important;
+  border-color: var(--crm-border) !important;
+}
+
+/* Portals: cover any bg-white/bg-popover inside popovers, dialogs, sheets */
+body:has(.admin-theme.dark) [data-radix-popper-content-wrapper] .bg-white,
+body:has(.admin-theme.dark) [data-radix-popper-content-wrapper] .bg-popover,
+body:has(.admin-theme.dark) [role="dialog"] .bg-white,
+body:has(.admin-theme.dark) [role="dialog"] .bg-popover,
+body:has(.admin-theme.dark) [data-radix-popper-content-wrapper],
+body:has(.admin-theme.dark) [role="dialog"] {
+  background-color: var(--crm-surface) !important;
+  color: var(--crm-ink);
+}
+
+body:has(.admin-theme.dark) [data-radix-popper-content-wrapper] *,
+body:has(.admin-theme.dark) [role="dialog"] * {
+  border-color: var(--crm-border);
+}
+
+
+
 
 
 
