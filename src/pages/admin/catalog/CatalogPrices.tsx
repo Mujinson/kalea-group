@@ -234,30 +234,40 @@ export default function CatalogPrices() {
       } else if (bulkOp === 'discount') {
         const v = Number(bulkValue);
         if (!isFinite(v)) throw new Error('Valore non valido');
-        const { error } = await supabase
-          .from('catalog_products')
-          .update({ supplier_discount_percentage: v })
-          .in('id', ids);
-        if (error) throw error;
+        for (let i = 0; i < ids.length; i += 100) {
+          const chunk = ids.slice(i, i + 100);
+          const { error } = await supabase
+            .from('catalog_products')
+            .update({ supplier_discount_percentage: v })
+            .in('id', chunk);
+          if (error) throw error;
+        }
         setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, supplier_discount_percentage: v } : r));
       } else if (bulkOp === 'markup') {
         const v = Number(bulkValue);
         if (!isFinite(v)) throw new Error('Valore non valido');
-        const { error } = await supabase
-          .from('catalog_products')
-          .update({ markup_percentage: v })
-          .in('id', ids);
-        if (error) throw error;
+        for (let i = 0; i < ids.length; i += 100) {
+          const chunk = ids.slice(i, i + 100);
+          const { error } = await supabase
+            .from('catalog_products')
+            .update({ markup_percentage: v })
+            .in('id', chunk);
+          if (error) throw error;
+        }
         setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, markup_percentage: v } : r));
       } else if (bulkOp === 'active') {
         const v = bulkActive === 'true';
-        const { error } = await supabase
-          .from('catalog_products')
-          .update({ is_active: v })
-          .in('id', ids);
-        if (error) throw error;
+        for (let i = 0; i < ids.length; i += 100) {
+          const chunk = ids.slice(i, i + 100);
+          const { error } = await supabase
+            .from('catalog_products')
+            .update({ is_active: v })
+            .in('id', chunk);
+          if (error) throw error;
+        }
         setRows(prev => prev.map(r => idSet.has(r.id) ? { ...r, is_active: v } : r));
       }
+
       setUndoStack(prev => [...prev, snapshot]);
       toast.success(`Bulk applicato a ${ids.length} prodotti`);
     } catch (e: any) {
