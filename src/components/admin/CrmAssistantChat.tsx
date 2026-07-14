@@ -86,7 +86,7 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
         className="fixed right-6 z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
         style={{
           bottom: bottomOffset,
-          background: 'linear-gradient(135deg, #1E1B4B 0%, #2A1F5C 100%)',
+          background: 'linear-gradient(135deg, #0F172A 0%, #2A1F5C 100%)',
           color: '#F5F1E8',
           border: '1px solid rgba(255,255,255,0.15)',
         }}
@@ -98,13 +98,13 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
         <SheetContent side="right" className="w-full sm:max-w-lg p-0 flex flex-col">
           <SheetHeader
             className="px-5 py-4 border-b shrink-0"
-            style={{ background: 'linear-gradient(180deg, #1E1B4B 0%, #2A1F5C 100%)' }}
+            style={{ background: 'linear-gradient(180deg, #0F172A 0%, #2A1F5C 100%)' }}
           >
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center"
-                  style={{ background: 'linear-gradient(135deg, #C4A882 0%, #8B6F4E 100%)', color: '#1E1B4B' }}
+                  style={{ background: 'linear-gradient(135deg, #C4A882 0%, #8B6F4E 100%)', color: '#0F172A' }}
                 >
                   <Sparkles className="w-4 h-4" />
                 </div>
@@ -125,7 +125,7 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
           </SheetHeader>
 
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3" style={{ background: '#F5F0EA' }}>
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3" style={{ background: '#F1F5F9' }}>
             {messages.length === 0 && !loading && (
               <div className="text-center text-sm text-muted-foreground mt-8 px-6">
                 Chiedi qualcosa al tuo assistente CRM: lead, preventivi, cantieri, disponibilità squadre, sconti…
@@ -138,7 +138,7 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
                   <div key={m.id} className="flex justify-end">
                     <div
                       className="max-w-[80%] rounded-2xl rounded-tr-sm px-3.5 py-2 text-sm whitespace-pre-wrap break-words"
-                      style={{ background: '#1E1B4B', color: '#F5F1E8' }}
+                      style={{ background: '#0F172A', color: '#F5F1E8' }}
                     >
                       {m.content}
                     </div>
@@ -148,7 +148,7 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
               if (m.role === 'assistant') {
                 return (
                   <div key={m.id} className="flex justify-start">
-                    <div className="max-w-[85%] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm whitespace-pre-wrap break-words bg-white text-[#1E1B4B] border border-black/5 shadow-sm">
+                    <div className="max-w-[85%] rounded-2xl rounded-tl-sm px-3.5 py-2 text-sm whitespace-pre-wrap break-words bg-white text-[#0F172A] border border-black/5 shadow-sm">
                       {m.content}
                     </div>
                   </div>
@@ -181,9 +181,9 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
               <div className="flex justify-start">
                 <div className="rounded-2xl rounded-tl-sm px-4 py-3 bg-white border border-black/5 shadow-sm">
                   <div className="flex gap-1 items-center">
-                    <span className="w-2 h-2 rounded-full bg-[#1E1B4B]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 rounded-full bg-[#1E1B4B]/40 animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 rounded-full bg-[#1E1B4B]/40 animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-2 h-2 rounded-full bg-[#0F172A]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 rounded-full bg-[#0F172A]/40 animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 rounded-full bg-[#0F172A]/40 animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -211,7 +211,7 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
                 onClick={handleSend}
                 disabled={loading || !input.trim()}
                 size="icon"
-                style={{ background: '#1E1B4B', color: '#F5F1E8' }}
+                style={{ background: '#0F172A', color: '#F5F1E8' }}
               >
                 <Send className="w-4 h-4" />
               </Button>

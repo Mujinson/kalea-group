@@ -19,7 +19,7 @@ interface Props {
   onChanged: () => void;
 }
 
-const PALETTE = ['#8C7B6B', '#3B82F6', '#16A34A', '#DC2626', '#F59E0B', '#A855F7', '#06B6D4', '#EC4899'];
+const PALETTE = ['#64748B', '#3B82F6', '#16A34A', '#DC2626', '#F59E0B', '#A855F7', '#06B6D4', '#EC4899'];
 
 export default function CrewManagerDialog({ open, onOpenChange, crews, crewMembers, workers, onChanged }: Props) {
   const { toast } = useToast();

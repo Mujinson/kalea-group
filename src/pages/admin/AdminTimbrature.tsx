@@ -187,7 +187,7 @@ const AdminTimbrature = () => {
     <div className="p-6 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-[#1E1B4B]">Timbrature Posatori</h1>
+          <h1 className="text-2xl font-semibold text-[#0F172A]">Timbrature Posatori</h1>
           <p className="text-sm text-muted-foreground">Ore giornaliere con verifica GPS · export per studio paghe</p>
         </div>
         <div className="flex gap-2">
@@ -200,7 +200,7 @@ const AdminTimbrature = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-end gap-3 p-3 rounded-lg border border-[#E5E2DD] bg-[#FAF7F2]">
+      <div className="flex flex-wrap items-end gap-3 p-3 rounded-lg border border-[#E5E7EB] bg-[#F8FAFC]">
         <div>
           <Label className="text-xs text-muted-foreground">Posatore</Label>
           <Select value={workerId} onValueChange={setWorkerId}>
@@ -238,7 +238,7 @@ const AdminTimbrature = () => {
           )}
         </div>
         <div className="ml-auto text-sm text-muted-foreground">
-          Totale periodo: <b className="text-[#1E1B4B]">{totalWorkHours.toFixed(2)}h</b>
+          Totale periodo: <b className="text-[#0F172A]">{totalWorkHours.toFixed(2)}h</b>
         </div>
       </div>
 
@@ -294,7 +294,7 @@ const AdminTimbrature = () => {
                         : null;
 
                       return (
-                        <div key={e.id} className={`text-xs p-2 rounded border ${bad ? 'border-red-300 bg-red-50' : 'border-[#E5E2DD] bg-[#FAF7F2]'}`}>
+                        <div key={e.id} className={`text-xs p-2 rounded border ${bad ? 'border-red-300 bg-red-50' : 'border-[#E5E7EB] bg-[#F8FAFC]'}`}>
                           <div className="flex items-center gap-1">
                             <span>{meta.icon}</span>
                             <span className="font-medium">{meta.short}</span>
@@ -306,7 +306,7 @@ const AdminTimbrature = () => {
                             )}
                           </div>
                           {address && (
-                            <div className="text-[11px] text-[#8C7B6B] mt-1 leading-tight line-clamp-2">
+                            <div className="text-[11px] text-[#64748B] mt-1 leading-tight line-clamp-2">
                               {address}
                             </div>
                           )}
@@ -328,7 +328,7 @@ const AdminTimbrature = () => {
                                 <iframe
                                   loading="lazy"
                                   title={`map-${e.id}`}
-                                  className="w-full h-32 mt-1 rounded border border-[#E5E2DD]"
+                                  className="w-full h-32 mt-1 rounded border border-[#E5E7EB]"
                                   src={`https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${e.latitude},${e.longitude}`}
                                 />
                               )}

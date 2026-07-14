@@ -93,19 +93,19 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
       <SheetContent side="right" className="w-full sm:max-w-3xl overflow-y-auto p-0">
         {loading || !lead ? (
-          <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-[#1E1B4B]" /></div>
+          <div className="flex justify-center py-20"><Loader2 className="w-6 h-6 animate-spin text-[#0F172A]" /></div>
         ) : (
           <>
             {/* header */}
-            <div className="sticky top-0 z-20 bg-white border-b border-[#E5E2DD] px-6 py-4">
+            <div className="sticky top-0 z-20 bg-white border-b border-[#E5E7EB] px-6 py-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-[#8C7B6B]">
+                  <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-[#64748B]">
                     <span className="font-mono">{lead.code || '—'}</span>
                     <span>·</span>
                     <span>{sourceLabel(lead.source)}</span>
                   </div>
-                  <SheetTitle className="text-[22px] font-semibold text-[#1E1B4B] mt-1 truncate">{displayName}</SheetTitle>
+                  <SheetTitle className="text-[22px] font-semibold text-[#0F172A] mt-1 truncate">{displayName}</SheetTitle>
                   <div className="flex items-center gap-2 mt-2">
                     <LeadStatusBadge status={lead.status} />
                     <Select value={lead.status} onValueChange={quickStatus}>
@@ -141,8 +141,8 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                 <TabsContent value="overview" className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Contatto */}
-                    <div className="rounded-xl border border-[#E5E2DD] p-4 space-y-3">
-                      <div className="flex items-center gap-2 text-[13px] font-semibold text-[#1E1B4B]">
+                    <div className="rounded-xl border border-[#E5E7EB] p-4 space-y-3">
+                      <div className="flex items-center gap-2 text-[13px] font-semibold text-[#0F172A]">
                         {lead.contact_type === 'privato' ? <User className="w-4 h-4" /> : <Building2 className="w-4 h-4" />}
                         Contatto
                       </div>
@@ -150,16 +150,16 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                       {lead.vat_number && <Row label="P.IVA" value={lead.vat_number} />}
                       {(lead.first_name || lead.last_name) && <Row label="Referente" value={`${lead.first_name || ''} ${lead.last_name || ''}`.trim()} />}
                       {lead.profession && <Row label="Professione" value={lead.profession} />}
-                      {lead.phone && <Row icon={<Phone className="w-4 h-4" />} value={<a className="text-[#1E1B4B] hover:underline" href={`tel:${lead.phone}`}>{lead.phone}</a>} />}
-                      {lead.email && <Row icon={<Mail className="w-4 h-4" />} value={<a className="text-[#1E1B4B] hover:underline" href={`mailto:${lead.email}`}>{lead.email}</a>} />}
-                      {lead.website && <Row icon={<Globe className="w-4 h-4" />} value={<a className="text-[#1E1B4B] hover:underline truncate" href={lead.website} target="_blank" rel="noreferrer">{lead.website}</a>} />}
-                      {lead.linkedin_url && <Row icon={<Linkedin className="w-4 h-4" />} value={<a className="text-[#1E1B4B] hover:underline truncate" href={lead.linkedin_url} target="_blank" rel="noreferrer">LinkedIn</a>} />}
+                      {lead.phone && <Row icon={<Phone className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline" href={`tel:${lead.phone}`}>{lead.phone}</a>} />}
+                      {lead.email && <Row icon={<Mail className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline" href={`mailto:${lead.email}`}>{lead.email}</a>} />}
+                      {lead.website && <Row icon={<Globe className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline truncate" href={lead.website} target="_blank" rel="noreferrer">{lead.website}</a>} />}
+                      {lead.linkedin_url && <Row icon={<Linkedin className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline truncate" href={lead.linkedin_url} target="_blank" rel="noreferrer">LinkedIn</a>} />}
                       {contactAddress && <Row icon={<MapPin className="w-4 h-4" />} value={contactAddress} />}
                     </div>
 
                     {/* Progetto */}
-                    <div className="rounded-xl border border-[#E5E2DD] p-4 space-y-3">
-                      <div className="flex items-center gap-2 text-[13px] font-semibold text-[#1E1B4B]">
+                    <div className="rounded-xl border border-[#E5E7EB] p-4 space-y-3">
+                      <div className="flex items-center gap-2 text-[13px] font-semibold text-[#0F172A]">
                         <MapPinned className="w-4 h-4" />
                         Progetto & cantiere
                       </div>
@@ -168,24 +168,24 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                       <Row label="Isolamento termico" value={lead.has_thermal_insulation ? 'Sì' : 'No'} />
                       <Row label="Visita showroom" value={lead.visited_showroom ? 'Sì' : 'No'} />
                       {lead.message && (
-                        <div className="pt-2 border-t border-[#E5E2DD]">
-                          <div className="text-[11px] uppercase tracking-widest text-[#8C7B6B] mb-1">Richiesta</div>
-                          <p className="text-[13px] text-[#1E1B4B] whitespace-pre-wrap">{lead.message}</p>
+                        <div className="pt-2 border-t border-[#E5E7EB]">
+                          <div className="text-[11px] uppercase tracking-widest text-[#64748B] mb-1">Richiesta</div>
+                          <p className="text-[13px] text-[#0F172A] whitespace-pre-wrap">{lead.message}</p>
                         </div>
                       )}
                     </div>
                   </div>
 
                   {lead.notes && (
-                    <div className="rounded-xl border border-[#E5E2DD] p-4">
-                      <div className="text-[11px] uppercase tracking-widest text-[#8C7B6B] mb-1">Note interne</div>
-                      <p className="text-[13px] text-[#1E1B4B] whitespace-pre-wrap">{lead.notes}</p>
+                    <div className="rounded-xl border border-[#E5E7EB] p-4">
+                      <div className="text-[11px] uppercase tracking-widest text-[#64748B] mb-1">Note interne</div>
+                      <p className="text-[13px] text-[#0F172A] whitespace-pre-wrap">{lead.notes}</p>
                     </div>
                   )}
                 </TabsContent>
 
                 <TabsContent value="timeline" className="space-y-4">
-                  <div className="rounded-xl border border-[#E5E2DD] p-4 space-y-2">
+                  <div className="rounded-xl border border-[#E5E7EB] p-4 space-y-2">
                     <div className="flex gap-2">
                       <Select value={noteType} onValueChange={(v) => setNoteType(v as any)}>
                         <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
@@ -197,28 +197,28 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                           <SelectItem value="meeting">📅 Meeting</SelectItem>
                         </SelectContent>
                       </Select>
-                      <Button size="sm" onClick={addActivity} disabled={!newNote.trim()} className="bg-[#1E1B4B]">Aggiungi</Button>
+                      <Button size="sm" onClick={addActivity} disabled={!newNote.trim()} className="bg-[#0F172A]">Aggiungi</Button>
                     </div>
                     <Textarea rows={3} value={newNote} onChange={(e) => setNewNote(e.target.value)} placeholder="Cos'è successo? (es. chiamato, non risponde, richiamare domani)" />
                   </div>
 
-                  {activities.length === 0 && <p className="text-[13px] text-[#8C7B6B] text-center py-6">Nessuna attività registrata.</p>}
+                  {activities.length === 0 && <p className="text-[13px] text-[#64748B] text-center py-6">Nessuna attività registrata.</p>}
 
-                  <ol className="relative border-l border-[#E5E2DD] ml-3 space-y-4">
+                  <ol className="relative border-l border-[#E5E7EB] ml-3 space-y-4">
                     {activities.map((a) => {
                       const Icon = ACTIVITY_ICONS[a.type] || StickyNote;
                       return (
                         <li key={a.id} className="ml-6">
-                          <span className="absolute -left-3 w-6 h-6 rounded-full bg-[#1E1B4B] text-white flex items-center justify-center">
+                          <span className="absolute -left-3 w-6 h-6 rounded-full bg-[#0F172A] text-white flex items-center justify-center">
                             <Icon className="w-3 h-3" />
                           </span>
-                          <div className="rounded-lg border border-[#E5E2DD] p-3 bg-white">
-                            <div className="flex items-center justify-between text-[11px] text-[#8C7B6B]">
+                          <div className="rounded-lg border border-[#E5E7EB] p-3 bg-white">
+                            <div className="flex items-center justify-between text-[11px] text-[#64748B]">
                               <span className="uppercase tracking-wider font-medium">{a.type}</span>
                               <span>{format(new Date(a.occurred_at), 'dd MMM yyyy · HH:mm', { locale: it })}</span>
                             </div>
-                            {a.title && <div className="text-[14px] font-medium text-[#1E1B4B] mt-1">{a.title}</div>}
-                            {a.description && <div className="text-[13px] text-[#1E1B4B] mt-1 whitespace-pre-wrap">{a.description}</div>}
+                            {a.title && <div className="text-[14px] font-medium text-[#0F172A] mt-1">{a.title}</div>}
+                            {a.description && <div className="text-[13px] text-[#0F172A] mt-1 whitespace-pre-wrap">{a.description}</div>}
                           </div>
                         </li>
                       );
@@ -227,7 +227,7 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                 </TabsContent>
 
                 <TabsContent value="quotes">
-                  <p className="text-[13px] text-[#8C7B6B]">Vai al dettaglio lead per gestire i preventivi collegati.</p>
+                  <p className="text-[13px] text-[#64748B]">Vai al dettaglio lead per gestire i preventivi collegati.</p>
                 </TabsContent>
               </Tabs>
             </div>
@@ -241,10 +241,10 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
 function Row({ icon, label, value }: { icon?: React.ReactNode; label?: string; value: React.ReactNode }) {
   return (
     <div className="flex items-start gap-2 text-[13px]">
-      {icon && <span className="text-[#8C7B6B] mt-0.5">{icon}</span>}
+      {icon && <span className="text-[#64748B] mt-0.5">{icon}</span>}
       <div className="min-w-0 flex-1">
-        {label && <div className="text-[11px] uppercase tracking-wider text-[#8C7B6B]">{label}</div>}
-        <div className="text-[#1E1B4B] truncate">{value}</div>
+        {label && <div className="text-[11px] uppercase tracking-wider text-[#64748B]">{label}</div>}
+        <div className="text-[#0F172A] truncate">{value}</div>
       </div>
     </div>
   );

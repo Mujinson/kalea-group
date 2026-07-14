@@ -629,7 +629,7 @@ export default function AdminPlanner() {
           <KPI icon={HardHat} label="Completati" value={serverKpis.sitesCompleted} color="#16A34A" />
           <KPI icon={AlertTriangle} label="In ritardo" value={kpis.overdue} color="#DC2626" />
           <KPI icon={UsersIcon} label="Operai oggi" value={kpis.workersToday} color="#16A34A" />
-          <KPI icon={Layers} label="Squadre libere" value={kpis.freeCrews} color="#8C7B6B" />
+          <KPI icon={Layers} label="Squadre libere" value={kpis.freeCrews} color="#64748B" />
           <KPI icon={Clock} label="Ore settimana" value={kpis.weekHours} color="#F59E0B" />
           <KPI icon={TrendingUp} label="Saturazione" value={`${kpis.sat}%`} color="#A855F7" />
         </div>
