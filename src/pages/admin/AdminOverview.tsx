@@ -170,13 +170,13 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>
+          <span className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: 'var(--crm-ink)', lineHeight: 1 }}>
             {pctVal.toFixed(0)}%
           </span>
-          {sub && <span className="mt-0.5" style={{ fontSize: 9, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{sub}</span>}
+          {sub && <span className="mt-0.5" style={{ fontSize: 9, color: 'var(--crm-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{sub}</span>}
         </div>
       </div>
-      <div className="mt-2 text-center" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', fontWeight: 600 }}>
+      <div className="mt-2 text-center" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--crm-ink-muted)', fontWeight: 600 }}>
         {label}
       </div>
     </div>
@@ -186,10 +186,10 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
 // ─── Panel wrapper ────────────────────────────────────────────
 function Panel({ title, right, children, className = '' }: { title?: string; right?: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-white ${className}`} style={{ border: '1px solid #E5E7EB', borderRadius: 12, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' }}>
+    <div className={`bg-[var(--crm-surface)] ${className}`} style={{ border: '1px solid #E5E7EB', borderRadius: 12, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' }}>
       {title && (
-        <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: '#F1F5F9' }}>
-          <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#0F172A' }}>{title}</h3>
+        <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: 'var(--crm-bg-soft)' }}>
+          <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--crm-ink)' }}>{title}</h3>
           {right}
         </div>
       )}
@@ -199,7 +199,7 @@ function Panel({ title, right, children, className = '' }: { title?: string; rig
 }
 
 const Empty = ({ msg = 'Nessun dato per il periodo' }: { msg?: string }) => (
-  <div className="flex items-center justify-center h-32 text-xs italic" style={{ color: '#94A3B8' }}>{msg}</div>
+  <div className="flex items-center justify-center h-32 text-xs italic" style={{ color: 'var(--crm-ink-muted)' }}>{msg}</div>
 );
 
 // ─── Main ─────────────────────────────────────────────────────
@@ -215,7 +215,7 @@ const STAGE_LABEL: Record<string, string> = {
   nuovo: 'Nuovo', contattato: 'Contattato', in_trattativa: 'Trattativa',
   preventivo_inviato: 'Prev. inviato', cliente: 'Cliente', perso: 'Perso',
 };
-const STAGE_COLORS = ['#94A3B8', '#0086C0', '#A25DDC', '#FDAB3D', '#00C875', '#E44258'];
+const STAGE_COLORS = ['var(--crm-ink-muted)', '#0086C0', '#A25DDC', '#FDAB3D', '#00C875', '#E44258'];
 
 const AdminOverview = () => {
   const navigate = useNavigate();
@@ -527,11 +527,11 @@ const AdminOverview = () => {
   return (
     <div className="space-y-3 pb-12" style={{ fontFamily: 'inherit' }}>
       {/* TOP BAR */}
-      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-white/95 backdrop-blur border-b" style={{ borderColor: '#E5E7EB' }}>
+      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-[var(--crm-surface)]/95 backdrop-blur border-b" style={{ borderColor: 'var(--crm-border)' }}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-baseline gap-3">
-            <h1 style={{ fontSize: 18, fontWeight: 800, color: '#0F172A', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
-            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: '#94A3B8', fontWeight: 600 }}>
+            <h1 style={{ fontSize: 18, fontWeight: 800, color: 'var(--crm-ink)', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
+            <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--crm-ink-muted)', fontWeight: 600 }}>
               {range.label}
             </span>
           </div>
@@ -541,15 +541,15 @@ const AdminOverview = () => {
                 <button key={k} onClick={() => setPeriod(k)}
                   style={{
                     padding: '6px 12px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
-                    background: period === k ? '#4F46E5' : '#FFFFFF',
-                    color: period === k ? '#FFFFFF' : '#64748B',
+                    background: period === k ? '#4F46E5' : 'var(--crm-surface)',
+                    color: period === k ? 'var(--crm-surface)' : 'var(--crm-ink-muted)',
                     transition: 'all 0.15s',
                   }}>
                   {PERIOD_LABELS[k]}
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: '#64748B', fontWeight: 600, letterSpacing: '0.05em' }}>
+            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               LIVE · {format(lastSync, 'HH:mm:ss')}
             </div>
@@ -562,7 +562,7 @@ const AdminOverview = () => {
             <button key={k} onClick={() => setTab(k)}
               style={{
                 padding: '8px 14px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em',
-                color: tab === k ? '#4F46E5' : '#94A3B8',
+                color: tab === k ? '#4F46E5' : 'var(--crm-ink-muted)',
                 borderBottom: tab === k ? '2px solid #4F46E5' : '2px solid transparent',
                 transition: 'all 0.15s',
               }}>
@@ -626,7 +626,7 @@ const AdminOverview = () => {
 
       {/* CHART + GAUGES (above the fold) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
-        <Panel title="Fatturato · 12 mesi" right={<span className="text-[10px] tabular-nums" style={{ color: '#94A3B8' }}>{eur(months12.reduce((s, x) => s + x.fatturato, 0))} totale</span>} className="lg:col-span-2">
+        <Panel title="Fatturato · 12 mesi" right={<span className="text-[10px] tabular-nums" style={{ color: 'var(--crm-ink-muted)' }}>{eur(months12.reduce((s, x) => s + x.fatturato, 0))} totale</span>} className="lg:col-span-2">
           {months12.some(m => m.fatturato > 0) ? (
             <ResponsiveContainer width="100%" height={240}>
               <AreaChart data={months12} margin={{ top: 5, right: 5, bottom: 0, left: -10 }}>
@@ -637,11 +637,11 @@ const AdminOverview = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="2 4" stroke="#F1F5F9" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false}
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: 'var(--crm-ink-muted)' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: 'var(--crm-ink-muted)' }} axisLine={false} tickLine={false}
                   tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v} />
                 <Tooltip
-                  contentStyle={{ background: '#0F172A', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }}
+                  contentStyle={{ background: 'var(--crm-ink)', border: 'none', borderRadius: 4, fontSize: 11, color: 'var(--crm-surface)' }}
                   labelStyle={{ color: '#4F46E5', fontWeight: 700 }}
                   formatter={(v: any) => eur(v)}
                 />
@@ -657,14 +657,14 @@ const AdminOverview = () => {
             <Gauge value={margine.avg} label="Margine" sub="Medio %" color={margineColor} size={108} />
             <Gauge value={goalPct} max={100} label="Obiettivo" sub={`/${eurShort(goal)}`} color="#4F46E5" size={108} />
           </div>
-          <div className="mt-3 pt-3 border-t" style={{ borderColor: '#F1F5F9' }}>
-            <div className="flex justify-between" style={{ fontSize: 10, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          <div className="mt-3 pt-3 border-t" style={{ borderColor: 'var(--crm-bg-soft)' }}>
+            <div className="flex justify-between" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               <span>YTD</span>
-              <span className="tabular-nums" style={{ color: '#0F172A', fontWeight: 700 }}>{eur(revenueYTD)}</span>
+              <span className="tabular-nums" style={{ color: 'var(--crm-ink)', fontWeight: 700 }}>{eur(revenueYTD)}</span>
             </div>
-            <div className="flex justify-between mt-1" style={{ fontSize: 10, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            <div className="flex justify-between mt-1" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               <span>Mancano</span>
-              <span className="tabular-nums" style={{ color: '#0F172A', fontWeight: 700 }}>{eur(Math.max(0, goal - revenueYTD))}</span>
+              <span className="tabular-nums" style={{ color: 'var(--crm-ink)', fontWeight: 700 }}>{eur(Math.max(0, goal - revenueYTD))}</span>
             </div>
           </div>
         </Panel>
@@ -676,7 +676,7 @@ const AdminOverview = () => {
           <BigKPI label="Lead Pipeline" value={leadPipeline.total} variant="light"
             sub={`${leadPipeline.counts.in_trattativa || 0} in trattativa`}
             icon={Users} onClick={() => navigate('/admin/leads')}>
-            <div className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-[#F1F5F9]">
+            <div className="mt-2 flex h-1.5 rounded-full overflow-hidden bg-[var(--crm-bg-soft)]">
               {PIPELINE_STAGES.map((s, i) => {
                 const v = leadPipeline.counts[s] || 0;
                 const w = leadPipeline.total > 0 ? (v / leadPipeline.total) * 100 : 0;
@@ -689,7 +689,7 @@ const AdminOverview = () => {
         {showFin && (
           <BigKPI label="Fatturato YTD" value={revenueYTD} format="eur" variant="light"
             sub={`${goalPct.toFixed(0)}% obiettivo`} icon={TrendingUp}>
-            <div className="mt-2 h-1.5 rounded-full bg-[#F1F5F9] overflow-hidden">
+            <div className="mt-2 h-1.5 rounded-full bg-[var(--crm-bg-soft)] overflow-hidden">
               <div className="h-full" style={{ width: `${Math.min(100, goalPct)}%`, background: '#4F46E5', transition: 'width 1s ease-out' }} />
             </div>
           </BigKPI>
@@ -716,9 +716,9 @@ const AdminOverview = () => {
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={stato6} margin={{ top: 5, right: 5, bottom: 0, left: -10 }}>
                   <CartesianGrid strokeDasharray="2 4" stroke="#F1F5F9" vertical={false} />
-                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: '#0F172A', border: 'none', borderRadius: 4, fontSize: 11, color: '#fff' }} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10, fill: 'var(--crm-ink-muted)' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: 'var(--crm-ink-muted)' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: 'var(--crm-ink)', border: 'none', borderRadius: 4, fontSize: 11, color: 'var(--crm-surface)' }} />
                   <Legend wrapperStyle={{ fontSize: 10 }} iconSize={8} />
                   <Bar dataKey="accettati" stackId="a" fill="#16a34a" />
                   <Bar dataKey="attesa" stackId="a" fill="#eab308" />
@@ -736,10 +736,10 @@ const AdminOverview = () => {
                   const w = leadPipeline.total > 0 ? (v / leadPipeline.total) * 100 : 0;
                   return (
                     <div key={s} className="flex items-center gap-2">
-                      <span style={{ fontSize: 10, width: 90, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{STAGE_LABEL[s]}</span>
-                      <div className="flex-1 h-5 bg-[#F6F7FB] overflow-hidden" style={{ borderRadius: 2 }}>
+                      <span style={{ fontSize: 10, width: 90, color: 'var(--crm-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{STAGE_LABEL[s]}</span>
+                      <div className="flex-1 h-5 bg-[var(--crm-bg-soft)] overflow-hidden" style={{ borderRadius: 2 }}>
                         <div className="h-full flex items-center justify-end pr-2" style={{ width: `${Math.max(w, 6)}%`, background: STAGE_COLORS[i], transition: 'width 1s ease-out' }}>
-                          <span style={{ fontSize: 10, fontWeight: 700, color: i >= 3 ? '#fff' : '#0F172A' }}>{v}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: i >= 3 ? 'var(--crm-surface)' : 'var(--crm-ink)' }}>{v}</span>
                         </div>
                       </div>
                     </div>
@@ -759,13 +759,13 @@ const AdminOverview = () => {
               <div className="divide-y" style={{ borderColor: 'rgba(26,26,46,0.04)' }}>
                 {preventivi.slice(0, 5).map(p => (
                   <button key={p.id} onClick={() => navigate(`/admin/strumenti/crea-preventivo?id=${p.id}`)}
-                    className="w-full text-left py-2 hover:bg-[#F6F7FB] flex justify-between items-center gap-2 px-1">
+                    className="w-full text-left py-2 hover:bg-[var(--crm-bg-soft)] flex justify-between items-center gap-2 px-1">
                     <div className="min-w-0">
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{p.numero_preventivo}</div>
-                      <div style={{ fontSize: 10, color: '#94A3B8' }} className="truncate">{p.cliente_nome || '—'}</div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--crm-ink)' }} className="truncate">{p.numero_preventivo}</div>
+                      <div style={{ fontSize: 10, color: 'var(--crm-ink-muted)' }} className="truncate">{p.cliente_nome || '—'}</div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="tabular-nums" style={{ fontSize: 12, fontWeight: 700, color: '#0F172A' }}>{eurShort(Number(p.importo_totale || 0))}</div>
+                      <div className="tabular-nums" style={{ fontSize: 12, fontWeight: 700, color: 'var(--crm-ink)' }}>{eurShort(Number(p.importo_totale || 0))}</div>
                       <StatoBadge stato={p.stato} />
                     </div>
                   </button>
@@ -793,14 +793,14 @@ const AdminOverview = () => {
                   return (
                     <button key={c.id} onClick={() => navigate(`/admin/cantieri/${c.id}`)} className="w-full text-left">
                       <div className="flex justify-between mb-1">
-                        <span style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{c.title}</span>
-                        {ritardo && <span style={{ fontSize: 9, fontWeight: 800, color: '#fff', background: '#C0392B', padding: '1px 5px', borderRadius: 2 }}>RITARDO</span>}
+                        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--crm-ink)' }} className="truncate">{c.title}</span>
+                        {ritardo && <span style={{ fontSize: 9, fontWeight: 800, color: 'var(--crm-surface)', background: '#C0392B', padding: '1px 5px', borderRadius: 2 }}>RITARDO</span>}
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 h-1 bg-[#F1F5F9] overflow-hidden" style={{ borderRadius: 1 }}>
+                        <div className="flex-1 h-1 bg-[var(--crm-bg-soft)] overflow-hidden" style={{ borderRadius: 1 }}>
                           <div className="h-full" style={{ width: `${p}%`, background: ritardo ? '#C0392B' : '#4F46E5', transition: 'width 1s ease-out' }} />
                         </div>
-                        <span className="tabular-nums" style={{ fontSize: 10, color: '#94A3B8', width: 28, textAlign: 'right' }}>{Math.round(p)}%</span>
+                        <span className="tabular-nums" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', width: 28, textAlign: 'right' }}>{Math.round(p)}%</span>
                       </div>
                     </button>
                   );
@@ -817,8 +817,8 @@ const AdminOverview = () => {
                 {debiti.open.slice(0, 6).map((d, i) => (
                   <div key={i} className="flex justify-between items-center py-2 px-1">
                     <div className="min-w-0">
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{d.name}</div>
-                      {d.lastDate && <div style={{ fontSize: 10, color: '#94A3B8' }}>Ultimo: {format(new Date(d.lastDate), 'dd MMM', { locale: it })}</div>}
+                      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--crm-ink)' }} className="truncate">{d.name}</div>
+                      {d.lastDate && <div style={{ fontSize: 10, color: 'var(--crm-ink-muted)' }}>Ultimo: {format(new Date(d.lastDate), 'dd MMM', { locale: it })}</div>}
                     </div>
                     <div className="tabular-nums shrink-0" style={{ fontSize: 12, fontWeight: 800, color: '#C0392B' }}>{eurShort(d.residuo)}</div>
                   </div>
@@ -843,15 +843,15 @@ const AdminOverview = () => {
                 }[a.type];
                 const Icon = cfg.icon;
                 return (
-                  <button key={i} onClick={a.onClick} className="w-full text-left flex items-center gap-2.5 py-1 hover:bg-[#F6F7FB] px-1 rounded">
+                  <button key={i} onClick={a.onClick} className="w-full text-left flex items-center gap-2.5 py-1 hover:bg-[var(--crm-bg-soft)] px-1 rounded">
                     <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: cfg.bg }}>
                       <Icon className="w-3.5 h-3.5" style={{ color: cfg.color }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#0F172A' }} className="truncate">{a.title}</div>
-                      <div style={{ fontSize: 10, color: '#94A3B8' }} className="truncate">{a.sub}</div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--crm-ink)' }} className="truncate">{a.title}</div>
+                      <div style={{ fontSize: 10, color: 'var(--crm-ink-muted)' }} className="truncate">{a.sub}</div>
                     </div>
-                    <div className="shrink-0 tabular-nums" style={{ fontSize: 9, color: '#94A3B8' }}>{format(a.date, 'dd/MM HH:mm')}</div>
+                    <div className="shrink-0 tabular-nums" style={{ fontSize: 9, color: 'var(--crm-ink-muted)' }}>{format(a.date, 'dd/MM HH:mm')}</div>
                   </button>
                 );
               })}
@@ -871,18 +871,18 @@ const AdminOverview = () => {
               const events = calendarEvents[key] || [];
               const isToday = isSameDay(d, new Date());
               return (
-                <div key={key} className="flex flex-col" style={{ border: isToday ? '1px solid #4F46E5' : '1px solid rgba(26,26,46,0.05)', borderRadius: 2, background: isToday ? '#FBF7EE' : '#fff', minHeight: 130 }}>
+                <div key={key} className="flex flex-col" style={{ border: isToday ? '1px solid #4F46E5' : '1px solid rgba(26,26,46,0.05)', borderRadius: 2, background: isToday ? 'var(--crm-primary-soft, #FBF7EE)' : 'var(--crm-surface)', minHeight: 130 }}>
                   <div className="px-1.5 py-1 border-b" style={{ borderColor: 'rgba(26,26,46,0.05)' }}>
-                    <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#94A3B8', fontWeight: 600 }}>{format(d, 'EEE', { locale: it })}</div>
-                    <div className="tabular-nums" style={{ fontSize: 14, fontWeight: 800, color: isToday ? '#4F46E5' : '#0F172A' }}>{format(d, 'd')}</div>
+                    <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--crm-ink-muted)', fontWeight: 600 }}>{format(d, 'EEE', { locale: it })}</div>
+                    <div className="tabular-nums" style={{ fontSize: 14, fontWeight: 800, color: isToday ? '#4F46E5' : 'var(--crm-ink)' }}>{format(d, 'd')}</div>
                   </div>
                   <div className="p-1 space-y-0.5 flex-1 overflow-hidden">
                     {events.slice(0, 4).map((ev, i) => (
-                      <div key={i} className="truncate" style={{ fontSize: 9, padding: '2px 4px', borderLeft: `2px solid ${ev.color}`, background: `${ev.color}10`, color: '#0F172A', fontWeight: 600 }} title={ev.label}>
+                      <div key={i} className="truncate" style={{ fontSize: 9, padding: '2px 4px', borderLeft: `2px solid ${ev.color}`, background: `${ev.color}10`, color: 'var(--crm-ink)', fontWeight: 600 }} title={ev.label}>
                         {ev.label}
                       </div>
                     ))}
-                    {events.length > 4 && <div style={{ fontSize: 9, color: '#94A3B8' }} className="px-1">+{events.length - 4}</div>}
+                    {events.length > 4 && <div style={{ fontSize: 9, color: 'var(--crm-ink-muted)' }} className="px-1">+{events.length - 4}</div>}
                   </div>
                 </div>
               );
@@ -893,11 +893,11 @@ const AdminOverview = () => {
 
       {/* ADMIN ONLY */}
       {isAdmin && (
-        <Panel title="Performance commerciali" right={<Briefcase className="w-3.5 h-3.5" style={{ color: '#94A3B8' }} />}>
+        <Panel title="Performance commerciali" right={<Briefcase className="w-3.5 h-3.5" style={{ color: 'var(--crm-ink-muted)' }} />}>
           {performanceAgenti.length ? (
             <table className="w-full" style={{ fontSize: 11 }}>
               <thead>
-                <tr style={{ color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 9 }}>
+                <tr style={{ color: 'var(--crm-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 9 }}>
                   <th className="text-left py-1.5 px-1 font-bold">Nome</th>
                   <th className="text-right py-1.5 px-1 font-bold">Lead</th>
                   <th className="text-right py-1.5 px-1 font-bold">Preventivi</th>
@@ -907,7 +907,7 @@ const AdminOverview = () => {
               </thead>
               <tbody>
                 {performanceAgenti.map((a, i) => (
-                  <tr key={a.id} className={i % 2 ? 'bg-[#FAF9F6]' : ''} style={{ borderTop: '1px solid rgba(26,26,46,0.04)' }}>
+                  <tr key={a.id} className={i % 2 ? 'bg-[var(--crm-bg-soft)]' : ''} style={{ borderTop: '1px solid rgba(26,26,46,0.04)' }}>
                     <td className="py-1.5 px-1 font-semibold">{a.nome}</td>
                     <td className="py-1.5 px-1 text-right tabular-nums">{a.lAss}</td>
                     <td className="py-1.5 px-1 text-right tabular-nums">{a.pInv}</td>
