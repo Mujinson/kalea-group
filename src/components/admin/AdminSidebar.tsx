@@ -198,20 +198,26 @@ const menuStructure: MenuEntry[] = [
   },
 ];
 
-// Sidebar palette inspired by Creatio: deep indigo gradient
-const SIDEBAR_BG = 'linear-gradient(180deg, #1E1B4B 0%, #2A1F5C 55%, #312866 100%)';
-const TEXT_DEFAULT = 'rgba(226, 222, 255, 0.78)';
-const TEXT_ACTIVE = '#FFFFFF';
-const HOVER_BG = 'rgba(255, 255, 255, 0.06)';
-const ACTIVE_BG = 'rgba(255, 255, 255, 0.10)';
-const BORDER_COL = 'rgba(255, 255, 255, 0.08)';
+// Sidebar palette — Monday/Linear bright white with colored group accents
+const SIDEBAR_BG = '#FFFFFF';
+const TEXT_DEFAULT = '#64748B';         // ink-muted
+const TEXT_ACTIVE = '#0F172A';           // ink
+const HOVER_BG = '#F4F5F9';              // surface-hover
+const ACTIVE_BG = '#EEF2FF';             // primary-soft
+const BORDER_COL = '#EEF0F4';
 
-const ColorTile = ({ icon: Icon, color }: { icon: LucideIcon; color: string }) => (
+const ColorTile = ({
+  icon: Icon, color, active,
+}: { icon: LucideIcon; color: string; active?: boolean }) => (
   <span
-    className="inline-flex items-center justify-center w-7 h-7 rounded-md shrink-0"
-    style={{ background: color, boxShadow: `0 1px 0 rgba(0,0,0,0.15) inset, 0 4px 10px ${color}33` }}
+    className="inline-flex items-center justify-center w-6 h-6 rounded-md shrink-0 transition-transform"
+    style={{
+      background: active ? color : `${color}18`,
+      color: active ? '#FFFFFF' : color,
+      boxShadow: active ? `0 2px 6px ${color}55, inset 0 1px 0 rgba(255,255,255,0.14)` : 'none',
+    }}
   >
-    <Icon className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+    <Icon className="w-3.5 h-3.5" strokeWidth={2} />
   </span>
 );
 
@@ -248,19 +254,9 @@ const AdminSidebar = () => {
   return (
     <Sidebar collapsible="icon" className="border-r" style={{ borderColor: BORDER_COL }}>
       <SidebarContent
-        className="pt-4 overflow-y-auto"
+        className="pt-3 overflow-y-auto"
         style={{ background: SIDEBAR_BG }}
       >
-        {/* Brand */}
-        <div className="px-5 pb-4 mb-2 group-data-[collapsible=icon]:hidden">
-          <span
-            className="font-heading font-semibold text-[20px] tracking-tight"
-            style={{ color: '#F5F1E8' }}
-          >
-            Kalēa<span className="text-[14px] align-top">®</span>
-          </span>
-        </div>
-
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-0.5 px-2">
@@ -274,16 +270,24 @@ const AdminSidebar = () => {
                       <SidebarMenuButton
                         onClick={() => handleNavigate(item.url)}
                         tooltip={item.title}
-                        className="h-10 px-3 rounded-md transition-colors duration-150 hover:!bg-white/5"
+                        className="h-9 px-2.5 rounded-crm-sm transition-colors duration-150 group/mi relative"
                         style={{
                           background: active ? ACTIVE_BG : 'transparent',
                           color: active ? TEXT_ACTIVE : TEXT_DEFAULT,
                           fontWeight: active ? 600 : 500,
-                          boxShadow: active ? `inset 3px 0 0 ${item.color}` : 'none',
                         }}
+                        onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = HOVER_BG; }}
+                        onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'transparent'; }}
                       >
-                        <ColorTile icon={item.icon} color={item.color} />
-                        <span className="text-[13.5px] ml-2.5">{item.title}</span>
+                        {active && (
+                          <span
+                            aria-hidden
+                            className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full"
+                            style={{ background: item.color }}
+                          />
+                        )}
+                        <ColorTile icon={item.icon} color={item.color} active={active} />
+                        <span className="text-[13px] ml-2">{item.title}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
@@ -301,39 +305,50 @@ const AdminSidebar = () => {
                       <CollapsibleTrigger asChild>
                         <SidebarMenuButton
                           tooltip={group.label}
-                          className="h-10 px-3 rounded-md w-full justify-between transition-colors duration-150 hover:!bg-white/5"
+                          className="h-9 px-2.5 rounded-crm-sm w-full justify-between transition-colors duration-150 relative"
                           style={{
                             background: groupActive ? ACTIVE_BG : 'transparent',
                             color: groupActive ? TEXT_ACTIVE : TEXT_DEFAULT,
                             fontWeight: groupActive ? 600 : 500,
-                            boxShadow: groupActive ? `inset 3px 0 0 ${group.color}` : 'none',
                           }}
+                          onMouseEnter={(e) => { if (!groupActive) e.currentTarget.style.background = HOVER_BG; }}
+                          onMouseLeave={(e) => { if (!groupActive) e.currentTarget.style.background = 'transparent'; }}
                         >
+                          {groupActive && (
+                            <span
+                              aria-hidden
+                              className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r-full"
+                              style={{ background: group.color }}
+                            />
+                          )}
                           <span className="flex items-center">
-                            <ColorTile icon={group.icon} color={group.color} />
-                            <span className="text-[13.5px] ml-2.5">{group.label}</span>
+                            <ColorTile icon={group.icon} color={group.color} active={groupActive} />
+                            <span className="text-[13px] ml-2">{group.label}</span>
                           </span>
                           <ChevronDown
-                            className="w-4 h-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180"
-                            style={{ color: 'rgba(226,222,255,0.45)' }}
+                            className="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180 text-crm-ink-subtle"
                           />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
                       <CollapsibleContent className="group-data-[collapsible=icon]:hidden">
-                        <SidebarMenu className="space-y-0 mt-0.5 ml-3 pl-3" style={{ borderLeft: `1px solid ${BORDER_COL}` }}>
+                        <SidebarMenu
+                          className="space-y-0 mt-0.5 ml-3.5 pl-3"
+                          style={{ borderLeft: `1px solid ${BORDER_COL}` }}
+                        >
                           {visibleItems.map((sub) => {
                             const subActive = isActive(sub.url);
                             return (
                               <SidebarMenuItem key={sub.title}>
                                 <SidebarMenuButton
                                   onClick={() => handleNavigate(sub.url)}
-                                  className="h-8 pl-6 pr-3 rounded-md transition-colors duration-150 hover:!bg-white/5"
+                                  className="h-7 pl-4 pr-2 rounded-crm-sm transition-colors duration-150 relative"
                                   style={{
                                     background: subActive ? HOVER_BG : 'transparent',
-                                    color: subActive ? TEXT_ACTIVE : 'rgba(226,222,255,0.65)',
+                                    color: subActive ? TEXT_ACTIVE : '#94A3B8',
                                     fontWeight: subActive ? 600 : 400,
-                                    position: 'relative',
                                   }}
+                                  onMouseEnter={(e) => { if (!subActive) e.currentTarget.style.color = TEXT_ACTIVE; }}
+                                  onMouseLeave={(e) => { if (!subActive) e.currentTarget.style.color = '#94A3B8'; }}
                                 >
                                   {subActive && (
                                     <span
@@ -358,35 +373,38 @@ const AdminSidebar = () => {
       </SidebarContent>
 
       <SidebarFooter
-        className="p-4"
-        style={{
-          borderTop: `1px solid ${BORDER_COL}`,
-          background: 'linear-gradient(180deg, #312866 0%, #1A153D 100%)',
-        }}
+        className="p-3"
+        style={{ borderTop: `1px solid ${BORDER_COL}`, background: '#FFFFFF' }}
       >
-        <div className="px-1 mb-3 group-data-[collapsible=icon]:hidden">
-          <div className="text-[12px] truncate" style={{ color: '#F5F1E8' }}>
-            {user?.email}
+        <div className="flex items-center gap-2 px-1 group-data-[collapsible=icon]:hidden">
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-semibold text-white shrink-0"
+            style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #A25DDC 100%)' }}
+          >
+            {(user?.email?.[0] || 'K').toUpperCase()}
           </div>
-          {role && (
-            <div
-              className="text-[10px] mt-1 uppercase"
-              style={{ color: 'rgba(226,222,255,0.55)', letterSpacing: '0.12em' }}
-            >
-              {role === 'admin' ? 'Admin' : role === 'commerciale' ? 'Commerciale' : 'Posatore'}
-            </div>
-          )}
+          <div className="min-w-0 flex-1">
+            <div className="text-[12px] font-medium text-crm-ink truncate">{user?.email}</div>
+            {role && (
+              <div className="text-[10px] uppercase tracking-[0.10em] text-crm-ink-subtle mt-0.5">
+                {role === 'admin' ? 'Admin' : role === 'commerciale' ? 'Commerciale' : 'Posatore'}
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleSignOut}
+            title="Esci"
+            className="w-7 h-7 rounded-crm-sm inline-flex items-center justify-center text-crm-ink-subtle hover:text-crm-danger hover:bg-crm-danger-soft transition"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+          </button>
         </div>
         <button
           onClick={handleSignOut}
           title="Esci"
-          className="flex items-center gap-2 px-1 py-1 text-[13px] transition-colors duration-150 group-data-[collapsible=icon]:justify-center"
-          style={{ color: 'rgba(226,222,255,0.7)', background: 'transparent', border: 'none' }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(226,222,255,0.7)')}
+          className="hidden group-data-[collapsible=icon]:flex w-full h-8 items-center justify-center rounded-crm-sm text-crm-ink-subtle hover:text-crm-danger hover:bg-crm-danger-soft transition"
         >
           <LogOut className="w-4 h-4" />
-          <span className="group-data-[collapsible=icon]:hidden">Esci</span>
         </button>
       </SidebarFooter>
     </Sidebar>
@@ -394,3 +412,4 @@ const AdminSidebar = () => {
 };
 
 export default AdminSidebar;
+
