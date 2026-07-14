@@ -105,18 +105,18 @@ function BigKPI({
     Math.round(animated).toLocaleString('it-IT');
 
   const styles: Record<Variant, React.CSSProperties> = {
-    light: { background: '#FFFFFF', color: '#1A1A2E', border: '1px solid rgba(26,26,46,0.08)' },
-    dark: { background: '#1A1A2E', color: '#FFFFFF', border: '1px solid #1A1A2E' },
-    gold: { background: '#FFFFFF', color: '#1A1A2E', borderLeft: '4px solid #C4A882', border: '1px solid rgba(196,168,130,0.30)', borderLeftWidth: 4 },
+    light: { background: '#FFFFFF', color: '#0F172A', border: '1px solid #E5E7EB', boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
+    dark: { background: '#0F172A', color: '#FFFFFF', border: '1px solid #0F172A', boxShadow: '0 4px 12px rgba(15,23,42,0.15)' },
+    gold: { background: '#FFFFFF', color: '#0F172A', borderLeft: '4px solid #4F46E5', border: '1px solid #E5E7EB', borderLeftWidth: 4, boxShadow: '0 1px 2px rgba(15,23,42,0.04)' },
     semaphore: {
-      background: semaphore === 'green' ? '#EAF5EE' : semaphore === 'amber' ? '#FDF4E3' : '#FBEAEA',
-      color: '#1A1A2E',
-      border: `1px solid ${semaphore === 'green' ? '#A8D5B5' : semaphore === 'amber' ? '#E8C97A' : '#E5A5A5'}`,
+      background: semaphore === 'green' ? '#ECFDF5' : semaphore === 'amber' ? '#FFFBEB' : '#FEF2F2',
+      color: '#0F172A',
+      border: `1px solid ${semaphore === 'green' ? '#A7F3D0' : semaphore === 'amber' ? '#FDE68A' : '#FECACA'}`,
     },
-    danger: { background: '#FFF0F0', color: '#1A1A2E', borderLeft: '4px solid #C0392B', border: '1px solid #F5C5C5', borderLeftWidth: 4 },
+    danger: { background: '#FEF2F2', color: '#0F172A', borderLeft: '4px solid #E44258', border: '1px solid #FECACA', borderLeftWidth: 4 },
   };
-  const labelColor = variant === 'dark' ? '#C8B8A0' : '#9A9890';
-  const subColor = variant === 'dark' ? 'rgba(255,255,255,0.65)' : '#6B6760';
+  const labelColor = variant === 'dark' ? 'rgba(255,255,255,0.65)' : '#64748B';
+  const subColor = variant === 'dark' ? 'rgba(255,255,255,0.70)' : '#475569';
 
   return (
     <div
