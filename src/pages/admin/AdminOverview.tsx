@@ -160,7 +160,7 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
     <div className="flex flex-col items-center justify-center">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="-rotate-90">
-          <circle cx={size / 2} cy={size / 2} r={r} stroke="#EEEAE2" strokeWidth={10} fill="none" />
+          <circle cx={size / 2} cy={size / 2} r={r} stroke="#F1F5F9" strokeWidth={10} fill="none" />
           <circle
             cx={size / 2} cy={size / 2} r={r} stroke={color} strokeWidth={10} fill="none"
             strokeLinecap="round"
@@ -170,13 +170,13 @@ function Gauge({ value, max = 100, label, sub, color = '#16a34a', size = 130 }: 
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: '#1A1A2E', lineHeight: 1 }}>
+          <span className="tabular-nums" style={{ fontSize: 22, fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>
             {pctVal.toFixed(0)}%
           </span>
-          {sub && <span className="mt-0.5" style={{ fontSize: 9, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{sub}</span>}
+          {sub && <span className="mt-0.5" style={{ fontSize: 9, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{sub}</span>}
         </div>
       </div>
-      <div className="mt-2 text-center" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#6B6760', fontWeight: 600 }}>
+      <div className="mt-2 text-center" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#475569', fontWeight: 600 }}>
         {label}
       </div>
     </div>
