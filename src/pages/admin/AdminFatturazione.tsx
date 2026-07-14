@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -70,7 +70,7 @@ export default function AdminFatturazione() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('quotes')
-        .select('id, quote_number, project_name, total_amount, status, customer_id, customer:customers(id, first_name, last_name, company_name), created_at')
+        .select('id, quote_number, project_name, total_amount, vat_amount, vat_rate, status, customer_id, client_name, lead_id, customer:customers(id, first_name, last_name, company_name), lead:leads(id, name, company_name), created_at')
         .in('status', ['accettato', 'accepted', 'approved', 'approvato'])
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -104,6 +104,9 @@ export default function AdminFatturazione() {
   }, [acceptedQuotes, invoices]);
 
   const customerName = (c: any) => c?.company_name || `${c?.first_name || ''} ${c?.last_name || ''}`.trim() || '—';
+  const quoteCustomerName = (q: any) => customerName(q?.customer) !== '—'
+    ? customerName(q.customer)
+    : (q?.lead?.company_name || q?.lead?.name || q?.client_name || '—');
 
   return (
     <div className="space-y-4">
@@ -151,7 +154,7 @@ export default function AdminFatturazione() {
                       onClick={() => navigate(`/admin/preventivi/modifica?edit=${q.id}`)}
                     >
                       <td className="p-3 font-medium">{q.quote_number || '—'}<div className="text-xs text-muted-foreground">{q.project_name}</div></td>
-                      <td className="p-3">{customerName(q.customer)}</td>
+                      <td className="p-3">{quoteCustomerName(q)}</td>
                       <td className="p-3 text-right tabular-nums">{eur(q.total_amount)}</td>
                       <td className="p-3 text-right tabular-nums text-muted-foreground">{eur(q.invoicedTotal)}</td>
                       <td className="p-3 text-right tabular-nums font-semibold">{eur(q.residuo)}</td>
@@ -251,7 +254,11 @@ export default function AdminFatturazione() {
         open={invoiceDialog.open}
         quote={invoiceDialog.quote}
         onClose={() => setInvoiceDialog({ open: false })}
-        onSaved={() => { qc.invalidateQueries({ queryKey: ['customer_invoices'] }); }}
+        onSaved={() => {
+          qc.invalidateQueries({ queryKey: ['customer_invoices'] });
+          qc.invalidateQueries({ queryKey: ['customer_payments'] });
+          qc.invalidateQueries({ queryKey: ['accepted_quotes_for_invoicing'] });
+        }}
       />
       <PaymentDialog
         open={paymentDialog.open}
@@ -260,6 +267,7 @@ export default function AdminFatturazione() {
         onSaved={() => {
           qc.invalidateQueries({ queryKey: ['customer_invoices'] });
           qc.invalidateQueries({ queryKey: ['customer_payments'] });
+          qc.invalidateQueries({ queryKey: ['accepted_quotes_for_invoicing'] });
         }}
       />
     </div>
