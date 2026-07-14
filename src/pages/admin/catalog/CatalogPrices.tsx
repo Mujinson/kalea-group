@@ -10,13 +10,16 @@ import {
 } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Search, Undo2, Loader2 } from 'lucide-react';
+import { Search, Undo2, Loader2, Download } from 'lucide-react';
+import { exportCSV } from '@/lib/exports';
 
 type Product = {
   id: string;
   product_code: string | null;
   name: string;
   brand: string | null;
+  collection: string | null;
+  format: string | null;
   category_id: string | null;
   category?: string | null;
   product_type: string | null;
@@ -68,7 +71,7 @@ export default function CatalogPrices() {
         fetchAllRows<Product>(
           supabase
             .from('catalog_products')
-            .select('id,product_code,name,brand,category_id,product_type,list_price,supplier_discount_percentage,markup_percentage,is_active,unit_of_measure')
+            .select('id,product_code,name,brand,collection,format,category_id,product_type,list_price,supplier_discount_percentage,markup_percentage,is_active,unit_of_measure')
             .order('brand', { ascending: true })
             .order('name', { ascending: true }),
         ),
@@ -340,6 +343,25 @@ export default function CatalogPrices() {
             Azzera ({activeFilterCount})
           </Button>
         )}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() =>
+            exportCSV(
+              filtered.map((r) => ({
+                name: r.name,
+                brand: r.brand,
+                collection: r.collection,
+                list_price: r.list_price,
+                format: r.format,
+              })),
+              `catalogo-prezzi-${new Date().toISOString().slice(0, 10)}`,
+            )
+          }
+          className="h-9 text-xs"
+        >
+          <Download className="w-4 h-4 mr-1" /> Esporta CSV
+        </Button>
         <div className="text-xs text-[#8A7060] ml-auto">
           {filtered.length} risultati · {selected.size} selezionati
         </div>
