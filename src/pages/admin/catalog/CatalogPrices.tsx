@@ -180,6 +180,10 @@ export default function CatalogPrices() {
     });
   };
   const allPageSelected = paged.length > 0 && paged.every(r => selected.has(r.id));
+  const selectAllFiltered = () => setSelected(new Set(filtered.map(r => r.id)));
+  const clearSelection = () => setSelected(new Set());
+  const allFilteredSelected = filtered.length > 0 && selected.size === filtered.length;
+
 
   const runBulk = async () => {
     if (selected.size === 0) { toast.error('Nessun prodotto selezionato'); return; }
