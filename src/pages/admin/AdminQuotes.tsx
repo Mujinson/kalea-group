@@ -552,11 +552,20 @@ const AdminQuotes = () => {
                   <DropdownMenuItem onClick={(e) => { e.stopPropagation(); navigate(`/admin/preventivi/modifica?edit=${quote.id}`); }}>
                     <Eye className="w-4 h-4 mr-2" />Apri
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); navigate(`/admin/preventivi/modifica?edit=${quote.id}`); }}>
+                    <Eye className="w-4 h-4 mr-2" />Apri
+                  </DropdownMenuItem>
+                  {(quote as any).quote_data?.tipo === 'contabilita_v2' && (
+                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); navigate(`/admin/preventivi/contabilita/modifica?edit=${quote.id}`); }}>
+                      <Eye className="w-4 h-4 mr-2" />Modifica (Contabilità)
+                    </DropdownMenuItem>
+                  )}
                   {quote.status === 'draft' && (
                     <DropdownMenuItem onClick={(e) => { e.stopPropagation(); sendQuoteByEmail(quote); }}>
                       <Send className="w-4 h-4 mr-2" />Invia
                     </DropdownMenuItem>
                   )}
+
                   <DropdownMenuSeparator />
                   {QUOTE_STATUSES.filter(s => s.value !== quote.status).map(s => (
                     <DropdownMenuItem key={s.value} onClick={(e) => {
