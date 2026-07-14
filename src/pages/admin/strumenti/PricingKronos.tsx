@@ -9,44 +9,515 @@ const fmtP = (n: number) => n.toFixed(1) + "%";
 
 // ─── DATI KRONOS 2026 ─────────────────────────────────────────
 const PRODOTTI = [
-  { id:"PV001", nome:"Pierre Vive Noble MAXI",       fmt:"120×280 rett.", col:"Pierre Vive", tipo:"Gres Fine",       listino:132 },
-  { id:"PV006", nome:"Pierre Vive Noble MAXI",        fmt:"120×120 rett.", col:"Pierre Vive", tipo:"Gres Fine",       listino:95  },
-  { id:"PV206", nome:"Pierre Vive Noble MAXI Grip",   fmt:"120×120 rett.", col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:97  },
-  { id:"PV011", nome:"Pierre Vive Noble",             fmt:"60×120 rett.",  col:"Pierre Vive", tipo:"Gres Fine",       listino:87  },
-  { id:"PV176", nome:"Pierre Vive Noble Grip",        fmt:"60×120 rett.",  col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:90  },
-  { id:"PV016", nome:"Pierre Vive Trace",             fmt:"60×120 rett.",  col:"Pierre Vive", tipo:"Gres Fine",       listino:90  },
-  { id:"PV211", nome:"Pierre Vive Noble",             fmt:"60×60 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:70  },
-  { id:"PV021", nome:"Pierre Vive Ancienne",          fmt:"60×120 rett.",  col:"Pierre Vive", tipo:"Gres Fine",       listino:87  },
-  { id:"PV031", nome:"Pierre Vive Ancienne",          fmt:"80×80 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:87  },
-  { id:"MA001", nome:"Materia MAXI",                  fmt:"120×280 rett.", col:"Materia",     tipo:"Gres Fine",       listino:132 },
-  { id:"MA016", nome:"Materia",                       fmt:"120×120 rett.", col:"Materia",     tipo:"Gres Fine",       listino:105 },
-  { id:"MA193", nome:"Materia",                       fmt:"60×120 rett.",  col:"Materia",     tipo:"Gres Fine",       listino:105 },
-  { id:"PS001", nome:"Piasentina Stone",              fmt:"60×120 rett.",  col:"Piasentina",  tipo:"Gres Fine",       listino:87  },
-  { id:"PS010", nome:"Piasentina Stone Grip",         fmt:"60×120 rett.",  col:"Piasentina",  tipo:"Gres Fine Grip",  listino:90  },
-  { id:"PS020", nome:"Piasentina Stone",              fmt:"30×60",         col:"Piasentina",  tipo:"Gres Fine",       listino:55  },
-  { id:"PS030", nome:"Piasentina Stone",              fmt:"80×80 rett.",   col:"Piasentina",  tipo:"Gres Fine",       listino:87  },
-  { id:"NA001", nome:"Nativa Vena",                   fmt:"60×120 rett.",  col:"Nativa",      tipo:"Gres Fine",       listino:95  },
-  { id:"NA010", nome:"Nativa Falda",                  fmt:"60×120 rett.",  col:"Nativa",      tipo:"Gres Fine",       listino:95  },
-  { id:"NA020", nome:"Nativa Armis",                  fmt:"60×120 rett.",  col:"Nativa",      tipo:"Gres Fine",       listino:98  },
-  { id:"NA030", nome:"Nativa",                        fmt:"30×60",         col:"Nativa",      tipo:"Gres Fine",       listino:60  },
-  { id:"ME001", nome:"Metallique MAXI",               fmt:"120×280 rett.", col:"Metallique",  tipo:"Gres Fine",       listino:132 },
-  { id:"ME020", nome:"Metallique",                    fmt:"60×120 rett.",  col:"Metallique",  tipo:"Gres Fine",       listino:87  },
-  { id:"ME030", nome:"Metallique Battiscopa",         fmt:"4,6×60",        col:"Metallique",  tipo:"Battiscopa",      listino:18  },
-  { id:"LR001", nome:"Le Reverse Chevron",            fmt:"varie",         col:"Le Reverse",  tipo:"Decorato",        listino:150 },
-  { id:"LR010", nome:"Le Reverse Versailles",         fmt:"varie",         col:"Le Reverse",  tipo:"Decorato",        listino:165 },
-  { id:"LR020", nome:"Le Reverse Esagono",            fmt:"varie",         col:"Le Reverse",  tipo:"Decorato",        listino:180 },
-  { id:"LR030", nome:"Le Reverse Lappato",            fmt:"60×120",        col:"Le Reverse",  tipo:"Decorato Lappato",listino:200 },
-  { id:"WS001", nome:"Wood Side Mosaico Chalet",      fmt:"29×120",        col:"Les Bois",    tipo:"Effetto Legno",   listino:240 },
-  { id:"WS010", nome:"Wood Side Listellato",          fmt:"25×120",        col:"Les Bois",    tipo:"Effetto Legno",   listino:266 },
-  { id:"WS020", nome:"Wood Side Mosaico Tessera",     fmt:"30×30",         col:"Les Bois",    tipo:"Effetto Legno",   listino:204 },
-  { id:"WS030", nome:"Wood Side Mosaico Sticks",      fmt:"30×30",         col:"Les Bois",    tipo:"Effetto Legno",   listino:177 },
-  { id:"OUT001",nome:"Outdoor SKE 2.0",               fmt:"60×120×2cm",    col:"Outdoor",     tipo:"Outdoor 20mm",    listino:95  },
-  { id:"OUT010",nome:"Outdoor SKE 2.0 MAXI",          fmt:"80×80×2cm",     col:"Outdoor",     tipo:"Outdoor 20mm",    listino:87  },
-  { id:"OUT020",nome:"Outdoor SKE 2.0",               fmt:"40×80×2cm",     col:"Outdoor",     tipo:"Outdoor 20mm",    listino:72  },
-  { id:"OUT030",nome:"Outdoor SKE 2.0 Grip",          fmt:"60×60×2cm",     col:"Outdoor",     tipo:"Outdoor 20mm Grip",listino:80 },
-  { id:"RK001", nome:"Rocks",                         fmt:"60×120 rett.",  col:"Rocks",       tipo:"Gres Fine",       listino:102 },
-  { id:"PM001", nome:"Prima Materia",                 fmt:"60×120 rett.",  col:"Rocks",       tipo:"Gres Fine",       listino:98  },
-  { id:"TL001", nome:"Talco",                         fmt:"60×120 rett.",  col:"Rocks",       tipo:"Gres Fine",       listino:96  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // PIERRE VIVE
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"PV001", nome:"Pierre Vive Noble Lastra Grande",       fmt:"120×280 rett.", col:"Pierre Vive", tipo:"Gres Fine 6mm",  listino:132 },
+
+  { id:"PV006", nome:"Pierre Vive Noble",                     fmt:"120×120 rett.", col:"Pierre Vive", tipo:"Gres Fine",       listino:95  },
+
+  { id:"PV206", nome:"Pierre Vive Noble Grip",                fmt:"120×120 grip",  col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:97  },
+
+  { id:"PV011", nome:"Pierre Vive Noble",                     fmt:"60×120 rett.",  col:"Pierre Vive", tipo:"Gres Fine",       listino:87  },
+
+  { id:"PV176", nome:"Pierre Vive Noble Grip",                fmt:"60×120 grip",   col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:90  },
+
+  { id:"PV016", nome:"Pierre Vive Noble Trace",               fmt:"60×120 trace",  col:"Pierre Vive", tipo:"Gres Fine",       listino:90  },
+
+  { id:"PV211", nome:"Pierre Vive Noble",                     fmt:"60×60 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:70  },
+
+  { id:"PV021", nome:"Pierre Vive Ancienne",                  fmt:"60×120 rett.",  col:"Pierre Vive", tipo:"Gres Fine",       listino:87  },
+
+  { id:"PV026", nome:"Pierre Vive Ancienne Grip",             fmt:"60×120 grip",   col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:90  },
+
+  { id:"PV031", nome:"Pierre Vive Ancienne",                  fmt:"80×80 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:87  },
+
+  { id:"PV036", nome:"Pierre Vive Ancienne Grip",             fmt:"80×80 grip",    col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:90  },
+
+  { id:"PV041", nome:"Pierre Vive Ancienne",                  fmt:"40×80 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:80  },
+
+  { id:"PV046", nome:"Pierre Vive Ancienne Grip",             fmt:"40×80 grip",    col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:83  },
+
+  { id:"PV051", nome:"Pierre Vive Ancienne",                  fmt:"60×60 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:70  },
+
+  { id:"PV056", nome:"Pierre Vive Ancienne Grip",             fmt:"60×60 grip",    col:"Pierre Vive", tipo:"Gres Fine Grip",  listino:73  },
+
+  { id:"PV061", nome:"Pierre Vive Ancienne Vintage",          fmt:"80×80 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:87  },
+
+  { id:"PV066", nome:"Pierre Vive Ancienne Vintage",          fmt:"40×80 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:80  },
+
+  { id:"PV071", nome:"Pierre Vive Ancienne Vintage",          fmt:"40×40 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:72  },
+
+  { id:"PV076", nome:"Pierre Vive Ancienne Vintage",          fmt:"60×60 rett.",   col:"Pierre Vive", tipo:"Gres Fine",       listino:70  },
+
+  { id:"PV181", nome:"Pierre Vive Battiscopa",                fmt:"4,6×60",        col:"Pierre Vive", tipo:"Battiscopa",      listino:18  },
+
+  { id:"PV126", nome:"Pierre Vive Ancienne Battiscopa",       fmt:"4,6×60",        col:"Pierre Vive", tipo:"Battiscopa",      listino:18  },
+
+  { id:"PV_SKE1",nome:"Pierre Vive Noble SKE 2.0",           fmt:"60×120 20mm",   col:"Pierre Vive", tipo:"Esterno 20mm",    listino:95  },
+
+  { id:"PV_SKE2",nome:"Pierre Vive Ancienne SKE 2.0",        fmt:"60×120 20mm",   col:"Pierre Vive", tipo:"Esterno 20mm",    listino:95  },
+
+  { id:"PV_SKE3",nome:"Pierre Vive Ancienne SKE 2.0",        fmt:"60×60 20mm",    col:"Pierre Vive", tipo:"Esterno 20mm",    listino:80  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // MATERIA
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"MA001", nome:"Materia Lastra Grande",                 fmt:"120×280 rett.", col:"Materia",     tipo:"Gres Fine 6mm",  listino:132 },
+
+  { id:"MA016", nome:"Materia",                               fmt:"120×120 rett.", col:"Materia",     tipo:"Gres Fine",      listino:105 },
+
+  { id:"MA081", nome:"Materia Grip",                          fmt:"120×120 grip",  col:"Materia",     tipo:"Gres Fine Grip", listino:108 },
+
+  { id:"MA021", nome:"Materia",                               fmt:"80×80 rett.",   col:"Materia",     tipo:"Gres Fine",      listino:95  },
+
+  { id:"MA041", nome:"Materia",                               fmt:"60×120 rett.",  col:"Materia",     tipo:"Gres Fine",      listino:105 },
+
+  { id:"MA086", nome:"Materia Grip",                          fmt:"60×120 grip",   col:"Materia",     tipo:"Gres Fine Grip", listino:108 },
+
+  { id:"MA051", nome:"Materia",                               fmt:"60×60 rett.",   col:"Materia",     tipo:"Gres Fine",      listino:85  },
+
+  { id:"MA061", nome:"Materia",                               fmt:"30×60",         col:"Materia",     tipo:"Gres Fine",      listino:70  },
+
+  { id:"MA193", nome:"Materia SKE 2.0",                       fmt:"60×120 20mm",   col:"Materia",     tipo:"Esterno 20mm",   listino:95  },
+
+  { id:"MA194", nome:"Materia SKE 2.0",                       fmt:"120×120 20mm",  col:"Materia",     tipo:"Esterno 20mm",   listino:110 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // PIASENTINA STONE
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"PS001", nome:"Piasentina Stone Velvet",               fmt:"120×280 6mm",   col:"Piasentina Stone", tipo:"Gres Fine 6mm",  listino:132 },
+
+  { id:"PS004", nome:"Piasentina Stone Velvet",               fmt:"120×120 rett.", col:"Piasentina Stone", tipo:"Gres Fine",       listino:90  },
+
+  { id:"PS019", nome:"Piasentina Stone Velvet",               fmt:"60×120 rett.",  col:"Piasentina Stone", tipo:"Gres Fine",       listino:87  },
+
+  { id:"PS003", nome:"Piasentina Stone Milled",               fmt:"120×280 6mm",   col:"Piasentina Stone", tipo:"Gres Fine 6mm",  listino:132 },
+
+  { id:"PS009", nome:"Piasentina Stone Milled",               fmt:"60×120 rett.",  col:"Piasentina Stone", tipo:"Gres Fine",       listino:87  },
+
+  { id:"PS002", nome:"Piasentina Stone Flamed",               fmt:"120×280 6mm",   col:"Piasentina Stone", tipo:"Gres Fine 6mm",  listino:132 },
+
+  { id:"PS005", nome:"Piasentina Stone Flamed",               fmt:"120×120 rett.", col:"Piasentina Stone", tipo:"Gres Fine",       listino:90  },
+
+  { id:"PS006", nome:"Piasentina Stone Flamed",               fmt:"80×180 rett.",  col:"Piasentina Stone", tipo:"Gres Fine",       listino:110 },
+
+  { id:"PS014", nome:"Piasentina Stone Flamed Grip",          fmt:"80×180 grip",   col:"Piasentina Stone", tipo:"Gres Fine Grip",  listino:113 },
+
+  { id:"PS008", nome:"Piasentina Stone Flamed",               fmt:"60×120 rett.",  col:"Piasentina Stone", tipo:"Gres Fine",       listino:87  },
+
+  { id:"PS016", nome:"Piasentina Stone Flamed Grip",          fmt:"60×120 grip",   col:"Piasentina Stone", tipo:"Gres Fine Grip",  listino:90  },
+
+  { id:"PS007", nome:"Piasentina Stone Flamed",               fmt:"40×80 rett.",   col:"Piasentina Stone", tipo:"Gres Fine",       listino:80  },
+
+  { id:"PS015", nome:"Piasentina Stone Flamed Grip",          fmt:"40×80 grip",    col:"Piasentina Stone", tipo:"Gres Fine Grip",  listino:83  },
+
+  { id:"PS010", nome:"Piasentina Stone Flamed SKE 2.0",       fmt:"80×180 20mm",   col:"Piasentina Stone", tipo:"Esterno 20mm",    listino:120 },
+
+  { id:"PS011", nome:"Piasentina Stone Flamed SKE 2.0",       fmt:"60×120 20mm",   col:"Piasentina Stone", tipo:"Esterno 20mm",    listino:105 },
+
+  { id:"PS013", nome:"Piasentina Stone Flamed SKE 2.0",       fmt:"60×60 20mm",    col:"Piasentina Stone", tipo:"Esterno 20mm",    listino:90  },
+
+  { id:"PS017", nome:"Piasentina Stone Flamed SKE 2.0",       fmt:"40×120 20mm",   col:"Piasentina Stone", tipo:"Esterno 20mm",    listino:98  },
+
+  { id:"PS012", nome:"Piasentina Stone Flamed SKE 2.0",       fmt:"40×180 20mm",   col:"Piasentina Stone", tipo:"Esterno 20mm",    listino:115 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // NATIVA
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"NA001", nome:"Nativa Vena",                           fmt:"60×120 rett.",  col:"Nativa",      tipo:"Gres Fine",      listino:95  },
+
+  { id:"NA002", nome:"Nativa Vena Grip",                      fmt:"60×120 grip",   col:"Nativa",      tipo:"Gres Fine Grip", listino:98  },
+
+  { id:"NA010", nome:"Nativa Falda",                          fmt:"60×120 rett.",  col:"Nativa",      tipo:"Gres Fine",      listino:95  },
+
+  { id:"NA011", nome:"Nativa Falda Heritage",                 fmt:"60×120 rett.",  col:"Nativa",      tipo:"Gres Fine",      listino:100 },
+
+  { id:"NA088", nome:"Nativa Armis SKE 2.0",                  fmt:"80×180 20mm",   col:"Nativa",      tipo:"Esterno 20mm",   listino:130 },
+
+  { id:"NA_SKE1",nome:"Nativa Vena SKE 2.0",                 fmt:"80×180 20mm",   col:"Nativa",      tipo:"Esterno 20mm",   listino:120 },
+
+  { id:"NA_SKE2",nome:"Nativa Vena SKE 2.0",                 fmt:"60×120 20mm",   col:"Nativa",      tipo:"Esterno 20mm",   listino:105 },
+
+  { id:"NA_SKE3",nome:"Nativa Falda SKE 2.0",                fmt:"60×120 20mm",   col:"Nativa",      tipo:"Esterno 20mm",   listino:105 },
+
+  { id:"NA_SKE4",nome:"Nativa Falda SKE 2.0",                fmt:"60×60 20mm",    col:"Nativa",      tipo:"Esterno 20mm",   listino:90  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // MÉTALLIQUE
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"ME001", nome:"Métallique Lastra Grande",              fmt:"120×280 rett.", col:"Métallique",  tipo:"Gres Fine 6mm",  listino:132 },
+
+  { id:"ME011", nome:"Métallique",                            fmt:"60×120 rett.",  col:"Métallique",  tipo:"Gres Fine",      listino:87  },
+
+  { id:"ME021", nome:"Métallique",                            fmt:"80×80 rett.",   col:"Métallique",  tipo:"Gres Fine",      listino:87  },
+
+  { id:"ME031", nome:"Métallique",                            fmt:"60×60 rett.",   col:"Métallique",  tipo:"Gres Fine",      listino:72  },
+
+  { id:"ME041", nome:"Métallique Oxyde",                      fmt:"60×120 rett.",  col:"Métallique",  tipo:"Gres Fine",      listino:90  },
+
+  { id:"ME051", nome:"Métallique Battiscopa",                 fmt:"4,6×60",        col:"Métallique",  tipo:"Battiscopa",     listino:18  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // LE REVERSE — COMPLETAMENTE RISCRITTO
+
+  // Superfici reali: Elegance, Antique, Carved. Spessore 10mm indoor.
+
+  // NON esistono: Chevron, Versailles, Esagono, Lappato.
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"RS001", nome:"Le Reverse Elegance Lastra Grande",     fmt:"120×280 6mm",   col:"Le Reverse",  tipo:"Gres Fine 6mm",  listino:132 },
+
+  { id:"RS011", nome:"Le Reverse Elegance",                   fmt:"60×120 10mm",   col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:95  },
+
+  { id:"RS021", nome:"Le Reverse Elegance",                   fmt:"80×80 10mm",    col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:95  },
+
+  { id:"RS031", nome:"Le Reverse Elegance",                   fmt:"60×60 10mm",    col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:78  },
+
+  { id:"RS041", nome:"Le Reverse Elegance",                   fmt:"40×80 10mm",    col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:85  },
+
+  { id:"RS051", nome:"Le Reverse Antique",                    fmt:"60×120 10mm",   col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:98  },
+
+  { id:"RS061", nome:"Le Reverse Antique",                    fmt:"80×80 10mm",    col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:98  },
+
+  { id:"RS071", nome:"Le Reverse Antique",                    fmt:"60×60 10mm",    col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:80  },
+
+  { id:"RS081", nome:"Le Reverse Antique",                    fmt:"40×80 10mm",    col:"Le Reverse",  tipo:"Gres Fine 10mm", listino:88  },
+
+  { id:"RS036", nome:"Le Reverse Carved",                     fmt:"60×120 rett.",  col:"Le Reverse",  tipo:"Gres Fine",      listino:98  },
+
+  { id:"RS076", nome:"Le Reverse Carved",                     fmt:"40×80 rett.",   col:"Le Reverse",  tipo:"Gres Fine",      listino:88  },
+
+  { id:"RS086", nome:"Le Reverse Carved",                     fmt:"60×60 rett.",   col:"Le Reverse",  tipo:"Gres Fine",      listino:80  },
+
+  { id:"RS181", nome:"Le Reverse Carved SKE 2.0",             fmt:"60×120 20mm",   col:"Le Reverse",  tipo:"Esterno 20mm",   listino:110 },
+
+  { id:"RS176", nome:"Le Reverse Carved SKE 2.0",             fmt:"60×60 20mm",    col:"Le Reverse",  tipo:"Esterno 20mm",   listino:95  },
+
+  { id:"RS8039",nome:"Le Reverse Carved SKE 2.0 Nuit 80×180",fmt:"80×180 20mm",   col:"Le Reverse",  tipo:"Esterno 20mm",   listino:130 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // CARRIÈRE
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"CA001", nome:"Carrière",                              fmt:"60×120 rett.",  col:"Carrière",    tipo:"Gres Fine",      listino:92  },
+
+  { id:"CA011", nome:"Carrière",                              fmt:"60×60 rett.",   col:"Carrière",    tipo:"Gres Fine",      listino:85  },
+
+  { id:"CA021", nome:"Carrière Anticato",                     fmt:"60×120 rett.",  col:"Carrière",    tipo:"Gres Fine",      listino:95  },
+
+  { id:"CA031", nome:"Carrière Anticato",                     fmt:"60×60 rett.",   col:"Carrière",    tipo:"Gres Fine",      listino:88  },
+
+  { id:"CA051", nome:"Carrière Aspetto Nobile",               fmt:"60×120 rett.",  col:"Carrière",    tipo:"Gres Fine",      listino:105 },
+
+  { id:"CA061", nome:"Carrière Aspetto di Recupero",          fmt:"60×120 rett.",  col:"Carrière",    tipo:"Gres Fine",      listino:105 },
+
+  { id:"CA_G9", nome:"Carrière Grip Outdoor",                 fmt:"60×60 grip",    col:"Carrière",    tipo:"Gres Fine Grip", listino:90  },
+
+  { id:"CA_G20",nome:"Carrière SKE 2.0",                      fmt:"60×60 20mm",    col:"Carrière",    tipo:"Esterno 20mm",   listino:95  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ROCKS
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"RK001", nome:"Rocks Porfido",                         fmt:"60×120 rett.",  col:"Rocks",       tipo:"Gres Fine",      listino:102 },
+
+  { id:"RK002", nome:"Rocks Porfido",                         fmt:"80×180 rett.",  col:"Rocks",       tipo:"Gres Fine",      listino:115 },
+
+  { id:"RK003", nome:"Rocks Porfido Grip",                    fmt:"80×180 grip",   col:"Rocks",       tipo:"Gres Fine Grip", listino:118 },
+
+  { id:"RK004", nome:"Rocks Porfido Grip",                    fmt:"60×120 grip",   col:"Rocks",       tipo:"Gres Fine Grip", listino:105 },
+
+  { id:"RK005", nome:"Rocks Porfido Grip",                    fmt:"40×80 grip",    col:"Rocks",       tipo:"Gres Fine Grip", listino:95  },
+
+  { id:"RK006", nome:"Rocks Porfido SKE 2.0",                 fmt:"80×180 20mm",   col:"Rocks",       tipo:"Esterno 20mm",   listino:130 },
+
+  { id:"RK007", nome:"Rocks Porfido SKE 2.0",                 fmt:"40×120 20mm",   col:"Rocks",       tipo:"Esterno 20mm",   listino:110 },
+
+  { id:"RK011", nome:"Rocks Silver Black",                    fmt:"60×120 rett.",  col:"Rocks",       tipo:"Gres Fine",      listino:102 },
+
+  { id:"RK012", nome:"Rocks Silver Black",                    fmt:"30×60",         col:"Rocks",       tipo:"Gres Fine",      listino:78  },
+
+  { id:"RK013", nome:"Rocks Silver Black Grip",               fmt:"60×120 grip",   col:"Rocks",       tipo:"Gres Fine Grip", listino:105 },
+
+  { id:"RK014", nome:"Rocks Silver Black SKE 2.0",            fmt:"60×120 20mm",   col:"Rocks",       tipo:"Esterno 20mm",   listino:115 },
+
+  { id:"RK015", nome:"Rocks Silver Black SKE 2.0",            fmt:"60×60 20mm",    col:"Rocks",       tipo:"Esterno 20mm",   listino:95  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // PRIMA MATERIA — CORRETTO (era col:"Rocks" — sbagliato)
+
+  // Spessore 10mm. MAXI = 120×240 (non 120×280).
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"8127", nome:"Prima Materia Cemento Lastra Grande",    fmt:"120×240 6mm",   col:"Prima Materia", tipo:"Gres Fine 6mm",  listino:125 },
+
+  { id:"8128", nome:"Prima Materia Cenere Lastra Grande",     fmt:"120×240 6mm",   col:"Prima Materia", tipo:"Gres Fine 6mm",  listino:125 },
+
+  { id:"8129", nome:"Prima Materia Sandalo Lastra Grande",    fmt:"120×240 6mm",   col:"Prima Materia", tipo:"Gres Fine 6mm",  listino:125 },
+
+  { id:"8100", nome:"Prima Materia Cemento",                  fmt:"80×180 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:115 },
+
+  { id:"8105", nome:"Prima Materia Cemento Cerato",           fmt:"80×180 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:118 },
+
+  { id:"8110", nome:"Prima Materia Cemento",                  fmt:"80×80 10mm",    col:"Prima Materia", tipo:"Gres Fine 10mm", listino:95  },
+
+  { id:"8120", nome:"Prima Materia Cemento",                  fmt:"40×80 10mm",    col:"Prima Materia", tipo:"Gres Fine 10mm", listino:82  },
+
+  { id:"8135", nome:"Prima Materia Cemento Grip",             fmt:"40×80 10mm",    col:"Prima Materia", tipo:"Gres Fine Grip", listino:85  },
+
+  { id:"8175", nome:"Prima Materia Cemento",                  fmt:"20×80 10mm",    col:"Prima Materia", tipo:"Gres Fine 10mm", listino:75  },
+
+  { id:"8140", nome:"Prima Materia Cemento",                  fmt:"60×120 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:98  },
+
+  { id:"8150", nome:"Prima Materia Cemento Cerato",           fmt:"60×120 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:100 },
+
+  { id:"8155", nome:"Prima Materia Cemento Grip",             fmt:"60×120 10mm",   col:"Prima Materia", tipo:"Gres Fine Grip", listino:100 },
+
+  { id:"8160", nome:"Prima Materia Cemento",                  fmt:"20×120 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:85  },
+
+  { id:"8231", nome:"Prima Materia Cemento",                  fmt:"60×60 10mm",    col:"Prima Materia", tipo:"Gres Fine 10mm", listino:78  },
+
+  { id:"8185", nome:"Prima Materia Battiscopa Cemento",       fmt:"4,6×60",        col:"Prima Materia", tipo:"Battiscopa",     listino:18  },
+
+  { id:"8101", nome:"Prima Materia Cenere",                   fmt:"80×180 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:115 },
+
+  { id:"8141", nome:"Prima Materia Cenere",                   fmt:"60×120 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:98  },
+
+  { id:"8161", nome:"Prima Materia Cenere",                   fmt:"20×120 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:85  },
+
+  { id:"8232", nome:"Prima Materia Cenere",                   fmt:"60×60 10mm",    col:"Prima Materia", tipo:"Gres Fine 10mm", listino:78  },
+
+  { id:"8186", nome:"Prima Materia Battiscopa Cenere",        fmt:"4,6×60",        col:"Prima Materia", tipo:"Battiscopa",     listino:18  },
+
+  { id:"8103", nome:"Prima Materia Sandalo",                  fmt:"80×180 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:115 },
+
+  { id:"8143", nome:"Prima Materia Sandalo",                  fmt:"60×120 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:98  },
+
+  { id:"8163", nome:"Prima Materia Sandalo",                  fmt:"20×120 10mm",   col:"Prima Materia", tipo:"Gres Fine 10mm", listino:85  },
+
+  { id:"8233", nome:"Prima Materia Sandalo",                  fmt:"60×60 10mm",    col:"Prima Materia", tipo:"Gres Fine 10mm", listino:78  },
+
+  { id:"8188", nome:"Prima Materia Battiscopa Sandalo",       fmt:"4,6×60",        col:"Prima Materia", tipo:"Battiscopa",     listino:18  },
+
+  { id:"8038", nome:"Prima Materia Cemento SKE 2.0",          fmt:"80×180 20mm",   col:"Prima Materia", tipo:"Esterno 20mm",   listino:130 },
+
+  { id:"8075", nome:"Prima Materia Cemento SKE 2.0",          fmt:"80×80 20mm",    col:"Prima Materia", tipo:"Esterno 20mm",   listino:105 },
+
+  { id:"8095", nome:"Prima Materia Cemento SKE 2.0",          fmt:"40×120 20mm",   col:"Prima Materia", tipo:"Esterno 20mm",   listino:110 },
+
+  { id:"8090", nome:"Prima Materia Cemento SKE 2.0",          fmt:"20×120 20mm",   col:"Prima Materia", tipo:"Esterno 20mm",   listino:95  },
+
+  { id:"8062", nome:"Prima Materia Cemento SKE 2.0",          fmt:"60×60 20mm",    col:"Prima Materia", tipo:"Esterno 20mm",   listino:90  },
+
+  { id:"8076", nome:"Prima Materia Cenere SKE 2.0",           fmt:"80×80 20mm",    col:"Prima Materia", tipo:"Esterno 20mm",   listino:105 },
+
+  { id:"8096", nome:"Prima Materia Cenere SKE 2.0",           fmt:"40×120 20mm",   col:"Prima Materia", tipo:"Esterno 20mm",   listino:110 },
+
+  { id:"8091", nome:"Prima Materia Cenere SKE 2.0",           fmt:"20×120 20mm",   col:"Prima Materia", tipo:"Esterno 20mm",   listino:95  },
+
+  { id:"8063", nome:"Prima Materia Cenere SKE 2.0",           fmt:"60×60 20mm",    col:"Prima Materia", tipo:"Esterno 20mm",   listino:90  },
+
+  { id:"8077", nome:"Prima Materia Sandalo SKE 2.0",          fmt:"80×80 20mm",    col:"Prima Materia", tipo:"Esterno 20mm",   listino:105 },
+
+  { id:"8098", nome:"Prima Materia Sandalo SKE 2.0",          fmt:"40×120 20mm",   col:"Prima Materia", tipo:"Esterno 20mm",   listino:110 },
+
+  { id:"8093", nome:"Prima Materia Sandalo SKE 2.0",          fmt:"20×120 20mm",   col:"Prima Materia", tipo:"Esterno 20mm",   listino:95  },
+
+  { id:"8064", nome:"Prima Materia Sandalo SKE 2.0",          fmt:"60×60 20mm",    col:"Prima Materia", tipo:"Esterno 20mm",   listino:90  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // TALCO — CORRETTO (era col:"Rocks" — sbagliato)
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"4001", nome:"Prima Materia Talco",                    fmt:"60×60",         col:"Talco",       tipo:"Gres Fine",      listino:96  },
+
+  { id:"4002", nome:"Prima Materia Talco",                    fmt:"60×120",        col:"Talco",       tipo:"Gres Fine",      listino:96  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // TERRA CREA — AGGIUNTO (mancava completamente)
+
+  // Spessore 10mm. Outdoor: "Rude R11".
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"TC061", nome:"Terra Crea Lastra Grande",              fmt:"120×280 6mm",   col:"Terra Crea",  tipo:"Gres Fine 6mm",  listino:135 },
+
+  { id:"TC001", nome:"Terra Crea",                            fmt:"60×120 10mm",   col:"Terra Crea",  tipo:"Gres Fine 10mm", listino:105 },
+
+  { id:"TC011", nome:"Terra Crea",                            fmt:"60×60 10mm",    col:"Terra Crea",  tipo:"Gres Fine 10mm", listino:85  },
+
+  { id:"TC021", nome:"Terra Crea",                            fmt:"80×80 10mm",    col:"Terra Crea",  tipo:"Gres Fine 10mm", listino:98  },
+
+  { id:"TC031", nome:"Terra Crea",                            fmt:"80×180 10mm",   col:"Terra Crea",  tipo:"Gres Fine 10mm", listino:115 },
+
+  { id:"TC041", nome:"Terra Crea",                            fmt:"120×120 10mm",  col:"Terra Crea",  tipo:"Gres Fine 10mm", listino:110 },
+
+  { id:"TC_R1", nome:"Terra Crea Rude R11",                   fmt:"80×180 10mm",   col:"Terra Crea",  tipo:"Gres Fine Grip", listino:118 },
+
+  { id:"TC_R2", nome:"Terra Crea Rude R11",                   fmt:"60×120 10mm",   col:"Terra Crea",  tipo:"Gres Fine Grip", listino:108 },
+
+  { id:"TC_R3", nome:"Terra Crea Rude R11",                   fmt:"80×80 10mm",    col:"Terra Crea",  tipo:"Gres Fine Grip", listino:102 },
+
+  { id:"TC_R4", nome:"Terra Crea Rude R11",                   fmt:"60×60 10mm",    col:"Terra Crea",  tipo:"Gres Fine Grip", listino:90  },
+
+  { id:"TC_SK1",nome:"Terra Crea SKE 2.0",                    fmt:"60×120 20mm",   col:"Terra Crea",  tipo:"Esterno 20mm",   listino:112 },
+
+  { id:"TC_SK2",nome:"Terra Crea SKE 2.0",                    fmt:"60×60 20mm",    col:"Terra Crea",  tipo:"Esterno 20mm",   listino:95  },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ESSENCE — AGGIUNTO (mancava completamente)
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"ES001", nome:"Essence Pure",                          fmt:"20×120",        col:"Essence",     tipo:"Gres Legno",     listino:105 },
+
+  { id:"ES002", nome:"Essence Pure",                          fmt:"26×180",        col:"Essence",     tipo:"Gres Legno",     listino:115 },
+
+  { id:"ES003", nome:"Essence Pure Lastra Grande",            fmt:"120×280 6mm",   col:"Essence",     tipo:"Gres Legno 6mm", listino:135 },
+
+  { id:"ES011", nome:"Essence Ambre",                         fmt:"20×120",        col:"Essence",     tipo:"Gres Legno",     listino:105 },
+
+  { id:"ES012", nome:"Essence Ambre",                         fmt:"26×180",        col:"Essence",     tipo:"Gres Legno",     listino:115 },
+
+  { id:"ES021", nome:"Essence Musk",                          fmt:"20×120",        col:"Essence",     tipo:"Gres Legno",     listino:105 },
+
+  { id:"ES022", nome:"Essence Musk",                          fmt:"26×180",        col:"Essence",     tipo:"Gres Legno",     listino:115 },
+
+  { id:"ES031", nome:"Essence Moka Lastra Grande",            fmt:"120×280 6mm",   col:"Essence",     tipo:"Gres Legno 6mm", listino:135 },
+
+  { id:"ES041", nome:"Essence Chevron",                       fmt:"9×58,5",        col:"Essence",     tipo:"Gres Legno",     listino:145 },
+
+  { id:"ES091", nome:"Essence Deck Pure",                     fmt:"20×120 20mm",   col:"Essence",     tipo:"Esterno 20mm",   listino:125 },
+
+  { id:"ES092", nome:"Essence Deck Ambre",                    fmt:"20×120 20mm",   col:"Essence",     tipo:"Esterno 20mm",   listino:125 },
+
+  { id:"ES093", nome:"Essence Deck Musk",                     fmt:"20×120 20mm",   col:"Essence",     tipo:"Esterno 20mm",   listino:125 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ÉVOLUTION — CORRETTO
+
+  // Outdoor SOLO 100×100 20mm. Nessun 9mm outdoor.
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"EV001", nome:"Évolution",                             fmt:"60×120 rett.",  col:"Évolution",   tipo:"Gres Fine",      listino:92  },
+
+  { id:"EV002", nome:"Évolution Lappato",                     fmt:"60×120 lapp.",  col:"Évolution",   tipo:"Gres Fine Lapp.",listino:95  },
+
+  { id:"EV003", nome:"Évolution Bocciardato",                 fmt:"60×120 rett.",  col:"Évolution",   tipo:"Gres Fine",      listino:98  },
+
+  { id:"EV010", nome:"Évolution SKE 2.0 Noir",               fmt:"100×100 20mm",  col:"Évolution",   tipo:"Esterno 20mm",   listino:135 },
+
+  { id:"EV011", nome:"Évolution SKE 2.0 Gris Foncé",         fmt:"100×100 20mm",  col:"Évolution",   tipo:"Esterno 20mm",   listino:135 },
+
+  { id:"EV012", nome:"Évolution SKE 2.0 Greyge",             fmt:"100×100 20mm",  col:"Évolution",   tipo:"Esterno 20mm",   listino:135 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // WOODSIDE — CORRETTO (era col:"Les Bois" — sbagliato)
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"WD001", nome:"Woodside",                              fmt:"20×120",        col:"Woodside",    tipo:"Gres Legno",     listino:105 },
+
+  { id:"WD002", nome:"Woodside",                              fmt:"26×180",        col:"Woodside",    tipo:"Gres Legno",     listino:120 },
+
+  { id:"WD003", nome:"Woodside Chalet",                       fmt:"29×120",        col:"Woodside",    tipo:"Gres Legno",     listino:240 },
+
+  { id:"WD_DK", nome:"Woodside Deck",                         fmt:"20×120 20mm",   col:"Woodside",    tipo:"Esterno 20mm",   listino:130 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // LES BOIS
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"LB001", nome:"Les Bois Slavonia",                     fmt:"20×120",        col:"Les Bois",    tipo:"Gres Legno",     listino:185 },
+
+  { id:"LB002", nome:"Les Bois Slavonia",                     fmt:"26×180",        col:"Les Bois",    tipo:"Gres Legno",     listino:200 },
+
+  { id:"LB011", nome:"Les Bois Bocote",                       fmt:"20×120",        col:"Les Bois",    tipo:"Gres Legno",     listino:185 },
+
+  { id:"LB021", nome:"Les Bois Mogano",                       fmt:"20×120",        col:"Les Bois",    tipo:"Gres Legno",     listino:185 },
+
+  { id:"LB031", nome:"Les Bois Cobolo",                       fmt:"80×180",        col:"Les Bois",    tipo:"Gres Legno",     listino:220 },
+
+  { id:"LB032", nome:"Les Bois Cobolo",                       fmt:"20×120",        col:"Les Bois",    tipo:"Gres Legno",     listino:185 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // OUTDOOR / SKE 2.0 GENERICI
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"OUT001", nome:"SKE 2.0 Outdoor",                      fmt:"60×120 20mm",   col:"Outdoor SKE 2.0", tipo:"Esterno 20mm", listino:95 },
+
+  { id:"OUT010", nome:"SKE 2.0 Outdoor",                      fmt:"80×80 20mm",    col:"Outdoor SKE 2.0", tipo:"Esterno 20mm", listino:87 },
+
+  { id:"OUT020", nome:"SKE 2.0 Outdoor",                      fmt:"40×80 20mm",    col:"Outdoor SKE 2.0", tipo:"Esterno 20mm", listino:72 },
+
+  { id:"OUT030", nome:"SKE 2.0 Outdoor Grip",                 fmt:"60×60 20mm",    col:"Outdoor SKE 2.0", tipo:"Esterno 20mm", listino:80 },
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // BLOCK — 18mm pavimentazione
+
+  // ══════════════════════════════════════════════════════════════════════════
+
+  { id:"BL001", nome:"Block Namur Antique",                   fmt:"20,2×20,2 18mm",col:"Block",       tipo:"Pavimentazione", listino:65 },
+
+  { id:"BL051", nome:"Block Namur Antique",                   fmt:"20,2×30,4 18mm",col:"Block",       tipo:"Pavimentazione", listino:70 },
+
+  { id:"BL002", nome:"Block Gent Antique",                    fmt:"20,2×20,2 18mm",col:"Block",       tipo:"Pavimentazione", listino:65 },
+
+  { id:"BL052", nome:"Block Gent Antique",                    fmt:"20,2×30,4 18mm",col:"Block",       tipo:"Pavimentazione", listino:70 },
+
+  { id:"BL003", nome:"Block Bruges Antique",                  fmt:"20,2×20,2 18mm",col:"Block",       tipo:"Pavimentazione", listino:65 },
+
+  { id:"BL053", nome:"Block Bruges Antique",                  fmt:"20,2×30,4 18mm",col:"Block",       tipo:"Pavimentazione", listino:70 },
+
+  { id:"BL004", nome:"Block Cotto",                           fmt:"20,2×20,2 18mm",col:"Block",       tipo:"Pavimentazione", listino:65 },
+
+  { id:"BL054", nome:"Block Cotto",                           fmt:"20,2×30,4 18mm",col:"Block",       tipo:"Pavimentazione", listino:70 },
+
+  { id:"BL005", nome:"Block Porfido",                         fmt:"20,2×20,2 18mm",col:"Block",       tipo:"Pavimentazione", listino:65 },
+
+  { id:"BL055", nome:"Block Porfido",                         fmt:"20,2×30,4 18mm",col:"Block",       tipo:"Pavimentazione", listino:70 },
+
+  { id:"BL006", nome:"Block Piasentina Flamed 1.8",           fmt:"20,2×20,2 18mm",col:"Block",       tipo:"Pavimentazione", listino:72 },
+
+  { id:"BL056", nome:"Block Piasentina Flamed 1.8",           fmt:"20,2×30,4 18mm",col:"Block",       tipo:"Pavimentazione", listino:77 },
+
 ];
 
 const BATT_LISTINO = 18;
