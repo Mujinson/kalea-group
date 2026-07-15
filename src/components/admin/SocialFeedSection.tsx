@@ -42,7 +42,7 @@ export default function SocialFeedSection() {
         .select("value")
         .eq("key", "social_latest_posts")
         .maybeSingle();
-      if (row?.value) setData({ ...EMPTY, ...(row.value as SocialFeedData) });
+      if (row?.value) setData({ ...EMPTY, ...(row.value as unknown as SocialFeedData) });
       setLoading(false);
     })();
   }, []);
