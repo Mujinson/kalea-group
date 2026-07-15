@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['New Order', 'sans-serif'],
-        heading: ['New Order', 'sans-serif'],
+        sans: ['new-order', 'New Order', 'sans-serif'],
+        heading: ['new-order', 'New Order', 'sans-serif'],
       },
       fontSize: {
         'hero-xl': ['3.75rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' }],
