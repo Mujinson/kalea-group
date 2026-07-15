@@ -11,6 +11,7 @@ import { AlertTriangle, Key } from 'lucide-react';
 import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
 import CommercialiSection from '@/components/admin/CommercialiSection';
+import SocialFeedSection from '@/components/admin/SocialFeedSection';
 
 const AdminSettings = () => {
   const { user } = useAdminAuth();
