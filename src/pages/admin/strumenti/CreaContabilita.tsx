@@ -1064,6 +1064,9 @@ function ModuloFornituraSection({ modulo, onChange, onDelete, catalogProdotti }:
             <AddRowBtn onClick={() => addRiga({ desc: "Battiscopa", badge: "Manuale", badgeColor: "gray", um: "Ml", qt: 1, listino: 6.3, sconto: 55, ricarico: 30 })}>
               + Battiscopa
             </AddRowBtn>
+            <AddRowBtn onClick={() => addRiga({ desc: "Manodopera", badge: "Interno", badgeColor: "green", um: "Ore", qt: 1, listino: 25, sconto: 0, ricarico: 30 })}>
+              + Manodopera
+            </AddRowBtn>
           </div>
         </div>
       )}
