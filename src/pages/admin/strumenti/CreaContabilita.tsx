@@ -1285,6 +1285,27 @@ function ServiziComuniSection({
         <AddRowBtn onClick={() => addRiga({ desc: "", badge: "Manuale", badgeColor: "gray", um: "N", qt: 1, listino: 0, sconto: 0, ricarico: 30 })}>
           + Riga manuale
         </AddRowBtn>
+        <AddRowBtn onClick={() => addRiga({ desc: "Trasporto", badge: "Servizio", badgeColor: "gray", um: "N", qt: 1, listino: 80, sconto: 0, ricarico: 30 })}>
+          + Trasporto
+        </AddRowBtn>
+        <AddRowBtn onClick={() => addRiga({ desc: "Sopralluogo", badge: "Servizio", badgeColor: "gray", um: "N", qt: 1, listino: 50, sconto: 0, ricarico: 30 })}>
+          + Sopralluogo
+        </AddRowBtn>
+        <AddRowBtn onClick={() => addRiga({ desc: "Smaltimento rifiuti", badge: "Servizio", badgeColor: "gray", um: "N", qt: 1, listino: 120, sconto: 0, ricarico: 30 })}>
+          + Smaltimento rifiuti
+        </AddRowBtn>
+        <AddRowBtn onClick={() => addRiga({ desc: "Autolivellamento", badge: "Servizio", badgeColor: "gray", um: "Mq", qt: 1, listino: 12, sconto: 0, ricarico: 30 })}>
+          + Autolivellamento
+        </AddRowBtn>
+        <AddRowBtn onClick={() => addRiga({ desc: "Posa tappetino", badge: "Interno", badgeColor: "green", um: "Mq", qt: 1, listino: 3, sconto: 0, ricarico: 100 })}>
+          + Posa tappetino
+        </AddRowBtn>
+        <AddRowBtn onClick={() => addRiga({ desc: "Posa", badge: "Interno", badgeColor: "green", um: "Mq", qt: 1, listino: 9, sconto: 0, ricarico: 122 })}>
+          + Posa
+        </AddRowBtn>
+        <AddRowBtn onClick={() => addRiga({ desc: "Pulizia", badge: "Servizio", badgeColor: "gray", um: "N", qt: 1, listino: 100, sconto: 0, ricarico: 30 })}>
+          + Pulizia
+        </AddRowBtn>
       </div>
     </div>
   );
