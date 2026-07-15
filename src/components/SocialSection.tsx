@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Instagram, Facebook, Linkedin, ArrowUpRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useDragScroll } from "@/hooks/useDragScroll";
+import { supabase } from "@/integrations/supabase/client";
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
