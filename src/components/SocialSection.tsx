@@ -122,10 +122,14 @@ const SocialSection = () => {
           }`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {channels.map((channel, index) => (
+          {channels.map((channel, index) => {
+            const post = latest[channel.id];
+            const hasPost = !!(post?.postUrl || post?.imageUrl);
+            const href = post?.postUrl || channel.url;
+            return (
             <motion.a
               key={channel.id}
-              href={channel.url}
+              href={href}
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 30 }}
@@ -137,19 +141,33 @@ const SocialSection = () => {
               className="group relative shrink-0 w-[260px] md:w-[300px] aspect-[4/5] rounded-2xl overflow-hidden snap-start"
               aria-label={`${t("social.follow")} ${channel.name}`}
             >
-              {/* Background gradient */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${channel.gradient}`}
-              />
+              {/* Background: post image or gradient */}
+              {post?.imageUrl ? (
+                <img
+                  src={post.imageUrl}
+                  alt={post.caption || channel.name}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <div className={`absolute inset-0 bg-gradient-to-br ${channel.gradient}`} />
+              )}
 
-              {/* Subtle texture overlay */}
-              <div
-                className="absolute inset-0 opacity-20"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 1px, transparent 1px, transparent 12px), repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 16px)",
-                }}
-              />
+              {/* Texture overlay (only on gradient) */}
+              {!post?.imageUrl && (
+                <div
+                  className="absolute inset-0 opacity-20"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(45deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 1px, transparent 1px, transparent 12px), repeating-linear-gradient(-45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 16px)",
+                  }}
+                />
+              )}
+
+              {/* Dark gradient for legibility when there's a post image */}
+              {post?.imageUrl && (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
+              )}
 
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -171,10 +189,16 @@ const SocialSection = () => {
                     {channel.name}
                   </p>
                   <p className="text-lg md:text-xl font-medium">{channel.handle}</p>
+                  {hasPost && post?.caption && (
+                    <p className="text-xs md:text-sm text-white/85 line-clamp-2 pt-1">
+                      {post.caption}
+                    </p>
+                  )}
                 </div>
               </div>
             </motion.a>
-          ))}
+            );
+          })}
         </div>
 
         {/* Fade edges */}
