@@ -33,6 +33,19 @@ const SocialSection = () => {
     direction: "left",
   });
 
+  const [latest, setLatest] = useState<Record<string, { postUrl?: string; imageUrl?: string; caption?: string }>>({});
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from("app_settings")
+        .select("value")
+        .eq("key", "social_latest_posts")
+        .maybeSingle();
+      if (data?.value) setLatest(data.value as any);
+    })();
+  }, []);
+
   const channels: SocialChannel[] = [
     {
       id: "instagram",
