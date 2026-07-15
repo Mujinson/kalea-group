@@ -85,6 +85,9 @@ const AdminSettings = () => {
       {/* Commerciali Section */}
       <CommercialiSection />
 
+      {/* Social feed manager */}
+      <SocialFeedSection />
+
       {/* Current User Info */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
