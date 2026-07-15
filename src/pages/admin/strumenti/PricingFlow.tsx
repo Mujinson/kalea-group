@@ -127,7 +127,7 @@ export default function PricingFlow() {
   const avgMargine = ((avgPrezzo - avgCosto) / avgPrezzo) * 100;
 
   return (
-    <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "28px 20px" }}>
+    <div style={{ fontFamily: "'new-order', 'New Order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "28px 20px" }}>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 20, fontWeight: 400, color: "#1A1A2E", marginBottom: 4 }}>Pricing Flow 2025</h1>
         <p style={{ fontSize: 13, color: "#9A9890" }}>Listino Flow by Woodco · Calcolo prezzi di vendita e margini in tempo reale</p>

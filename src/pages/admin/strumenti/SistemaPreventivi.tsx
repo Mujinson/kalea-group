@@ -310,7 +310,7 @@ export default function SistemaPreventivi() {
   const sectionTitle: any = {fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:14,paddingBottom:8,borderBottom:"1px solid #E0DDD8"};
 
   return (
-    <div style={{fontFamily:"-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif",color:"#1A1A1A",maxWidth:1300,margin:"0 auto",padding:"8px 4px"}}>
+    <div style={{fontFamily:"'new-order', 'New Order', sans-serif",color:"#1A1A1A",maxWidth:1300,margin:"0 auto",padding:"8px 4px"}}>
 
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}}>
         <div>
