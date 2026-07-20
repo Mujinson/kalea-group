@@ -216,7 +216,7 @@ export default function Preventivatore() {
   const fColors = selected ? (FORN_COLORS[selected.fornitore] || { bg: "#F1F5F9", color: "#5F5E5A" }) : { bg: "", color: "" };
 
   return (
-    <div style={{ fontFamily: "'new-order', 'New Order', sans-serif", color: "#1A1A1A", maxWidth: 1280, margin: "0 auto", padding: "8px 4px" }}>
+    <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1280, margin: "0 auto", padding: "8px 4px" }}>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 22, fontWeight: 400, color: "#1A1A2E", marginBottom: 4 }}>Preventivatore Kalēa</h1>
         <p style={{ fontSize: 13, color: "#9A9890" }}>Tutti i fornitori · Materiale + Posa + Tappetino · Calcola se ci stai dentro con i prezzi</p>

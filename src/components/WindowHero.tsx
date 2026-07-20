@@ -332,7 +332,7 @@ const WindowHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-white text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 tracking-wide"
-              style={{ fontFamily: "'new-order', 'New Order', sans-serif" }}
+              style={{ fontFamily: "'new-order', sans-serif" }}
             >
               Surface System
             </motion.h1>

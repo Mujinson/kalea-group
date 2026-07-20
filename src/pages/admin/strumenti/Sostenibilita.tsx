@@ -260,7 +260,7 @@ export default function Sostenibilita() {
   return (
     <div
       style={{
-        fontFamily: "'new-order', 'New Order', sans-serif",
+        fontFamily: "'new-order', sans-serif",
         color: '#1A1A1A',
         maxWidth: 1100,
         margin: '0 auto',

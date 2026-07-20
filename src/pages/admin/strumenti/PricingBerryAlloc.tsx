@@ -124,7 +124,7 @@ export default function PricingBerryAlloc() {
   const avgListino = PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length;
 
   return (
-    <div style={{ fontFamily: "'new-order', 'New Order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "8px 4px" }}>
+    <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "8px 4px" }}>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 20, fontWeight: 400, color: "#1A1A2E", marginBottom: 4 }}>Pricing BerryAlloc 2026</h1>
         <p style={{ fontSize: 13, color: "#9A9890" }}>Distribuito da Woodco · Laminato DPL · HPF · Parqwood · Zenn · Spirit · Listino 2026</p>
