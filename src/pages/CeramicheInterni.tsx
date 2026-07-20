@@ -34,9 +34,9 @@ const CeramicheInterni = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title="Ceramiche da Interni | Gres Porcellanato | Kalēa®"
-        description="Superfici ceramiche selezionate da Kalēa® per l'eccellenza materica e la resistenza superiore. Gres porcellanato effetto pietra, cemento, metallo e legno per interni di alta gamma."
-        keywords="ceramiche interni, gres porcellanato, piastrelle design, effetto pietra, effetto cemento, effetto legno, pavimenti lusso"
+        title="Ceramiche | Gres Porcellanato di Design | Kalēa®"
+        description="Scopri la selezione esclusiva di ceramiche Kalēa®: gres porcellanato effetto pietra, cemento, metallo e legno per pavimenti e rivestimenti interni ed esterni di alta gamma. Superfici Made in Italy per architetti e designer."
+        keywords="ceramiche design, gres porcellanato, piastrelle lusso, ceramiche interni, ceramiche esterni, effetto pietra, effetto cemento, effetto legno, pavimenti alta gamma, rivestimenti design, Kalēa"
       />
 
       {/* Hero */}
