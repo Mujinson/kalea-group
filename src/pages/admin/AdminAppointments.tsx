@@ -175,8 +175,10 @@ const AdminAppointments = () => {
       <Tabs defaultValue="calendar">
         <TabsList>
           <TabsTrigger value="calendar">Calendario</TabsTrigger>
+          <TabsTrigger value="google">Google Calendar</TabsTrigger>
           <TabsTrigger value="list">Lista</TabsTrigger>
         </TabsList>
+
 
         <TabsContent value="calendar">
           {/* Calendar header */}
