@@ -512,6 +512,12 @@ export default function AdminPlanner() {
                     );
                   })}
                   {dayAssigns.length > 3 && <div className="text-[9px] text-muted-foreground">+{dayAssigns.length - 3}</div>}
+                  {apptsForDay(d).slice(0, 2).map((ap) => (
+                    <div key={ap.id} className="text-[9px] truncate px-1 rounded bg-purple-100 text-purple-800 border-l-2 border-purple-500" title={`${ap.title} · ${format(new Date(ap.appointment_date), 'HH:mm')}`}>
+                      {APPT_ICON[ap.appointment_type] || '📅'} {format(new Date(ap.appointment_date), 'HH:mm')} {ap.title}
+                    </div>
+                  ))}
+                  {apptsForDay(d).length > 2 && <div className="text-[9px] text-purple-700">+{apptsForDay(d).length - 2} appt.</div>}
                 </div>
               </div>
             );
