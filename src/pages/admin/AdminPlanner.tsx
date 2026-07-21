@@ -734,6 +734,7 @@ export default function AdminPlanner() {
           {view === 'anno' && renderAnno()}
           {view === 'gantt' && renderGantt()}
           {view === 'carico' && renderCarico()}
+          {view === 'gcal' && renderGcal()}
         </div>
       </div>
 
