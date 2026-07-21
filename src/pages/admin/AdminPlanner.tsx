@@ -34,11 +34,13 @@ import {
 import CrewManagerDialog from '@/components/admin/planner/CrewManagerDialog';
 import AssignmentDialog from '@/components/admin/planner/AssignmentDialog';
 
-type ViewMode = 'giorno' | 'settimana' | 'mese' | 'anno' | 'gantt' | 'carico';
+type ViewMode = 'giorno' | 'settimana' | 'mese' | 'anno' | 'gantt' | 'carico' | 'gcal';
 
 const VIEW_LABELS: Record<ViewMode, string> = {
-  giorno: 'Giorno', settimana: 'Settimana', mese: 'Mese', anno: 'Anno', gantt: 'Gantt', carico: 'Carico',
+  giorno: 'Giorno', settimana: 'Settimana', mese: 'Mese', anno: 'Anno', gantt: 'Gantt', carico: 'Carico', gcal: 'Google Calendar',
 };
+
+const GCAL_EMBED_SRC = 'https://calendar.google.com/calendar/embed?src=135b1a2f990dd0c5081b9ac59698f6c310f5d5bf93ac607c75d13922ba84eac6%40group.calendar.google.com&ctz=Europe%2FRome';
 
 const KPI = ({ icon: Icon, label, value, color = '#1A1A2E' }: any) => (
   <div className="bg-white border rounded-md px-3 py-2 flex items-center gap-3">
