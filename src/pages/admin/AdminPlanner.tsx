@@ -144,16 +144,18 @@ export default function AdminPlanner() {
   const [filterPriority, setFilterPriority] = useState<string>('');
 
   const fetchAll = useCallback(async () => {
-    const [cs, cm, ca, st, wk, cu] = await Promise.all([
+    const [cs, cm, ca, st, wk, cu, ap] = await Promise.all([
       fetchAllRows((supabase as any).from('crews').select('*').order('name')),
       fetchAllRows((supabase as any).from('crew_members').select('*')),
       fetchAllRows((supabase as any).from('crew_assignments').select('*')),
       fetchAllRows((supabase as any).from('construction_sites').select('*')),
       fetchAllRows((supabase as any).from('workers').select('id, full_name, first_name, last_name')),
       fetchAllRows((supabase as any).from('customers').select('id, name, full_name')),
+      fetchAllRows((supabase as any).from('appointments').select('id, title, appointment_date, duration_minutes, appointment_type, status, lead_id, assigned_to')),
     ]);
     setCrews(cs || []); setCrewMembers(cm || []); setAssignments(ca || []);
     setSites(st || []); setWorkers(wk || []); setCustomers(cu || []);
+    setAppointments(ap || []);
   }, []);
 
   const fetchServerKpis = useCallback(async () => {
