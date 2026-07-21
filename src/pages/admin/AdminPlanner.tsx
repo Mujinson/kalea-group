@@ -386,6 +386,23 @@ export default function AdminPlanner() {
     );
   };
 
+  const apptsForDay = (d: Date) => {
+    const ds = format(d, 'yyyy-MM-dd');
+    return appointments.filter((a) => (a.appointment_date || '').slice(0, 10) === ds);
+  };
+  const APPT_ICON: Record<string, string> = { chiamata: '📞', videochiamata: '🎥', visita: '📍' };
+
+  const renderGcal = () => (
+    <div className="bg-white border rounded-md overflow-hidden">
+      <div className="p-3 border-b bg-amber-50 text-xs text-amber-900">
+        💡 Se non vedi gli eventi: apri Google Calendar → Impostazioni del calendario Kalēa → <b>Rendi disponibile pubblicamente</b>, altrimenti l'embed mostra solo lo scheletro.
+      </div>
+      <div className="w-full" style={{ aspectRatio: '4 / 3', minHeight: 600 }}>
+        <iframe src={GCAL_EMBED_SRC} className="w-full h-full border-0" title="Google Calendar Kalēa" />
+      </div>
+    </div>
+  );
+
   const renderSettimana = () => {
     const ws = startOfWeek(cursor, { weekStartsOn: 1 });
     const days = eachDayOfInterval({ start: ws, end: endOfWeek(cursor, { weekStartsOn: 1 }) });
