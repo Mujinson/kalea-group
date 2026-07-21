@@ -240,6 +240,9 @@ const AdminAppointments = () => {
 
         <TabsContent value="google">
           <Card className="bg-white overflow-hidden">
+            <div className="p-3 border-b bg-amber-50 text-xs text-amber-900">
+              💡 Se non vedi gli eventi: apri Google Calendar → Impostazioni del calendario Kalēa → <b>"Rendi disponibile pubblicamente"</b> (o condividi il calendario con il tuo account). L'embed mostra solo eventi visibili pubblicamente.
+            </div>
             <div className="w-full" style={{ aspectRatio: "4 / 3", minHeight: 600 }}>
               <iframe
                 src="https://calendar.google.com/calendar/embed?src=135b1a2f990dd0c5081b9ac59698f6c310f5d5bf93ac607c75d13922ba84eac6%40group.calendar.google.com&ctz=Europe%2FRome"

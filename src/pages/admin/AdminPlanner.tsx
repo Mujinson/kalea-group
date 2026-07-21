@@ -34,11 +34,13 @@ import {
 import CrewManagerDialog from '@/components/admin/planner/CrewManagerDialog';
 import AssignmentDialog from '@/components/admin/planner/AssignmentDialog';
 
-type ViewMode = 'giorno' | 'settimana' | 'mese' | 'anno' | 'gantt' | 'carico';
+type ViewMode = 'giorno' | 'settimana' | 'mese' | 'anno' | 'gantt' | 'carico' | 'gcal';
 
 const VIEW_LABELS: Record<ViewMode, string> = {
-  giorno: 'Giorno', settimana: 'Settimana', mese: 'Mese', anno: 'Anno', gantt: 'Gantt', carico: 'Carico',
+  giorno: 'Giorno', settimana: 'Settimana', mese: 'Mese', anno: 'Anno', gantt: 'Gantt', carico: 'Carico', gcal: 'Google Calendar',
 };
+
+const GCAL_EMBED_SRC = 'https://calendar.google.com/calendar/embed?src=135b1a2f990dd0c5081b9ac59698f6c310f5d5bf93ac607c75d13922ba84eac6%40group.calendar.google.com&ctz=Europe%2FRome';
 
 const KPI = ({ icon: Icon, label, value, color = '#1A1A2E' }: any) => (
   <div className="bg-white border rounded-md px-3 py-2 flex items-center gap-3">
@@ -122,6 +124,7 @@ export default function AdminPlanner() {
   const [sites, setSites] = useState<Site[]>([]);
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
+  const [appointments, setAppointments] = useState<any[]>([]);
 
   // Server-side KPIs (count + sum) — affidabili, indipendenti dai filtri client
   const [serverKpis, setServerKpis] = useState({
@@ -141,16 +144,18 @@ export default function AdminPlanner() {
   const [filterPriority, setFilterPriority] = useState<string>('');
 
   const fetchAll = useCallback(async () => {
-    const [cs, cm, ca, st, wk, cu] = await Promise.all([
+    const [cs, cm, ca, st, wk, cu, ap] = await Promise.all([
       fetchAllRows((supabase as any).from('crews').select('*').order('name')),
       fetchAllRows((supabase as any).from('crew_members').select('*')),
       fetchAllRows((supabase as any).from('crew_assignments').select('*')),
       fetchAllRows((supabase as any).from('construction_sites').select('*')),
       fetchAllRows((supabase as any).from('workers').select('id, full_name, first_name, last_name')),
       fetchAllRows((supabase as any).from('customers').select('id, name, full_name')),
+      fetchAllRows((supabase as any).from('appointments').select('id, title, appointment_date, duration_minutes, appointment_type, status, lead_id, assigned_to')),
     ]);
     setCrews(cs || []); setCrewMembers(cm || []); setAssignments(ca || []);
     setSites(st || []); setWorkers(wk || []); setCustomers(cu || []);
+    setAppointments(ap || []);
   }, []);
 
   const fetchServerKpis = useCallback(async () => {
@@ -381,6 +386,23 @@ export default function AdminPlanner() {
     );
   };
 
+  const apptsForDay = (d: Date) => {
+    const ds = format(d, 'yyyy-MM-dd');
+    return appointments.filter((a) => (a.appointment_date || '').slice(0, 10) === ds);
+  };
+  const APPT_ICON: Record<string, string> = { chiamata: '📞', videochiamata: '🎥', visita: '📍' };
+
+  const renderGcal = () => (
+    <div className="bg-white border rounded-md overflow-hidden">
+      <div className="p-3 border-b bg-amber-50 text-xs text-amber-900">
+        💡 Se non vedi gli eventi: apri Google Calendar → Impostazioni del calendario Kalēa → <b>Rendi disponibile pubblicamente</b>, altrimenti l'embed mostra solo lo scheletro.
+      </div>
+      <div className="w-full" style={{ aspectRatio: '4 / 3', minHeight: 600 }}>
+        <iframe src={GCAL_EMBED_SRC} className="w-full h-full border-0" title="Google Calendar Kalēa" />
+      </div>
+    </div>
+  );
+
   const renderSettimana = () => {
     const ws = startOfWeek(cursor, { weekStartsOn: 1 });
     const days = eachDayOfInterval({ start: ws, end: endOfWeek(cursor, { weekStartsOn: 1 }) });
@@ -490,6 +512,12 @@ export default function AdminPlanner() {
                     );
                   })}
                   {dayAssigns.length > 3 && <div className="text-[9px] text-muted-foreground">+{dayAssigns.length - 3}</div>}
+                  {apptsForDay(d).slice(0, 2).map((ap) => (
+                    <div key={ap.id} className="text-[9px] truncate px-1 rounded bg-purple-100 text-purple-800 border-l-2 border-purple-500" title={`${ap.title} · ${format(new Date(ap.appointment_date), 'HH:mm')}`}>
+                      {APPT_ICON[ap.appointment_type] || '📅'} {format(new Date(ap.appointment_date), 'HH:mm')} {ap.title}
+                    </div>
+                  ))}
+                  {apptsForDay(d).length > 2 && <div className="text-[9px] text-purple-700">+{apptsForDay(d).length - 2} appt.</div>}
                 </div>
               </div>
             );
@@ -706,6 +734,7 @@ export default function AdminPlanner() {
           {view === 'anno' && renderAnno()}
           {view === 'gantt' && renderGantt()}
           {view === 'carico' && renderCarico()}
+          {view === 'gcal' && renderGcal()}
         </div>
       </div>
 
