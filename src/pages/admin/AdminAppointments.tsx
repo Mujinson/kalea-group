@@ -238,7 +238,20 @@ const AdminAppointments = () => {
           </Card>
         </TabsContent>
 
+        <TabsContent value="google">
+          <Card className="bg-white overflow-hidden">
+            <div className="w-full" style={{ aspectRatio: "4 / 3", minHeight: 600 }}>
+              <iframe
+                src="https://calendar.google.com/calendar/embed?src=135b1a2f990dd0c5081b9ac59698f6c310f5d5bf93ac607c75d13922ba84eac6%40group.calendar.google.com&ctz=Europe%2FRome"
+                className="w-full h-full border-0"
+                title="Google Calendar Kalēa"
+              />
+            </div>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="list">
+
           {/* Upcoming */}
           <div className="space-y-4">
             <h2 className="text-lg font-semibold">🟢 Prossimi Appuntamenti</h2>
