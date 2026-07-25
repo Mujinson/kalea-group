@@ -135,7 +135,8 @@ export default function PricingKronos() {
     const colMatch = colFilter === "Tutte" || p.col.toLowerCase().includes(colFilter.toLowerCase());
     const searchMatch = !search || p.nome.toLowerCase().includes(search.toLowerCase()) || p.fmt.toLowerCase().includes(search.toLowerCase());
     return colMatch && searchMatch;
-  }), [colFilter, search]);
+  }), [colFilter, search, PRODOTTI]);
+
 
   const selected = PRODOTTI.find(p => p.id === selectedId);
 
