@@ -144,6 +144,25 @@ interface StaticCost {
   vat_percentage: number;
 }
 
+function SaleOriginQuoteLink({ saleId }: { saleId: string }) {
+  const [q, setQ] = useState<{ id: string; quote_number: string | null } | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase.from('quotes').select('id, quote_number').eq('converted_sale_id', saleId).maybeSingle();
+      if (!cancelled) setQ(data as any);
+    })();
+    return () => { cancelled = true; };
+  }, [saleId]);
+  if (!q) return null;
+  return (
+    <div className="rounded-md border bg-muted/30 px-3 py-2 text-sm flex items-center justify-between">
+      <span>Preventivo di origine: <strong>{q.quote_number || q.id.slice(0, 8)}</strong></span>
+      <Link to={`/admin/preventivi/modifica?edit=${q.id}`} className="text-primary hover:underline">Apri</Link>
+    </div>
+  );
+}
+
 const AdminSales = () => {
   const [sales, setSales] = useState<Sale[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
