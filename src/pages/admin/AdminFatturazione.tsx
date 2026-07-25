@@ -345,7 +345,7 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
       customer_type: 'cliente_privato',
       status: 'opportunity',
       notes: `Creato automaticamente dal preventivo ${quote.quote_number || quote.id}`,
-    } as any).select('id').single();
+    }).select('id').single();
     if (createError) throw createError;
     const customerId = existingId || created?.id;
 
@@ -375,7 +375,7 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
       due_date: dueDate || null,
       status: 'emessa',
       created_by: user.user?.id,
-    } as any);
+    });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Fattura creata');
@@ -492,7 +492,7 @@ function PaymentDialog({ open, invoice, onClose, onSaved }: any) {
       reference: reference || null,
       notes: notes || null,
       recorded_by: user.user?.id,
-    } as any);
+    });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Incasso registrato');
