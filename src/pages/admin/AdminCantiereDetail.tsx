@@ -363,6 +363,62 @@ const AdminCantiereDetail = () => {
         </div>
       </div>
 
+      {/* Origin links + budget vs actual */}
+      {(originQuote || originSale || budgetSummary.budget > 0) && (
+        <Card className="bg-white">
+          <CardContent className="p-4 space-y-3">
+            <div className="flex flex-wrap items-center gap-4 text-sm">
+              {originSale && (
+                <div>
+                  <span className="text-muted-foreground">Vendita di origine: </span>
+                  <Link to={`/admin/sales?sale=${originSale.id}`} className="text-primary hover:underline font-medium">
+                    {format(new Date(originSale.sale_date), "dd/MM/yyyy")} — €{Number(originSale.total_amount).toLocaleString("it-IT")}
+                  </Link>
+                </div>
+              )}
+              {originQuote && (
+                <div>
+                  <span className="text-muted-foreground">Preventivo di origine: </span>
+                  <Link to={`/admin/preventivi/modifica?edit=${originQuote.id}`} className="text-primary hover:underline font-medium">
+                    {originQuote.quote_number || originQuote.id.slice(0, 8)}
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {budgetSummary.budget > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-2 border-t">
+                <div>
+                  <p className="text-xs text-muted-foreground">Budget preventivato</p>
+                  <p className="text-lg font-semibold">€{budgetSummary.budget.toLocaleString("it-IT", { minimumFractionDigits: 2 })}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Materiali</p>
+                  <p className="text-sm font-medium">€{budgetSummary.materialsCost.toLocaleString("it-IT", { minimumFractionDigits: 2 })}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Spese</p>
+                  <p className="text-sm font-medium">€{budgetSummary.expensesCost.toLocaleString("it-IT", { minimumFractionDigits: 2 })}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Manodopera</p>
+                  <p className="text-sm font-medium">€{budgetSummary.laborCost.toLocaleString("it-IT", { minimumFractionDigits: 2 })}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Consumo ({budgetSummary.pct.toFixed(0)}%)</p>
+                  <p className={`text-lg font-semibold ${budgetSummary.delta < 0 ? "text-destructive" : "text-emerald-600"}`}>
+                    €{budgetSummary.actual.toLocaleString("it-IT", { minimumFractionDigits: 2 })}
+                  </p>
+                  <p className={`text-xs ${budgetSummary.delta < 0 ? "text-destructive" : "text-muted-foreground"}`}>
+                    {budgetSummary.delta >= 0 ? "Residuo" : "Sforamento"}: €{Math.abs(budgetSummary.delta).toLocaleString("it-IT", { minimumFractionDigits: 2 })}
+                  </p>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Info cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-white">
