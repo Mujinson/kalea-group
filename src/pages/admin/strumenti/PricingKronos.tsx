@@ -157,7 +157,7 @@ export default function PricingKronos() {
     prev = { costo, prezzo, mqOrd, costoAcq, battCosto, battVend, prezzoList, prezzoFin, totFin, totAcq, margineE, marginePct, scontoMax, inPericolo };
   }
 
-  const avgListino = PRODOTTI.reduce((a,p)=>a+p.listino,0)/PRODOTTI.length;
+  const avgListino = PRODOTTI.length > 0 ? PRODOTTI.reduce((a,p)=>a+p.listino,0)/PRODOTTI.length : 0;
   const avgCosto   = avgListino * coeff;
   const avgPrezzo  = avgCosto * (1 + mkCoeff);
   const avgMarg    = ((avgPrezzo - avgCosto)/avgPrezzo)*100;
