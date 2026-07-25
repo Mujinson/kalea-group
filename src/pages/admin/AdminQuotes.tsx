@@ -523,6 +523,13 @@ const AdminQuotes = () => {
         ] as DataTableColumn<Quote>[]}
       />
       </CrmTableCard>
+
+      <ConvertQuoteToSaleDialog
+        open={convertDialogOpen}
+        quote={quoteToConvert as any}
+        onOpenChange={(o) => { setConvertDialogOpen(o); if (!o) setQuoteToConvert(null); }}
+        onConverted={fetchData}
+      />
     </div>
   );
 };
