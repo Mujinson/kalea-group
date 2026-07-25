@@ -229,7 +229,12 @@ export default function PricingFlow() {
                           borderColor: isSel ? "#1A1A2E" : "#E0DDD8" }}>
                         {isSel ? "Selezionato" : "Seleziona"}
                       </button>
+                      <button onClick={(e) => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
+                        style={{ marginLeft: 6, padding: "4px 10px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, background: "transparent", color: "#0C447C" }}>
+                        → Preventivo
+                      </button>
                     </td>
+
                   </tr>
                 );
               })}
