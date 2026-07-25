@@ -79,8 +79,25 @@ export default function PricingFlow() {
   const [sfrido,       setSfrido]       = useState(10);
   const [scontoCliente,setScontoCliente]= useState(0);
 
+  const { prodotti: catProdotti, accessori: catAccessori, loading: catalogLoading } = usePricingCatalog("flow");
+  const goToCreaPreventivo = useCreaPreventivoLink();
+
+  const PRODOTTI = useMemo(
+    () => catProdotti.map(r => ({
+      id: r.id, nome: r.nome, dims: r.dims, listino: r.listino,
+      tipo: inferTipoFlow(r.nome, r.collection),
+      note: r.collection || "",
+    })),
+    [catProdotti]
+  );
+  const ACCESSORI = useMemo(
+    () => catAccessori.map(r => ({ nome: r.nome, unita: r.unita || "ml", listino: r.listino })),
+    [catAccessori]
+  );
+
   const coeff  = SCONTI[scontoIdx].coeff;
   const mkCoeff = markup / 100;
+
 
   const calcP = (listino: number) => {
     const costo   = listino * coeff;
