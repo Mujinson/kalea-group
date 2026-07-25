@@ -53,6 +53,7 @@ const AdminInventory = () => {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('mgo');
+  const [movementDetailOpen, setMovementDetailOpen] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     product_type: 'MgO',
     color: '',
@@ -62,6 +63,45 @@ const AdminInventory = () => {
     notes: '',
     movement_date: format(new Date(), 'yyyy-MM-dd'),
   });
+
+  const realStock = useRealStock();
+
+  const { data: catalogProducts = [] } = useQuery({
+    queryKey: ['inventory-catalog-products'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('catalog_products')
+        .select('id, name, product_code, unit_of_measure, brand');
+      if (error) throw error;
+      return (data as any[]) || [];
+    },
+  });
+
+  const catalogRows = useMemo(() => {
+    // one row per inventory item linked to a catalog product
+    return (realStock.inventory as any[])
+      .filter((inv) => !!inv.product_id)
+      .map((inv) => {
+        const prod = catalogProducts.find((p: any) => p.id === inv.product_id);
+        const stock = realStock.getRealStock(inv.product_id);
+        const min = Number(inv.min_stock ?? inv.low_stock_threshold ?? 0);
+        const low = min > 0 && stock < min;
+        return {
+          inventory_id: inv.id,
+          product_id: inv.product_id,
+          product_code: prod?.product_code || '—',
+          product_name: prod?.name || inv.product_type,
+          brand: prod?.brand || '',
+          unit: prod?.unit_of_measure || 'mq',
+          stock,
+          min,
+          low,
+        };
+      });
+  }, [realStock.inventory, catalogProducts]);
+
+  const lowStockCatalogCount = catalogRows.filter((r) => r.low).length;
+
 
   const handleDataChange = useCallback(() => {
     fetchInventory();
