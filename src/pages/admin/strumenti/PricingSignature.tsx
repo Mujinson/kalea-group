@@ -124,9 +124,10 @@ export default function PricingSignature() {
     prev = { costo, prezzo, mqOrd, costoAcq, prezzoList, prezzoFin, margE, margPct };
   }
 
-  const avgListino = PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length;
-  const minListino = Math.min(...PRODOTTI.map(p => p.listino));
-  const maxListino = Math.max(...PRODOTTI.map(p => p.listino));
+  const avgListino = PRODOTTI.length > 0 ? PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length : 0;
+  const minListino = PRODOTTI.length > 0 ? Math.min(...PRODOTTI.map(p => p.listino)) : 0;
+  const maxListino = PRODOTTI.length > 0 ? Math.max(...PRODOTTI.map(p => p.listino)) : 0;
+
 
   return (
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "8px 4px" }}>
