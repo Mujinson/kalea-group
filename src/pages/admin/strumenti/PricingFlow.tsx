@@ -274,8 +274,9 @@ export default function PricingFlow() {
               })}
             </tbody>
           </table>
-        </div>
       </div>
+      </>)}
+
 
       {selected && prev && (
         <>
