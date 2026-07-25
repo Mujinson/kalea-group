@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from 'sonner';
@@ -112,6 +113,7 @@ export default function CatalogImport() {
   const [existing, setExisting] = useState<ExistingProduct[]>([]);
   const [diff, setDiff] = useState<DiffRow[] | null>(null);
   const [applying, setApplying] = useState(false);
+  const [createInventoryForNew, setCreateInventoryForNew] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
   useEffect(() => {
@@ -306,7 +308,42 @@ export default function CatalogImport() {
         if (error) throw error;
       }
 
-      toast.success(`Listino v${version} applicato: ${totals.new} nuovi, ${totals.updated + totals.price_changed} aggiornati`);
+      // Optional: create inventory rows for NEW products
+      let inventoryCreated = 0;
+      if (createInventoryForNew) {
+        const newCodes = diff.filter(d => d.diff === 'new').map(d => String(d.code));
+        if (newCodes.length > 0) {
+          const { data: created } = await supabase
+            .from('catalog_products')
+            .select('id, product_code, name, list_price, supplier_discount_percentage')
+            .in('product_code', newCodes);
+          const rows = (created || []).map((p: any) => {
+            const cost = Number(p.list_price || 0) * (1 - Number(p.supplier_discount_percentage || 0) / 100);
+            return {
+              product_id: p.id,
+              product_type: p.name || p.product_code,
+              quantity_sqm: 0,
+              purchase_cost: cost,
+              movement_type: 'IN',
+              movement_date: new Date().toISOString().slice(0, 10),
+              notes: `Creato da import listino v${version}`,
+            };
+          });
+          if (rows.length) {
+            for (let i = 0; i < rows.length; i += 200) {
+              const chunk = rows.slice(i, i + 200);
+              const { error } = await supabase.from('inventory').insert(chunk);
+              if (error) throw error;
+              inventoryCreated += chunk.length;
+            }
+          }
+        }
+      }
+
+      toast.success(
+        `Listino v${version} applicato: ${totals.new} nuovi, ${totals.updated + totals.price_changed} aggiornati` +
+        (inventoryCreated > 0 ? ` · ${inventoryCreated} articoli magazzino creati` : '')
+      );
       setStep(4);
     } catch (e: any) {
       console.error(e);
@@ -456,12 +493,21 @@ export default function CatalogImport() {
             </CardContent>
           </Card>
 
-          <div className="flex gap-2 justify-end">
-            <Button variant="outline" onClick={() => setStep(2)}>Modifica mappatura</Button>
-            <Button variant="outline" onClick={reset}>Annulla</Button>
-            <Button onClick={apply} disabled={applying}>
-              {applying ? 'Applicazione…' : `Applica listino (v. next)`}
-            </Button>
+          <div className="flex flex-wrap gap-3 justify-between items-center">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <Checkbox
+                checked={createInventoryForNew}
+                onCheckedChange={(v) => setCreateInventoryForNew(v === true)}
+              />
+              <span>Crea articolo di magazzino per i {totals.new} prodotti nuovi (giacenza iniziale 0)</span>
+            </label>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setStep(2)}>Modifica mappatura</Button>
+              <Button variant="outline" onClick={reset}>Annulla</Button>
+              <Button onClick={apply} disabled={applying}>
+                {applying ? 'Applicazione…' : `Applica listino (v. next)`}
+              </Button>
+            </div>
           </div>
         </>
       )}

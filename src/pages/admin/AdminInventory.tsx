@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,8 @@ import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
+import { useRealStock } from '@/hooks/useRealStock';
+import { useQuery } from '@tanstack/react-query';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC n.1', 'CWC n.2', 'CWC n.3', 'CWC n.4', 'CWC n.5', 'CWC n.6', 'CWC n.7'];
@@ -51,6 +53,7 @@ const AdminInventory = () => {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('mgo');
+  const [movementDetailOpen, setMovementDetailOpen] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     product_type: 'MgO',
     color: '',
@@ -60,6 +63,45 @@ const AdminInventory = () => {
     notes: '',
     movement_date: format(new Date(), 'yyyy-MM-dd'),
   });
+
+  const realStock = useRealStock();
+
+  const { data: catalogProducts = [] } = useQuery({
+    queryKey: ['inventory-catalog-products'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('catalog_products')
+        .select('id, name, product_code, unit_of_measure, brand');
+      if (error) throw error;
+      return (data as any[]) || [];
+    },
+  });
+
+  const catalogRows = useMemo(() => {
+    // one row per inventory item linked to a catalog product
+    return (realStock.inventory as any[])
+      .filter((inv) => !!inv.product_id)
+      .map((inv) => {
+        const prod = catalogProducts.find((p: any) => p.id === inv.product_id);
+        const stock = realStock.getRealStock(inv.product_id);
+        const min = Number(inv.min_stock ?? inv.low_stock_threshold ?? 0);
+        const low = min > 0 && stock < min;
+        return {
+          inventory_id: inv.id,
+          product_id: inv.product_id,
+          product_code: prod?.product_code || '—',
+          product_name: prod?.name || inv.product_type,
+          brand: prod?.brand || '',
+          unit: prod?.unit_of_measure || 'mq',
+          stock,
+          min,
+          low,
+        };
+      });
+  }, [realStock.inventory, catalogProducts]);
+
+  const lowStockCatalogCount = catalogRows.filter((r) => r.low).length;
+
 
   const handleDataChange = useCallback(() => {
     fetchInventory();
@@ -298,6 +340,7 @@ const AdminInventory = () => {
         <CrmKpiTile label="Stock CWC" value={`${cwcTotalStock.toFixed(0)} mq`} color="green" icon={<Package className="w-4 h-4" />} hint={criticalAlerts.filter(a => a.product === 'CWC').length > 0 ? `${criticalAlerts.filter(a => a.product === 'CWC').length} varianti critiche` : undefined} onClick={() => setActiveTab('cwc')} />
         <CrmKpiTile label="Tappetino" value={`${tappetino.toFixed(0)} mq`} color="amber" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('tappetino')} />
         <CrmKpiTile label="Profili" value={`${profili.toFixed(0)} mq`} color="purple" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('profili')} />
+        <CrmKpiTile label="Sotto scorta" value={lowStockCatalogCount} color={lowStockCatalogCount > 0 ? 'orange' : 'slate'} icon={lowStockCatalogCount > 0 ? <AlertTriangle className="w-4 h-4" /> : <Package className="w-4 h-4" />} onClick={() => setActiveTab('catalogo')} />
       </CrmKpiRow>
 
 
@@ -334,6 +377,7 @@ const AdminInventory = () => {
           <TabsTrigger value="cwc">CWC per Variante</TabsTrigger>
           <TabsTrigger value="tappetino">Tappetino</TabsTrigger>
           <TabsTrigger value="profili">Profili</TabsTrigger>
+          <TabsTrigger value="catalogo">Articoli Catalogo {lowStockCatalogCount > 0 && <Badge variant="destructive" className="ml-2">{lowStockCatalogCount}</Badge>}</TabsTrigger>
           <TabsTrigger value="movimenti">Tutti i Movimenti</TabsTrigger>
         </TabsList>
 
@@ -425,6 +469,98 @@ const AdminInventory = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="catalogo">
+          <Card>
+            <CardHeader>
+              <CardTitle>Articoli collegati al catalogo</CardTitle>
+              <CardDescription>Stock reale = giacenza iniziale + somma movimenti</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {catalogRows.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-6 text-center">Nessun articolo di magazzino collegato al catalogo.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b text-left">
+                        <th className="py-2 pr-3">Codice</th>
+                        <th className="py-2 pr-3">Prodotto</th>
+                        <th className="py-2 pr-3">Brand</th>
+                        <th className="py-2 pr-3 text-right">Stock reale</th>
+                        <th className="py-2 pr-3 text-right">Min</th>
+                        <th className="py-2 pr-3">Stato</th>
+                        <th className="py-2 pr-3"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {catalogRows.map((r) => (
+                        <tr key={r.inventory_id} className="border-b hover:bg-muted/30">
+                          <td className="py-2 pr-3 font-mono text-xs">{r.product_code}</td>
+                          <td className="py-2 pr-3 font-medium">{r.product_name}</td>
+                          <td className="py-2 pr-3 text-muted-foreground">{r.brand || '—'}</td>
+                          <td className="py-2 pr-3 text-right font-semibold">{r.stock.toFixed(2)} {r.unit}</td>
+                          <td className="py-2 pr-3 text-right">{r.min > 0 ? `${r.min.toFixed(0)} ${r.unit}` : '—'}</td>
+                          <td className="py-2 pr-3">
+                            {r.low ? <Badge variant="destructive">Sotto scorta</Badge> : <Badge variant="secondary">OK</Badge>}
+                          </td>
+                          <td className="py-2 pr-3 text-right">
+                            <Button variant="ghost" size="sm" onClick={() => setMovementDetailOpen(r.inventory_id)}>
+                              Storico
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Dialog open={!!movementDetailOpen} onOpenChange={(o) => !o && setMovementDetailOpen(null)}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Storico movimenti</DialogTitle>
+                <DialogDescription>
+                  {catalogRows.find(r => r.inventory_id === movementDetailOpen)?.product_name}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="max-h-96 overflow-y-auto">
+                {(() => {
+                  const list = movementDetailOpen ? (realStock.movementsByInventoryId.get(movementDetailOpen) || []) : [];
+                  if (list.length === 0) return <p className="text-sm text-muted-foreground py-4 text-center">Nessun movimento registrato</p>;
+                  return (
+                    <table className="w-full text-sm">
+                      <thead className="sticky top-0 bg-background border-b">
+                        <tr className="text-left">
+                          <th className="py-2 pr-3">Data</th>
+                          <th className="py-2 pr-3">Tipo</th>
+                          <th className="py-2 pr-3 text-right">Qta</th>
+                          <th className="py-2 pr-3">Note</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list
+                          .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                          .map((m: any) => (
+                          <tr key={m.id} className="border-b">
+                            <td className="py-2 pr-3">{format(new Date(m.created_at), 'dd MMM yyyy', { locale: it })}</td>
+                            <td className="py-2 pr-3"><Badge variant="outline">{m.movement_type}</Badge></td>
+                            <td className={`py-2 pr-3 text-right font-medium ${Number(m.quantity) < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                              {Number(m.quantity) > 0 ? '+' : ''}{Number(m.quantity).toFixed(2)}
+                            </td>
+                            <td className="py-2 pr-3 text-muted-foreground">{m.note || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  );
+                })()}
+              </div>
+            </DialogContent>
+          </Dialog>
         </TabsContent>
 
         <TabsContent value="movimenti">

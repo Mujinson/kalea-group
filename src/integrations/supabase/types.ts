@@ -1956,6 +1956,7 @@ export type Database = {
           id: string
           is_paid: boolean | null
           low_stock_threshold: number | null
+          min_stock: number | null
           movement_date: string
           movement_type: string
           notes: string | null
@@ -1973,6 +1974,7 @@ export type Database = {
           id?: string
           is_paid?: boolean | null
           low_stock_threshold?: number | null
+          min_stock?: number | null
           movement_date?: string
           movement_type?: string
           notes?: string | null
@@ -1990,6 +1992,7 @@ export type Database = {
           id?: string
           is_paid?: boolean | null
           low_stock_threshold?: number | null
+          min_stock?: number | null
           movement_date?: string
           movement_type?: string
           notes?: string | null
@@ -2020,6 +2023,77 @@ export type Database = {
             columns: ["supplier_id"]
             isOneToOne: false
             referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory_movements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          inventory_id: string | null
+          movement_type: string
+          note: string | null
+          product_id: string | null
+          quantity: number
+          reference_sale_id: string | null
+          reference_site_id: string | null
+          reference_site_material_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          inventory_id?: string | null
+          movement_type: string
+          note?: string | null
+          product_id?: string | null
+          quantity: number
+          reference_sale_id?: string | null
+          reference_site_id?: string | null
+          reference_site_material_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          inventory_id?: string | null
+          movement_type?: string
+          note?: string | null
+          product_id?: string | null
+          quantity?: number
+          reference_sale_id?: string | null
+          reference_site_id?: string | null
+          reference_site_material_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_movements_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_movements_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_movements_reference_sale_id_fkey"
+            columns: ["reference_sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_movements_reference_site_id_fkey"
+            columns: ["reference_site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
             referencedColumns: ["id"]
           },
         ]
@@ -3478,9 +3552,12 @@ export type Database = {
         Row: {
           added_by: string | null
           created_at: string
+          delivered_at: string | null
           id: string
+          is_delivered: boolean
           material_name: string
           notes: string | null
+          product_id: string | null
           quantity: number
           site_id: string
           total_cost: number | null
@@ -3491,9 +3568,12 @@ export type Database = {
         Insert: {
           added_by?: string | null
           created_at?: string
+          delivered_at?: string | null
           id?: string
+          is_delivered?: boolean
           material_name: string
           notes?: string | null
+          product_id?: string | null
           quantity?: number
           site_id: string
           total_cost?: number | null
@@ -3504,9 +3584,12 @@ export type Database = {
         Update: {
           added_by?: string | null
           created_at?: string
+          delivered_at?: string | null
           id?: string
+          is_delivered?: boolean
           material_name?: string
           notes?: string | null
+          product_id?: string | null
           quantity?: number
           site_id?: string
           total_cost?: number | null
@@ -3515,6 +3598,13 @@ export type Database = {
           usage_date?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "site_materials_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "site_materials_site_id_fkey"
             columns: ["site_id"]

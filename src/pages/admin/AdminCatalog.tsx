@@ -14,6 +14,7 @@ import { Plus, Search, Edit, Trash2, AlertTriangle, Package, Truck, Wrench, Buil
 import { toast } from "sonner";
 import { fetchAllRows } from "@/lib/fetchAllRows";
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
+import { useRealStock } from "@/hooks/useRealStock";
 
 type CatalogProduct = any;
 
@@ -115,15 +116,17 @@ const AdminCatalog = () => {
     });
   }, [products, search, filterCategory, filterSupplier]);
 
+  const { getRealStock, isLowStock, countLowStock } = useRealStock();
+
   const stats = useMemo(() => {
     const total = products.length;
-    const lowStock = products.filter((p: any) => p.available_stock <= p.low_stock_threshold && p.low_stock_threshold > 0).length;
+    const lowStock = countLowStock(products as any[]);
     const lowMargin = products.filter((p: any) => {
       const margin = p.sale_price > 0 ? ((p.sale_price - p.net_cost) / p.sale_price) * 100 : 0;
       return margin < p.min_margin_percentage;
     }).length;
     return { total, lowStock, lowMargin };
-  }, [products]);
+  }, [products, countLowStock]);
 
   const openNew = () => {
     setEditing(null);
@@ -305,7 +308,8 @@ const AdminCatalog = () => {
             ) : filtered.map((p: any) => {
               const margin = computeMargin(p);
               const lowMargin = margin < p.min_margin_percentage;
-              const lowStock = p.available_stock <= p.low_stock_threshold && p.low_stock_threshold > 0;
+              const realStock = getRealStock(p.id);
+              const lowStock = isLowStock(p.id);
               return (
                 <TableRow key={p.id}>
                   <TableCell className="font-mono text-xs">{p.product_code}</TableCell>
@@ -329,9 +333,9 @@ const AdminCatalog = () => {
                   </TableCell>
                   <TableCell className="text-right">
                     {lowStock ? (
-                      <Badge variant="outline" style={{ color: "#C97A4A", borderColor: "#C97A4A" }}>{p.available_stock} {p.unit_of_measure}</Badge>
+                      <Badge variant="outline" style={{ color: "#C97A4A", borderColor: "#C97A4A" }}>{realStock.toFixed(0)} {p.unit_of_measure}</Badge>
                     ) : (
-                      <span className="text-sm">{Number(p.available_stock).toFixed(0)} {p.unit_of_measure}</span>
+                      <span className="text-sm">{realStock.toFixed(0)} {p.unit_of_measure}</span>
                     )}
                   </TableCell>
                   <TableCell>
