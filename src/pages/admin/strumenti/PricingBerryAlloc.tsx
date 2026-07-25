@@ -86,8 +86,21 @@ export default function PricingBerryAlloc() {
   const [battML, setBattML] = useState(20);
   const [scCliente, setScCliente] = useState(0);
 
+  const { prodotti: catProdotti, loading: catalogLoading } = usePricingCatalog("berryalloc");
+  const goToCreaPreventivo = useCreaPreventivoLink();
+
+  const PRODOTTI = useMemo(
+    () => catProdotti.map(r => ({
+      id: r.id, nome: r.nome, dims: r.dims, listino: r.listino,
+      cat: inferCatBerry(r.nome, r.collection),
+      tipo: inferTipoBerry(r.nome),
+    })),
+    [catProdotti]
+  );
+
   const coeff = SCONTI[settings.scontoIdx].coeff;
   const mkCoeff = settings.markup / 100;
+
 
   const filtered = PRODOTTI.filter(p => {
     const cm = catFilter === "Tutte" || p.cat === catFilter;
