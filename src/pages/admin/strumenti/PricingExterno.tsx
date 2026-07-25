@@ -1,5 +1,19 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useToolSettings } from "@/hooks/useToolSettings";
+import {
+  usePricingCatalog,
+  useCreaPreventivoLink,
+  PricingLoadingState,
+  PricingEmptyState,
+} from "./_shared";
+
+const inferPavExterno = (nome: string, collection: string): { id: string; nome: string; dims: string; tipo: string; listino: number; note: string; key: "skudo" | "trad" } | null => {
+  const s = `${nome} ${collection}`.toLowerCase();
+  if (s.includes("skudo")) return null;
+  if (s.includes("traditional")) return null;
+  return null;
+};
+
 
 const fmt2 = (n: number) => "€ " + n.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmt0 = (n: number) => "€ " + Math.round(n).toLocaleString("it-IT");
