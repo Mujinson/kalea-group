@@ -1036,30 +1036,49 @@ export default function CreaPreventivo() {
   useEffect(() => {
     const loadProdotti = async () => {
       setProdottiLoading(true);
-      const { data, error } = await supabase
-        .from("catalog_products")
-        .select(`
-          product_code,
-          name,
-          collection,
-          format,
-          list_price,
-          supplier_discount_percentage,
-          unit_of_measure,
-          is_active,
-          catalog_brands ( name )
-        `)
-        .eq("is_active", true)
-        .gt("list_price", 0)
-        .order("name");
+      const [{ data, error }, { data: rulesData }] = await Promise.all([
+        supabase
+          .from("catalog_products")
+          .select(`
+            product_code,
+            name,
+            collection,
+            format,
+            list_price,
+            supplier_discount_percentage,
+            unit_of_measure,
+            is_active,
+            catalog_brands ( name )
+          `)
+          .eq("is_active", true)
+          .gt("list_price", 0)
+          .order("name"),
+        supabase
+          .from("pricing_rules")
+          .select("supplier_discount_pct, markup_pct, catalog_brands(name)"),
+      ]);
+
+      // brand-lowercase → { coeff, markupMult } override
+      const brandMap: Record<string, { coeff?: number; markupMult?: number }> = {};
+      (rulesData ?? []).forEach((r: any) => {
+        const n = String(r.catalog_brands?.name ?? "").toLowerCase().trim();
+        if (!n) return;
+        brandMap[n] = {
+          coeff: r.supplier_discount_pct != null ? Number(r.supplier_discount_pct) / 100 : undefined,
+          markupMult: r.markup_pct != null ? 1 + Number(r.markup_pct) / 100 : undefined,
+        };
+      });
 
       if (!error && data) {
         const mapped: ProdottoCalcolo[] = data.map((p: any) => {
           const brandName: string = p.catalog_brands?.name ?? "Altro";
-          const disc = p.supplier_discount_percentage ?? 0;
-          const coeff = parseFloat(((100 - disc) / 100).toFixed(4));
-          const collezione = (p.collection ?? "").toLowerCase();
           const brand = brandName.toLowerCase();
+          const rule = brandMap[brand] ?? {};
+          const disc = p.supplier_discount_percentage ?? 0;
+          const coeffFromProduct = parseFloat(((100 - disc) / 100).toFixed(4));
+          const coeff = rule.coeff ?? coeffFromProduct;
+          const mkMult = rule.markupMult ?? MARKUP;
+          const collezione = (p.collection ?? "").toLowerCase();
 
           let tappetino: "mai" | "sempre" | "opzionale" = "mai";
           if (collezione.includes("laminato") || collezione.includes("laminate")) {
@@ -1086,6 +1105,7 @@ export default function CreaPreventivo() {
             dims: p.format ?? "",
             listino: p.list_price ?? 0,
             coeff,
+            mkMult,
             tappetino,
           };
         });
@@ -1095,6 +1115,7 @@ export default function CreaPreventivo() {
     };
     loadProdotti();
   }, []);
+
 
   // Preselezione prodotto da query string (?product_code=XXX)
   const [presetSearchParams] = useSearchParams();
