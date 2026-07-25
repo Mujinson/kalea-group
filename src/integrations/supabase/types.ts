@@ -1843,6 +1843,7 @@ export type Database = {
           movement_date: string
           movement_type: string
           notes: string | null
+          product_id: string | null
           product_type: string
           purchase_cost: number
           quantity_sqm: number
@@ -1859,6 +1860,7 @@ export type Database = {
           movement_date?: string
           movement_type?: string
           notes?: string | null
+          product_id?: string | null
           product_type: string
           purchase_cost: number
           quantity_sqm: number
@@ -1875,6 +1877,7 @@ export type Database = {
           movement_date?: string
           movement_type?: string
           notes?: string | null
+          product_id?: string | null
           product_type?: string
           purchase_cost?: number
           quantity_sqm?: number
@@ -1882,6 +1885,13 @@ export type Database = {
           supplier_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "inventory_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_products"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "inventory_sale_id_link_fkey"
             columns: ["sale_id_link"]
@@ -2470,33 +2480,50 @@ export type Database = {
       }
       pricing_rules: {
         Row: {
+          brand_id: string | null
           created_at: string
           id: string
-          max_discount_pct: number
-          min_margin_pct: number
+          markup_pct: number | null
+          max_discount_pct: number | null
+          min_margin_pct: number | null
           requires_approval_above_discount: number | null
-          role: string
+          role: string | null
+          supplier_discount_pct: number | null
           updated_at: string
         }
         Insert: {
+          brand_id?: string | null
           created_at?: string
           id?: string
-          max_discount_pct: number
-          min_margin_pct: number
+          markup_pct?: number | null
+          max_discount_pct?: number | null
+          min_margin_pct?: number | null
           requires_approval_above_discount?: number | null
-          role: string
+          role?: string | null
+          supplier_discount_pct?: number | null
           updated_at?: string
         }
         Update: {
+          brand_id?: string | null
           created_at?: string
           id?: string
-          max_discount_pct?: number
-          min_margin_pct?: number
+          markup_pct?: number | null
+          max_discount_pct?: number | null
+          min_margin_pct?: number | null
           requires_approval_above_discount?: number | null
-          role?: string
+          role?: string | null
+          supplier_discount_pct?: number | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pricing_rules_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "catalog_brands"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_categories: {
         Row: {
