@@ -1,5 +1,38 @@
 import { useState, useMemo } from "react";
 import { useToolSettings } from "@/hooks/useToolSettings";
+import {
+  usePricingCatalog,
+  useCreaPreventivoLink,
+  PricingLoadingState,
+  PricingEmptyState,
+} from "./_shared";
+
+const inferColKronos = (nome: string, collection: string): string => {
+  const s = `${nome} ${collection}`.toLowerCase();
+  if (s.includes("pierre vive") || s.includes("pv")) return "Pierre Vive";
+  if (s.includes("materia")) return "Materia";
+  if (s.includes("piasentina")) return "Piasentina";
+  if (s.includes("nativa")) return "Nativa";
+  if (s.includes("metallique")) return "Metallique";
+  if (s.includes("reverse")) return "Le Reverse";
+  if (s.includes("bois") || s.includes("legno") || s.includes("wood")) return "Les Bois";
+  if (s.includes("outdoor") || s.includes("20mm") || s.includes("2cm")) return "Outdoor";
+  if (s.includes("rocks") || s.includes("block")) return "Rocks";
+  return collection || "Altro";
+};
+
+const inferTipoKronos = (nome: string, collection: string): string => {
+  const s = `${nome} ${collection}`.toLowerCase();
+  if (s.includes("battiscopa")) return "Battiscopa";
+  if (s.includes("grip") && s.includes("20")) return "Outdoor 20mm Grip";
+  if (s.includes("20mm") || s.includes(" 20 mm") || s.includes("2cm")) return "Outdoor 20mm";
+  if (s.includes("grip")) return "Gres Fine Grip";
+  if (s.includes("lappat")) return "Decorato Lappato";
+  if (s.includes("decor")) return "Decorato";
+  if (s.includes("bois") || s.includes("legno") || s.includes("wood")) return "Effetto Legno";
+  return "Gres Fine";
+};
+
 
 // ─── HELPERS ─────────────────────────────────────────────────
 const fmt2 = (n: number) =>
