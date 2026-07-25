@@ -182,11 +182,17 @@ export default function PricingFlow() {
         ))}
       </div>
 
+      {catalogLoading ? (
+        <PricingLoadingState />
+      ) : PRODOTTI.length === 0 ? (
+        <PricingEmptyState label="Flow" />
+      ) : (
       <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
         <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
-          Listino Flow 2025 — clicca un prodotto per il preventivo
+          Listino Flow — clicca un prodotto per il preventivo
         </div>
         <div style={{ overflowX: "auto" }}>
+
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
               <tr>
