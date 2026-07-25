@@ -375,7 +375,7 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
       due_date: dueDate || null,
       status: 'emessa',
       created_by: user.user?.id,
-    });
+    } as any);
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Fattura creata');
