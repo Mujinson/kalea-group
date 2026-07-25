@@ -493,12 +493,21 @@ export default function CatalogImport() {
             </CardContent>
           </Card>
 
-          <div className="flex gap-2 justify-end">
-            <Button variant="outline" onClick={() => setStep(2)}>Modifica mappatura</Button>
-            <Button variant="outline" onClick={reset}>Annulla</Button>
-            <Button onClick={apply} disabled={applying}>
-              {applying ? 'Applicazione…' : `Applica listino (v. next)`}
-            </Button>
+          <div className="flex flex-wrap gap-3 justify-between items-center">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <Checkbox
+                checked={createInventoryForNew}
+                onCheckedChange={(v) => setCreateInventoryForNew(v === true)}
+              />
+              <span>Crea articolo di magazzino per i {totals.new} prodotti nuovi (giacenza iniziale 0)</span>
+            </label>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setStep(2)}>Modifica mappatura</Button>
+              <Button variant="outline" onClick={reset}>Annulla</Button>
+              <Button onClick={apply} disabled={applying}>
+                {applying ? 'Applicazione…' : `Applica listino (v. next)`}
+              </Button>
+            </div>
           </div>
         </>
       )}
