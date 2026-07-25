@@ -14,6 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
+      _deprecated_commercial_invoices: {
+        Row: {
+          attachment_url: string | null
+          commission_percentage: number
+          created_at: string
+          due_date: string | null
+          id: string
+          invoice_number: string | null
+          notes: string | null
+          paid_date: string | null
+          salesperson_id: string
+          status: Database["public"]["Enums"]["invoice_status"]
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          attachment_url?: string | null
+          commission_percentage?: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string | null
+          notes?: string | null
+          paid_date?: string | null
+          salesperson_id: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          total_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          attachment_url?: string | null
+          commission_percentage?: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string | null
+          notes?: string | null
+          paid_date?: string | null
+          salesperson_id?: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commercial_invoices_salesperson_id_fkey"
+            columns: ["salesperson_id"]
+            isOneToOne: false
+            referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       _deprecated_preventivi: {
         Row: {
           cantiere: string | null
@@ -794,59 +847,6 @@ export type Database = {
           },
         ]
       }
-      commercial_invoices: {
-        Row: {
-          attachment_url: string | null
-          commission_percentage: number
-          created_at: string
-          due_date: string | null
-          id: string
-          invoice_number: string | null
-          notes: string | null
-          paid_date: string | null
-          salesperson_id: string
-          status: Database["public"]["Enums"]["invoice_status"]
-          total_amount: number
-          updated_at: string
-        }
-        Insert: {
-          attachment_url?: string | null
-          commission_percentage?: number
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          invoice_number?: string | null
-          notes?: string | null
-          paid_date?: string | null
-          salesperson_id: string
-          status?: Database["public"]["Enums"]["invoice_status"]
-          total_amount?: number
-          updated_at?: string
-        }
-        Update: {
-          attachment_url?: string | null
-          commission_percentage?: number
-          created_at?: string
-          due_date?: string | null
-          id?: string
-          invoice_number?: string | null
-          notes?: string | null
-          paid_date?: string | null
-          salesperson_id?: string
-          status?: Database["public"]["Enums"]["invoice_status"]
-          total_amount?: number
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "commercial_invoices_salesperson_id_fkey"
-            columns: ["salesperson_id"]
-            isOneToOne: false
-            referencedRelation: "salespeople"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       commissions: {
         Row: {
           amount: number
@@ -1513,6 +1513,7 @@ export type Database = {
           notes: string | null
           paid_amount: number
           quote_id: string | null
+          salesperson_id: string | null
           site_id: string | null
           status: string
           subtotal: number
@@ -1538,6 +1539,7 @@ export type Database = {
           notes?: string | null
           paid_amount?: number
           quote_id?: string | null
+          salesperson_id?: string | null
           site_id?: string | null
           status?: string
           subtotal?: number
@@ -1563,6 +1565,7 @@ export type Database = {
           notes?: string | null
           paid_amount?: number
           quote_id?: string | null
+          salesperson_id?: string | null
           site_id?: string | null
           status?: string
           subtotal?: number
@@ -1597,6 +1600,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "customer_invoices_salesperson_id_fkey"
+            columns: ["salesperson_id"]
+            isOneToOne: false
+            referencedRelation: "salespeople"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "customer_invoices_site_id_fkey"
             columns: ["site_id"]
             isOneToOne: false
@@ -1614,6 +1624,7 @@ export type Database = {
           method: string
           notes: string | null
           payment_date: string
+          payment_schedule_id: string | null
           recorded_by: string | null
           reference: string | null
           tranche_type: string | null
@@ -1627,6 +1638,7 @@ export type Database = {
           method?: string
           notes?: string | null
           payment_date?: string
+          payment_schedule_id?: string | null
           recorded_by?: string | null
           reference?: string | null
           tranche_type?: string | null
@@ -1640,6 +1652,7 @@ export type Database = {
           method?: string
           notes?: string | null
           payment_date?: string
+          payment_schedule_id?: string | null
           recorded_by?: string | null
           reference?: string | null
           tranche_type?: string | null
@@ -1651,6 +1664,13 @@ export type Database = {
             columns: ["invoice_id"]
             isOneToOne: false
             referencedRelation: "customer_invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_payments_payment_schedule_id_fkey"
+            columns: ["payment_schedule_id"]
+            isOneToOne: false
+            referencedRelation: "payment_schedules"
             referencedColumns: ["id"]
           },
         ]
@@ -2005,7 +2025,7 @@ export type Database = {
             foreignKeyName: "invoice_sales_invoice_id_fkey"
             columns: ["invoice_id"]
             isOneToOne: false
-            referencedRelation: "commercial_invoices"
+            referencedRelation: "_deprecated_commercial_invoices"
             referencedColumns: ["id"]
           },
           {
@@ -2437,6 +2457,7 @@ export type Database = {
           created_at: string
           due_date: string
           id: string
+          invoice_id: string | null
           is_paid: boolean
           notes: string | null
           paid_date: string | null
@@ -2449,6 +2470,7 @@ export type Database = {
           created_at?: string
           due_date: string
           id?: string
+          invoice_id?: string | null
           is_paid?: boolean
           notes?: string | null
           paid_date?: string | null
@@ -2461,6 +2483,7 @@ export type Database = {
           created_at?: string
           due_date?: string
           id?: string
+          invoice_id?: string | null
           is_paid?: boolean
           notes?: string | null
           paid_date?: string | null
@@ -2469,6 +2492,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "payment_schedules_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "customer_invoices"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "payment_schedules_sale_id_fkey"
             columns: ["sale_id"]

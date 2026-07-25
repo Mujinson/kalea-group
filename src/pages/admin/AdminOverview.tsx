@@ -244,7 +244,6 @@ const AdminOverview = () => {
   const [fixedCosts, setFixedCosts] = useState<any[]>([]);
   const [variableCosts, setVariableCosts] = useState<any[]>([]);
   const [staticCosts, setStaticCosts] = useState<any[]>([]);
-  const [commercialInvoices, setCommercialInvoices] = useState<any[]>([]);
   const [paymentAgreements, setPaymentAgreements] = useState<any[]>([]);
   const [customerInvoices, setCustomerInvoices] = useState<any[]>([]);
   const [customerPayments, setCustomerPayments] = useState<any[]>([]);
@@ -252,7 +251,7 @@ const AdminOverview = () => {
 
   const fetchAll = useCallback(async () => {
     try {
-      const [q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ci, ciNew, cpNew, gs] = await Promise.all([
+      const [q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ciNew, cpNew, gs] = await Promise.all([
         fetchAllRows(supabase.from('quotes').select('*')),
         fetchAllRows(supabase.from('sales').select('*')),
         fetchAllRows(supabase.from('construction_sites').select('*')),
@@ -268,9 +267,8 @@ const AdminOverview = () => {
         fetchAllRows(supabase.from('fixed_costs').select('*')),
         fetchAllRows(supabase.from('variable_costs').select('*')),
         fetchAllRows(supabase.from('static_costs').select('*')),
-        fetchAllRows(supabase.from('commercial_invoices').select('*')),
-        fetchAllRows(supabase.from('customer_invoices' as any).select('*')),
-        fetchAllRows(supabase.from('customer_payments' as any).select('*')),
+        fetchAllRows(supabase.from('customer_invoices').select('*')),
+        fetchAllRows(supabase.from('customer_payments').select('*')),
         supabase.from('app_settings').select('value').eq('key', 'yearly_revenue_goal').maybeSingle(),
       ]);
       setQuotes(q || []); setSales(s || []);
@@ -278,7 +276,7 @@ const AdminOverview = () => {
       setInventory(inv || []); setSalespeople(sps || []);
       setPaymentSchedules(ps || []); setAppointments(ap || []); setReminders(rem || []);
       setCustomers(cu || []); setFixedCosts(fc || []); setVariableCosts(vc || []);
-      setStaticCosts(sc || []); setCommercialInvoices(ci || []);
+      setStaticCosts(sc || []);
       setCustomerInvoices(ciNew || []); setCustomerPayments(cpNew || []);
       const goalVal = (gs as any)?.data?.value?.amount;
       if (typeof goalVal === 'number') setGoal(goalVal);
@@ -289,9 +287,10 @@ const AdminOverview = () => {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useRealtimeSubscription({
-    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'commercial_invoices', 'customer_invoices' as any, 'customer_payments' as any],
+    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'customer_invoices', 'customer_payments'],
     onDataChange: fetchAll,
   });
+
 
   // ─── Derived ──────────────────────────────────────────────
   // VENDUTO = valore preventivi accettati (quello che era il vecchio "Fatturato")

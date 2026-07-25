@@ -1,146 +1,101 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable';
-import { format, differenceInDays } from 'date-fns';
+import { format, differenceInDays, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
-import { TrendingUp, TrendingDown, DollarSign, AlertTriangle, Wallet, Receipt } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, AlertTriangle, Receipt, Wallet } from 'lucide-react';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 
-const eur = (n: number) =>
-  `€${Math.round(n || 0).toLocaleString('it-IT')}`;
+const eur = (n: number) => `€${Math.round(n || 0).toLocaleString('it-IT')}`;
 
-type Receivable = {
+type Rata = {
   id: string;
-  source: 'fattura' | 'rata';
+  invoice_number: string;
   customer: string;
   amount: number;
   due_date: string | null;
-  paid: boolean;
-  status: string;
+  is_paid: boolean;
+  paid_date: string | null;
 };
 
-type Payable = {
-  id: string;
-  source: 'pagamento' | 'accordo';
-  supplier: string;
-  amount: number;
-  date: string | null;
-  notes: string | null;
-};
+type CashRow = { month: string; entrate: number; uscite: number; netto: number };
 
 type CommissionRow = {
-  id: string;
-  user: string;
-  customer: string | null;
-  base: number;
-  pct: number;
-  amount: number;
-  status: string;
-  paid_at: string | null;
+  id: string; user: string; customer: string | null;
+  base: number; pct: number; amount: number; status: string; paid_at: string | null;
 };
 
 export default function AdminContabilita() {
   const [loading, setLoading] = useState(true);
-  const [receivables, setReceivables] = useState<Receivable[]>([]);
-  const [payables, setPayables] = useState<Payable[]>([]);
+  const [rate, setRate] = useState<Rata[]>([]);
+  const [cashRows, setCashRows] = useState<CashRow[]>([]);
   const [commissions, setCommissions] = useState<CommissionRow[]>([]);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [invRes, schedRes, payRes, agrRes, comRes] = await Promise.all([
-        supabase.from('commercial_invoices').select('id, invoice_number, total_amount, status, due_date, paid_date, salesperson_id').order('due_date', { ascending: true, nullsFirst: false }),
-        supabase.from('payment_schedules').select('id, amount, due_date, is_paid, paid_date, payment_type, sale_id').order('due_date', { ascending: true, nullsFirst: false }),
-        supabase.from('supplier_payments').select('*').order('payment_date', { ascending: false }),
-        supabase.from('payment_agreements').select('*'),
+      const [invRes, schedRes, payRes, supRes, fcRes, vcRes, comRes] = await Promise.all([
+        supabase.from('customer_invoices').select('id, invoice_number, customer_id, total, paid_amount, status, due_date').neq('status', 'annullata'),
+        supabase.from('payment_schedules').select('id, invoice_id, amount, due_date, is_paid, paid_date').order('due_date', { ascending: true, nullsFirst: false }),
+        supabase.from('customer_payments').select('id, payment_date, amount'),
+        supabase.from('supplier_payments').select('id, payment_date, payment_amount'),
+        supabase.from('fixed_costs').select('id, amount, frequency, created_at'),
+        supabase.from('variable_costs').select('id, amount, cost_date, created_at'),
         supabase.from('commissions').select('id, user_id, customer_id, customer_name, base_amount, percentage, amount, status, paid_at').order('created_at', { ascending: false }),
       ]);
 
-      // Map salesperson + customer names lazily
-      const salespeopleIds = Array.from(new Set((invRes.data || []).map((i: any) => i.salesperson_id).filter(Boolean)));
-      const customerIds = Array.from(new Set((comRes.data || []).map((c: any) => c.customer_id).filter(Boolean)));
-      const saleIds = Array.from(new Set((schedRes.data || []).map((s: any) => s.sale_id).filter(Boolean)));
+      const invById = new Map((invRes.data || []).map((i: any) => [i.id, i]));
+      const customerIds = Array.from(new Set([
+        ...((invRes.data || []).map((i: any) => i.customer_id)),
+        ...((comRes.data || []).map((c: any) => c.customer_id)),
+      ].filter(Boolean)));
 
-      const [spRes, custRes, salesRes, usersRes] = await Promise.all([
-        salespeopleIds.length ? supabase.from('salespeople').select('id, full_name, user_id').in('id', salespeopleIds) : Promise.resolve({ data: [] as any[] }),
+      const [custRes, spRes] = await Promise.all([
         customerIds.length ? supabase.from('customers').select('id, first_name, last_name, company_name').in('id', customerIds) : Promise.resolve({ data: [] as any[] }),
-        saleIds.length ? supabase.from('sales').select('id, customer_id').in('id', saleIds) : Promise.resolve({ data: [] as any[] }),
         supabase.from('salespeople').select('id, full_name, user_id'),
       ]);
-
-      const spByUser = new Map((usersRes.data || []).map((s: any) => [s.user_id, s.full_name]));
       const custMap = new Map((custRes.data || []).map((c: any) => [c.id, c.company_name || `${c.first_name || ''} ${c.last_name || ''}`.trim()]));
-      const saleCustomerMap = new Map((salesRes.data || []).map((s: any) => [s.id, s.customer_id]));
+      const spByUser = new Map((spRes.data || []).map((s: any) => [s.user_id, s.full_name]));
 
-      // Need to also resolve sale → customer name
-      const extraCustIds = Array.from(new Set(Array.from(saleCustomerMap.values()).filter(Boolean))).filter((id: any) => !custMap.has(id));
-      if (extraCustIds.length) {
-        const { data: extraCust } = await supabase.from('customers').select('id, first_name, last_name, company_name').in('id', extraCustIds as string[]);
-        (extraCust || []).forEach((c: any) => custMap.set(c.id, c.company_name || `${c.first_name || ''} ${c.last_name || ''}`.trim()));
-      }
-
-      const recRows: Receivable[] = [
-        ...(invRes.data || []).map((i: any) => ({
-          id: i.id,
-          source: 'fattura' as const,
-          customer: i.invoice_number || '—',
-          amount: Number(i.total_amount || 0),
-          due_date: i.due_date,
-          paid: !!i.paid_date,
-          status: i.status || (i.paid_date ? 'pagata' : 'da incassare'),
-        })),
-        ...(schedRes.data || []).map((s: any) => ({
-          id: s.id,
-          source: 'rata' as const,
-          customer: custMap.get(saleCustomerMap.get(s.sale_id)) || '—',
-          amount: Number(s.amount || 0),
-          due_date: s.due_date,
-          paid: !!s.is_paid,
-          status: s.is_paid ? 'pagata' : s.payment_type || 'in scadenza',
-        })),
-      ];
-
-      // Aggrega i pagamenti per fornitore (per calcolare residuo accordi)
-      const paidBySupplier = new Map<string, number>();
-      (payRes.data || []).forEach((p: any) => {
-        const k = (p.supplier_name || '').trim().toLowerCase();
-        paidBySupplier.set(k, (paidBySupplier.get(k) || 0) + Number(p.payment_amount || 0));
-      });
-
-      const agreementSuppliers = new Set(
-        (agrRes.data || []).map((a: any) => (a.supplier_name || '').trim().toLowerCase())
-      );
-
-      const payRows: Payable[] = [
-        // Pagamenti a fornitori SENZA accordo → debito storico residuo
-        ...(payRes.data || [])
-          .filter((p: any) => !agreementSuppliers.has((p.supplier_name || '').trim().toLowerCase()))
-          .map((p: any) => ({
-            id: p.id,
-            source: 'pagamento' as const,
-            supplier: p.supplier_name || '—',
-            amount: Number(p.payment_amount || 0),
-            date: p.payment_date,
-            notes: p.notes,
-          })),
-        // Accordi → mostro RESIDUO (totale - già pagato)
-        ...(agrRes.data || []).map((a: any) => {
-          const paid = paidBySupplier.get((a.supplier_name || '').trim().toLowerCase()) || 0;
-          const residuo = Math.max(0, Number(a.total_amount || 0) - paid);
+      // Rate collegate a fatture
+      const rataRows: Rata[] = (schedRes.data || [])
+        .filter((s: any) => s.invoice_id)
+        .map((s: any) => {
+          const inv: any = invById.get(s.invoice_id);
           return {
-            id: a.id,
-            source: 'accordo' as const,
-            supplier: a.supplier_name || '—',
-            amount: residuo,
-            date: a.end_date,
-            notes: a.notes ? `${a.notes} · pagato ${eur(paid)} / ${eur(Number(a.total_amount || 0))}` : `pagato ${eur(paid)} / ${eur(Number(a.total_amount || 0))}`,
+            id: s.id,
+            invoice_number: inv?.invoice_number || '—',
+            customer: custMap.get(inv?.customer_id) || '—',
+            amount: Number(s.amount || 0),
+            due_date: s.due_date,
+            is_paid: !!s.is_paid,
+            paid_date: s.paid_date,
           };
-        }),
-      ];
+        });
+
+      // Cash flow ultimi 6 mesi
+      const months: CashRow[] = [];
+      for (let i = 5; i >= 0; i--) {
+        const ref = subMonths(new Date(), i);
+        const start = startOfMonth(ref);
+        const end = endOfMonth(ref);
+        const inRange = (d: string | null | undefined) => {
+          if (!d) return false;
+          const dt = new Date(d);
+          return dt >= start && dt <= end;
+        };
+        const entrate = (payRes.data || []).filter((p: any) => inRange(p.payment_date)).reduce((s, p: any) => s + Number(p.amount || 0), 0);
+        const uSup = (supRes.data || []).filter((p: any) => inRange(p.payment_date)).reduce((s, p: any) => s + Number(p.payment_amount || 0), 0);
+        const uFc = (fcRes.data || []).filter((f: any) => f.frequency === 'mensile' || inRange(f.created_at)).reduce((s, f: any) => s + (f.frequency === 'mensile' ? Number(f.amount || 0) : (inRange(f.created_at) ? Number(f.amount || 0) : 0)), 0);
+        const uVc = (vcRes.data || []).filter((v: any) => inRange(v.cost_date || v.created_at)).reduce((s, v: any) => s + Number(v.amount || 0), 0);
+        const uscite = uSup + uFc + uVc;
+        months.push({ month: format(ref, 'MMM yy', { locale: it }), entrate, uscite, netto: entrate - uscite });
+      }
+      setCashRows(months);
 
       const comRows: CommissionRow[] = (comRes.data || []).map((c: any) => ({
         id: c.id,
@@ -153,8 +108,7 @@ export default function AdminContabilita() {
         paid_at: c.paid_at,
       }));
 
-      setReceivables(recRows);
-      setPayables(payRows);
+      setRate(rataRows);
       setCommissions(comRows);
     } finally {
       setLoading(false);
@@ -162,42 +116,42 @@ export default function AdminContabilita() {
   }, []);
 
   useRealtimeSubscription({
-    tables: ['commercial_invoices', 'payment_schedules', 'supplier_payments', 'payment_agreements', 'commissions'],
+    tables: ['customer_invoices', 'customer_payments', 'payment_schedules', 'supplier_payments', 'fixed_costs', 'variable_costs', 'commissions'],
     onDataChange: load,
   });
 
   useEffect(() => { load(); }, [load]);
 
   const today = new Date();
-  const totRecOpen = receivables.filter(r => !r.paid).reduce((s, r) => s + r.amount, 0);
-  const totRecOverdue = receivables.filter(r => !r.paid && r.due_date && new Date(r.due_date) < today).reduce((s, r) => s + r.amount, 0);
-  const totPay = payables.reduce((s, p) => s + p.amount, 0);
+  const insoluti = useMemo(() => rate.filter(r => !r.is_paid && r.due_date && new Date(r.due_date) < today), [rate]);
+  const totRateOpen = rate.filter(r => !r.is_paid).reduce((s, r) => s + r.amount, 0);
+  const totInsoluti = insoluti.reduce((s, r) => s + r.amount, 0);
+  const totEntrateMese = cashRows[cashRows.length - 1]?.entrate || 0;
+  const totUsciteMese = cashRows[cashRows.length - 1]?.uscite || 0;
   const totComOpen = commissions.filter(c => c.status !== 'pagata' && c.status !== 'paid').reduce((s, c) => s + c.amount, 0);
-  const totComPaid = commissions.filter(c => c.status === 'pagata' || c.status === 'paid').reduce((s, c) => s + c.amount, 0);
 
-  const recCols: DataTableColumn<Receivable>[] = [
-    { key: 'source', header: 'Tipo', cell: (r) => <Badge variant="outline">{r.source}</Badge> },
-    { key: 'customer', header: 'Cliente / Rif.' },
+  const rataCols: DataTableColumn<Rata>[] = [
+    { key: 'invoice_number', header: 'Fattura' },
+    { key: 'customer', header: 'Cliente' },
     { key: 'amount', header: 'Importo', cell: (r) => <span className="font-semibold">{eur(r.amount)}</span> },
     { key: 'due_date', header: 'Scadenza', cell: (r) => r.due_date ? format(new Date(r.due_date), 'dd/MM/yyyy', { locale: it }) : '—' },
     {
-      key: 'status', header: 'Stato', cell: (r) => {
-        if (r.paid) return <Badge className="bg-green-100 text-green-800">pagata</Badge>;
+      key: 'is_paid', header: 'Stato', cell: (r) => {
+        if (r.is_paid) return <Badge className="bg-green-100 text-green-800">pagata</Badge>;
         if (r.due_date && new Date(r.due_date) < today) {
           const d = differenceInDays(today, new Date(r.due_date));
           return <Badge className="bg-red-100 text-red-800">scaduta {d}g</Badge>;
         }
-        return <Badge variant="outline">{r.status}</Badge>;
+        return <Badge variant="outline">in scadenza</Badge>;
       }
     },
   ];
 
-  const payCols: DataTableColumn<Payable>[] = [
-    { key: 'source', header: 'Tipo', cell: (p) => <Badge variant="outline">{p.source}</Badge> },
-    { key: 'supplier', header: 'Fornitore' },
-    { key: 'amount', header: 'Importo', cell: (p) => <span className="font-semibold">{eur(p.amount)}</span> },
-    { key: 'date', header: 'Data', cell: (p) => p.date ? format(new Date(p.date), 'dd/MM/yyyy', { locale: it }) : '—' },
-    { key: 'notes', header: 'Note', cell: (p) => p.notes || '—' },
+  const cashCols: DataTableColumn<CashRow>[] = [
+    { key: 'month', header: 'Mese' },
+    { key: 'entrate', header: 'Entrate', cell: (r) => <span className="text-green-700 font-semibold">{eur(r.entrate)}</span> },
+    { key: 'uscite', header: 'Uscite', cell: (r) => <span className="text-red-700 font-semibold">{eur(r.uscite)}</span> },
+    { key: 'netto', header: 'Netto', cell: (r) => <span className={`font-bold ${r.netto >= 0 ? 'text-green-700' : 'text-red-700'}`}>{eur(r.netto)}</span> },
   ];
 
   const comCols: DataTableColumn<CommissionRow>[] = [
@@ -218,39 +172,48 @@ export default function AdminContabilita() {
     <div className="space-y-6">
       <CrmPageHeader
         title="Contabilità"
-        subtitle="Crediti, debiti e commissioni in un'unica vista"
-        
+        subtitle="Scadenzario, insoluti, cash flow e commissioni — sistema unificato"
       />
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <KpiCard icon={TrendingUp} label="Crediti aperti" value={eur(totRecOpen)} color="#0EA5E9" />
-        <KpiCard icon={AlertTriangle} label="Crediti scaduti" value={eur(totRecOverdue)} color="#DC2626" />
-        <KpiCard icon={TrendingDown} label="Debiti fornitori" value={eur(totPay)} color="#F59E0B" />
+        <KpiCard icon={TrendingUp} label="Rate aperte" value={eur(totRateOpen)} color="#0EA5E9" />
+        <KpiCard icon={AlertTriangle} label={`Insoluti (${insoluti.length})`} value={eur(totInsoluti)} color="#DC2626" />
+        <KpiCard icon={Wallet} label="Entrate (mese)" value={eur(totEntrateMese)} color="#16A34A" />
+        <KpiCard icon={TrendingDown} label="Uscite (mese)" value={eur(totUsciteMese)} color="#F59E0B" />
         <KpiCard icon={DollarSign} label="Commissioni da liquidare" value={eur(totComOpen)} color="#A855F7" />
-        <KpiCard icon={Receipt} label="Commissioni pagate" value={eur(totComPaid)} color="#16A34A" />
       </div>
 
-      <Tabs defaultValue="crediti" className="space-y-4">
+      <Tabs defaultValue="scadenzario" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="crediti">Crediti ({receivables.length})</TabsTrigger>
-          <TabsTrigger value="debiti">Debiti ({payables.length})</TabsTrigger>
+          <TabsTrigger value="scadenzario">Scadenzario ({rate.length})</TabsTrigger>
+          <TabsTrigger value="insoluti">Insoluti ({insoluti.length})</TabsTrigger>
+          <TabsTrigger value="cashflow">Cash flow</TabsTrigger>
           <TabsTrigger value="commissioni">Commissioni ({commissions.length})</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="crediti">
+        <TabsContent value="scadenzario">
           <Card>
-            <CardHeader><CardTitle>Crediti — fatture clienti e rate</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Scadenzario rate</CardTitle></CardHeader>
             <CardContent>
-              <DataTable data={receivables} columns={recCols} loading={loading} emptyTitle="Nessun credito registrato" />
+              <DataTable data={rate} columns={rataCols} loading={loading} emptyTitle="Nessuna rata pianificata" />
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="debiti">
+        <TabsContent value="insoluti">
           <Card>
-            <CardHeader><CardTitle>Debiti — pagamenti fornitori e accordi</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Rate scadute non pagate</CardTitle></CardHeader>
             <CardContent>
-              <DataTable data={payables} columns={payCols} loading={loading} emptyTitle="Nessun debito registrato" />
+              <DataTable data={insoluti} columns={rataCols} loading={loading} emptyTitle="Nessun insoluto — tutto in regola" />
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="cashflow">
+          <Card>
+            <CardHeader><CardTitle>Cash flow — ultimi 6 mesi</CardTitle></CardHeader>
+            <CardContent>
+              <DataTable data={cashRows} columns={cashCols} loading={loading} emptyTitle="Nessun movimento" />
             </CardContent>
           </Card>
         </TabsContent>
