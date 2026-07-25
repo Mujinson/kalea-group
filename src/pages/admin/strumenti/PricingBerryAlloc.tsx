@@ -181,6 +181,11 @@ export default function PricingBerryAlloc() {
             </button>
           ))}
         </div>
+        {catalogLoading ? (
+          <PricingLoadingState />
+        ) : PRODOTTI.length === 0 ? (
+          <PricingEmptyState label="BerryAlloc" />
+        ) : (<>
         <div style={{ maxHeight: 440, overflowY: "auto", borderRadius: 8, border: "1px solid #E0DDD8" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead style={{ position: "sticky", top: 0, background: "#fff", zIndex: 1 }}>
@@ -208,11 +213,15 @@ export default function PricingBerryAlloc() {
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#1A1A2E", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezzo)}/mq</td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><MargineChip pct={margPct} /></td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#A32D2D", fontWeight: 500, whiteSpace: "nowrap" }}>max {fmtP(margPct)}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", whiteSpace: "nowrap" }}>
                       <button onClick={e => { e.stopPropagation(); setSelectedId(p.id); }}
                         style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid", cursor: "pointer", fontSize: 11,
                           background: isSel ? "#1A1A2E" : "transparent", color: isSel ? "#fff" : "#1A1A2E", borderColor: isSel ? "#1A1A2E" : "#E0DDD8" }}>
                         {isSel ? "✓" : "Usa"}
+                      </button>
+                      <button onClick={e => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
+                        style={{ marginLeft: 4, padding: "4px 8px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
+                        →
                       </button>
                     </td>
                   </tr>
@@ -221,7 +230,9 @@ export default function PricingBerryAlloc() {
             </tbody>
           </table>
         </div>
-        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>{filtered.length} prodotti · Prezzi IVA esclusa · Listino BerryAlloc 2026</div>
+        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>{filtered.length} prodotti · Prezzi IVA esclusa · Listino BerryAlloc</div>
+        </>)}
+
       </div>
 
       {selected && prev && (
