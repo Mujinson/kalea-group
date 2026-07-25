@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { useToolSettings } from "@/hooks/useToolSettings";
 import {
   usePricingCatalog,
   useCreaPreventivoLink,
@@ -70,7 +69,7 @@ interface S { scontoIdx: number; markup: number; }
 const defaults: S = { scontoIdx: 1, markup: 60 };
 
 export default function PricingFlow() {
-  const { settings, update } = useToolSettings<S>("pricing_flow", defaults);
+  const { settings, update } = useBrandPricingRule("flow", SCONTI, defaults);
   const scontoIdx = settings.scontoIdx;
   const markup = settings.markup;
 

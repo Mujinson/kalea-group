@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { useToolSettings } from "@/hooks/useToolSettings";
 import {
   usePricingCatalog,
   useCreaPreventivoLink,
@@ -95,7 +94,7 @@ interface S { scontoIdx: number; markup: number; markupPrem: number; }
 const defaults: S = { scontoIdx: 3, markup: 70, markupPrem: 90 };
 
 export default function PricingKronos() {
-  const { settings, update } = useToolSettings<S>("pricing_kronos", defaults);
+  const { settings, update } = useBrandPricingRule("kronos", SCONTI, defaults);
   const { scontoIdx, markup, markupPrem } = settings;
 
   const [colFilter,     setColFilter]     = useState("Tutte");

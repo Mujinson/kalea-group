@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { useToolSettings } from "@/hooks/useToolSettings";
 import {
   usePricingCatalog,
   useCreaPreventivoLink,
@@ -102,7 +101,7 @@ type S = { scontoIdx: number; markup: number };
 const defaults: S = { scontoIdx: 1, markup: 60 };
 
 export default function PricingExterno() {
-  const { settings, update } = useToolSettings<S>("pricing_externo", defaults);
+  const { settings, update } = useBrandPricingRule("externo", SCONTI, defaults);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mqPrev, setMqPrev] = useState(30);
   const [sfrido, setSfrido] = useState(10);
