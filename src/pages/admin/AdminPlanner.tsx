@@ -202,7 +202,11 @@ export default function AdminPlanner() {
     const [quotesValue, commissionsAccrued, receivables, payables, paymentsOverdue] = await Promise.all([
       sumCol('quotes', 'total_amount', (q) => q.in('status', ACCEPTED)),
       sumCol('commissions', 'amount', (q) => q.eq('status', 'da_liquidare')),
-      sumCol('commercial_invoices', 'total_amount', (q) => q.is('paid_date', null)),
+      (async () => {
+        const { data } = await (supabase as any).from('customer_invoices').select('total, paid_amount').neq('status', 'annullata');
+        return (data || []).reduce((acc: number, r: any) => acc + Math.max(0, Number(r.total || 0) - Number(r.paid_amount || 0)), 0);
+      })(),
+
       sumCol('site_expenses', 'amount', (q) => q.eq('is_paid', false)),
       sumCol('payment_schedules', 'amount', (q) => q.lt('due_date', today).eq('is_paid', false)),
     ]);
