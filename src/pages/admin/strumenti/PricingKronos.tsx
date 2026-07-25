@@ -243,6 +243,11 @@ export default function PricingKronos() {
           ))}
         </div>
 
+        {catalogLoading ? (
+          <PricingLoadingState />
+        ) : PRODOTTI.length === 0 ? (
+          <PricingEmptyState label="Kronos" />
+        ) : (<>
         <div style={{ maxHeight: 440, overflowY: "auto", borderRadius: 8, border: "1px solid #E0DDD8" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead style={{ position: "sticky", top: 0, background: "#fff", zIndex: 1 }}>
@@ -259,9 +264,7 @@ export default function PricingKronos() {
                 const isSel = p.id === selectedId;
                 return (
                   <tr key={p.id} onClick={() => setSelectedId(p.id)}
-                    style={{ background: isSel ? "#E6F1FB" : "transparent", cursor: "pointer" }}
-                    onMouseEnter={e => { if (!isSel) (e.currentTarget as HTMLElement).style.background = "#F7F6F3"; }}
-                    onMouseLeave={e => { if (!isSel) (e.currentTarget as HTMLElement).style.background = isSel ? "#E6F1FB" : "transparent"; }}>
+                    style={{ background: isSel ? "#E6F1FB" : "transparent", cursor: "pointer" }}>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 11, color: "#9A9890", whiteSpace: "nowrap" }}>{p.col}</td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontWeight: 500, whiteSpace: "nowrap" }}>{p.nome}</td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#6B6860", whiteSpace: "nowrap" }}>{p.fmt}</td>
@@ -272,13 +275,15 @@ export default function PricingKronos() {
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#534AB7", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezPrem)}/mq</td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><MargineChip pct={margPct} /></td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#A32D2D", fontWeight: 500, whiteSpace: "nowrap" }}>max {fmtP(scontoMax)}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", whiteSpace: "nowrap" }}>
                       <button onClick={(e) => { e.stopPropagation(); setSelectedId(p.id); }}
-                        style={{ padding: "4px 12px", borderRadius: 6, border: "1px solid", cursor: "pointer", fontSize: 12,
-                          background: isSel ? "#1A1A2E" : "transparent",
-                          color: isSel ? "#fff" : "#1A1A2E",
-                          borderColor: isSel ? "#1A1A2E" : "#E0DDD8" }}>
-                        {isSel ? "✓" : "Seleziona"}
+                        style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid", cursor: "pointer", fontSize: 11,
+                          background: isSel ? "#1A1A2E" : "transparent", color: isSel ? "#fff" : "#1A1A2E", borderColor: isSel ? "#1A1A2E" : "#E0DDD8" }}>
+                        {isSel ? "✓" : "Usa"}
+                      </button>
+                      <button onClick={(e) => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
+                        style={{ marginLeft: 4, padding: "4px 8px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
+                        →
                       </button>
                     </td>
                   </tr>
@@ -288,8 +293,10 @@ export default function PricingKronos() {
           </table>
         </div>
         <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>
-          {filtered.length} articoli visualizzati · Prezzi IVA esclusa · Listino Kronos 2026
+          {filtered.length} articoli visualizzati · Prezzi IVA esclusa · Listino Kronos
         </div>
+        </>)}
+
       </div>
 
       {selected && prev && (
