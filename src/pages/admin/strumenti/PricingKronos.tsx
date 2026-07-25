@@ -107,8 +107,21 @@ export default function PricingKronos() {
   const [scontoCliente, setScontoCliente] = useState(0);
   const [usePrem,       setUsePrem]       = useState(false);
 
+  const { prodotti: catProdotti, loading: catalogLoading } = usePricingCatalog("kronos");
+  const goToCreaPreventivo = useCreaPreventivoLink();
+
+  const PRODOTTI = useMemo(
+    () => catProdotti.map(r => ({
+      id: r.id, nome: r.nome, fmt: r.dims, listino: r.listino,
+      col: inferColKronos(r.nome, r.collection),
+      tipo: inferTipoKronos(r.nome, r.collection),
+    })),
+    [catProdotti]
+  );
+
   const coeff   = SCONTI[scontoIdx].coeff;
   const mkCoeff = (usePrem ? markupPrem : markup) / 100;
+
 
   const calcP = (listino: number, mk?: number) => {
     const c = mk !== undefined ? mk : mkCoeff;
