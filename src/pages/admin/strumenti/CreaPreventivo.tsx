@@ -1094,6 +1094,20 @@ export default function CreaPreventivo() {
     loadProdotti();
   }, []);
 
+  // Preselezione prodotto da query string (?product_code=XXX)
+  const presetCode = searchParams.get("product_code");
+  useEffect(() => {
+    if (!presetCode || PRODOTTI.length === 0) return;
+    const match = PRODOTTI.find(p => p.id === presetCode);
+    if (match) {
+      setProdotto(match);
+      setStep(s => (s < 2 ? 2 : s));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [presetCode, PRODOTTI]);
+
+
+
 
   // CALCOLO
   const [search, setSearch] = useState("");
