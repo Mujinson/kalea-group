@@ -68,6 +68,8 @@ const AdminQuotes = () => {
   const [editingQuote, setEditingQuote] = useState<Quote | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [convertDialogOpen, setConvertDialogOpen] = useState(false);
+  const [quoteToConvert, setQuoteToConvert] = useState<Quote | null>(null);
 
   // Form state
   const [selectedCustomerId, setSelectedCustomerId] = useState('');
