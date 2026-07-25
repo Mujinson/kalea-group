@@ -113,6 +113,7 @@ export default function CatalogImport() {
   const [existing, setExisting] = useState<ExistingProduct[]>([]);
   const [diff, setDiff] = useState<DiffRow[] | null>(null);
   const [applying, setApplying] = useState(false);
+  const [createInventoryForNew, setCreateInventoryForNew] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
   useEffect(() => {
