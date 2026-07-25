@@ -14,6 +14,7 @@ import { Plus, Search, Edit, Trash2, AlertTriangle, Package, Truck, Wrench, Buil
 import { toast } from "sonner";
 import { fetchAllRows } from "@/lib/fetchAllRows";
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
+import { useRealStock } from "@/hooks/useRealStock";
 
 type CatalogProduct = any;
 
