@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useToolSettings } from "@/hooks/useToolSettings";
+import {
+  usePricingCatalog,
+  useCreaPreventivoLink,
+  PricingLoadingState,
+  PricingEmptyState,
+} from "./_shared";
 
 const fmt2 = (n: number) => "€ " + n.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmt0 = (n: number) => "€ " + Math.round(n).toLocaleString("it-IT");
@@ -14,53 +20,18 @@ const SCONTI = [
 
 const CATEGORIE = ["Tutte", "Dream Rovere Verniciato", "Dream Rovere Oliato", "Dream Noce", "Dream Olmo/Castagno", "Slim", "Sense/Element", "Ground/Impression", "Star/Her/Him"];
 
-const PRODOTTI = [
-  { id:"dr-nat-sp",  nome:"Rovere Naturale Spazzolato", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Natural", listino:152.20 },
-  { id:"dr-nat-lev", nome:"Rovere Naturale Levigato", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Satinata Natural", listino:102.70 },
-  { id:"dr-crema",   nome:"Rovere Crema", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Natural", listino:175.00 },
-  { id:"dr-sabbia",  nome:"Rovere Sabbia", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Natural", listino:175.00 },
-  { id:"dr-cognac",  nome:"Rovere Cognac", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Spirit", listino:164.90 },
-  { id:"dr-bianco",  nome:"Rovere Bianco", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Natural", listino:176.80 },
-  { id:"dr-notte",   nome:"Rovere Notte", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Natural", listino:176.80 },
-  { id:"dr-alpaca",  nome:"Rovere Alpaca", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Natural", listino:182.40 },
-  { id:"dr-corteccia",nome:"Rovere Corteccia", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Natural", listino:182.40 },
-  { id:"dr-spirit",  nome:"Rovere Naturale Spirit", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Spirit", listino:142.40 },
-  { id:"dr-wild",    nome:"Rovere Naturale Wild", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Verniciato", tipo:"Vernice Extra Opaca Wild", listino:122.30 },
-  { id:"do-nat",     nome:"Rovere Naturale Oliato", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Oliato", tipo:"Olio-Cera OSMO Spirit", listino:157.40 },
-  { id:"do-avorio",  nome:"Rovere Avorio", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Oliato", tipo:"Olio-Cera OSMO Natural", listino:182.40 },
-  { id:"do-canapa",  nome:"Rovere Canapa", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Oliato", tipo:"Olio-Cera OSMO Spirit", listino:172.40 },
-  { id:"do-ciocco",  nome:"Rovere Cioccolato Fumé", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Oliato", tipo:"Olio-Cera OSMO Spirit", listino:172.40 },
-  { id:"do-speziato",nome:"Rovere Speziato", dims:"160×1200/2200 Tav.2", cat:"Dream Rovere Oliato", tipo:"Olio-Cera OSMO Wild", listino:151.80 },
-  { id:"noce-nat",   nome:"Noce Naturale Levigato", dims:"160×1000/2200 Tav.2", cat:"Dream Noce", tipo:"Vernice Satinata Natural", listino:166.80 },
-  { id:"noce-nat-sp",nome:"Noce Naturale Spazzolato", dims:"160×1000/2200 Tav.2", cat:"Dream Noce", tipo:"Vernice Extra Opaca Natural", listino:218.30 },
-  { id:"noce-camm",  nome:"Noce Cammello", dims:"160×1000/2200 Tav.2", cat:"Dream Noce", tipo:"Vernice Extra Opaca Spirit", listino:250.60 },
-  { id:"noce-eleg",  nome:"Noce Elegante", dims:"160×1000/2200 Tav.2", cat:"Dream Noce", tipo:"Olio-Cera OSMO Natural", listino:233.50 },
-  { id:"olmo-nat",   nome:"Olmo Naturale", dims:"140/170/200×1000/2200", cat:"Dream Olmo/Castagno", tipo:"Olio-Cera OSMO Unica", listino:229.70 },
-  { id:"cast-nat",   nome:"Castagno Naturale", dims:"140/170/200×1000/2200", cat:"Dream Olmo/Castagno", tipo:"Vernice Extra Opaca Unica", listino:225.90 },
-  { id:"cast-dor",   nome:"Castagno Dorato", dims:"140/170/200×1000/2200", cat:"Dream Olmo/Castagno", tipo:"Vernice Extra Opaca Unica", listino:241.10 },
-  { id:"slim120-nat",nome:"Slim 120 Rovere Naturale Natural", dims:"120×800/1200 10mm", cat:"Slim", tipo:"Vernice Extra Opaca — 2,5mm legno", listino:114.80 },
-  { id:"slim120-spi",nome:"Slim 120 Rovere Naturale Spirit", dims:"120×800/1200 10mm", cat:"Slim", tipo:"Vernice Extra Opaca Spirit", listino:106.90 },
-  { id:"slim180-nat",nome:"Slim 180 Rovere Naturale Natural", dims:"180×1200/2200 10mm", cat:"Slim", tipo:"Vernice Extra Opaca — 2,5mm legno", listino:144.70 },
-  { id:"slim180-spi",nome:"Slim 180 Rovere Naturale Spirit", dims:"180×1200/2200 10mm", cat:"Slim", tipo:"Vernice Extra Opaca Spirit", listino:139.10 },
-  { id:"slim120-olio",nome:"Slim 120 Rovere Oliato Nat.", dims:"120×800/1200 10mm", cat:"Slim", tipo:"Olio-Cera OSMO Spirit", listino:119.20 },
-  { id:"sense-lana", nome:"Sense — Rovere Lana", dims:"150×1900 mm 10mm", cat:"Sense/Element", tipo:"Vernice Opaca ABCD", listino:73.80 },
-  { id:"sense-twill",nome:"Sense — Rovere Twill", dims:"150×1900 mm 10mm", cat:"Sense/Element", tipo:"Vernice Opaca AB", listino:99.50 },
-  { id:"sense-canvas",nome:"Sense — Rovere Canvas", dims:"150×1900 mm 10mm", cat:"Sense/Element", tipo:"Vernice Opaca CDE", listino:65.70 },
-  { id:"elem-paper", nome:"Element — Rovere Paper", dims:"220×2200 mm 14mm", cat:"Sense/Element", tipo:"Olio UV DEF", listino:115.30 },
-  { id:"elem-plaster",nome:"Element — Rovere Plaster", dims:"220×2200 mm 14mm", cat:"Sense/Element", tipo:"Vernice Opaca EF", listino:85.00 },
-  { id:"elem-clay",  nome:"Element — Rovere Clay", dims:"220×2200 mm 14mm", cat:"Sense/Element", tipo:"Vernice Opaca fumé EF", listino:88.00 },
-  { id:"grd-limo",   nome:"Ground — Rovere Limo", dims:"180/190×1800/1900", cat:"Ground/Impression", tipo:"Vernice Opaca ABC", listino:93.60 },
-  { id:"grd-laguna", nome:"Ground — Rovere Laguna", dims:"180/190×1800/1900", cat:"Ground/Impression", tipo:"Vernice Opaca AB premium", listino:116.80 },
-  { id:"grd-savana", nome:"Ground — Rovere Savana", dims:"180/190×1800/1900", cat:"Ground/Impression", tipo:"Vernice Opaca CD", listino:83.90 },
-  { id:"grd-selva",  nome:"Ground — Rovere Selva", dims:"180/190×1800/1900", cat:"Ground/Impression", tipo:"Vernice Opaca EF", listino:77.70 },
-  { id:"grd-torba",  nome:"Ground — Rovere Torba Fumé", dims:"180/190×1800/1900", cat:"Ground/Impression", tipo:"Vernice Opaca ABCD", listino:91.10 },
-  { id:"grd-noce",   nome:"Ground — Noce Americano", dims:"180/190×1800/1900", cat:"Ground/Impression", tipo:"Vernice Opaca ABCD", listino:144.20 },
-  { id:"imp-kalika", nome:"Impression — Rovere Kalika", dims:"189×1800/1900 15mm", cat:"Ground/Impression", tipo:"Olio-Cera OSMO CDE 15mm", listino:119.40 },
-  { id:"star-nat",   nome:"Star — Rovere Naturale", dims:"90×510 spina 45°", cat:"Star/Her/Him", tipo:"Vernice Opaca ABCD", listino:98.80 },
-  { id:"her-nat",    nome:"Her — Rovere Naturale", dims:"90×600 spina italiana", cat:"Star/Her/Him", tipo:"Vernice Opaca ABCD", listino:86.10 },
-  { id:"him-nat-ab", nome:"Him — Rovere Naturale AB", dims:"70×490 spina italiana", cat:"Star/Her/Him", tipo:"Vernice Opaca AB", listino:83.30 },
-  { id:"him-nat-abcd",nome:"Him — Rovere Naturale ABCD", dims:"70×490 spina italiana", cat:"Star/Her/Him", tipo:"Vernice Opaca ABCD", listino:77.00 },
-];
+const inferCatParq = (nome: string, collection: string): string => {
+  const s = `${nome} ${collection}`.toLowerCase();
+  if (s.includes("slim")) return "Slim";
+  if (s.includes("sense") || s.includes("element")) return "Sense/Element";
+  if (s.includes("ground") || s.includes("impression")) return "Ground/Impression";
+  if (s.includes("star") || s.includes(" her") || s.includes(" him") || s.includes("spina")) return "Star/Her/Him";
+  if (s.includes("olmo") || s.includes("castagno")) return "Dream Olmo/Castagno";
+  if (s.includes("noce")) return "Dream Noce";
+  if (s.includes("oliato") || s.includes("olio") || s.includes("osmo")) return "Dream Rovere Oliato";
+  return "Dream Rovere Verniciato";
+};
+
 
 const BATT_DREAM = 12.10;
 
