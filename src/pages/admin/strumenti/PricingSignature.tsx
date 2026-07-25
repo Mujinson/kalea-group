@@ -85,8 +85,21 @@ export default function PricingSignature() {
   const [battML, setBattML] = useState(20);
   const [scCliente, setScCliente] = useState(0);
 
+  const { prodotti: catProdotti, loading: catalogLoading } = usePricingCatalog("signature");
+  const goToCreaPreventivo = useCreaPreventivoLink();
+
+  const PRODOTTI = useMemo(
+    () => catProdotti.map(r => ({
+      id: r.id, nome: r.nome, dims: r.dims, listino: r.listino,
+      cat: inferCatSign(r.nome, r.collection),
+      tipo: r.collection || "",
+    })),
+    [catProdotti]
+  );
+
   const coeff = SCONTI[settings.scontoIdx].coeff;
   const mkCoeff = settings.markup / 100;
+
 
   const filtered = PRODOTTI.filter(p => {
     const cm = catFilter === "Tutte" || p.cat === catFilter;
