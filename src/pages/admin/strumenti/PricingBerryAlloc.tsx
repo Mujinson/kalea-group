@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useToolSettings } from "@/hooks/useToolSettings";
+import {
+  usePricingCatalog,
+  useCreaPreventivoLink,
+  PricingLoadingState,
+  PricingEmptyState,
+} from "./_shared";
 
 const fmt2 = (n: number) => "€ " + n.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmt0 = (n: number) => "€ " + Math.round(n).toLocaleString("it-IT");
@@ -14,40 +20,26 @@ const SCONTI = [
 
 const CATEGORIE = ["Tutte", "Laminato DPL", "Laminato HPF", "Parqwood Legno", "Zenn Vinilico", "Spirit Vinilico"];
 
-const PRODOTTI = [
-  { id:"ocean8v4", nome:"Ocean 8 V4", dims:"1288×190×8 mm", cat:"Laminato DPL", tipo:"Resistente acqua 100h AC5", listino:34.20 },
-  { id:"ocean8xl", nome:"Ocean 8 XL", dims:"2038×241×8 mm", cat:"Laminato DPL", tipo:"Resistente acqua 100h AC5 XL", listino:39.90 },
-  { id:"ocean12v4", nome:"Ocean 12 V4", dims:"1288×190×12 mm", cat:"Laminato DPL", tipo:"Resistente acqua 100h AC5", listino:60.80 },
-  { id:"ocean12xl", nome:"Ocean 12 XL", dims:"2038×241×12 mm", cat:"Laminato DPL", tipo:"Resistente acqua 100h AC5 XL", listino:63.80 },
-  { id:"chateau", nome:"Chateau+", dims:"504×84×8 mm", cat:"Laminato DPL", tipo:"Spina ital. resistente acqua AC5", listino:57.90 },
-  { id:"cadenza", nome:"Cadenza", dims:"1383×214×8 mm", cat:"Laminato DPL", tipo:"Classico AC4", listino:30.70 },
-  { id:"origcomp", nome:"Original Comfort", dims:"1207×198×9+2 mm", cat:"Laminato HPF", tipo:"Alta pressione AC6", listino:69.90 },
-  { id:"origcore", nome:"Original Core", dims:"1207×198×9 mm", cat:"Laminato HPF", tipo:"Alta pressione AC6", listino:67.80 },
-  { id:"grandavcomp", nome:"Grand Avenue Comfort", dims:"2410×241×10,3+2 mm", cat:"Laminato HPF", tipo:"Grande formato AC6", listino:73.70 },
-  { id:"grandavcore", nome:"Grand Avenue Core", dims:"2410×241×10,3 mm", cat:"Laminato HPF", tipo:"Grande formato AC6", listino:69.50 },
-  { id:"grandmaj", nome:"Grand Majestic Comfort", dims:"2410×303×10,3+2 mm", cat:"Laminato HPF", tipo:"Grande formato AC6", listino:83.90 },
-  { id:"parqxl", nome:"Parqwood XL", dims:"1190×185×10/0,6 mm", cat:"Parqwood Legno", tipo:"Legno ad alta resist. Naturel", listino:75.10 },
-  { id:"parqxl2", nome:"Parqwood XL Calm", dims:"1190×185×10/0,6 mm", cat:"Parqwood Legno", tipo:"Legno ad alta resist. Calm", listino:78.30 },
-  { id:"parqxxl", nome:"Parqwood XXL Long", dims:"2200×210×10/0,6 mm", cat:"Parqwood Legno", tipo:"Legno ad alta resist. Naturel", listino:78.30 },
-  { id:"parqherr", nome:"Parqwood Herringbone", dims:"504×84×9,5/0,6 mm", cat:"Parqwood Legno", tipo:"Spina italiana Calm", listino:111.80 },
-  { id:"parqhxl", nome:"Parqwood Hydro XL", dims:"1190×185×12/0,6 mm", cat:"Parqwood Legno", tipo:"100% waterproof Naturel", listino:78.60 },
-  { id:"parqhxxl", nome:"Parqwood Hydro XXL Long", dims:"2200×210×12/0,6 mm", cat:"Parqwood Legno", tipo:"100% waterproof Naturel", listino:81.80 },
-  { id:"zenn30plk", nome:"Zenn RigidClick 30 Planks", dims:"1219×178×4+1 mm", cat:"Zenn Vinilico", tipo:"SPC a secco materassino", listino:43.80 },
-  { id:"zenn30til", nome:"Zenn RigidClick 30 Tiles", dims:"914×457×4+1 mm", cat:"Zenn Vinilico", tipo:"SPC a secco materassino", listino:43.80 },
-  { id:"zenn55plk", nome:"Zenn RigidClick 55 Planks", dims:"1219×178×5+1 mm", cat:"Zenn Vinilico", tipo:"SPC a secco materassino", listino:57.90 },
-  { id:"zenn55til", nome:"Zenn RigidClick 55 Tiles", dims:"914×457×5+1 mm", cat:"Zenn Vinilico", tipo:"SPC a secco materassino", listino:59.30 },
-  { id:"zenn55herr", nome:"Zenn RigidClick 55 Herringbone", dims:"610×108×5+1 mm", cat:"Zenn Vinilico", tipo:"SPC spina a secco", listino:62.40 },
-  { id:"zennll", nome:"Zenn Loose Lay 55 Planks", dims:"1219×229×4,5 mm", cat:"Zenn Vinilico", tipo:"Loose Lay", listino:60.90 },
-  { id:"zenngd30p", nome:"Zenn GD 30 Planks", dims:"1219×178×2 mm", cat:"Zenn Vinilico", tipo:"Da incollare", listino:30.30 },
-  { id:"zenngd55p", nome:"Zenn GD 55 Planks", dims:"1219×178×2,5 mm", cat:"Zenn Vinilico", tipo:"Da incollare", listino:37.80 },
-  { id:"spiritdg", nome:"Spirit Soul 55 Doga", dims:"1524×228×5+1 mm", cat:"Spirit Vinilico", tipo:"SPC a secco", listino:61.70 },
-  { id:"spirittil", nome:"Spirit Soul 55 Piastrella", dims:"914×457×5+1 mm", cat:"Spirit Vinilico", tipo:"SPC a secco", listino:63.40 },
-  { id:"spiritherr", nome:"Spirit Herringbone", dims:"610×108×5+1 mm", cat:"Spirit Vinilico", tipo:"SPC spina a secco", listino:64.70 },
-  { id:"spiritgd", nome:"Spirit Pro GD 55", dims:"1500×230×2,5 mm", cat:"Spirit Vinilico", tipo:"Da incollare", listino:42.80 },
-];
+const inferCatBerry = (nome: string, collection: string): string => {
+  const s = `${nome} ${collection}`.toLowerCase();
+  if (s.includes("spirit")) return "Spirit Vinilico";
+  if (s.includes("zenn")) return "Zenn Vinilico";
+  if (s.includes("parqwood") || s.includes("parquet")) return "Parqwood Legno";
+  if (s.includes("hpf") || s.includes("original") || s.includes("avenue") || s.includes("majestic")) return "Laminato HPF";
+  return "Laminato DPL";
+};
+
+const inferTipoBerry = (nome: string): string => {
+  const s = nome.toLowerCase();
+  if (s.includes("herring") || s.includes("spina")) return "Spina";
+  if (s.includes("gd") || s.includes("incoll")) return "Da incollare";
+  if (s.includes("hydro") || s.includes("waterproof")) return "100% waterproof";
+  return "Standard";
+};
 
 const BATT_LAMINATO = 5.90;
 const BATT_VINILICO = 11.90;
+
 
 function SliderRow({ label, min, max, value, step, onChange, format }: any) {
   return (
@@ -94,8 +86,21 @@ export default function PricingBerryAlloc() {
   const [battML, setBattML] = useState(20);
   const [scCliente, setScCliente] = useState(0);
 
+  const { prodotti: catProdotti, loading: catalogLoading } = usePricingCatalog("berryalloc");
+  const goToCreaPreventivo = useCreaPreventivoLink();
+
+  const PRODOTTI = useMemo(
+    () => catProdotti.map(r => ({
+      id: r.id, nome: r.nome, dims: r.dims, listino: r.listino,
+      cat: inferCatBerry(r.nome, r.collection),
+      tipo: inferTipoBerry(r.nome),
+    })),
+    [catProdotti]
+  );
+
   const coeff = SCONTI[settings.scontoIdx].coeff;
   const mkCoeff = settings.markup / 100;
+
 
   const filtered = PRODOTTI.filter(p => {
     const cm = catFilter === "Tutte" || p.cat === catFilter;
@@ -121,7 +126,7 @@ export default function PricingBerryAlloc() {
     prev = { costo, prezzo, mqOrd, costoAcq, prezzoList, prezzoFin, margE, margPct, scontoMax };
   }
 
-  const avgListino = PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length;
+  const avgListino = PRODOTTI.length > 0 ? PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length : 0;
 
   return (
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "8px 4px" }}>
@@ -176,6 +181,11 @@ export default function PricingBerryAlloc() {
             </button>
           ))}
         </div>
+        {catalogLoading ? (
+          <PricingLoadingState />
+        ) : PRODOTTI.length === 0 ? (
+          <PricingEmptyState label="BerryAlloc" />
+        ) : (<>
         <div style={{ maxHeight: 440, overflowY: "auto", borderRadius: 8, border: "1px solid #E0DDD8" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead style={{ position: "sticky", top: 0, background: "#fff", zIndex: 1 }}>
@@ -203,11 +213,15 @@ export default function PricingBerryAlloc() {
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#1A1A2E", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezzo)}/mq</td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><MargineChip pct={margPct} /></td>
                     <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#A32D2D", fontWeight: 500, whiteSpace: "nowrap" }}>max {fmtP(margPct)}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", whiteSpace: "nowrap" }}>
                       <button onClick={e => { e.stopPropagation(); setSelectedId(p.id); }}
                         style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid", cursor: "pointer", fontSize: 11,
                           background: isSel ? "#1A1A2E" : "transparent", color: isSel ? "#fff" : "#1A1A2E", borderColor: isSel ? "#1A1A2E" : "#E0DDD8" }}>
                         {isSel ? "✓" : "Usa"}
+                      </button>
+                      <button onClick={e => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
+                        style={{ marginLeft: 4, padding: "4px 8px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
+                        →
                       </button>
                     </td>
                   </tr>
@@ -216,7 +230,9 @@ export default function PricingBerryAlloc() {
             </tbody>
           </table>
         </div>
-        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>{filtered.length} prodotti · Prezzi IVA esclusa · Listino BerryAlloc 2026</div>
+        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>{filtered.length} prodotti · Prezzi IVA esclusa · Listino BerryAlloc</div>
+        </>)}
+
       </div>
 
       {selected && prev && (

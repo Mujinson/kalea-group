@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useToolSettings } from "@/hooks/useToolSettings";
+import {
+  usePricingCatalog,
+  useCreaPreventivoLink,
+  PricingLoadingState,
+  PricingEmptyState,
+} from "./_shared";
 
 // ─── HELPERS ─────────────────────────────────────────────────
 const fmt2 = (n: number) =>
@@ -7,42 +13,20 @@ const fmt2 = (n: number) =>
 const fmt0 = (n: number) => "€ " + Math.round(n).toLocaleString("it-IT");
 const fmtP = (n: number) => n.toFixed(1) + "%";
 
-// ─── DATI LISTINO FLOW 2025 ───────────────────────────────────
-const PRODOTTI = [
-  { id: "flow40",   nome: "FLOW 40",              dims: "1524×228,6×4+1 mm",   listino: 43.80, tipo: "Standard",   note: "Pronta consegna" },
-  { id: "flow55w",  nome: "FLOW 55 WOOD",         dims: "1524×228,6×4,5+1 mm", listino: 49.00, tipo: "Standard",   note: "Pronta consegna" },
-  { id: "flow55c",  nome: "FLOW 55 CEMENT",       dims: "920×460×5,5+1 mm",    listino: 52.70, tipo: "Standard",   note: "Pronta consegna" },
-  { id: "flowxl",   nome: "FLOW XL",              dims: "1800×228,6×5+1 mm",   listino: 53.00, tipo: "Standard",   note: "Pronta consegna" },
-  { id: "flowspina",nome: "FLOW SPINA ANDE",      dims: "640×128×4,5+1 mm",    listino: 51.20, tipo: "Standard",   note: "Pronta consegna" },
-  { id: "flow55gdw",nome: "FLOW 55 GD WOOD",      dims: "1500×230×2,5 mm",     listino: 32.10, tipo: "Da incollare",note: "Pronta consegna" },
-  { id: "flow55gdc",nome: "FLOW 55 GD CEMENT",    dims: "914,4×457,2×2,5 mm",  listino: 31.40, tipo: "Da incollare",note: "Pronta consegna" },
-  { id: "flowpxlw", nome: "FLOW+ XL WOOD",        dims: "1800×228,6×5,5+1 mm", listino: 54.10, tipo: "Premium",    note: "Novità 2025" },
-  { id: "flowpxlt", nome: "FLOW+ XL TILE",        dims: "1200×600×5,5+1 mm",   listino: 55.30, tipo: "Premium",    note: "Novità 2025" },
-  { id: "flowpspi", nome: "FLOW+ SPINA ITALIANA", dims: "640×128×5,5+1 mm",    listino: 54.40, tipo: "Premium",    note: "Novità 2025" },
-  { id: "flowpspf", nome: "FLOW+ SPINA FRANCESE", dims: "625×127×5,5+1 mm",    listino: 61.80, tipo: "Premium",    note: "Novità 2025" },
-];
-
-const ACCESSORI = [
-  { nome: "Battiscopa PVC coordinato",   unita: "ml",  listino: 6.20  },
-  { nome: "Giunto a T coordinato",       unita: "ml",  listino: 16.20 },
-  { nome: "Profilo raccordo coordinato", unita: "ml",  listino: 16.20 },
-  { nome: "Profilo finitura coordinato", unita: "ml",  listino: 16.20 },
-  { nome: "Giunto a T alluminio 32mm",   unita: "ml",  listino: 9.90  },
-  { nome: "Profilo raccordo alu 31mm",   unita: "ml",  listino: 9.90  },
-  { nome: "Profilo finitura alu 25mm",   unita: "ml",  listino: 9.90  },
-  { nome: "Paragradino rigato",          unita: "ml",  listino: 14.10 },
-  { nome: "Nylon barriera vapore",       unita: "mq",  listino: 1.80  },
-  { nome: "Isoldrum LVT Plus",           unita: "mq",  listino: 10.20 },
-  { nome: "Ardex Fix livellante",        unita: "kg",  listino: 19.10 },
-  { nome: "Flow Care LVT Cleaner",       unita: "lt",  listino: 12.80 },
-];
-
 const SCONTI = [
   { label: "50%",   coeff: 0.50 },
   { label: "50+10", coeff: 0.50 * 0.90 },
   { label: "50+15", coeff: 0.50 * 0.85 },
   { label: "50+20", coeff: 0.50 * 0.80 },
 ];
+
+const inferTipoFlow = (nome: string, collection: string): string => {
+  const s = `${nome} ${collection}`.toLowerCase();
+  if (s.includes("premium") || s.includes("flow+")) return "Premium";
+  if (s.includes("gd") || s.includes("incoll")) return "Da incollare";
+  return "Standard";
+};
+
 
 function Slider({ label, min, max, value, step, onChange, format }: any) {
   return (
@@ -95,8 +79,25 @@ export default function PricingFlow() {
   const [sfrido,       setSfrido]       = useState(10);
   const [scontoCliente,setScontoCliente]= useState(0);
 
+  const { prodotti: catProdotti, accessori: catAccessori, loading: catalogLoading } = usePricingCatalog("flow");
+  const goToCreaPreventivo = useCreaPreventivoLink();
+
+  const PRODOTTI = useMemo(
+    () => catProdotti.map(r => ({
+      id: r.id, nome: r.nome, dims: r.dims, listino: r.listino,
+      tipo: inferTipoFlow(r.nome, r.collection),
+      note: r.collection || "",
+    })),
+    [catProdotti]
+  );
+  const ACCESSORI = useMemo(
+    () => catAccessori.map(r => ({ nome: r.nome, unita: r.unita || "ml", listino: r.listino })),
+    [catAccessori]
+  );
+
   const coeff  = SCONTI[scontoIdx].coeff;
   const mkCoeff = markup / 100;
+
 
   const calcP = (listino: number) => {
     const costo   = listino * coeff;
@@ -121,10 +122,11 @@ export default function PricingFlow() {
     prev = { costo, prezzo, mqOrd, costoAcq, prezzoList, prezzoFin, margineE, marginePct, scontoMax, inPericolo };
   }
 
-  const avgListino = PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length;
+  const avgListino = PRODOTTI.length > 0 ? PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length : 0;
   const avgCosto   = avgListino * coeff;
   const avgPrezzo  = avgCosto * (1 + mkCoeff);
-  const avgMargine = ((avgPrezzo - avgCosto) / avgPrezzo) * 100;
+  const avgMargine = avgPrezzo > 0 ? ((avgPrezzo - avgCosto) / avgPrezzo) * 100 : 0;
+
 
   return (
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "28px 20px" }}>
@@ -180,11 +182,18 @@ export default function PricingFlow() {
         ))}
       </div>
 
+      {catalogLoading ? (
+        <PricingLoadingState />
+      ) : PRODOTTI.length === 0 ? (
+        <PricingEmptyState label="Flow" />
+      ) : (<>
+
       <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
         <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
-          Listino Flow 2025 — clicca un prodotto per il preventivo
+          Listino Flow — clicca un prodotto per il preventivo
         </div>
         <div style={{ overflowX: "auto" }}>
+
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
               <tr>
@@ -221,7 +230,12 @@ export default function PricingFlow() {
                           borderColor: isSel ? "#1A1A2E" : "#E0DDD8" }}>
                         {isSel ? "Selezionato" : "Seleziona"}
                       </button>
+                      <button onClick={(e) => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
+                        style={{ marginLeft: 6, padding: "4px 10px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, background: "transparent", color: "#0C447C" }}>
+                        → Preventivo
+                      </button>
                     </td>
+
                   </tr>
                 );
               })}
@@ -263,6 +277,9 @@ export default function PricingFlow() {
           </table>
         </div>
       </div>
+      </>)}
+
+
 
       {selected && prev && (
         <>
