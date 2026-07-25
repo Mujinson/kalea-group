@@ -361,7 +361,7 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
     const customerId = await ensureCustomerId();
     if (!customerId) { setSaving(false); toast.error('Preventivo senza cliente CRM collegato'); return; }
     const { data: user } = await supabase.auth.getUser();
-    const { error } = await supabase.from('customer_invoices' as any).insert({
+    const { error } = await supabase.from('customer_invoices').insert({
       customer_id: customerId,
       quote_id: quote.id,
       description: description || `${quote.project_name || quote.quote_number} — ${trancheType}`,
@@ -483,7 +483,7 @@ function PaymentDialog({ open, invoice, onClose, onSaved }: any) {
     if (!invoice || amount <= 0) { toast.error('Importo non valido'); return; }
     setSaving(true);
     const { data: user } = await supabase.auth.getUser();
-    const { error } = await supabase.from('customer_payments' as any).insert({
+    const { error } = await supabase.from('customer_payments').insert({
       invoice_id: invoice.id,
       payment_date: date,
       amount,
