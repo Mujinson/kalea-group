@@ -1494,7 +1494,7 @@ export default function CreaPreventivo() {
       coeffUsed = (100 - disc) / 100;
     }
     const costoMatMq = prodotto ? listinoUsed * coeffUsed : 0;
-    const prezzoMatMqAuto = costoMatMq * MARKUP;
+    const prezzoMatMqAuto = costoMatMq * (prodotto?.mkMult ?? MARKUP);
     const prezzoMatMq = overrides.matMq != null ? overrides.matMq : prezzoMatMqAuto;
     const mqOrd = prodotto ? mqPrev * (1 + sfrido/100) : 0;
     const costoMatTot = mqOrd * costoMatMq;
@@ -1553,7 +1553,7 @@ export default function CreaPreventivo() {
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0, sfridoPct:0, scontoPct:0, scontoEur:null }]);
   const addRigaFromProdotto = (p:any) => {
     const costo = (p.listino||0) * (p.coeff||0.45);
-    const prezzo = costo * MARKUP;
+    const prezzo = costo * (p.mkMult ?? MARKUP);
     setRigheMat(r=>[...r,{
       id: Date.now()+Math.random(),
       desc: `${p.fornitore} — ${p.nome}${p.dims?` (${p.dims})`:""}`,
@@ -1823,7 +1823,7 @@ export default function CreaPreventivo() {
 
                   {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                     const costoMq=p.listino*p.coeff;
-                    const prezzoMq=costoMq*MARKUP;
+                    const prezzoMq=costoMq*(p.mkMult ?? MARKUP);
                     const fc=prodStyle(p);
                     return (
                       <div key={p.id}
@@ -1866,7 +1866,7 @@ export default function CreaPreventivo() {
                     <div style={{fontSize:12,color:"#9A9890",marginTop:2}}>{prodotto.dims} · {prodotto.categoria}</div>
                     <div style={{display:"flex",gap:6,alignItems:"center",marginTop:8}}>
                       <span style={{fontSize:10,padding:"3px 9px",borderRadius:6,fontWeight:500,background:prodStyle(prodotto).bg,color:prodStyle(prodotto).c}}>{prodBadgeLabel(prodotto)}</span>
-                      <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*MARKUP)}/mq</span>
+                      <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*(prodotto.mkMult ?? MARKUP))}/mq</span>
                     </div>
                   </div>
                   <div style={{display:"flex",flexDirection:"column",gap:6,alignItems:"flex-end"}}>
@@ -1905,7 +1905,7 @@ export default function CreaPreventivo() {
                     <div style={{maxHeight:340,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff"}}>
                       {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                         const costoMq=p.listino*p.coeff;
-                        const prezzoMq=costoMq*MARKUP;
+                        const prezzoMq=costoMq*(p.mkMult ?? MARKUP);
                         const fc=prodStyle(p);
                         return (
                           <div key={p.id} style={{padding:"8px 12px",borderBottom:"0.5px solid #E0DDD8",display:"flex",alignItems:"center",gap:10}}>
