@@ -189,7 +189,7 @@ async function resolveBrandIdForKey(key: PricingCatalogKey): Promise<string | nu
 }
 
 export function useBrandPricingRule<
-  S extends { scontoIdx: number; markup: number; [k: string]: unknown }
+  S extends { scontoIdx: number; markup: number }
 >(key: PricingCatalogKey, scontoTable: ScontoOpt[], defaults: S) {
   const [settings, setSettings] = useState<S>(defaults);
   const [brandId, setBrandId] = useState<string | null>(null);
