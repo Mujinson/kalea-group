@@ -1095,7 +1095,9 @@ export default function CreaPreventivo() {
   }, []);
 
   // Preselezione prodotto da query string (?product_code=XXX)
-  const presetCode = searchParams.get("product_code");
+  const [presetSearchParams] = useSearchParams();
+  const presetCode = presetSearchParams.get("product_code");
+
   useEffect(() => {
     if (!presetCode || PRODOTTI.length === 0) return;
     const match = PRODOTTI.find(p => p.id === presetCode);
