@@ -1,5 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useToolSettings } from "@/hooks/useToolSettings";
+import {
+  usePricingCatalog,
+  useCreaPreventivoLink,
+  PricingLoadingState,
+  PricingEmptyState,
+} from "./_shared";
 
 const fmt2 = (n: number) => "€ " + n.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmt0 = (n: number) => "€ " + Math.round(n).toLocaleString("it-IT");
@@ -14,51 +20,21 @@ const SCONTI = [
 
 const CATEGORIE = ["Tutte", "Spine Verniciato", "Spine Oliato", "Spine Noce/Essenze", "Quadrotte Verniciato", "Quadrotte Oliato", "Arrow", "Rovere Recupero"];
 
-const PRODOTTI = [
-  { id:"s45-nat-n",  nome:"Spina 45 Larga — Rovere Naturale Natural", dims:"180×620 mm 14mm 4mm nobile", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:223.00 },
-  { id:"s45-nat-sp", nome:"Spina 45 Larga — Rovere Naturale Spirit", dims:"180×620 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:203.80 },
-  { id:"s45-crema",  nome:"Spina 45 Larga — Rovere Crema", dims:"180×620 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:242.30 },
-  { id:"s45-bianco", nome:"Spina 45 Larga — Rovere Bianco", dims:"180×620 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:244.20 },
-  { id:"s45-alpaca", nome:"Spina 45 Larga — Rovere Alpaca", dims:"180×620 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:250.00 },
-  { id:"s45-cognac", nome:"Spina 45 Larga — Rovere Cognac", dims:"180×620 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Spirit", listino:223.00 },
-  { id:"s52-nat-n",  nome:"Spina 52 Larga — Rovere Naturale Natural", dims:"180×590 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:223.00 },
-  { id:"s52-crema",  nome:"Spina 52 Larga — Rovere Crema", dims:"180×590 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:242.30 },
-  { id:"sc-nat-n",   nome:"Spina Corta — Rovere Naturale Natural", dims:"180×415 mm 60° 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:225.90 },
-  { id:"sc-crema",   nome:"Spina Corta — Rovere Crema", dims:"180×415 mm 60° 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:245.40 },
-  { id:"es-nat-n",   nome:"Esagono — Rovere Naturale Natural", dims:"200×231 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:281.10 },
-  { id:"es-crema",   nome:"Esagono — Rovere Crema", dims:"200×231 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:300.80 },
-  { id:"lst-nat-n",  nome:"Listello — Rovere Naturale Natural", dims:"70×800/1200 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:134.50 },
-  { id:"lst-crema",  nome:"Listello — Rovere Crema", dims:"70×800/1200 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:153.50 },
-  { id:"p180-nat-n", nome:"Pattern 180 — Rovere Naturale Natural", dims:"180×180/360/540 mm 14mm", cat:"Spine Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:190.20 },
-  { id:"so45-nat",   nome:"Spina 45 — Rovere Naturale Oliato", dims:"180×620 mm", cat:"Spine Oliato", tipo:"Olio-Cera OSMO Spirit", listino:215.40 },
-  { id:"so45-avorio",nome:"Spina 45 — Rovere Avorio", dims:"180×620 mm", cat:"Spine Oliato", tipo:"Olio-Cera OSMO Natural", listino:250.00 },
-  { id:"so45-canapa",nome:"Spina 45 — Rovere Canapa", dims:"180×620 mm", cat:"Spine Oliato", tipo:"Olio-Cera OSMO Spirit", listino:230.70 },
-  { id:"so45-ciocco",nome:"Spina 45 — Rovere Cioccolato Fumé", dims:"180×620 mm", cat:"Spine Oliato", tipo:"Olio-Cera OSMO Spirit", listino:230.70 },
-  { id:"so45-spez",  nome:"Spina 45 — Rovere Speziato", dims:"180×620 mm", cat:"Spine Oliato", tipo:"Olio-Cera OSMO Wild", listino:211.50 },
-  { id:"sn45-nat",   nome:"Spina 45 — Noce Naturale", dims:"180×620 mm", cat:"Spine Noce/Essenze", tipo:"Vernice Extra Opaca Natural", listino:305.70 },
-  { id:"sn45-camm",  nome:"Spina 45 — Noce Cammello", dims:"180×620 mm", cat:"Spine Noce/Essenze", tipo:"Vernice Extra Opaca Spirit", listino:338.40 },
-  { id:"sn45-eleg",  nome:"Spina 45 — Noce Elegante", dims:"180×620 mm", cat:"Spine Noce/Essenze", tipo:"Olio-Cera OSMO Natural", listino:321.10 },
-  { id:"solmo45",    nome:"Spina 45 — Olmo Naturale", dims:"170×620 mm", cat:"Spine Noce/Essenze", tipo:"Olio-Cera OSMO Unica", listino:300.70 },
-  { id:"scast45",    nome:"Spina 45 — Castagno Naturale", dims:"170×620 mm", cat:"Spine Noce/Essenze", tipo:"Vernice Extra Opaca Unica", listino:295.70 },
-  { id:"q1-nat-n",   nome:"Q1 Quadrotta — Rovere Naturale Natural", dims:"600×600 mm", cat:"Quadrotte Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:316.40 },
-  { id:"q1-nat-sp",  nome:"Q1 Quadrotta — Rovere Naturale Spirit", dims:"600×600 mm", cat:"Quadrotte Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:297.00 },
-  { id:"q1-crema",   nome:"Q1 Quadrotta — Rovere Crema", dims:"600×600 mm", cat:"Quadrotte Verniciato", tipo:"Spazzolata Vernice Extra Opaca Natural", listino:335.80 },
-  { id:"q3-nat-n",   nome:"Q3 con Cornice — Rovere Naturale Natural", dims:"782×782 mm", cat:"Quadrotte Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:355.20 },
-  { id:"q6vers",     nome:"Q8 Versailles — Rovere Naturale Natural", dims:"980×980 mm", cat:"Quadrotte Verniciato", tipo:"Spazzolata Vernice Extra Opaca", listino:355.20 },
-  { id:"qn-nat",     nome:"Quadrotta — Noce Naturale", dims:"600×600 mm", cat:"Quadrotte Verniciato", tipo:"Vernice Extra Opaca Natural", listino:355.20 },
-  { id:"qn-camm",    nome:"Quadrotta — Noce Cammello", dims:"600×600 mm", cat:"Quadrotte Verniciato", tipo:"Vernice Extra Opaca Spirit", listino:388.30 },
-  { id:"qo1-nat",    nome:"Q1 Quadrotta Oliata — Rovere Naturale", dims:"600×600 mm", cat:"Quadrotte Oliato", tipo:"Olio-Cera OSMO Spirit", listino:308.70 },
-  { id:"qo1-avorio", nome:"Q1 Quadrotta Oliata — Rovere Avorio", dims:"600×600 mm", cat:"Quadrotte Oliato", tipo:"Olio-Cera OSMO Natural", listino:343.60 },
-  { id:"qo1-canapa", nome:"Q1 Quadrotta Oliata — Rovere Canapa", dims:"600×600 mm", cat:"Quadrotte Oliato", tipo:"Olio-Cera OSMO Spirit", listino:324.20 },
-  { id:"qon-nat",    nome:"Quadrotta Oliata — Noce Naturale", dims:"600×600 mm", cat:"Quadrotte Oliato", tipo:"Vernice Extra Opaca Natural", listino:355.20 },
-  { id:"qon-camm",   nome:"Quadrotta Oliata — Noce Cammello", dims:"600×600 mm", cat:"Quadrotte Oliato", tipo:"Vernice Extra Opaca Spirit", listino:388.30 },
-  { id:"arr-nat",    nome:"Arrow — Rovere Naturale Natural", dims:"45×450 mm 14mm", cat:"Arrow", tipo:"Spazzolata Vernice Extra Opaca", listino:153.20 },
-  { id:"arr-conch",  nome:"Arrow — Rovere Conchiglia", dims:"45×450 mm 14mm", cat:"Arrow", tipo:"Spazzolata Vernice Extra Opaca", listino:172.60 },
-  { id:"arr-tan",    nome:"Arrow — Rovere Tan Fumé", dims:"45×450 mm 14mm", cat:"Arrow", tipo:"Spazzolata Olio-Cera", listino:180.30 },
-  { id:"arr-plat",   nome:"Arrow — Rovere Platino", dims:"45×450 mm 14mm", cat:"Arrow", tipo:"Spazzolata Vernice Extra Opaca", listino:172.60 },
-  { id:"rec-foss",   nome:"Rovere Fossile — Prima Patina", dims:"120/240×800/2500 14mm", cat:"Rovere Recupero", tipo:"Spazzolata Olio-Cera OSMO Wild", listino:315.80 },
-  { id:"rec-sec",    nome:"Rovere Secolare — Seconda Patina", dims:"120/240×800/2500 14mm", cat:"Rovere Recupero", tipo:"Spazzolata Olio-Cera OSMO Wild", listino:315.80 },
-];
+const inferCatSign = (nome: string, collection: string): string => {
+  const s = `${nome} ${collection}`.toLowerCase();
+  if (s.includes("recupero") || s.includes("fossile") || s.includes("secolare")) return "Rovere Recupero";
+  if (s.includes("arrow")) return "Arrow";
+  const isQuad = s.includes("quadrott") || s.includes("versailles");
+  const isSpina = s.includes("spina") || s.includes("esagono") || s.includes("pattern") || s.includes("listello");
+  const isOliato = s.includes("oliat") || s.includes("olio") || s.includes("osmo");
+  if (isQuad) return isOliato ? "Quadrotte Oliato" : "Quadrotte Verniciato";
+  if (isSpina) {
+    if (s.includes("noce") || s.includes("olmo") || s.includes("castagno")) return "Spine Noce/Essenze";
+    return isOliato ? "Spine Oliato" : "Spine Verniciato";
+  }
+  return "Spine Verniciato";
+};
+
 
 const BATT_SIGN = 12.10;
 
