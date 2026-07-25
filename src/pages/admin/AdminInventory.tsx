@@ -340,6 +340,7 @@ const AdminInventory = () => {
         <CrmKpiTile label="Stock CWC" value={`${cwcTotalStock.toFixed(0)} mq`} color="green" icon={<Package className="w-4 h-4" />} hint={criticalAlerts.filter(a => a.product === 'CWC').length > 0 ? `${criticalAlerts.filter(a => a.product === 'CWC').length} varianti critiche` : undefined} onClick={() => setActiveTab('cwc')} />
         <CrmKpiTile label="Tappetino" value={`${tappetino.toFixed(0)} mq`} color="amber" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('tappetino')} />
         <CrmKpiTile label="Profili" value={`${profili.toFixed(0)} mq`} color="purple" icon={<Package className="w-4 h-4" />} onClick={() => setActiveTab('profili')} />
+        <CrmKpiTile label="Sotto scorta" value={lowStockCatalogCount} color={lowStockCatalogCount > 0 ? 'orange' : 'slate'} icon={lowStockCatalogCount > 0 ? <AlertTriangle className="w-4 h-4" /> : <Package className="w-4 h-4" />} onClick={() => setActiveTab('catalogo')} />
       </CrmKpiRow>
 
 
