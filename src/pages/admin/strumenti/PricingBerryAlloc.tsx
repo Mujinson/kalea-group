@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import { useToolSettings } from "@/hooks/useToolSettings";
 import {
   usePricingCatalog,
+  useBrandPricingRule,
   useCreaPreventivoLink,
   PricingLoadingState,
   PricingEmptyState,
@@ -77,7 +77,7 @@ type S = { scontoIdx: number; markup: number };
 const defaults: S = { scontoIdx: 1, markup: 60 };
 
 export default function PricingBerryAlloc() {
-  const { settings, update } = useToolSettings<S>("pricing_berryalloc", defaults);
+  const { settings, update } = useBrandPricingRule("berryalloc", SCONTI, defaults);
   const [catFilter, setCatFilter] = useState("Tutte");
   const [search, setSearch] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);

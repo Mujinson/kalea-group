@@ -29,8 +29,10 @@ type ProdottoCalcolo = {
   dims: string;
   listino: number;
   coeff: number;
+  mkMult: number;
   tappetino: "mai" | "sempre" | "opzionale";
 };
+
 
 const FORN_STYLE: Record<string, { bg: string; c: string }> = {
   "Flow":{bg:"#E6F1FB",c:"#0C447C"},
@@ -1034,30 +1036,49 @@ export default function CreaPreventivo() {
   useEffect(() => {
     const loadProdotti = async () => {
       setProdottiLoading(true);
-      const { data, error } = await supabase
-        .from("catalog_products")
-        .select(`
-          product_code,
-          name,
-          collection,
-          format,
-          list_price,
-          supplier_discount_percentage,
-          unit_of_measure,
-          is_active,
-          catalog_brands ( name )
-        `)
-        .eq("is_active", true)
-        .gt("list_price", 0)
-        .order("name");
+      const [{ data, error }, { data: rulesData }] = await Promise.all([
+        supabase
+          .from("catalog_products")
+          .select(`
+            product_code,
+            name,
+            collection,
+            format,
+            list_price,
+            supplier_discount_percentage,
+            unit_of_measure,
+            is_active,
+            catalog_brands ( name )
+          `)
+          .eq("is_active", true)
+          .gt("list_price", 0)
+          .order("name"),
+        supabase
+          .from("pricing_rules")
+          .select("supplier_discount_pct, markup_pct, catalog_brands(name)"),
+      ]);
+
+      // brand-lowercase → { coeff, markupMult } override
+      const brandMap: Record<string, { coeff?: number; markupMult?: number }> = {};
+      (rulesData ?? []).forEach((r: any) => {
+        const n = String(r.catalog_brands?.name ?? "").toLowerCase().trim();
+        if (!n) return;
+        brandMap[n] = {
+          coeff: r.supplier_discount_pct != null ? Number(r.supplier_discount_pct) / 100 : undefined,
+          markupMult: r.markup_pct != null ? 1 + Number(r.markup_pct) / 100 : undefined,
+        };
+      });
 
       if (!error && data) {
         const mapped: ProdottoCalcolo[] = data.map((p: any) => {
           const brandName: string = p.catalog_brands?.name ?? "Altro";
-          const disc = p.supplier_discount_percentage ?? 0;
-          const coeff = parseFloat(((100 - disc) / 100).toFixed(4));
-          const collezione = (p.collection ?? "").toLowerCase();
           const brand = brandName.toLowerCase();
+          const rule = brandMap[brand] ?? {};
+          const disc = p.supplier_discount_percentage ?? 0;
+          const coeffFromProduct = parseFloat(((100 - disc) / 100).toFixed(4));
+          const coeff = rule.coeff ?? coeffFromProduct;
+          const mkMult = rule.markupMult ?? MARKUP;
+          const collezione = (p.collection ?? "").toLowerCase();
 
           let tappetino: "mai" | "sempre" | "opzionale" = "mai";
           if (collezione.includes("laminato") || collezione.includes("laminate")) {
@@ -1084,6 +1105,7 @@ export default function CreaPreventivo() {
             dims: p.format ?? "",
             listino: p.list_price ?? 0,
             coeff,
+            mkMult,
             tappetino,
           };
         });
@@ -1093,6 +1115,7 @@ export default function CreaPreventivo() {
     };
     loadProdotti();
   }, []);
+
 
   // Preselezione prodotto da query string (?product_code=XXX)
   const [presetSearchParams] = useSearchParams();
@@ -1471,7 +1494,7 @@ export default function CreaPreventivo() {
       coeffUsed = (100 - disc) / 100;
     }
     const costoMatMq = prodotto ? listinoUsed * coeffUsed : 0;
-    const prezzoMatMqAuto = costoMatMq * MARKUP;
+    const prezzoMatMqAuto = costoMatMq * (prodotto?.mkMult ?? MARKUP);
     const prezzoMatMq = overrides.matMq != null ? overrides.matMq : prezzoMatMqAuto;
     const mqOrd = prodotto ? mqPrev * (1 + sfrido/100) : 0;
     const costoMatTot = mqOrd * costoMatMq;
@@ -1530,7 +1553,7 @@ export default function CreaPreventivo() {
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0, sfridoPct:0, scontoPct:0, scontoEur:null }]);
   const addRigaFromProdotto = (p:any) => {
     const costo = (p.listino||0) * (p.coeff||0.45);
-    const prezzo = costo * MARKUP;
+    const prezzo = costo * (p.mkMult ?? MARKUP);
     setRigheMat(r=>[...r,{
       id: Date.now()+Math.random(),
       desc: `${p.fornitore} — ${p.nome}${p.dims?` (${p.dims})`:""}`,
@@ -1800,7 +1823,7 @@ export default function CreaPreventivo() {
 
                   {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                     const costoMq=p.listino*p.coeff;
-                    const prezzoMq=costoMq*MARKUP;
+                    const prezzoMq=costoMq*(p.mkMult ?? MARKUP);
                     const fc=prodStyle(p);
                     return (
                       <div key={p.id}
@@ -1843,7 +1866,7 @@ export default function CreaPreventivo() {
                     <div style={{fontSize:12,color:"#9A9890",marginTop:2}}>{prodotto.dims} · {prodotto.categoria}</div>
                     <div style={{display:"flex",gap:6,alignItems:"center",marginTop:8}}>
                       <span style={{fontSize:10,padding:"3px 9px",borderRadius:6,fontWeight:500,background:prodStyle(prodotto).bg,color:prodStyle(prodotto).c}}>{prodBadgeLabel(prodotto)}</span>
-                      <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*MARKUP)}/mq</span>
+                      <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*(prodotto.mkMult ?? MARKUP))}/mq</span>
                     </div>
                   </div>
                   <div style={{display:"flex",flexDirection:"column",gap:6,alignItems:"flex-end"}}>
@@ -1882,7 +1905,7 @@ export default function CreaPreventivo() {
                     <div style={{maxHeight:340,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff"}}>
                       {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                         const costoMq=p.listino*p.coeff;
-                        const prezzoMq=costoMq*MARKUP;
+                        const prezzoMq=costoMq*(p.mkMult ?? MARKUP);
                         const fc=prodStyle(p);
                         return (
                           <div key={p.id} style={{padding:"8px 12px",borderBottom:"0.5px solid #E0DDD8",display:"flex",alignItems:"center",gap:10}}>

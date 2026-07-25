@@ -161,6 +161,109 @@ export function useCreaPreventivoLink() {
     navigate(`/admin/preventivi/nuovo?product_code=${encodeURIComponent(productCode)}`);
 }
 
+// ─────────────────────────────────────────────────────────────
+// BRAND PRICING RULES — sconto fornitore + markup salvati per
+// brand nella tabella public.pricing_rules. Fonte unica condivisa
+// tra le pagine Pricing e CreaPreventivo.
+// ─────────────────────────────────────────────────────────────
+
+type ScontoOpt = { coeff: number };
+
+function nearestScontoIdx(table: ScontoOpt[], coeff: number): number {
+  let best = 0, bestDiff = Infinity;
+  table.forEach((s, i) => {
+    const d = Math.abs(s.coeff - coeff);
+    if (d < bestDiff) { bestDiff = d; best = i; }
+  });
+  return best;
+}
+
+async function resolveBrandIdForKey(key: PricingCatalogKey): Promise<string | null> {
+  const { data } = await supabase
+    .from('catalog_brands')
+    .select('id, name')
+    .order('name');
+  const match = PRICING_BRAND_MATCH[key];
+  const found = (data ?? []).find((b: any) => match(String(b.name ?? '').toLowerCase(), ''));
+  return found?.id ?? null;
+}
+
+export function useBrandPricingRule<
+  S extends { scontoIdx: number; markup: number }
+>(key: PricingCatalogKey, scontoTable: ScontoOpt[], defaults: S) {
+  const [settings, setSettings] = useState<S>(defaults);
+  const [brandId, setBrandId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const bid = await resolveBrandIdForKey(key);
+      if (cancelled) return;
+      setBrandId(bid);
+      if (!bid) { setLoading(false); return; }
+      const { data } = await supabase
+        .from('pricing_rules')
+        .select('supplier_discount_pct, markup_pct')
+        .eq('brand_id', bid)
+        .maybeSingle();
+      if (cancelled) return;
+      if (data) {
+        const coeff = data.supplier_discount_pct != null
+          ? Number(data.supplier_discount_pct) / 100
+          : scontoTable[defaults.scontoIdx].coeff;
+        setSettings((prev) => ({
+          ...prev,
+          scontoIdx: nearestScontoIdx(scontoTable, coeff),
+          markup: data.markup_pct != null ? Number(data.markup_pct) : prev.markup,
+        }));
+      }
+      setLoading(false);
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  const update = async (partial: Partial<S>) => {
+    const next = { ...settings, ...partial } as S;
+    setSettings(next);
+    if (!brandId) return;
+    const coeff = scontoTable[next.scontoIdx]?.coeff ?? scontoTable[0].coeff;
+    await supabase.from('pricing_rules').upsert({
+      brand_id: brandId,
+      supplier_discount_pct: Math.round(coeff * 1000) / 10, // 0.45 → 45.0
+      markup_pct: next.markup,
+      role: 'brand', // required NOT NULL originally; keep a marker
+    }, { onConflict: 'brand_id' });
+  };
+
+  return { settings, update, brandId, loading };
+}
+
+// Map brandName-lowercase → { coeff, markupMult } for CreaPreventivo
+export async function fetchBrandPricingMap(): Promise<
+  Record<string, { coeff: number; markupMult: number }>
+> {
+  const { data } = await supabase
+    .from('pricing_rules')
+    .select('brand_id, supplier_discount_pct, markup_pct, catalog_brands(name)');
+  const map: Record<string, { coeff: number; markupMult: number }> = {};
+  (data ?? []).forEach((r: any) => {
+    const name = String(r.catalog_brands?.name ?? '').toLowerCase().trim();
+    if (!name) return;
+    const coeff = r.supplier_discount_pct != null ? Number(r.supplier_discount_pct) / 100 : NaN;
+    const markupMult = r.markup_pct != null ? 1 + Number(r.markup_pct) / 100 : NaN;
+    if (Number.isFinite(coeff) || Number.isFinite(markupMult)) {
+      map[name] = {
+        coeff: Number.isFinite(coeff) ? coeff : 0.5,
+        markupMult: Number.isFinite(markupMult) ? markupMult : 2.0,
+      };
+    }
+  });
+  return map;
+}
+
+
 
 export const fmtEur = (n: number) =>
   new Intl.NumberFormat('it-IT', {
