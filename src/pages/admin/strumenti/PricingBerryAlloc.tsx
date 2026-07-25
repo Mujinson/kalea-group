@@ -126,7 +126,7 @@ export default function PricingBerryAlloc() {
     prev = { costo, prezzo, mqOrd, costoAcq, prezzoList, prezzoFin, margE, margPct, scontoMax };
   }
 
-  const avgListino = PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length;
+  const avgListino = PRODOTTI.length > 0 ? PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length : 0;
 
   return (
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "8px 4px" }}>
