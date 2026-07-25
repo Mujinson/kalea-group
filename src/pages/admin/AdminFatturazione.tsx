@@ -492,7 +492,7 @@ function PaymentDialog({ open, invoice, onClose, onSaved }: any) {
       reference: reference || null,
       notes: notes || null,
       recorded_by: user.user?.id,
-    } as any);
+    });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success('Incasso registrato');
