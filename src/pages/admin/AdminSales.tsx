@@ -155,6 +155,7 @@ const AdminSales = () => {
   const [viewingSale, setViewingSale] = useState<Sale | null>(null);
   const [editingSaleId, setEditingSaleId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('customer');
+  const [originQuote, setOriginQuote] = useState<{ id: string; quote_number: string | null } | null>(null);
   
   // Form state
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
