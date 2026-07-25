@@ -116,6 +116,36 @@ const AdminCantiereDetail = () => {
     enabled: !!id,
   });
 
+  const { data: originQuote } = useQuery({
+    queryKey: ["site-origin-quote", site?.quote_id],
+    queryFn: async () => {
+      const { data } = await supabase.from("quotes").select("id, quote_number").eq("id", site!.quote_id!).maybeSingle();
+      return data;
+    },
+    enabled: !!site?.quote_id,
+  });
+
+  const { data: originSale } = useQuery({
+    queryKey: ["site-origin-sale", (site as any)?.sale_id],
+    queryFn: async () => {
+      const { data } = await supabase.from("sales").select("id, sale_date, total_amount").eq("id", (site as any).sale_id).maybeSingle();
+      return data;
+    },
+    enabled: !!(site as any)?.sale_id,
+  });
+
+  const budgetSummary = useMemo(() => {
+    const budget = Number((site as any)?.budget_amount) || 0;
+    const materialsCost = (materials || []).reduce((s: number, m: any) => s + (Number(m.total_cost) || 0), 0);
+    const expensesCost = (expenses || []).reduce((s: number, e: any) => s + (Number(e.amount) || 0), 0);
+    const laborCost = (workLogs || []).reduce((s: number, w: any) => s + ((Number(w.hours_worked) || 0) * (Number(w.hourly_cost) || 0)), 0);
+    const actual = materialsCost + expensesCost + laborCost;
+    const delta = budget - actual;
+    const pct = budget > 0 ? (actual / budget) * 100 : 0;
+    return { budget, materialsCost, expensesCost, laborCost, actual, delta, pct };
+  }, [site, materials, expenses, workLogs]);
+
+
   const { data: kpiChecklist } = useQuery({
     queryKey: ["site-checklist-kpi", id],
     queryFn: async () => {
