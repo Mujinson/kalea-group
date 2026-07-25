@@ -263,80 +263,16 @@ const AdminQuotes = () => {
     }
   };
 
-  const convertToSale = async (quote: Quote) => {
+  const convertToSale = (quote: Quote) => {
     if (!quote.customer_id) {
       toast.error('Preventivo senza cliente');
       return;
     }
-
-    try {
-      // Parse items and amounts safely as numbers
-      const quoteItems = Array.isArray(quote.items) ? quote.items : [];
-      const firstItem = quoteItems[0];
-      const totalAmount = Number(quote.total_amount) || 0;
-      const vatAmount = Number(quote.vat_amount) || 0;
-      const totalQty = quoteItems.reduce((sum, i) => sum + (Number(i.quantity_sqm) || 0), 0);
-
-      // Calculate subtotal and unit price
-      const subtotal = totalAmount - vatAmount;
-      const unitPrice = totalQty > 0 ? subtotal / totalQty : 0;
-      const vatRate = quote.vat_included ? 0 : 0.22;
-
-      // Calculate COGS and margin
-      const productType = firstItem?.product_type || 'MgO';
-      const cogsPerSqm = calculateCOGS(productType);
-      const totalCogs = cogsPerSqm * totalQty;
-      const marginAmount = subtotal - totalCogs;
-      const marginPercentage = subtotal > 0 ? (marginAmount / subtotal) * 100 : 0;
-
-      // Create sale with all financial data
-      const { data: saleData, error: saleError } = await supabase.from('sales').insert({
-        customer_id: quote.customer_id,
-        product_type: productType,
-        color: firstItem?.color || null,
-        quantity_sqm: totalQty,
-        sale_price: unitPrice,
-        vat_included: quote.vat_included,
-        vat_amount: vatAmount,
-        vat_rate: vatRate,
-        subtotal_amount: subtotal,
-        total_amount: totalAmount,
-        margin_amount: marginAmount,
-        margin_percentage: marginPercentage,
-        notes: `Convertito da preventivo ${quote.quote_number}`,
-      }).select().single();
-
-      if (saleError) throw saleError;
-
-      // Update quote
-      await supabase.from('quotes').update({
-        status: 'converted',
-        converted_sale_id: saleData.id,
-        accepted_date: new Date().toISOString(),
-      }).eq('id', quote.id);
-
-      // Update customer totals and margin
-      const { data: custData } = await supabase.from('customers')
-        .select('total_value, total_margin')
-        .eq('id', quote.customer_id)
-        .single();
-
-      const newTotalValue = (Number(custData?.total_value) || 0) + subtotal;
-      const newTotalMargin = (Number(custData?.total_margin) || 0) + marginAmount;
-      
-      await supabase.from('customers').update({
-        status: 'working' as const,
-        total_value: newTotalValue,
-        total_margin: newTotalMargin,
-      }).eq('id', quote.customer_id);
-
-      toast.success('Preventivo convertito in vendita');
-      fetchData();
-    } catch (error) {
-      console.error('Error converting:', error);
-      toast.error('Errore nella conversione');
-    }
+    setQuoteToConvert(quote);
+    setConvertDialogOpen(true);
   };
+
+
 
   const sendQuoteByEmail = async (quote: Quote) => {
     const customer = customers.find(c => c.id === quote.customer_id);
