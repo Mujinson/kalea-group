@@ -122,10 +122,11 @@ export default function PricingFlow() {
     prev = { costo, prezzo, mqOrd, costoAcq, prezzoList, prezzoFin, margineE, marginePct, scontoMax, inPericolo };
   }
 
-  const avgListino = PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length;
+  const avgListino = PRODOTTI.length > 0 ? PRODOTTI.reduce((a, p) => a + p.listino, 0) / PRODOTTI.length : 0;
   const avgCosto   = avgListino * coeff;
   const avgPrezzo  = avgCosto * (1 + mkCoeff);
-  const avgMargine = ((avgPrezzo - avgCosto) / avgPrezzo) * 100;
+  const avgMargine = avgPrezzo > 0 ? ((avgPrezzo - avgCosto) / avgPrezzo) * 100 : 0;
+
 
   return (
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "28px 20px" }}>
