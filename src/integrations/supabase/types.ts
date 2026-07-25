@@ -860,6 +860,7 @@ export type Database = {
           percentage: number
           preventivo_id: string | null
           quote_id: string | null
+          sale_id: string | null
           status: string
           updated_at: string
           user_id: string
@@ -876,6 +877,7 @@ export type Database = {
           percentage?: number
           preventivo_id?: string | null
           quote_id?: string | null
+          sale_id?: string | null
           status?: string
           updated_at?: string
           user_id: string
@@ -892,6 +894,7 @@ export type Database = {
           percentage?: number
           preventivo_id?: string | null
           quote_id?: string | null
+          sale_id?: string | null
           status?: string
           updated_at?: string
           user_id?: string
@@ -911,6 +914,13 @@ export type Database = {
             referencedRelation: "quotes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "commissions_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
         ]
       }
       construction_sites: {
@@ -918,6 +928,7 @@ export type Database = {
           access_difficulty: string | null
           address: string | null
           available_days: number | null
+          budget_amount: number | null
           building_floor: string | null
           city: string | null
           construction_type: string | null
@@ -960,6 +971,7 @@ export type Database = {
           province: string | null
           quote_id: string | null
           region: string | null
+          sale_id: string | null
           salesperson_id: string | null
           start_date: string | null
           status: string
@@ -974,6 +986,7 @@ export type Database = {
           access_difficulty?: string | null
           address?: string | null
           available_days?: number | null
+          budget_amount?: number | null
           building_floor?: string | null
           city?: string | null
           construction_type?: string | null
@@ -1016,6 +1029,7 @@ export type Database = {
           province?: string | null
           quote_id?: string | null
           region?: string | null
+          sale_id?: string | null
           salesperson_id?: string | null
           start_date?: string | null
           status?: string
@@ -1030,6 +1044,7 @@ export type Database = {
           access_difficulty?: string | null
           address?: string | null
           available_days?: number | null
+          budget_amount?: number | null
           building_floor?: string | null
           city?: string | null
           construction_type?: string | null
@@ -1072,6 +1087,7 @@ export type Database = {
           province?: string | null
           quote_id?: string | null
           region?: string | null
+          sale_id?: string | null
           salesperson_id?: string | null
           start_date?: string | null
           status?: string
@@ -1116,6 +1132,13 @@ export type Database = {
             columns: ["quote_id"]
             isOneToOne: false
             referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "construction_sites_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
             referencedColumns: ["id"]
           },
           {
