@@ -333,9 +333,9 @@ const AdminCatalog = () => {
                   </TableCell>
                   <TableCell className="text-right">
                     {lowStock ? (
-                      <Badge variant="outline" style={{ color: "#C97A4A", borderColor: "#C97A4A" }}>{p.available_stock} {p.unit_of_measure}</Badge>
+                      <Badge variant="outline" style={{ color: "#C97A4A", borderColor: "#C97A4A" }}>{realStock.toFixed(0)} {p.unit_of_measure}</Badge>
                     ) : (
-                      <span className="text-sm">{Number(p.available_stock).toFixed(0)} {p.unit_of_measure}</span>
+                      <span className="text-sm">{realStock.toFixed(0)} {p.unit_of_measure}</span>
                     )}
                   </TableCell>
                   <TableCell>
