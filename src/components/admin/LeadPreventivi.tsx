@@ -15,8 +15,8 @@ export default function LeadPreventivi({ leadId }: Props) {
     (async () => {
       setLoading(true);
       const { data } = await supabase
-        .from("preventivi" as any)
-        .select("id,numero_preventivo,data,importo_totale,stato,lingua,cliente_nome,cantiere,created_at")
+        .from("quotes")
+        .select("id,quote_number,total_amount,status,project_name,client_name,created_at")
         .eq("lead_id", leadId)
         .order("created_at", { ascending: false });
       if (active) { setRows((data as any[]) || []); setLoading(false); }
@@ -27,8 +27,11 @@ export default function LeadPreventivi({ leadId }: Props) {
   const statoColor: Record<string,string> = {
     bozza: "bg-gray-100 text-gray-700",
     inviato: "bg-blue-100 text-blue-700",
+    sent: "bg-blue-100 text-blue-700",
     accettato: "bg-green-100 text-green-700",
+    accepted: "bg-green-100 text-green-700",
     rifiutato: "bg-red-100 text-red-700",
+    rejected: "bg-red-100 text-red-700",
   };
 
   return (
@@ -44,14 +47,14 @@ export default function LeadPreventivi({ leadId }: Props) {
         {rows.map((p) => (
           <div key={p.id} className="flex justify-between items-start border-b pb-2 last:border-0">
             <div>
-              <div className="font-medium">{p.numero_preventivo}</div>
+              <div className="font-medium">{p.quote_number}</div>
               <div className="text-xs text-muted-foreground">
-                {p.cantiere || p.cliente_nome || "—"} · {format(new Date(p.data || p.created_at), "dd/MM/yyyy")}
+                {p.project_name || p.client_name || "—"} · {format(new Date(p.created_at), "dd/MM/yyyy")}
               </div>
             </div>
             <div className="text-right">
-              <div className="font-semibold">€ {Number(p.importo_totale).toLocaleString("it-IT", { minimumFractionDigits: 2 })}</div>
-              <Badge className={statoColor[p.stato] || "bg-gray-100"} variant="secondary">{p.stato}</Badge>
+              <div className="font-semibold">€ {Number(p.total_amount || 0).toLocaleString("it-IT", { minimumFractionDigits: 2 })}</div>
+              <Badge className={statoColor[p.status] || "bg-gray-100"} variant="secondary">{p.status}</Badge>
             </div>
           </div>
         ))}
