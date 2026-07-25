@@ -45,11 +45,11 @@ export default function AdminFatturazione() {
     queryKey: ['customer_invoices'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('customer_invoices' as any)
+        .from('customer_invoices')
         .select('*, customer:customers(id, first_name, last_name, company_name), quote:quotes(id, quote_number, total_amount)')
         .order('invoice_date', { ascending: false });
       if (error) throw error;
-      return data as any[];
+      return (data ?? []) as any[];
     },
   });
 
