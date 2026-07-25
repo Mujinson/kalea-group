@@ -14,6 +14,79 @@ export type Database = {
   }
   public: {
     Tables: {
+      _deprecated_preventivi: {
+        Row: {
+          cantiere: string | null
+          cliente_nome: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          data: string
+          id: string
+          importo_totale: number
+          json_dati: Json
+          lead_id: string | null
+          lingua: string
+          numero_preventivo: string
+          stato: string
+          updated_at: string
+        }
+        Insert: {
+          cantiere?: string | null
+          cliente_nome?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          data?: string
+          id?: string
+          importo_totale?: number
+          json_dati?: Json
+          lead_id?: string | null
+          lingua?: string
+          numero_preventivo: string
+          stato?: string
+          updated_at?: string
+        }
+        Update: {
+          cantiere?: string | null
+          cliente_nome?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          data?: string
+          id?: string
+          importo_totale?: number
+          json_dati?: Json
+          lead_id?: string | null
+          lingua?: string
+          numero_preventivo?: string
+          stato?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "preventivi_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "preventivi_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "v_customer_receivables"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "preventivi_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       app_settings: {
         Row: {
           key: string
@@ -828,7 +901,7 @@ export type Database = {
             foreignKeyName: "commissions_preventivo_id_fkey"
             columns: ["preventivo_id"]
             isOneToOne: false
-            referencedRelation: "preventivi"
+            referencedRelation: "_deprecated_preventivi"
             referencedColumns: ["id"]
           },
           {
@@ -2401,79 +2474,6 @@ export type Database = {
             columns: ["sale_id"]
             isOneToOne: false
             referencedRelation: "sales"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      preventivi: {
-        Row: {
-          cantiere: string | null
-          cliente_nome: string | null
-          created_at: string
-          created_by: string | null
-          customer_id: string | null
-          data: string
-          id: string
-          importo_totale: number
-          json_dati: Json
-          lead_id: string | null
-          lingua: string
-          numero_preventivo: string
-          stato: string
-          updated_at: string
-        }
-        Insert: {
-          cantiere?: string | null
-          cliente_nome?: string | null
-          created_at?: string
-          created_by?: string | null
-          customer_id?: string | null
-          data?: string
-          id?: string
-          importo_totale?: number
-          json_dati?: Json
-          lead_id?: string | null
-          lingua?: string
-          numero_preventivo: string
-          stato?: string
-          updated_at?: string
-        }
-        Update: {
-          cantiere?: string | null
-          cliente_nome?: string | null
-          created_at?: string
-          created_by?: string | null
-          customer_id?: string | null
-          data?: string
-          id?: string
-          importo_totale?: number
-          json_dati?: Json
-          lead_id?: string | null
-          lingua?: string
-          numero_preventivo?: string
-          stato?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "preventivi_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "customers"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "preventivi_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "v_customer_receivables"
-            referencedColumns: ["customer_id"]
-          },
-          {
-            foreignKeyName: "preventivi_lead_id_fkey"
-            columns: ["lead_id"]
-            isOneToOne: false
-            referencedRelation: "leads"
             referencedColumns: ["id"]
           },
         ]
