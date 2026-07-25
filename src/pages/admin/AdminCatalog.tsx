@@ -308,7 +308,8 @@ const AdminCatalog = () => {
             ) : filtered.map((p: any) => {
               const margin = computeMargin(p);
               const lowMargin = margin < p.min_margin_percentage;
-              const lowStock = p.available_stock <= p.low_stock_threshold && p.low_stock_threshold > 0;
+              const realStock = getRealStock(p.id);
+              const lowStock = isLowStock(p.id);
               return (
                 <TableRow key={p.id}>
                   <TableCell className="font-mono text-xs">{p.product_code}</TableCell>
