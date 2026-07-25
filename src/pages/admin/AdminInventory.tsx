@@ -377,6 +377,7 @@ const AdminInventory = () => {
           <TabsTrigger value="cwc">CWC per Variante</TabsTrigger>
           <TabsTrigger value="tappetino">Tappetino</TabsTrigger>
           <TabsTrigger value="profili">Profili</TabsTrigger>
+          <TabsTrigger value="catalogo">Articoli Catalogo {lowStockCatalogCount > 0 && <Badge variant="destructive" className="ml-2">{lowStockCatalogCount}</Badge>}</TabsTrigger>
           <TabsTrigger value="movimenti">Tutti i Movimenti</TabsTrigger>
         </TabsList>
 
