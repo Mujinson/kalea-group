@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   usePricingCatalog,
+  useBrandPricingRule,
   useCreaPreventivoLink,
   PricingLoadingState,
   PricingEmptyState,
