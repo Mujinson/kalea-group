@@ -116,15 +116,17 @@ const AdminCatalog = () => {
     });
   }, [products, search, filterCategory, filterSupplier]);
 
+  const { getRealStock, isLowStock, countLowStock } = useRealStock();
+
   const stats = useMemo(() => {
     const total = products.length;
-    const lowStock = products.filter((p: any) => p.available_stock <= p.low_stock_threshold && p.low_stock_threshold > 0).length;
+    const lowStock = countLowStock(products as any[]);
     const lowMargin = products.filter((p: any) => {
       const margin = p.sale_price > 0 ? ((p.sale_price - p.net_cost) / p.sale_price) * 100 : 0;
       return margin < p.min_margin_percentage;
     }).length;
     return { total, lowStock, lowMargin };
-  }, [products]);
+  }, [products, countLowStock]);
 
   const openNew = () => {
     setEditing(null);
