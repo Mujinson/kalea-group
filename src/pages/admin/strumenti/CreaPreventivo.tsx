@@ -29,8 +29,10 @@ type ProdottoCalcolo = {
   dims: string;
   listino: number;
   coeff: number;
+  mkMult: number;
   tappetino: "mai" | "sempre" | "opzionale";
 };
+
 
 const FORN_STYLE: Record<string, { bg: string; c: string }> = {
   "Flow":{bg:"#E6F1FB",c:"#0C447C"},
