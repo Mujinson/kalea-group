@@ -471,6 +471,98 @@ const AdminInventory = () => {
           </Card>
         </TabsContent>
 
+        <TabsContent value="catalogo">
+          <Card>
+            <CardHeader>
+              <CardTitle>Articoli collegati al catalogo</CardTitle>
+              <CardDescription>Stock reale = giacenza iniziale + somma movimenti</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {catalogRows.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-6 text-center">Nessun articolo di magazzino collegato al catalogo.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b text-left">
+                        <th className="py-2 pr-3">Codice</th>
+                        <th className="py-2 pr-3">Prodotto</th>
+                        <th className="py-2 pr-3">Brand</th>
+                        <th className="py-2 pr-3 text-right">Stock reale</th>
+                        <th className="py-2 pr-3 text-right">Min</th>
+                        <th className="py-2 pr-3">Stato</th>
+                        <th className="py-2 pr-3"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {catalogRows.map((r) => (
+                        <tr key={r.inventory_id} className="border-b hover:bg-muted/30">
+                          <td className="py-2 pr-3 font-mono text-xs">{r.product_code}</td>
+                          <td className="py-2 pr-3 font-medium">{r.product_name}</td>
+                          <td className="py-2 pr-3 text-muted-foreground">{r.brand || '—'}</td>
+                          <td className="py-2 pr-3 text-right font-semibold">{r.stock.toFixed(2)} {r.unit}</td>
+                          <td className="py-2 pr-3 text-right">{r.min > 0 ? `${r.min.toFixed(0)} ${r.unit}` : '—'}</td>
+                          <td className="py-2 pr-3">
+                            {r.low ? <Badge variant="destructive">Sotto scorta</Badge> : <Badge variant="secondary">OK</Badge>}
+                          </td>
+                          <td className="py-2 pr-3 text-right">
+                            <Button variant="ghost" size="sm" onClick={() => setMovementDetailOpen(r.inventory_id)}>
+                              Storico
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Dialog open={!!movementDetailOpen} onOpenChange={(o) => !o && setMovementDetailOpen(null)}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Storico movimenti</DialogTitle>
+                <DialogDescription>
+                  {catalogRows.find(r => r.inventory_id === movementDetailOpen)?.product_name}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="max-h-96 overflow-y-auto">
+                {(() => {
+                  const list = movementDetailOpen ? (realStock.movementsByInventoryId.get(movementDetailOpen) || []) : [];
+                  if (list.length === 0) return <p className="text-sm text-muted-foreground py-4 text-center">Nessun movimento registrato</p>;
+                  return (
+                    <table className="w-full text-sm">
+                      <thead className="sticky top-0 bg-background border-b">
+                        <tr className="text-left">
+                          <th className="py-2 pr-3">Data</th>
+                          <th className="py-2 pr-3">Tipo</th>
+                          <th className="py-2 pr-3 text-right">Qta</th>
+                          <th className="py-2 pr-3">Note</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list
+                          .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                          .map((m: any) => (
+                          <tr key={m.id} className="border-b">
+                            <td className="py-2 pr-3">{format(new Date(m.created_at), 'dd MMM yyyy', { locale: it })}</td>
+                            <td className="py-2 pr-3"><Badge variant="outline">{m.movement_type}</Badge></td>
+                            <td className={`py-2 pr-3 text-right font-medium ${Number(m.quantity) < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                              {Number(m.quantity) > 0 ? '+' : ''}{Number(m.quantity).toFixed(2)}
+                            </td>
+                            <td className="py-2 pr-3 text-muted-foreground">{m.note || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  );
+                })()}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </TabsContent>
+
         <TabsContent value="movimenti">
           <div className="mb-3">
             <h3 className="text-lg font-semibold">Movimenti Magazzino</h3>
