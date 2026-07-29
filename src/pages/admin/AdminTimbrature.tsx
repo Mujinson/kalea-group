@@ -6,7 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Download, MapPin, AlertTriangle, Loader2, CheckCircle2, HelpCircle, FileText } from 'lucide-react';
-import { EVENT_LABELS, summarizeDay, formatHM, type TimeEntry } from '@/lib/timbrature';
+import { EVENT_LABELS, summarizeDay, formatHM, dayStages, formatTime, STAGE_ORDER, type TimeEntry } from '@/lib/timbrature';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { reverseGeocode } from '@/lib/geo';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
