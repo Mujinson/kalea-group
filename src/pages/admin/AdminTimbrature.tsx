@@ -113,7 +113,7 @@ const AdminTimbrature = () => {
     });
     return Array.from(map.entries()).map(([key, ev]) => {
       const [uid, date] = key.split('|');
-      return { userId: uid, date, entries: ev, summary: summarizeDay(ev) };
+      return { userId: uid, date, entries: ev, summary: summarizeDay(ev), stages: dayStages(ev) };
     }).sort((a, b) => (a.date === b.date ? a.userId.localeCompare(b.userId) : b.date.localeCompare(a.date)));
   }, [entries]);
 
@@ -121,6 +121,8 @@ const AdminTimbrature = () => {
     if (fromDate && toDate) return `${fromDate} → ${toDate}`;
     return month;
   };
+
+  const completedCount = grouped.filter((g) => g.stages.isComplete).length;
 
   const buildRows = () =>
     grouped.map((g) => {
@@ -132,6 +134,8 @@ const AdminTimbrature = () => {
       return {
         date: g.date,
         name,
+        status: g.stages.isComplete ? 'Completato' : 'Incompleto',
+        stageTimes: STAGE_ORDER.map((t) => formatTime(g.stages.stages[t].firstAt)),
         first,
         last,
         pause: String(g.summary.pauseMinutes),
