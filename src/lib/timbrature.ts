@@ -14,7 +14,7 @@ export const EVENT_LABELS: Record<TimbratureEventType, { label: string; short: s
   arrive_site: { label: 'Arrivato in cantiere', short: 'Arrivo cantiere', icon: '📍' },
   pause_start: { label: 'Inizio pausa', short: 'Inizio pausa', icon: '☕' },
   pause_end: { label: 'Fine pausa', short: 'Fine pausa', icon: '▶️' },
-  leave_site: { label: 'Esco dal cantiere', short: 'Uscita cantiere', icon: '🚪' },
+  leave_site: { label: 'Fine giornata in cantiere', short: 'Fine cantiere', icon: '🚪' },
   arrive_home: { label: 'Arrivato a casa', short: 'Arrivo casa', icon: '🏠' },
 };
 
@@ -45,9 +45,9 @@ export function nextEvents(lastType: TimbratureEventType | null): TimbratureEven
     case 'pause_start':
       return ['pause_end'];
     case 'pause_end':
-      return ['pause_start', 'leave_site'];
+      return ['arrive_site', 'leave_site', 'pause_start'];
     case 'leave_site':
-      return ['arrive_site', 'arrive_home'];
+      return ['arrive_home', 'arrive_site'];
     case 'arrive_home':
       return []; // giornata chiusa
   }
