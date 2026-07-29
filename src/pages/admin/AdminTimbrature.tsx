@@ -246,7 +246,8 @@ const AdminTimbrature = () => {
           )}
         </div>
         <div className="ml-auto text-sm text-muted-foreground">
-          Totale periodo: <b className="text-[#0F172A]">{totalWorkHours.toFixed(2)}h</b>
+          Giornate complete: <b className="text-[#0F172A]">{completedCount}/{grouped.length}</b>
+          {' · '}Totale periodo: <b className="text-[#0F172A]">{totalWorkHours.toFixed(2)}h</b>
         </div>
       </div>
 
@@ -255,6 +256,78 @@ const AdminTimbrature = () => {
       ) : grouped.length === 0 ? (
         <Card><CardContent className="py-12 text-center text-muted-foreground">Nessuna timbratura nel periodo selezionato.</CardContent></Card>
       ) : (
+      <Tabs defaultValue="riepilogo" className="space-y-3">
+        <TabsList>
+          <TabsTrigger value="riepilogo">Riepilogo giornaliero</TabsTrigger>
+          <TabsTrigger value="dettaglio">Dettaglio timbrature</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="riepilogo">
+          <Card>
+            <CardContent className="p-0 overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Data</TableHead>
+                    <TableHead>Dipendente</TableHead>
+                    <TableHead>Stato</TableHead>
+                    {STAGE_ORDER.map((t) => (
+                      <TableHead key={t} className="text-center whitespace-nowrap">
+                        {EVENT_LABELS[t].icon} {EVENT_LABELS[t].short}
+                      </TableHead>
+                    ))}
+                    <TableHead className="text-right">Ore lav.</TableHead>
+                    <TableHead className="text-right">Pausa</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {grouped.map((g) => {
+                    const w = workerByUserId.get(g.userId);
+                    const name = w ? `${w.first_name} ${w.last_name}` : 'Utente';
+                    const dateLabel = new Date(g.date).toLocaleDateString('it-IT', { weekday: 'short', day: '2-digit', month: 'short' });
+                    return (
+                      <TableRow key={'sum' + g.userId + g.date} className={g.stages.isComplete ? '' : 'bg-amber-50/60'}>
+                        <TableCell className="whitespace-nowrap">{dateLabel}</TableCell>
+                        <TableCell className="font-medium whitespace-nowrap">{name}</TableCell>
+                        <TableCell>
+                          {g.stages.isComplete ? (
+                            <span className="inline-flex items-center gap-1 text-[11px] text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded">
+                              <CheckCircle2 className="w-3 h-3" /> Completato
+                            </span>
+                          ) : (
+                            <span
+                              className="inline-flex items-center gap-1 text-[11px] text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded"
+                              title={`Mancano: ${g.stages.missing.map((t) => EVENT_LABELS[t].short).join(', ')}`}
+                            >
+                              <AlertTriangle className="w-3 h-3" /> Incompleto
+                            </span>
+                          )}
+                        </TableCell>
+                        {STAGE_ORDER.map((t) => {
+                          const s = g.stages.stages[t];
+                          const required = ['start_home', 'arrive_site', 'leave_site', 'arrive_home'].includes(t);
+                          return (
+                            <TableCell
+                              key={t}
+                              className={`text-center text-xs whitespace-nowrap ${s.count === 0 ? (required ? 'text-red-600' : 'text-muted-foreground') : ''}`}
+                            >
+                              {formatTime(s.firstAt)}
+                              {s.count > 1 && <span className="text-[10px] text-muted-foreground"> ×{s.count}</span>}
+                            </TableCell>
+                          );
+                        })}
+                        <TableCell className="text-right whitespace-nowrap">{formatHM(g.summary.workMinutes)}</TableCell>
+                        <TableCell className="text-right whitespace-nowrap text-muted-foreground">{formatHM(g.summary.pauseMinutes)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="dettaglio">
         <div className="space-y-3">
           {grouped.map((g) => {
             const w = workerByUserId.get(g.userId);
