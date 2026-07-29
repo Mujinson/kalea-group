@@ -424,6 +424,8 @@ const AdminTimbrature = () => {
             );
           })}
         </div>
+        </TabsContent>
+      </Tabs>
       )}
     </div>
   );
