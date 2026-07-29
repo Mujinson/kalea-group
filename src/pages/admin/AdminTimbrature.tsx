@@ -6,7 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Download, MapPin, AlertTriangle, Loader2, CheckCircle2, HelpCircle, FileText } from 'lucide-react';
-import { EVENT_LABELS, summarizeDay, formatHM, type TimeEntry } from '@/lib/timbrature';
+import { EVENT_LABELS, summarizeDay, formatHM, dayStages, formatTime, STAGE_ORDER, type TimeEntry } from '@/lib/timbrature';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { reverseGeocode } from '@/lib/geo';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -111,7 +113,7 @@ const AdminTimbrature = () => {
     });
     return Array.from(map.entries()).map(([key, ev]) => {
       const [uid, date] = key.split('|');
-      return { userId: uid, date, entries: ev, summary: summarizeDay(ev) };
+      return { userId: uid, date, entries: ev, summary: summarizeDay(ev), stages: dayStages(ev) };
     }).sort((a, b) => (a.date === b.date ? a.userId.localeCompare(b.userId) : b.date.localeCompare(a.date)));
   }, [entries]);
 
@@ -119,6 +121,8 @@ const AdminTimbrature = () => {
     if (fromDate && toDate) return `${fromDate} → ${toDate}`;
     return month;
   };
+
+  const completedCount = grouped.filter((g) => g.stages.isComplete).length;
 
   const buildRows = () =>
     grouped.map((g) => {
@@ -130,6 +134,8 @@ const AdminTimbrature = () => {
       return {
         date: g.date,
         name,
+        status: g.stages.isComplete ? 'Completato' : 'Incompleto',
+        stageTimes: STAGE_ORDER.map((t) => formatTime(g.stages.stages[t].firstAt)),
         first,
         last,
         pause: String(g.summary.pauseMinutes),
@@ -141,13 +147,15 @@ const AdminTimbrature = () => {
 
   const totalWorkHours = grouped.reduce((s, g) => s + g.summary.workMinutes / 60, 0);
 
+  const stageHeaders = STAGE_ORDER.map((t) => EVENT_LABELS[t].short);
+
   const exportCSV = () => {
-    const header = ['Data', 'Posatore', 'Prima timbratura', 'Ultima timbratura', 'Pausa (min)', 'Ore lavorate', 'Ore cantiere', 'Alert fuori-cantiere'];
+    const header = ['Data', 'Posatore', 'Stato', ...stageHeaders, 'Pausa (min)', 'Ore lavorate', 'Ore cantiere', 'Alert fuori-cantiere'];
     const lines = [header.join(';')];
     buildRows().forEach((r) => {
-      lines.push([r.date, r.name, r.first, r.last, r.pause, r.work, r.site, r.alerts].join(';'));
+      lines.push([r.date, r.name, r.status, ...r.stageTimes, r.pause, r.work, r.site, r.alerts].join(';'));
     });
-    lines.push(['', '', '', '', 'TOTALE', totalWorkHours.toFixed(2), '', ''].join(';'));
+    lines.push(['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2), '', ''].join(';'));
     const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -166,14 +174,14 @@ const AdminTimbrature = () => {
       const w = workers.find((x) => x.id === workerId);
       return w ? `${w.first_name} ${w.last_name}` : '';
     })();
-    doc.text(`Periodo: ${periodLabel()}  ·  ${wName}`, 14, 22);
+    doc.text(`Periodo: ${periodLabel()}  ·  ${wName}  ·  Completati ${completedCount}/${grouped.length}`, 14, 22);
 
     autoTable(doc, {
       startY: 28,
-      head: [['Data', 'Posatore', 'Inizio', 'Fine', 'Pausa (min)', 'Ore lavorate', 'Ore cantiere', 'Alert']],
-      body: buildRows().map((r) => [r.date, r.name, r.first, r.last, r.pause, r.work, r.site, r.alerts]),
-      foot: [['', '', '', '', 'TOTALE', totalWorkHours.toFixed(2), '', '']],
-      styles: { fontSize: 9 },
+      head: [['Data', 'Posatore', 'Stato', ...stageHeaders, 'Pausa', 'Ore lav.', 'Ore cant.', 'Alert']],
+      body: buildRows().map((r) => [r.date, r.name, r.status, ...r.stageTimes, r.pause, r.work, r.site, r.alerts]),
+      foot: [['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2), '', '']],
+      styles: { fontSize: 8 },
       headStyles: { fillColor: [30, 27, 75] },
       footStyles: { fillColor: [245, 240, 232], textColor: 30 },
     });
@@ -238,7 +246,8 @@ const AdminTimbrature = () => {
           )}
         </div>
         <div className="ml-auto text-sm text-muted-foreground">
-          Totale periodo: <b className="text-[#0F172A]">{totalWorkHours.toFixed(2)}h</b>
+          Giornate complete: <b className="text-[#0F172A]">{completedCount}/{grouped.length}</b>
+          {' · '}Totale periodo: <b className="text-[#0F172A]">{totalWorkHours.toFixed(2)}h</b>
         </div>
       </div>
 
@@ -247,6 +256,78 @@ const AdminTimbrature = () => {
       ) : grouped.length === 0 ? (
         <Card><CardContent className="py-12 text-center text-muted-foreground">Nessuna timbratura nel periodo selezionato.</CardContent></Card>
       ) : (
+      <Tabs defaultValue="riepilogo" className="space-y-3">
+        <TabsList>
+          <TabsTrigger value="riepilogo">Riepilogo giornaliero</TabsTrigger>
+          <TabsTrigger value="dettaglio">Dettaglio timbrature</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="riepilogo">
+          <Card>
+            <CardContent className="p-0 overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Data</TableHead>
+                    <TableHead>Dipendente</TableHead>
+                    <TableHead>Stato</TableHead>
+                    {STAGE_ORDER.map((t) => (
+                      <TableHead key={t} className="text-center whitespace-nowrap">
+                        {EVENT_LABELS[t].icon} {EVENT_LABELS[t].short}
+                      </TableHead>
+                    ))}
+                    <TableHead className="text-right">Ore lav.</TableHead>
+                    <TableHead className="text-right">Pausa</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {grouped.map((g) => {
+                    const w = workerByUserId.get(g.userId);
+                    const name = w ? `${w.first_name} ${w.last_name}` : 'Utente';
+                    const dateLabel = new Date(g.date).toLocaleDateString('it-IT', { weekday: 'short', day: '2-digit', month: 'short' });
+                    return (
+                      <TableRow key={'sum' + g.userId + g.date} className={g.stages.isComplete ? '' : 'bg-amber-50/60'}>
+                        <TableCell className="whitespace-nowrap">{dateLabel}</TableCell>
+                        <TableCell className="font-medium whitespace-nowrap">{name}</TableCell>
+                        <TableCell>
+                          {g.stages.isComplete ? (
+                            <span className="inline-flex items-center gap-1 text-[11px] text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded">
+                              <CheckCircle2 className="w-3 h-3" /> Completato
+                            </span>
+                          ) : (
+                            <span
+                              className="inline-flex items-center gap-1 text-[11px] text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded"
+                              title={`Mancano: ${g.stages.missing.map((t) => EVENT_LABELS[t].short).join(', ')}`}
+                            >
+                              <AlertTriangle className="w-3 h-3" /> Incompleto
+                            </span>
+                          )}
+                        </TableCell>
+                        {STAGE_ORDER.map((t) => {
+                          const s = g.stages.stages[t];
+                          const required = ['start_home', 'arrive_site', 'leave_site', 'arrive_home'].includes(t);
+                          return (
+                            <TableCell
+                              key={t}
+                              className={`text-center text-xs whitespace-nowrap ${s.count === 0 ? (required ? 'text-red-600' : 'text-muted-foreground') : ''}`}
+                            >
+                              {formatTime(s.firstAt)}
+                              {s.count > 1 && <span className="text-[10px] text-muted-foreground"> ×{s.count}</span>}
+                            </TableCell>
+                          );
+                        })}
+                        <TableCell className="text-right whitespace-nowrap">{formatHM(g.summary.workMinutes)}</TableCell>
+                        <TableCell className="text-right whitespace-nowrap text-muted-foreground">{formatHM(g.summary.pauseMinutes)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="dettaglio">
         <div className="space-y-3">
           {grouped.map((g) => {
             const w = workerByUserId.get(g.userId);
@@ -343,6 +424,8 @@ const AdminTimbrature = () => {
             );
           })}
         </div>
+        </TabsContent>
+      </Tabs>
       )}
     </div>
   );
