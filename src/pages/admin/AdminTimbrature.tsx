@@ -147,13 +147,15 @@ const AdminTimbrature = () => {
 
   const totalWorkHours = grouped.reduce((s, g) => s + g.summary.workMinutes / 60, 0);
 
+  const stageHeaders = STAGE_ORDER.map((t) => EVENT_LABELS[t].short);
+
   const exportCSV = () => {
-    const header = ['Data', 'Posatore', 'Prima timbratura', 'Ultima timbratura', 'Pausa (min)', 'Ore lavorate', 'Ore cantiere', 'Alert fuori-cantiere'];
+    const header = ['Data', 'Posatore', 'Stato', ...stageHeaders, 'Pausa (min)', 'Ore lavorate', 'Ore cantiere', 'Alert fuori-cantiere'];
     const lines = [header.join(';')];
     buildRows().forEach((r) => {
-      lines.push([r.date, r.name, r.first, r.last, r.pause, r.work, r.site, r.alerts].join(';'));
+      lines.push([r.date, r.name, r.status, ...r.stageTimes, r.pause, r.work, r.site, r.alerts].join(';'));
     });
-    lines.push(['', '', '', '', 'TOTALE', totalWorkHours.toFixed(2), '', ''].join(';'));
+    lines.push(['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2), '', ''].join(';'));
     const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -172,14 +174,14 @@ const AdminTimbrature = () => {
       const w = workers.find((x) => x.id === workerId);
       return w ? `${w.first_name} ${w.last_name}` : '';
     })();
-    doc.text(`Periodo: ${periodLabel()}  ·  ${wName}`, 14, 22);
+    doc.text(`Periodo: ${periodLabel()}  ·  ${wName}  ·  Completati ${completedCount}/${grouped.length}`, 14, 22);
 
     autoTable(doc, {
       startY: 28,
-      head: [['Data', 'Posatore', 'Inizio', 'Fine', 'Pausa (min)', 'Ore lavorate', 'Ore cantiere', 'Alert']],
-      body: buildRows().map((r) => [r.date, r.name, r.first, r.last, r.pause, r.work, r.site, r.alerts]),
-      foot: [['', '', '', '', 'TOTALE', totalWorkHours.toFixed(2), '', '']],
-      styles: { fontSize: 9 },
+      head: [['Data', 'Posatore', 'Stato', ...stageHeaders, 'Pausa', 'Ore lav.', 'Ore cant.', 'Alert']],
+      body: buildRows().map((r) => [r.date, r.name, r.status, ...r.stageTimes, r.pause, r.work, r.site, r.alerts]),
+      foot: [['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2), '', '']],
+      styles: { fontSize: 8 },
       headStyles: { fillColor: [30, 27, 75] },
       footStyles: { fillColor: [245, 240, 232], textColor: 30 },
     });
