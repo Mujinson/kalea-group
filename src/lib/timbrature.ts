@@ -110,6 +110,58 @@ export function todayKey(d = new Date()): string {
   return d.toISOString().slice(0, 10);
 }
 
+/** Tappe obbligatorie che ogni dipendente deve timbrare ogni giorno. */
+export const REQUIRED_EVENTS: TimbratureEventType[] = [
+  'start_home',
+  'arrive_site',
+  'leave_site',
+  'arrive_home',
+];
+
+/** Ordine di visualizzazione delle tappe nel riepilogo giornaliero. */
+export const STAGE_ORDER: TimbratureEventType[] = [
+  'start_home',
+  'arrive_site',
+  'pause_start',
+  'pause_end',
+  'leave_site',
+  'arrive_home',
+];
+
+export interface StageInfo {
+  firstAt: string | null;
+  lastAt: string | null;
+  count: number;
+}
+
+export interface DayStages {
+  stages: Record<TimbratureEventType, StageInfo>;
+  missing: TimbratureEventType[];
+  isComplete: boolean;
+}
+
+/** Tempi registrati per ogni tappa + stato completato/non completato della giornata. */
+export function dayStages(entries: TimeEntry[]): DayStages {
+  const stages = {} as Record<TimbratureEventType, StageInfo>;
+  STAGE_ORDER.forEach((t) => (stages[t] = { firstAt: null, lastAt: null, count: 0 }));
+  [...entries]
+    .sort((a, b) => a.event_at.localeCompare(b.event_at))
+    .forEach((e) => {
+      const s = stages[e.event_type];
+      if (!s) return;
+      if (!s.firstAt) s.firstAt = e.event_at;
+      s.lastAt = e.event_at;
+      s.count += 1;
+    });
+  const missing = REQUIRED_EVENTS.filter((t) => stages[t].count === 0);
+  return { stages, missing, isComplete: missing.length === 0 };
+}
+
+export function formatTime(iso: string | null): string {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+}
+
 export interface DailySummary {
   totalMinutes: number;
   workMinutes: number;
