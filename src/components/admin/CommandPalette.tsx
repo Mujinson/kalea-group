@@ -29,6 +29,7 @@ import {
   Bot,
 } from 'lucide-react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Entry {
   label: string;
