@@ -398,6 +398,12 @@ export default function AdminLeads() {
         onArchive={() => { if (detailId) { archive(detailId); setDetailId(null); } }}
         onCreateQuote={() => { const l = filtered.find((x: any) => x.id === detailId); if (l) goCreateQuote(l); }}
       />
+      <LeadDuplicatesDialog
+        open={dupOpen}
+        onOpenChange={setDupOpen}
+        leads={leads || []}
+        onDone={() => qc.invalidateQueries({ queryKey: ['admin-leads'] })}
+      />
     </div>
   );
 }
