@@ -134,7 +134,7 @@ export default function AdminFatturazione() {
       />
 
       <CrmKpiRow cols={5}>
-        <CrmKpiTile label="Venduto" value={eur(kpi.venduto)} color="indigo" icon={<TrendingUp className="w-4 h-4" />} hint="Preventivi accettati" />
+        <CrmKpiTile label="Venduto" value={eur(kpi.venduto)} color="indigo" icon={<TrendingUp className="w-4 h-4" />} hint="Vendite + preventivi accettati" />
         <CrmKpiTile label="Fatturato" value={eur(kpi.fatturato)} color="blue" icon={<FileText className="w-4 h-4" />} hint="Totale fatture emesse" />
         <CrmKpiTile label="Incassato" value={eur(kpi.incassato)} color="green" icon={<Wallet className="w-4 h-4" />} hint="Pagamenti ricevuti" />
         <CrmKpiTile label="Da incassare" value={eur(kpi.daIncassare)} color="amber" icon={<Euro className="w-4 h-4" />} hint="Fatture aperte" />
