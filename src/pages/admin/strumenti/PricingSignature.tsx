@@ -5,6 +5,8 @@ import {
   useCreaPreventivoLink,
   PricingLoadingState,
   PricingEmptyState,
+  usePricingPagination,
+  PricingPagination,
 } from "./_shared";
 
 const fmt2 = (n: number) => "€ " + n.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -109,6 +111,8 @@ export default function PricingSignature() {
 
   const selected = PRODOTTI.find(p => p.id === selectedId);
 
+  const { visible: pagedRows, page, pageCount, setPage, total: totalRows } = usePricingPagination(filtered);
+
   let prev: any = null;
   if (selected) {
     const costo = selected.listino * coeff;
@@ -212,7 +216,7 @@ export default function PricingSignature() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(p => {
+              {pagedRows.map(p => {
                 const costo = p.listino * coeff;
                 const prezzo = costo * (1 + mkCoeff);
                 const margPct = ((prezzo - costo) / prezzo) * 100;
@@ -245,7 +249,8 @@ export default function PricingSignature() {
             </tbody>
           </table>
         </div>
-        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>{filtered.length} articoli · Prezzi IVA esclusa · Listino Signature</div>
+        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>{pagedRows.length} di {totalRows} articoli · Prezzi IVA esclusa · Listino Signature</div>
+        <PricingPagination page={page} pageCount={pageCount} total={totalRows} setPage={setPage} label="articoli" />
         </>)}
 
       </div>
