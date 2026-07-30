@@ -58,6 +58,8 @@ const AdminCatalog = () => {
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterSupplier, setFilterSupplier] = useState<string>("all");
+  const [issueFilter, setIssueFilter] = useState<"all" | "no-brand" | "dupes">("all");
+
   const [openProductDialog, setOpenProductDialog] = useState(false);
   const [openSupplierDialog, setOpenSupplierDialog] = useState(false);
   const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
