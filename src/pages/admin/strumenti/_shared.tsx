@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Slider } from '@/components/ui/slider';
 import { supabase } from '@/integrations/supabase/client';
@@ -46,50 +46,64 @@ export const PRICING_BRAND_MATCH: Record<
 const ACCESSORY_RX =
   /accessor|batti|profilo|clip|vite|piedino|cleaner|colla|ardex|nylon|isoldrum|barriera|fascia|giunto|tappo|paragradino|livellante|magatello|piastr(a|ine)/i;
 
+// Tetto di sicurezza: righe scaricate dal catalogo per singolo listino.
+const MAX_FETCH_ROWS = 4000;
+const FETCH_PAGE = 1000;
+
 export function usePricingCatalog(key: PricingCatalogKey) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rows, setRows] = useState<PricingCatalogRow[]>([]);
+  // Evita fetch ripetuti se il componente rimonta/ri-renderizza in loop.
+  const fetchedKey = useRef<string | null>(null);
 
   useEffect(() => {
+    if (fetchedKey.current === key) return;
+    fetchedKey.current = key;
     let cancelled = false;
     (async () => {
       setLoading(true);
-      const { data, error: err } = await supabase
-        .from('catalog_products')
-        .select(
-          'product_code, name, collection, format, list_price, unit_of_measure, is_active, catalog_brands(name)'
-        )
-        .eq('is_active', true)
-        .gt('list_price', 0)
-        .order('name');
-      if (cancelled) return;
-      if (err) {
-        setError(err.message);
-        setRows([]);
-        setLoading(false);
-        return;
+      setError(null);
+      const all: any[] = [];
+      for (let from = 0; from < MAX_FETCH_ROWS; from += FETCH_PAGE) {
+        const { data, error: err } = await supabase
+          .from('catalog_products')
+          .select(
+            'product_code, name, collection, format, list_price, unit_of_measure, catalog_brands(name)'
+          )
+          .eq('is_active', true)
+          .gt('list_price', 0)
+          .order('name')
+          .range(from, from + FETCH_PAGE - 1);
+        if (cancelled) return;
+        if (err) {
+          setError(err.message);
+          setRows([]);
+          setLoading(false);
+          return;
+        }
+        all.push(...(data ?? []));
+        if (!data || data.length < FETCH_PAGE) break;
       }
       const match = PRICING_BRAND_MATCH[key];
-      const mapped: PricingCatalogRow[] = (data ?? [])
-        .map((p: any) => {
-          const brandName = String(p.catalog_brands?.name ?? '');
-          const collection = String(p.collection ?? '');
-          const name = String(p.name ?? '');
-          return {
-            id: String(p.product_code ?? name),
-            nome: name,
-            dims: String(p.format ?? ''),
-            listino: Number(p.list_price ?? 0),
-            unita: String(p.unit_of_measure ?? 'mq'),
-            collection,
-            brand: brandName,
-            is_accessory: ACCESSORY_RX.test(`${collection} ${name}`),
-            _brandLc: brandName.toLowerCase(),
-            _colLc: collection.toLowerCase(),
-          } as any;
-        })
-        .filter((r: any) => match(r._brandLc, r._colLc));
+      const mapped: PricingCatalogRow[] = [];
+      for (const p of all) {
+        const brandName = String((p as any).catalog_brands?.name ?? '');
+        const collection = String(p.collection ?? '');
+        const name = String(p.name ?? '');
+        if (!match(brandName.toLowerCase(), collection.toLowerCase())) continue;
+        mapped.push({
+          id: String(p.product_code ?? name),
+          nome: name,
+          dims: String(p.format ?? ''),
+          listino: Number(p.list_price ?? 0),
+          unita: String(p.unit_of_measure ?? 'mq'),
+          collection,
+          brand: brandName,
+          is_accessory: ACCESSORY_RX.test(`${collection} ${name}`),
+        });
+      }
+      if (cancelled) return;
       setRows(mapped);
       setLoading(false);
     })();
@@ -98,12 +112,67 @@ export function usePricingCatalog(key: PricingCatalogKey) {
     };
   }, [key]);
 
-  return {
-    prodotti: rows.filter((r) => !r.is_accessory),
-    accessori: rows.filter((r) => r.is_accessory),
-    loading,
-    error,
-  };
+  // Riferimenti stabili: evita che consumer con useMemo/useEffect su questi
+  // array entrino in cicli di render infiniti.
+  const prodotti = useMemo(() => rows.filter((r) => !r.is_accessory), [rows]);
+  const accessori = useMemo(() => rows.filter((r) => r.is_accessory), [rows]);
+
+  return { prodotti, accessori, loading, error };
+}
+
+/** Limite di sicurezza righe renderizzate + paginazione client-side. */
+export const PRICING_PAGE_SIZE = 200;
+
+export function usePricingPagination<T>(items: T[], pageSize = PRICING_PAGE_SIZE) {
+  const [page, setPage] = useState(0);
+  const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
+  const safePage = Math.min(page, pageCount - 1);
+  useEffect(() => {
+    setPage(0);
+  }, [items.length, pageSize]);
+  const visible = useMemo(
+    () => items.slice(safePage * pageSize, safePage * pageSize + pageSize),
+    [items, safePage, pageSize]
+  );
+  return { visible, page: safePage, pageCount, setPage, total: items.length };
+}
+
+export function PricingPagination({
+  page,
+  pageCount,
+  total,
+  setPage,
+  label = 'articoli',
+}: {
+  page: number;
+  pageCount: number;
+  total: number;
+  setPage: (n: number) => void;
+  label?: string;
+}) {
+  if (pageCount <= 1) return null;
+  const btn = (disabled: boolean) => ({
+    padding: '4px 12px',
+    borderRadius: 6,
+    border: '1px solid #E0DDD8',
+    background: 'transparent',
+    fontSize: 12,
+    cursor: disabled ? 'default' : 'pointer',
+    opacity: disabled ? 0.4 : 1,
+  } as const);
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 10, fontSize: 12, color: '#6B6860' }}>
+      <button style={btn(page === 0)} disabled={page === 0} onClick={() => setPage(page - 1)}>
+        ← Prec
+      </button>
+      <span>
+        Pagina {page + 1} di {pageCount} · {total} {label} (max {PRICING_PAGE_SIZE} per pagina)
+      </span>
+      <button style={btn(page >= pageCount - 1)} disabled={page >= pageCount - 1} onClick={() => setPage(page + 1)}>
+        Succ →
+      </button>
+    </div>
+  );
 }
 
 export function PricingLoadingState({ rows = 5 }: { rows?: number }) {

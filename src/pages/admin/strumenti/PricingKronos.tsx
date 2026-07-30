@@ -5,6 +5,8 @@ import {
   useCreaPreventivoLink,
   PricingLoadingState,
   PricingEmptyState,
+  usePricingPagination,
+  PricingPagination,
 } from "./_shared";
 
 const inferColKronos = (nome: string, collection: string): string => {
@@ -140,6 +142,8 @@ export default function PricingKronos() {
 
   const selected = PRODOTTI.find(p => p.id === selectedId);
 
+  const { visible: pagedRows, page, pageCount, setPage, total: totalRows } = usePricingPagination(filtered);
+
   let prev: any = null;
   if (selected) {
     const { costo, prezzo, scontoMax } = calcP(selected.listino);
@@ -258,7 +262,7 @@ export default function PricingKronos() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(p => {
+              {pagedRows.map(p => {
                 const { costo, prezzo, margPct, scontoMax } = calcP(p.listino, markup/100);
                 const { prezzo: prezPrem } = calcP(p.listino, markupPrem/100);
                 const isSel = p.id === selectedId;
@@ -293,8 +297,9 @@ export default function PricingKronos() {
           </table>
         </div>
         <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>
-          {filtered.length} articoli visualizzati · Prezzi IVA esclusa · Listino Kronos
+          {pagedRows.length} di {totalRows} articoli visualizzati · Prezzi IVA esclusa · Listino Kronos
         </div>
+        <PricingPagination page={page} pageCount={pageCount} total={totalRows} setPage={setPage} label="articoli" />
         </>)}
 
       </div>
