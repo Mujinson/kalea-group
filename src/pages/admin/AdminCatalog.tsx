@@ -346,7 +346,12 @@ const AdminCatalog = () => {
               return (
                 <TableRow key={p.id}>
                   <TableCell className="font-mono text-xs">{p.product_code}</TableCell>
-                  <TableCell className="text-sm whitespace-nowrap font-medium" style={{ color: "#64748B" }}>{p.brand || "—"}</TableCell>
+                  <TableCell className="text-sm whitespace-nowrap font-medium" style={{ color: "#64748B" }}>
+                    {p.brand || "—"}
+                    {!p.brand_id && <Badge variant="destructive" className="ml-2 text-[10px]">no brand</Badge>}
+                    {dupKeys.has(normKey(p)) && <Badge variant="outline" className="ml-2 text-[10px]">doppione?</Badge>}
+                  </TableCell>
+
                   <TableCell>
                     <div className="font-medium">{p.name}</div>
                     {p.product_categories?.name && <div className="text-xs" style={{ color: "#8A7060" }}>{p.product_categories.name}</div>}
