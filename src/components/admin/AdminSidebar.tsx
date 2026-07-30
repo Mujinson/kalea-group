@@ -23,6 +23,7 @@ import {
   Settings,
   Users,
   BarChart3,
+  Percent,
   FileText,
   UserPlus,
   Kanban,
@@ -154,6 +155,7 @@ const menuStructure: MenuEntry[] = [
       label: 'Statistiche', icon: BarChart3, color: '#06B6D4', adminOnly: true,
       items: [
         { title: 'Analytics', url: '/admin/analytics', icon: BarChart3, adminOnly: true },
+        { title: 'Margini', url: '/admin/margini', icon: Percent, adminOnly: true },
       ],
     },
   },
