@@ -187,6 +187,9 @@ export default function AdminLeads() {
             <Button onClick={() => navigate('/admin/map?layer=leads')} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
               <MapPin className="w-4 h-4 mr-2" />Mappa
             </Button>
+            <Button onClick={() => setDupOpen(true)} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
+              <Copy className="w-4 h-4 mr-2" />Trova duplicati
+            </Button>
             <Button onClick={exportCsv} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
               <Download className="w-4 h-4 mr-2" />Esporta
             </Button>
@@ -195,6 +198,7 @@ export default function AdminLeads() {
             </Button>
           </>
         }
+
       />
 
       <CrmKpiRow cols={5}>
