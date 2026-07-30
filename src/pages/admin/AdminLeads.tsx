@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import {
   Search, Plus, Filter as FilterIcon, Columns3, Download, MoreVertical,
-  Pencil, Eye, Archive, ArchiveRestore, Trash2, FileText, MapPin,
+  Pencil, Eye, Archive, ArchiveRestore, Trash2, FileText, MapPin, Copy,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -20,6 +20,7 @@ import { fetchAllRows } from '@/lib/fetchAllRows';
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmTableCard } from '@/components/admin/CrmShell';
 import LeadFormDrawer from '@/components/admin/leads/LeadFormDrawer';
 import LeadDetailSheet from '@/components/admin/leads/LeadDetailSheet';
+import LeadDuplicatesDialog from '@/components/admin/leads/LeadDuplicatesDialog';
 import { LeadStatusBadge } from '@/components/admin/leads/LeadStatusBadge';
 import { LEAD_STATUSES, LEAD_SOURCES, sourceLabel } from '@/components/admin/leads/leadConstants';
 import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
@@ -67,6 +68,7 @@ export default function AdminLeads() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
+  const [dupOpen, setDupOpen] = useState(false);
 
   const toggleCol = (key: string) => {
     setVisibleCols((prev) => {
@@ -187,6 +189,9 @@ export default function AdminLeads() {
             <Button onClick={() => navigate('/admin/map?layer=leads')} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
               <MapPin className="w-4 h-4 mr-2" />Mappa
             </Button>
+            <Button onClick={() => setDupOpen(true)} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
+              <Copy className="w-4 h-4 mr-2" />Trova duplicati
+            </Button>
             <Button onClick={exportCsv} size="sm" variant="outline" className="border-crm-border text-crm-ink hover:bg-crm-bg-soft">
               <Download className="w-4 h-4 mr-2" />Esporta
             </Button>
@@ -195,6 +200,7 @@ export default function AdminLeads() {
             </Button>
           </>
         }
+
       />
 
       <CrmKpiRow cols={5}>
@@ -391,6 +397,12 @@ export default function AdminLeads() {
         onEdit={() => { const id = detailId; setDetailId(null); setEditingId(id); setFormOpen(true); }}
         onArchive={() => { if (detailId) { archive(detailId); setDetailId(null); } }}
         onCreateQuote={() => { const l = filtered.find((x: any) => x.id === detailId); if (l) goCreateQuote(l); }}
+      />
+      <LeadDuplicatesDialog
+        open={dupOpen}
+        onOpenChange={setDupOpen}
+        leads={leads || []}
+        onDone={() => qc.invalidateQueries({ queryKey: ['admin-leads'] })}
       />
     </div>
   );

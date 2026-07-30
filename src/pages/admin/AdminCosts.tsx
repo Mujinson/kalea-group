@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { useRealStock } from '@/hooks/useRealStock';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { DataTable } from '@/components/admin/DataTable';
 import { Button } from '@/components/ui/button';
@@ -140,6 +141,14 @@ const AdminCosts = () => {
 
   // Stock Valuation State
   const [stockValuation, setStockValuation] = useState<StockValuation | null>(null);
+  const realStock = useRealStock();
+  const [netCostByProduct, setNetCostByProduct] = useState<Map<string, number>>(new Map());
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase.from('catalog_products').select('id, net_cost');
+      setNetCostByProduct(new Map((data || []).map((p: any) => [p.id as string, Number(p.net_cost || 0)])));
+    })();
+  }, []);
   const [stockDialog, setStockDialog] = useState(false);
   const [stockForm, setStockForm] = useState({ total_value: '', notes: '' });
 
@@ -394,6 +403,14 @@ const AdminCosts = () => {
   const totalVariableCosts = variableCosts.reduce((sum, c) => sum + c.amount, 0);
   const unpaidTotal = fixedCosts.filter(c => !c.is_paid).reduce((sum, c) => sum + c.amount, 0) + variableCosts.filter(c => !c.is_paid).reduce((sum, c) => sum + c.amount, 0);
 
+  // Valorizzazione reale magazzino: stock reale (giacenza + movimenti) × net_cost catalogo
+  const stockRealValue = Array.from(realStock.stockByProduct.entries()).reduce((sum: number, entry) => {
+    const [pid, qty] = entry as [string, number];
+    const cost = Number(netCostByProduct.get(pid) || 0);
+    return sum + Math.max(0, Number(qty) || 0) * cost;
+  }, 0);
+
+
   if (loading) return <div className="flex items-center justify-center h-64">Caricamento...</div>;
 
   return (
@@ -408,7 +425,7 @@ const AdminCosts = () => {
         <CrmKpiTile label="Costi Fissi" value={formatCurrency(totalFixedCosts)} color="red" icon={<TrendingDown className="w-4 h-4" />} />
         <CrmKpiTile label="Costi Variabili" value={formatCurrency(totalVariableCosts)} color="orange" icon={<TrendingUp className="w-4 h-4" />} />
         <CrmKpiTile label="Da Pagare" value={formatCurrency(unpaidTotal)} color="amber" icon={<Receipt className="w-4 h-4" />} />
-        <CrmKpiTile label="Stock Terni" value={formatCurrency(stockValuation?.total_value || 0)} color="blue" icon={<Euro className="w-4 h-4" />} onClick={() => setStockDialog(true)} />
+        <CrmKpiTile label="Valore magazzino" value={formatCurrency(stockRealValue)} color="blue" icon={<Euro className="w-4 h-4" />} hint="Stock reale × costo netto catalogo" onClick={() => setStockDialog(true)} />
       </CrmKpiRow>
 
 
@@ -641,9 +658,12 @@ const AdminCosts = () => {
       {/* Stock Dialog */}
       <Dialog open={stockDialog} onOpenChange={setStockDialog}>
         <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>Valore Stock Terni</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Valore magazzino</DialogTitle></DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">Valore informativo dello stock pavimento a Terni.</p>
+            <p className="text-sm text-muted-foreground">
+              Valore reale calcolato: <strong>{formatCurrency(stockRealValue)}</strong> (stock reale × costo netto catalogo).
+              Sotto puoi mantenere una stima manuale informativa.
+            </p>
             <div><Label>Valore Totale (€)</Label><Input type="number" step="0.01" value={stockForm.total_value} onChange={(e) => setStockForm({ ...stockForm, total_value: e.target.value })} /></div>
             <div><Label>Note</Label><Textarea value={stockForm.notes} onChange={(e) => setStockForm({ ...stockForm, notes: e.target.value })} /></div>
             {stockValuation?.last_updated && <p className="text-xs text-muted-foreground">Ultimo aggiornamento: {new Date(stockValuation.last_updated).toLocaleDateString('it-IT')}</p>}

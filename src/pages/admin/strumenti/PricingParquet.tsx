@@ -87,11 +87,17 @@ export default function PricingParquet() {
   const goToCreaPreventivo = useCreaPreventivoLink();
 
   const PRODOTTI = useMemo(
-    () => catProdotti.map(r => ({
-      id: r.id, nome: r.nome, dims: r.dims, listino: r.listino,
-      cat: inferCatParq(r.nome, r.collection),
-      tipo: r.collection || "",
-    })),
+    () => catProdotti.map(r => {
+      const linea = (r.collection || "").trim();
+      const nomeCompleto = linea && !r.nome.toLowerCase().includes(linea.toLowerCase())
+        ? `${linea} — ${r.nome}`
+        : r.nome;
+      return {
+        id: r.id, nome: nomeCompleto, dims: r.dims, listino: r.listino,
+        cat: inferCatParq(r.nome, r.collection),
+        tipo: linea,
+      };
+    }),
     [catProdotti]
   );
 

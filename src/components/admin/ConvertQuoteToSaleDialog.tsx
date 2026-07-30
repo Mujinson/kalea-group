@@ -203,13 +203,49 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       const unitPrice = totalQty > 0 ? sub / totalQty : 0;
       const vatRate = quote.vat_included ? 0 : 0.22;
 
+      // Risoluzione codici catalogo (serve sia per il costo che per le righe materiali)
+      const codes = Array.from(new Set(matLines.map(m => m.product_code).filter(Boolean))) as string[];
+      const codeToId = new Map<string, string>();
+      const costById = new Map<string, number>();
+      if (codes.length) {
+        const { data: prods } = await supabase.from('catalog_products').select('id, product_code, net_cost').in('product_code', codes);
+        (prods || []).forEach((p: any) => {
+          codeToId.set(p.product_code, p.id);
+          costById.set(p.id, Number(p.net_cost || 0));
+        });
+      }
+
+      // Costo totale: net_cost catalogo se disponibile, altrimenti costo unitario del preventivo
+      const totalCost = matLines.reduce((s, m) => {
+        const pid = m.catalog_id || (m.product_code ? codeToId.get(m.product_code) : null);
+        const unitCost = (pid && costById.get(pid)) || m.unit_cost || 0;
+        return s + m.quantity * unitCost;
+      }, 0);
+      const marginAmount = Math.round((sub - totalCost) * 100) / 100;
+      const marginPct = sub > 0 ? Math.round((marginAmount / sub) * 10000) / 100 : 0;
+
+      // Nome cliente
+      const { data: custInfo } = await supabase
+        .from('customers')
+        .select('first_name, last_name, company_name')
+        .eq('id', quote.customer_id)
+        .maybeSingle();
+      const customerName = custInfo?.company_name
+        || `${custInfo?.first_name || ''} ${custInfo?.last_name || ''}`.trim()
+        || null;
+
+      const productType = matLines[0]?.name
+        || firstItem?.product_type
+        || quote.quote_data?.prodotto?.nome
+        || quote.subject
+        || 'Fornitura';
 
       // a) Sale
       const { data: sale, error: saleErr } = await supabase.from('sales').insert({
         customer_id: quote.customer_id,
-        product_type: firstItem?.product_type || quote.quote_data?.prodotto?.nome || quote.subject || 'MgO',
+        customer_name: customerName,
+        product_type: productType,
         color: firstItem?.color || quote.quote_data?.tonalita?.[0]?.nome || null,
-
         quantity_sqm: totalQty,
         sale_price: unitPrice,
         vat_included: quote.vat_included,
@@ -217,10 +253,13 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
         vat_rate: vatRate,
         subtotal_amount: sub,
         total_amount: totalAmount,
+        margin_amount: marginAmount,
+        margin_percentage: marginPct,
         notes: `Convertito da preventivo ${quote.quote_number || ''}`.trim(),
       }).select().single();
       if (saleErr) throw saleErr;
       created.sale_id = sale.id;
+
 
       // b) payment_schedules
       const schedRows = rates.map(r => ({
@@ -297,13 +336,7 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
           created.site_id = siteId;
         }
 
-        // e) site_materials dalle righe del preventivo (con risoluzione product_id sul catalogo)
-        const codes = Array.from(new Set(matLines.map(m => m.product_code).filter(Boolean))) as string[];
-        const codeToId = new Map<string, string>();
-        if (codes.length) {
-          const { data: prods } = await supabase.from('catalog_products').select('id, product_code').in('product_code', codes);
-          (prods || []).forEach((p: any) => codeToId.set(p.product_code, p.id));
-        }
+        // e) site_materials dalle righe del preventivo (product_id già risolto sopra)
         const matRows = matLines.map(m => ({
           site_id: siteId!,
           product_id: m.catalog_id || (m.product_code ? codeToId.get(m.product_code) || null : null),
