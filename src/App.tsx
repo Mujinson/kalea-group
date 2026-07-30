@@ -265,6 +265,7 @@ const App = () => (
                 <Route path="catalogo/import-flags" element={<CatalogImportFlags />} />
                 <Route path="catalogo/prezzi" element={<CatalogPrices />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
+                <Route path="margini" element={<AdminMargini />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
                 <Route path="appuntamenti" element={<AdminAppointments />} />
