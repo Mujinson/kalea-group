@@ -303,6 +303,15 @@ const AdminCatalog = () => {
             {suppliers.map((s: any) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={issueFilter} onValueChange={(v) => setIssueFilter(v as any)}>
+          <SelectTrigger className="w-[200px] bg-white"><SelectValue placeholder="Anomalie" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tutti i prodotti</SelectItem>
+            <SelectItem value="no-brand">Senza brand ({stats.noBrand})</SelectItem>
+            <SelectItem value="dupes">Possibili doppioni ({stats.dupes})</SelectItem>
+          </SelectContent>
+        </Select>
+
       </div>
 
       {/* Table */}
