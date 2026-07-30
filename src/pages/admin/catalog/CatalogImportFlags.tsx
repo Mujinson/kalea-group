@@ -226,7 +226,23 @@ export default function CatalogImportFlags() {
         <ToolbarButton active={filter === "verify"} onClick={() => setFilter("verify")}>
           Da verificare ({counts.verify})
         </ToolbarButton>
+        <ToolbarButton
+          variant="primary"
+          icon={<Plus className="w-3.5 h-3.5" />}
+          onClick={bulkCreateNoMatch}
+          disabled={bulkBusy || counts.noMatch === 0}
+        >
+          Crea tutti i Non in DB ({counts.noMatch})
+        </ToolbarButton>
+        <ToolbarButton
+          icon={<Check className="w-3.5 h-3.5" />}
+          onClick={bulkResolveAll}
+          disabled={bulkBusy || filtered.length === 0}
+        >
+          Segna tutti come risolti ({filtered.length})
+        </ToolbarButton>
       </CrmToolbar>
+
 
       {loading ? (
         <div className="crm-card p-6 text-sm text-crm-ink-muted">Caricamento…</div>
