@@ -344,7 +344,6 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
           quantity: m.quantity,
           unit: m.unit,
           unit_cost: m.unit_cost,
-          total_cost: Math.round(m.quantity * m.unit_cost * 100) / 100,
           notes: `Da preventivo ${quote.quote_number || ''}`.trim(),
         }));
         if (matRows.length) {
