@@ -195,6 +195,18 @@ const TimbratureCard = () => {
             </div>
           )}
 
+          {missing.length > 0 && (
+            <div className="rounded-lg bg-[#FDF6E7] border border-[#E8D9B5] p-3">
+              <div className="text-[12px] font-medium text-[#8B6F4E]">Tappe obbligatorie mancanti</div>
+              <div className="text-[12px] text-[#6B6258] mt-1">
+                {missing.map((m) => EVENT_LABELS[m].short).join(' · ')}
+              </div>
+              <div className="text-[11px] text-[#8C7B6B] mt-1 italic">
+                Devi timbrare tutte le tappe prima di poter chiudere la giornata.
+              </div>
+            </div>
+          )}
+
           {!assignedSite && ['arrive_site', 'leave_site'].some((t) => next.includes(t as any)) && (
             <div className="text-[11px] text-[#8C7B6B] italic">
               Nessun cantiere assegnato oggi: la timbratura verrà salvata solo con la posizione GPS.
