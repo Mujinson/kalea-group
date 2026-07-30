@@ -425,7 +425,7 @@ const AdminCosts = () => {
         <CrmKpiTile label="Costi Fissi" value={formatCurrency(totalFixedCosts)} color="red" icon={<TrendingDown className="w-4 h-4" />} />
         <CrmKpiTile label="Costi Variabili" value={formatCurrency(totalVariableCosts)} color="orange" icon={<TrendingUp className="w-4 h-4" />} />
         <CrmKpiTile label="Da Pagare" value={formatCurrency(unpaidTotal)} color="amber" icon={<Receipt className="w-4 h-4" />} />
-        <CrmKpiTile label="Stock Terni" value={formatCurrency(stockValuation?.total_value || 0)} color="blue" icon={<Euro className="w-4 h-4" />} onClick={() => setStockDialog(true)} />
+        <CrmKpiTile label="Valore magazzino" value={formatCurrency(stockRealValue)} color="blue" icon={<Euro className="w-4 h-4" />} hint="Stock reale × costo netto catalogo" onClick={() => setStockDialog(true)} />
       </CrmKpiRow>
 
 
