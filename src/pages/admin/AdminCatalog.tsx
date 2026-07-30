@@ -149,6 +149,31 @@ const AdminCatalog = () => {
   }, [products, countLowStock, dupKeys]);
 
 
+  // Tiene il prodotto più vecchio per ogni chiave duplicata e disattiva gli altri
+  const deactivateDuplicates = async () => {
+    const byKey = new Map<string, any[]>();
+    (products as any[]).forEach((p) => {
+      const k = normKey(p);
+      if (!dupKeys.has(k)) return;
+      if (!byKey.has(k)) byKey.set(k, []);
+      byKey.get(k)!.push(p);
+    });
+    const toDeactivate: string[] = [];
+    byKey.forEach((arr) => {
+      const sorted = [...arr].sort((a, b) => new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime());
+      sorted.slice(1).filter((p) => p.is_active !== false).forEach((p) => toDeactivate.push(p.id));
+    });
+    if (!toDeactivate.length) return toast.info("Nessun doppione da disattivare");
+    if (!window.confirm(`Disattivare ${toDeactivate.length} prodotti duplicati? Il più vecchio di ogni gruppo resta attivo.`)) return;
+    for (let i = 0; i < toDeactivate.length; i += 100) {
+      const { error } = await supabase.from("catalog_products").update({ is_active: false }).in("id", toDeactivate.slice(i, i + 100));
+      if (error) return toast.error(error.message);
+    }
+    toast.success(`${toDeactivate.length} doppioni disattivati`);
+    qc.invalidateQueries({ queryKey: ["catalog-products"] });
+  };
+
+
   const openNew = () => {
     setEditing(null);
     setForm(emptyProduct);
