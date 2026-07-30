@@ -6,6 +6,7 @@ import { Loader2, MapPin, AlertTriangle } from 'lucide-react';
 import {
   EVENT_LABELS,
   nextEvents,
+  missingRequired,
   recordTimbratura,
   summarizeDay,
   formatHM,
@@ -82,8 +83,9 @@ const TimbratureCard = () => {
   }, [user, load]);
 
   const lastType: TimbratureEventType | null = entries.length ? entries[entries.length - 1].event_type : null;
-  const next = nextEvents(lastType);
+  const next = nextEvents(lastType, entries);
   const summary = summarizeDay(entries);
+  const missing = missingRequired(entries);
 
   const handleClick = async (type: TimbratureEventType) => {
     if (!user) return;
