@@ -403,7 +403,10 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
 
           <div className="flex items-center gap-2">
             <Checkbox id="create-site" checked={createSite} onCheckedChange={(v) => setCreateSite(!!v)} />
-            <Label htmlFor="create-site" className="cursor-pointer">Crea cantiere da questa vendita (con budget e materiali del preventivo)</Label>
+            <Label htmlFor="create-site" className="cursor-pointer">
+              Crea cantiere da questa vendita ({matPreview.length} righe materiale dal preventivo)
+            </Label>
+
           </div>
         </div>
 
