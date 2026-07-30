@@ -658,9 +658,12 @@ const AdminCosts = () => {
       {/* Stock Dialog */}
       <Dialog open={stockDialog} onOpenChange={setStockDialog}>
         <DialogContent className="max-w-md">
-          <DialogHeader><DialogTitle>Valore Stock Terni</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>Valore magazzino</DialogTitle></DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">Valore informativo dello stock pavimento a Terni.</p>
+            <p className="text-sm text-muted-foreground">
+              Valore reale calcolato: <strong>{formatCurrency(stockRealValue)}</strong> (stock reale × costo netto catalogo).
+              Sotto puoi mantenere una stima manuale informativa.
+            </p>
             <div><Label>Valore Totale (€)</Label><Input type="number" step="0.01" value={stockForm.total_value} onChange={(e) => setStockForm({ ...stockForm, total_value: e.target.value })} /></div>
             <div><Label>Note</Label><Textarea value={stockForm.notes} onChange={(e) => setStockForm({ ...stockForm, notes: e.target.value })} /></div>
             {stockValuation?.last_updated && <p className="text-xs text-muted-foreground">Ultimo aggiornamento: {new Date(stockValuation.last_updated).toLocaleDateString('it-IT')}</p>}
