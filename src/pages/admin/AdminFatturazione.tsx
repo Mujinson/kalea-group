@@ -71,16 +71,32 @@ export default function AdminFatturazione() {
       const { data, error } = await supabase
         .from('quotes')
         .select('id, quote_number, project_name, total_amount, vat_amount, vat_rate, status, customer_id, client_name, lead_id, customer:customers(id, first_name, last_name, company_name), lead:leads(id, name, company_name, email, phone, address, city, province, region, country), created_at')
-        .in('status', ['accettato', 'accepted', 'approved', 'approvato'])
+        .in('status', ['accettato', 'accepted', 'approved', 'approvato', 'converted', 'convertito', 'vinta', 'vinto'])
         .order('created_at', { ascending: false });
       if (error) throw error;
       return data as any[];
     },
   });
 
+  // Vendite reali (fonte del KPI "Venduto")
+  const { data: sales = [] } = useQuery({
+    queryKey: ['sales_for_invoicing'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('sales').select('id, total_amount, quote_id, sale_date');
+      if (error) throw error;
+      return (data ?? []) as any[];
+    },
+  });
+
   // KPI: venduto vs fatturato vs incassato vs da incassare
   const kpi = useMemo(() => {
-    const venduto = acceptedQuotes.reduce((s, q) => s + Number(q.total_amount || 0), 0);
+    const salesTotal = sales.reduce((s, v) => s + Number(v.total_amount || 0), 0);
+    const quotedIds = new Set(sales.map((s) => s.quote_id).filter(Boolean));
+    // preventivi accettati non ancora convertiti in vendita
+    const quotesTotal = acceptedQuotes
+      .filter((q) => !quotedIds.has(q.id))
+      .reduce((s, q) => s + Number(q.total_amount || 0), 0);
+    const venduto = salesTotal + quotesTotal;
     const fatturato = invoices.filter((i) => i.status !== 'annullata').reduce((s, i) => s + Number(i.total || 0), 0);
     const incassato = invoices.reduce((s, i) => s + Number(i.paid_amount || 0), 0);
     const daIncassare = invoices
@@ -90,7 +106,8 @@ export default function AdminFatturazione() {
       .filter((i) => i.status === 'scaduta')
       .reduce((s, i) => s + (Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
     return { venduto, fatturato, incassato, daIncassare, scaduto };
-  }, [invoices, acceptedQuotes]);
+  }, [invoices, acceptedQuotes, sales]);
+
 
   // Preventivi da fatturare (accettati con residuo da fatturare)
   const daFatturare = useMemo(() => {
