@@ -273,11 +273,14 @@ const AdminCatalog = () => {
         }
       />
 
-      <CrmKpiRow cols={3}>
+      <CrmKpiRow cols={5}>
         <CrmKpiTile label="Prodotti totali" value={stats.total} color="indigo" icon={<Package className="w-4 h-4" />} />
         <CrmKpiTile label="Sotto scorta" value={stats.lowStock} color={stats.lowStock > 0 ? "orange" : "slate"} icon={stats.lowStock > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} />
         <CrmKpiTile label="Margine sotto soglia" value={stats.lowMargin} color={stats.lowMargin > 0 ? "red" : "slate"} icon={stats.lowMargin > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} />
+        <CrmKpiTile label="Senza brand" value={stats.noBrand} color={stats.noBrand > 0 ? "amber" : "slate"} icon={stats.noBrand > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} hint="Regole sconto/markup non applicate" />
+        <CrmKpiTile label="Possibili doppioni" value={stats.dupes} color={stats.dupes > 0 ? "orange" : "slate"} icon={stats.dupes > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} hint="Stesso nome, formato e spessore" />
       </CrmKpiRow>
+
 
 
       {/* Filters */}
