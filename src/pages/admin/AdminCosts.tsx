@@ -394,6 +394,13 @@ const AdminCosts = () => {
   const totalVariableCosts = variableCosts.reduce((sum, c) => sum + c.amount, 0);
   const unpaidTotal = fixedCosts.filter(c => !c.is_paid).reduce((sum, c) => sum + c.amount, 0) + variableCosts.filter(c => !c.is_paid).reduce((sum, c) => sum + c.amount, 0);
 
+  // Valorizzazione reale magazzino: stock reale (giacenza + movimenti) × net_cost catalogo
+  const stockRealValue = Array.from(realStock.stockByProduct.entries()).reduce((sum, [pid, qty]) => {
+    const cost = Number(netCostByProduct.get(pid) || 0);
+    return sum + Math.max(0, Number(qty) || 0) * cost;
+  }, 0);
+
+
   if (loading) return <div className="flex items-center justify-center h-64">Caricamento...</div>;
 
   return (
