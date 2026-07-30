@@ -140,6 +140,14 @@ const AdminCosts = () => {
 
   // Stock Valuation State
   const [stockValuation, setStockValuation] = useState<StockValuation | null>(null);
+  const realStock = useRealStock();
+  const [netCostByProduct, setNetCostByProduct] = useState<Map<string, number>>(new Map());
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase.from('catalog_products').select('id, net_cost');
+      setNetCostByProduct(new Map((data || []).map((p: any) => [p.id as string, Number(p.net_cost || 0)])));
+    })();
+  }, []);
   const [stockDialog, setStockDialog] = useState(false);
   const [stockForm, setStockForm] = useState({ total_value: '', notes: '' });
 
