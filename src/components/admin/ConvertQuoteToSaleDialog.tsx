@@ -143,6 +143,10 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     return Number(quote.total_amount || 0) - Number(quote.vat_amount || 0);
   }, [quote]);
 
+  const matPreview = useMemo(() => (quote ? extractMaterialLines(quote) : []), [quote]);
+
+
+
   useEffect(() => {
     if (!open) return;
     setRates(defaultRates());
