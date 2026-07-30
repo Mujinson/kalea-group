@@ -67,6 +67,7 @@ export default function AdminLeads() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [detailId, setDetailId] = useState<string | null>(null);
+  const [dupOpen, setDupOpen] = useState(false);
 
   const toggleCol = (key: string) => {
     setVisibleCols((prev) => {
