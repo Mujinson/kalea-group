@@ -58,6 +58,8 @@ const AdminCatalog = () => {
   const [search, setSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterSupplier, setFilterSupplier] = useState<string>("all");
+  const [issueFilter, setIssueFilter] = useState<"all" | "no-brand" | "dupes">("all");
+
   const [openProductDialog, setOpenProductDialog] = useState(false);
   const [openSupplierDialog, setOpenSupplierDialog] = useState(false);
   const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
@@ -104,6 +106,18 @@ const AdminCatalog = () => {
     enabled: !!historyProductId,
   });
 
+  const normKey = (p: any) =>
+    `${(p.name || "").toLowerCase().replace(/[^a-z0-9]/g, "")}|${(p.format || "").toLowerCase().replace(/[^a-z0-9]/g, "")}|${p.thickness_mm ?? ""}`;
+
+  const dupKeys = useMemo(() => {
+    const counts = new Map<string, number>();
+    (products as any[]).forEach((p) => {
+      const k = normKey(p);
+      counts.set(k, (counts.get(k) || 0) + 1);
+    });
+    return new Set(Array.from(counts.entries()).filter(([, n]) => n > 1).map(([k]) => k));
+  }, [products]);
+
   const filtered = useMemo(() => {
     return products.filter((p: any) => {
       const matchSearch = !search ||
@@ -112,9 +126,13 @@ const AdminCatalog = () => {
         p.supplier_code?.toLowerCase().includes(search.toLowerCase());
       const matchCat = filterCategory === "all" || p.category_id === filterCategory;
       const matchSup = filterSupplier === "all" || p.supplier_id === filterSupplier;
-      return matchSearch && matchCat && matchSup;
+      const matchIssue =
+        issueFilter === "all" ||
+        (issueFilter === "no-brand" && !p.brand_id) ||
+        (issueFilter === "dupes" && dupKeys.has(normKey(p)));
+      return matchSearch && matchCat && matchSup && matchIssue;
     });
-  }, [products, search, filterCategory, filterSupplier]);
+  }, [products, search, filterCategory, filterSupplier, issueFilter, dupKeys]);
 
   const { getRealStock, isLowStock, countLowStock } = useRealStock();
 
@@ -125,8 +143,11 @@ const AdminCatalog = () => {
       const margin = p.sale_price > 0 ? ((p.sale_price - p.net_cost) / p.sale_price) * 100 : 0;
       return margin < p.min_margin_percentage;
     }).length;
-    return { total, lowStock, lowMargin };
-  }, [products, countLowStock]);
+    const noBrand = (products as any[]).filter((p) => !p.brand_id).length;
+    const dupes = (products as any[]).filter((p) => dupKeys.has(normKey(p))).length;
+    return { total, lowStock, lowMargin, noBrand, dupes };
+  }, [products, countLowStock, dupKeys]);
+
 
   const openNew = () => {
     setEditing(null);
@@ -252,11 +273,14 @@ const AdminCatalog = () => {
         }
       />
 
-      <CrmKpiRow cols={3}>
+      <CrmKpiRow cols={5}>
         <CrmKpiTile label="Prodotti totali" value={stats.total} color="indigo" icon={<Package className="w-4 h-4" />} />
         <CrmKpiTile label="Sotto scorta" value={stats.lowStock} color={stats.lowStock > 0 ? "orange" : "slate"} icon={stats.lowStock > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} />
         <CrmKpiTile label="Margine sotto soglia" value={stats.lowMargin} color={stats.lowMargin > 0 ? "red" : "slate"} icon={stats.lowMargin > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} />
+        <CrmKpiTile label="Senza brand" value={stats.noBrand} color={stats.noBrand > 0 ? "amber" : "slate"} icon={stats.noBrand > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} hint="Regole sconto/markup non applicate" />
+        <CrmKpiTile label="Possibili doppioni" value={stats.dupes} color={stats.dupes > 0 ? "orange" : "slate"} icon={stats.dupes > 0 ? <AlertTriangle className="w-4 h-4" /> : undefined} hint="Stesso nome, formato e spessore" />
       </CrmKpiRow>
+
 
 
       {/* Filters */}
@@ -279,6 +303,15 @@ const AdminCatalog = () => {
             {suppliers.map((s: any) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={issueFilter} onValueChange={(v) => setIssueFilter(v as any)}>
+          <SelectTrigger className="w-[200px] bg-white"><SelectValue placeholder="Anomalie" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tutti i prodotti</SelectItem>
+            <SelectItem value="no-brand">Senza brand ({stats.noBrand})</SelectItem>
+            <SelectItem value="dupes">Possibili doppioni ({stats.dupes})</SelectItem>
+          </SelectContent>
+        </Select>
+
       </div>
 
       {/* Table */}
@@ -313,7 +346,12 @@ const AdminCatalog = () => {
               return (
                 <TableRow key={p.id}>
                   <TableCell className="font-mono text-xs">{p.product_code}</TableCell>
-                  <TableCell className="text-sm whitespace-nowrap font-medium" style={{ color: "#64748B" }}>{p.brand || "—"}</TableCell>
+                  <TableCell className="text-sm whitespace-nowrap font-medium" style={{ color: "#64748B" }}>
+                    {p.brand || "—"}
+                    {!p.brand_id && <Badge variant="destructive" className="ml-2 text-[10px]">no brand</Badge>}
+                    {dupKeys.has(normKey(p)) && <Badge variant="outline" className="ml-2 text-[10px]">doppione?</Badge>}
+                  </TableCell>
+
                   <TableCell>
                     <div className="font-medium">{p.name}</div>
                     {p.product_categories?.name && <div className="text-xs" style={{ color: "#8A7060" }}>{p.product_categories.name}</div>}

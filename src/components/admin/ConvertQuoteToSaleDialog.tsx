@@ -36,7 +36,74 @@ interface QuoteForConvert {
   project_name?: string | null;
   subject?: string | null;
   lead_id?: string | null;
+  quote_data?: any;
 }
+
+/** Riga materiale normalizzata dal payload del preventivo */
+interface MatLine {
+  name: string;
+  quantity: number;
+  unit: string;
+  unit_cost: number;
+  product_code?: string | null;
+  catalog_id?: string | null;
+}
+
+/** Estrae le righe materiale dal payload items/quote_data del preventivo. */
+export const extractMaterialLines = (quote: QuoteForConvert): MatLine[] => {
+  const items: any[] = Array.isArray(quote.items) ? quote.items : [];
+  const qd = quote.quote_data || {};
+  const prodCode: string | null = qd?.prodotto?.id || null;
+  const costoMatMq = Number(qd?.calc?.costoMatMq) || 0;
+  const out: MatLine[] = [];
+
+  for (const it of items) {
+    const type = String(it?.type || '');
+    if (type === 'prodotto') {
+      const unitCost = costoMatMq || Number(it.prezzo_mq) || 0;
+      const tonalita: any[] = Array.isArray(it.tonalita) ? it.tonalita : [];
+      if (tonalita.length > 0) {
+        for (const t of tonalita) {
+          const mq = Number(t?.mq) || 0;
+          if (mq <= 0) continue;
+          out.push({
+            name: [it.descrizione, t?.nome].filter(Boolean).join(' — '),
+            quantity: mq,
+            unit: 'mq',
+            unit_cost: unitCost,
+            product_code: prodCode,
+          });
+        }
+      } else {
+        const mq = Number(it.mq) || Number(it.quantity_sqm) || 0;
+        if (mq > 0) {
+          out.push({ name: it.descrizione || 'Materiale', quantity: mq, unit: 'mq', unit_cost: unitCost, product_code: prodCode });
+        }
+      }
+    } else if (type === 'extra' || type === 'articolo' || type === 'accessorio') {
+      const qty = Number(it.qta) || 0;
+      if (qty <= 0) continue;
+      out.push({
+        name: it.descrizione || 'Voce',
+        quantity: qty,
+        unit: it.unita || 'pz',
+        unit_cost: Number(it.prezzo_un) || 0,
+        catalog_id: it.catalog_id || null,
+        product_code: it.codice || null,
+      });
+    } else if (!type && Number(it?.quantity_sqm) > 0) {
+      // formato legacy
+      out.push({
+        name: [it.product_type, it.color].filter(Boolean).join(' — ') || 'Materiale',
+        quantity: Number(it.quantity_sqm) || 0,
+        unit: 'mq',
+        unit_cost: Number(it.unit_price) || 0,
+      });
+    }
+  }
+  return out;
+};
+
 
 interface Rate {
   key: string;
@@ -75,6 +142,10 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     if (!quote) return 0;
     return Number(quote.total_amount || 0) - Number(quote.vat_amount || 0);
   }, [quote]);
+
+  const matPreview = useMemo(() => (quote ? extractMaterialLines(quote) : []), [quote]);
+
+
 
   useEffect(() => {
     if (!open) return;
@@ -121,20 +192,24 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     };
 
     try {
-      const items = Array.isArray(quote.items) ? quote.items : [];
-      const firstItem = items[0];
-      const totalQty = items.reduce((s, i) => s + (Number(i.quantity_sqm) || 0), 0);
+      const items: any[] = Array.isArray(quote.items) ? quote.items : [];
+      const matLines = extractMaterialLines(quote);
+      const firstItem: any = items[0];
+      const totalQty = matLines.filter(m => m.unit === 'mq').reduce((s, m) => s + m.quantity, 0)
+        || items.reduce((s: number, i: any) => s + (Number(i.quantity_sqm) || 0), 0);
       const totalAmount = Number(quote.total_amount) || 0;
       const vatAmount = Number(quote.vat_amount) || 0;
       const sub = totalAmount - vatAmount;
       const unitPrice = totalQty > 0 ? sub / totalQty : 0;
       const vatRate = quote.vat_included ? 0 : 0.22;
 
+
       // a) Sale
       const { data: sale, error: saleErr } = await supabase.from('sales').insert({
         customer_id: quote.customer_id,
-        product_type: firstItem?.product_type || 'MgO',
-        color: firstItem?.color || null,
+        product_type: firstItem?.product_type || quote.quote_data?.prodotto?.nome || quote.subject || 'MgO',
+        color: firstItem?.color || quote.quote_data?.tonalita?.[0]?.nome || null,
+
         quantity_sqm: totalQty,
         sale_price: unitPrice,
         vat_included: quote.vat_included,
@@ -222,23 +297,29 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
           created.site_id = siteId;
         }
 
-        // e) site_materials from quote items
-        const matRows = items
-          .filter(i => Number(i.quantity_sqm) > 0)
-          .map(i => ({
-            site_id: siteId!,
-            material_name: [i.product_type, i.color].filter(Boolean).join(' — '),
-            quantity: Number(i.quantity_sqm) || 0,
-            unit: 'mq',
-            unit_cost: Number(i.unit_price) || 0,
-            total_cost: Number(i.total_price) || (Number(i.quantity_sqm) * Number(i.unit_price)),
-            notes: `Da preventivo ${quote.quote_number || ''}`.trim(),
-          }));
+        // e) site_materials dalle righe del preventivo (con risoluzione product_id sul catalogo)
+        const codes = Array.from(new Set(matLines.map(m => m.product_code).filter(Boolean))) as string[];
+        const codeToId = new Map<string, string>();
+        if (codes.length) {
+          const { data: prods } = await supabase.from('catalog_products').select('id, product_code').in('product_code', codes);
+          (prods || []).forEach((p: any) => codeToId.set(p.product_code, p.id));
+        }
+        const matRows = matLines.map(m => ({
+          site_id: siteId!,
+          product_id: m.catalog_id || (m.product_code ? codeToId.get(m.product_code) || null : null),
+          material_name: m.name,
+          quantity: m.quantity,
+          unit: m.unit,
+          unit_cost: m.unit_cost,
+          total_cost: Math.round(m.quantity * m.unit_cost * 100) / 100,
+          notes: `Da preventivo ${quote.quote_number || ''}`.trim(),
+        }));
         if (matRows.length) {
           const { data: matIns, error: matErr } = await supabase.from('site_materials').insert(matRows).select('id');
           if (matErr) throw matErr;
           created.site_material_ids = (matIns || []).map(m => m.id);
         }
+
       }
 
       // Mark quote as converted
@@ -326,7 +407,10 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
 
           <div className="flex items-center gap-2">
             <Checkbox id="create-site" checked={createSite} onCheckedChange={(v) => setCreateSite(!!v)} />
-            <Label htmlFor="create-site" className="cursor-pointer">Crea cantiere da questa vendita (con budget e materiali del preventivo)</Label>
+            <Label htmlFor="create-site" className="cursor-pointer">
+              Crea cantiere da questa vendita ({matPreview.length} righe materiale dal preventivo)
+            </Label>
+
           </div>
         </div>
 
