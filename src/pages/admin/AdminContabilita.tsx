@@ -132,7 +132,7 @@ export default function AdminContabilita() {
   }, []);
 
   useRealtimeSubscription({
-    tables: ['customer_invoices', 'customer_payments', 'payment_schedules', 'supplier_payments', 'fixed_costs', 'variable_costs', 'commissions'],
+    tables: ['customer_invoices', 'customer_payments', 'payment_schedules', 'supplier_payments', 'fixed_costs', 'variable_costs', 'commissions', 'sales'],
     onDataChange: load,
   });
 
@@ -147,7 +147,9 @@ export default function AdminContabilita() {
   const totComOpen = commissions.filter(c => c.status !== 'pagata' && c.status !== 'paid').reduce((s, c) => s + c.amount, 0);
 
   const rataCols: DataTableColumn<Rata>[] = [
-    { key: 'invoice_number', header: 'Fattura' },
+    { key: 'origin', header: 'Origine' },
+    { key: 'invoice_number', header: 'Rata', cell: (r) => r.invoice_number || '—' },
+
     { key: 'customer', header: 'Cliente' },
     { key: 'amount', header: 'Importo', cell: (r) => <span className="font-semibold">{eur(r.amount)}</span> },
     { key: 'due_date', header: 'Scadenza', cell: (r) => r.due_date ? format(new Date(r.due_date), 'dd/MM/yyyy', { locale: it }) : '—' },
