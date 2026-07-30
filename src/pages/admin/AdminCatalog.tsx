@@ -104,6 +104,18 @@ const AdminCatalog = () => {
     enabled: !!historyProductId,
   });
 
+  const normKey = (p: any) =>
+    `${(p.name || "").toLowerCase().replace(/[^a-z0-9]/g, "")}|${(p.format || "").toLowerCase().replace(/[^a-z0-9]/g, "")}|${p.thickness_mm ?? ""}`;
+
+  const dupKeys = useMemo(() => {
+    const counts = new Map<string, number>();
+    (products as any[]).forEach((p) => {
+      const k = normKey(p);
+      counts.set(k, (counts.get(k) || 0) + 1);
+    });
+    return new Set(Array.from(counts.entries()).filter(([, n]) => n > 1).map(([k]) => k));
+  }, [products]);
+
   const filtered = useMemo(() => {
     return products.filter((p: any) => {
       const matchSearch = !search ||
@@ -112,9 +124,13 @@ const AdminCatalog = () => {
         p.supplier_code?.toLowerCase().includes(search.toLowerCase());
       const matchCat = filterCategory === "all" || p.category_id === filterCategory;
       const matchSup = filterSupplier === "all" || p.supplier_id === filterSupplier;
-      return matchSearch && matchCat && matchSup;
+      const matchIssue =
+        issueFilter === "all" ||
+        (issueFilter === "no-brand" && !p.brand_id) ||
+        (issueFilter === "dupes" && dupKeys.has(normKey(p)));
+      return matchSearch && matchCat && matchSup && matchIssue;
     });
-  }, [products, search, filterCategory, filterSupplier]);
+  }, [products, search, filterCategory, filterSupplier, issueFilter, dupKeys]);
 
   const { getRealStock, isLowStock, countLowStock } = useRealStock();
 
@@ -125,8 +141,11 @@ const AdminCatalog = () => {
       const margin = p.sale_price > 0 ? ((p.sale_price - p.net_cost) / p.sale_price) * 100 : 0;
       return margin < p.min_margin_percentage;
     }).length;
-    return { total, lowStock, lowMargin };
-  }, [products, countLowStock]);
+    const noBrand = (products as any[]).filter((p) => !p.brand_id).length;
+    const dupes = (products as any[]).filter((p) => dupKeys.has(normKey(p))).length;
+    return { total, lowStock, lowMargin, noBrand, dupes };
+  }, [products, countLowStock, dupKeys]);
+
 
   const openNew = () => {
     setEditing(null);
