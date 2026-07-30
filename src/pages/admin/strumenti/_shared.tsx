@@ -306,8 +306,43 @@ export function useBrandPricingRule<
     }, { onConflict: 'brand_id' });
   };
 
-  return { settings, update, brandId, loading };
 }
+
+// ─────────────────────────────────────────────────────────────
+// DEFAULT DI LISTINO — stessi valori usati come `defaults` nelle
+// pagine Pricing. Servono da fallback condiviso quando in
+// pricing_rules non esiste ancora una riga per quel brand, così
+// il prezzo del preventivatore coincide con quello del Pricing.
+// ─────────────────────────────────────────────────────────────
+export const PRICING_KEY_DEFAULTS: Record<
+  PricingCatalogKey,
+  { coeff: number; markupPct: number }
+> = {
+  flow: { coeff: 0.45, markupPct: 60 },
+  kronos: { coeff: 0.5 * 0.8 * 0.9, markupPct: 70 },
+  berryalloc: { coeff: 0.45, markupPct: 60 },
+  parquet: { coeff: 0.45, markupPct: 60 },
+  signature: { coeff: 0.45, markupPct: 60 },
+  externo: { coeff: 0.45, markupPct: 60 },
+};
+
+// Risolve la chiave listino a partire da brand/collezione del prodotto.
+export function resolvePricingKey(
+  brandLower: string,
+  collectionLower: string
+): PricingCatalogKey | null {
+  const keys = Object.keys(PRICING_BRAND_MATCH) as PricingCatalogKey[];
+  // signature prima di parquet: parquet la esclude esplicitamente
+  const ordered: PricingCatalogKey[] = [
+    'signature',
+    ...keys.filter((k) => k !== 'signature'),
+  ];
+  for (const k of ordered) {
+    if (PRICING_BRAND_MATCH[k](brandLower, collectionLower)) return k;
+  }
+  return null;
+}
+
 
 // Map brandName-lowercase → { coeff, markupMult } for CreaPreventivo
 export async function fetchBrandPricingMap(): Promise<
