@@ -292,23 +292,29 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
           created.site_id = siteId;
         }
 
-        // e) site_materials from quote items
-        const matRows = items
-          .filter(i => Number(i.quantity_sqm) > 0)
-          .map(i => ({
-            site_id: siteId!,
-            material_name: [i.product_type, i.color].filter(Boolean).join(' — '),
-            quantity: Number(i.quantity_sqm) || 0,
-            unit: 'mq',
-            unit_cost: Number(i.unit_price) || 0,
-            total_cost: Number(i.total_price) || (Number(i.quantity_sqm) * Number(i.unit_price)),
-            notes: `Da preventivo ${quote.quote_number || ''}`.trim(),
-          }));
+        // e) site_materials dalle righe del preventivo (con risoluzione product_id sul catalogo)
+        const codes = Array.from(new Set(matLines.map(m => m.product_code).filter(Boolean))) as string[];
+        const codeToId = new Map<string, string>();
+        if (codes.length) {
+          const { data: prods } = await supabase.from('catalog_products').select('id, product_code').in('product_code', codes);
+          (prods || []).forEach((p: any) => codeToId.set(p.product_code, p.id));
+        }
+        const matRows = matLines.map(m => ({
+          site_id: siteId!,
+          product_id: m.catalog_id || (m.product_code ? codeToId.get(m.product_code) || null : null),
+          material_name: m.name,
+          quantity: m.quantity,
+          unit: m.unit,
+          unit_cost: m.unit_cost,
+          total_cost: Math.round(m.quantity * m.unit_cost * 100) / 100,
+          notes: `Da preventivo ${quote.quote_number || ''}`.trim(),
+        }));
         if (matRows.length) {
           const { data: matIns, error: matErr } = await supabase.from('site_materials').insert(matRows).select('id');
           if (matErr) throw matErr;
           created.site_material_ids = (matIns || []).map(m => m.id);
         }
+
       }
 
       // Mark quote as converted
