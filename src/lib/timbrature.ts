@@ -34,24 +34,45 @@ export interface TimeEntry {
 }
 
 /** Returns the logical next events allowed after the last recorded one. */
-export function nextEvents(lastType: TimbratureEventType | null): TimbratureEventType[] {
+export function nextEvents(lastType: TimbratureEventType | null, entries: TimeEntry[] = []): TimbratureEventType[] {
+  let candidates: TimbratureEventType[];
   switch (lastType) {
     case null:
-      return ['start_home'];
+      candidates = ['start_home'];
+      break;
     case 'start_home':
-      return ['arrive_site', 'arrive_home'];
+      candidates = ['arrive_site'];
+      break;
     case 'arrive_site':
-      return ['pause_start', 'leave_site'];
+      candidates = ['pause_start', 'leave_site'];
+      break;
     case 'pause_start':
-      return ['pause_end'];
+      candidates = ['pause_end'];
+      break;
     case 'pause_end':
-      return ['arrive_site', 'leave_site', 'pause_start'];
+      candidates = ['arrive_site', 'leave_site', 'pause_start'];
+      break;
     case 'leave_site':
-      return ['arrive_home', 'arrive_site'];
+      candidates = ['arrive_home', 'arrive_site'];
+      break;
     case 'arrive_home':
-      return []; // giornata chiusa
+      candidates = []; // giornata chiusa
+      break;
   }
+  // La giornata si può chiudere solo se tutte le tappe obbligatorie sono state timbrate
+  const missing = missingRequired(entries);
+  return candidates.filter((c) => {
+    if (c !== 'arrive_home') return true;
+    return missing.filter((m) => m !== 'arrive_home').length === 0;
+  });
 }
+
+/** Tappe obbligatorie non ancora timbrate nella giornata. */
+export function missingRequired(entries: TimeEntry[]): TimbratureEventType[] {
+  const done = new Set(entries.map((e) => e.event_type));
+  return REQUIRED_EVENTS.filter((t) => !done.has(t));
+}
+
 
 interface RecordOptions {
   userId: string;
@@ -114,9 +135,12 @@ export function todayKey(d = new Date()): string {
 export const REQUIRED_EVENTS: TimbratureEventType[] = [
   'start_home',
   'arrive_site',
+  'pause_start',
+  'pause_end',
   'leave_site',
   'arrive_home',
 ];
+
 
 /** Ordine di visualizzazione delle tappe nel riepilogo giornaliero. */
 export const STAGE_ORDER: TimbratureEventType[] = [

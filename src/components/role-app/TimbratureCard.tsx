@@ -6,6 +6,7 @@ import { Loader2, MapPin, AlertTriangle } from 'lucide-react';
 import {
   EVENT_LABELS,
   nextEvents,
+  missingRequired,
   recordTimbratura,
   summarizeDay,
   formatHM,
@@ -82,8 +83,9 @@ const TimbratureCard = () => {
   }, [user, load]);
 
   const lastType: TimbratureEventType | null = entries.length ? entries[entries.length - 1].event_type : null;
-  const next = nextEvents(lastType);
+  const next = nextEvents(lastType, entries);
   const summary = summarizeDay(entries);
+  const missing = missingRequired(entries);
 
   const handleClick = async (type: TimbratureEventType) => {
     if (!user) return;
@@ -189,6 +191,18 @@ const TimbratureCard = () => {
               <div className="text-[12px] text-[#6B6258] mt-1">
                 Lavorate {formatHM(summary.workMinutes)} · Pausa {formatHM(summary.pauseMinutes)}
                 {summary.siteMinutes > 0 ? ` · In cantiere ${formatHM(summary.siteMinutes)}` : ''}
+              </div>
+            </div>
+          )}
+
+          {missing.length > 0 && (
+            <div className="rounded-lg bg-[#FDF6E7] border border-[#E8D9B5] p-3">
+              <div className="text-[12px] font-medium text-[#8B6F4E]">Tappe obbligatorie mancanti</div>
+              <div className="text-[12px] text-[#6B6258] mt-1">
+                {missing.map((m) => EVENT_LABELS[m].short).join(' · ')}
+              </div>
+              <div className="text-[11px] text-[#8C7B6B] mt-1 italic">
+                Devi timbrare tutte le tappe prima di poter chiudere la giornata.
               </div>
             </div>
           )}
