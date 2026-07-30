@@ -324,7 +324,14 @@ const AdminOverview = () => {
     const all = [
       ...preventivi.filter(x => inRange(x.data || x.created_at, range.start, range.end)).map(x => x.stato),
       ...quotes.filter(x => inRange(x.created_at, range.start, range.end))
-        .map(x => x.status === 'accepted' ? 'accettato' : x.status === 'rejected' ? 'rifiutato' : x.status === 'sent' ? 'inviato' : 'bozza'),
+        .map(x => {
+          const s = (x.status || '').toLowerCase();
+          if (['accepted', 'accettato', 'converted', 'vinta', 'fatturato'].includes(s)) return 'accettato';
+          if (['rejected', 'rifiutato', 'persa'].includes(s)) return 'rifiutato';
+          if (s === 'sent' || s === 'inviato') return 'inviato';
+          return 'bozza';
+        }),
+
     ];
     return {
       tot: all.length,
