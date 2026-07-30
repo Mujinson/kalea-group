@@ -124,6 +124,63 @@ export default function CatalogImportFlags() {
     setTotals((t) => ({ ...t, resolved: t.resolved + 1, pending: t.pending - 1 }));
   };
 
+  const [bulkBusy, setBulkBusy] = useState(false);
+
+  const bulkCreateNoMatch = async () => {
+    const targets = rows.filter((r) => r.issue_note === "no_match_in_db");
+    if (!targets.length) return;
+    if (!window.confirm(`Creare ${targets.length} nuovi prodotti a catalogo dalle righe "Non in DB"?`)) return;
+    setBulkBusy(true);
+    const payload = targets.map((r) => {
+      const csv = r.csv_row || {};
+      const priceBase = num(csv.prezzo_base_mq);
+      return {
+        brand: (csv.brand || "").trim() || null,
+        name: (csv.name || "").trim() || "Prodotto importato",
+        format: (csv.format || "").trim() || null,
+        price_base_sqm: priceBase,
+        price_over_pallet_sqm: num(csv.prezzo_oltre_paletta_mq),
+        price_over_3_pallets_sqm: num(csv.prezzo_oltre_3_palette_mq),
+        list_price: priceBase,
+        is_active: true,
+        unit_of_measure: "mq",
+      };
+    });
+    const { error } = await supabase.from("catalog_products").insert(payload as any);
+    if (error) {
+      toast.error("Errore: " + error.message);
+      setBulkBusy(false);
+      return;
+    }
+    const ids = targets.map((r) => r.id);
+    for (let i = 0; i < ids.length; i += 100) {
+      await supabase.from("catalog_import_flags").update({ resolved: true }).in("id", ids.slice(i, i + 100));
+    }
+    toast.success(`${targets.length} prodotti creati`);
+    setBulkBusy(false);
+    load();
+  };
+
+  const bulkResolveAll = async () => {
+    const targets = filtered;
+    if (!targets.length) return;
+    if (!window.confirm(`Segnare ${targets.length} segnalazioni come risolte? L'operazione non modifica il catalogo.`)) return;
+    setBulkBusy(true);
+    const ids = targets.map((r) => r.id);
+    for (let i = 0; i < ids.length; i += 100) {
+      const { error } = await supabase.from("catalog_import_flags").update({ resolved: true }).in("id", ids.slice(i, i + 100));
+      if (error) {
+        toast.error("Errore: " + error.message);
+        setBulkBusy(false);
+        return;
+      }
+    }
+    toast.success(`${targets.length} segnalazioni archiviate`);
+    setBulkBusy(false);
+    load();
+  };
+
+
   return (
     <div className="space-y-4">
       <PageHeader
