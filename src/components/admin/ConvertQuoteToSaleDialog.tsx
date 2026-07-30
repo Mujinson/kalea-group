@@ -188,14 +188,17 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     };
 
     try {
-      const items = Array.isArray(quote.items) ? quote.items : [];
-      const firstItem = items[0];
-      const totalQty = items.reduce((s, i) => s + (Number(i.quantity_sqm) || 0), 0);
+      const items: any[] = Array.isArray(quote.items) ? quote.items : [];
+      const matLines = extractMaterialLines(quote);
+      const firstItem: any = items[0];
+      const totalQty = matLines.filter(m => m.unit === 'mq').reduce((s, m) => s + m.quantity, 0)
+        || items.reduce((s: number, i: any) => s + (Number(i.quantity_sqm) || 0), 0);
       const totalAmount = Number(quote.total_amount) || 0;
       const vatAmount = Number(quote.vat_amount) || 0;
       const sub = totalAmount - vatAmount;
       const unitPrice = totalQty > 0 ? sub / totalQty : 0;
       const vatRate = quote.vat_included ? 0 : 0.22;
+
 
       // a) Sale
       const { data: sale, error: saleErr } = await supabase.from('sales').insert({
