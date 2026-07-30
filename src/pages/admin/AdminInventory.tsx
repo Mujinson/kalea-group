@@ -235,8 +235,19 @@ const AdminInventory = () => {
   const tappetino = calculateTotalStock('Tappetino');
   const profili = calculateTotalStock('Profili');
   
-  const lowStockAlerts = [...mgoStockByColor, ...cwcStockByVariant].filter(s => s.status !== 'ok' && s.quantity > 0);
+  // Avvisi sotto scorta: unica fonte = min_stock + stock reale calcolato dai movimenti
+  const lowStockAlerts = catalogRows
+    .filter((r) => r.low)
+    .map((r) => ({
+      product: r.brand || r.product_code,
+      color: r.product_name,
+      quantity: r.stock,
+      min: r.min,
+      avgCost: 0,
+      status: (r.stock <= 0 ? 'critical' : r.stock < r.min * 0.5 ? 'urgent' : 'warning') as 'ok' | 'warning' | 'urgent' | 'critical',
+    }));
   const criticalAlerts = lowStockAlerts.filter(s => s.status === 'critical');
+
 
   const getStatusBadge = (status: string, quantity: number) => {
     if (quantity <= 0) return <Badge variant="destructive">Esaurito</Badge>;
