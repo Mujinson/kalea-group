@@ -372,13 +372,14 @@ const AdminInventory = () => {
                   alert.status === 'urgent' ? 'bg-orange-100 text-orange-800' :
                   'bg-yellow-100 text-yellow-800'
                 }`}>
-                  <strong>Rifornire {alert.color}</strong>: {alert.quantity.toFixed(0)} mq
+                  <strong>Rifornire {alert.color}</strong>: {alert.quantity.toFixed(0)} / min {alert.min.toFixed(0)}
                 </div>
               ))}
             </div>
           </CardContent>
         </Card>
       )}
+
 
 
       {/* Detailed Stock Tabs */}
