@@ -299,7 +299,12 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
             created.commission_id = comm.id;
           } else {
             // patch existing to link sale_id
-            await supabase.from('commissions').update({ sale_id: sale.id }).eq('id', existing.id);
+            await supabase.from('commissions').update({
+              sale_id: sale.id,
+              customer_id: quote.customer_id,
+              customer_name: customerName,
+            }).eq('id', existing.id);
+
           }
         }
       }
