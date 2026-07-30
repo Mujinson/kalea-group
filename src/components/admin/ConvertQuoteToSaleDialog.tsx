@@ -203,8 +203,9 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       // a) Sale
       const { data: sale, error: saleErr } = await supabase.from('sales').insert({
         customer_id: quote.customer_id,
-        product_type: firstItem?.product_type || 'MgO',
-        color: firstItem?.color || null,
+        product_type: firstItem?.product_type || quote.quote_data?.prodotto?.nome || quote.subject || 'MgO',
+        color: firstItem?.color || quote.quote_data?.tonalita?.[0]?.nome || null,
+
         quantity_sqm: totalQty,
         sale_price: unitPrice,
         vat_included: quote.vat_included,
