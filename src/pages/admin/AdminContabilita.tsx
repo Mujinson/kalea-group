@@ -42,7 +42,7 @@ export default function AdminContabilita() {
     try {
       const [invRes, schedRes, payRes, supRes, fcRes, vcRes, comRes] = await Promise.all([
         supabase.from('customer_invoices').select('id, invoice_number, customer_id, total, paid_amount, status, due_date').neq('status', 'annullata'),
-        supabase.from('payment_schedules').select('id, invoice_id, amount, due_date, is_paid, paid_date').order('due_date', { ascending: true, nullsFirst: false }),
+        supabase.from('payment_schedules').select('id, invoice_id, sale_id, amount, due_date, is_paid, paid_date, payment_type').order('due_date', { ascending: true, nullsFirst: false }),
         supabase.from('customer_payments').select('id, payment_date, amount'),
         supabase.from('supplier_payments').select('id, payment_date, payment_amount'),
         supabase.from('fixed_costs').select('id, amount, frequency, created_at'),
@@ -50,10 +50,18 @@ export default function AdminContabilita() {
         supabase.from('commissions').select('id, user_id, customer_id, customer_name, base_amount, percentage, amount, status, paid_at').order('created_at', { ascending: false }),
       ]);
 
+      // Vendite collegate alle rate senza fattura
+      const saleIds = Array.from(new Set((schedRes.data || []).map((s: any) => s.sale_id).filter(Boolean)));
+      const salesRes = saleIds.length
+        ? await supabase.from('sales').select('id, customer_id, sale_date, total_amount').in('id', saleIds)
+        : { data: [] as any[] };
+      const saleById = new Map((salesRes.data || []).map((s: any) => [s.id, s]));
+
       const invById = new Map((invRes.data || []).map((i: any) => [i.id, i]));
       const customerIds = Array.from(new Set([
         ...((invRes.data || []).map((i: any) => i.customer_id)),
         ...((comRes.data || []).map((c: any) => c.customer_id)),
+        ...((salesRes.data || []).map((s: any) => s.customer_id)),
       ].filter(Boolean)));
 
       const [custRes, spRes] = await Promise.all([
@@ -63,21 +71,27 @@ export default function AdminContabilita() {
       const custMap = new Map((custRes.data || []).map((c: any) => [c.id, c.company_name || `${c.first_name || ''} ${c.last_name || ''}`.trim()]));
       const spByUser = new Map((spRes.data || []).map((s: any) => [s.user_id, s.full_name]));
 
-      // Rate collegate a fatture
-      const rataRows: Rata[] = (schedRes.data || [])
-        .filter((s: any) => s.invoice_id)
-        .map((s: any) => {
-          const inv: any = invById.get(s.invoice_id);
-          return {
-            id: s.id,
-            invoice_number: inv?.invoice_number || '—',
-            customer: custMap.get(inv?.customer_id) || '—',
-            amount: Number(s.amount || 0),
-            due_date: s.due_date,
-            is_paid: !!s.is_paid,
-            paid_date: s.paid_date,
-          };
-        });
+      // Tutte le rate: da fattura oppure da vendita (conversione preventivo)
+      const rataRows: Rata[] = (schedRes.data || []).map((s: any) => {
+        const inv: any = s.invoice_id ? invById.get(s.invoice_id) : null;
+        const sale: any = !inv && s.sale_id ? saleById.get(s.sale_id) : null;
+        const origin = inv
+          ? `Fattura ${inv.invoice_number || '—'}`
+          : sale
+            ? `Vendita del ${sale.sale_date ? format(new Date(sale.sale_date), 'dd/MM/yyyy', { locale: it }) : '—'}`
+            : 'Rata manuale';
+        return {
+          id: s.id,
+          invoice_number: s.payment_type || inv?.invoice_number || '—',
+          origin,
+          customer: custMap.get(inv?.customer_id) || custMap.get(sale?.customer_id) || '—',
+          amount: Number(s.amount || 0),
+          due_date: s.due_date,
+          is_paid: !!s.is_paid,
+          paid_date: s.paid_date,
+        };
+      });
+
 
       // Cash flow ultimi 6 mesi
       const months: CashRow[] = [];
