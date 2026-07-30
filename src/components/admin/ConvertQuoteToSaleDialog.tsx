@@ -36,7 +36,74 @@ interface QuoteForConvert {
   project_name?: string | null;
   subject?: string | null;
   lead_id?: string | null;
+  quote_data?: any;
 }
+
+/** Riga materiale normalizzata dal payload del preventivo */
+interface MatLine {
+  name: string;
+  quantity: number;
+  unit: string;
+  unit_cost: number;
+  product_code?: string | null;
+  catalog_id?: string | null;
+}
+
+/** Estrae le righe materiale dal payload items/quote_data del preventivo. */
+export const extractMaterialLines = (quote: QuoteForConvert): MatLine[] => {
+  const items: any[] = Array.isArray(quote.items) ? quote.items : [];
+  const qd = quote.quote_data || {};
+  const prodCode: string | null = qd?.prodotto?.id || null;
+  const costoMatMq = Number(qd?.calc?.costoMatMq) || 0;
+  const out: MatLine[] = [];
+
+  for (const it of items) {
+    const type = String(it?.type || '');
+    if (type === 'prodotto') {
+      const unitCost = costoMatMq || Number(it.prezzo_mq) || 0;
+      const tonalita: any[] = Array.isArray(it.tonalita) ? it.tonalita : [];
+      if (tonalita.length > 0) {
+        for (const t of tonalita) {
+          const mq = Number(t?.mq) || 0;
+          if (mq <= 0) continue;
+          out.push({
+            name: [it.descrizione, t?.nome].filter(Boolean).join(' — '),
+            quantity: mq,
+            unit: 'mq',
+            unit_cost: unitCost,
+            product_code: prodCode,
+          });
+        }
+      } else {
+        const mq = Number(it.mq) || Number(it.quantity_sqm) || 0;
+        if (mq > 0) {
+          out.push({ name: it.descrizione || 'Materiale', quantity: mq, unit: 'mq', unit_cost: unitCost, product_code: prodCode });
+        }
+      }
+    } else if (type === 'extra' || type === 'articolo' || type === 'accessorio') {
+      const qty = Number(it.qta) || 0;
+      if (qty <= 0) continue;
+      out.push({
+        name: it.descrizione || 'Voce',
+        quantity: qty,
+        unit: it.unita || 'pz',
+        unit_cost: Number(it.prezzo_un) || 0,
+        catalog_id: it.catalog_id || null,
+        product_code: it.codice || null,
+      });
+    } else if (!type && Number(it?.quantity_sqm) > 0) {
+      // formato legacy
+      out.push({
+        name: [it.product_type, it.color].filter(Boolean).join(' — ') || 'Materiale',
+        quantity: Number(it.quantity_sqm) || 0,
+        unit: 'mq',
+        unit_cost: Number(it.unit_price) || 0,
+      });
+    }
+  }
+  return out;
+};
+
 
 interface Rate {
   key: string;
