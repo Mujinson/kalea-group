@@ -23,6 +23,7 @@ import {
   Settings,
   Users,
   BarChart3,
+  Percent,
   FileText,
   UserPlus,
   Kanban,
