@@ -336,13 +336,7 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
           created.site_id = siteId;
         }
 
-        // e) site_materials dalle righe del preventivo (con risoluzione product_id sul catalogo)
-        const codes = Array.from(new Set(matLines.map(m => m.product_code).filter(Boolean))) as string[];
-        const codeToId = new Map<string, string>();
-        if (codes.length) {
-          const { data: prods } = await supabase.from('catalog_products').select('id, product_code').in('product_code', codes);
-          (prods || []).forEach((p: any) => codeToId.set(p.product_code, p.id));
-        }
+        // e) site_materials dalle righe del preventivo (product_id già risolto sopra)
         const matRows = matLines.map(m => ({
           site_id: siteId!,
           product_id: m.catalog_id || (m.product_code ? codeToId.get(m.product_code) || null : null),
