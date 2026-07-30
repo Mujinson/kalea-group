@@ -288,6 +288,8 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
               quote_id: quote.id,
               sale_id: sale.id,
               customer_id: quote.customer_id,
+              customer_name: customerName,
+
               base_amount: sub,
               percentage: pct,
               amount: Math.round((sub * pct / 100) * 100) / 100,
