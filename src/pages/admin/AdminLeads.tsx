@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import {
   Search, Plus, Filter as FilterIcon, Columns3, Download, MoreVertical,
-  Pencil, Eye, Archive, ArchiveRestore, Trash2, FileText, MapPin,
+  Pencil, Eye, Archive, ArchiveRestore, Trash2, FileText, MapPin, Copy,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -20,6 +20,7 @@ import { fetchAllRows } from '@/lib/fetchAllRows';
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmTableCard } from '@/components/admin/CrmShell';
 import LeadFormDrawer from '@/components/admin/leads/LeadFormDrawer';
 import LeadDetailSheet from '@/components/admin/leads/LeadDetailSheet';
+import LeadDuplicatesDialog from '@/components/admin/leads/LeadDuplicatesDialog';
 import { LeadStatusBadge } from '@/components/admin/leads/LeadStatusBadge';
 import { LEAD_STATUSES, LEAD_SOURCES, sourceLabel } from '@/components/admin/leads/leadConstants';
 import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
