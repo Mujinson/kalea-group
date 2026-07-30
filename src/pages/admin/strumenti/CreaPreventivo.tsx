@@ -1073,12 +1073,20 @@ export default function CreaPreventivo() {
         const mapped: ProdottoCalcolo[] = data.map((p: any) => {
           const brandName: string = p.catalog_brands?.name ?? "Altro";
           const brand = brandName.toLowerCase();
+          const collLower = String(p.collection ?? "").toLowerCase();
           const rule = brandMap[brand] ?? {};
+          // Fallback: stessi coefficienti di default delle pagine Pricing,
+          // così il prezzo proposto coincide con quello mostrato lì.
+          const pricingKey = resolvePricingKey(brand, collLower);
+          const keyDefaults = pricingKey ? PRICING_KEY_DEFAULTS[pricingKey] : null;
           const disc = p.supplier_discount_percentage ?? 0;
           const coeffFromProduct = parseFloat(((100 - disc) / 100).toFixed(4));
-          const coeff = rule.coeff ?? coeffFromProduct;
-          const mkMult = rule.markupMult ?? MARKUP;
+          const coeff = rule.coeff ?? keyDefaults?.coeff ?? coeffFromProduct;
+          const mkMult =
+            rule.markupMult ??
+            (keyDefaults ? 1 + keyDefaults.markupPct / 100 : MARKUP);
           const collezione = (p.collection ?? "").toLowerCase();
+
 
           let tappetino: "mai" | "sempre" | "opzionale" = "mai";
           if (collezione.includes("laminato") || collezione.includes("laminate")) {
