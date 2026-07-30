@@ -145,7 +145,7 @@ export default function AdminMargini() {
           subtitle: [s.city, sale ? 'con vendita' : 'senza vendita'].filter(Boolean).join(' · '),
           date: sale?.sale_date || s.start_date || s.planned_start_date || s.created_at?.slice(0, 10) || null,
           salespersonId: s.salesperson_id || null,
-          salespersonName: (s.salesperson_id && spName.get(s.salesperson_id)) || '—',
+          salespersonName: String((s.salesperson_id && spName.get(s.salesperson_id)) || '—'),
           revenue,
           materials: (matBySite.get(s.id) || 0) + (sale ? matBySale.get(sale.id) || 0 : 0),
           labor: laborBySite.get(s.id) || 0,
