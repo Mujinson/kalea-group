@@ -306,7 +306,9 @@ export function useBrandPricingRule<
     }, { onConflict: 'brand_id' });
   };
 
+  return { settings, update, brandId, loading };
 }
+
 
 // ─────────────────────────────────────────────────────────────
 // DEFAULT DI LISTINO — stessi valori usati come `defaults` nelle
