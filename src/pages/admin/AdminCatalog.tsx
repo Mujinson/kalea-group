@@ -311,8 +311,14 @@ const AdminCatalog = () => {
             <SelectItem value="dupes">Possibili doppioni ({stats.dupes})</SelectItem>
           </SelectContent>
         </Select>
+        {issueFilter === "dupes" && stats.dupes > 0 && (
+          <Button variant="outline" size="sm" onClick={deactivateDuplicates}>
+            Disattiva doppioni (tieni il più vecchio)
+          </Button>
+        )}
 
       </div>
+
 
       {/* Table */}
       <div className="bg-white rounded-lg border overflow-hidden" style={{ borderColor: "rgba(59,35,20,0.1)" }}>
