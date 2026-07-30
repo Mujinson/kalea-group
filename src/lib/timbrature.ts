@@ -135,9 +135,12 @@ export function todayKey(d = new Date()): string {
 export const REQUIRED_EVENTS: TimbratureEventType[] = [
   'start_home',
   'arrive_site',
+  'pause_start',
+  'pause_end',
   'leave_site',
   'arrive_home',
 ];
+
 
 /** Ordine di visualizzazione delle tappe nel riepilogo giornaliero. */
 export const STAGE_ORDER: TimbratureEventType[] = [
