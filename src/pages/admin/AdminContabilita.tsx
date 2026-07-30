@@ -15,12 +15,14 @@ const eur = (n: number) => `€${Math.round(n || 0).toLocaleString('it-IT')}`;
 type Rata = {
   id: string;
   invoice_number: string;
+  origin: string;
   customer: string;
   amount: number;
   due_date: string | null;
   is_paid: boolean;
   paid_date: string | null;
 };
+
 
 type CashRow = { month: string; entrate: number; uscite: number; netto: number };
 
