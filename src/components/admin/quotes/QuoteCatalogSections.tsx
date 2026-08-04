@@ -217,6 +217,19 @@ function Section({
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSel, setPickerSel] = useState<CatalogProduct | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+
+  const moveLine = (fromId: string, toId: string) => {
+    if (fromId === toId) return;
+    const from = lines.findIndex((l) => l.id === fromId);
+    const to = lines.findIndex((l) => l.id === toId);
+    if (from < 0 || to < 0) return;
+    const next = [...lines];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setLines(next);
+  };
 
   const total = lines.reduce((s, l) => {
     const lordo = (Number(l.quantity) || 0) * (Number(l.unit_price) || 0);
@@ -248,10 +261,17 @@ function Section({
           key={l.id}
           line={l}
           ivaRate={ivaRate}
+          dragging={dragId === l.id}
+          dragOver={overId === l.id && dragId !== l.id}
+          onDragStart={() => setDragId(l.id)}
+          onDragOver={(e) => { e.preventDefault(); setOverId(l.id); }}
+          onDrop={() => { if (dragId) moveLine(dragId, l.id); setDragId(null); setOverId(null); }}
+          onDragEnd={() => { setDragId(null); setOverId(null); }}
           onChange={(patch) => setLines(lines.map((x) => (x.id === l.id ? { ...x, ...patch } : x)))}
           onDelete={() => setLines(lines.filter((x) => x.id !== l.id))}
         />
       ))}
+
 
 
       {pickerOpen && (
