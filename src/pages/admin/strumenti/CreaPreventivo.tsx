@@ -2762,7 +2762,8 @@ export default function CreaPreventivo() {
 
             {/* Footer */}
             <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid #E0DDD8",textAlign:"center",fontSize:11,color:"#9A9890"}}>
-              Kalēa · Desenzano del Garda (BS) · info@kalea.space · kalea.space · P.IVA IT_____________
+              <div>Kalēa · Desenzano del Garda (BS) · info@kalea.space · kalea.space · P.IVA: 04797310986</div>
+              <div style={{marginTop:2,color:"#6B6860"}}>Kalea Group Srl</div>
             </div>
           </div>
         </div>
