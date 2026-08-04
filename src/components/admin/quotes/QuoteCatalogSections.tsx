@@ -91,24 +91,58 @@ function LineRow({
   onChange,
   onDelete,
   ivaRate,
+  dragging,
+  dragOver,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onDragEnd,
 }: {
   line: CatalogLine;
   onChange: (patch: Partial<CatalogLine>) => void;
   onDelete: () => void;
   ivaRate: number;
+  dragging?: boolean;
+  dragOver?: boolean;
+  onDragStart?: () => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDrop?: () => void;
+  onDragEnd?: () => void;
 }) {
   const lordo = (Number(line.quantity) || 0) * (Number(line.unit_price) || 0);
   const imponibile = lordo * (1 - (Number(line.discount_pct) || 0) / 100);
   const iva = imponibile * ((Number(ivaRate) || 0) / 100);
   return (
-    <div style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #E0DDD8", background: "#FBFAF7", marginBottom: 10 }}>
+    <div
+      onDragOver={onDragOver}
+      onDrop={(e) => { e.preventDefault(); onDrop?.(); }}
+      style={{
+        padding: "10px 12px",
+        borderRadius: 8,
+        border: dragOver ? "1px solid #C8A96E" : "1px solid #E0DDD8",
+        boxShadow: dragOver ? "0 -2px 0 #C8A96E inset" : undefined,
+        background: "#FBFAF7",
+        marginBottom: 10,
+        opacity: dragging ? 0.45 : 1,
+      }}
+    >
       <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, alignItems: "center" }}>
+        <div
+          draggable
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          title="Trascina per riordinare"
+          style={{ cursor: "grab", color: "#9A9890", display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <GripVertical className="w-4 h-4" />
+        </div>
         <input
           value={line.code || ""}
           onChange={(e) => onChange({ code: e.target.value })}
           placeholder="Codice"
           style={{ padding: "7px 8px", borderRadius: 6, border: "1px solid #E0DDD8", fontSize: 12, minWidth: 0 }}
         />
+
         <div style={{ minWidth: 0 }}>
           <input
             value={line.name}
