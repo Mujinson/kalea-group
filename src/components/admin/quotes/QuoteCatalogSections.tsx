@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CatalogProductPicker, { CatalogProduct } from "@/components/admin/cantieri/CatalogProductPicker";
-import { Plus, Trash2, X } from "lucide-react";
+import { Plus, Trash2, X, GripVertical } from "lucide-react";
 
 export interface CatalogLine {
   id: string;
@@ -68,12 +68,13 @@ function emptyLine(unit = "a corpo"): CatalogLine {
   };
 }
 
-const GRID = "90px minmax(0,2fr) 70px 80px 90px 90px 26px";
+const GRID = "22px 90px minmax(0,2fr) 70px 80px 90px 90px 26px";
 
 function HeaderRow() {
   const th: React.CSSProperties = { fontSize: 10, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".06em" };
   return (
     <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, padding: "0 12px 6px", alignItems: "center" }}>
+      <span />
       <span style={th}>Codice</span>
       <span style={th}>Descrizione</span>
       <span style={th}>Unità</span>
@@ -90,24 +91,58 @@ function LineRow({
   onChange,
   onDelete,
   ivaRate,
+  dragging,
+  dragOver,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onDragEnd,
 }: {
   line: CatalogLine;
   onChange: (patch: Partial<CatalogLine>) => void;
   onDelete: () => void;
   ivaRate: number;
+  dragging?: boolean;
+  dragOver?: boolean;
+  onDragStart?: () => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDrop?: () => void;
+  onDragEnd?: () => void;
 }) {
   const lordo = (Number(line.quantity) || 0) * (Number(line.unit_price) || 0);
   const imponibile = lordo * (1 - (Number(line.discount_pct) || 0) / 100);
   const iva = imponibile * ((Number(ivaRate) || 0) / 100);
   return (
-    <div style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #E0DDD8", background: "#FBFAF7", marginBottom: 10 }}>
+    <div
+      onDragOver={onDragOver}
+      onDrop={(e) => { e.preventDefault(); onDrop?.(); }}
+      style={{
+        padding: "10px 12px",
+        borderRadius: 8,
+        border: dragOver ? "1px solid #C8A96E" : "1px solid #E0DDD8",
+        boxShadow: dragOver ? "0 -2px 0 #C8A96E inset" : undefined,
+        background: "#FBFAF7",
+        marginBottom: 10,
+        opacity: dragging ? 0.45 : 1,
+      }}
+    >
       <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, alignItems: "center" }}>
+        <div
+          draggable
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          title="Trascina per riordinare"
+          style={{ cursor: "grab", color: "#9A9890", display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <GripVertical className="w-4 h-4" />
+        </div>
         <input
           value={line.code || ""}
           onChange={(e) => onChange({ code: e.target.value })}
           placeholder="Codice"
           style={{ padding: "7px 8px", borderRadius: 6, border: "1px solid #E0DDD8", fontSize: 12, minWidth: 0 }}
         />
+
         <div style={{ minWidth: 0 }}>
           <input
             value={line.name}
@@ -182,6 +217,19 @@ function Section({
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSel, setPickerSel] = useState<CatalogProduct | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [overId, setOverId] = useState<string | null>(null);
+
+  const moveLine = (fromId: string, toId: string) => {
+    if (fromId === toId) return;
+    const from = lines.findIndex((l) => l.id === fromId);
+    const to = lines.findIndex((l) => l.id === toId);
+    if (from < 0 || to < 0) return;
+    const next = [...lines];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setLines(next);
+  };
 
   const total = lines.reduce((s, l) => {
     const lordo = (Number(l.quantity) || 0) * (Number(l.unit_price) || 0);
@@ -213,10 +261,17 @@ function Section({
           key={l.id}
           line={l}
           ivaRate={ivaRate}
+          dragging={dragId === l.id}
+          dragOver={overId === l.id && dragId !== l.id}
+          onDragStart={() => setDragId(l.id)}
+          onDragOver={(e) => { e.preventDefault(); setOverId(l.id); }}
+          onDrop={() => { if (dragId) moveLine(dragId, l.id); setDragId(null); setOverId(null); }}
+          onDragEnd={() => { setDragId(null); setOverId(null); }}
           onChange={(patch) => setLines(lines.map((x) => (x.id === l.id ? { ...x, ...patch } : x)))}
           onDelete={() => setLines(lines.filter((x) => x.id !== l.id))}
         />
       ))}
+
 
 
       {pickerOpen && (
