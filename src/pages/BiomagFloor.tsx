@@ -127,21 +127,21 @@ const BiomagFloor = () => {
     <div className="relative bg-background">
       <SEOHead
         title={language === 'it' ? "BIOMAG FLOOR® — Pavimento in Fibra Naturale | Kalēa®" :
-               language === 'en' ? "BIOMAG FLOOR® — Natural Fiber Floating Floor | Kalēa®" :
-               language === 'de' ? "BIOMAG FLOOR® — Naturfaser-Schwimmboden | Kalēa®" :
-               "BIOMAG FLOOR® — Sol Flottant Fibre Naturelle | Kalēa®"}
-        description={language === 'it' ? "BIOMAG FLOOR® di Kalēa®: pavimento flottante in fibra naturale e minerale, ecologico e biodegradabile. Click-clack senza colla, fonoassorbente. 7 finiture esclusive." :
-                     language === 'en' ? "BIOMAG FLOOR® by Kalēa®: natural fiber floating floor, eco-friendly and biodegradable. Click-clack installation, sound-absorbing. 7 exclusive finishes." :
-                     language === 'de' ? "BIOMAG FLOOR® von Kalēa®: Naturfaser-Schwimmboden, umweltfreundlich und biologisch abbaubar. Klick-Installation, schallabsorbierend." :
-                     "BIOMAG FLOOR® par Kalēa® : sol flottant en fibre naturelle, écologique et biodégradable. Installation click sans colle."}
-        keywords="pavimento flottante fibra naturale, pavimento ecologico, pavimento biodegradabile, pavimento fonoassorbente, BIOMAG FLOOR, pavimento click senza colla, pavimento sostenibile, pavimento galleggiante naturale"
+               language === 'en' ? "BIOMAG FLOOR® — Natural Fiber Flooring | Kalēa®" :
+               language === 'de' ? "BIOMAG FLOOR® — Naturfaser Bodenbelag | Kalēa®" :
+               "BIOMAG FLOOR® — Sol en Fibre Naturelle | Kalēa®"}
+        description={language === 'it' ? "BIOMAG FLOOR® di Kalēa®: pavimento in fibra naturale e minerale, ecologico e biodegradabile. Servizio chiavi in mano con fornitura e posa professionale. 7 finiture esclusive." :
+                     language === 'en' ? "BIOMAG FLOOR® by Kalēa®: natural fiber and mineral flooring, eco-friendly and biodegradable. Turnkey supply and professional installation. 7 exclusive finishes." :
+                     language === 'de' ? "BIOMAG FLOOR® von Kalēa®: Naturfaser- und Mineralboden, umweltfreundlich und biologisch abbaubar. Schlüsselfertige Lieferung und professionelle Verlegung." :
+                     "BIOMAG FLOOR® par Kalēa® : sol en fibre naturelle et minérale, écologique et biodégradable. Fourniture et pose professionnelle clé en main."}
+        keywords="pavimento fibra naturale, pavimento ecologico, pavimento biodegradabile, pavimento fonoassorbente, BIOMAG FLOOR, pavimento sostenibile, fornitura e posa pavimento, pavimenti naturali"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "Product",
           name: "BIOMAG FLOOR®",
           brand: { "@type": "Brand", name: "Kalēa" },
           category: "Flooring",
-          description: "Pavimento flottante in ossido di magnesio: waterproof, ignifugo, fonoassorbente, click-clack senza colla.",
+          description: "Pavimento in ossido di magnesio: waterproof, ignifugo, fonoassorbente, con servizio di fornitura e posa professionale.",
           url: `https://kalea.space/${language}/biomag-floor`,
         }}
       />

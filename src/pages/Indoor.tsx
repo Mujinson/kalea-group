@@ -111,15 +111,15 @@ const Indoor = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title={language === 'it' ? "Pavimenti Flottanti per Interni | BIOMAG & Hypermatt | Kalēa®" :
-               language === 'en' ? "Indoor Floating Floors | BIOMAG & Hypermatt | Kalēa®" :
-               language === 'de' ? "Schwimmende Böden für Innenräume | BIOMAG & Hypermatt | Kalēa®" :
-               "Sols Flottants d'Intérieur | BIOMAG & Hypermatt | Kalēa®"}
-        description={language === 'it' ? "Scopri i pavimenti flottanti Kalēa® per interni: Biomag Floor in MgO e Collezione Hypermatt SPC ultra-matte. Installazione click-clack senza colla." :
-                     language === 'en' ? "Discover Kalēa® indoor floating floors: Biomag Floor in MgO and Hypermatt SPC ultra-matte collection." :
-                     language === 'de' ? "Entdecken Sie Kalēa® schwimmende Böden für Innenräume: Biomag Floor aus MgO und Hypermatt SPC Kollektion." :
-                     "Découvrez les sols flottants Kalēa® pour intérieurs : Biomag Floor en MgO et collection Hypermatt SPC ultra-matte."}
-        keywords="pavimenti flottanti interni, pavimento flottante indoor, pavimenti click clack, pavimenti senza colla, pavimenti MgO interni, Hypermatt, pavimento galleggiante interni"
+        title={language === 'it' ? "Pavimenti e Rivestimenti per Interni | Kalēa®" :
+               language === 'en' ? "Indoor Flooring and Wall Coverings | Kalēa®" :
+               language === 'de' ? "Innenböden und Wandverkleidungen | Kalēa®" :
+               "Revêtements Intérieurs | Kalēa®"}
+        description={language === 'it' ? "Scopri le pavimentazioni e i rivestimenti Kalēa® per interni: servizio chiavi in mano di fornitura e posa con BIOMAG FLOOR® in MgO e collezione Hypermatt SPC ultra-matte." :
+                     language === 'en' ? "Discover Kalēa® indoor flooring and wall coverings: turnkey supply and installation with BIOMAG FLOOR® in MgO and Hypermatt SPC ultra-matte collection." :
+                     language === 'de' ? "Entdecken Sie Kalēa® Innenböden und Wandverkleidungen: schlüsselfertige Lieferung und Verlegung mit BIOMAG FLOOR® aus MgO und Hypermatt SPC Kollektion." :
+                     "Découvrez les revêtements intérieurs Kalēa® : fourniture et pose clé en main avec BIOMAG FLOOR® en MgO et collection Hypermatt SPC ultra-matte."}
+        keywords="pavimenti interni, rivestimenti interni, fornitura e posa interni, pavimenti MgO interni, Hypermatt interni, pavimenti SPC interni, parquet interni, pavimenti di design interni"
       />
 
       {/* Hero Section - Fixed background */}
