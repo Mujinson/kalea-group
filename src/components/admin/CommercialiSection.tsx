@@ -315,14 +315,27 @@ const CommercialiSection = () => {
                     <Label className="flex items-center gap-2">
                       <KeyRound className="w-4 h-4" /> Password temporanea *
                     </Label>
-                    <Input
-                      type="text"
-                      value={form.password}
-                      placeholder="Minimo 8 caratteri"
-                      onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        type="text"
+                        value={form.password}
+                        placeholder="Minimo 8 caratteri"
+                        onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                      />
+                      <Button type="button" variant="outline" onClick={() => {
+                        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
+                        const arr = new Uint32Array(14);
+                        crypto.getRandomValues(arr);
+                        const pwd = Array.from(arr, n => chars[n % chars.length]).join('');
+                        setForm(p => ({ ...p, password: pwd }));
+                        navigator.clipboard?.writeText(pwd).catch(() => {});
+                        toast.success('Password generata e copiata negli appunti');
+                      }}>
+                        Genera
+                      </Button>
+                    </div>
                     <p className="text-xs text-muted-foreground">
-                      L'utente potrà cambiarla dal suo profilo dopo il primo accesso.
+                      Comunicala all'operaio: potrà cambiarla dal suo profilo dopo il primo accesso.
                     </p>
                   </div>
                 )}
