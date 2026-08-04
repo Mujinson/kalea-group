@@ -2542,11 +2542,13 @@ export default function CreaPreventivo() {
 
             {/* Testata */}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
-              <div>
-                {KALEA_LOGO ? <img src={KALEA_LOGO} alt="Kalēa" style={{height:44,display:"block",marginBottom:4}}/> : <div style={{fontSize:24,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>}
+              <div style={{textAlign:"center"}}>
+                {KALEA_LOGO ? <img src={KALEA_LOGO} alt="Kalēa" style={{height:88,display:"block",margin:"0 auto 8px"}}/> : <div style={{fontSize:40,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>}
                 <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
                 <div style={{fontSize:12,color:"#6B6860"}}>Superfici · Pavimentazioni · Posa</div>
                 <div style={{fontSize:11,color:"#9A9890",marginTop:2}}>Desenzano del Garda (BS) · info@kalea.space · kalea.space</div>
+                <div style={{fontSize:11,color:"#9A9890",marginTop:2}}>P.IVA: 04797310986</div>
+                <div style={{fontSize:11,color:"#6B6860"}}>Kalea Group Srl</div>
               </div>
               <div style={{textAlign:"right"}}>
                 <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>{t.titolo}</div>
