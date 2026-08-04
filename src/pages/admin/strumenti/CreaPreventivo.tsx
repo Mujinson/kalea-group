@@ -2770,6 +2770,14 @@ export default function CreaPreventivo() {
       )}
 
       <style>{`
+        #pdf-preview .preventivo-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+        #pdf-preview .preventivo-table th,
+        #pdf-preview .preventivo-table td { vertical-align: middle; }
+        #pdf-preview .preventivo-table th { white-space: nowrap; }
+        #pdf-preview .preventivo-table td:nth-child(2),
+        #pdf-preview .preventivo-table td:nth-child(3),
+        #pdf-preview .preventivo-table td:nth-child(4) { white-space: nowrap; }
+        #pdf-preview .preventivo-table td:nth-child(1) { word-break: break-word; }
         @media print {
           body > * { display: none !important; }
           #pdf-preview { display: block !important; box-shadow: none !important; border: none !important; }
