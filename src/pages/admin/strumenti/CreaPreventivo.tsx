@@ -2575,11 +2575,11 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Corpo preventivo */}
-            <table style={{width:"100%",borderCollapse:"collapse",marginBottom:24}}>
+            <table className="preventivo-table" style={{width:"100%",borderCollapse:"collapse",marginBottom:24,tableLayout:"fixed"}}>
               <thead>
                 <tr>
                   {[t.desc,t.mq,t.prezzo_unit,t.totale].map((h:string)=>(
-                    <th key={h} style={{background:"#1A1A2E",padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
+                    <th key={h} style={{background:"#1A1A2E",padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em",width:h===t.desc?"50%":h===t.mq?"16%":h===t.prezzo_unit?"17%":"17%",whiteSpace:"nowrap"}}>{h}</th>
                   ))}
                 </tr>
               </thead>
