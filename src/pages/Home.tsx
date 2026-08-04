@@ -55,18 +55,18 @@ const Home = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title={language === 'it' ? "Pavimenti Flottanti MgO e Fibra Naturale | Kalēa®" :
-               language === 'en' ? "MgO & Natural Fiber Floating Floors | Kalēa®" :
-               language === 'de' ? "MgO & Naturfaser Schwimmböden | Kalēa®" :
-               "Sols Flottants MgO & Fibre Naturelle | Kalēa®"}
-        description={language === 'it' ? "Pavimenti flottanti in MgO e fibra naturale: waterproof, ignifughi, click-clack senza colla. Designed in Italy." :
-                     language === 'en' ? "Next-gen floating floors in MgO and natural fiber. Waterproof, fireproof, click-lock. Designed in Italy." :
-                     language === 'de' ? "Schwimmböden aus MgO und Naturfaser. Wasserdicht, feuerfest, Klick-Verlegung. Designed in Italy." :
-                     "Sols flottants en MgO et fibre naturelle. Étanches, ignifuges, pose clipsable. Designed in Italy."}
-        keywords={language === 'it' ? "pavimenti flottanti, pavimento flottante, pavimenti in MgO, pavimenti click clack, pavimento senza colla, pavimenti waterproof, pavimenti ignifughi, pavimento galleggiante, pavimento sopraelevato, pavimento flottante prezzi, ristrutturazione pavimenti, pavimento per ristrutturazione, pavimenti innovativi, pavimenti di design, pavimenti sostenibili, pavimento ecologico, parquet flottante, laminato flottante, SPC pavimento, LVT pavimento" :
-                  language === 'en' ? "floating floors, floating floor, MgO flooring, click-lock flooring, glueless flooring, waterproof flooring, fireproof flooring, raised flooring, innovative flooring, sustainable flooring, eco-friendly floor, design flooring" :
-                  language === 'de' ? "schwimmender Boden, Klickboden, MgO Boden, wasserdichter Boden, feuerfester Boden, nachhaltiger Bodenbelag, Design Bodenbelag, ökologischer Boden" :
-                  "sol flottant, parquet flottant, sol clipsable, sol MgO, sol étanche, sol ignifuge, revêtement de sol design, sol écologique"}
+        title={language === 'it' ? "Kalēa® — Fornitura e Posa Pavimentazioni Chiavi in Mano" :
+               language === 'en' ? "Kalēa® — Turnkey Flooring Supply and Installation" :
+               language === 'de' ? "Kalēa® — Schlüsselfertige Bodenbeläge Lieferung und Verlegung" :
+               "Kalēa® — Fourniture et Pose de Revêtements Clé en Main"}
+        description={language === 'it' ? "Kalēa®: servizio chiavi in mano di fornitura e posa di pavimentazioni parquet, MgO, SPC, laminati e rivestimenti. Soluzioni complete per interni ed esterni, progettate e realizzate in Italia." :
+                     language === 'en' ? "Kalēa®: turnkey supply and installation of parquet, MgO, SPC, laminate flooring and wall coverings. Complete solutions for interiors and exteriors, designed and made in Italy." :
+                     language === 'de' ? "Kalēa®: schlüsselfertige Lieferung und Verlegung von Parkett, MgO, SPC, Laminatböden und Wandverkleidungen. Komplettlösungen für Innen- und Außenbereiche, designed and made in Italy." :
+                     "Kalēa® : fourniture et pose clé en main de parquets, revêtements MgO, SPC, stratifiés et revêtements muraux. Solutions complètes pour intérieurs et extérieurs, conçues et réalisées en Italie."}
+        keywords={language === 'it' ? "fornitura e posa pavimenti, pavimentazioni chiavi in mano, posa parquet, pavimenti MgO, pavimenti SPC, pavimenti laminati, rivestimenti interni, rivestimenti esterni, pavimenti di design, pavimenti luxury, pavimenti Made in Italy" :
+                  language === 'en' ? "turnkey flooring, flooring supply and installation, parquet installation, MgO flooring, SPC flooring, laminate flooring, interior wall coverings, exterior wall coverings, luxury flooring, Made in Italy flooring" :
+                  language === 'de' ? "schlüsselfertige Bodenbeläge, Boden Lieferung und Verlegung, Parkett Verlegung, MgO Boden, SPC Boden, Laminatboden, Innenwandverkleidungen, Außenwandverkleidungen, Luxus Bodenbeläge, Made in Italy" :
+                  "revêtements clé en main, fourniture et pose revêtements, pose parquet, sol MgO, sol SPC, sol stratifié, revêtements muraux intérieurs, revêtements muraux extérieurs, revêtements de luxe, Made in Italy"}
         ogType="website"
       />
 
@@ -80,7 +80,7 @@ const Home = () => {
             name: "Kalēa® Surface System",
             url: "https://www.kalea.space",
             logo: "https://www.kalea.space/favicon-k.png",
-            description: "Pavimenti flottanti di nuova generazione in ossido di magnesio e fibra naturale. Progettati in Italia.",
+            description: "Servizio chiavi in mano di fornitura e posa di pavimentazioni e rivestimenti di design. Progettato e realizzato in Italia.",
             sameAs: [
               "https://www.instagram.com/kalea.group/",
               "https://www.facebook.com/people/Kalea/61585013655612/",
@@ -98,8 +98,8 @@ const Home = () => {
                 itemOffered: {
                   "@type": "Product",
                   name: "BIOMAG FLOOR®",
-                  description: "Pavimento flottante in ossido di magnesio, waterproof e ignifugo con installazione click-clack.",
-                  category: "Pavimenti flottanti",
+                  description: "Pavimento in ossido di magnesio, waterproof e ignifugo, con fornitura e posa professionale.",
+                  category: "Pavimenti",
                 },
               },
               {
