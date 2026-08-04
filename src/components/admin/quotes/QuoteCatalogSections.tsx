@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CatalogProductPicker, { CatalogProduct } from "@/components/admin/cantieri/CatalogProductPicker";
-import { Plus, Trash2, X } from "lucide-react";
+import { Plus, Trash2, X, GripVertical } from "lucide-react";
 
 export interface CatalogLine {
   id: string;
@@ -68,12 +68,13 @@ function emptyLine(unit = "a corpo"): CatalogLine {
   };
 }
 
-const GRID = "90px minmax(0,2fr) 70px 80px 90px 90px 26px";
+const GRID = "22px 90px minmax(0,2fr) 70px 80px 90px 90px 26px";
 
 function HeaderRow() {
   const th: React.CSSProperties = { fontSize: 10, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".06em" };
   return (
     <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, padding: "0 12px 6px", alignItems: "center" }}>
+      <span />
       <span style={th}>Codice</span>
       <span style={th}>Descrizione</span>
       <span style={th}>Unità</span>
