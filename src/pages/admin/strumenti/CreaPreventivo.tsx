@@ -2341,7 +2341,9 @@ export default function CreaPreventivo() {
             articoli={articoli} setArticoli={setArticoli}
             accessori={accessori} setAccessori={setAccessori}
             servizi={servizi} setServizi={setServizi}
+            ivaRate={ivaRate}
           />
+
         </div>
         </div>
       )}
