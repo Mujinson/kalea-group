@@ -2634,6 +2634,30 @@ export default function CreaPreventivo() {
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasfertaTot)}</td>
                   </tr>
                 )}
+                {([["Articoli",articoli],["Accessori",accessori],["Servizi",servizi]] as const).map(([label,lines]) =>
+                  lines.length > 0 ? (
+                    <React.Fragment key={label}>
+                      <tr style={{background:"#F7F6F3"}}>
+                        <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{label}</td>
+                      </tr>
+                      {lines.map((l)=>{
+                        const lordo = (Number(l.quantity)||0) * (Number(l.unit_price)||0);
+                        const netto = lordo * (1 - (Number(l.discount_pct)||0)/100);
+                        return (
+                          <tr key={l.id}>
+                            <td style={{padding:"8px 12px",fontSize:13}}>
+                              {l.name}
+                              {l.description && <div style={{fontSize:11,color:"#6B6860",marginTop:3}}>{l.description}</div>}
+                            </td>
+                            <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{l.quantity} {l.unit}</td>
+                            <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(Number(l.unit_price)||0)}</td>
+                            <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(netto)}</td>
+                          </tr>
+                        );
+                      })}
+                    </React.Fragment>
+                  ) : null
+                )}
               </tbody>
             </table>
 
