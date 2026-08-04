@@ -68,20 +68,40 @@ function emptyLine(unit = "a corpo"): CatalogLine {
   };
 }
 
+const GRID = "90px minmax(0,2fr) 70px 80px 90px 90px 26px";
+
+function HeaderRow() {
+  const th: React.CSSProperties = { fontSize: 10, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".06em" };
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, padding: "0 12px 6px", alignItems: "center" }}>
+      <span style={th}>Codice</span>
+      <span style={th}>Descrizione</span>
+      <span style={th}>Unità</span>
+      <span style={{ ...th, textAlign: "right" }}>Q.tà</span>
+      <span style={{ ...th, textAlign: "right" }}>Prezzo</span>
+      <span style={{ ...th, textAlign: "right" }}>Sconto %</span>
+      <span />
+    </div>
+  );
+}
+
 function LineRow({
   line,
   onChange,
   onDelete,
+  ivaRate,
 }: {
   line: CatalogLine;
   onChange: (patch: Partial<CatalogLine>) => void;
   onDelete: () => void;
+  ivaRate: number;
 }) {
   const lordo = (Number(line.quantity) || 0) * (Number(line.unit_price) || 0);
-  const netto = lordo * (1 - (Number(line.discount_pct) || 0) / 100);
+  const imponibile = lordo * (1 - (Number(line.discount_pct) || 0) / 100);
+  const iva = imponibile * ((Number(ivaRate) || 0) / 100);
   return (
     <div style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #E0DDD8", background: "#FBFAF7", marginBottom: 10 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "90px minmax(0,2fr) 70px 80px 90px 90px 26px", gap: 6, alignItems: "center" }}>
+      <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, alignItems: "center" }}>
         <input
           value={line.code || ""}
           onChange={(e) => onChange({ code: e.target.value })}
@@ -124,6 +144,7 @@ function LineRow({
           <input
             type="number"
             step="0.1"
+            title="Sconto sulla riga (non è l'IVA)"
             value={line.discount_pct}
             onChange={(e) => onChange({ discount_pct: Number(e.target.value) })}
             style={{ width: "100%", padding: "7px 20px 7px 8px", borderRadius: 6, border: "1px solid #E0DDD8", fontSize: 12, textAlign: "right", boxSizing: "border-box" }}
@@ -135,11 +156,12 @@ function LineRow({
         </button>
       </div>
       <div style={{ marginTop: 6, textAlign: "right", fontSize: 11, color: "#6B6860" }}>
-        Lordo <b style={{ color: "#1A1A2E" }}>{euro(lordo)}</b> · Netto <b style={{ color: "#1A1A2E" }}>{euro(netto)}</b>
+        Imponibile <b style={{ color: "#1A1A2E" }}>{euro(imponibile)}</b> · IVA {ivaRate}% <b style={{ color: "#1A1A2E" }}>{euro(iva)}</b> · Totale <b style={{ color: "#1A1A2E" }}>{euro(imponibile + iva)}</b>
       </div>
     </div>
   );
 }
+
 
 function Section({
   title,
