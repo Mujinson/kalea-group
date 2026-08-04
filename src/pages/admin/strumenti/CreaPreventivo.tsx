@@ -2690,9 +2690,9 @@ export default function CreaPreventivo() {
                   <span style={{color:r.c||"#1A1A1A",whiteSpace:"nowrap"}}>{r.v}</span>
                 </div>
               ))}
-              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4}}>
+              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4,gap:12}}>
                 <span>{t.totale_doc}</span>
-                <span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
+                <span style={{color:"#1A1A2E",whiteSpace:"nowrap"}}>{euro(calc.totaleIva)}</span>
               </div>
             </div>
 
