@@ -2346,6 +2346,20 @@ export default function CreaPreventivo() {
             ivaRate={ivaRate}
           />
 
+          <div style={{...card,marginTop:14,display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,flexWrap:"wrap"}}>
+            <div style={{fontSize:13,color:"#6B6860"}}>
+              {calc ? (
+                <>Totale IVA inclusa <b style={{color:"#1A1A2E",fontSize:15}}>{euro(calc.totaleIva)}</b>
+                {calc.marginePct <= MARGINE_BLOCCO && <span style={{color:"#A32D2D",marginLeft:10}}>margine {pct(calc.marginePct)} — sotto soglia</span>}</>
+              ) : "Aggiungi almeno un prodotto, un servizio o una riga manuale per proseguire"}
+            </div>
+            <button
+              onClick={()=>{ if(!calc){ toast.error("Aggiungi almeno una voce al preventivo"); return; } setStep(2); window.scrollTo({top:0,behavior:"smooth"}); }}
+              disabled={!calc}
+              style={{padding:"12px 26px",borderRadius:9,border:"none",cursor:calc?"pointer":"not-allowed",fontSize:14,fontWeight:500,background:calc?"#1A1A2E":"#C9C6C0",color:"#fff"}}>
+              Avanti → Intestazione & Cliente
+            </button>
+          </div>
         </div>
         </div>
       )}
