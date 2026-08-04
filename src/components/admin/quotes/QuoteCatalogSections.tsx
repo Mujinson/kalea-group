@@ -68,20 +68,40 @@ function emptyLine(unit = "a corpo"): CatalogLine {
   };
 }
 
+const GRID = "90px minmax(0,2fr) 70px 80px 90px 90px 26px";
+
+function HeaderRow() {
+  const th: React.CSSProperties = { fontSize: 10, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".06em" };
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, padding: "0 12px 6px", alignItems: "center" }}>
+      <span style={th}>Codice</span>
+      <span style={th}>Descrizione</span>
+      <span style={th}>Unità</span>
+      <span style={{ ...th, textAlign: "right" }}>Q.tà</span>
+      <span style={{ ...th, textAlign: "right" }}>Prezzo</span>
+      <span style={{ ...th, textAlign: "right" }}>Sconto %</span>
+      <span />
+    </div>
+  );
+}
+
 function LineRow({
   line,
   onChange,
   onDelete,
+  ivaRate,
 }: {
   line: CatalogLine;
   onChange: (patch: Partial<CatalogLine>) => void;
   onDelete: () => void;
+  ivaRate: number;
 }) {
   const lordo = (Number(line.quantity) || 0) * (Number(line.unit_price) || 0);
-  const netto = lordo * (1 - (Number(line.discount_pct) || 0) / 100);
+  const imponibile = lordo * (1 - (Number(line.discount_pct) || 0) / 100);
+  const iva = imponibile * ((Number(ivaRate) || 0) / 100);
   return (
     <div style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #E0DDD8", background: "#FBFAF7", marginBottom: 10 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "90px minmax(0,2fr) 70px 80px 90px 90px 26px", gap: 6, alignItems: "center" }}>
+      <div style={{ display: "grid", gridTemplateColumns: GRID, gap: 6, alignItems: "center" }}>
         <input
           value={line.code || ""}
           onChange={(e) => onChange({ code: e.target.value })}
@@ -124,6 +144,7 @@ function LineRow({
           <input
             type="number"
             step="0.1"
+            title="Sconto sulla riga (non è l'IVA)"
             value={line.discount_pct}
             onChange={(e) => onChange({ discount_pct: Number(e.target.value) })}
             style={{ width: "100%", padding: "7px 20px 7px 8px", borderRadius: 6, border: "1px solid #E0DDD8", fontSize: 12, textAlign: "right", boxSizing: "border-box" }}
@@ -135,11 +156,12 @@ function LineRow({
         </button>
       </div>
       <div style={{ marginTop: 6, textAlign: "right", fontSize: 11, color: "#6B6860" }}>
-        Lordo <b style={{ color: "#1A1A2E" }}>{euro(lordo)}</b> · Netto <b style={{ color: "#1A1A2E" }}>{euro(netto)}</b>
+        Imponibile <b style={{ color: "#1A1A2E" }}>{euro(imponibile)}</b> · IVA {ivaRate}% <b style={{ color: "#1A1A2E" }}>{euro(iva)}</b> · Totale <b style={{ color: "#1A1A2E" }}>{euro(imponibile + iva)}</b>
       </div>
     </div>
   );
 }
+
 
 function Section({
   title,
@@ -148,6 +170,7 @@ function Section({
   categoryNames,
   defaultUnit,
   allowManual = true,
+  ivaRate,
 }: {
   title: string;
   lines: CatalogLine[];
@@ -155,6 +178,7 @@ function Section({
   categoryNames: string[];
   defaultUnit?: string;
   allowManual?: boolean;
+  ivaRate: number;
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSel, setPickerSel] = useState<CatalogProduct | null>(null);
@@ -163,6 +187,7 @@ function Section({
     const lordo = (Number(l.quantity) || 0) * (Number(l.unit_price) || 0);
     return s + lordo * (1 - (Number(l.discount_pct) || 0) / 100);
   }, 0);
+  const totalIva = total * (1 + (Number(ivaRate) || 0) / 100);
 
   return (
     <div style={cardStyle}>
@@ -171,7 +196,7 @@ function Section({
           {title} <span style={{ color: "#6B6860", marginLeft: 6 }}>({lines.length})</span>
         </span>
         <span style={{ fontSize: 12, color: "#1A1A2E", textTransform: "none", letterSpacing: 0, fontWeight: 600 }}>
-          Totale {euro(total)}
+          Imponibile {euro(total)} · IVA {ivaRate}% → {euro(totalIva)}
         </span>
       </div>
 
@@ -181,14 +206,18 @@ function Section({
         </div>
       )}
 
+      {lines.length > 0 && <HeaderRow />}
+
       {lines.map((l) => (
         <LineRow
           key={l.id}
           line={l}
+          ivaRate={ivaRate}
           onChange={(patch) => setLines(lines.map((x) => (x.id === l.id ? { ...x, ...patch } : x)))}
           onDelete={() => setLines(lines.filter((x) => x.id !== l.id))}
         />
       ))}
+
 
       {pickerOpen && (
         <div style={{ padding: 12, border: "1px dashed #C8A96E", borderRadius: 8, marginBottom: 10, background: "#FEFCF6" }}>
@@ -252,6 +281,7 @@ export default function QuoteCatalogSections({
   setAccessori,
   servizi,
   setServizi,
+  ivaRate = 22,
 }: {
   articoli: CatalogLine[];
   setArticoli: (v: CatalogLine[]) => void;
@@ -259,15 +289,17 @@ export default function QuoteCatalogSections({
   setAccessori: (v: CatalogLine[]) => void;
   servizi: CatalogLine[];
   setServizi: (v: CatalogLine[]) => void;
+  ivaRate?: number;
 }) {
   return (
     <div>
-      <Section title="Articoli" lines={articoli} setLines={setArticoli} categoryNames={ARTICOLI_CATS} defaultUnit="mq" />
-      <Section title="Accessori" lines={accessori} setLines={setAccessori} categoryNames={ACCESSORI_CATS} defaultUnit="pz" />
-      <Section title="Servizi" lines={servizi} setLines={setServizi} categoryNames={SERVIZI_CATS} defaultUnit="a corpo" />
+      <Section title="Articoli" lines={articoli} setLines={setArticoli} categoryNames={ARTICOLI_CATS} defaultUnit="mq" ivaRate={ivaRate} />
+      <Section title="Accessori" lines={accessori} setLines={setAccessori} categoryNames={ACCESSORI_CATS} defaultUnit="pz" ivaRate={ivaRate} />
+      <Section title="Servizi" lines={servizi} setLines={setServizi} categoryNames={SERVIZI_CATS} defaultUnit="a corpo" ivaRate={ivaRate} />
     </div>
   );
 }
+
 
 export function catalogLinesTotal(lines: CatalogLine[]): number {
   return lines.reduce((s, l) => {
