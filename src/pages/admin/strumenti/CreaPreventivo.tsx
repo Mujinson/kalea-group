@@ -2568,9 +2568,11 @@ export default function CreaPreventivo() {
                 </tr>
               </thead>
               <tbody>
-                <tr style={{background:"#F7F6F3"}}>
-                  <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
-                </tr>
+                {(prodotto || righeMat.filter((r:any)=>r.desc).length>0) && (
+                  <tr style={{background:"#F7F6F3"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
+                  </tr>
+                )}
                 {prodotto && (
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>
