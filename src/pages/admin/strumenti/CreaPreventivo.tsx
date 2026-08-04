@@ -1494,7 +1494,9 @@ export default function CreaPreventivo() {
   }), [search, fornFilt]);
 
   const calc = useMemo(()=>{
-    if (!prodotto && (righeMat?.length || 0) === 0) return null;
+    const hasCatalog = (articoli.length + accessori.length + servizi.length) > 0;
+    if (!prodotto && (righeMat?.length || 0) === 0 && !hasCatalog) return null;
+
     // Per Woodco usiamo il prezzo del listino DB (cascading) + lo sconto fornitore associato
     let listinoUsed = prodotto?.listino ?? 0;
     let coeffUsed = prodotto?.coeff ?? 0;
