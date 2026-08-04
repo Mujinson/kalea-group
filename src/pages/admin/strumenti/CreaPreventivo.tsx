@@ -2685,9 +2685,9 @@ export default function CreaPreventivo() {
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
                 {l:`IVA ${ivaRate}%`,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
+                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13,gap:12}}>
                   <span style={{color:"#6B6860"}}>{r.l}</span>
-                  <span style={{color:r.c||"#1A1A1A"}}>{r.v}</span>
+                  <span style={{color:r.c||"#1A1A1A",whiteSpace:"nowrap"}}>{r.v}</span>
                 </div>
               ))}
               <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4}}>
