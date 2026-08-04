@@ -2575,11 +2575,11 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Corpo preventivo */}
-            <table style={{width:"100%",borderCollapse:"collapse",marginBottom:24}}>
+            <table className="preventivo-table" style={{width:"100%",borderCollapse:"collapse",marginBottom:24,tableLayout:"fixed"}}>
               <thead>
                 <tr>
                   {[t.desc,t.mq,t.prezzo_unit,t.totale].map((h:string)=>(
-                    <th key={h} style={{background:"#1A1A2E",padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em"}}>{h}</th>
+                    <th key={h} style={{background:"#1A1A2E",padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em",width:h===t.desc?"50%":h===t.mq?"16%":h===t.prezzo_unit?"17%":"17%",whiteSpace:"nowrap"}}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -2685,14 +2685,14 @@ export default function CreaPreventivo() {
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
                 {l:`IVA ${ivaRate}%`,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
+                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13,gap:12}}>
                   <span style={{color:"#6B6860"}}>{r.l}</span>
-                  <span style={{color:r.c||"#1A1A1A"}}>{r.v}</span>
+                  <span style={{color:r.c||"#1A1A1A",whiteSpace:"nowrap"}}>{r.v}</span>
                 </div>
               ))}
-              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4}}>
+              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4,gap:12}}>
                 <span>{t.totale_doc}</span>
-                <span style={{color:"#1A1A2E"}}>{euro(calc.totaleIva)}</span>
+                <span style={{color:"#1A1A2E",whiteSpace:"nowrap"}}>{euro(calc.totaleIva)}</span>
               </div>
             </div>
 
@@ -2770,6 +2770,14 @@ export default function CreaPreventivo() {
       )}
 
       <style>{`
+        #pdf-preview .preventivo-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+        #pdf-preview .preventivo-table th,
+        #pdf-preview .preventivo-table td { vertical-align: middle; }
+        #pdf-preview .preventivo-table th { white-space: nowrap; }
+        #pdf-preview .preventivo-table td:nth-child(2),
+        #pdf-preview .preventivo-table td:nth-child(3),
+        #pdf-preview .preventivo-table td:nth-child(4) { white-space: nowrap; }
+        #pdf-preview .preventivo-table td:nth-child(1) { word-break: break-word; }
         @media print {
           body > * { display: none !important; }
           #pdf-preview { display: block !important; box-shadow: none !important; border: none !important; }
