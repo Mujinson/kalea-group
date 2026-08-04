@@ -170,6 +170,7 @@ function Section({
   categoryNames,
   defaultUnit,
   allowManual = true,
+  ivaRate,
 }: {
   title: string;
   lines: CatalogLine[];
@@ -177,6 +178,7 @@ function Section({
   categoryNames: string[];
   defaultUnit?: string;
   allowManual?: boolean;
+  ivaRate: number;
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSel, setPickerSel] = useState<CatalogProduct | null>(null);
@@ -185,6 +187,7 @@ function Section({
     const lordo = (Number(l.quantity) || 0) * (Number(l.unit_price) || 0);
     return s + lordo * (1 - (Number(l.discount_pct) || 0) / 100);
   }, 0);
+  const totalIva = total * (1 + (Number(ivaRate) || 0) / 100);
 
   return (
     <div style={cardStyle}>
@@ -193,7 +196,7 @@ function Section({
           {title} <span style={{ color: "#6B6860", marginLeft: 6 }}>({lines.length})</span>
         </span>
         <span style={{ fontSize: 12, color: "#1A1A2E", textTransform: "none", letterSpacing: 0, fontWeight: 600 }}>
-          Totale {euro(total)}
+          Imponibile {euro(total)} · IVA {ivaRate}% → {euro(totalIva)}
         </span>
       </div>
 
@@ -203,14 +206,18 @@ function Section({
         </div>
       )}
 
+      {lines.length > 0 && <HeaderRow />}
+
       {lines.map((l) => (
         <LineRow
           key={l.id}
           line={l}
+          ivaRate={ivaRate}
           onChange={(patch) => setLines(lines.map((x) => (x.id === l.id ? { ...x, ...patch } : x)))}
           onDelete={() => setLines(lines.filter((x) => x.id !== l.id))}
         />
       ))}
+
 
       {pickerOpen && (
         <div style={{ padding: 12, border: "1px dashed #C8A96E", borderRadius: 8, marginBottom: 10, background: "#FEFCF6" }}>
