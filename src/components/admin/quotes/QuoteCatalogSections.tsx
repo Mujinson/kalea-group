@@ -281,6 +281,7 @@ export default function QuoteCatalogSections({
   setAccessori,
   servizi,
   setServizi,
+  ivaRate = 22,
 }: {
   articoli: CatalogLine[];
   setArticoli: (v: CatalogLine[]) => void;
@@ -288,15 +289,17 @@ export default function QuoteCatalogSections({
   setAccessori: (v: CatalogLine[]) => void;
   servizi: CatalogLine[];
   setServizi: (v: CatalogLine[]) => void;
+  ivaRate?: number;
 }) {
   return (
     <div>
-      <Section title="Articoli" lines={articoli} setLines={setArticoli} categoryNames={ARTICOLI_CATS} defaultUnit="mq" />
-      <Section title="Accessori" lines={accessori} setLines={setAccessori} categoryNames={ACCESSORI_CATS} defaultUnit="pz" />
-      <Section title="Servizi" lines={servizi} setLines={setServizi} categoryNames={SERVIZI_CATS} defaultUnit="a corpo" />
+      <Section title="Articoli" lines={articoli} setLines={setArticoli} categoryNames={ARTICOLI_CATS} defaultUnit="mq" ivaRate={ivaRate} />
+      <Section title="Accessori" lines={accessori} setLines={setAccessori} categoryNames={ACCESSORI_CATS} defaultUnit="pz" ivaRate={ivaRate} />
+      <Section title="Servizi" lines={servizi} setLines={setServizi} categoryNames={SERVIZI_CATS} defaultUnit="a corpo" ivaRate={ivaRate} />
     </div>
   );
 }
+
 
 export function catalogLinesTotal(lines: CatalogLine[]): number {
   return lines.reduce((s, l) => {
