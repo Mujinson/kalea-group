@@ -1631,7 +1631,7 @@ export default function CreaPreventivo() {
       const quoteData: any = {
         cliente: clienteSnapshot, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
-        ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
+        ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
         catalog: { articoli, accessori, servizi },
       };
