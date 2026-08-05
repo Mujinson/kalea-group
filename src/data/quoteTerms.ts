@@ -7,9 +7,10 @@ export type QuoteType = "fornitura_posa" | "fornitura" | "posa" | "servizi";
 export const QUOTE_TYPE_LABELS: Record<QuoteType, string> = {
   fornitura_posa: "Fornitura e Posa",
   fornitura: "Solo Fornitura",
-  pos: "Solo Posa" as any, // placeholder rimosso sotto
+  posa: "Solo Posa",
   servizi: "Servizi",
-} as any;
+};
+
 
 export const QUOTE_TYPES: { value: QuoteType; label: string }[] = [
   { value: "fornitura_posa", label: "Fornitura e Posa" },
