@@ -1471,6 +1471,7 @@ export default function CreaPreventivo() {
         if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
         setIvaRate(loadedIvaRate);
         if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
+        if (d.showCondizioniFornitura != null) setShowCondizioniFornitura(!!d.showCondizioniFornitura);
         if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
         if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
         if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
