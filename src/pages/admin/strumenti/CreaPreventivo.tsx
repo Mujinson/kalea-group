@@ -1280,6 +1280,7 @@ export default function CreaPreventivo() {
   const [metodoTrasporto, setMetodoTrasporto] = useState<string>("Trasporto a cura Kalēa");
   const [tempiConsegna, setTempiConsegna] = useState<string>("");
   const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
+  const [showCondizioniFornitura, setShowCondizioniFornitura] = useState<boolean>(true);
 
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("edit");
