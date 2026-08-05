@@ -2468,7 +2468,43 @@ export default function CreaPreventivo() {
               <button onClick={()=>setPagamenti([...pagamenti,{label:"",pct:0,data:"",note:""}])} style={{padding:"5px 12px",borderRadius:6,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Rata</button>
             </div>
 
+            {/* TIPO DI PREVENTIVO + TERMINI */}
             <div style={card}>
+              <div style={sectionTitle}>Tipo di preventivo</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:8,marginBottom:12}}>
+                {QUOTE_TYPES.map(tp=>(
+                  <button key={tp.value}
+                    onClick={()=>{
+                      setTipoPreventivo(tp.value);
+                      setTerminiCustom(null);
+                      setShowCondizioniFornitura(tp.value==="fornitura_posa"||tp.value==="fornitura");
+                    }}
+                    style={{padding:"9px 12px",borderRadius:8,fontSize:13,cursor:"pointer",
+                      border:tipoPreventivo===tp.value?"1.5px solid #1A1A2E":"1px solid #E0DDD8",
+                      background:tipoPreventivo===tp.value?"#1A1A2E":"#fff",
+                      color:tipoPreventivo===tp.value?"#fff":"#1A1A2E",fontWeight:tipoPreventivo===tp.value?600:400}}>
+                    {tp.label}
+                  </button>
+                ))}
+              </div>
+              <div style={{fontSize:12,color:"#9A9890",marginBottom:6}}>
+                Termini e condizioni stampati nel PDF (modificabili per questo preventivo)
+              </div>
+              <textarea
+                value={terminiCustom ?? (QUOTE_TERMS[tipoPreventivo] || t.termini_testo)}
+                onChange={e=>setTerminiCustom(e.target.value)}
+                rows={10}
+                style={{width:"100%",padding:"10px 12px",borderRadius:8,border:"1px solid #E0DDD8",fontSize:12,lineHeight:1.6,boxSizing:"border-box",fontFamily:"inherit",resize:"vertical"}}
+              />
+              {terminiCustom !== null && (
+                <button onClick={()=>setTerminiCustom(null)} style={{marginTop:8,padding:"5px 12px",borderRadius:6,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
+                  Ripristina testo standard
+                </button>
+              )}
+            </div>
+
+            <div style={card}>
+
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
                 <div style={sectionTitle}>Condizioni di fornitura</div>
                 <label style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#6B6860",cursor:"pointer",marginBottom:10}}>
