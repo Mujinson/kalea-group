@@ -1642,6 +1642,8 @@ export default function CreaPreventivo() {
         cliente: clienteSnapshot, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
         ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
+        tipoPreventivo, terminiCustom,
+
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
         catalog: { articoli, accessori, servizi },
       };
