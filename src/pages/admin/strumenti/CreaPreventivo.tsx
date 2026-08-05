@@ -1283,6 +1283,10 @@ export default function CreaPreventivo() {
   const [tempiConsegna, setTempiConsegna] = useState<string>("");
   const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
   const [showCondizioniFornitura, setShowCondizioniFornitura] = useState<boolean>(true);
+  // TIPO DI PREVENTIVO + TERMINI E CONDIZIONI
+  const [tipoPreventivo, setTipoPreventivo] = useState<QuoteType>("fornitura_posa");
+  const [terminiCustom, setTerminiCustom] = useState<string | null>(null);
+
 
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("edit");
