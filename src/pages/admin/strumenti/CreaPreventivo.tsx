@@ -2795,7 +2795,7 @@ export default function CreaPreventivo() {
             {/* Termini */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8"}}>
               <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
-              <div style={{fontSize:11,color:"#6B6860",lineHeight:1.8,whiteSpace:"pre-line"}}>{t.termini_testo}</div>
+              <div style={{fontSize:11,color:"#6B6860",lineHeight:1.8,whiteSpace:"pre-line"}}>{terminiCustom ?? (QUOTE_TERMS[tipoPreventivo] || t.termini_testo)}</div>
             </div>
 
             {/* Sezione Privacy firma */}
