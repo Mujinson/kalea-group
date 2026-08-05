@@ -2457,8 +2457,20 @@ export default function CreaPreventivo() {
             </div>
 
             <div style={card}>
-              <div style={sectionTitle}>Condizioni di fornitura</div>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
+                <div style={sectionTitle}>Condizioni di fornitura</div>
+                <label style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#6B6860",cursor:"pointer",marginBottom:10}}>
+                  <input type="checkbox" checked={showCondizioniFornitura} onChange={e=>setShowCondizioniFornitura(e.target.checked)} />
+                  Includi nel preventivo
+                </label>
+              </div>
+              {!showCondizioniFornitura && (
+                <div style={{fontSize:12,color:"#9A9890",marginBottom:10}}>
+                  Preventivo di soli servizi: la sezione fornitura non verrà stampata.
+                </div>
+              )}
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+                {showCondizioniFornitura && (<>
                 <div>
                   <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Metodo di trasporto</div>
                   <select value={metodoTrasporto} onChange={e=>setMetodoTrasporto(e.target.value)}
@@ -2476,6 +2488,7 @@ export default function CreaPreventivo() {
                   <input value={tempiConsegna} onChange={e=>setTempiConsegna(e.target.value)} placeholder="Es. 15-20 giorni lavorativi"
                     style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
                 </div>
+                </>)}
                 <div>
                   <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tipo di pagamento</div>
                   <select value={tipoPagamento} onChange={e=>setTipoPagamento(e.target.value)}
@@ -2501,6 +2514,7 @@ export default function CreaPreventivo() {
                 </div>
               </div>
             </div>
+
 
 
 
