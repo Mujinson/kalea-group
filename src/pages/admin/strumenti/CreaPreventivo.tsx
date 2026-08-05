@@ -1280,6 +1280,7 @@ export default function CreaPreventivo() {
   const [metodoTrasporto, setMetodoTrasporto] = useState<string>("Trasporto a cura Kalēa");
   const [tempiConsegna, setTempiConsegna] = useState<string>("");
   const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
+  const [showCondizioniFornitura, setShowCondizioniFornitura] = useState<boolean>(true);
 
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("edit");
@@ -1470,6 +1471,7 @@ export default function CreaPreventivo() {
         if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
         setIvaRate(loadedIvaRate);
         if (d.metodoTrasporto) setMetodoTrasporto(d.metodoTrasporto);
+        if (d.showCondizioniFornitura != null) setShowCondizioniFornitura(!!d.showCondizioniFornitura);
         if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
         if (d.tipoPagamento) setTipoPagamento(d.tipoPagamento);
         if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
@@ -1630,7 +1632,7 @@ export default function CreaPreventivo() {
       const quoteData: any = {
         cliente: clienteSnapshot, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
-        ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita,
+        ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
         catalog: { articoli, accessori, servizi },
       };
@@ -2456,8 +2458,20 @@ export default function CreaPreventivo() {
             </div>
 
             <div style={card}>
-              <div style={sectionTitle}>Condizioni di fornitura</div>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
+                <div style={sectionTitle}>Condizioni di fornitura</div>
+                <label style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#6B6860",cursor:"pointer",marginBottom:10}}>
+                  <input type="checkbox" checked={showCondizioniFornitura} onChange={e=>setShowCondizioniFornitura(e.target.checked)} />
+                  Includi nel preventivo
+                </label>
+              </div>
+              {!showCondizioniFornitura && (
+                <div style={{fontSize:12,color:"#9A9890",marginBottom:10}}>
+                  Preventivo di soli servizi: la sezione fornitura non verrà stampata.
+                </div>
+              )}
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+                {showCondizioniFornitura && (<>
                 <div>
                   <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Metodo di trasporto</div>
                   <select value={metodoTrasporto} onChange={e=>setMetodoTrasporto(e.target.value)}
@@ -2475,6 +2489,7 @@ export default function CreaPreventivo() {
                   <input value={tempiConsegna} onChange={e=>setTempiConsegna(e.target.value)} placeholder="Es. 15-20 giorni lavorativi"
                     style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
                 </div>
+                </>)}
                 <div>
                   <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tipo di pagamento</div>
                   <select value={tipoPagamento} onChange={e=>setTipoPagamento(e.target.value)}
@@ -2500,6 +2515,7 @@ export default function CreaPreventivo() {
                 </div>
               </div>
             </div>
+
 
 
 
@@ -2698,14 +2714,17 @@ export default function CreaPreventivo() {
 
             {/* Condizioni di fornitura */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
-              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di fornitura</div>
+              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? "Condizioni di fornitura" : "Condizioni"}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
+                {showCondizioniFornitura && (<>
                 <div><span style={{color:"#6B6860"}}>Metodo di trasporto: </span><span style={{fontWeight:500}}>{metodoTrasporto||"—"}</span></div>
                 <div><span style={{color:"#6B6860"}}>Tempi di consegna: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
+                </>)}
                 <div><span style={{color:"#6B6860"}}>Tipo di pagamento: </span><span style={{fontWeight:500}}>{tipoPagamento||"—"}</span></div>
                 <div><span style={{color:"#6B6860"}}>Aliquota IVA: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
               </div>
             </div>
+
 
             {/* Pagamenti */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
