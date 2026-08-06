@@ -23,6 +23,7 @@ import { WorkLogFormDrawer } from "@/components/admin/workers/WorkLogFormDrawer"
 import { AssignmentBoard } from "@/components/admin/workers/AssignmentBoard";
 import { exportCSV, exportXLSX, exportPDF } from "@/lib/exports";
 import { Calendar } from "@/components/ui/calendar";
+import { summarizeDay, formatTime } from "@/lib/timbrature";
 
 const statusColors: Record<string, string> = {
   attivo: "bg-emerald-50 text-emerald-700 border-emerald-200",
