@@ -89,7 +89,26 @@ const CantieriOperaiOre = () => {
     },
   });
 
+  // Timbrature (worker_time_entries) — fonte reale delle ore dei posatori
+  const { data: timeEntries = [] } = useQuery({
+    queryKey: ["worker-time-entries-logs"],
+    queryFn: async () => {
+      const from = format(new Date(Date.now() - 180 * 86400000), "yyyy-MM-dd");
+      const { data, error } = await supabase
+        .from("worker_time_entries" as any)
+        .select("*")
+        .gte("event_date", from)
+        .order("event_at", { ascending: true });
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
   const workerById = useMemo(() => Object.fromEntries(workers.map((w) => [w.id, w])), [workers]);
+  const workerByUserId = useMemo(
+    () => Object.fromEntries(workers.filter((w) => w.user_id).map((w) => [w.user_id, w])),
+    [workers],
+  );
   const siteById = useMemo(() => Object.fromEntries(sites.map((s) => [s.id, s])), [sites]);
 
   // KPIs
