@@ -76,7 +76,7 @@ const CantieriOperaiOre = () => {
     },
   });
 
-  const { data: logs = [] } = useQuery({
+  const { data: dbLogs = [] } = useQuery({
     queryKey: ["work-logs"],
     queryFn: async () => {
       const { data, error } = await supabase
