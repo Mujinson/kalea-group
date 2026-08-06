@@ -229,6 +229,7 @@ const CantieriOperaiOre = () => {
     qc.invalidateQueries({ queryKey: ["workers"] });
     qc.invalidateQueries({ queryKey: ["work-logs"] });
     qc.invalidateQueries({ queryKey: ["site-workers"] });
+    qc.invalidateQueries({ queryKey: ["worker-time-entries-logs"] });
   };
 
   const deleteWorker = async (id: string) => {
