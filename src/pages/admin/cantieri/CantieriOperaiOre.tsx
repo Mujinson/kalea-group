@@ -485,6 +485,9 @@ const CantieriOperaiOre = () => {
                           <td className="p-3 text-xs text-right">€{cost.toFixed(0)}</td>
                           <td className="p-3 text-xs text-muted-foreground truncate max-w-[180px]">{l.notes || "—"}</td>
                           <td className="p-3 text-right">
+                            {l.from_timbrature ? (
+                              <Badge variant="outline" className="text-[10px]">Timbratura</Badge>
+                            ) : (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-7 w-7"><Trash2 className="w-3 h-3 text-red-500" /></Button>
@@ -499,6 +502,7 @@ const CantieriOperaiOre = () => {
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
+                            )}
                           </td>
                         </tr>
                       );
