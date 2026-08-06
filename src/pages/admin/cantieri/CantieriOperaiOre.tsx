@@ -111,6 +111,51 @@ const CantieriOperaiOre = () => {
   );
   const siteById = useMemo(() => Object.fromEntries(sites.map((s) => [s.id, s])), [sites]);
 
+  // Converte le timbrature in righe di registro ore (una per operaio/giorno),
+  // saltando i giorni che hanno già un registro manuale.
+  const timbratureLogs = useMemo(() => {
+    const byKey = new Map<string, any[]>();
+    timeEntries.forEach((e) => {
+      const w = e.worker_id ? workerById[e.worker_id] : workerByUserId[e.user_id];
+      if (!w) return;
+      const key = `${w.id}|${e.event_date}`;
+      if (!byKey.has(key)) byKey.set(key, []);
+      byKey.get(key)!.push(e);
+    });
+    const manual = new Set(dbLogs.map((l) => `${l.worker_id}|${String(l.work_date).slice(0, 10)}`));
+    const out: any[] = [];
+    byKey.forEach((entries, key) => {
+      if (manual.has(key)) return;
+      const [workerId, date] = key.split("|");
+      const s = summarizeDay(entries as any);
+      const hours = s.siteMinutes / 60;
+      if (hours <= 0) return;
+      const siteId = entries.find((e) => e.site_id)?.site_id || null;
+      const arrive = entries.find((e) => e.event_type === "arrive_site");
+      const leave = [...entries].reverse().find((e) => e.event_type === "leave_site");
+      out.push({
+        id: `tb-${key}`,
+        from_timbrature: true,
+        worker_id: workerId,
+        site_id: siteId,
+        work_date: date,
+        start_time: arrive ? formatTime(arrive.event_at) : null,
+        end_time: leave ? formatTime(leave.event_at) : null,
+        break_minutes: s.pauseMinutes,
+        hours_worked: Number(hours.toFixed(2)),
+        hourly_cost: null,
+        notes: "Da timbrature",
+        construction_sites: siteId ? { title: (siteById as any)[siteId]?.title } : null,
+      });
+    });
+    return out;
+  }, [timeEntries, dbLogs, workerById, workerByUserId, siteById]);
+
+  const logs = useMemo(
+    () => [...dbLogs, ...timbratureLogs].sort((a, b) => String(b.work_date).localeCompare(String(a.work_date))),
+    [dbLogs, timbratureLogs],
+  );
+
   // KPIs
   const today = new Date();
   const monthStart = startOfMonth(today);
