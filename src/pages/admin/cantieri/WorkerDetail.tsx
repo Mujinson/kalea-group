@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { toast } from "sonner";
 import { WorkerFormDrawer, type Worker } from "@/components/admin/workers/WorkerFormDrawer";
+import { summarizeDay, formatTime } from "@/lib/timbrature";
 
 const statusLabel: Record<string, string> = {
   attivo: "Attivo", ferie: "In ferie", sospeso: "Sospeso", non_attivo: "Non attivo",
