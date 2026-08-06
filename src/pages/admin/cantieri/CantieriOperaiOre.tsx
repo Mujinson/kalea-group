@@ -23,6 +23,7 @@ import { WorkLogFormDrawer } from "@/components/admin/workers/WorkLogFormDrawer"
 import { AssignmentBoard } from "@/components/admin/workers/AssignmentBoard";
 import { exportCSV, exportXLSX, exportPDF } from "@/lib/exports";
 import { Calendar } from "@/components/ui/calendar";
+import { summarizeDay, formatTime } from "@/lib/timbrature";
 
 const statusColors: Record<string, string> = {
   attivo: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -76,7 +77,7 @@ const CantieriOperaiOre = () => {
     },
   });
 
-  const { data: logs = [] } = useQuery({
+  const { data: dbLogs = [] } = useQuery({
     queryKey: ["work-logs"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -89,8 +90,72 @@ const CantieriOperaiOre = () => {
     },
   });
 
+  // Timbrature (worker_time_entries) — fonte reale delle ore dei posatori
+  const { data: timeEntries = [] } = useQuery({
+    queryKey: ["worker-time-entries-logs"],
+    queryFn: async () => {
+      const from = format(new Date(Date.now() - 180 * 86400000), "yyyy-MM-dd");
+      const { data, error } = await supabase
+        .from("worker_time_entries" as any)
+        .select("*")
+        .gte("event_date", from)
+        .order("event_at", { ascending: true });
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
   const workerById = useMemo(() => Object.fromEntries(workers.map((w) => [w.id, w])), [workers]);
+  const workerByUserId = useMemo(
+    () => Object.fromEntries(workers.filter((w) => w.user_id).map((w) => [w.user_id, w])),
+    [workers],
+  );
   const siteById = useMemo(() => Object.fromEntries(sites.map((s) => [s.id, s])), [sites]);
+
+  // Converte le timbrature in righe di registro ore (una per operaio/giorno),
+  // saltando i giorni che hanno già un registro manuale.
+  const timbratureLogs = useMemo(() => {
+    const byKey = new Map<string, any[]>();
+    timeEntries.forEach((e) => {
+      const w = e.worker_id ? workerById[e.worker_id] : workerByUserId[e.user_id];
+      if (!w) return;
+      const key = `${w.id}|${e.event_date}`;
+      if (!byKey.has(key)) byKey.set(key, []);
+      byKey.get(key)!.push(e);
+    });
+    const manual = new Set(dbLogs.map((l) => `${l.worker_id}|${String(l.work_date).slice(0, 10)}`));
+    const out: any[] = [];
+    byKey.forEach((entries, key) => {
+      if (manual.has(key)) return;
+      const [workerId, date] = key.split("|");
+      const s = summarizeDay(entries as any);
+      const hours = s.siteMinutes / 60;
+      if (hours <= 0) return;
+      const siteId = entries.find((e) => e.site_id)?.site_id || null;
+      const arrive = entries.find((e) => e.event_type === "arrive_site");
+      const leave = [...entries].reverse().find((e) => e.event_type === "leave_site");
+      out.push({
+        id: `tb-${key}`,
+        from_timbrature: true,
+        worker_id: workerId,
+        site_id: siteId,
+        work_date: date,
+        start_time: arrive ? formatTime(arrive.event_at) : null,
+        end_time: leave ? formatTime(leave.event_at) : null,
+        break_minutes: s.pauseMinutes,
+        hours_worked: Number(hours.toFixed(2)),
+        hourly_cost: null,
+        notes: "Da timbrature",
+        construction_sites: siteId ? { title: (siteById as any)[siteId]?.title } : null,
+      });
+    });
+    return out;
+  }, [timeEntries, dbLogs, workerById, workerByUserId, siteById]);
+
+  const logs = useMemo(
+    () => [...dbLogs, ...timbratureLogs].sort((a, b) => String(b.work_date).localeCompare(String(a.work_date))),
+    [dbLogs, timbratureLogs],
+  );
 
   // KPIs
   const today = new Date();
@@ -164,6 +229,7 @@ const CantieriOperaiOre = () => {
     qc.invalidateQueries({ queryKey: ["workers"] });
     qc.invalidateQueries({ queryKey: ["work-logs"] });
     qc.invalidateQueries({ queryKey: ["site-workers"] });
+    qc.invalidateQueries({ queryKey: ["worker-time-entries-logs"] });
   };
 
   const deleteWorker = async (id: string) => {
@@ -420,6 +486,9 @@ const CantieriOperaiOre = () => {
                           <td className="p-3 text-xs text-right">€{cost.toFixed(0)}</td>
                           <td className="p-3 text-xs text-muted-foreground truncate max-w-[180px]">{l.notes || "—"}</td>
                           <td className="p-3 text-right">
+                            {l.from_timbrature ? (
+                              <Badge variant="outline" className="text-[10px]">Timbratura</Badge>
+                            ) : (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-7 w-7"><Trash2 className="w-3 h-3 text-red-500" /></Button>
@@ -434,6 +503,7 @@ const CantieriOperaiOre = () => {
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
+                            )}
                           </td>
                         </tr>
                       );
