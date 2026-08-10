@@ -400,18 +400,23 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
             Totale imponibile: <strong>€{subtotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</strong>
           </div>
 
-          <div className="space-y-2">
-            <Label>Venditore (per provvigione)</Label>
-            <Select value={salespersonId} onValueChange={setSalespersonId}>
-              <SelectTrigger><SelectValue placeholder="Nessuno" /></SelectTrigger>
-              <SelectContent>
-                {salespeople.map(sp => (
-                  <SelectItem key={sp.id} value={sp.id}>
-                    {sp.first_name} {sp.last_name} — {Number(sp.commission_rate) || 0}%
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="space-y-2 rounded-lg border p-3">
+            <div className="flex items-center gap-2">
+              <Checkbox id="add-commission" checked={addCommission} onCheckedChange={(v) => setAddCommission(!!v)} />
+              <Label htmlFor="add-commission" className="cursor-pointer">Prevedi una provvigione su questa vendita</Label>
+            </div>
+            {addCommission && (
+              <Select value={salespersonId} onValueChange={setSalespersonId}>
+                <SelectTrigger><SelectValue placeholder="Seleziona a chi va la provvigione" /></SelectTrigger>
+                <SelectContent>
+                  {salespeople.map(sp => (
+                    <SelectItem key={sp.id} value={sp.id}>
+                      {sp.first_name} {sp.last_name} — {Number(sp.commission_rate) || 0}%
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
 
           <div className="space-y-3">
