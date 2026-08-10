@@ -134,6 +134,7 @@ const defaultRates = (): Rate[] => ([
 export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverted }: Props) => {
   const [rates, setRates] = useState<Rate[]>(defaultRates());
   const [createSite, setCreateSite] = useState(true);
+  const [addCommission, setAddCommission] = useState(false);
   const [salespersonId, setSalespersonId] = useState<string>('');
   const [salespeople, setSalespeople] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -151,14 +152,11 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     if (!open) return;
     setRates(defaultRates());
     setCreateSite(true);
+    setAddCommission(false);
+    setSalespersonId('');
     (async () => {
       const { data: sps } = await supabase.from('salespeople').select('id, user_id, first_name, last_name, commission_rate, is_commission_earner').eq('is_active', true).order('first_name');
       setSalespeople(sps || []);
-      // Precompile from customer
-      if (quote?.customer_id) {
-        const { data: cust } = await supabase.from('customers').select('assigned_salesperson_id').eq('id', quote.customer_id).maybeSingle();
-        if (cust?.assigned_salesperson_id) setSalespersonId(cust.assigned_salesperson_id);
-      }
     })();
   }, [open, quote?.customer_id]);
 
