@@ -2555,6 +2555,9 @@ export type Database = {
           due_date: string
           id: string
           invoice_id: string | null
+          invoice_number: string | null
+          invoiced_amount: number | null
+          is_invoiced: boolean
           is_paid: boolean
           notes: string | null
           paid_date: string | null
@@ -2568,6 +2571,9 @@ export type Database = {
           due_date: string
           id?: string
           invoice_id?: string | null
+          invoice_number?: string | null
+          invoiced_amount?: number | null
+          is_invoiced?: boolean
           is_paid?: boolean
           notes?: string | null
           paid_date?: string | null
@@ -2581,6 +2587,9 @@ export type Database = {
           due_date?: string
           id?: string
           invoice_id?: string | null
+          invoice_number?: string | null
+          invoiced_amount?: number | null
+          is_invoiced?: boolean
           is_paid?: boolean
           notes?: string | null
           paid_date?: string | null

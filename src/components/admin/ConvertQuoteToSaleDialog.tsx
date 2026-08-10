@@ -108,8 +108,12 @@ export const extractMaterialLines = (quote: QuoteForConvert): MatLine[] => {
 interface Rate {
   key: string;
   label: string;
-  percentage: number;
+  /** Importo NETTO (imponibile) della rata in euro */
+  amount: number;
   due_date: string;
+  is_invoiced: boolean;
+  invoice_number: string;
+  invoiced_amount: number | null;
 }
 
 interface Props {
@@ -125,14 +129,21 @@ const addDays = (n: number) => {
   return format(d, 'yyyy-MM-dd');
 };
 
-const defaultRates = (): Rate[] => ([
-  { key: '1', label: 'Acconto', percentage: 30, due_date: addDays(0) },
-  { key: '2', label: 'Consegna', percentage: 40, due_date: addDays(30) },
-  { key: '3', label: 'Fine lavori', percentage: 30, due_date: addDays(60) },
-]);
+const round2 = (n: number) => Math.round((Number(n) || 0) * 100) / 100;
+const euro = (n: number) => `€${round2(n).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+const newRate = (label: string, amount: number, days: number): Rate => ({
+  key: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+  label,
+  amount: round2(amount),
+  due_date: addDays(days),
+  is_invoiced: false,
+  invoice_number: '',
+  invoiced_amount: null,
+});
 
 export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverted }: Props) => {
-  const [rates, setRates] = useState<Rate[]>(defaultRates());
+  const [rates, setRates] = useState<Rate[]>([]);
   const [createSite, setCreateSite] = useState(true);
   const [addCommission, setAddCommission] = useState(false);
   const [salespersonId, setSalespersonId] = useState<string>('');
@@ -141,16 +152,26 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
 
   const subtotal = useMemo(() => {
     if (!quote) return 0;
-    return Number(quote.total_amount || 0) - Number(quote.vat_amount || 0);
+    return round2(Number(quote.total_amount || 0) - Number(quote.vat_amount || 0));
   }, [quote]);
+
+  /** Aliquota IVA presa direttamente dal preventivo (fallback 22%) */
+  const vatRate = useMemo(() => {
+    if (!quote) return 0.22;
+    const vat = Number(quote.vat_amount || 0);
+    if (subtotal > 0 && vat > 0) return Math.round((vat / subtotal) * 100) / 100;
+    return quote.vat_included ? 0 : 0.22;
+  }, [quote, subtotal]);
 
   const matPreview = useMemo(() => (quote ? extractMaterialLines(quote) : []), [quote]);
 
-
-
   useEffect(() => {
     if (!open) return;
-    setRates(defaultRates());
+    const base = round2(Number(quote?.total_amount || 0) - Number(quote?.vat_amount || 0));
+    setRates([
+      newRate('Acconto', round2(base * 0.3), 0),
+      newRate('Saldo', round2(base * 0.7), 30),
+    ]);
     setCreateSite(true);
     setAddCommission(false);
     setSalespersonId('');
@@ -158,18 +179,24 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       const { data: sps } = await supabase.from('salespeople').select('id, user_id, first_name, last_name, commission_rate, is_commission_earner').eq('is_active', true).order('first_name');
       setSalespeople(sps || []);
     })();
-  }, [open, quote?.customer_id]);
+  }, [open, quote?.id, quote?.customer_id]);
 
-  const totalPct = rates.reduce((s, r) => s + (Number(r.percentage) || 0), 0);
+  const allocated = round2(rates.reduce((s, r) => s + (Number(r.amount) || 0), 0));
+  const residuo = round2(subtotal - allocated);
 
-  const addRate = () => setRates([...rates, { key: Date.now().toString(), label: `Rata ${rates.length + 1}`, percentage: 0, due_date: addDays(90) }]);
+  const addRate = () => setRates([...rates, newRate(`Rata ${rates.length + 1}`, residuo > 0 ? residuo : 0, 30 * (rates.length + 1))]);
+  const addSaldo = () => setRates([...rates, newRate('Saldo', residuo, 30 * (rates.length + 1))]);
   const removeRate = (k: string) => setRates(rates.filter(r => r.key !== k));
   const updateRate = (k: string, patch: Partial<Rate>) => setRates(rates.map(r => r.key === k ? { ...r, ...patch } : r));
 
   const handleConfirm = async () => {
     if (!quote) return;
     if (!quote.customer_id) { toast.error('Preventivo senza cliente'); return; }
-    if (Math.round(totalPct) !== 100) { toast.error(`Le percentuali delle rate devono sommare a 100% (attuale ${totalPct}%)`); return; }
+    if (rates.length && Math.abs(residuo) > 0.02) {
+      toast.error(`Le rate non coprono il totale: residuo ${euro(residuo)}`);
+      return;
+    }
+
 
     setSubmitting(true);
     const created = {
@@ -259,14 +286,18 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       created.sale_id = sale.id;
 
 
-      // b) payment_schedules
+      // b) payment_schedules (importi netti; IVA e fatturazione tracciate a parte)
       const schedRows = rates.map(r => ({
         sale_id: sale.id,
-        amount: Math.round(((sub * r.percentage) / 100) * 100) / 100,
+        amount: round2(r.amount),
         due_date: r.due_date,
         is_paid: false,
         payment_type: r.label,
-      }));
+        is_invoiced: r.is_invoiced,
+        invoice_number: r.is_invoiced ? (r.invoice_number || null) : null,
+        invoiced_amount: r.is_invoiced ? (r.invoiced_amount ?? round2(r.amount * (1 + vatRate))) : null,
+      })) as any[];
+
       if (schedRows.length) {
         const { data: schedIns, error: schedErr } = await supabase.from('payment_schedules').insert(schedRows).select('id');
         if (schedErr) throw schedErr;
@@ -396,9 +427,12 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
         </DialogHeader>
 
         <div className="space-y-6 py-2">
-          <div className="rounded-lg border p-3 text-sm bg-muted/30">
-            Totale imponibile: <strong>€{subtotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</strong>
+          <div className="rounded-lg border p-3 text-sm bg-muted/30 space-y-1">
+            <div className="flex justify-between"><span>Imponibile preventivo</span><strong>{euro(subtotal)}</strong></div>
+            <div className="flex justify-between"><span>IVA {Math.round(vatRate * 100)}%</span><strong>{euro(subtotal * vatRate)}</strong></div>
+            <div className="flex justify-between"><span>Totale con IVA</span><strong>{euro(subtotal * (1 + vatRate))}</strong></div>
           </div>
+
 
           <div className="space-y-2 rounded-lg border p-3">
             <div className="flex items-center gap-2">
@@ -421,31 +455,70 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label>Piano rate</Label>
+              <Label>Piano rate (importi netti · IVA {Math.round(vatRate * 100)}% dal preventivo)</Label>
               <div className="flex items-center gap-2">
-                <span className={`text-sm ${Math.round(totalPct) === 100 ? 'text-muted-foreground' : 'text-destructive font-medium'}`}>Totale: {totalPct}%</span>
                 <Button type="button" size="sm" variant="outline" onClick={addRate}><Plus className="w-3 h-3 mr-1" />Rata</Button>
+                {Math.abs(residuo) > 0.02 && (
+                  <Button type="button" size="sm" variant="secondary" onClick={addSaldo}>Aggiungi saldo {euro(residuo)}</Button>
+                )}
               </div>
             </div>
-            {rates.map(r => (
-              <div key={r.key} className="grid grid-cols-12 gap-2 items-center">
-                <Input className="col-span-4" value={r.label} onChange={e => updateRate(r.key, { label: e.target.value })} placeholder="Descrizione" />
-                <div className="col-span-3 flex items-center gap-1">
-                  <Input type="number" step="0.01" value={r.percentage} onChange={e => updateRate(r.key, { percentage: parseFloat(e.target.value) || 0 })} />
-                  <span className="text-sm text-muted-foreground">%</span>
+
+            {rates.map(r => {
+              const iva = round2((Number(r.amount) || 0) * vatRate);
+              const lordo = round2((Number(r.amount) || 0) + iva);
+              return (
+                <div key={r.key} className="rounded-lg border p-3 space-y-2">
+                  <div className="grid grid-cols-12 gap-2 items-center">
+                    <Input className="col-span-4" value={r.label} onChange={e => updateRate(r.key, { label: e.target.value })} placeholder="Descrizione" />
+                    <div className="col-span-3 flex items-center gap-1">
+                      <span className="text-sm text-muted-foreground">€</span>
+                      <Input type="number" step="0.01" value={r.amount} onChange={e => updateRate(r.key, { amount: parseFloat(e.target.value) || 0 })} placeholder="Netto" />
+                    </div>
+                    <Input className="col-span-4" type="date" value={r.due_date} onChange={e => updateRate(r.key, { due_date: e.target.value })} />
+                    <Button type="button" size="icon" variant="ghost" className="col-span-1" onClick={() => removeRate(r.key)}>
+                      <Trash2 className="w-4 h-4 text-destructive" />
+                    </Button>
+                  </div>
+
+                  <div className="text-xs text-muted-foreground whitespace-nowrap">
+                    Netto {euro(r.amount)} · IVA {Math.round(vatRate * 100)}% {euro(iva)} · <strong className="text-foreground">Totale {euro(lordo)}</strong>
+                    {subtotal > 0 && <> · {round2((Number(r.amount) || 0) / subtotal * 100)}% del preventivo</>}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Checkbox id={`inv-${r.key}`} checked={r.is_invoiced} onCheckedChange={(v) => updateRate(r.key, { is_invoiced: !!v, invoiced_amount: v ? lordo : null })} />
+                    <Label htmlFor={`inv-${r.key}`} className="cursor-pointer text-sm">Fatturata</Label>
+                    {r.is_invoiced && (
+                      <>
+                        <Input className="w-40 h-8" value={r.invoice_number} onChange={e => updateRate(r.key, { invoice_number: e.target.value })} placeholder="N° fattura" />
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-muted-foreground">€</span>
+                          <Input className="w-32 h-8" type="number" step="0.01" value={r.invoiced_amount ?? ''} onChange={e => updateRate(r.key, { invoiced_amount: e.target.value === '' ? null : parseFloat(e.target.value) })} placeholder="Importo fatt." />
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <Input className="col-span-4" type="date" value={r.due_date} onChange={e => updateRate(r.key, { due_date: e.target.value })} />
-                <Button type="button" size="icon" variant="ghost" className="col-span-1" onClick={() => removeRate(r.key)}>
-                  <Trash2 className="w-4 h-4 text-destructive" />
-                </Button>
+              );
+            })}
+
+            <div className="rounded-lg border p-3 text-sm space-y-1 bg-muted/30">
+              <div className="flex justify-between"><span>Totale rate (netto)</span><strong>{euro(allocated)}</strong></div>
+              <div className="flex justify-between"><span>IVA {Math.round(vatRate * 100)}%</span><strong>{euro(allocated * vatRate)}</strong></div>
+              <div className="flex justify-between"><span>Totale rate (lordo)</span><strong>{euro(allocated * (1 + vatRate))}</strong></div>
+              <div className={`flex justify-between ${Math.abs(residuo) > 0.02 ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>
+                <span>Residuo da assegnare</span><strong>{euro(residuo)}</strong>
               </div>
-            ))}
-            {Math.round(totalPct) !== 100 && (
+            </div>
+
+            {Math.abs(residuo) > 0.02 && (
               <div className="flex items-center gap-2 text-sm text-destructive">
-                <AlertCircle className="w-4 h-4" /> Le percentuali devono sommare a 100%
+                <AlertCircle className="w-4 h-4" /> Le rate devono coprire l'intero imponibile del preventivo.
               </div>
             )}
           </div>
+
 
           <div className="flex items-center gap-2">
             <Checkbox id="create-site" checked={createSite} onCheckedChange={(v) => setCreateSite(!!v)} />
