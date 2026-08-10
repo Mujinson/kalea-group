@@ -134,6 +134,7 @@ const defaultRates = (): Rate[] => ([
 export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverted }: Props) => {
   const [rates, setRates] = useState<Rate[]>(defaultRates());
   const [createSite, setCreateSite] = useState(true);
+  const [addCommission, setAddCommission] = useState(false);
   const [salespersonId, setSalespersonId] = useState<string>('');
   const [salespeople, setSalespeople] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -151,14 +152,11 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     if (!open) return;
     setRates(defaultRates());
     setCreateSite(true);
+    setAddCommission(false);
+    setSalespersonId('');
     (async () => {
       const { data: sps } = await supabase.from('salespeople').select('id, user_id, first_name, last_name, commission_rate, is_commission_earner').eq('is_active', true).order('first_name');
       setSalespeople(sps || []);
-      // Precompile from customer
-      if (quote?.customer_id) {
-        const { data: cust } = await supabase.from('customers').select('assigned_salesperson_id').eq('id', quote.customer_id).maybeSingle();
-        if (cust?.assigned_salesperson_id) setSalespersonId(cust.assigned_salesperson_id);
-      }
     })();
   }, [open, quote?.customer_id]);
 
@@ -276,7 +274,7 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       }
 
       // c) commission
-      if (salespersonId) {
+      if (addCommission && salespersonId) {
         const sp = salespeople.find(s => s.id === salespersonId);
         const pct = Number(sp?.commission_rate) || 0;
         if (sp?.user_id && pct > 0) {
@@ -402,18 +400,23 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
             Totale imponibile: <strong>€{subtotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</strong>
           </div>
 
-          <div className="space-y-2">
-            <Label>Venditore (per provvigione)</Label>
-            <Select value={salespersonId} onValueChange={setSalespersonId}>
-              <SelectTrigger><SelectValue placeholder="Nessuno" /></SelectTrigger>
-              <SelectContent>
-                {salespeople.map(sp => (
-                  <SelectItem key={sp.id} value={sp.id}>
-                    {sp.first_name} {sp.last_name} — {Number(sp.commission_rate) || 0}%
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="space-y-2 rounded-lg border p-3">
+            <div className="flex items-center gap-2">
+              <Checkbox id="add-commission" checked={addCommission} onCheckedChange={(v) => setAddCommission(!!v)} />
+              <Label htmlFor="add-commission" className="cursor-pointer">Prevedi una provvigione su questa vendita</Label>
+            </div>
+            {addCommission && (
+              <Select value={salespersonId} onValueChange={setSalespersonId}>
+                <SelectTrigger><SelectValue placeholder="Seleziona a chi va la provvigione" /></SelectTrigger>
+                <SelectContent>
+                  {salespeople.map(sp => (
+                    <SelectItem key={sp.id} value={sp.id}>
+                      {sp.first_name} {sp.last_name} — {Number(sp.commission_rate) || 0}%
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
 
           <div className="space-y-3">
