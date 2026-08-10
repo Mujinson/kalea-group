@@ -427,9 +427,12 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
         </DialogHeader>
 
         <div className="space-y-6 py-2">
-          <div className="rounded-lg border p-3 text-sm bg-muted/30">
-            Totale imponibile: <strong>€{subtotal.toLocaleString('it-IT', { minimumFractionDigits: 2 })}</strong>
+          <div className="rounded-lg border p-3 text-sm bg-muted/30 space-y-1">
+            <div className="flex justify-between"><span>Imponibile preventivo</span><strong>{euro(subtotal)}</strong></div>
+            <div className="flex justify-between"><span>IVA {Math.round(vatRate * 100)}%</span><strong>{euro(subtotal * vatRate)}</strong></div>
+            <div className="flex justify-between"><span>Totale con IVA</span><strong>{euro(subtotal * (1 + vatRate))}</strong></div>
           </div>
+
 
           <div className="space-y-2 rounded-lg border p-3">
             <div className="flex items-center gap-2">
