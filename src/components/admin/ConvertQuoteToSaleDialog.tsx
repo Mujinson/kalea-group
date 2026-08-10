@@ -274,7 +274,7 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       }
 
       // c) commission
-      if (salespersonId) {
+      if (addCommission && salespersonId) {
         const sp = salespeople.find(s => s.id === salespersonId);
         const pct = Number(sp?.commission_rate) || 0;
         if (sp?.user_id && pct > 0) {
