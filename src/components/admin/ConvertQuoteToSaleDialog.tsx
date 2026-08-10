@@ -108,8 +108,12 @@ export const extractMaterialLines = (quote: QuoteForConvert): MatLine[] => {
 interface Rate {
   key: string;
   label: string;
-  percentage: number;
+  /** Importo NETTO (imponibile) della rata in euro */
+  amount: number;
   due_date: string;
+  is_invoiced: boolean;
+  invoice_number: string;
+  invoiced_amount: number | null;
 }
 
 interface Props {
@@ -125,14 +129,21 @@ const addDays = (n: number) => {
   return format(d, 'yyyy-MM-dd');
 };
 
-const defaultRates = (): Rate[] => ([
-  { key: '1', label: 'Acconto', percentage: 30, due_date: addDays(0) },
-  { key: '2', label: 'Consegna', percentage: 40, due_date: addDays(30) },
-  { key: '3', label: 'Fine lavori', percentage: 30, due_date: addDays(60) },
-]);
+const round2 = (n: number) => Math.round((Number(n) || 0) * 100) / 100;
+const euro = (n: number) => `€${round2(n).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+const newRate = (label: string, amount: number, days: number): Rate => ({
+  key: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+  label,
+  amount: round2(amount),
+  due_date: addDays(days),
+  is_invoiced: false,
+  invoice_number: '',
+  invoiced_amount: null,
+});
 
 export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverted }: Props) => {
-  const [rates, setRates] = useState<Rate[]>(defaultRates());
+  const [rates, setRates] = useState<Rate[]>([]);
   const [createSite, setCreateSite] = useState(true);
   const [addCommission, setAddCommission] = useState(false);
   const [salespersonId, setSalespersonId] = useState<string>('');
@@ -141,16 +152,26 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
 
   const subtotal = useMemo(() => {
     if (!quote) return 0;
-    return Number(quote.total_amount || 0) - Number(quote.vat_amount || 0);
+    return round2(Number(quote.total_amount || 0) - Number(quote.vat_amount || 0));
   }, [quote]);
+
+  /** Aliquota IVA presa direttamente dal preventivo (fallback 22%) */
+  const vatRate = useMemo(() => {
+    if (!quote) return 0.22;
+    const vat = Number(quote.vat_amount || 0);
+    if (subtotal > 0 && vat > 0) return Math.round((vat / subtotal) * 100) / 100;
+    return quote.vat_included ? 0 : 0.22;
+  }, [quote, subtotal]);
 
   const matPreview = useMemo(() => (quote ? extractMaterialLines(quote) : []), [quote]);
 
-
-
   useEffect(() => {
     if (!open) return;
-    setRates(defaultRates());
+    const base = round2(Number(quote?.total_amount || 0) - Number(quote?.vat_amount || 0));
+    setRates([
+      newRate('Acconto', round2(base * 0.3), 0),
+      newRate('Saldo', round2(base * 0.7), 30),
+    ]);
     setCreateSite(true);
     setAddCommission(false);
     setSalespersonId('');
@@ -158,18 +179,24 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       const { data: sps } = await supabase.from('salespeople').select('id, user_id, first_name, last_name, commission_rate, is_commission_earner').eq('is_active', true).order('first_name');
       setSalespeople(sps || []);
     })();
-  }, [open, quote?.customer_id]);
+  }, [open, quote?.id, quote?.customer_id]);
 
-  const totalPct = rates.reduce((s, r) => s + (Number(r.percentage) || 0), 0);
+  const allocated = round2(rates.reduce((s, r) => s + (Number(r.amount) || 0), 0));
+  const residuo = round2(subtotal - allocated);
 
-  const addRate = () => setRates([...rates, { key: Date.now().toString(), label: `Rata ${rates.length + 1}`, percentage: 0, due_date: addDays(90) }]);
+  const addRate = () => setRates([...rates, newRate(`Rata ${rates.length + 1}`, residuo > 0 ? residuo : 0, 30 * (rates.length + 1))]);
+  const addSaldo = () => setRates([...rates, newRate('Saldo', residuo, 30 * (rates.length + 1))]);
   const removeRate = (k: string) => setRates(rates.filter(r => r.key !== k));
   const updateRate = (k: string, patch: Partial<Rate>) => setRates(rates.map(r => r.key === k ? { ...r, ...patch } : r));
 
   const handleConfirm = async () => {
     if (!quote) return;
     if (!quote.customer_id) { toast.error('Preventivo senza cliente'); return; }
-    if (Math.round(totalPct) !== 100) { toast.error(`Le percentuali delle rate devono sommare a 100% (attuale ${totalPct}%)`); return; }
+    if (rates.length && Math.abs(residuo) > 0.02) {
+      toast.error(`Le rate non coprono il totale: residuo ${euro(residuo)}`);
+      return;
+    }
+
 
     setSubmitting(true);
     const created = {
