@@ -452,31 +452,70 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label>Piano rate</Label>
+              <Label>Piano rate (importi netti · IVA {Math.round(vatRate * 100)}% dal preventivo)</Label>
               <div className="flex items-center gap-2">
-                <span className={`text-sm ${Math.round(totalPct) === 100 ? 'text-muted-foreground' : 'text-destructive font-medium'}`}>Totale: {totalPct}%</span>
                 <Button type="button" size="sm" variant="outline" onClick={addRate}><Plus className="w-3 h-3 mr-1" />Rata</Button>
+                {Math.abs(residuo) > 0.02 && (
+                  <Button type="button" size="sm" variant="secondary" onClick={addSaldo}>Aggiungi saldo {euro(residuo)}</Button>
+                )}
               </div>
             </div>
-            {rates.map(r => (
-              <div key={r.key} className="grid grid-cols-12 gap-2 items-center">
-                <Input className="col-span-4" value={r.label} onChange={e => updateRate(r.key, { label: e.target.value })} placeholder="Descrizione" />
-                <div className="col-span-3 flex items-center gap-1">
-                  <Input type="number" step="0.01" value={r.percentage} onChange={e => updateRate(r.key, { percentage: parseFloat(e.target.value) || 0 })} />
-                  <span className="text-sm text-muted-foreground">%</span>
+
+            {rates.map(r => {
+              const iva = round2((Number(r.amount) || 0) * vatRate);
+              const lordo = round2((Number(r.amount) || 0) + iva);
+              return (
+                <div key={r.key} className="rounded-lg border p-3 space-y-2">
+                  <div className="grid grid-cols-12 gap-2 items-center">
+                    <Input className="col-span-4" value={r.label} onChange={e => updateRate(r.key, { label: e.target.value })} placeholder="Descrizione" />
+                    <div className="col-span-3 flex items-center gap-1">
+                      <span className="text-sm text-muted-foreground">€</span>
+                      <Input type="number" step="0.01" value={r.amount} onChange={e => updateRate(r.key, { amount: parseFloat(e.target.value) || 0 })} placeholder="Netto" />
+                    </div>
+                    <Input className="col-span-4" type="date" value={r.due_date} onChange={e => updateRate(r.key, { due_date: e.target.value })} />
+                    <Button type="button" size="icon" variant="ghost" className="col-span-1" onClick={() => removeRate(r.key)}>
+                      <Trash2 className="w-4 h-4 text-destructive" />
+                    </Button>
+                  </div>
+
+                  <div className="text-xs text-muted-foreground whitespace-nowrap">
+                    Netto {euro(r.amount)} · IVA {Math.round(vatRate * 100)}% {euro(iva)} · <strong className="text-foreground">Totale {euro(lordo)}</strong>
+                    {subtotal > 0 && <> · {round2((Number(r.amount) || 0) / subtotal * 100)}% del preventivo</>}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Checkbox id={`inv-${r.key}`} checked={r.is_invoiced} onCheckedChange={(v) => updateRate(r.key, { is_invoiced: !!v, invoiced_amount: v ? lordo : null })} />
+                    <Label htmlFor={`inv-${r.key}`} className="cursor-pointer text-sm">Fatturata</Label>
+                    {r.is_invoiced && (
+                      <>
+                        <Input className="w-40 h-8" value={r.invoice_number} onChange={e => updateRate(r.key, { invoice_number: e.target.value })} placeholder="N° fattura" />
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-muted-foreground">€</span>
+                          <Input className="w-32 h-8" type="number" step="0.01" value={r.invoiced_amount ?? ''} onChange={e => updateRate(r.key, { invoiced_amount: e.target.value === '' ? null : parseFloat(e.target.value) })} placeholder="Importo fatt." />
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <Input className="col-span-4" type="date" value={r.due_date} onChange={e => updateRate(r.key, { due_date: e.target.value })} />
-                <Button type="button" size="icon" variant="ghost" className="col-span-1" onClick={() => removeRate(r.key)}>
-                  <Trash2 className="w-4 h-4 text-destructive" />
-                </Button>
+              );
+            })}
+
+            <div className="rounded-lg border p-3 text-sm space-y-1 bg-muted/30">
+              <div className="flex justify-between"><span>Totale rate (netto)</span><strong>{euro(allocated)}</strong></div>
+              <div className="flex justify-between"><span>IVA {Math.round(vatRate * 100)}%</span><strong>{euro(allocated * vatRate)}</strong></div>
+              <div className="flex justify-between"><span>Totale rate (lordo)</span><strong>{euro(allocated * (1 + vatRate))}</strong></div>
+              <div className={`flex justify-between ${Math.abs(residuo) > 0.02 ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>
+                <span>Residuo da assegnare</span><strong>{euro(residuo)}</strong>
               </div>
-            ))}
-            {Math.round(totalPct) !== 100 && (
+            </div>
+
+            {Math.abs(residuo) > 0.02 && (
               <div className="flex items-center gap-2 text-sm text-destructive">
-                <AlertCircle className="w-4 h-4" /> Le percentuali devono sommare a 100%
+                <AlertCircle className="w-4 h-4" /> Le rate devono coprire l'intero imponibile del preventivo.
               </div>
             )}
           </div>
+
 
           <div className="flex items-center gap-2">
             <Checkbox id="create-site" checked={createSite} onCheckedChange={(v) => setCreateSite(!!v)} />
