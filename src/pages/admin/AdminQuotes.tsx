@@ -255,13 +255,24 @@ const AdminQuotes = () => {
         updates.sent_date = new Date().toISOString();
       }
 
-      await supabase.from('quotes').update(updates).eq('id', quoteId);
-      toast.success(`Stato aggiornato a ${newStatus}`);
+      const { data, error } = await supabase
+        .from('quotes')
+        .update(updates)
+        .eq('id', quoteId)
+        .select('id');
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        toast.error('Nessuna riga aggiornata: permessi insufficienti su questo preventivo');
+        return;
+      }
+      const label = QUOTE_STATUSES.find(s => s.value === newStatus)?.label || newStatus;
+      toast.success(`Stato aggiornato a ${label}`);
       fetchData();
-    } catch (error) {
-      toast.error('Errore aggiornamento');
+    } catch (error: any) {
+      toast.error(`Errore aggiornamento: ${error?.message || 'sconosciuto'}`);
     }
   };
+
 
   const convertToSale = (quote: Quote) => {
     if (!quote.customer_id) {
