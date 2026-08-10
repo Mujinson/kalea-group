@@ -286,14 +286,18 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       created.sale_id = sale.id;
 
 
-      // b) payment_schedules
+      // b) payment_schedules (importi netti; IVA e fatturazione tracciate a parte)
       const schedRows = rates.map(r => ({
         sale_id: sale.id,
-        amount: Math.round(((sub * r.percentage) / 100) * 100) / 100,
+        amount: round2(r.amount),
         due_date: r.due_date,
         is_paid: false,
         payment_type: r.label,
-      }));
+        is_invoiced: r.is_invoiced,
+        invoice_number: r.is_invoiced ? (r.invoice_number || null) : null,
+        invoiced_amount: r.is_invoiced ? (r.invoiced_amount ?? round2(r.amount * (1 + vatRate))) : null,
+      })) as any[];
+
       if (schedRows.length) {
         const { data: schedIns, error: schedErr } = await supabase.from('payment_schedules').insert(schedRows).select('id');
         if (schedErr) throw schedErr;
