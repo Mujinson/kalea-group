@@ -171,14 +171,14 @@ function SaleLinkedRecords({ saleId }: { saleId: string }) {
     let cancelled = false;
     (async () => {
       const [siteRes, invRes, schRes] = await Promise.all([
-        supabase.from('construction_sites').select('id, title').eq('sale_id', saleId).maybeSingle(),
-        supabase.from('customer_invoices').select('id, invoice_number').eq('sale_id', saleId),
-        supabase.from('payment_schedules').select('id', { count: 'exact', head: true }).eq('sale_id', saleId),
+        (supabase as any).from('construction_sites').select('id, title').eq('sale_id', saleId).maybeSingle(),
+        (supabase as any).from('customer_invoices').select('id, invoice_number').eq('sale_id', saleId),
+        (supabase as any).from('payment_schedules').select('id').eq('sale_id', saleId),
       ]);
       if (cancelled) return;
       setSite((siteRes.data as any) || null);
       setInvoices((invRes.data as any) || []);
-      setSchedules((schRes as any).count || 0);
+      setSchedules(((schRes as any).data || []).length);
     })();
     return () => { cancelled = true; };
   }, [saleId]);
