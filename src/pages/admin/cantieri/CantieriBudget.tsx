@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Euro, TrendingUp, TrendingDown, AlertTriangle, HardHat } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const COSTO_ORARIO = 25;
+
 
 const CantieriBudget = () => {
   const navigate = useNavigate();
@@ -42,25 +42,40 @@ const CantieriBudget = () => {
   const { data: workLogs } = useQuery({
     queryKey: ["cb-worklogs"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("site_work_logs").select("site_id, hours_worked").limit(1000);
+      const { data, error } = await supabase.from("site_work_logs").select("site_id, hours_worked, hourly_cost, worker_id, worker_user_id").limit(1000);
       if (error) throw error;
-      return data;
+      return data as any[];
     },
   });
 
-  // Build per-site budget comparison
+  const { data: workers } = useQuery({
+    queryKey: ["cb-workers"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("workers").select("id, user_id, hourly_cost");
+      if (error) throw error;
+      return data as any[];
+    },
+  });
+
+  const workerById = new Map((workers || []).map((w: any) => [w.id, w]));
+  const workerByUser = new Map((workers || []).map((w: any) => [w.user_id, w]));
+
+  // Build per-site budget comparison (budget reale dal cantiere, costo orario reale per operaio)
   const siteData = sites?.map(site => {
     const matCost = materials?.filter(m => m.site_id === site.id).reduce((s, m) => s + (m.total_cost || 0), 0) || 0;
     const expCost = expenses?.filter(e => e.site_id === site.id).reduce((s, e) => s + (e.amount || 0), 0) || 0;
-    const hours = workLogs?.filter(l => l.site_id === site.id).reduce((s, l) => s + (l.hours_worked || 0), 0) || 0;
-    const laborCost = hours * COSTO_ORARIO;
+    const logs = (workLogs || []).filter((l: any) => l.site_id === site.id);
+    const hours = logs.reduce((s: number, l: any) => s + (Number(l.hours_worked) || 0), 0);
+    const laborCost = logs.reduce((s: number, l: any) => {
+      const w: any = workerById.get(l.worker_id) || workerByUser.get(l.worker_user_id);
+      const rate = Number(l.hourly_cost ?? w?.hourly_cost ?? 0);
+      return s + (Number(l.hours_worked) || 0) * rate;
+    }, 0);
     const totalSpent = matCost + expCost + laborCost;
-    // Budget: for now estimate as 120% of spent (or use a fixed value if available in notes)
-    // In a real scenario, budget would be a column on construction_sites
-    const estimatedBudget = totalSpent > 0 ? Math.round(totalSpent * 1.2) : 0;
-    const margin = estimatedBudget - totalSpent;
-    const pct = estimatedBudget > 0 ? Math.round((totalSpent / estimatedBudget) * 100) : 0;
-    return { ...site, matCost, expCost, laborCost, totalSpent, budget: estimatedBudget, margin, pct };
+    const budget = Number((site as any).budget_amount || 0);
+    const margin = budget - totalSpent;
+    const pct = budget > 0 ? Math.round((totalSpent / budget) * 100) : 0;
+    return { ...site, matCost, expCost, hours, laborCost, totalSpent, budget, margin, pct };
   }) || [];
 
   const totalSpent = siteData.reduce((s, d) => s + d.totalSpent, 0);
@@ -136,7 +151,7 @@ const CantieriBudget = () => {
               <div className="mb-2">
                 <div className="flex justify-between text-xs text-muted-foreground mb-1">
                   <span>Speso: €{s.totalSpent.toLocaleString("it-IT")}</span>
-                  <span>Budget: €{s.budget.toLocaleString("it-IT")}</span>
+                  <span>{s.budget > 0 ? `Budget: €${s.budget.toLocaleString("it-IT")}` : "Budget non impostato"}</span>
                 </div>
                 <Progress value={Math.min(s.pct, 100)} className={`h-2 ${s.pct > 100 ? "[&>div]:bg-red-500" : s.pct > 80 ? "[&>div]:bg-amber-500" : ""}`} />
               </div>

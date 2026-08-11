@@ -163,6 +163,50 @@ function SaleOriginQuoteLink({ saleId }: { saleId: string }) {
   );
 }
 
+function SaleLinkedRecords({ saleId }: { saleId: string }) {
+  const [site, setSite] = useState<{ id: string; title: string | null } | null>(null);
+  const [invoices, setInvoices] = useState<{ id: string; invoice_number: string | null }[]>([]);
+  const [schedules, setSchedules] = useState<number>(0);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [siteRes, invRes, schRes] = await Promise.all([
+        (supabase as any).from('construction_sites').select('id, title').eq('sale_id', saleId).maybeSingle(),
+        (supabase as any).from('customer_invoices').select('id, invoice_number').eq('sale_id', saleId),
+        (supabase as any).from('payment_schedules').select('id').eq('sale_id', saleId),
+      ]);
+      if (cancelled) return;
+      setSite((siteRes.data as any) || null);
+      setInvoices((invRes.data as any) || []);
+      setSchedules(((schRes as any).data || []).length);
+    })();
+    return () => { cancelled = true; };
+  }, [saleId]);
+  if (!site && invoices.length === 0 && schedules === 0) return null;
+  return (
+    <div className="rounded-md border bg-muted/30 px-3 py-2 text-sm space-y-1">
+      {site && (
+        <div className="flex items-center justify-between">
+          <span>Cantiere: <strong>{site.title || site.id.slice(0, 8)}</strong></span>
+          <Link to={`/admin/cantieri/${site.id}`} className="text-primary hover:underline">Apri</Link>
+        </div>
+      )}
+      {invoices.length > 0 && (
+        <div className="flex items-center justify-between">
+          <span>Fatture collegate: <strong>{invoices.map(i => i.invoice_number || i.id.slice(0, 6)).join(', ')}</strong></span>
+          <Link to="/admin/fatturazione" className="text-primary hover:underline">Apri</Link>
+        </div>
+      )}
+      {schedules > 0 && (
+        <div className="flex items-center justify-between">
+          <span>Piano rate: <strong>{schedules} rate</strong></span>
+          <Link to="/admin/contabilita" className="text-primary hover:underline">Apri</Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const AdminSales = () => {
   const [sales, setSales] = useState<Sale[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -1076,6 +1120,9 @@ const AdminSales = () => {
           </DialogHeader>
           {viewingSale && (
             <SaleOriginQuoteLink saleId={viewingSale.id} />
+          )}
+          {viewingSale && (
+            <SaleLinkedRecords saleId={viewingSale.id} />
           )}
           {viewingSale && (
             <div className="space-y-4">
