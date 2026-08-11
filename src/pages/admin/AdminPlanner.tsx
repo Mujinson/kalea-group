@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { WON_QUOTE_STATUSES } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
 import { DB_ACTIVE_STATUSES, DB_DONE_STATUSES, isSiteActive, isSiteDone, normalizeSiteStatus, siteStatusColor, siteStatusLabel } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
@@ -164,8 +165,8 @@ export default function AdminPlanner() {
     const since30 = format(addDays(new Date(), -30), 'yyyy-MM-dd');
     const ACTIVE = DB_ACTIVE_STATUSES;
     const DONE = DB_DONE_STATUSES;
-    const ACCEPTED = ['accettato', 'accepted', 'approved', 'approvato'];
-    const SENT = ['inviato', 'sent', 'inviata', 'accettato', 'accepted'];
+    const ACCEPTED = WON_QUOTE_STATUSES;
+    const SENT = ['inviato', 'sent', 'inviata', ...WON_QUOTE_STATUSES];
 
     const safe = async <T,>(p: Promise<T>, fb: T): Promise<T> => { try { return await p; } catch { return fb; } };
 

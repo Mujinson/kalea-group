@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo } from "react";
+import { WON_QUOTE_STATUSES } from "@/lib/quoteStatus";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -333,7 +334,7 @@ const AdminCantiereDetail = () => {
         .from("quotes")
         .select("id, total_amount, status, project_name")
         .eq("customer_id", site!.customer_id!)
-        .in("status", ["accepted", "accettato"]);
+        .in("status", WON_QUOTE_STATUSES);
       if (error) throw error;
       return data || [];
     },

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { isQuoteWon } from '@/lib/quoteStatus';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -373,7 +374,7 @@ const AdminQuotes = () => {
     nuove: quotes.filter(q => q.status === 'draft').length,
     inviate: quotes.filter(q => q.status === 'sent').length,
     in_trattativa: quotes.filter(q => q.status === 'in_trattativa').length,
-    vinte: quotes.filter(q => q.status === 'converted' || q.status === 'accepted').length,
+    vinte: quotes.filter(q => isQuoteWon(q.status)).length,
     perse: quotes.filter(q => q.status === 'rejected').length,
   };
   const totalePreventivato = quotes.reduce((sum, q) => sum + (Number(q.total_amount) || 0), 0);

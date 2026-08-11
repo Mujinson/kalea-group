@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { isQuoteWon, isQuoteLost } from '@/lib/quoteStatus';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -92,8 +93,8 @@ const SalespersonDetail = ({ salespersonId }: Props) => {
   const stats = useMemo(() => {
     const draft = quotes.filter(q => q.status === 'draft').length;
     const sent = quotes.filter(q => ['sent', 'in_attesa'].includes(q.status)).length;
-    const won = quotes.filter(q => ['accepted', 'vinto'].includes(q.status)).length;
-    const lost = quotes.filter(q => ['rejected', 'perso'].includes(q.status)).length;
+    const won = quotes.filter(q => isQuoteWon(q.status)).length;
+    const lost = quotes.filter(q => isQuoteLost(q.status)).length;
     const totalCommission = commissions.reduce((s, c) => s + (c.commission_amount || 0), 0);
     return { draft, sent, won, lost, total: quotes.length, totalCommission };
   }, [quotes, commissions]);

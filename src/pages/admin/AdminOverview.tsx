@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
+import { isQuoteWon, isQuoteLost, isQuotePending } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
 import { isSiteActive } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
@@ -296,7 +297,7 @@ const AdminOverview = () => {
   // ─── Derived ──────────────────────────────────────────────
   // VENDUTO = valore preventivi accettati (quello che era il vecchio "Fatturato")
   const sumRevenue = (s: Date, e: Date) =>
-    quotes.filter(x => ['accepted','accettato','fatturato'].includes((x.status || '').toLowerCase()) && inRange(x.accepted_date || x.created_at, s, e))
+    quotes.filter(x => isQuoteWon(x.status) && inRange(x.accepted_date || x.created_at, s, e))
       .reduce((a, x) => a + Number(x.total_amount || 0), 0) +
     sales.filter(x => inRange(x.sale_date || x.created_at, s, e))
       .reduce((a, x) => a + Number(x.total_amount || 0), 0);
@@ -327,9 +328,9 @@ const AdminOverview = () => {
       ...quotes.filter(x => inRange(x.created_at, range.start, range.end))
         .map(x => {
           const s = (x.status || '').toLowerCase();
-          if (['accepted', 'accettato', 'converted', 'vinta', 'fatturato'].includes(s)) return 'accettato';
-          if (['rejected', 'rifiutato', 'persa'].includes(s)) return 'rifiutato';
-          if (s === 'sent' || s === 'inviato') return 'inviato';
+          if (isQuoteWon(s)) return 'accettato';
+          if (isQuoteLost(s)) return 'rifiutato';
+          if (isQuotePending(s)) return 'inviato';
           return 'bozza';
         }),
 
@@ -440,8 +441,8 @@ const AdminOverview = () => {
         ...preventivi.filter(x => inRange(x.data || x.created_at, ms, me)).map(x => x.stato),
         ...quotes.filter(x => inRange(x.created_at, ms, me)).map(x => {
           const s = (x.status || '').toLowerCase();
-          if (['accepted', 'accettato', 'converted', 'vinta', 'fatturato'].includes(s)) return 'accettato';
-          if (['rejected', 'rifiutato', 'persa'].includes(s)) return 'rifiutato';
+          if (isQuoteWon(s)) return 'accettato';
+          if (isQuoteLost(s)) return 'rifiutato';
           return 'inviato';
         }),
       ];

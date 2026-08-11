@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { WON_QUOTE_STATUSES } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -71,7 +72,7 @@ export default function AdminFatturazione() {
       const { data, error } = await supabase
         .from('quotes')
         .select('id, quote_number, project_name, total_amount, vat_amount, vat_rate, status, customer_id, client_name, lead_id, customer:customers(id, first_name, last_name, company_name), lead:leads(id, name, company_name, email, phone, address, city, province, region, country), created_at')
-        .in('status', ['accettato', 'accepted', 'approved', 'approvato', 'converted', 'convertito', 'vinta', 'vinto'])
+        .in('status', WON_QUOTE_STATUSES)
         .order('created_at', { ascending: false });
       if (error) throw error;
       return data as any[];
