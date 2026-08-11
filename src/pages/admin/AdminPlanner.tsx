@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DB_ACTIVE_STATUSES, DB_DONE_STATUSES, isSiteActive, isSiteDone, normalizeSiteStatus, siteStatusColor, siteStatusLabel } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { useToast } from '@/hooks/use-toast';
@@ -55,9 +56,9 @@ const KPI = ({ icon: Icon, label, value, color = '#1A1A2E' }: any) => (
 );
 
 const StatusPill = ({ status }: { status?: string | null }) => {
-  const s = (status || 'da_iniziare').toLowerCase();
-  const color = STATUS_COLORS[s] || '#9CA3AF';
-  return <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded" style={{ background: color + '20', color }}>{STATUS_LABEL[s] || s}</span>;
+  const s = normalizeSiteStatus(status);
+  const color = siteStatusColor(s);
+  return <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded" style={{ background: color + '20', color }}>{siteStatusLabel(s)}</span>;
 };
 
 const PriorityDot = ({ priority }: { priority?: string | null }) => {
@@ -161,8 +162,8 @@ export default function AdminPlanner() {
   const fetchServerKpis = useCallback(async () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     const since30 = format(addDays(new Date(), -30), 'yyyy-MM-dd');
-    const ACTIVE = ['attivo', 'in_corso', 'in_progress', 'pianificato', 'planned', 'da_iniziare'];
-    const DONE = ['completato', 'completed', 'chiuso'];
+    const ACTIVE = DB_ACTIVE_STATUSES;
+    const DONE = DB_DONE_STATUSES;
     const ACCEPTED = ['accettato', 'accepted', 'approved', 'approvato'];
     const SENT = ['inviato', 'sent', 'inviata', 'accettato', 'accepted'];
 
@@ -229,7 +230,7 @@ export default function AdminPlanner() {
 
   // Filtered sites/assignments
   const filteredSites = useMemo(() => sites.filter((s) => {
-    if (filterStatus && (s.status || '').toLowerCase() !== filterStatus) return false;
+    if (filterStatus && normalizeSiteStatus(s.status) !== filterStatus) return false;
     if (filterPriority && (s.priority || '').toLowerCase() !== filterPriority) return false;
     return true;
   }), [sites, filterStatus, filterPriority]);
@@ -243,13 +244,13 @@ export default function AdminPlanner() {
   // KPI
   const kpis = useMemo(() => {
     const today = format(new Date(), 'yyyy-MM-dd');
-    const activeSites = sites.filter((s) => ['attivo', 'in_corso'].includes((s.status || '').toLowerCase()));
+    const activeSites = sites.filter((s) => isSiteActive(s.status));
     const todaysAssign = assignments.filter((a) => a.start_date <= today && a.end_date >= today);
     const busyCrewIds = new Set(todaysAssign.map((a) => a.crew_id));
     const workersToday = new Set<string>();
     todaysAssign.forEach((a) => crewMembers.filter((m) => m.crew_id === a.crew_id).forEach((m) => workersToday.add(m.worker_id)));
     const freeCrews = crews.filter((c) => c.active && !busyCrewIds.has(c.id)).length;
-    const overdue = sites.filter((s) => s.planned_end_date && s.planned_end_date < today && (s.status || '').toLowerCase() !== 'completato').length;
+    const overdue = sites.filter((s) => s.planned_end_date && s.planned_end_date < today && !isSiteDone(s.status)).length;
     const ws = startOfWeek(new Date(), { weekStartsOn: 1 });
     const we = endOfWeek(new Date(), { weekStartsOn: 1 });
     let weekHours = 0;
