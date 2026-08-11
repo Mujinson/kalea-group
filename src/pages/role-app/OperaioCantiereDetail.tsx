@@ -1,3 +1,4 @@
+import { siteStatusLabel } from '@/lib/siteStatus';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -102,7 +103,7 @@ const OperaioCantiereDetail = () => {
           </div>
           <div className="flex flex-col items-end gap-1">
             {site.priority && <span className={`text-[11px] px-2 py-0.5 rounded-md font-medium ${priorityClass}`}>{site.priority}</span>}
-            {site.status && <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#1E1B4B]/10 text-[#1E1B4B]">{site.status}</span>}
+            {site.status && <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#1E1B4B]/10 text-[#1E1B4B]">{siteStatusLabel(site.status)}</span>}
           </div>
         </div>
 

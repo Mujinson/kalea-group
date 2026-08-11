@@ -1,3 +1,4 @@
+import { isSiteActive } from "@/lib/siteStatus";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -102,7 +103,7 @@ const CantieriReport = () => {
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground mb-1">Cantieri</p>
             <p className="text-xl font-bold">{sites?.length || 0}</p>
-            <p className="text-xs text-muted-foreground">{sites?.filter(s => s.status === "attivo").length || 0} attivi</p>
+            <p className="text-xs text-muted-foreground">{sites?.filter(s => isSiteActive(s.status)).length || 0} attivi</p>
           </CardContent>
         </Card>
         <Card className="bg-white">

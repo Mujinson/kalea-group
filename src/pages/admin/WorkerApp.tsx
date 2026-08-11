@@ -1,3 +1,4 @@
+import { DB_ACTIVE_STATUSES } from "@/lib/siteStatus";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,7 +59,7 @@ const WorkerApp = () => {
       const { data, error } = await supabase
         .from("construction_sites")
         .select("id, title, city, address, status")
-        .eq("status", "attivo")
+        .in("status", DB_ACTIVE_STATUSES)
         .order("title");
       if (error) throw error;
       return data;

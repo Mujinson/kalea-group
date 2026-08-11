@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { isSiteActive } from "@/lib/siteStatus";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -58,7 +59,7 @@ const CantieriDashboard = () => {
     },
   });
 
-  const activeSites = sites?.filter(s => s.status === "attivo") || [];
+  const activeSites = sites?.filter(s => isSiteActive(s.status)) || [];
   const totalSites = sites?.length || 0;
   const totalHours = workLogs?.reduce((s, l) => s + (l.hours_worked || 0), 0) || 0;
   const totalMaterialCost = materials?.reduce((s, m) => s + (m.total_cost || 0), 0) || 0;

@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
 import SiteConfigPanel, { priorityBadge } from "@/components/admin/cantieri/SiteConfigPanel";
 import SiteIssuesPanel from "@/components/admin/cantieri/SiteIssuesPanel";
+import SiteStatusSelect from "@/components/admin/cantieri/SiteStatusSelect";
 
 const EXPENSE_TYPES = [
   "Materiali", "Trasporto", "Attrezzatura", "Manodopera esterna",
@@ -359,7 +360,7 @@ const AdminCantiereDetail = () => {
         <div className="flex items-center gap-2">
           {site.priority && priorityBadge(site.priority)}
           {site.tipologia && <Badge variant="outline">{site.tipologia}</Badge>}
-          <Badge variant={site.status === "attivo" ? "default" : "secondary"}>{site.status}</Badge>
+          <SiteStatusSelect siteId={site.id} status={site.status} />
         </div>
       </div>
 

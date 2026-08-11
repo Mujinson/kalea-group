@@ -1,3 +1,4 @@
+import { isSiteActive } from "@/lib/siteStatus";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -67,7 +68,7 @@ const CantieriBudget = () => {
   const totalLabor = siteData.reduce((s, d) => s + d.laborCost, 0);
   const totalExp = siteData.reduce((s, d) => s + d.expCost, 0);
 
-  const activeSites = siteData.filter(s => s.status === "attivo");
+  const activeSites = siteData.filter(s => isSiteActive(s.status));
 
   return (
     <div className="space-y-6">

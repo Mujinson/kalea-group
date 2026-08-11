@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isSiteActive } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -348,7 +349,7 @@ const AdminOverview = () => {
   }, [leads, range]);
 
   const cantieriAttivi = useMemo(() => {
-    const attivi = sites.filter(s => s.status === 'attivo' || s.status === 'in_corso');
+    const attivi = sites.filter(s => isSiteActive(s.status));
     const today = new Date();
     return {
       count: attivi.length,
@@ -788,9 +789,9 @@ const AdminOverview = () => {
 
         {showCan && (
           <Panel title="Cantieri in corso" right={<button onClick={() => navigate('/admin/cantieri')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#4F46E5' }}>Tutti →</button>}>
-            {sites.filter(s => s.status === 'attivo' || s.status === 'in_corso').length ? (
+            {sites.filter(s => isSiteActive(s.status)).length ? (
               <div className="space-y-2.5">
-                {sites.filter(s => s.status === 'attivo' || s.status === 'in_corso').slice(0, 5).map(c => {
+                {sites.filter(s => isSiteActive(s.status)).slice(0, 5).map(c => {
                   const today = new Date();
                   const start = c.start_date ? new Date(c.start_date) : null;
                   const end = c.end_date ? new Date(c.end_date) : null;

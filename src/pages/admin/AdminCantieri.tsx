@@ -13,6 +13,8 @@ import { HardHat, Plus, Search, MapPin, Eye, Trash2, Edit, Upload, X, Image, Fil
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from "@/components/admin/CrmShell";
+import SiteStatusSelect from "@/components/admin/cantieri/SiteStatusSelect";
+import { SITE_STATUSES, isSiteActive, isSiteDone, isSitePlanned, normalizeSiteStatus, siteStatusLabel } from "@/lib/siteStatus";
 
 const TIPOLOGIE = [
   "Villa privata", "Appartamento", "Condominio", "Hotel", "Ristorante",
@@ -23,7 +25,7 @@ const AdminCantieri = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "attivo" | "completato" | "pausa">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "attivo" | "completato" | "pausa" | "pianificato">("all");
   const [createOpen, setCreateOpen] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
@@ -32,7 +34,7 @@ const AdminCantieri = () => {
     title: "", project_name: "", address: "", city: "", province: "",
     region: "", postal_code: "", country: "Italia", tipologia: "",
     product_model: "", notes: "", contact_name: "", contact_surname: "",
-    contact_email: "", contact_phone: "", status: "attivo",
+    contact_email: "", contact_phone: "", status: "pianificato",
     start_date: "", end_date: "",
   });
 
@@ -49,9 +51,10 @@ const AdminCantieri = () => {
   });
 
   const filtered = sites?.filter((s) => {
-    if (statusFilter === "attivo" && s.status !== "attivo") return false;
-    if (statusFilter === "completato" && s.status !== "completato") return false;
-    if (statusFilter === "pausa" && (s.status === "attivo" || s.status === "completato")) return false;
+    if (statusFilter === "attivo" && !isSiteActive(s.status)) return false;
+    if (statusFilter === "completato" && !isSiteDone(s.status)) return false;
+    if (statusFilter === "pianificato" && !isSitePlanned(s.status)) return false;
+    if (statusFilter === "pausa" && (isSiteActive(s.status) || isSiteDone(s.status) || isSitePlanned(s.status))) return false;
     if (!search) return true;
     const q = search.toLowerCase();
     return (
@@ -69,7 +72,7 @@ const AdminCantieri = () => {
       title: "", project_name: "", address: "", city: "", province: "",
       region: "", postal_code: "", country: "Italia", tipologia: "",
       product_model: "", notes: "", contact_name: "", contact_surname: "",
-      contact_email: "", contact_phone: "", status: "attivo",
+      contact_email: "", contact_phone: "", status: "pianificato",
       start_date: "", end_date: "",
     });
     setEditId(null);
@@ -85,7 +88,7 @@ const AdminCantieri = () => {
       product_model: site.product_model || "", notes: site.notes || "",
       contact_name: site.contact_name || "", contact_surname: site.contact_surname || "",
       contact_email: site.contact_email || "", contact_phone: site.contact_phone || "",
-      status: site.status || "attivo",
+      status: normalizeSiteStatus(site.status),
       start_date: site.start_date || "", end_date: site.end_date || "",
     });
     setEditId(site.id);
@@ -164,22 +167,25 @@ const AdminCantieri = () => {
         }
       />
 
-      <CrmKpiRow cols={4}>
+      <CrmKpiRow cols={5}>
         <div onClick={() => setStatusFilter("all")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "all" ? "ring-2 ring-[#0F172A]/40" : "hover:scale-[1.01]"}`}>
           <CrmKpiTile label="Totale" value={sites?.length || 0} color="indigo" icon={<HardHat className="w-4 h-4" />} />
         </div>
+        <div onClick={() => setStatusFilter("pianificato")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "pianificato" ? "ring-2 ring-violet-500/50" : "hover:scale-[1.01]"}`}>
+          <CrmKpiTile label="Pianificati" value={sites?.filter(s => isSitePlanned(s.status)).length || 0} color="purple" />
+        </div>
         <div onClick={() => setStatusFilter("attivo")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "attivo" ? "ring-2 ring-green-500/50" : "hover:scale-[1.01]"}`}>
-          <CrmKpiTile label="Attivi" value={sites?.filter(s => s.status === 'attivo').length || 0} color="green" />
+          <CrmKpiTile label="Attivi" value={sites?.filter(s => isSiteActive(s.status)).length || 0} color="green" />
         </div>
         <div onClick={() => setStatusFilter("completato")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "completato" ? "ring-2 ring-blue-500/50" : "hover:scale-[1.01]"}`}>
-          <CrmKpiTile label="Completati" value={sites?.filter(s => s.status === 'completato').length || 0} color="blue" />
+          <CrmKpiTile label="Completati" value={sites?.filter(s => isSiteDone(s.status)).length || 0} color="blue" />
         </div>
         <div onClick={() => setStatusFilter("pausa")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "pausa" ? "ring-2 ring-amber-500/50" : "hover:scale-[1.01]"}`}>
-          <CrmKpiTile label="In pausa" value={sites?.filter(s => s.status !== 'attivo' && s.status !== 'completato').length || 0} color="amber" />
+          <CrmKpiTile label="In pausa / altro" value={sites?.filter(s => !isSiteActive(s.status) && !isSiteDone(s.status) && !isSitePlanned(s.status)).length || 0} color="amber" />
         </div>
       </CrmKpiRow>
       {statusFilter !== "all" && (
-        <p className="text-xs text-[#8A7060]">Filtro: <span className="font-semibold">{statusFilter}</span> · <button onClick={() => setStatusFilter("all")} className="underline">rimuovi</button></p>
+        <p className="text-xs text-[#8A7060]">Filtro: <span className="font-semibold">{statusFilter === 'pausa' ? 'in pausa / altro' : siteStatusLabel(statusFilter)}</span> · <button onClick={() => setStatusFilter("all")} className="underline">rimuovi</button></p>
       )}
 
       <CrmFilterBar>
@@ -222,9 +228,7 @@ const AdminCantieri = () => {
                   <td className="px-4 py-3 text-sm">{site.postal_code}</td>
                   <td className="px-4 py-3 text-sm">{site.product_model}</td>
                   <td className="px-4 py-3">
-                    <Badge variant={site.status === 'attivo' ? 'default' : 'secondary'} className="text-xs">
-                      {site.status}
-                    </Badge>
+                    <SiteStatusSelect siteId={site.id} status={site.status} size="sm" />
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center gap-1 justify-end" onClick={(e) => e.stopPropagation()}>
@@ -319,6 +323,16 @@ const AdminCantieri = () => {
                   <Label>Modello posato</Label>
                   <Input value={form.product_model} onChange={(e) => setForm({ ...form, product_model: e.target.value })} placeholder="Es: Biomag Oak Natural" />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Stato</Label>
+                <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
+                  <SelectTrigger><SelectValue placeholder="Stato" /></SelectTrigger>
+                  <SelectContent>
+                    {SITE_STATUSES.map((s) => (<SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="grid grid-cols-2 gap-3">

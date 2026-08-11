@@ -1,3 +1,4 @@
+import { siteStatusLabel } from '@/lib/siteStatus';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -81,7 +82,7 @@ const OperaioSites = () => {
                 className="inline-block mt-1 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full text-white"
                 style={{ background: statusColor(s.status) }}
               >
-                {s.status}
+                {siteStatusLabel(s.status)}
               </span>
             </div>
             <ChevronRight className="w-5 h-5 text-[#8C7B6B] shrink-0" />
