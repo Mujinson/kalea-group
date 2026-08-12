@@ -689,12 +689,27 @@ const AdminSales = () => {
     });
     
     // Set sale items (simplified - single item from main sale)
-    setSaleItems([{
+    const [{ data: itemRows }, { data: costRows }] = await Promise.all([
+      supabase.from('sale_items').select('product_type, product_variant, quantity_sqm, unit_price').eq('sale_id', sale.id).order('created_at'),
+      supabase.from('sale_additional_costs').select('cost_type, quantity, unit_price').eq('sale_id', sale.id).order('created_at'),
+    ]);
+    setSaleItems(itemRows && itemRows.length ? itemRows.map((i: any) => ({
+      product_type: i.product_type,
+      product_variant: i.product_variant || '',
+      quantity_sqm: Number(i.quantity_sqm) || 0,
+      unit_price: Number(i.unit_price) || 0,
+    })) : [{
       product_type: sale.product_type,
       product_variant: sale.color || '',
       quantity_sqm: sale.quantity_sqm,
       unit_price: sale.sale_price,
     }]);
+    setAdditionalCosts((costRows || []).map((c: any) => ({
+      cost_type: c.cost_type,
+      quantity: Number(c.quantity) || 0,
+      unit_price: Number(c.unit_price) || 0,
+    })));
+
     
     setDialogOpen(true);
     setActiveTab('products');

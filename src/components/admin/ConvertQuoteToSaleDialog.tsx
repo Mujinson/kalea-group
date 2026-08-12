@@ -104,6 +104,41 @@ export const extractMaterialLines = (quote: QuoteForConvert): MatLine[] => {
   return out;
 };
 
+/** Righe da salvare in sale_items (prodotti/articoli/accessori) e sale_additional_costs (servizi/extra) */
+export const extractSaleLines = (quote: QuoteForConvert) => {
+  const items: any[] = Array.isArray(quote.items) ? quote.items : [];
+  const products: any[] = [];
+  const costs: any[] = [];
+
+  for (const it of items) {
+    const type = String(it?.type || '');
+    const qty = Number(it.qta ?? it.quantity_sqm ?? it.mq) || 0;
+    const unitPrice = Number(it.prezzo_un ?? it.prezzo_mq ?? it.unit_price) || 0;
+    const total = Number(it.importo ?? it.total_price) || round2(qty * unitPrice);
+    const label = it.descrizione || [it.product_type, it.color].filter(Boolean).join(' — ') || 'Voce';
+
+    if (type === 'servizio' || type === 'extra') {
+      costs.push({
+        cost_type: label,
+        quantity: qty || null,
+        unit: it.unita || null,
+        unit_price: unitPrice,
+        total_price: total,
+      });
+    } else if (qty > 0 || total > 0) {
+      products.push({
+        product_type: label,
+        product_variant: it.unita || it.color || null,
+        quantity_sqm: qty,
+        unit_price: unitPrice,
+        total_price: total,
+      });
+    }
+  }
+  return { products, costs };
+};
+
+
 
 interface Rate {
   key: string;
@@ -224,9 +259,11 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
         || items.reduce((s: number, i: any) => s + (Number(i.quantity_sqm) || 0), 0);
       const totalAmount = Number(quote.total_amount) || 0;
       const vatAmount = Number(quote.vat_amount) || 0;
-      const sub = totalAmount - vatAmount;
-      const unitPrice = totalQty > 0 ? sub / totalQty : 0;
-      const vatRate = quote.vat_included ? 0 : 0.22;
+      const sub = round2(totalAmount - vatAmount);
+      const unitPrice = totalQty > 0 ? round2(sub / totalQty) : 0;
+      const vatRate = sub > 0 && vatAmount > 0 ? Math.round((vatAmount / sub) * 100) / 100 : (quote.vat_included ? 0 : 0.22);
+      const saleLines = extractSaleLines(quote);
+
 
       // Risoluzione codici catalogo (serve sia per il costo che per le righe materiali)
       const codes = Array.from(new Set(matLines.map(m => m.product_code).filter(Boolean))) as string[];
@@ -284,6 +321,21 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       }).select().single();
       if (saleErr) throw saleErr;
       created.sale_id = sale.id;
+
+      // a2) righe vendita complete dal preventivo
+      if (saleLines.products.length) {
+        const { error: itErr } = await supabase.from('sale_items').insert(
+          saleLines.products.map(p => ({ ...p, sale_id: sale.id }))
+        );
+        if (itErr) throw itErr;
+      }
+      if (saleLines.costs.length) {
+        const { error: acErr } = await supabase.from('sale_additional_costs').insert(
+          saleLines.costs.map(c => ({ ...c, sale_id: sale.id }))
+        );
+        if (acErr) throw acErr;
+      }
+
 
 
       // b) payment_schedules (importi netti; IVA e fatturazione tracciate a parte)
