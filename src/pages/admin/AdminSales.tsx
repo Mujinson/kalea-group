@@ -1062,7 +1062,7 @@ const AdminSales = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2"><Label>Anticipo (€)</Label><Input type="number" step="0.01" value={paymentData.deposit_amount} onChange={(e) => setPaymentData({...paymentData, deposit_amount: e.target.value})} /></div>
+                  <div className="space-y-2"><Label>Anticipo netto (€)</Label><Input type="number" step="0.01" value={paymentData.deposit_amount} onChange={(e) => setPaymentData({...paymentData, deposit_amount: e.target.value})} /></div>
                   <div className="space-y-2"><Label>Data Anticipo</Label><Input type="date" value={paymentData.deposit_date} onChange={(e) => setPaymentData({...paymentData, deposit_date: e.target.value})} /></div>
                 </div>
                 <div className="rounded-lg border p-3 space-y-3">
