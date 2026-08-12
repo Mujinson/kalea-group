@@ -11,6 +11,8 @@ import CreaPreventivo from '@/components/role-app/MobileQuoteWrapper';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import TimbratureCard from '@/components/role-app/TimbratureCard';
+import MonthlyHoursCard from '@/components/role-app/MonthlyHoursCard';
+
 import { Phone, MapPin, Camera, MessageSquare, Plus } from 'lucide-react';
 
 const nav = [
@@ -88,6 +90,9 @@ const OperaioHome = () => {
       </div>
 
       <TimbratureCard />
+
+      <MonthlyHoursCard />
+
 
       <button
         onClick={() => navigate('crea-preventivo')}

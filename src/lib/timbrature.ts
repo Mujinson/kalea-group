@@ -33,39 +33,30 @@ export interface TimeEntry {
   notes: string | null;
 }
 
-/** Returns the logical next events allowed after the last recorded one. */
+/** Returns the single logical next event allowed after the last recorded one. */
 export function nextEvents(lastType: TimbratureEventType | null, entries: TimeEntry[] = []): TimbratureEventType[] {
-  let candidates: TimbratureEventType[];
+  const done = new Set(entries.map((e) => e.event_type));
   switch (lastType) {
     case null:
-      candidates = ['start_home'];
-      break;
+      return ['start_home'];
     case 'start_home':
-      candidates = ['arrive_site'];
-      break;
+      return ['arrive_site'];
     case 'arrive_site':
-      candidates = ['pause_start', 'leave_site'];
-      break;
+      // se la pausa è già stata fatta, il passo successivo è la fine cantiere
+      return done.has('pause_end') ? ['leave_site'] : ['pause_start'];
     case 'pause_start':
-      candidates = ['pause_end'];
-      break;
+      return ['pause_end'];
     case 'pause_end':
-      candidates = ['arrive_site', 'leave_site', 'pause_start'];
-      break;
+      return ['leave_site'];
     case 'leave_site':
-      candidates = ['arrive_home', 'arrive_site'];
-      break;
+      return ['arrive_home'];
     case 'arrive_home':
-      candidates = []; // giornata chiusa
-      break;
+      return [];
+    default:
+      return [];
   }
-  // La giornata si può chiudere solo se tutte le tappe obbligatorie sono state timbrate
-  const missing = missingRequired(entries);
-  return candidates.filter((c) => {
-    if (c !== 'arrive_home') return true;
-    return missing.filter((m) => m !== 'arrive_home').length === 0;
-  });
 }
+
 
 /** Tappe obbligatorie non ancora timbrate nella giornata. */
 export function missingRequired(entries: TimeEntry[]): TimbratureEventType[] {
@@ -191,6 +182,7 @@ export interface DailySummary {
   workMinutes: number;
   pauseMinutes: number;
   siteMinutes: number;
+  travelMinutes: number;
   firstAt: string | null;
   lastAt: string | null;
 }
@@ -217,13 +209,28 @@ export function summarizeDay(entries: TimeEntry[]): DailySummary {
   }
   const first = sorted.find((e) => e.event_type === 'start_home');
   const last = [...sorted].reverse().find((e) => e.event_type === 'arrive_home');
+
+  // Viaggio = casa → primo arrivo cantiere + ultima uscita cantiere → casa
+  const firstSite = sorted.find((e) => e.event_type === 'arrive_site');
+  const lastLeave = [...sorted].reverse().find((e) => e.event_type === 'leave_site');
+  let travel = 0;
+  if (first && firstSite) {
+    travel += Math.max(0, (new Date(firstSite.event_at).getTime() - new Date(first.event_at).getTime()) / 60000);
+  }
+  if (lastLeave && last) {
+    travel += Math.max(0, (new Date(last.event_at).getTime() - new Date(lastLeave.event_at).getTime()) / 60000);
+  }
+
   const totalMin = first && last ? (new Date(last.event_at).getTime() - new Date(first.event_at).getTime()) / 60000 : 0;
   const workMin = Math.max(0, totalMin - pause);
+
   return {
     totalMinutes: Math.round(totalMin),
     workMinutes: Math.round(workMin),
     pauseMinutes: Math.round(pause),
     siteMinutes: Math.round(site),
+    travelMinutes: Math.round(travel),
+
     firstAt: first?.event_at || null,
     lastAt: last?.event_at || null,
   };

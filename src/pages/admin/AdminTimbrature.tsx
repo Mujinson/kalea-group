@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Download, MapPin, AlertTriangle, Loader2, CheckCircle2, HelpCircle, FileText } from 'lucide-react';
-import { EVENT_LABELS, summarizeDay, formatHM, dayStages, formatTime, STAGE_ORDER, type TimeEntry } from '@/lib/timbrature';
+import { Download, MapPin, AlertTriangle, Loader2, CheckCircle2, HelpCircle, FileText, Pencil, Trash2, Plus } from 'lucide-react';
+import { EVENT_LABELS, summarizeDay, formatHM, dayStages, formatTime, STAGE_ORDER, type TimeEntry, type TimbratureEventType } from '@/lib/timbrature';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { reverseGeocode } from '@/lib/geo';
@@ -44,6 +46,57 @@ const AdminTimbrature = () => {
   const [loading, setLoading] = useState(true);
   const [addresses, setAddresses] = useState<Record<string, string>>({});
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
+  const [reloadKey, setReloadKey] = useState(0);
+  const [editing, setEditing] = useState<null | {
+    id?: string;
+    user_id: string;
+    event_date: string;
+    event_type: TimbratureEventType;
+    time: string;
+  }>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
+
+  const saveEdit = async () => {
+    if (!editing) return;
+    setSavingEdit(true);
+    try {
+      const eventAt = new Date(`${editing.event_date}T${editing.time}:00`).toISOString();
+      if (editing.id) {
+        const { error } = await supabase
+          .from('worker_time_entries' as any)
+          .update({ event_type: editing.event_type, event_at: eventAt })
+          .eq('id', editing.id);
+        if (error) throw error;
+      } else {
+        const worker = workers.find((w) => w.user_id === editing.user_id);
+        const { error } = await supabase.from('worker_time_entries' as any).insert({
+          user_id: editing.user_id,
+          worker_id: worker?.id ?? null,
+          event_type: editing.event_type,
+          event_at: eventAt,
+          event_date: editing.event_date,
+        });
+        if (error) throw error;
+      }
+      toast.success('Timbratura salvata');
+      setEditing(null);
+      setReloadKey((k) => k + 1);
+    } catch (e: any) {
+      toast.error('Errore: ' + (e?.message || 'salvataggio non riuscito'));
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  const deleteEntry = async (id: string) => {
+    if (!confirm('Eliminare questa timbratura?')) return;
+    const { error } = await supabase.from('worker_time_entries' as any).delete().eq('id', id);
+    if (error) return toast.error('Errore: ' + error.message);
+    toast.success('Timbratura eliminata');
+    setEditing(null);
+    setReloadKey((k) => k + 1);
+  };
+
 
   useEffect(() => {
     (async () => {
@@ -96,7 +149,7 @@ const AdminTimbrature = () => {
         }
       });
     })();
-  }, [workerId, month, fromDate, toDate, workers]);
+  }, [workerId, month, fromDate, toDate, workers, reloadKey]);
 
   const workerByUserId = useMemo(() => {
     const m = new Map<string, Worker>();
@@ -348,10 +401,19 @@ const AdminTimbrature = () => {
                           <AlertTriangle className="w-3 h-3" /> {alerts} fuori cantiere
                         </span>
                       )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2"
+                        onClick={() => setEditing({ user_id: g.userId, event_date: g.date, event_type: 'arrive_site', time: '08:00' })}
+                      >
+                        <Plus className="w-3 h-3 mr-1" /> Aggiungi
+                      </Button>
                     </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-2">
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     {g.entries.map((e) => {
                       const meta = EVENT_LABELS[e.event_type];
@@ -380,12 +442,33 @@ const AdminTimbrature = () => {
                             <span>{meta.icon}</span>
                             <span className="font-medium">{meta.short}</span>
                             <span className="text-muted-foreground">{t}</span>
-                            {gmap && (
-                              <a href={gmap} target="_blank" rel="noreferrer" className="text-[#8B6F4E] ml-auto" title="Apri in Google Maps">
-                                <MapPin className="w-3 h-3" />
-                              </a>
-                            )}
+                            <div className="ml-auto flex items-center gap-1">
+                              {gmap && (
+                                <a href={gmap} target="_blank" rel="noreferrer" className="text-[#8B6F4E]" title="Apri in Google Maps">
+                                  <MapPin className="w-3 h-3" />
+                                </a>
+                              )}
+                              <button
+                                title="Modifica timbratura"
+                                className="text-[#64748B] hover:text-[#0F172A]"
+                                onClick={() =>
+                                  setEditing({
+                                    id: e.id,
+                                    user_id: e.user_id,
+                                    event_date: e.event_date,
+                                    event_type: e.event_type,
+                                    time: new Date(e.event_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+                                  })
+                                }
+                              >
+                                <Pencil className="w-3 h-3" />
+                              </button>
+                              <button title="Elimina" className="text-red-500 hover:text-red-700" onClick={() => deleteEntry(e.id)}>
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
                           </div>
+
                           {address && (
                             <div className="text-[11px] text-[#64748B] mt-1 leading-tight line-clamp-2">
                               {address}
@@ -427,7 +510,54 @@ const AdminTimbrature = () => {
         </TabsContent>
       </Tabs>
       )}
+
+      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{editing?.id ? 'Modifica timbratura' : 'Aggiungi timbratura'}</DialogTitle>
+          </DialogHeader>
+          {editing && (
+            <div className="space-y-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Tappa</Label>
+                <Select
+                  value={editing.event_type}
+                  onValueChange={(v) => setEditing({ ...editing, event_type: v as TimbratureEventType })}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {STAGE_ORDER.map((t) => (
+                      <SelectItem key={t} value={t}>{EVENT_LABELS[t].icon} {EVENT_LABELS[t].short}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Data</Label>
+                  <Input type="date" value={editing.event_date} onChange={(ev) => setEditing({ ...editing, event_date: ev.target.value })} />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Ora</Label>
+                  <Input type="time" value={editing.time} onChange={(ev) => setEditing({ ...editing, time: ev.target.value })} />
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter className="gap-2">
+            {editing?.id && (
+              <Button variant="outline" className="text-red-600" onClick={() => deleteEntry(editing.id!)}>
+                <Trash2 className="w-4 h-4 mr-1" /> Elimina
+              </Button>
+            )}
+            <Button onClick={saveEdit} disabled={savingEdit}>
+              {savingEdit && <Loader2 className="w-3 h-3 animate-spin mr-2" />} Salva
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+
   );
 };
 
