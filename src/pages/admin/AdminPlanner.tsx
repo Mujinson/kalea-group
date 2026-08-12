@@ -148,18 +148,21 @@ export default function AdminPlanner() {
   const [filterPriority, setFilterPriority] = useState<string>('');
 
   const fetchAll = useCallback(async () => {
-    const [cs, cm, ca, st, wk, cu, ap] = await Promise.all([
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const [cs, cm, ca, st, wk, cu, ap, sw, te] = await Promise.all([
       fetchAllRows((supabase as any).from('crews').select('*').order('name')),
       fetchAllRows((supabase as any).from('crew_members').select('*')),
       fetchAllRows((supabase as any).from('crew_assignments').select('*')),
       fetchAllRows((supabase as any).from('construction_sites').select('*')),
-      fetchAllRows((supabase as any).from('workers').select('id, full_name, first_name, last_name')),
+      fetchAllRows((supabase as any).from('workers').select('id, first_name, last_name, user_id')),
       fetchAllRows((supabase as any).from('customers').select('id, name, full_name')),
       fetchAllRows((supabase as any).from('appointments').select('id, title, appointment_date, duration_minutes, appointment_type, status, lead_id, assigned_to')),
+      fetchAllRows((supabase as any).from('site_workers').select('*').eq('is_active', true)),
+      fetchAllRows((supabase as any).from('worker_time_entries').select('worker_id, user_id, site_id, event_type, event_date').eq('event_date', todayStr)),
     ]);
     setCrews(cs || []); setCrewMembers(cm || []); setAssignments(ca || []);
     setSites(st || []); setWorkers(wk || []); setCustomers(cu || []);
-    setAppointments(ap || []);
+    setAppointments(ap || []); setSiteWorkers(sw || []); setTodayEntries(te || []);
   }, []);
 
   const fetchServerKpis = useCallback(async () => {
