@@ -73,7 +73,8 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
         )}
 
         <p className="text-[11px] text-muted-foreground italic">
-          I costi generali (stipendi, furgone, commercialista) non sono imputati alla commessa: questo è margine di commessa, non utile netto.
+          Tutti i valori sono al netto dell'IVA. Questo è il <strong>margine sui materiali</strong>: non include manodopera, furgone,
+          gasolio, pranzi né i costi generali (stipendi, commercialista). Non è l'utile del lavoro.
         </p>
       </CardContent>
     </Card>
