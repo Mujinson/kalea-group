@@ -95,34 +95,48 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="right" className="w-full sm:max-w-lg p-0 flex flex-col">
+        <SheetContent side="right" className="w-full sm:max-w-lg p-0 flex flex-col [&>button]:hidden">
           <SheetHeader
             className="px-5 py-4 border-b shrink-0"
-            style={{ background: 'linear-gradient(180deg, #0F172A 0%, #2A1F5C 100%)' }}
+            style={{
+              background: 'linear-gradient(180deg, #0F172A 0%, #2A1F5C 100%)',
+              paddingTop: 'calc(1rem + env(safe-area-inset-top))',
+            }}
           >
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
                 <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center"
+                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
                   style={{ background: 'linear-gradient(135deg, #C4A882 0%, #8B6F4E 100%)', color: '#0F172A' }}
                 >
                   <Sparkles className="w-4 h-4" />
                 </div>
-                <SheetTitle className="text-[16px] font-semibold" style={{ color: '#F5F1E8' }}>
+                <SheetTitle className="text-[16px] font-semibold truncate" style={{ color: '#F5F1E8' }}>
                   Assistente CRM
                 </SheetTitle>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleNewConversation}
-                className="text-white/80 hover:text-white hover:bg-white/10 h-8 px-2 text-xs"
-              >
-                <Plus className="w-3.5 h-3.5 mr-1" />
-                Nuova
-              </Button>
+              <div className="flex items-center gap-1 shrink-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleNewConversation}
+                  className="text-white/80 hover:text-white hover:bg-white/10 h-9 px-2 text-xs"
+                >
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  Nuova
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  aria-label="Chiudi assistente"
+                  className="h-9 w-9 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/10"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </SheetHeader>
+
 
           {/* Messages */}
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3" style={{ background: '#F1F5F9' }}>
