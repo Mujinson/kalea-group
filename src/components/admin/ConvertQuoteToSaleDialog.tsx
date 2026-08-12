@@ -104,6 +104,41 @@ export const extractMaterialLines = (quote: QuoteForConvert): MatLine[] => {
   return out;
 };
 
+/** Righe da salvare in sale_items (prodotti/articoli/accessori) e sale_additional_costs (servizi/extra) */
+export const extractSaleLines = (quote: QuoteForConvert) => {
+  const items: any[] = Array.isArray(quote.items) ? quote.items : [];
+  const products: any[] = [];
+  const costs: any[] = [];
+
+  for (const it of items) {
+    const type = String(it?.type || '');
+    const qty = Number(it.qta ?? it.quantity_sqm ?? it.mq) || 0;
+    const unitPrice = Number(it.prezzo_un ?? it.prezzo_mq ?? it.unit_price) || 0;
+    const total = Number(it.importo ?? it.total_price) || round2(qty * unitPrice);
+    const label = it.descrizione || [it.product_type, it.color].filter(Boolean).join(' — ') || 'Voce';
+
+    if (type === 'servizio' || type === 'extra') {
+      costs.push({
+        cost_type: label,
+        quantity: qty || null,
+        unit: it.unita || null,
+        unit_price: unitPrice,
+        total_price: total,
+      });
+    } else if (qty > 0 || total > 0) {
+      products.push({
+        product_type: label,
+        product_variant: it.unita || it.color || null,
+        quantity_sqm: qty,
+        unit_price: unitPrice,
+        total_price: total,
+      });
+    }
+  }
+  return { products, costs };
+};
+
+
 
 interface Rate {
   key: string;
