@@ -156,23 +156,51 @@ export default function AiAssistantBar() {
           onSubmit={(e) => { e.preventDefault(); ask(input); }}
           className="flex items-center gap-2 h-12 px-3"
         >
-          <Sparkles className="w-4 h-4 text-crm-primary shrink-0" />
+          {voice.listening ? (
+            <span className="w-4 h-4 shrink-0 inline-flex items-center justify-center" aria-hidden>
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+            </span>
+          ) : (
+            <Sparkles className="w-4 h-4 text-crm-primary shrink-0" />
+          )}
           <input
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setTimeout(() => setFocused(false), 150)}
-            placeholder="Chiedi all'assistente: incassi, preventivi, ore, cantieri…"
+            placeholder={
+              voice.listening
+                ? 'Ti ascolto… parla pure'
+                : voice.transcribing
+                  ? 'Sto trascrivendo…'
+                  : "Chiedi all'assistente: incassi, preventivi, ore, cantieri…"
+            }
             aria-label="Chiedi all'assistente AI"
             className="flex-1 h-full bg-transparent text-[13px] text-crm-ink placeholder:text-crm-ink-subtle outline-none"
           />
-          {!input && !attiva && (
+
+          {/* onda animata durante la registrazione */}
+          {voice.listening && (
+            <span className="hidden sm:flex items-center gap-[3px] h-4 shrink-0" aria-hidden>
+              {[0, 1, 2, 3, 4].map((i) => (
+                <span
+                  key={i}
+                  className="w-[3px] rounded-full bg-red-500/80 transition-[height] duration-100"
+                  style={{
+                    height: `${4 + Math.min(14, voice.level * 22 * (i % 2 === 0 ? 1 : 0.65) + (i === 2 ? 4 : 0))}px`,
+                  }}
+                />
+              ))}
+            </span>
+          )}
+
+          {!input && !attiva && !voice.listening && (
             <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[10px] rounded bg-crm-bg-soft border border-crm-border text-crm-ink-subtle font-medium">
               ⌘K
             </kbd>
           )}
-          {attiva && (
+          {attiva && !voice.listening && (
             <button
               type="button"
               onClick={() => { setTurns([]); setInput(''); }}
@@ -182,6 +210,31 @@ export default function AiAssistantBar() {
               <X className="w-4 h-4" />
             </button>
           )}
+
+          {voice.supported && (
+            <button
+              type="button"
+              onClick={voice.toggle}
+              disabled={loading || voice.transcribing}
+              title={voice.listening ? 'Ferma e invia' : 'Detta la domanda'}
+              aria-label={voice.listening ? 'Ferma la registrazione e invia' : 'Detta la domanda'}
+              aria-pressed={voice.listening}
+              className={`w-8 h-8 inline-flex items-center justify-center rounded-crm-sm transition disabled:opacity-40 ${
+                voice.listening
+                  ? 'bg-red-500 text-white'
+                  : 'text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
+              }`}
+            >
+              {voice.transcribing ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : voice.listening ? (
+                <Square className="w-3.5 h-3.5 fill-current" />
+              ) : (
+                <Mic className="w-4 h-4" />
+              )}
+            </button>
+          )}
+
           <button
             type="submit"
             disabled={!input.trim() || loading}
@@ -192,6 +245,21 @@ export default function AiAssistantBar() {
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
           </button>
         </form>
+
+        {voice.error && (
+          <div className="flex items-start gap-2 px-3 pb-2 text-[12px] text-red-600">
+            <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+            <span className="flex-1">{voice.error}</span>
+            <button
+              type="button"
+              onClick={() => voice.setError(null)}
+              className="text-crm-ink-muted hover:text-crm-ink"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
 
         {/* Esempi: solo a barra vuota e senza conversazione */}
         {!attiva && (focused || input.length === 0) && (
