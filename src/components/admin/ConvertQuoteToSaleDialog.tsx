@@ -198,7 +198,7 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     if (subtotal > 0 && vat > 0) return Math.round((vat / subtotal) * 100) / 100;
     if (quote.vat_included) return 0;
     // fallback: aliquota del preventivo (frazione o percentuale), mai una costante
-    return normalizeVatRate(quote.vat_rate) / 100;
+    return normalizeVatRate((quote as any).vat_rate) / 100;
   }, [quote, subtotal]);
 
   const matPreview = useMemo(() => (quote ? extractMaterialLines(quote) : []), [quote]);
@@ -266,7 +266,7 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       const unitPrice = totalQty > 0 ? round2(sub / totalQty) : 0;
       const vatRate = sub > 0 && vatAmount > 0
         ? Math.round((vatAmount / sub) * 100) / 100
-        : (quote.vat_included ? 0 : normalizeVatRate(quote.vat_rate) / 100);
+        : (quote.vat_included ? 0 : normalizeVatRate((quote as any).vat_rate) / 100);
       const saleLines = extractSaleLines(quote);
 
 
