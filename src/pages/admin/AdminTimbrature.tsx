@@ -510,7 +510,54 @@ const AdminTimbrature = () => {
         </TabsContent>
       </Tabs>
       )}
+
+      <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{editing?.id ? 'Modifica timbratura' : 'Aggiungi timbratura'}</DialogTitle>
+          </DialogHeader>
+          {editing && (
+            <div className="space-y-3">
+              <div>
+                <Label className="text-xs text-muted-foreground">Tappa</Label>
+                <Select
+                  value={editing.event_type}
+                  onValueChange={(v) => setEditing({ ...editing, event_type: v as TimbratureEventType })}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {STAGE_ORDER.map((t) => (
+                      <SelectItem key={t} value={t}>{EVENT_LABELS[t].icon} {EVENT_LABELS[t].short}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-muted-foreground">Data</Label>
+                  <Input type="date" value={editing.event_date} onChange={(ev) => setEditing({ ...editing, event_date: ev.target.value })} />
+                </div>
+                <div>
+                  <Label className="text-xs text-muted-foreground">Ora</Label>
+                  <Input type="time" value={editing.time} onChange={(ev) => setEditing({ ...editing, time: ev.target.value })} />
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter className="gap-2">
+            {editing?.id && (
+              <Button variant="outline" className="text-red-600" onClick={() => deleteEntry(editing.id!)}>
+                <Trash2 className="w-4 h-4 mr-1" /> Elimina
+              </Button>
+            )}
+            <Button onClick={saveEdit} disabled={savingEdit}>
+              {savingEdit && <Loader2 className="w-3 h-3 animate-spin mr-2" />} Salva
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+
   );
 };
 
