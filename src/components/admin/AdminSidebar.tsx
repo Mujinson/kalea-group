@@ -235,7 +235,7 @@ const AdminSidebar = () => {
 
   const isActive = (path: string) => {
     if (path === '/admin') return location.pathname === '/admin';
-    return location.pathname.startsWith(path);
+    return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
   const isGroupActive = (items: MenuItem[]) =>
