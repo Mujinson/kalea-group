@@ -7,6 +7,7 @@ import NotificationCenter from '@/components/admin/NotificationCenter';
 import CommandPalette from '@/components/admin/CommandPalette';
 import CrmFaqDialog from '@/components/admin/CrmFaqDialog';
 import CrmAssistantChat from '@/components/admin/CrmAssistantChat';
+import AiAssistantBar from '@/components/admin/AiAssistantBar';
 import { Loader2, Search, HelpCircle, Settings, LogOut, Moon, Sun } from 'lucide-react';
 import kaleaLogo from '@/assets/kalea-logo.png.asset.json';
 
@@ -65,7 +66,7 @@ const AdminLayout = () => {
   if (!user || !isAdmin) return null;
 
   const openSearch = () => {
-    const ev = new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true });
+    const ev = new KeyboardEvent('keydown', { key: 'k', metaKey: true, shiftKey: true, bubbles: true });
     window.dispatchEvent(ev);
   };
 
@@ -104,11 +105,11 @@ const AdminLayout = () => {
           <button
             onClick={openSearch}
             className="ml-4 hidden md:flex items-center gap-2 h-9 px-3 rounded-crm-sm text-[13px] w-[320px] bg-crm-bg-soft border border-crm-border text-crm-ink-muted hover:border-crm-border-strong hover:bg-white transition"
-            title="Cerca (⌘K)"
+            title="Cerca (⌘⇧K)"
           >
             <Search className="w-3.5 h-3.5" />
             <span>Cerca clienti, lead, prodotti…</span>
-            <kbd className="ml-auto px-1.5 py-0.5 text-[10px] rounded bg-white border border-crm-border text-crm-ink-subtle font-medium">⌘K</kbd>
+            <kbd className="ml-auto px-1.5 py-0.5 text-[10px] rounded bg-white border border-crm-border text-crm-ink-subtle font-medium">⌘⇧K</kbd>
           </button>
 
           <div className="flex-1" />
@@ -143,6 +144,7 @@ const AdminLayout = () => {
           <AdminSidebar />
           <main className="flex-1 flex flex-col min-w-0">
             <CommandPalette />
+            <AiAssistantBar />
             <div
               key={location.pathname}
               className="flex-1 p-3 md:p-6 overflow-auto animate-crm-fade-up"
