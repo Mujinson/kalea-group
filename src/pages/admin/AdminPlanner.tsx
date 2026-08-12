@@ -437,7 +437,7 @@ export default function AdminPlanner() {
         )}
         {/* Events */}
         {assignsByDay.map((a, idx) => {
-          const c = crews.find((x) => x.id === a.crew_id);
+          const c = crewFor(a.crew_id);
           if (!c) return null;
           const s = sites.find((x) => x.id === a.site_id);
           const startH = 8; // default 08:00
@@ -580,7 +580,7 @@ export default function AdminPlanner() {
                 <div className={`text-[10px] font-bold mb-1 inline-flex items-center justify-center ${isToday ? 'bg-blue-600 text-white rounded-full w-5 h-5' : ''}`}>{format(d, 'd')}</div>
                 <div className="space-y-0.5">
                   {dayAssigns.slice(0, 3).map((a) => {
-                    const c = crews.find((x) => x.id === a.crew_id);
+                    const c = crewFor(a.crew_id);
                     const s = sites.find((x) => x.id === a.site_id);
                     if (!c) return null;
                     return (
@@ -654,7 +654,7 @@ export default function AdminPlanner() {
                 </div>
                 <div className="relative" style={{ width: days.length * dayW, height: 48 }}>
                   {sAssigns.map((a, idx) => {
-                    const c = crews.find((x) => x.id === a.crew_id);
+                    const c = crewFor(a.crew_id);
                     if (!c) return null;
                     const startD = parseISO(a.start_date) < ms ? ms : parseISO(a.start_date);
                     const endD = parseISO(a.end_date) > me ? me : parseISO(a.end_date);
@@ -830,7 +830,7 @@ export default function AdminPlanner() {
                 <div className="text-xs uppercase font-bold text-muted-foreground mb-1">Squadre assegnate</div>
                 <div className="space-y-1">
                   {assignments.filter((a) => a.site_id === selectedSite.id).map((a) => {
-                    const c = crews.find((x) => x.id === a.crew_id);
+                    const c = crewFor(a.crew_id);
                     if (!c) return null;
                     return (
                       <div key={a.id} className="flex items-center justify-between p-2 rounded" style={{ background: c.color + '15' }}>
@@ -877,7 +877,7 @@ function SiteRow({ site, days, customerName, assignments, crews, crewMembers, wo
         return (
           <DroppableCell key={dayStr} id={`day:${site.id}:${dayStr}`} data={{ type: 'day', site_id: site.id, date: dayStr }} className="bg-white p-1 min-h-[80px] space-y-0.5">
             {dayAssigns.map((a) => {
-              const c = crews.find((x) => x.id === a.crew_id);
+              const c = crewFor(a.crew_id);
               return c ? <DraggableAssignment key={a.id} assignment={a} crew={c} members={crewMembers} workers={workers} compact /> : null;
             })}
             {!dayAssigns.length && (
