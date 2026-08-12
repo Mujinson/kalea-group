@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square } from 'lucide-react';
+import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2 } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
+import { useSpeech } from '@/hooks/useSpeech';
 
 type Ref = { etichetta: string; percorso: string };
 type Turn = {
@@ -33,6 +34,15 @@ export default function AiAssistantBar() {
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // Risposta vocale (spenta di default, scelta ricordata)
+  const [voiceReply, setVoiceReply] = useState(
+    () => typeof localStorage !== 'undefined' && localStorage.getItem('kalea:ai-voice-reply') === '1',
+  );
+  const voiceReplyRef = useRef(voiceReply);
+  voiceReplyRef.current = voiceReply;
+  const speech = useSpeech();
+  const [ultimaRisposta, setUltimaRisposta] = useState('');
 
   // ⌘K / Ctrl+K → focus sulla barra assistente
   useEffect(() => {
@@ -122,8 +132,9 @@ export default function AiAssistantBar() {
             acc += payload.testo;
             patch({ risposta: acc });
           } else if (event === 'done') {
+            acc = payload?.risposta || acc;
             patch({
-              risposta: payload?.risposta || acc,
+              risposta: acc,
               riferimenti: Array.isArray(payload?.riferimenti) ? payload.riferimenti : [],
               streaming: false,
             });
@@ -133,13 +144,17 @@ export default function AiAssistantBar() {
         }
       }
       patch({ streaming: false });
+      if (acc.trim()) {
+        setUltimaRisposta(acc);
+        if (voiceReplyRef.current) void speech.speak(acc);
+      }
     } catch (e: any) {
       patch({ errore: e?.message || 'Errore nella richiesta all\'assistente.', streaming: false });
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 30);
     }
-  }, [loading, turns]);
+  }, [loading, turns, speech]);
 
   const voice = useVoiceInput({
     onInterim: (t) => setInput(t),
@@ -235,6 +250,54 @@ export default function AiAssistantBar() {
             </button>
           )}
 
+          {/* Interruttore risposta vocale */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={voiceReply}
+            aria-label="Risposta vocale"
+            title={voiceReply ? 'Risposta vocale attiva' : 'Risposta vocale spenta'}
+            onClick={() => {
+              const next = !voiceReply;
+              setVoiceReply(next);
+              localStorage.setItem('kalea:ai-voice-reply', next ? '1' : '0');
+              if (!next) speech.stop();
+            }}
+            className={`h-8 px-2 inline-flex items-center gap-1.5 rounded-crm-sm border transition shrink-0 ${
+              voiceReply
+                ? 'border-crm-primary/40 bg-crm-primary/10 text-crm-primary'
+                : 'border-crm-border text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
+            }`}
+          >
+            {voiceReply ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            <span className="hidden lg:inline text-[11px] font-medium">Voce</span>
+          </button>
+
+          {/* Interrompi audio / ripeti ultima risposta */}
+          {speech.speaking ? (
+            <button
+              type="button"
+              onClick={speech.stop}
+              title="Interrompi audio"
+              aria-label="Interrompi audio"
+              className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm bg-crm-bg-soft text-crm-ink border border-crm-border hover:border-crm-border-strong transition"
+            >
+              <Square className="w-3.5 h-3.5 fill-current" />
+            </button>
+          ) : (
+            ultimaRisposta && (
+              <button
+                type="button"
+                onClick={() => void speech.speak(ultimaRisposta)}
+                title="Ripeti l'ultima risposta"
+                aria-label="Ripeti l'ultima risposta"
+                className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
+              >
+                <Repeat2 className="w-4 h-4" />
+              </button>
+            )
+          )}
+
           <button
             type="submit"
             disabled={!input.trim() || loading}
@@ -253,6 +316,20 @@ export default function AiAssistantBar() {
             <button
               type="button"
               onClick={() => voice.setError(null)}
+              className="text-crm-ink-muted hover:text-crm-ink"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {speech.error && (
+          <div className="flex items-start gap-2 px-3 pb-2 text-[12px] text-red-600">
+            <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+            <span className="flex-1">{speech.error}</span>
+            <button
+              type="button"
+              onClick={() => speech.setError(null)}
               className="text-crm-ink-muted hover:text-crm-ink"
             >
               <X className="w-3.5 h-3.5" />
