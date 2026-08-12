@@ -258,6 +258,9 @@ const AdminSales = () => {
     deposit_date: '',
     balance_due_date: '',
     is_paid: false,
+    deposit_invoiced: false,
+    deposit_invoice_number: '',
+    deposit_vat_rate: '22',
   });
 
   const handleDataChange = useCallback(() => {
@@ -501,7 +504,7 @@ const AdminSales = () => {
       }
 
       // Anticipo → rata "acconto" già incassata
-      await syncDepositSchedule(saleResult.id, depositAmount, paymentData.deposit_date || saleData.sale_date);
+      await syncDepositSchedule(saleResult.id, depositAmount, paymentData.deposit_date || saleData.sale_date, customerId);
 
       // Create payment schedule if balance exists
       if (balanceAmount > 0 && paymentData.balance_due_date) {
@@ -569,7 +572,7 @@ const AdminSales = () => {
     setAdditionalCosts([]);
     setSalespersonCommissions([]);
     setSaleData({ channel: 'B2B', sale_date: format(new Date(), 'yyyy-MM-dd'), vat_included: false, notes: '' });
-    setPaymentData({ payment_method: '', payment_terms: '', deposit_amount: '', deposit_date: '', balance_due_date: '', is_paid: false });
+    setPaymentData({ payment_method: '', payment_terms: '', deposit_amount: '', deposit_date: '', balance_due_date: '', is_paid: false, deposit_invoiced: false, deposit_invoice_number: '', deposit_vat_rate: '22' });
     setActiveTab('customer');
     setEditingSaleId(null);
   };
@@ -626,6 +629,17 @@ const AdminSales = () => {
       vat_included: sale.vat_included,
       notes: sale.notes || '',
     });
+    const { data: acconto } = await (supabase as any)
+      .from('payment_schedules')
+      .select('is_invoiced, invoice_number, invoice_id')
+      .eq('sale_id', sale.id)
+      .eq('payment_type', 'acconto')
+      .maybeSingle();
+    let vatRate = '22';
+    if (acconto?.invoice_id) {
+      const { data: inv } = await (supabase as any).from('customer_invoices').select('vat_rate').eq('id', acconto.invoice_id).maybeSingle();
+      if (inv?.vat_rate != null) vatRate = String(inv.vat_rate);
+    }
     setPaymentData({
       payment_method: sale.payment_method || '',
       payment_terms: sale.payment_terms || '',
@@ -633,6 +647,9 @@ const AdminSales = () => {
       deposit_date: (sale as any).deposit_date || '',
       balance_due_date: sale.balance_due_date || '',
       is_paid: sale.is_paid || false,
+      deposit_invoiced: !!acconto?.is_invoiced,
+      deposit_invoice_number: acconto?.invoice_number || '',
+      deposit_vat_rate: vatRate,
     });
     
     // Set sale items (simplified - single item from main sale)
@@ -647,35 +664,102 @@ const AdminSales = () => {
     setActiveTab('products');
   };
 
-  // Registra/aggiorna l'anticipo come rata "acconto" già pagata, così risulta incassato
-  const syncDepositSchedule = async (saleId: string, depositAmount: number, depositDate: string) => {
+  // Registra/aggiorna l'anticipo: rata "acconto" pagata + (se fatturato) fattura e incasso reale
+  const syncDepositSchedule = async (saleId: string, depositAmount: number, depositDate: string, customerId?: string | null) => {
     try {
-      const { data: existing } = await supabase
+      const sb = supabase as any;
+      const { data: existing } = await sb
         .from('payment_schedules')
-        .select('id')
+        .select('id, invoice_id')
         .eq('sale_id', saleId)
         .eq('payment_type', 'acconto')
         .maybeSingle();
 
-      if (depositAmount > 0) {
-        const payload = {
-          sale_id: saleId,
-          amount: depositAmount,
-          due_date: depositDate,
-          paid_date: depositDate,
-          is_paid: true,
-          payment_type: 'acconto',
-        };
+      if (depositAmount <= 0) {
         if (existing?.id) {
-          await supabase.from('payment_schedules').update(payload).eq('id', existing.id);
-        } else {
-          await supabase.from('payment_schedules').insert(payload);
+          if (existing.invoice_id) await sb.from('customer_invoices').delete().eq('id', existing.invoice_id);
+          await sb.from('payment_schedules').delete().eq('id', existing.id);
         }
-      } else if (existing?.id) {
-        await supabase.from('payment_schedules').delete().eq('id', existing.id);
+        return;
+      }
+
+      const vatRate = Number(paymentData.deposit_vat_rate || 22);
+      const vatAmount = Math.round(depositAmount * vatRate) / 100;
+      const gross = depositAmount + vatAmount;
+
+      let invoiceId: string | null = existing?.invoice_id || null;
+
+      if (paymentData.deposit_invoiced) {
+        const invPayload: any = {
+          customer_id: customerId || null,
+          invoice_date: depositDate,
+          description: 'Acconto vendita',
+          subtotal: depositAmount,
+          vat_rate: vatRate,
+          vat_amount: vatAmount,
+          total: gross,
+          tranche_type: 'acconto',
+          status: 'emessa',
+        };
+        if (paymentData.deposit_invoice_number.trim()) invPayload.invoice_number = paymentData.deposit_invoice_number.trim();
+
+        if (invoiceId) {
+          await sb.from('customer_invoices').update(invPayload).eq('id', invoiceId);
+        } else {
+          const { data: inv, error: invErr } = await sb.from('customer_invoices').insert(invPayload).select('id').single();
+          if (invErr) throw invErr;
+          invoiceId = inv.id;
+          await sb.from('invoice_sales').insert({ invoice_id: invoiceId, sale_id: saleId });
+        }
+      } else if (invoiceId) {
+        await sb.from('customer_invoices').delete().eq('id', invoiceId);
+        invoiceId = null;
+      }
+
+      const payload: any = {
+        sale_id: saleId,
+        amount: depositAmount,
+        due_date: depositDate,
+        paid_date: depositDate,
+        is_paid: true,
+        payment_type: 'acconto',
+        invoice_id: invoiceId,
+        is_invoiced: !!invoiceId,
+        invoice_number: invoiceId ? (paymentData.deposit_invoice_number.trim() || null) : null,
+        invoiced_amount: invoiceId ? gross : null,
+      };
+      let scheduleId = existing?.id as string | undefined;
+      if (scheduleId) {
+        await sb.from('payment_schedules').update(payload).eq('id', scheduleId);
+      } else {
+        const { data: sch } = await sb.from('payment_schedules').insert(payload).select('id').single();
+        scheduleId = sch?.id;
+      }
+
+      // Incasso reale (visibile in contabilità/dashboard) solo se c'è una fattura
+      if (invoiceId) {
+        const { data: existingPay } = await sb
+          .from('customer_payments')
+          .select('id')
+          .eq('invoice_id', invoiceId)
+          .maybeSingle();
+        const payPayload = {
+          invoice_id: invoiceId,
+          payment_schedule_id: scheduleId || null,
+          payment_date: depositDate,
+          amount: gross,
+          method: paymentData.payment_method || 'bonifico',
+          tranche_type: 'acconto',
+        };
+        if (existingPay?.id) {
+          await sb.from('customer_payments').update(payPayload).eq('id', existingPay.id);
+        } else {
+          await sb.from('customer_payments').insert(payPayload);
+        }
       }
     } catch (e) {
       console.error('Errore sincronizzazione acconto:', e);
+      toast.error("Errore nel salvataggio dell'anticipo");
     }
   };
 
@@ -721,7 +805,7 @@ const AdminSales = () => {
 
       if (error) throw error;
 
-      await syncDepositSchedule(editingSaleId!, depositAmount, paymentData.deposit_date || saleData.sale_date);
+      await syncDepositSchedule(editingSaleId!, depositAmount, paymentData.deposit_date || saleData.sale_date, selectedCustomerId || null);
 
       toast.success('Vendita aggiornata');
       setDialogOpen(false);
@@ -978,8 +1062,23 @@ const AdminSales = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2"><Label>Anticipo (€)</Label><Input type="number" step="0.01" value={paymentData.deposit_amount} onChange={(e) => setPaymentData({...paymentData, deposit_amount: e.target.value})} /></div>
+                  <div className="space-y-2"><Label>Anticipo netto (€)</Label><Input type="number" step="0.01" value={paymentData.deposit_amount} onChange={(e) => setPaymentData({...paymentData, deposit_amount: e.target.value})} /></div>
                   <div className="space-y-2"><Label>Data Anticipo</Label><Input type="date" value={paymentData.deposit_date} onChange={(e) => setPaymentData({...paymentData, deposit_date: e.target.value})} /></div>
+                </div>
+                <div className="rounded-lg border p-3 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <Checkbox id="depInvoiced" checked={paymentData.deposit_invoiced} onCheckedChange={(c) => setPaymentData({...paymentData, deposit_invoiced: !!c})} />
+                    <Label htmlFor="depInvoiced">Anticipo fatturato (registra fattura e incasso)</Label>
+                  </div>
+                  {paymentData.deposit_invoiced && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2"><Label>N. Fattura</Label><Input placeholder="es. 2026/012" value={paymentData.deposit_invoice_number} onChange={(e) => setPaymentData({...paymentData, deposit_invoice_number: e.target.value})} /></div>
+                      <div className="space-y-2"><Label>IVA (%)</Label><Input type="number" step="0.01" value={paymentData.deposit_vat_rate} onChange={(e) => setPaymentData({...paymentData, deposit_vat_rate: e.target.value})} /></div>
+                      <div className="sm:col-span-2 text-sm text-muted-foreground">
+                        Imponibile {formatCurrency(Number(paymentData.deposit_amount || 0))} + IVA {formatCurrency(Number(paymentData.deposit_amount || 0) * Number(paymentData.deposit_vat_rate || 0) / 100)} = <strong>{formatCurrency(Number(paymentData.deposit_amount || 0) * (1 + Number(paymentData.deposit_vat_rate || 0) / 100))}</strong>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-2"><Label>Scadenza Saldo</Label><Input type="date" value={paymentData.balance_due_date} onChange={(e) => setPaymentData({...paymentData, balance_due_date: e.target.value})} /></div>
                 <div className="flex items-center gap-4 pt-4 border-t">
