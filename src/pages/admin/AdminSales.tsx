@@ -629,12 +629,15 @@ const AdminSales = () => {
       vat_included: sale.vat_included,
       notes: sale.notes || '',
     });
-    const { data: acconto } = await (supabase as any)
+    const { data: acconti } = await (supabase as any)
       .from('payment_schedules')
       .select('is_invoiced, invoice_number, invoice_id')
       .eq('sale_id', sale.id)
-      .eq('payment_type', 'acconto')
-      .maybeSingle();
+      .ilike('payment_type', 'acconto')
+      .order('is_invoiced', { ascending: false })
+      .order('created_at', { ascending: true })
+      .limit(1);
+    const acconto = acconti?.[0];
     let vatRate = '22';
     if (acconto?.invoice_id) {
       const { data: inv } = await (supabase as any).from('customer_invoices').select('vat_rate').eq('id', acconto.invoice_id).maybeSingle();
@@ -666,19 +669,27 @@ const AdminSales = () => {
 
   // Registra/aggiorna l'anticipo: rata "acconto" pagata + (se fatturato) fattura e incasso reale
   const syncDepositSchedule = async (saleId: string, depositAmount: number, depositDate: string, customerId?: string | null) => {
-    try {
       const sb = supabase as any;
-      const { data: existing } = await sb
+      const { data: existingRows, error: existingError } = await sb
         .from('payment_schedules')
         .select('id, invoice_id')
         .eq('sale_id', saleId)
-        .eq('payment_type', 'acconto')
-        .maybeSingle();
+        .ilike('payment_type', 'acconto')
+        .order('created_at', { ascending: true });
+      if (existingError) throw existingError;
+      const existing = existingRows?.[0];
+      const duplicateIds = (existingRows || []).slice(1).map((row: { id: string }) => row.id);
 
       if (depositAmount <= 0) {
-        if (existing?.id) {
-          if (existing.invoice_id) await sb.from('customer_invoices').delete().eq('id', existing.invoice_id);
-          await sb.from('payment_schedules').delete().eq('id', existing.id);
+        for (const row of existingRows || []) {
+          if (row.invoice_id) {
+            const { error } = await sb.from('customer_invoices').delete().eq('id', row.invoice_id);
+            if (error) throw error;
+          }
+        }
+        if (existingRows?.length) {
+          const { error } = await sb.from('payment_schedules').delete().in('id', existingRows.map((row: { id: string }) => row.id));
+          if (error) throw error;
         }
         return;
       }
@@ -704,15 +715,18 @@ const AdminSales = () => {
         if (paymentData.deposit_invoice_number.trim()) invPayload.invoice_number = paymentData.deposit_invoice_number.trim();
 
         if (invoiceId) {
-          await sb.from('customer_invoices').update(invPayload).eq('id', invoiceId);
+          const { error } = await sb.from('customer_invoices').update(invPayload).eq('id', invoiceId);
+          if (error) throw error;
         } else {
           const { data: inv, error: invErr } = await sb.from('customer_invoices').insert(invPayload).select('id').single();
           if (invErr) throw invErr;
           invoiceId = inv.id;
-          await sb.from('invoice_sales').insert({ invoice_id: invoiceId, sale_id: saleId });
+          const { error: linkError } = await sb.from('invoice_sales').insert({ invoice_id: invoiceId, sale_id: saleId });
+          if (linkError) throw linkError;
         }
       } else if (invoiceId) {
-        await sb.from('customer_invoices').delete().eq('id', invoiceId);
+        const { error } = await sb.from('customer_invoices').delete().eq('id', invoiceId);
+        if (error) throw error;
         invoiceId = null;
       }
 
@@ -730,10 +744,17 @@ const AdminSales = () => {
       };
       let scheduleId = existing?.id as string | undefined;
       if (scheduleId) {
-        await sb.from('payment_schedules').update(payload).eq('id', scheduleId);
+        const { error } = await sb.from('payment_schedules').update(payload).eq('id', scheduleId);
+        if (error) throw error;
       } else {
-        const { data: sch } = await sb.from('payment_schedules').insert(payload).select('id').single();
+        const { data: sch, error } = await sb.from('payment_schedules').insert(payload).select('id').single();
+        if (error) throw error;
         scheduleId = sch?.id;
+      }
+
+      if (duplicateIds.length) {
+        const { error } = await sb.from('payment_schedules').delete().in('id', duplicateIds);
+        if (error) throw error;
       }
 
       // Incasso reale (visibile in contabilità/dashboard) solo se c'è una fattura
@@ -752,15 +773,13 @@ const AdminSales = () => {
           tranche_type: 'acconto',
         };
         if (existingPay?.id) {
-          await sb.from('customer_payments').update(payPayload).eq('id', existingPay.id);
+          const { error } = await sb.from('customer_payments').update(payPayload).eq('id', existingPay.id);
+          if (error) throw error;
         } else {
-          await sb.from('customer_payments').insert(payPayload);
+          const { error } = await sb.from('customer_payments').insert(payPayload);
+          if (error) throw error;
         }
       }
-    } catch (e) {
-      console.error('Errore sincronizzazione acconto:', e);
-      toast.error("Errore nel salvataggio dell'anticipo");
-    }
   };
 
   const handleUpdateSale = async () => {
@@ -805,7 +824,8 @@ const AdminSales = () => {
 
       if (error) throw error;
 
-      await syncDepositSchedule(editingSaleId!, depositAmount, paymentData.deposit_date || saleData.sale_date, selectedCustomerId || null);
+      if (!editingSaleId) throw new Error('Vendita non disponibile');
+      await syncDepositSchedule(editingSaleId, depositAmount, paymentData.deposit_date || saleData.sale_date, selectedCustomerId || null);
 
       toast.success('Vendita aggiornata');
       setDialogOpen(false);
