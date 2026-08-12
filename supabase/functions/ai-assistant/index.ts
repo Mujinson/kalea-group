@@ -343,23 +343,59 @@ async function oreDipendente(sb: SupabaseClient, a: any, refs: Ref[]) {
   const w: any = workers[0];
   refs.push({ etichetta: `${w.first_name} ${w.last_name}`, percorso: `/admin/cantieri-operai/${w.id}` });
 
-  const { data: logs } = await sb.from('site_work_logs')
+  // FONTE PRIMARIA: rapportini (site_work_logs.hours_worked su work_date)
+  const { data: logs, error: lErr } = await sb.from('site_work_logs')
     .select('site_id, work_date, hours_worked').eq('worker_id', w.id)
     .gte('work_date', p.start).lte('work_date', p.end).limit(1000);
+  if (lErr) return { errore: lErr.message };
 
-  let entries: any[] = [];
-  if (w.user_id) {
-    const { data: te } = await sb.from('worker_time_entries')
-      .select('event_type, event_at, event_date, site_id').eq('user_id', w.user_id)
-      .gte('event_date', p.start).lte('event_date', p.end).order('event_at').limit(2000);
-    entries = te || [];
+  const perCantiere: Record<string, number> = {};
+  const resolveNames = async (ids: string[]) => {
+    const names: Record<string, string> = {};
+    if (ids.length) {
+      const { data: s } = await sb.from('construction_sites').select('id, title, city').in('id', ids);
+      for (const r of (s || []) as any[]) names[r.id] = [r.title, r.city].filter(Boolean).join(' — ');
+    }
+    return names;
+  };
+
+  if (logs?.length) {
+    for (const l of logs as any[]) perCantiere[l.site_id] = (perCantiere[l.site_id] || 0) + num(l.hours_worked);
+    const siteIds = Object.keys(perCantiere);
+    const names = await resolveNames(siteIds);
+    const oreRapportini = (logs as any[]).reduce((s: number, r: any) => s + num(r.hours_worked), 0);
+    const perData: Record<string, number> = {};
+    for (const l of logs as any[]) perData[l.work_date] = (perData[l.work_date] || 0) + num(l.hours_worked);
+    return {
+      dipendente: `${w.first_name} ${w.last_name}`, periodo: p.label, dal: p.start, al: p.end,
+      fonte: 'rapportini',
+      stima: false,
+      ore_totali: Math.round(oreRapportini * 100) / 100,
+      giorni_lavorati: Object.keys(perData).length,
+      per_cantiere: siteIds.map((id) => ({ cantiere: names[id] || id, ore: Math.round(perCantiere[id] * 100) / 100 })),
+      dettaglio_giornaliero: Object.entries(perData).map(([data, ore]) => ({ data, ore: Math.round(ore * 100) / 100 })).sort((x, y) => x.data.localeCompare(y.data)),
+    };
   }
 
-  // ore da timbrature: arrive_site -> leave_site meno pausa
+  // FALLBACK: nessun rapportino nel periodo -> stima dalle timbrature grezze
+  if (!w.user_id) {
+    return {
+      dipendente: `${w.first_name} ${w.last_name}`, periodo: p.label, dal: p.start, al: p.end,
+      fonte: 'nessuna', stima: false, ore_totali: 0,
+      messaggio: 'Nessun rapportino nel periodo e nessun account collegato per stimare dalle timbrature.',
+    };
+  }
+  const { data: te, error: tErr } = await sb.from('worker_time_entries')
+    .select('event_type, event_at, event_date, site_id').eq('user_id', w.user_id)
+    .gte('event_date', p.start).lte('event_date', p.end).order('event_at').limit(2000);
+  if (tErr) return { errore: tErr.message };
+  const entries = (te || []) as any[];
+
   const byDay: Record<string, any[]> = {};
   for (const e of entries) (byDay[e.event_date] ||= []).push(e);
-  let oreTimbrature = 0;
+  let oreStimate = 0;
   const perGiorno: any[] = [];
+  const giorniIncompleti: string[] = [];
   for (const [day, evs] of Object.entries(byDay)) {
     const at = (t: string) => evs.find((e: any) => e.event_type === t)?.event_at;
     const s = at('arrive_site'), e2 = at('leave_site') || at('arrive_home');
@@ -368,30 +404,28 @@ async function oreDipendente(sb: SupabaseClient, a: any, refs: Ref[]) {
       let h = (+new Date(e2) - +new Date(s)) / 3600000;
       if (bs && be) h -= (+new Date(be) - +new Date(bs)) / 3600000;
       h = Math.max(0, Math.round(h * 100) / 100);
-      oreTimbrature += h;
+      oreStimate += h;
       perGiorno.push({ data: day, ore: h, cantiere_id: evs.find((x: any) => x.site_id)?.site_id || null });
+    } else {
+      giorniIncompleti.push(day);
     }
   }
-
-  const perCantiere: Record<string, number> = {};
-  for (const l of (logs || []) as any[]) perCantiere[l.site_id] = (perCantiere[l.site_id] || 0) + num(l.hours_worked);
   for (const g of perGiorno) if (g.cantiere_id) perCantiere[g.cantiere_id] = (perCantiere[g.cantiere_id] || 0) + g.ore;
   const siteIds = Object.keys(perCantiere);
-  const names: Record<string, string> = {};
-  if (siteIds.length) {
-    const { data: s } = await sb.from('construction_sites').select('id, title, city').in('id', siteIds);
-    for (const r of (s || []) as any[]) names[r.id] = [r.title, r.city].filter(Boolean).join(' — ');
-  }
-  const oreRapportini = (logs || []).reduce((s: number, r: any) => s + num(r.hours_worked), 0);
+  const names = await resolveNames(siteIds);
+
   return {
     dipendente: `${w.first_name} ${w.last_name}`, periodo: p.label, dal: p.start, al: p.end,
-    ore_da_rapportini: Math.round(oreRapportini * 100) / 100,
-    ore_da_timbrature: Math.round(oreTimbrature * 100) / 100,
-    ore_totali: Math.round((oreRapportini + oreTimbrature) * 100) / 100,
+    fonte: 'timbrature_grezze',
+    stima: true,
+    avviso: 'ATTENZIONE: nessun rapportino (site_work_logs) per questo dipendente nel periodo. Le ore sono una STIMA ricostruita dalle coppie entrata/uscita delle timbrature grezze (arrivo cantiere → fine cantiere, meno la pausa) e vanno dichiarate come tali nella risposta.',
+    ore_totali: Math.round(oreStimate * 100) / 100,
     giorni_timbrati: perGiorno.length,
+    giorni_con_timbrature_incomplete: giorniIncompleti,
     per_cantiere: siteIds.map((id) => ({ cantiere: names[id] || id, ore: Math.round(perCantiere[id] * 100) / 100 })),
     dettaglio_giornaliero: perGiorno,
   };
+
 }
 
 async function resolveSite(sb: SupabaseClient, term: string) {
