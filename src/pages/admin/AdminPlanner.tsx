@@ -877,7 +877,7 @@ function SiteRow({ site, days, customerName, assignments, crews, crewMembers, wo
         return (
           <DroppableCell key={dayStr} id={`day:${site.id}:${dayStr}`} data={{ type: 'day', site_id: site.id, date: dayStr }} className="bg-white p-1 min-h-[80px] space-y-0.5">
             {dayAssigns.map((a) => {
-              const c = crewFor(a.crew_id);
+              const c = crews.find((x) => x.id === a.crew_id) || null;
               return c ? <DraggableAssignment key={a.id} assignment={a} crew={c} members={crewMembers} workers={workers} compact /> : null;
             })}
             {!dayAssigns.length && (
