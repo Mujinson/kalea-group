@@ -102,9 +102,9 @@ export const normalizeVatRate = (v: unknown, fallback = 22): number => {
 };
 
 /** Scorporo: dal lordo al netto usando l'aliquota del documento. */
-export const netFromGross = (gross: number, ratePct: number) =>
+export const netFromGross = (gross: number, ratePct: unknown) =>
   Math.round((Number(gross) || 0) / (1 + normalizeVatRate(ratePct, 0) / 100) * 100) / 100;
 
 /** IVA calcolata sull'imponibile. */
-export const vatFromNet = (net: number, ratePct: number) =>
+export const vatFromNet = (net: number, ratePct: unknown) =>
   Math.round((Number(net) || 0) * normalizeVatRate(ratePct, 0)) / 100;
