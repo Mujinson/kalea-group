@@ -43,15 +43,15 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
       <CardContent className="space-y-3">
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <p className="text-xs text-muted-foreground">Ricavi</p>
+            <p className="text-xs text-muted-foreground">Ricavi (imponibile)</p>
             <p className="text-lg font-bold">{fmtEur(revenue)}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Costi</p>
+            <p className="text-xs text-muted-foreground">Costi materiali (imponibile)</p>
             <p className="text-lg font-bold text-orange-600">{fmtEur(costs)}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Margine</p>
+            <p className="text-xs text-muted-foreground">Margine materiali</p>
             <p className={`text-lg font-bold ${margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {fmtEur(margin)} <span className="text-xs">({marginPct.toFixed(1)}%)</span>
             </p>
