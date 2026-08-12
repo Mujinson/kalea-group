@@ -155,10 +155,16 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
     if (existing) {
       await supabase.from("site_equipment" as any).delete().eq("id", existing.id);
     } else {
-      await supabase.from("site_equipment" as any).insert({ site_id: siteId, type });
+      await supabase.from("site_equipment" as any).insert({ site_id: siteId, type, status: "da_portare", quantity_on_site: 0 });
     }
     qc.invalidateQueries({ queryKey: ["site-equipment", siteId] });
   };
+  const updateEquipment = async (id: string, patch: Record<string, any>) => {
+    const { error } = await supabase.from("site_equipment" as any).update(patch).eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    qc.invalidateQueries({ queryKey: ["site-equipment", siteId] });
+  };
+
 
   // ============ Checklist ============
   const { data: checklist } = useQuery({
