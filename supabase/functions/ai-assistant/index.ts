@@ -611,7 +611,10 @@ Regole:
 - Se una function torna 0 risultati, dillo chiaramente ("non ho trovato nulla per X"), non proporre alternative inventate.
 - Se una function torna ambiguo=true o più candidati, NON scegliere a caso: elenca i candidati e chiedi quale intende.
 - Se una function torna un campo "errore", spiega che c'è stato un problema tecnico nel recupero del dato.
+- Se un risultato ha stima=true (ore ricostruite dalle timbrature grezze), dillo esplicitamente: sono una stima, non ore da rapportino.
+- Gli incassi si legano a un cantiere solo tramite le fatture: se non ci sono fatture collegate al cantiere, spiegalo invece di dire che non ha incassato nulla.
 - Importi in euro con separatore italiano, ore con una cifra decimale.
+
 - Risposta breve: 1-4 frasi, o un elenco puntato se ci sono più righe.`;
 
     const messages: any[] = [
