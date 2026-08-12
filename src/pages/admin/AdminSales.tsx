@@ -1075,6 +1075,13 @@ const AdminSales = () => {
                 <div className="flex items-center gap-4 pt-4 border-t">
                   <Checkbox id="vatIncluded" checked={saleData.vat_included} onCheckedChange={(checked) => setSaleData({...saleData, vat_included: !!checked})} />
                   <Label htmlFor="vatIncluded">IVA inclusa</Label>
+                  {!saleData.vat_included && (
+                    <div className="flex items-center gap-2 ml-auto">
+                      <Label htmlFor="saleVatRate" className="whitespace-nowrap">Aliquota IVA (%)</Label>
+                      <Input id="saleVatRate" type="number" step="0.01" className="w-24" value={saleData.vat_rate}
+                        onChange={(e) => setSaleData({ ...saleData, vat_rate: e.target.value })} />
+                    </div>
+                  )}
                 </div>
               </TabsContent>
 
