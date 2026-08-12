@@ -259,9 +259,11 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
         || items.reduce((s: number, i: any) => s + (Number(i.quantity_sqm) || 0), 0);
       const totalAmount = Number(quote.total_amount) || 0;
       const vatAmount = Number(quote.vat_amount) || 0;
-      const sub = totalAmount - vatAmount;
-      const unitPrice = totalQty > 0 ? sub / totalQty : 0;
-      const vatRate = quote.vat_included ? 0 : 0.22;
+      const sub = round2(totalAmount - vatAmount);
+      const unitPrice = totalQty > 0 ? round2(sub / totalQty) : 0;
+      const vatRate = sub > 0 && vatAmount > 0 ? Math.round((vatAmount / sub) * 100) / 100 : (quote.vat_included ? 0 : 0.22);
+      const saleLines = extractSaleLines(quote);
+
 
       // Risoluzione codici catalogo (serve sia per il costo che per le righe materiali)
       const codes = Array.from(new Set(matLines.map(m => m.product_code).filter(Boolean))) as string[];
