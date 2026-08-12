@@ -657,6 +657,9 @@ const AdminSales = () => {
       const marginAmount = subtotal - (totalQty * costPerSqm);
       const marginPercentage = subtotal > 0 ? (marginAmount / subtotal) * 100 : 0;
 
+      const depositAmount = paymentData.deposit_amount ? parseFloat(paymentData.deposit_amount) : 0;
+      const balanceAmount = total - depositAmount;
+
       const { error } = await supabase.from('sales').update({
         product_type: firstItem.product_type,
         color: firstItem.product_variant || null,
@@ -673,11 +676,17 @@ const AdminSales = () => {
         margin_percentage: marginPercentage,
         payment_method: (paymentData.payment_method || null) as "assegno" | "bonifico" | "carta_credito" | "contanti" | null,
         payment_terms: paymentData.payment_terms || null,
+        deposit_amount: depositAmount,
+        deposit_date: paymentData.deposit_date || null,
+        balance_amount: balanceAmount,
+        balance_due_date: paymentData.balance_due_date || null,
         is_paid: paymentData.is_paid,
         notes: saleData.notes || null,
       }).eq('id', editingSaleId);
 
       if (error) throw error;
+
+      await syncDepositSchedule(editingSaleId!, depositAmount, paymentData.deposit_date || saleData.sale_date);
 
       toast.success('Vendita aggiornata');
       setDialogOpen(false);
