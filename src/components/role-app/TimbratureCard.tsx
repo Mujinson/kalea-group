@@ -149,7 +149,22 @@ const TimbratureCard = () => {
     }
   };
 
+  if (!loading && dayClosed) {
+    return (
+      <div className="bg-white rounded-xl border border-[#E5E2DD] p-6 text-center space-y-2">
+        <div className="text-[28px]">🌙</div>
+        <h3 className="text-[17px] font-semibold text-[#1E1B4B]">Per oggi è tutto</h3>
+        <p className="text-[14px] text-[#6B6258]">Ti auguriamo una buona serata.</p>
+        <p className="text-[15px] font-medium text-[#8B6F4E] capitalize">{farewell}</p>
+        <div className="text-[12px] text-[#8C7B6B] pt-2">
+          Cantiere {formatHM(summary.siteMinutes)} · Viaggio {formatHM(summary.travelMinutes)} · Pausa {formatHM(summary.pauseMinutes)}
+        </div>
+      </div>
+    );
+  }
+
   return (
+
     <div className="bg-white rounded-xl border border-[#E5E2DD] p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div>
