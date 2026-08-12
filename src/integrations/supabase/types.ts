@@ -1913,6 +1913,7 @@ export type Database = {
           frequency: Database["public"]["Enums"]["cost_frequency"]
           id: string
           is_paid: boolean | null
+          next_due_date: string | null
           notes: string | null
           paid_date: string | null
           person_name: string | null
@@ -1927,6 +1928,7 @@ export type Database = {
           frequency?: Database["public"]["Enums"]["cost_frequency"]
           id?: string
           is_paid?: boolean | null
+          next_due_date?: string | null
           notes?: string | null
           paid_date?: string | null
           person_name?: string | null
@@ -1941,6 +1943,7 @@ export type Database = {
           frequency?: Database["public"]["Enums"]["cost_frequency"]
           id?: string
           is_paid?: boolean | null
+          next_due_date?: string | null
           notes?: string | null
           paid_date?: string | null
           person_name?: string | null
@@ -3921,6 +3924,87 @@ export type Database = {
         }
         Relationships: []
       }
+      supplier_invoices: {
+        Row: {
+          attachment_url: string | null
+          category: string | null
+          created_at: string
+          due_date: string | null
+          id: string
+          invoice_date: string
+          invoice_number: string
+          is_reverse_charge: boolean
+          notes: string | null
+          paid_amount: number
+          payment_method: string | null
+          site_id: string | null
+          status: string
+          subtotal: number
+          supplier_id: string
+          total: number
+          updated_at: string
+          vat_amount: number
+          vat_rate: number | null
+        }
+        Insert: {
+          attachment_url?: string | null
+          category?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          invoice_date?: string
+          invoice_number: string
+          is_reverse_charge?: boolean
+          notes?: string | null
+          paid_amount?: number
+          payment_method?: string | null
+          site_id?: string | null
+          status?: string
+          subtotal?: number
+          supplier_id: string
+          total?: number
+          updated_at?: string
+          vat_amount?: number
+          vat_rate?: number | null
+        }
+        Update: {
+          attachment_url?: string | null
+          category?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          invoice_date?: string
+          invoice_number?: string
+          is_reverse_charge?: boolean
+          notes?: string | null
+          paid_amount?: number
+          payment_method?: string | null
+          site_id?: string | null
+          status?: string
+          subtotal?: number
+          supplier_id?: string
+          total?: number
+          updated_at?: string
+          vat_amount?: number
+          vat_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_invoices_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_invoices_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       supplier_payments: {
         Row: {
           created_at: string
@@ -3928,6 +4012,8 @@ export type Database = {
           notes: string | null
           payment_amount: number
           payment_date: string
+          supplier_id: string | null
+          supplier_invoice_id: string | null
           supplier_name: string
           total_debt: number
         }
@@ -3937,6 +4023,8 @@ export type Database = {
           notes?: string | null
           payment_amount: number
           payment_date?: string
+          supplier_id?: string | null
+          supplier_invoice_id?: string | null
           supplier_name?: string
           total_debt: number
         }
@@ -3946,10 +4034,27 @@ export type Database = {
           notes?: string | null
           payment_amount?: number
           payment_date?: string
+          supplier_id?: string | null
+          supplier_invoice_id?: string | null
           supplier_name?: string
           total_debt?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "supplier_payments_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_payments_supplier_invoice_id_fkey"
+            columns: ["supplier_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "supplier_invoices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       suppliers: {
         Row: {
