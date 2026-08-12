@@ -27,6 +27,9 @@ import {
   Edit2
 } from 'lucide-react';
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
+import CostiOperativiTab from '@/components/admin/costi/CostiOperativiTab';
+import ScadenzarioTable from '@/components/admin/ScadenzarioTable';
+import { fmtEur, fmtDateIt, yearlyFactor } from '@/lib/finance';
 
 // Types
 interface FixedCost {
@@ -401,6 +404,15 @@ const AdminCosts = () => {
   // Totals
   const totalFixedCosts = fixedCosts.reduce((sum, c) => sum + c.amount, 0);
   const totalVariableCosts = variableCosts.reduce((sum, c) => sum + c.amount, 0);
+  const fixedYearly = fixedCosts.reduce((sum, c) => sum + Number(c.amount) * yearlyFactor(c.frequency), 0);
+  const nowMonth = new Date().getMonth();
+  const nowYear = new Date().getFullYear();
+  const toAccrueThisMonth = fixedCosts.reduce((sum, c: any) => {
+    const due = c.next_due_date || c.cost_date;
+    if (!due) return sum;
+    const d = new Date(due);
+    return d.getMonth() === nowMonth && d.getFullYear() === nowYear && !c.is_paid ? sum + Number(c.amount) : sum;
+  }, 0);
   const unpaidTotal = fixedCosts.filter(c => !c.is_paid).reduce((sum, c) => sum + c.amount, 0) + variableCosts.filter(c => !c.is_paid).reduce((sum, c) => sum + c.amount, 0);
 
   // Valorizzazione reale magazzino: stock reale (giacenza + movimenti) × net_cost catalogo
@@ -431,14 +443,29 @@ const AdminCosts = () => {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="w-full grid grid-cols-3 h-auto">
+        <TabsList className="w-full grid grid-cols-3 md:grid-cols-5 h-auto">
           <TabsTrigger value="fissi" className="text-xs md:text-sm py-2">Costi Fissi</TabsTrigger>
           <TabsTrigger value="variabili" className="text-xs md:text-sm py-2">Costi Variabili</TabsTrigger>
+          <TabsTrigger value="cantiere" className="text-xs md:text-sm py-2">Variabili & Cantiere</TabsTrigger>
+          <TabsTrigger value="scadenzario" className="text-xs md:text-sm py-2">Scadenzario</TabsTrigger>
           <TabsTrigger value="cogs" className="text-xs md:text-sm py-2">COGS Prodotto</TabsTrigger>
         </TabsList>
 
+        <TabsContent value="cantiere" className="space-y-4">
+          <CostiOperativiTab />
+        </TabsContent>
+
+        <TabsContent value="scadenzario" className="space-y-4">
+          <ScadenzarioTable />
+        </TabsContent>
+
         {/* Fixed Costs Tab */}
         <TabsContent value="fissi" className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Card className="bg-white"><CardContent className="p-4"><p className="text-xs text-muted-foreground mb-1">Totale annuo</p><p className="text-xl font-bold">{fmtEur(fixedYearly)}</p></CardContent></Card>
+            <Card className="bg-white"><CardContent className="p-4"><p className="text-xs text-muted-foreground mb-1">Media mensile</p><p className="text-xl font-bold">{fmtEur(fixedYearly / 12)}</p></CardContent></Card>
+            <Card className="bg-white"><CardContent className="p-4"><p className="text-xs text-muted-foreground mb-1">Da accantonare questo mese</p><p className="text-xl font-bold text-amber-600">{fmtEur(toAccrueThisMonth)}</p></CardContent></Card>
+          </div>
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-sm md:text-base">Costi Fissi</h3>
             <Dialog open={fixedCostDialog} onOpenChange={(open) => { setFixedCostDialog(open); if (!open) resetFixedCostForm(); }}>
@@ -485,6 +512,7 @@ const AdminCosts = () => {
               { key: 'description', header: 'Descrizione', sortable: true, cell: (c) => <span className="font-medium">{c.description}</span> },
               { key: 'category', header: 'Categoria', sortable: true, cell: (c) => getCategoryLabel(c.category, FIXED_COST_CATEGORIES) },
               { key: 'frequency', header: 'Frequenza', sortable: true, cell: (c) => getFrequencyLabel(c.frequency) },
+              { key: 'next_due_date', header: 'Prossima scadenza', sortable: true, cell: (c: any) => fmtDateIt(c.next_due_date || c.cost_date) },
               { key: 'person_name', header: 'Persona', cell: (c) => c.person_name ? <span className="flex items-center gap-1"><User className="w-3 h-3" />{c.person_name}</span> : '—' },
               {
                 key: 'is_paid',

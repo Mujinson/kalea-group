@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo } from "react";
+import SiteEconomics from "@/components/admin/cantieri/SiteEconomics";
 import { WON_QUOTE_STATUSES } from "@/lib/quoteStatus";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -528,6 +529,8 @@ const AdminCantiereDetail = () => {
           {site.end_date && <span>Fine: {format(new Date(site.end_date), "dd/MM/yyyy")}</span>}
         </div>
       )}
+
+      <SiteEconomics siteId={id!} budget={(site as any)?.budget_amount} />
 
       {/* Tabs */}
       <Tabs defaultValue="config" className="space-y-4">

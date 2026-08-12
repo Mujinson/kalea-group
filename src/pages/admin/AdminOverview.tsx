@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import FinanceOverviewBlock from '@/components/admin/FinanceOverviewBlock';
 import {
   TrendingUp, FileText, HardHat, Target, Users, Wallet,
   AlertTriangle, Package, ChevronRight, ArrowUp, ArrowDown,
@@ -616,6 +617,9 @@ const AdminOverview = () => {
           />
         </div>
       )}
+
+      {/* FINANZA — costi, fornitori, IVA, scadenze */}
+      <FinanceOverviewBlock />
 
       {/* KPI ROW — operativa: Preventivi · Cantieri · Margine */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
