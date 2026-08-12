@@ -645,8 +645,21 @@ Regole:
         case 'fatture_da_incassare': return await fattureDaIncassare(sb, args);
         case 'cantieri_attivi': return await cantieriAttivi(sb, args, refs);
         case 'chi_lavora_oggi': return await chiLavoraOggi(sb, args);
-        default: return { errore: `Tool sconosciuto: ${name}` };
+        default: return { errore: 'richiesta non supportata' };
       }
+    };
+
+    // I messaggi tecnici del database non devono mai arrivare al modello né all'utente.
+    const sanitize = (r: any) => {
+      if (r && typeof r === 'object' && 'errore' in r && r.errore) {
+        console.error('tool error', r.errore);
+        return { ...r, errore: 'dato non recuperabile' };
+      }
+      if (r && typeof r === 'object' && Array.isArray((r as any).errori) && (r as any).errori.length) {
+        console.error('tool errors', (r as any).errori);
+        return { ...r, errori: ['dato non recuperabile'] };
+      }
+      return r;
     };
 
     // ---- fase 1: loop di tool calling (non in streaming) ----
