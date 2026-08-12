@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2 } from 'lucide-react';
+import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
 import { useSpeech } from '@/hooks/useSpeech';
 
@@ -24,6 +24,28 @@ const ESEMPI = [
   'Attrezzature mancanti al cantiere Bellagio',
 ];
 
+const MAX_STORICO = 15;
+
+/** Trasforma qualsiasi errore in un messaggio chiaro in italiano. */
+function messaggioErrore(raw: unknown): string {
+  const m = String((raw as any)?.message ?? raw ?? '').trim();
+  const low = m.toLowerCase();
+  if (!m) return 'Non sono riuscito a rispondere. Riprova tra qualche secondo.';
+  if (low.includes('failed to fetch') || low.includes('networkerror') || low.includes('load failed'))
+    return 'Connessione assente o instabile: controlla la rete e riprova.';
+  if (low.includes('abort')) return 'Richiesta interrotta.';
+  if (low.includes('401') || low.includes('sessione')) return 'Sessione scaduta: rientra nel CRM e riprova.';
+  if (low.includes('403')) return 'Non hai i permessi per vedere questo dato.';
+  if (low.includes('429') || low.includes('troppe richieste')) return 'Troppe richieste di fila: aspetta qualche secondo e riprova.';
+  if (low.includes('402') || low.includes('crediti')) return 'Crediti AI esauriti: ricaricali per continuare a usare l\'assistente.';
+  if (low.includes('500') || low.includes('502') || low.includes('503'))
+    return 'L\'assistente non è raggiungibile in questo momento. Riprova tra poco.';
+  // messaggi tecnici (SQL, stack, JSON) -> generico
+  if (/[{}<>]|select |pgrst|jwt|undefined is not/i.test(m))
+    return 'Non sono riuscito a recuperare il dato. Riprova, o prova a chiedere in modo diverso.';
+  return m;
+}
+
 const FUNCTIONS_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/ai-assistant`;
 
 export default function AiAssistantBar() {
@@ -34,6 +56,34 @@ export default function AiAssistantBar() {
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // Cronologia recente delle domande, per utente
+  const [userKey, setUserKey] = useState<string | null>(null);
+  const [storico, setStorico] = useState<string[]>([]);
+  const [storicoAperto, setStoricoAperto] = useState(false);
+
+  useEffect(() => {
+    let attivo = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (!attivo) return;
+      const k = `kalea:ai-storico:${data.user?.id ?? 'anon'}`;
+      setUserKey(k);
+      try {
+        const raw = localStorage.getItem(k);
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(parsed)) setStorico(parsed.filter((x) => typeof x === 'string').slice(0, MAX_STORICO));
+      } catch { /* storico corrotto */ }
+    });
+    return () => { attivo = false; };
+  }, []);
+
+  const salvaStorico = useCallback((domanda: string) => {
+    setStorico((prev) => {
+      const next = [domanda, ...prev.filter((d) => d.toLowerCase() !== domanda.toLowerCase())].slice(0, MAX_STORICO);
+      if (userKey) { try { localStorage.setItem(userKey, JSON.stringify(next)); } catch { /* quota */ } }
+      return next;
+    });
+  }, [userKey]);
 
   // Risposta vocale (spenta di default, scelta ricordata)
   const [voiceReply, setVoiceReply] = useState(
@@ -82,6 +132,8 @@ export default function AiAssistantBar() {
       ]);
 
     setTurns((prev) => [...prev, { id, domanda, risposta: '', riferimenti: [], streaming: true }]);
+    setStoricoAperto(false);
+    salvaStorico(domanda);
 
     const patch = (p: Partial<Turn>) =>
       setTurns((prev) => prev.map((t) => (t.id === id ? { ...t, ...p } : t)));
@@ -139,7 +191,7 @@ export default function AiAssistantBar() {
               streaming: false,
             });
           } else if (event === 'error') {
-            patch({ errore: payload?.errore || 'Errore durante la risposta.', streaming: false });
+            patch({ errore: messaggioErrore(payload?.errore) , streaming: false });
           }
         }
       }
@@ -149,12 +201,12 @@ export default function AiAssistantBar() {
         if (voiceReplyRef.current) void speech.speak(acc);
       }
     } catch (e: any) {
-      patch({ errore: e?.message || 'Errore nella richiesta all\'assistente.', streaming: false });
+      patch({ errore: messaggioErrore(e), streaming: false });
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 30);
     }
-  }, [loading, turns, speech]);
+  }, [loading, turns, speech, salvaStorico]);
 
   const voice = useVoiceInput({
     onInterim: (t) => setInput(t),
