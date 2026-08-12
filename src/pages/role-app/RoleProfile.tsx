@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { LogOut, Mail, Phone, User as UserIcon, Shield, CalendarOff } from 'lucide-react';
 import TimeOffSheet from '@/components/role-app/TimeOffSheet';
+import MonthlyHoursCard from '@/components/role-app/MonthlyHoursCard';
 
 const RoleProfile = () => {
   const { user, role } = useAdminAuth();
@@ -51,6 +52,8 @@ const RoleProfile = () => {
           <div className="text-[12px] uppercase tracking-wider text-[#8C7B6B] mt-1">{role || '—'}</div>
         </div>
       </div>
+
+      {(role === 'operaio' || role === 'ibrido') && <MonthlyHoursCard />}
 
       <div className="bg-white rounded-xl border border-[#E5E2DD] divide-y divide-[#E5E2DD]">
         <div className="flex items-center gap-3 p-4">
