@@ -100,6 +100,8 @@ import CantieriOperaiOre from "./pages/admin/cantieri/CantieriOperaiOre";
 import CantieriMateriali from "./pages/admin/cantieri/CantieriMateriali";
 import CantieriBudget from "./pages/admin/cantieri/CantieriBudget";
 import CantieriReport from "./pages/admin/cantieri/CantieriReport";
+import CantieriMarginalita from "./pages/admin/cantieri/CantieriMarginalita";
+import AdminFornitori from "./pages/admin/AdminFornitori";
 import AdminCatalog from "./pages/admin/AdminCatalog";
 import CatalogPlaceholder from "./pages/admin/catalog/CatalogPlaceholder";
 import CatalogBrands from "./pages/admin/catalog/CatalogBrands";
@@ -286,6 +288,9 @@ const App = () => (
                 <Route path="registro-lavori" element={<AdminWorkLogs />} />
                 <Route path="timbrature" element={<AdminTimbrature />} />
                 <Route path="costi" element={<AdminCosts />} />
+                <Route path="fornitori" element={<AdminFornitori />} />
+                <Route path="cantieri-marginalita" element={<CantieriMarginalita />} />
+                <Route path="cantieri/marginalita" element={<CantieriMarginalita />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
                 <Route path="contabilita" element={<AdminContabilita />} />
                 <Route path="fatturazione" element={<AdminFatturazione />} />

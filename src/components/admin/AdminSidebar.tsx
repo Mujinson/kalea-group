@@ -167,6 +167,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Fatturazione & Incassi', url: '/admin/fatturazione', icon: FileText, adminOnly: true },
         { title: 'Contabilità', url: '/admin/contabilita', icon: Landmark, adminOnly: true },
         { title: 'Costi', url: '/admin/costi', icon: DollarSign, adminOnly: true },
+        { title: 'Fornitori', url: '/admin/fornitori', icon: Truck, adminOnly: true },
         { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard, adminOnly: true },
       ],
     },
