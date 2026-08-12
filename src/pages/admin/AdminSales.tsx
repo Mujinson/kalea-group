@@ -500,6 +500,9 @@ const AdminSales = () => {
         if (commError) throw commError;
       }
 
+      // Anticipo → rata "acconto" già incassata
+      await syncDepositSchedule(saleResult.id, depositAmount, paymentData.deposit_date || saleData.sale_date);
+
       // Create payment schedule if balance exists
       if (balanceAmount > 0 && paymentData.balance_due_date) {
         const { error: scheduleError } = await supabase.from('payment_schedules').insert({
@@ -627,7 +630,7 @@ const AdminSales = () => {
       payment_method: sale.payment_method || '',
       payment_terms: sale.payment_terms || '',
       deposit_amount: String(sale.deposit_amount || ''),
-      deposit_date: '',
+      deposit_date: (sale as any).deposit_date || '',
       balance_due_date: sale.balance_due_date || '',
       is_paid: sale.is_paid || false,
     });
@@ -644,6 +647,38 @@ const AdminSales = () => {
     setActiveTab('products');
   };
 
+  // Registra/aggiorna l'anticipo come rata "acconto" già pagata, così risulta incassato
+  const syncDepositSchedule = async (saleId: string, depositAmount: number, depositDate: string) => {
+    try {
+      const { data: existing } = await supabase
+        .from('payment_schedules')
+        .select('id')
+        .eq('sale_id', saleId)
+        .eq('payment_type', 'acconto')
+        .maybeSingle();
+
+      if (depositAmount > 0) {
+        const payload = {
+          sale_id: saleId,
+          amount: depositAmount,
+          due_date: depositDate,
+          paid_date: depositDate,
+          is_paid: true,
+          payment_type: 'acconto',
+        };
+        if (existing?.id) {
+          await supabase.from('payment_schedules').update(payload).eq('id', existing.id);
+        } else {
+          await supabase.from('payment_schedules').insert(payload);
+        }
+      } else if (existing?.id) {
+        await supabase.from('payment_schedules').delete().eq('id', existing.id);
+      }
+    } catch (e) {
+      console.error('Errore sincronizzazione acconto:', e);
+    }
+  };
+
   const handleUpdateSale = async () => {
     try {
       const firstItem = saleItems[0];
@@ -656,6 +691,9 @@ const AdminSales = () => {
       const totalQty = saleItems.reduce((sum, item) => sum + item.quantity_sqm, 0);
       const marginAmount = subtotal - (totalQty * costPerSqm);
       const marginPercentage = subtotal > 0 ? (marginAmount / subtotal) * 100 : 0;
+
+      const depositAmount = paymentData.deposit_amount ? parseFloat(paymentData.deposit_amount) : 0;
+      const balanceAmount = total - depositAmount;
 
       const { error } = await supabase.from('sales').update({
         product_type: firstItem.product_type,
@@ -673,11 +711,17 @@ const AdminSales = () => {
         margin_percentage: marginPercentage,
         payment_method: (paymentData.payment_method || null) as "assegno" | "bonifico" | "carta_credito" | "contanti" | null,
         payment_terms: paymentData.payment_terms || null,
+        deposit_amount: depositAmount,
+        deposit_date: paymentData.deposit_date || null,
+        balance_amount: balanceAmount,
+        balance_due_date: paymentData.balance_due_date || null,
         is_paid: paymentData.is_paid,
         notes: saleData.notes || null,
       }).eq('id', editingSaleId);
 
       if (error) throw error;
+
+      await syncDepositSchedule(editingSaleId!, depositAmount, paymentData.deposit_date || saleData.sale_date);
 
       toast.success('Vendita aggiornata');
       setDialogOpen(false);
@@ -967,9 +1011,15 @@ const AdminSales = () => {
                   </CardContent>
                 </Card>
                 <div className="space-y-2"><Label>Note</Label><Textarea value={saleData.notes} onChange={(e) => setSaleData({...saleData, notes: e.target.value})} placeholder="Note aggiuntive..." /></div>
-                <Button onClick={handleSubmit} className="w-full" size="lg">Salva Vendita</Button>
               </TabsContent>
             </Tabs>
+
+            {/* Salva sempre visibile su ogni scheda */}
+            <div className="sticky bottom-0 -mx-6 px-6 pt-3 pb-2 bg-background border-t mt-4">
+              <Button onClick={handleSubmit} className="w-full" size="lg">
+                {editingSaleId ? 'Salva Modifiche' : 'Salva Vendita'}
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
         }
