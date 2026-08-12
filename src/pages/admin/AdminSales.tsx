@@ -630,7 +630,7 @@ const AdminSales = () => {
       payment_method: sale.payment_method || '',
       payment_terms: sale.payment_terms || '',
       deposit_amount: String(sale.deposit_amount || ''),
-      deposit_date: '',
+      deposit_date: (sale as any).deposit_date || '',
       balance_due_date: sale.balance_due_date || '',
       is_paid: sale.is_paid || false,
     });
