@@ -229,6 +229,8 @@ export function summarizeDay(entries: TimeEntry[]): DailySummary {
     workMinutes: Math.round(workMin),
     pauseMinutes: Math.round(pause),
     siteMinutes: Math.round(site),
+    travelMinutes: Math.round(travel),
+
     firstAt: first?.event_at || null,
     lastAt: last?.event_at || null,
   };
