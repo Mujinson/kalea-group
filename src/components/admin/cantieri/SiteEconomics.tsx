@@ -11,16 +11,18 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
     queryKey: ['site-economics', siteId],
     queryFn: async () => {
       const [inv, sup, exp] = await Promise.all([
-        supabase.from('customer_invoices').select('total').eq('site_id', siteId),
-        supabase.from('supplier_invoices').select('total').eq('site_id', siteId),
+        supabase.from('customer_invoices').select('subtotal,total').eq('site_id', siteId),
+        supabase.from('supplier_invoices').select('subtotal,total').eq('site_id', siteId),
         supabase.from('site_expenses').select('amount').eq('site_id', siteId),
       ]);
       if (inv.error) throw inv.error;
       if (sup.error) throw sup.error;
       if (exp.error) throw exp.error;
-      const revenue = (inv.data || []).reduce((s: number, r: any) => s + Number(r.total || 0), 0);
+      // Imponibile contro imponibile: l'IVA non è né ricavo né costo.
+      const net = (r: any) => Number(r.subtotal ?? r.total ?? 0);
+      const revenue = (inv.data || []).reduce((s: number, r: any) => s + net(r), 0);
       const costs =
-        (sup.data || []).reduce((s: number, r: any) => s + Number(r.total || 0), 0) +
+        (sup.data || []).reduce((s: number, r: any) => s + net(r), 0) +
         (exp.data || []).reduce((s: number, r: any) => s + Number(r.amount || 0), 0);
       return { revenue, costs };
     },
@@ -41,15 +43,15 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
       <CardContent className="space-y-3">
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <p className="text-xs text-muted-foreground">Ricavi</p>
+            <p className="text-xs text-muted-foreground">Ricavi (imponibile)</p>
             <p className="text-lg font-bold">{fmtEur(revenue)}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Costi</p>
+            <p className="text-xs text-muted-foreground">Costi materiali (imponibile)</p>
             <p className="text-lg font-bold text-orange-600">{fmtEur(costs)}</p>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground">Margine</p>
+            <p className="text-xs text-muted-foreground">Margine materiali</p>
             <p className={`text-lg font-bold ${margin >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               {fmtEur(margin)} <span className="text-xs">({marginPct.toFixed(1)}%)</span>
             </p>
@@ -71,7 +73,8 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
         )}
 
         <p className="text-[11px] text-muted-foreground italic">
-          I costi generali (stipendi, furgone, commercialista) non sono imputati alla commessa: questo è margine di commessa, non utile netto.
+          Tutti i valori sono al netto dell'IVA. Questo è il <strong>margine sui materiali</strong>: non include manodopera, furgone,
+          gasolio, pranzi né i costi generali (stipendi, commercialista). Non è l'utile del lavoro.
         </p>
       </CardContent>
     </Card>

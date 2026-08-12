@@ -17,16 +17,18 @@ const CantieriMarginalita = () => {
     queryFn: async () => {
       const [sites, cInv, sInv, exp, fixed] = await Promise.all([
         supabase.from('construction_sites').select('id, title, city, status, budget_amount'),
-        supabase.from('customer_invoices').select('site_id, total'),
-        supabase.from('supplier_invoices').select('site_id, total'),
+        supabase.from('customer_invoices').select('site_id, subtotal, total'),
+        supabase.from('supplier_invoices').select('site_id, subtotal, total'),
         supabase.from('site_expenses').select('site_id, amount'),
         supabase.from('fixed_costs').select('amount, frequency'),
       ]);
       if (sites.error) throw sites.error;
+      // Imponibile contro imponibile: l'IVA transita e non va conteggiata.
+      const net = (r: any) => Number(r.subtotal ?? r.total ?? 0);
       const rows = (sites.data || []).map((s: any) => {
-        const revenue = (cInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.total || 0), 0);
+        const revenue = (cInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + net(r), 0);
         const costs =
-          (sInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.total || 0), 0) +
+          (sInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + net(r), 0) +
           (exp.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.amount || 0), 0);
         const margin = revenue - costs;
         const marginPct = revenue > 0 ? (margin / revenue) * 100 : 0;
@@ -54,13 +56,13 @@ const CantieriMarginalita = () => {
       <CrmPageHeader
         breadcrumb={['CRM', 'Cantieri', 'Marginalità']}
         title="Marginalità cantieri"
-        subtitle="Classifica delle commesse per margine percentuale"
+        subtitle="Classifica delle commesse per margine materiali (valori al netto IVA)"
       />
 
       <CrmKpiRow>
-        <CrmKpiTile label="Ricavi commesse" value={fmtEur(totRev)} color="green" icon={<TrendingUp className="w-4 h-4" />} />
-        <CrmKpiTile label="Costi commesse" value={fmtEur(totCost)} color="orange" icon={<TrendingDown className="w-4 h-4" />} />
-        <CrmKpiTile label="Margine totale" value={fmtEur(totMargin)} color={totMargin >= 0 ? 'green' : 'red'} icon={<Percent className="w-4 h-4" />} />
+        <CrmKpiTile label="Ricavi (imponibile)" value={fmtEur(totRev)} color="green" icon={<TrendingUp className="w-4 h-4" />} />
+        <CrmKpiTile label="Costi materiali (imponibile)" value={fmtEur(totCost)} color="orange" icon={<TrendingDown className="w-4 h-4" />} />
+        <CrmKpiTile label="Margine materiali" value={fmtEur(totMargin)} color={totMargin >= 0 ? 'green' : 'red'} icon={<Percent className="w-4 h-4" />} />
         <CrmKpiTile label="Costi generali / mese" value={fmtEur(data?.generalMonthly || 0)} color="slate" hint="Non imputati alle commesse" />
       </CrmKpiRow>
 
@@ -75,10 +77,10 @@ const CantieriMarginalita = () => {
         columns={[
           { key: 'title', header: 'Cantiere', sortable: true, cell: (r) => <span className="font-medium">{r.title}</span> },
           { key: 'city', header: 'Città' },
-          { key: 'revenue', header: 'Ricavi', sortable: true, className: 'text-right', accessor: (r) => r.revenue, cell: (r) => fmtEur(r.revenue) },
-          { key: 'costs', header: 'Costi', sortable: true, className: 'text-right', accessor: (r) => r.costs, cell: (r) => fmtEur(r.costs) },
+          { key: 'revenue', header: 'Ricavi (netto)', sortable: true, className: 'text-right', accessor: (r) => r.revenue, cell: (r) => fmtEur(r.revenue) },
+          { key: 'costs', header: 'Costi materiali (netto)', sortable: true, className: 'text-right', accessor: (r) => r.costs, cell: (r) => fmtEur(r.costs) },
           {
-            key: 'margin', header: 'Margine', sortable: true, className: 'text-right font-semibold', accessor: (r) => r.margin,
+            key: 'margin', header: 'Margine materiali', sortable: true, className: 'text-right font-semibold', accessor: (r) => r.margin,
             cell: (r) => <span className={r.margin >= 0 ? 'text-green-600' : 'text-red-600'}>{fmtEur(r.margin)}</span>,
           },
           {
@@ -97,7 +99,8 @@ const CantieriMarginalita = () => {
 
       <Card className="bg-white">
         <CardContent className="p-4 text-xs text-muted-foreground">
-          I costi generali (stipendi, furgone, commercialista) restano fuori dal margine di commessa e sono mostrati a parte:
+          Tutti i valori sono al netto dell'IVA (imponibile contro imponibile). Il margine mostrato è solo sui <strong>materiali</strong>:
+          non contiene manodopera, furgone, gasolio e pranzi. I costi generali (stipendi, commercialista) restano fuori e valgono
           <span className="font-semibold text-foreground"> {fmtEur(data?.generalMonthly || 0)}/mese</span>.
         </CardContent>
       </Card>
