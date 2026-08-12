@@ -56,13 +56,13 @@ const CantieriMarginalita = () => {
       <CrmPageHeader
         breadcrumb={['CRM', 'Cantieri', 'Marginalità']}
         title="Marginalità cantieri"
-        subtitle="Classifica delle commesse per margine percentuale"
+        subtitle="Classifica delle commesse per margine materiali (valori al netto IVA)"
       />
 
       <CrmKpiRow>
-        <CrmKpiTile label="Ricavi commesse" value={fmtEur(totRev)} color="green" icon={<TrendingUp className="w-4 h-4" />} />
-        <CrmKpiTile label="Costi commesse" value={fmtEur(totCost)} color="orange" icon={<TrendingDown className="w-4 h-4" />} />
-        <CrmKpiTile label="Margine totale" value={fmtEur(totMargin)} color={totMargin >= 0 ? 'green' : 'red'} icon={<Percent className="w-4 h-4" />} />
+        <CrmKpiTile label="Ricavi (imponibile)" value={fmtEur(totRev)} color="green" icon={<TrendingUp className="w-4 h-4" />} />
+        <CrmKpiTile label="Costi materiali (imponibile)" value={fmtEur(totCost)} color="orange" icon={<TrendingDown className="w-4 h-4" />} />
+        <CrmKpiTile label="Margine materiali" value={fmtEur(totMargin)} color={totMargin >= 0 ? 'green' : 'red'} icon={<Percent className="w-4 h-4" />} />
         <CrmKpiTile label="Costi generali / mese" value={fmtEur(data?.generalMonthly || 0)} color="slate" hint="Non imputati alle commesse" />
       </CrmKpiRow>
 
