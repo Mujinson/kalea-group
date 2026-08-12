@@ -144,6 +144,12 @@ interface StaticCost {
   vat_percentage: number;
 }
 
+interface SaleInvoiceSummary {
+  saleId: string;
+  invoiced: number;
+  collected: number;
+}
+
 function SaleOriginQuoteLink({ saleId }: { saleId: string }) {
   const [q, setQ] = useState<{ id: string; quote_number: string | null } | null>(null);
   useEffect(() => {
@@ -212,6 +218,7 @@ const AdminSales = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [salespeople, setSalespeople] = useState<Salesperson[]>([]);
   const [staticCosts, setStaticCosts] = useState<StaticCost[]>([]);
+  const [saleInvoiceSummaries, setSaleInvoiceSummaries] = useState<SaleInvoiceSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
@@ -278,7 +285,7 @@ const AdminSales = () => {
 
   const fetchAll = async () => {
     setLoading(true);
-    await Promise.all([fetchSales(), fetchCustomers(), fetchSalespeople(), fetchStaticCosts()]);
+    await Promise.all([fetchSales(), fetchCustomers(), fetchSalespeople(), fetchStaticCosts(), fetchAccountingSummaries()]);
     setLoading(false);
   };
 
@@ -331,6 +338,32 @@ const AdminSales = () => {
       setStaticCosts(data || []);
     } catch (error) {
       console.error('Error fetching static costs:', error);
+    }
+  };
+
+  const fetchAccountingSummaries = async () => {
+    try {
+      const [{ data: links, error: linksError }, { data: invoices, error: invoicesError }] = await Promise.all([
+        (supabase as any).from('invoice_sales').select('sale_id, invoice_id'),
+        (supabase as any).from('customer_invoices').select('id, total, paid_amount, status'),
+      ]);
+      if (linksError) throw linksError;
+      if (invoicesError) throw invoicesError;
+
+      const invoicesById = new Map((invoices || []).map((invoice: any) => [invoice.id, invoice]));
+      const summaries = new Map<string, SaleInvoiceSummary>();
+      for (const link of links || []) {
+        const invoice = invoicesById.get(link.invoice_id) as any;
+        if (!invoice || invoice.status === 'annullata') continue;
+        const current = summaries.get(link.sale_id) || { saleId: link.sale_id, invoiced: 0, collected: 0 };
+        current.invoiced += Number(invoice.total || 0);
+        current.collected += Number(invoice.paid_amount || 0);
+        summaries.set(link.sale_id, current);
+      }
+      setSaleInvoiceSummaries(Array.from(summaries.values()));
+    } catch (error) {
+      console.error('Error fetching sale accounting summaries:', error);
+      setSaleInvoiceSummaries([]);
     }
   };
 
@@ -872,9 +905,10 @@ const AdminSales = () => {
 
   const totals = calculateTotals();
   const totalMq = sales.reduce((sum, s) => sum + Number(s.quantity_sqm), 0);
-  const totalRevenue = sales.reduce((sum, s) => sum + Number(s.total_amount || (Number(s.quantity_sqm) * Number(s.sale_price))), 0);
+  const totalInvoiced = saleInvoiceSummaries.reduce((sum, summary) => sum + summary.invoiced, 0);
+  const totalCollected = saleInvoiceSummaries.reduce((sum, summary) => sum + summary.collected, 0);
   const totalMargin = sales.reduce((sum, s) => sum + (Number(s.margin_amount) || 0), 0);
-  const paidCount = sales.filter(s => s.is_paid).length;
+  const accountingBySale = new Map(saleInvoiceSummaries.map(summary => [summary.saleId, summary]));
 
   return (
     <div className="space-y-4">
@@ -1161,7 +1195,7 @@ const AdminSales = () => {
           </div>
           <div>
             <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Fatturato</p>
-            <p className="text-lg font-bold">{formatCurrency(totalRevenue)}</p>
+            <p className="text-lg font-bold">{formatCurrency(totalInvoiced)}</p>
           </div>
         </div>
         <div className="rounded-2xl border border-border/60 bg-white p-4 flex items-center gap-3">
@@ -1178,8 +1212,8 @@ const AdminSales = () => {
             <CreditCard className="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Pagate</p>
-            <p className="text-lg font-bold">{paidCount}/{sales.length}</p>
+            <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Incassato</p>
+            <p className="text-lg font-bold">{formatCurrency(totalCollected)}</p>
           </div>
         </div>
       </div>
@@ -1249,19 +1283,24 @@ const AdminSales = () => {
             cell: (s) => formatCurrency(Number(s.margin_amount) || 0),
           },
           {
-            key: 'is_paid',
+            key: 'payment_status',
             header: 'Stato',
             sortable: true,
-            accessor: (s) => (s.is_paid ? 1 : 0),
-            cell: (s) => (
-              <Button
-                variant={s.is_paid ? 'default' : 'outline'}
-                size="sm"
-                onClick={(e) => { e.stopPropagation(); togglePaidStatus(s); }}
-              >
-                {s.is_paid ? <><Check className="w-3 h-3 mr-1" />Pagato</> : 'Non pagato'}
-              </Button>
-            ),
+            accessor: (s) => accountingBySale.get(s.id)?.collected || 0,
+            cell: (s) => {
+              const accounting = accountingBySale.get(s.id);
+              const invoiced = accounting?.invoiced || 0;
+              const collected = accounting?.collected || 0;
+              const isPaid = invoiced > 0 && collected >= invoiced;
+              return (
+                <div className="text-right leading-tight">
+                  <Badge variant={isPaid ? 'default' : collected > 0 ? 'secondary' : 'outline'}>
+                    {isPaid ? 'Incassato' : collected > 0 ? 'Parziale' : 'Non incassato'}
+                  </Badge>
+                  <div className="mt-1 text-[10px] text-muted-foreground">{formatCurrency(collected)} / {formatCurrency(invoiced)}</div>
+                </div>
+              );
+            },
           },
           {
             key: 'actions',
