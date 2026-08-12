@@ -5,6 +5,7 @@ import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Plus, TrendingUp, FileText, CheckCircle2, Target } from 'lucide-react';
 import QuickNewLeadSheet from '@/components/role-app/QuickNewLeadSheet';
 import TimbratureCard from '@/components/role-app/TimbratureCard';
+import MonthlyHoursCard from '@/components/role-app/MonthlyHoursCard';
 import { useLocation } from 'react-router-dom';
 
 const eur = (n: number) =>
@@ -81,6 +82,7 @@ const CommercialeHome = () => {
       </div>
 
       {isIbrido && <TimbratureCard />}
+      {isIbrido && <MonthlyHoursCard />}
 
 
 
