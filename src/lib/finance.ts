@@ -88,3 +88,23 @@ export const addPeriod = (date: Date, frequency?: string | null) => {
   d.setMonth(d.getMonth() + months);
   return d;
 };
+
+/**
+ * IVA — l'aliquota va SEMPRE presa dal record, mai da una costante.
+ * I record storici salvano l'aliquota a volte in frazione (0.10) e a volte
+ * in percentuale (10): normalizeVatRate restituisce sempre la percentuale.
+ */
+export const normalizeVatRate = (v: unknown, fallback = 22): number => {
+  const n = Number(v);
+  if (!Number.isFinite(n) || n < 0) return fallback;
+  if (n === 0) return 0;
+  return n <= 1 ? n * 100 : n;
+};
+
+/** Scorporo: dal lordo al netto usando l'aliquota del documento. */
+export const netFromGross = (gross: number, ratePct: number) =>
+  Math.round((Number(gross) || 0) / (1 + normalizeVatRate(ratePct, 0) / 100) * 100) / 100;
+
+/** IVA calcolata sull'imponibile. */
+export const vatFromNet = (net: number, ratePct: number) =>
+  Math.round((Number(net) || 0) * normalizeVatRate(ratePct, 0)) / 100;
