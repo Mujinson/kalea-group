@@ -250,6 +250,54 @@ export default function AiAssistantBar() {
             </button>
           )}
 
+          {/* Interruttore risposta vocale */}
+          <button
+            type="button"
+            role="switch"
+            aria-checked={voiceReply}
+            aria-label="Risposta vocale"
+            title={voiceReply ? 'Risposta vocale attiva' : 'Risposta vocale spenta'}
+            onClick={() => {
+              const next = !voiceReply;
+              setVoiceReply(next);
+              localStorage.setItem('kalea:ai-voice-reply', next ? '1' : '0');
+              if (!next) speech.stop();
+            }}
+            className={`h-8 px-2 inline-flex items-center gap-1.5 rounded-crm-sm border transition shrink-0 ${
+              voiceReply
+                ? 'border-crm-primary/40 bg-crm-primary/10 text-crm-primary'
+                : 'border-crm-border text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
+            }`}
+          >
+            {voiceReply ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            <span className="hidden lg:inline text-[11px] font-medium">Voce</span>
+          </button>
+
+          {/* Interrompi audio / ripeti ultima risposta */}
+          {speech.speaking ? (
+            <button
+              type="button"
+              onClick={speech.stop}
+              title="Interrompi audio"
+              aria-label="Interrompi audio"
+              className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm bg-crm-bg-soft text-crm-ink border border-crm-border hover:border-crm-border-strong transition"
+            >
+              <Square className="w-3.5 h-3.5 fill-current" />
+            </button>
+          ) : (
+            ultimaRisposta && (
+              <button
+                type="button"
+                onClick={() => void speech.speak(ultimaRisposta)}
+                title="Ripeti l'ultima risposta"
+                aria-label="Ripeti l'ultima risposta"
+                className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
+              >
+                <Repeat2 className="w-4 h-4" />
+              </button>
+            )
+          )}
+
           <button
             type="submit"
             disabled={!input.trim() || loading}
