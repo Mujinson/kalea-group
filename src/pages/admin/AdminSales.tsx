@@ -1011,9 +1011,15 @@ const AdminSales = () => {
                   </CardContent>
                 </Card>
                 <div className="space-y-2"><Label>Note</Label><Textarea value={saleData.notes} onChange={(e) => setSaleData({...saleData, notes: e.target.value})} placeholder="Note aggiuntive..." /></div>
-                <Button onClick={handleSubmit} className="w-full" size="lg">Salva Vendita</Button>
               </TabsContent>
             </Tabs>
+
+            {/* Salva sempre visibile su ogni scheda */}
+            <div className="sticky bottom-0 -mx-6 px-6 pt-3 pb-2 bg-background border-t mt-4">
+              <Button onClick={handleSubmit} className="w-full" size="lg">
+                {editingSaleId ? 'Salva Modifiche' : 'Salva Vendita'}
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
         }
