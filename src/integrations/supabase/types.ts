@@ -3419,23 +3419,38 @@ export type Database = {
       site_equipment: {
         Row: {
           created_at: string
+          expected_date: string | null
           id: string
           notes: string | null
+          quantity_needed: number | null
+          quantity_on_site: number
+          returned_date: string | null
           site_id: string
+          status: string
           type: string
         }
         Insert: {
           created_at?: string
+          expected_date?: string | null
           id?: string
           notes?: string | null
+          quantity_needed?: number | null
+          quantity_on_site?: number
+          returned_date?: string | null
           site_id: string
+          status?: string
           type: string
         }
         Update: {
           created_at?: string
+          expected_date?: string | null
           id?: string
           notes?: string | null
+          quantity_needed?: number | null
+          quantity_on_site?: number
+          returned_date?: string | null
           site_id?: string
+          status?: string
           type?: string
         }
         Relationships: [
