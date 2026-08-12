@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MessageSquare, Send, Plus, AlertCircle, RefreshCw, Sparkles } from 'lucide-react';
+import { MessageSquare, Send, Plus, AlertCircle, RefreshCw, Sparkles, X } from 'lucide-react';
 
 type ChatMessage =
   | { id: string; role: 'user'; content: string }
