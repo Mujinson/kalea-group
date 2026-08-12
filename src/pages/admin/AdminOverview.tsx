@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { isQuoteWon, isQuoteLost, isQuotePending } from '@/lib/quoteStatus';
+import { isQuoteWon, isQuoteLost, isQuotePending, dedupeWonQuotes } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
 import { isSiteActive } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
