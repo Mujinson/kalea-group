@@ -574,10 +574,10 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const anonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!lovableApiKey) return json({ error: 'LOVABLE_API_KEY non configurata' }, 500);
+    if (!lovableApiKey) return json({ error: 'Assistente non configurato: manca la chiave AI.' }, 500);
 
     const authHeader = req.headers.get('Authorization') || '';
-    if (!authHeader.startsWith('Bearer ')) return json({ error: 'Non autenticato' }, 401);
+    if (!authHeader.startsWith('Bearer ')) return json({ error: 'Sessione scaduta: rientra nel CRM per usare l\'assistente.' }, 401);
 
     // client con il token dell'utente => RLS applicata a ogni query
     const sb = createClient(supabaseUrl, anonKey, {
@@ -585,13 +585,13 @@ Deno.serve(async (req) => {
       auth: { persistSession: false, autoRefreshToken: false },
     });
     const { data: userData, error: userErr } = await sb.auth.getUser();
-    if (userErr || !userData?.user) return json({ error: 'Non autenticato' }, 401);
+    if (userErr || !userData?.user) return json({ error: 'Sessione scaduta: rientra nel CRM per usare l\'assistente.' }, 401);
 
     let body: any;
-    try { body = await req.json(); } catch { return json({ error: 'JSON non valido' }, 400); }
+    try { body = await req.json(); } catch { return json({ error: 'Richiesta non valida.' }, 400); }
     const message = String(body?.message ?? '').trim();
-    if (!message) return json({ error: 'message obbligatorio' }, 400);
-    if (message.length > 4000) return json({ error: 'message troppo lungo' }, 400);
+    if (!message) return json({ error: 'Scrivi una domanda per l\'assistente.' }, 400);
+    if (message.length > 4000) return json({ error: 'La domanda è troppo lunga, prova a riassumerla.' }, 400);
     const history = Array.isArray(body?.history) ? body.history.slice(-10) : [];
     const stream = body?.stream !== false;
 
@@ -676,7 +676,7 @@ Regole:
         console.error('AI gateway error', resp.status, txt);
         if (resp.status === 429) return json({ error: 'Troppe richieste, riprova tra poco.' }, 429);
         if (resp.status === 402) return json({ error: 'Crediti AI esauriti.' }, 402);
-        return json({ error: 'Errore AI gateway', details: txt }, 500);
+        return json({ error: 'Il servizio AI non è raggiungibile in questo momento, riprova tra poco.' }, 502);
       }
       const data = await resp.json();
       const msg = data?.choices?.[0]?.message ?? {};
@@ -755,7 +755,7 @@ Regole:
           send('done', { risposta: text || 'Non sono riuscito a formulare una risposta.', riferimenti: uniqueRefs, tool_usati: toolLog });
         } catch (e) {
           console.error('stream error', e);
-          send('error', { errore: (e as Error).message });
+          send('error', { errore: 'Non sono riuscito a completare la risposta, riprova tra poco.' });
         } finally {
           controller.close();
         }
@@ -767,6 +767,6 @@ Regole:
     });
   } catch (e) {
     console.error('ai-assistant error', e);
-    return json({ error: (e as Error).message }, 500);
+    return json({ error: 'Qualcosa è andato storto nell\'assistente, riprova tra poco.' }, 500);
   }
 });
