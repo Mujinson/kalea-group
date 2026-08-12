@@ -629,6 +629,17 @@ const AdminSales = () => {
       vat_included: sale.vat_included,
       notes: sale.notes || '',
     });
+    const { data: acconto } = await (supabase as any)
+      .from('payment_schedules')
+      .select('is_invoiced, invoice_number, invoice_id')
+      .eq('sale_id', sale.id)
+      .eq('payment_type', 'acconto')
+      .maybeSingle();
+    let vatRate = '22';
+    if (acconto?.invoice_id) {
+      const { data: inv } = await (supabase as any).from('customer_invoices').select('vat_rate').eq('id', acconto.invoice_id).maybeSingle();
+      if (inv?.vat_rate != null) vatRate = String(inv.vat_rate);
+    }
     setPaymentData({
       payment_method: sale.payment_method || '',
       payment_terms: sale.payment_terms || '',
@@ -636,6 +647,9 @@ const AdminSales = () => {
       deposit_date: (sale as any).deposit_date || '',
       balance_due_date: sale.balance_due_date || '',
       is_paid: sale.is_paid || false,
+      deposit_invoiced: !!acconto?.is_invoiced,
+      deposit_invoice_number: acconto?.invoice_number || '',
+      deposit_vat_rate: vatRate,
     });
     
     // Set sale items (simplified - single item from main sale)
