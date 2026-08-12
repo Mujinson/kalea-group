@@ -96,7 +96,7 @@ const AdminTimbrature = () => {
         }
       });
     })();
-  }, [workerId, month, fromDate, toDate, workers]);
+  }, [workerId, month, fromDate, toDate, workers, reloadKey]);
 
   const workerByUserId = useMemo(() => {
     const m = new Map<string, Worker>();
