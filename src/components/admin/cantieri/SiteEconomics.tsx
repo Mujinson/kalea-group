@@ -11,16 +11,18 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
     queryKey: ['site-economics', siteId],
     queryFn: async () => {
       const [inv, sup, exp] = await Promise.all([
-        supabase.from('customer_invoices').select('total').eq('site_id', siteId),
-        supabase.from('supplier_invoices').select('total').eq('site_id', siteId),
+        supabase.from('customer_invoices').select('subtotal,total').eq('site_id', siteId),
+        supabase.from('supplier_invoices').select('subtotal,total').eq('site_id', siteId),
         supabase.from('site_expenses').select('amount').eq('site_id', siteId),
       ]);
       if (inv.error) throw inv.error;
       if (sup.error) throw sup.error;
       if (exp.error) throw exp.error;
-      const revenue = (inv.data || []).reduce((s: number, r: any) => s + Number(r.total || 0), 0);
+      // Imponibile contro imponibile: l'IVA non è né ricavo né costo.
+      const net = (r: any) => Number(r.subtotal ?? r.total ?? 0);
+      const revenue = (inv.data || []).reduce((s: number, r: any) => s + net(r), 0);
       const costs =
-        (sup.data || []).reduce((s: number, r: any) => s + Number(r.total || 0), 0) +
+        (sup.data || []).reduce((s: number, r: any) => s + net(r), 0) +
         (exp.data || []).reduce((s: number, r: any) => s + Number(r.amount || 0), 0);
       return { revenue, costs };
     },
