@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { normalizeVatRate, vatFromNet } from '@/lib/finance';
 import { Plus, Trash2, User, Package, CreditCard, FileText, Users, Check, X, Eye, Pencil, TrendingUp } from 'lucide-react';
 import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { format } from 'date-fns';
@@ -255,6 +256,7 @@ const AdminSales = () => {
     channel: 'B2B',
     sale_date: format(new Date(), 'yyyy-MM-dd'),
     vat_included: false,
+    vat_rate: '22',
     notes: '',
   });
 
@@ -391,7 +393,7 @@ const AdminSales = () => {
     const itemsTotal = saleItems.reduce((sum, item) => sum + (item.quantity_sqm * item.unit_price), 0);
     const costsTotal = additionalCosts.reduce((sum, cost) => sum + (cost.quantity * cost.unit_price), 0);
     const subtotal = itemsTotal + costsTotal;
-    const vatAmount = saleData.vat_included ? 0 : subtotal * 0.22;
+    const vatAmount = saleData.vat_included ? 0 : vatFromNet(subtotal, saleData.vat_rate);
     const total = subtotal + vatAmount;
     const totalQty = saleItems.reduce((sum, item) => sum + item.quantity_sqm, 0);
     const cogs = calculateCOGS();
@@ -604,7 +606,7 @@ const AdminSales = () => {
     setSaleItems([{ product_type: 'MgO', product_variant: '', quantity_sqm: 0, unit_price: 0 }]);
     setAdditionalCosts([]);
     setSalespersonCommissions([]);
-    setSaleData({ channel: 'B2B', sale_date: format(new Date(), 'yyyy-MM-dd'), vat_included: false, notes: '' });
+    setSaleData({ channel: 'B2B', sale_date: format(new Date(), 'yyyy-MM-dd'), vat_included: false, vat_rate: '22', notes: '' });
     setPaymentData({ payment_method: '', payment_terms: '', deposit_amount: '', deposit_date: '', balance_due_date: '', is_paid: false, deposit_invoiced: false, deposit_invoice_number: '', deposit_vat_rate: '22' });
     setActiveTab('customer');
     setEditingSaleId(null);
@@ -660,6 +662,7 @@ const AdminSales = () => {
       channel: sale.channel,
       sale_date: sale.sale_date,
       vat_included: sale.vat_included,
+      vat_rate: String(normalizeVatRate((sale as any).vat_rate)),
       notes: sale.notes || '',
     });
     const { data: acconti } = await (supabase as any)
@@ -837,7 +840,8 @@ const AdminSales = () => {
       const costPerSqm = costInfo ? (costInfo.fob_cost + costInfo.import_logistics_cost) * (1 + costInfo.duty_percentage / 100) : 15.49;
       
       const subtotal = saleItems.reduce((sum, item) => sum + (item.quantity_sqm * item.unit_price), 0);
-      const vatAmount = saleData.vat_included ? 0 : subtotal * 0.22;
+      const rate = normalizeVatRate(saleData.vat_rate);
+      const vatAmount = saleData.vat_included ? 0 : vatFromNet(subtotal, rate);
       const total = subtotal + vatAmount;
       const totalQty = saleItems.reduce((sum, item) => sum + item.quantity_sqm, 0);
       const marginAmount = subtotal - (totalQty * costPerSqm);
@@ -854,7 +858,7 @@ const AdminSales = () => {
         channel: saleData.channel,
         sale_date: saleData.sale_date,
         vat_included: saleData.vat_included,
-        vat_rate: 0.22,
+        vat_rate: (saleData.vat_included ? 0 : rate) / 100,
         subtotal_amount: subtotal,
         vat_amount: vatAmount,
         total_amount: total,
@@ -1071,6 +1075,13 @@ const AdminSales = () => {
                 <div className="flex items-center gap-4 pt-4 border-t">
                   <Checkbox id="vatIncluded" checked={saleData.vat_included} onCheckedChange={(checked) => setSaleData({...saleData, vat_included: !!checked})} />
                   <Label htmlFor="vatIncluded">IVA inclusa</Label>
+                  {!saleData.vat_included && (
+                    <div className="flex items-center gap-2 ml-auto">
+                      <Label htmlFor="saleVatRate" className="whitespace-nowrap">Aliquota IVA (%)</Label>
+                      <Input id="saleVatRate" type="number" step="0.01" className="w-24" value={saleData.vat_rate}
+                        onChange={(e) => setSaleData({ ...saleData, vat_rate: e.target.value })} />
+                    </div>
+                  )}
                 </div>
               </TabsContent>
 
@@ -1277,7 +1288,7 @@ const AdminSales = () => {
             accessor: (s) => Number(s.total_amount || (Number(s.quantity_sqm) * Number(s.sale_price))),
             cell: (s) => {
               const netto = Number(s.subtotal_amount ?? (Number(s.quantity_sqm) * Number(s.sale_price)));
-              const iva = Number(s.vat_amount ?? (s.vat_included ? 0 : netto * 0.22));
+              const iva = Number(s.vat_amount ?? (s.vat_included ? 0 : vatFromNet(netto, normalizeVatRate((s as any).vat_rate))));
               const totale = Number(s.total_amount ?? (netto + iva));
               return (
                 <div className="leading-tight">
@@ -1389,8 +1400,8 @@ const AdminSales = () => {
                 </div>
                 {!viewingSale.vat_included && (
                   <div className="flex justify-between text-muted-foreground">
-                    <span>IVA (22%)</span>
-                    <span>{formatCurrency(Number(viewingSale.vat_amount) || (Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price) * 0.22))}</span>
+                    <span>IVA ({normalizeVatRate((viewingSale as any).vat_rate)}%)</span>
+                    <span>{formatCurrency(Number(viewingSale.vat_amount) || vatFromNet(Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price), normalizeVatRate((viewingSale as any).vat_rate)))}</span>
                   </div>
                 )}
                 <div className="flex justify-between font-bold text-lg border-t pt-2">
@@ -1398,7 +1409,7 @@ const AdminSales = () => {
                   <span>{formatCurrency(
                     viewingSale.vat_included 
                       ? Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price)
-                      : (Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price)) * 1.22
+                      : (Number(viewingSale.quantity_sqm) * Number(viewingSale.sale_price)) * (1 + normalizeVatRate((viewingSale as any).vat_rate) / 100)
                   )}</span>
                 </div>
                 <div className="flex justify-between text-green-600">

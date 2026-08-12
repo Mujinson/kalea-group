@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { normalizeVatRate } from '@/lib/finance';
 import { supabase } from '@/integrations/supabase/client';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -481,7 +482,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
       // Calculate subtotal and unit price
       const subtotal = totalAmount - vatAmount;
       const unitPrice = totalQty > 0 ? subtotal / totalQty : 0;
-      const vatRate = quote.vat_included ? 0 : 0.22;
+      const vatRate = quote.vat_included ? 0 : (subtotal > 0 && vatAmount > 0 ? Math.round((vatAmount / subtotal) * 100) / 100 : normalizeVatRate((quote as any).vat_rate) / 100);
 
       // Calculate COGS and margin
       const productType = items[0]?.product_type || 'MgO';
