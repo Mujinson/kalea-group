@@ -322,6 +322,21 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       if (saleErr) throw saleErr;
       created.sale_id = sale.id;
 
+      // a2) righe vendita complete dal preventivo
+      if (saleLines.products.length) {
+        const { error: itErr } = await supabase.from('sale_items').insert(
+          saleLines.products.map(p => ({ ...p, sale_id: sale.id }))
+        );
+        if (itErr) throw itErr;
+      }
+      if (saleLines.costs.length) {
+        const { error: acErr } = await supabase.from('sale_additional_costs').insert(
+          saleLines.costs.map(c => ({ ...c, sale_id: sale.id }))
+        );
+        if (acErr) throw acErr;
+      }
+
+
 
       // b) payment_schedules (importi netti; IVA e fatturazione tracciate a parte)
       const schedRows = rates.map(r => ({
