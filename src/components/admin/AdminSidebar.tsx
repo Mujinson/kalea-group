@@ -24,6 +24,7 @@ import {
   Users,
   BarChart3,
   Percent,
+  Truck,
   FileText,
   UserPlus,
   Kanban,
@@ -156,6 +157,7 @@ const menuStructure: MenuEntry[] = [
       items: [
         { title: 'Analytics', url: '/admin/analytics', icon: BarChart3, adminOnly: true },
         { title: 'Margini', url: '/admin/margini', icon: Percent, adminOnly: true },
+        { title: 'Marginalità cantieri', url: '/admin/cantieri-marginalita', icon: Percent, adminOnly: true },
       ],
     },
   },
