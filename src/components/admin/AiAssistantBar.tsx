@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square } from 'lucide-react';
+import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2 } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
 import { useSpeech } from '@/hooks/useSpeech';
 
