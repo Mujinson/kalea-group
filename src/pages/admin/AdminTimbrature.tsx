@@ -44,6 +44,57 @@ const AdminTimbrature = () => {
   const [loading, setLoading] = useState(true);
   const [addresses, setAddresses] = useState<Record<string, string>>({});
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
+  const [reloadKey, setReloadKey] = useState(0);
+  const [editing, setEditing] = useState<null | {
+    id?: string;
+    user_id: string;
+    event_date: string;
+    event_type: TimbratureEventType;
+    time: string;
+  }>(null);
+  const [savingEdit, setSavingEdit] = useState(false);
+
+  const saveEdit = async () => {
+    if (!editing) return;
+    setSavingEdit(true);
+    try {
+      const eventAt = new Date(`${editing.event_date}T${editing.time}:00`).toISOString();
+      if (editing.id) {
+        const { error } = await supabase
+          .from('worker_time_entries' as any)
+          .update({ event_type: editing.event_type, event_at: eventAt })
+          .eq('id', editing.id);
+        if (error) throw error;
+      } else {
+        const worker = workers.find((w) => w.user_id === editing.user_id);
+        const { error } = await supabase.from('worker_time_entries' as any).insert({
+          user_id: editing.user_id,
+          worker_id: worker?.id ?? null,
+          event_type: editing.event_type,
+          event_at: eventAt,
+          event_date: editing.event_date,
+        });
+        if (error) throw error;
+      }
+      toast.success('Timbratura salvata');
+      setEditing(null);
+      setReloadKey((k) => k + 1);
+    } catch (e: any) {
+      toast.error('Errore: ' + (e?.message || 'salvataggio non riuscito'));
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  const deleteEntry = async (id: string) => {
+    if (!confirm('Eliminare questa timbratura?')) return;
+    const { error } = await supabase.from('worker_time_entries' as any).delete().eq('id', id);
+    if (error) return toast.error('Errore: ' + error.message);
+    toast.success('Timbratura eliminata');
+    setEditing(null);
+    setReloadKey((k) => k + 1);
+  };
+
 
   useEffect(() => {
     (async () => {
