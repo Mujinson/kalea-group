@@ -665,7 +665,7 @@ export default function AdminPlanner() {
                       <div key={a.id} className="absolute text-[10px] font-bold text-white rounded cursor-pointer px-1.5 flex items-center"
                         style={{ left: offset, width: width - 2, top: 6 + idx * 18, height: 16, background: c.color }}
                         title={`${c.name}: ${a.start_date} → ${a.end_date}`}
-                        onClick={() => { if (confirm(`Eliminare ${c.name}?`)) deleteAssignment(a.id); }}
+                        onClick={() => { if (String(a.id).startsWith('direct:')) return; if (confirm(`Eliminare ${c.name}?`)) deleteAssignment(a.id); }}
                       >
                         {c.name}
                       </div>
