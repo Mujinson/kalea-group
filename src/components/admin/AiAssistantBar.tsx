@@ -132,8 +132,9 @@ export default function AiAssistantBar() {
             acc += payload.testo;
             patch({ risposta: acc });
           } else if (event === 'done') {
+            acc = payload?.risposta || acc;
             patch({
-              risposta: payload?.risposta || acc,
+              risposta: acc,
               riferimenti: Array.isArray(payload?.riferimenti) ? payload.riferimenti : [],
               streaming: false,
             });
@@ -143,13 +144,17 @@ export default function AiAssistantBar() {
         }
       }
       patch({ streaming: false });
+      if (acc.trim()) {
+        setUltimaRisposta(acc);
+        if (voiceReplyRef.current) void speech.speak(acc);
+      }
     } catch (e: any) {
       patch({ errore: e?.message || 'Errore nella richiesta all\'assistente.', streaming: false });
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 30);
     }
-  }, [loading, turns]);
+  }, [loading, turns, speech]);
 
   const voice = useVoiceInput({
     onInterim: (t) => setInput(t),
