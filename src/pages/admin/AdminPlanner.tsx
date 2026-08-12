@@ -127,6 +127,8 @@ export default function AdminPlanner() {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [appointments, setAppointments] = useState<any[]>([]);
+  const [siteWorkers, setSiteWorkers] = useState<any[]>([]);
+  const [todayEntries, setTodayEntries] = useState<any[]>([]);
 
   // Server-side KPIs (count + sum) — affidabili, indipendenti dai filtri client
   const [serverKpis, setServerKpis] = useState({
@@ -146,18 +148,21 @@ export default function AdminPlanner() {
   const [filterPriority, setFilterPriority] = useState<string>('');
 
   const fetchAll = useCallback(async () => {
-    const [cs, cm, ca, st, wk, cu, ap] = await Promise.all([
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const [cs, cm, ca, st, wk, cu, ap, sw, te] = await Promise.all([
       fetchAllRows((supabase as any).from('crews').select('*').order('name')),
       fetchAllRows((supabase as any).from('crew_members').select('*')),
       fetchAllRows((supabase as any).from('crew_assignments').select('*')),
       fetchAllRows((supabase as any).from('construction_sites').select('*')),
-      fetchAllRows((supabase as any).from('workers').select('id, full_name, first_name, last_name')),
+      fetchAllRows((supabase as any).from('workers').select('id, first_name, last_name, user_id')),
       fetchAllRows((supabase as any).from('customers').select('id, name, full_name')),
       fetchAllRows((supabase as any).from('appointments').select('id, title, appointment_date, duration_minutes, appointment_type, status, lead_id, assigned_to')),
+      fetchAllRows((supabase as any).from('site_workers').select('*').eq('is_active', true)),
+      fetchAllRows((supabase as any).from('worker_time_entries').select('worker_id, user_id, site_id, event_type, event_date').eq('event_date', todayStr)),
     ]);
     setCrews(cs || []); setCrewMembers(cm || []); setAssignments(ca || []);
     setSites(st || []); setWorkers(wk || []); setCustomers(cu || []);
-    setAppointments(ap || []);
+    setAppointments(ap || []); setSiteWorkers(sw || []); setTodayEntries(te || []);
   }, []);
 
   const fetchServerKpis = useCallback(async () => {
@@ -236,11 +241,69 @@ export default function AdminPlanner() {
     return true;
   }), [sites, filterStatus, filterPriority]);
 
-  const filteredAssignments = useMemo(() => assignments.filter((a) => {
-    if (filterCrew && a.crew_id !== filterCrew) return false;
-    if (!filteredSites.some((s) => s.id === a.site_id)) return false;
-    return true;
-  }), [assignments, filterCrew, filteredSites]);
+  // Assegnazioni "dirette": operai assegnati al cantiere (site_workers), senza squadra.
+  // Coprono l'intero periodo del cantiere così da comparire su tutta la settimana.
+  const directAssignments = useMemo<Assignment[]>(() => {
+    const bySite = new Map<string, any[]>();
+    siteWorkers.forEach((sw) => {
+      if (!bySite.has(sw.site_id)) bySite.set(sw.site_id, []);
+      bySite.get(sw.site_id)!.push(sw);
+    });
+    const out: Assignment[] = [];
+    bySite.forEach((rows, siteId) => {
+      const site: any = sites.find((s) => s.id === siteId);
+      if (!site || isSiteDone(site.status)) return;
+      const starts = rows.map((r) => r.start_date).filter(Boolean) as string[];
+      const start = [site.start_date, site.planned_start_date, ...starts].filter(Boolean).sort()[0]
+        || format(new Date(), 'yyyy-MM-dd');
+      const ends = rows.map((r) => r.end_date).filter(Boolean) as string[];
+      const end = (site.end_date || site.planned_end_date || ends.sort().slice(-1)[0]
+        || format(addDays(new Date(), 7), 'yyyy-MM-dd')) as string;
+      if (end < start) return;
+      out.push({
+        id: `direct:${siteId}`,
+        crew_id: `direct:${siteId}`,
+        site_id: siteId,
+        start_date: start,
+        end_date: end,
+        hours_per_day: 8,
+        notes: null,
+      });
+    });
+    return out;
+  }, [siteWorkers, sites]);
+
+  const directCrews = useMemo(() => {
+    const m = new Map<string, Crew>();
+    directAssignments.forEach((a) => {
+      const n = siteWorkers.filter((sw) => sw.site_id === a.site_id).length;
+      const site: any = sites.find((s) => s.id === a.site_id);
+      m.set(a.crew_id, {
+        id: a.crew_id,
+        name: `${n} ${n === 1 ? 'operaio' : 'operai'}`,
+        color: '#0EA5E9',
+        max_workers: n,
+        lead_worker_id: null,
+        notes: site?.title || null,
+        active: true,
+      });
+    });
+    return m;
+  }, [directAssignments, siteWorkers, sites]);
+
+  const crewFor = useCallback(
+    (id: string) => crews.find((c) => c.id === id) || directCrews.get(id) || null,
+    [crews, directCrews],
+  );
+
+  const filteredAssignments = useMemo(() => {
+    const all = filterCrew ? assignments : [...assignments, ...directAssignments];
+    return all.filter((a) => {
+      if (filterCrew && a.crew_id !== filterCrew) return false;
+      if (!filteredSites.some((s) => s.id === a.site_id)) return false;
+      return true;
+    });
+  }, [assignments, directAssignments, filterCrew, filteredSites]);
 
   // KPI
   const kpis = useMemo(() => {
@@ -250,17 +313,26 @@ export default function AdminPlanner() {
     const busyCrewIds = new Set(todaysAssign.map((a) => a.crew_id));
     const workersToday = new Set<string>();
     todaysAssign.forEach((a) => crewMembers.filter((m) => m.crew_id === a.crew_id).forEach((m) => workersToday.add(m.worker_id)));
+    // Operai assegnati direttamente a un cantiere attivo oggi
+    directAssignments.forEach((a) => {
+      if (a.start_date > today || a.end_date < today) return;
+      siteWorkers.filter((sw) => sw.site_id === a.site_id).forEach((sw) => workersToday.add(sw.worker_id || sw.worker_user_id));
+    });
+    // Operai che hanno timbrato oggi
+    todayEntries.forEach((e) => workersToday.add(e.worker_id || e.user_id));
     const freeCrews = crews.filter((c) => c.active && !busyCrewIds.has(c.id)).length;
     const overdue = sites.filter((s) => s.planned_end_date && s.planned_end_date < today && !isSiteDone(s.status)).length;
     const ws = startOfWeek(new Date(), { weekStartsOn: 1 });
     const we = endOfWeek(new Date(), { weekStartsOn: 1 });
     let weekHours = 0;
-    assignments.forEach((a) => {
+    [...assignments, ...directAssignments].forEach((a) => {
       const s = parseISO(a.start_date) < ws ? ws : parseISO(a.start_date);
       const e = parseISO(a.end_date) > we ? we : parseISO(a.end_date);
       if (e < s) return;
       const days = differenceInCalendarDays(e, s) + 1;
-      const crewSize = crewMembers.filter((m) => m.crew_id === a.crew_id).length || 1;
+      const crewSize = a.crew_id.startsWith('direct:')
+        ? siteWorkers.filter((sw) => sw.site_id === a.site_id).length || 1
+        : crewMembers.filter((m) => m.crew_id === a.crew_id).length || 1;
       weekHours += days * Number(a.hours_per_day || 8) * crewSize;
     });
     const sat = crews.length
@@ -272,7 +344,7 @@ export default function AdminPlanner() {
       overdue: Math.max(overdue, serverKpis.sitesOverdue),
       weekHours: Math.round(weekHours), sat,
     };
-  }, [sites, assignments, crews, crewMembers, serverKpis]);
+  }, [sites, assignments, directAssignments, siteWorkers, todayEntries, crews, crewMembers, serverKpis]);
 
   const conflicts = useMemo(() => computeConflicts(assignments, crews, crewMembers, sites), [assignments, crews, crewMembers, sites]);
 
@@ -284,6 +356,7 @@ export default function AdminPlanner() {
     const tgt: any = over.data.current;
     if (data?.type !== 'assignment') return;
     const a: Assignment = data.assignment;
+    if (String(a.id).startsWith('direct:')) return; // assegnazione derivata da site_workers, non spostabile
 
     let updates: Partial<Assignment> | null = null;
     if (tgt?.type === 'day') {
@@ -365,7 +438,7 @@ export default function AdminPlanner() {
         )}
         {/* Events */}
         {assignsByDay.map((a, idx) => {
-          const c = crews.find((x) => x.id === a.crew_id);
+          const c = crewFor(a.crew_id);
           if (!c) return null;
           const s = sites.find((x) => x.id === a.site_id);
           const startH = 8; // default 08:00
@@ -508,7 +581,7 @@ export default function AdminPlanner() {
                 <div className={`text-[10px] font-bold mb-1 inline-flex items-center justify-center ${isToday ? 'bg-blue-600 text-white rounded-full w-5 h-5' : ''}`}>{format(d, 'd')}</div>
                 <div className="space-y-0.5">
                   {dayAssigns.slice(0, 3).map((a) => {
-                    const c = crews.find((x) => x.id === a.crew_id);
+                    const c = crewFor(a.crew_id);
                     const s = sites.find((x) => x.id === a.site_id);
                     if (!c) return null;
                     return (
@@ -582,7 +655,7 @@ export default function AdminPlanner() {
                 </div>
                 <div className="relative" style={{ width: days.length * dayW, height: 48 }}>
                   {sAssigns.map((a, idx) => {
-                    const c = crews.find((x) => x.id === a.crew_id);
+                    const c = crewFor(a.crew_id);
                     if (!c) return null;
                     const startD = parseISO(a.start_date) < ms ? ms : parseISO(a.start_date);
                     const endD = parseISO(a.end_date) > me ? me : parseISO(a.end_date);
@@ -592,7 +665,7 @@ export default function AdminPlanner() {
                       <div key={a.id} className="absolute text-[10px] font-bold text-white rounded cursor-pointer px-1.5 flex items-center"
                         style={{ left: offset, width: width - 2, top: 6 + idx * 18, height: 16, background: c.color }}
                         title={`${c.name}: ${a.start_date} → ${a.end_date}`}
-                        onClick={() => { if (confirm(`Eliminare ${c.name}?`)) deleteAssignment(a.id); }}
+                        onClick={() => { if (String(a.id).startsWith('direct:')) return; if (confirm(`Eliminare ${c.name}?`)) deleteAssignment(a.id); }}
                       >
                         {c.name}
                       </div>
@@ -755,22 +828,23 @@ export default function AdminPlanner() {
               {selectedSite.address && <div>📍 {selectedSite.address}</div>}
               {selectedSite.estimated_hours && <div>⏱ Ore stimate: <b>{selectedSite.estimated_hours}h</b></div>}
               <div>
-                <div className="text-xs uppercase font-bold text-muted-foreground mb-1">Squadre assegnate</div>
+                <div className="text-xs uppercase font-bold text-muted-foreground mb-1">Squadre / operai assegnati</div>
                 <div className="space-y-1">
-                  {assignments.filter((a) => a.site_id === selectedSite.id).map((a) => {
-                    const c = crews.find((x) => x.id === a.crew_id);
+                  {[...assignments, ...directAssignments].filter((a) => a.site_id === selectedSite.id).map((a) => {
+                    const c = crewFor(a.crew_id);
                     if (!c) return null;
+                    const isDirect = String(a.id).startsWith('direct:');
                     return (
                       <div key={a.id} className="flex items-center justify-between p-2 rounded" style={{ background: c.color + '15' }}>
                         <div>
                           <div className="font-semibold text-xs flex items-center gap-1.5"><span className="w-2 h-2 rounded-full" style={{ background: c.color }} />{c.name}</div>
                           <div className="text-[10px] text-muted-foreground">{a.start_date} → {a.end_date} ({durationDays(a)}gg · {a.hours_per_day}h/g)</div>
                         </div>
-                        <Button size="sm" variant="ghost" onClick={() => deleteAssignment(a.id)}>×</Button>
+                        {!isDirect && <Button size="sm" variant="ghost" onClick={() => deleteAssignment(a.id)}>×</Button>}
                       </div>
                     );
                   })}
-                  {!assignments.some((a) => a.site_id === selectedSite.id) && <p className="text-xs text-muted-foreground italic">Nessuna squadra</p>}
+                  {![...assignments, ...directAssignments].some((a) => a.site_id === selectedSite.id) && <p className="text-xs text-muted-foreground italic">Nessuna squadra</p>}
                 </div>
                 <Button size="sm" variant="outline" className="w-full mt-2" onClick={() => setAssignDialog({ site_id: selectedSite.id })}><Plus className="w-3 h-3 mr-1" />Assegna squadra</Button>
               </div>
@@ -805,7 +879,7 @@ function SiteRow({ site, days, customerName, assignments, crews, crewMembers, wo
         return (
           <DroppableCell key={dayStr} id={`day:${site.id}:${dayStr}`} data={{ type: 'day', site_id: site.id, date: dayStr }} className="bg-white p-1 min-h-[80px] space-y-0.5">
             {dayAssigns.map((a) => {
-              const c = crews.find((x) => x.id === a.crew_id);
+              const c = crews.find((x) => x.id === a.crew_id) || null;
               return c ? <DraggableAssignment key={a.id} assignment={a} crew={c} members={crewMembers} workers={workers} compact /> : null;
             })}
             {!dayAssigns.length && (
