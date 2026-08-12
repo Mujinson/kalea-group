@@ -217,11 +217,11 @@ export default function AiAssistantBar() {
 
   return (
     <div className="px-3 md:px-6 pt-3 md:pt-4">
-      <div className="rounded-crm bg-crm-surface border border-crm-border shadow-crm-sm overflow-hidden">
+      <div className="relative rounded-crm bg-crm-surface border border-crm-border shadow-crm-sm">
         {/* Barra domanda */}
         <form
           onSubmit={(e) => { e.preventDefault(); ask(input); }}
-          className="flex items-center gap-2 h-12 px-3"
+          className="flex items-center gap-1 sm:gap-2 h-12 px-2 sm:px-3"
         >
           {voice.listening ? (
             <span className="w-4 h-4 shrink-0 inline-flex items-center justify-center" aria-hidden>
@@ -244,7 +244,7 @@ export default function AiAssistantBar() {
                   : "Chiedi all'assistente: incassi, preventivi, ore, cantieri…"
             }
             aria-label="Chiedi all'assistente AI"
-            className="flex-1 h-full bg-transparent text-[13px] text-crm-ink placeholder:text-crm-ink-subtle outline-none"
+            className="flex-1 min-w-0 h-full bg-transparent text-[16px] sm:text-[13px] text-crm-ink placeholder:text-crm-ink-subtle outline-none"
           />
 
           {/* onda animata durante la registrazione */}
@@ -272,9 +272,24 @@ export default function AiAssistantBar() {
               type="button"
               onClick={() => { setTurns([]); setInput(''); }}
               title="Nuova conversazione"
-              className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
+              className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
             >
               <X className="w-4 h-4" />
+            </button>
+          )}
+
+          {storico.length > 0 && !voice.listening && (
+            <button
+              type="button"
+              onClick={() => setStoricoAperto((v) => !v)}
+              title="Cronologia recente"
+              aria-label="Cronologia recente"
+              aria-expanded={storicoAperto}
+              className={`w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm transition ${
+                storicoAperto ? 'bg-crm-bg-soft text-crm-ink' : 'text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
+              }`}
+            >
+              <History className="w-4 h-4" />
             </button>
           )}
 
@@ -286,7 +301,7 @@ export default function AiAssistantBar() {
               title={voice.listening ? 'Ferma e invia' : 'Detta la domanda'}
               aria-label={voice.listening ? 'Ferma la registrazione e invia' : 'Detta la domanda'}
               aria-pressed={voice.listening}
-              className={`w-8 h-8 inline-flex items-center justify-center rounded-crm-sm transition disabled:opacity-40 ${
+              className={`w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm transition disabled:opacity-40 ${
                 voice.listening
                   ? 'bg-red-500 text-white'
                   : 'text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
@@ -315,7 +330,7 @@ export default function AiAssistantBar() {
               localStorage.setItem('kalea:ai-voice-reply', next ? '1' : '0');
               if (!next) speech.stop();
             }}
-            className={`h-8 px-2 inline-flex items-center gap-1.5 rounded-crm-sm border transition shrink-0 ${
+            className={`h-9 sm:h-8 px-2 inline-flex items-center gap-1.5 rounded-crm-sm border transition shrink-0 ${
               voiceReply
                 ? 'border-crm-primary/40 bg-crm-primary/10 text-crm-primary'
                 : 'border-crm-border text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
@@ -332,7 +347,7 @@ export default function AiAssistantBar() {
               onClick={speech.stop}
               title="Interrompi audio"
               aria-label="Interrompi audio"
-              className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm bg-crm-bg-soft text-crm-ink border border-crm-border hover:border-crm-border-strong transition"
+              className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm bg-crm-bg-soft text-crm-ink border border-crm-border hover:border-crm-border-strong transition"
             >
               <Square className="w-3.5 h-3.5 fill-current" />
             </button>
@@ -343,7 +358,7 @@ export default function AiAssistantBar() {
                 onClick={() => void speech.speak(ultimaRisposta)}
                 title="Ripeti l'ultima risposta"
                 aria-label="Ripeti l'ultima risposta"
-                className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
+                className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
               >
                 <Repeat2 className="w-4 h-4" />
               </button>
@@ -354,7 +369,7 @@ export default function AiAssistantBar() {
             type="submit"
             disabled={!input.trim() || loading}
             title="Invia"
-            className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-white disabled:opacity-40 transition"
+            className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-white disabled:opacity-40 transition"
             style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #A25DDC 100%)' }}
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
@@ -454,11 +469,7 @@ export default function AiAssistantBar() {
                 )}
               </div>
             ))}
-            {loading && !turns[turns.length - 1]?.risposta && (
-              <p className="text-[12px] text-crm-ink-subtle inline-flex items-center gap-2">
-                <Loader2 className="w-3.5 h-3.5 animate-spin" /> Sto cercando nei dati…
-              </p>
-            )}
+            {loading && !turns[turns.length - 1]?.risposta && <ThinkingIndicator />}
           </div>
         )}
       </div>
