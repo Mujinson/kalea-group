@@ -356,6 +356,7 @@ export default function AdminPlanner() {
     const tgt: any = over.data.current;
     if (data?.type !== 'assignment') return;
     const a: Assignment = data.assignment;
+    if (String(a.id).startsWith('direct:')) return; // assegnazione derivata da site_workers, non spostabile
 
     let updates: Partial<Assignment> | null = null;
     if (tgt?.type === 'day') {
