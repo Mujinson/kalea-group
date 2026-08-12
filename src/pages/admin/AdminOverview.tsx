@@ -295,12 +295,20 @@ const AdminOverview = () => {
 
 
   // ─── Derived ──────────────────────────────────────────────
-  // VENDUTO = valore preventivi accettati (quello che era il vecchio "Fatturato")
-  const sumRevenue = (s: Date, e: Date) =>
-    quotes.filter(x => isQuoteWon(x.status) && inRange(x.accepted_date || x.created_at, s, e))
-      .reduce((a, x) => a + Number(x.total_amount || 0), 0) +
-    sales.filter(x => inRange(x.sale_date || x.created_at, s, e))
-      .reduce((a, x) => a + Number(x.total_amount || 0), 0);
+  // VENDUTO = vendite + preventivi vinti NON ancora convertiti in vendita
+  // (senza il filtro anti-duplicato lo stesso importo veniva contato due volte)
+  const sumRevenue = (s: Date, e: Date) => {
+    const saleIds = new Set(sales.map(x => x.id));
+    const quotesNotConverted = quotes.filter(x =>
+      isQuoteWon(x.status) &&
+      !(x.converted_sale_id && saleIds.has(x.converted_sale_id)) &&
+      inRange(x.accepted_date || x.created_at, s, e)
+    );
+    return quotesNotConverted.reduce((a, x) => a + Number(x.total_amount || 0), 0) +
+      sales.filter(x => inRange(x.sale_date || x.created_at, s, e))
+        .reduce((a, x) => a + Number(x.total_amount || 0), 0);
+  };
+
 
   const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [quotes, sales, range]);
   const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [quotes, sales, range]);
