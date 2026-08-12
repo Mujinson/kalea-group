@@ -500,6 +500,9 @@ const AdminSales = () => {
         if (commError) throw commError;
       }
 
+      // Anticipo → rata "acconto" già incassata
+      await syncDepositSchedule(saleResult.id, depositAmount, paymentData.deposit_date || saleData.sale_date);
+
       // Create payment schedule if balance exists
       if (balanceAmount > 0 && paymentData.balance_due_date) {
         const { error: scheduleError } = await supabase.from('payment_schedules').insert({
