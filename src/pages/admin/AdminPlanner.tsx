@@ -155,7 +155,7 @@ export default function AdminPlanner() {
       fetchAllRows((supabase as any).from('crew_assignments').select('*')),
       fetchAllRows((supabase as any).from('construction_sites').select('*')),
       fetchAllRows((supabase as any).from('workers').select('id, first_name, last_name, user_id')),
-      fetchAllRows((supabase as any).from('customers').select('id, name, full_name')),
+      fetchAllRows((supabase as any).from('customers').select('id, first_name, last_name, company_name')),
       fetchAllRows((supabase as any).from('appointments').select('id, title, appointment_date, duration_minutes, appointment_type, status, lead_id, assigned_to')),
       fetchAllRows((supabase as any).from('site_workers').select('*').eq('is_active', true)),
       fetchAllRows((supabase as any).from('worker_time_entries').select('worker_id, user_id, site_id, event_type, event_date').eq('event_date', todayStr)),
@@ -231,7 +231,7 @@ export default function AdminPlanner() {
   const customerName = (id?: string | null) => {
     if (!id) return '';
     const c: any = customers.find((x) => x.id === id);
-    return c?.name || c?.full_name || '';
+    return c?.company_name || [c?.first_name, c?.last_name].filter(Boolean).join(' ') || '';
   };
 
   // Filtered sites/assignments
@@ -456,7 +456,7 @@ export default function AdminPlanner() {
               style={{ top, height, left, width, background: c.color + 'E6', color: 'white', borderLeft: `3px solid ${c.color}` }}
             >
               <div className="text-[10px] font-bold uppercase truncate">{c.name}</div>
-              <div className="text-[9px] opacity-90 truncate">{s?.name || s?.city}</div>
+               <div className="text-[9px] opacity-90 truncate">{(s as any)?.title || s?.name || s?.city}</div>
               <div className="text-[9px] opacity-75">{String(startH).padStart(2, '0')}:00 — {String(startH + dur).padStart(2, '0')}:00</div>
             </button>
           );
@@ -585,8 +585,8 @@ export default function AdminPlanner() {
                     const s = sites.find((x) => x.id === a.site_id);
                     if (!c) return null;
                     return (
-                      <div key={a.id} onClick={(e) => { e.stopPropagation(); s && setSelectedSite(s); }} className="text-[9px] truncate cursor-pointer px-1 rounded" style={{ background: c.color + '20', borderLeft: `2px solid ${c.color}` }} title={`${c.name} → ${s?.name || s?.city}`}>
-                        {c.name} · {s?.name || s?.city}
+                       <div key={a.id} onClick={(e) => { e.stopPropagation(); s && setSelectedSite(s); }} className="text-[9px] truncate cursor-pointer px-1 rounded" style={{ background: c.color + '20', borderLeft: `2px solid ${c.color}` }} title={`${c.name} → ${(s as any)?.title || s?.name || s?.city}`}>
+                         {c.name} · {(s as any)?.title || s?.name || s?.city}
                       </div>
                     );
                   })}
@@ -650,7 +650,7 @@ export default function AdminPlanner() {
             return (
               <div key={s.id} className="flex border-b hover:bg-muted/20">
                 <div style={{ width: 200 }} className="p-2 border-r cursor-pointer" onClick={() => setSelectedSite(s)}>
-                  <div className="flex items-center gap-1.5"><PriorityDot priority={s.priority} /><span className="text-xs font-semibold truncate">{s.name || s.city}</span></div>
+                   <div className="flex items-center gap-1.5"><PriorityDot priority={s.priority} /><span className="text-xs font-semibold truncate">{(s as any).title || s.name || s.city}</span></div>
                   <div className="text-[10px] text-muted-foreground truncate">{customerName(s.customer_id)}</div>
                 </div>
                 <div className="relative" style={{ width: days.length * dayW, height: 48 }}>
