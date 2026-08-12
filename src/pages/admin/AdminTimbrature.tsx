@@ -401,10 +401,19 @@ const AdminTimbrature = () => {
                           <AlertTriangle className="w-3 h-3" /> {alerts} fuori cantiere
                         </span>
                       )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2"
+                        onClick={() => setEditing({ user_id: g.userId, event_date: g.date, event_type: 'arrive_site', time: '08:00' })}
+                      >
+                        <Plus className="w-3 h-3 mr-1" /> Aggiungi
+                      </Button>
                     </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-2">
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                     {g.entries.map((e) => {
                       const meta = EVENT_LABELS[e.event_type];
