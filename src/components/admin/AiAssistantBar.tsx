@@ -140,6 +140,11 @@ export default function AiAssistantBar() {
     }
   }, [loading, turns]);
 
+  const voice = useVoiceInput({
+    onInterim: (t) => setInput(t),
+    onFinal: (t) => { setInput(t); void ask(t); },
+  });
+
   const attiva = turns.length > 0;
 
   return (
