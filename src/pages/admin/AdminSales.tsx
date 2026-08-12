@@ -504,7 +504,7 @@ const AdminSales = () => {
       }
 
       // Anticipo → rata "acconto" già incassata
-      await syncDepositSchedule(saleResult.id, depositAmount, paymentData.deposit_date || saleData.sale_date);
+      await syncDepositSchedule(saleResult.id, depositAmount, paymentData.deposit_date || saleData.sale_date, customerId);
 
       // Create payment schedule if balance exists
       if (balanceAmount > 0 && paymentData.balance_due_date) {
@@ -805,7 +805,7 @@ const AdminSales = () => {
 
       if (error) throw error;
 
-      await syncDepositSchedule(editingSaleId!, depositAmount, paymentData.deposit_date || saleData.sale_date);
+      await syncDepositSchedule(editingSaleId!, depositAmount, paymentData.deposit_date || saleData.sale_date, selectedCustomerId || null);
 
       toast.success('Vendita aggiornata');
       setDialogOpen(false);
@@ -1064,6 +1064,21 @@ const AdminSales = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2"><Label>Anticipo (€)</Label><Input type="number" step="0.01" value={paymentData.deposit_amount} onChange={(e) => setPaymentData({...paymentData, deposit_amount: e.target.value})} /></div>
                   <div className="space-y-2"><Label>Data Anticipo</Label><Input type="date" value={paymentData.deposit_date} onChange={(e) => setPaymentData({...paymentData, deposit_date: e.target.value})} /></div>
+                </div>
+                <div className="rounded-lg border p-3 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <Checkbox id="depInvoiced" checked={paymentData.deposit_invoiced} onCheckedChange={(c) => setPaymentData({...paymentData, deposit_invoiced: !!c})} />
+                    <Label htmlFor="depInvoiced">Anticipo fatturato (registra fattura e incasso)</Label>
+                  </div>
+                  {paymentData.deposit_invoiced && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2"><Label>N. Fattura</Label><Input placeholder="es. 2026/012" value={paymentData.deposit_invoice_number} onChange={(e) => setPaymentData({...paymentData, deposit_invoice_number: e.target.value})} /></div>
+                      <div className="space-y-2"><Label>IVA (%)</Label><Input type="number" step="0.01" value={paymentData.deposit_vat_rate} onChange={(e) => setPaymentData({...paymentData, deposit_vat_rate: e.target.value})} /></div>
+                      <div className="sm:col-span-2 text-sm text-muted-foreground">
+                        Imponibile {formatCurrency(Number(paymentData.deposit_amount || 0))} + IVA {formatCurrency(Number(paymentData.deposit_amount || 0) * Number(paymentData.deposit_vat_rate || 0) / 100)} = <strong>{formatCurrency(Number(paymentData.deposit_amount || 0) * (1 + Number(paymentData.deposit_vat_rate || 0) / 100))}</strong>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-2"><Label>Scadenza Saldo</Label><Input type="date" value={paymentData.balance_due_date} onChange={(e) => setPaymentData({...paymentData, balance_due_date: e.target.value})} /></div>
                 <div className="flex items-center gap-4 pt-4 border-t">
