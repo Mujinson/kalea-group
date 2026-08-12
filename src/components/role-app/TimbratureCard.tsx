@@ -189,9 +189,9 @@ const TimbratureCard = () => {
             <div className="rounded-lg bg-[#F0EDE7] p-3 text-center">
               <div className="text-[13px] text-[#1E1B4B] font-medium">✅ Giornata chiusa</div>
               <div className="text-[12px] text-[#6B6258] mt-1">
-                Lavorate {formatHM(summary.workMinutes)} · Pausa {formatHM(summary.pauseMinutes)}
-                {summary.siteMinutes > 0 ? ` · In cantiere ${formatHM(summary.siteMinutes)}` : ''}
+                Cantiere {formatHM(summary.siteMinutes)} · Viaggio {formatHM(summary.travelMinutes)} · Pausa {formatHM(summary.pauseMinutes)}
               </div>
+
             </div>
           )}
 
