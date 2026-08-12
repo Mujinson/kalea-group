@@ -93,7 +93,7 @@ export function CrmKpiTile({ label, value, color = "indigo", icon, hint, onClick
       onClick={onClick}
       disabled={!clickable}
       className={cn(
-        "text-left crm-card p-4 flex flex-col gap-2 animate-crm-fade-up disabled:cursor-default",
+        "w-full h-full text-left crm-card p-4 flex flex-col justify-between gap-2 animate-crm-fade-up disabled:cursor-default",
         clickable && "crm-card-hover cursor-pointer",
       )}
     >
