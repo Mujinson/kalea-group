@@ -323,6 +323,20 @@ export default function AiAssistantBar() {
           </div>
         )}
 
+        {speech.error && (
+          <div className="flex items-start gap-2 px-3 pb-2 text-[12px] text-red-600">
+            <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+            <span className="flex-1">{speech.error}</span>
+            <button
+              type="button"
+              onClick={() => speech.setError(null)}
+              className="text-crm-ink-muted hover:text-crm-ink"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
 
         {/* Esempi: solo a barra vuota e senza conversazione */}
         {!attiva && (focused || input.length === 0) && (
