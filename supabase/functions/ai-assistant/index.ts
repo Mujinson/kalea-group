@@ -95,17 +95,19 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'incassi_periodo',
-      description: 'Somma degli incassi realmente ricevuti (customer_payments) nel periodo, con numero di operazioni e importo medio.',
+      description: 'Somma degli incassi realmente ricevuti (customer_payments) nel periodo, con numero di operazioni e importo medio. Se indichi un cantiere, filtra passando dalle fatture (customer_payments.invoice_id -> customer_invoices.site_id).',
       parameters: {
         type: 'object',
         properties: {
           data_inizio: { type: 'string', description: 'YYYY-MM-DD' },
           data_fine: { type: 'string', description: 'YYYY-MM-DD' },
           periodo: { type: 'string', description: 'In alternativa alle date: "oggi", "questa settimana", "questo mese", "mese scorso", "anno"' },
+          cantiere: { type: 'string', description: 'Opzionale: nome, città, indirizzo o UUID del cantiere di cui calcolare gli incassi' },
         },
       },
     },
   },
+
   {
     type: 'function',
     function: {
