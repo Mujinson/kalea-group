@@ -269,6 +269,14 @@ const AdminQuotes = () => {
       const label = QUOTE_STATUSES.find(s => s.value === newStatus)?.label || newStatus;
       toast.success(`Stato aggiornato a ${label}`);
       fetchData();
+
+      // Preventivo vinto → crea la vendita in automatico con tutte le voci
+      const q = quotes.find(x => x.id === quoteId);
+      if (isQuoteWon(newStatus) && q && !q.converted_sale_id && q.customer_id) {
+        setQuoteToConvert({ ...q, status: newStatus } as any);
+        setConvertDialogOpen(true);
+      }
+
     } catch (error: any) {
       toast.error(`Errore aggiornamento: ${error?.message || 'sconosciuto'}`);
     }
