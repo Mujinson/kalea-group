@@ -182,6 +182,7 @@ export interface DailySummary {
   workMinutes: number;
   pauseMinutes: number;
   siteMinutes: number;
+  travelMinutes: number;
   firstAt: string | null;
   lastAt: string | null;
 }
@@ -208,8 +209,21 @@ export function summarizeDay(entries: TimeEntry[]): DailySummary {
   }
   const first = sorted.find((e) => e.event_type === 'start_home');
   const last = [...sorted].reverse().find((e) => e.event_type === 'arrive_home');
+
+  // Viaggio = casa → primo arrivo cantiere + ultima uscita cantiere → casa
+  const firstSite = sorted.find((e) => e.event_type === 'arrive_site');
+  const lastLeave = [...sorted].reverse().find((e) => e.event_type === 'leave_site');
+  let travel = 0;
+  if (first && firstSite) {
+    travel += Math.max(0, (new Date(firstSite.event_at).getTime() - new Date(first.event_at).getTime()) / 60000);
+  }
+  if (lastLeave && last) {
+    travel += Math.max(0, (new Date(last.event_at).getTime() - new Date(lastLeave.event_at).getTime()) / 60000);
+  }
+
   const totalMin = first && last ? (new Date(last.event_at).getTime() - new Date(first.event_at).getTime()) / 60000 : 0;
   const workMin = Math.max(0, totalMin - pause);
+
   return {
     totalMinutes: Math.round(totalMin),
     workMinutes: Math.round(workMin),
