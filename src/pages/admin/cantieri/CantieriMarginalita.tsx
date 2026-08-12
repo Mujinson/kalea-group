@@ -99,7 +99,8 @@ const CantieriMarginalita = () => {
 
       <Card className="bg-white">
         <CardContent className="p-4 text-xs text-muted-foreground">
-          I costi generali (stipendi, furgone, commercialista) restano fuori dal margine di commessa e sono mostrati a parte:
+          Tutti i valori sono al netto dell'IVA (imponibile contro imponibile). Il margine mostrato è solo sui <strong>materiali</strong>:
+          non contiene manodopera, furgone, gasolio e pranzi. I costi generali (stipendi, commercialista) restano fuori e valgono
           <span className="font-semibold text-foreground"> {fmtEur(data?.generalMonthly || 0)}/mese</span>.
         </CardContent>
       </Card>
