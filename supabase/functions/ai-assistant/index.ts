@@ -692,7 +692,8 @@ Regole:
         try { args = tc.function?.arguments ? JSON.parse(tc.function.arguments) : {}; } catch { args = {}; }
         let result: any;
         try { result = await runTool(tc.function?.name, args); }
-        catch (e) { result = { errore: (e as Error).message }; }
+        catch (e) { console.error('tool crash', e); result = { errore: 'dato non recuperabile' }; }
+        result = sanitize(result);
         toolLog.push({ tool: tc.function?.name, args });
         messages.push({ role: 'tool', tool_call_id: tc.id, content: JSON.stringify(result).slice(0, 60000) });
       }
