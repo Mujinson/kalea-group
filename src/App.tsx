@@ -31,6 +31,7 @@ import CeramicaCollectionDetail from "./pages/CeramicaCollectionDetail";
 import Parquet from "./pages/Parquet";
 import ParquetCollectionDetail from "./pages/ParquetCollectionDetail";
 import IndoorSpc from "./pages/IndoorSpc";
+import ServizioDetail from "./pages/ServizioDetail";
 import SpcCollectionDetail from "./pages/SpcCollectionDetail";
 import IndoorLaminati from "./pages/IndoorLaminati";
 import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
@@ -460,6 +461,12 @@ const App = () => (
               <Route path="/en/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
               <Route path="/de/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
               <Route path="/fr/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
+
+              {/* Servizi (all languages) */}
+              <Route path="/it/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />
+              <Route path="/en/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />
+              <Route path="/de/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />
+              <Route path="/fr/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />
 
               {/* SPC hub + collection detail (all languages) */}
               <Route path="/it/indoor/spc" element={<><SEOHandler /><Layout><IndoorSpc /></Layout></>} />
