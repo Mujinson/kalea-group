@@ -249,19 +249,52 @@ async function cercaPreventivo(sb: SupabaseClient, a: any, refs: Ref[]) {
   };
 }
 
-async function incassiPeriodo(sb: SupabaseClient, a: any) {
+async function incassiPeriodo(sb: SupabaseClient, a: any, refs: Ref[]) {
   const p = resolvePeriod(a.periodo, a.data_inizio, a.data_fine);
-  const { data, error } = await sb.from('customer_payments')
-    .select('amount, payment_date, method').gte('payment_date', p.start).lte('payment_date', p.end).limit(2000);
+  const cantiere = String(a.cantiere || '').trim();
+  let siteInfo: any = null;
+  let invoiceIds: string[] | null = null;
+
+  if (cantiere) {
+    const { data: sites, error: sErr } = await resolveSite(sb, cantiere);
+    if (sErr) return { errore: sErr.message };
+    if (!sites?.length) return { trovati: 0, messaggio: `Nessun cantiere trovato per "${cantiere}".` };
+    if (sites.length > 1) {
+      return { ambiguo: true, candidati: (sites as any[]).map((s) => ({ id: s.id, nome: s.title, citta: s.city })), messaggio: 'Più cantieri corrispondono, chiedi di specificare.' };
+    }
+    siteInfo = sites[0];
+    refs.push({ etichetta: `Cantiere ${siteInfo.title || siteInfo.city}`, percorso: `/admin/cantieri/${siteInfo.id}` });
+    // customer_payments non ha site_id: si passa da invoice_id -> customer_invoices.site_id
+    const { data: inv, error: iErr } = await sb.from('customer_invoices')
+      .select('id, invoice_number').eq('site_id', siteInfo.id).limit(500);
+    if (iErr) return { errore: iErr.message };
+    invoiceIds = (inv || []).map((r: any) => r.id);
+    if (!invoiceIds.length) {
+      return {
+        periodo: p.label, dal: p.start, al: p.end,
+        cantiere: siteInfo.title || siteInfo.project_name,
+        incassato: 0, operazioni: 0, importo_medio: 0,
+        nota: 'Nessuna fattura collegata a questo cantiere, quindi nessun incasso attribuibile (gli incassi sono legati al cantiere solo tramite le fatture).',
+      };
+    }
+  }
+
+  let q = sb.from('customer_payments')
+    .select('amount, payment_date, method, invoice_id').gte('payment_date', p.start).lte('payment_date', p.end).limit(2000);
+  if (invoiceIds) q = q.in('invoice_id', invoiceIds);
+  const { data, error } = await q;
   if (error) return { errore: error.message };
   const tot = (data || []).reduce((s: number, r: any) => s + num(r.amount), 0);
   return {
     periodo: p.label, dal: p.start, al: p.end,
+    cantiere: siteInfo ? (siteInfo.title || siteInfo.project_name) : null,
+    fonte: siteInfo ? 'customer_payments filtrati sulle fatture del cantiere (invoice_id -> customer_invoices.site_id)' : 'customer_payments (tutti i clienti)',
     incassato: Math.round(tot * 100) / 100,
     operazioni: data?.length || 0,
     importo_medio: data?.length ? Math.round((tot / data.length) * 100) / 100 : 0,
   };
 }
+
 
 async function andamentoPeriodo(sb: SupabaseClient, a: any) {
   const p = resolvePeriod(a.periodo);
