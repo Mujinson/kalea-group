@@ -48,6 +48,30 @@ function messaggioErrore(raw: unknown): string {
 
 const FUNCTIONS_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/ai-assistant`;
 
+function ThinkingIndicator() {
+  const FRASI = ['Sto pensando', 'Sto cercando nei dati', 'Ci sono quasi'];
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % FRASI.length), 2600);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <p className="text-[12px] text-crm-ink-subtle inline-flex items-center gap-2" aria-live="polite">
+      <Sparkles className="w-3.5 h-3.5 text-crm-primary animate-pulse" />
+      <span>{FRASI[i]}</span>
+      <span className="inline-flex items-center gap-1" aria-hidden>
+        {[0, 1, 2].map((d) => (
+          <span
+            key={d}
+            className="w-1 h-1 rounded-full bg-crm-primary/70 animate-bounce"
+            style={{ animationDelay: `${d * 140}ms`, animationDuration: '900ms' }}
+          />
+        ))}
+      </span>
+    </p>
+  );
+}
+
 export default function AiAssistantBar() {
   const navigate = useNavigate();
   const [input, setInput] = useState('');
@@ -375,6 +399,46 @@ export default function AiAssistantBar() {
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
           </button>
         </form>
+
+        {/* Cronologia recente */}
+        {storicoAperto && storico.length > 0 && (
+          <>
+            <button
+              type="button"
+              aria-label="Chiudi cronologia"
+              className="fixed inset-0 z-40 cursor-default"
+              onClick={() => setStoricoAperto(false)}
+            />
+            <div className="absolute z-50 right-2 sm:right-3 top-[52px] w-[min(22rem,calc(100vw-2rem))] rounded-crm bg-crm-surface border border-crm-border shadow-crm-md overflow-hidden animate-crm-fade-up">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-crm-border">
+                <span className="text-[11px] font-medium uppercase tracking-wide text-crm-ink-subtle">Cronologia recente</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStorico([]);
+                    if (userKey) localStorage.removeItem(userKey);
+                    setStoricoAperto(false);
+                  }}
+                  className="text-[11px] text-crm-ink-muted hover:text-crm-ink"
+                >
+                  Cancella
+                </button>
+              </div>
+              <div className="max-h-[46vh] overflow-auto py-1">
+                {storico.map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => { setInput(d); void ask(d); }}
+                    className="w-full text-left px-3 py-2.5 text-[13px] text-crm-ink hover:bg-crm-bg-soft transition truncate"
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         {voice.error && (
           <div className="flex items-start gap-2 px-3 pb-2 text-[12px] text-red-600">
