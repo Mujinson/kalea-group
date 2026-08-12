@@ -664,35 +664,102 @@ const AdminSales = () => {
     setActiveTab('products');
   };
 
-  // Registra/aggiorna l'anticipo come rata "acconto" già pagata, così risulta incassato
-  const syncDepositSchedule = async (saleId: string, depositAmount: number, depositDate: string) => {
+  // Registra/aggiorna l'anticipo: rata "acconto" pagata + (se fatturato) fattura e incasso reale
+  const syncDepositSchedule = async (saleId: string, depositAmount: number, depositDate: string, customerId?: string | null) => {
     try {
-      const { data: existing } = await supabase
+      const sb = supabase as any;
+      const { data: existing } = await sb
         .from('payment_schedules')
-        .select('id')
+        .select('id, invoice_id')
         .eq('sale_id', saleId)
         .eq('payment_type', 'acconto')
         .maybeSingle();
 
-      if (depositAmount > 0) {
-        const payload = {
-          sale_id: saleId,
-          amount: depositAmount,
-          due_date: depositDate,
-          paid_date: depositDate,
-          is_paid: true,
-          payment_type: 'acconto',
-        };
+      if (depositAmount <= 0) {
         if (existing?.id) {
-          await supabase.from('payment_schedules').update(payload).eq('id', existing.id);
-        } else {
-          await supabase.from('payment_schedules').insert(payload);
+          if (existing.invoice_id) await sb.from('customer_invoices').delete().eq('id', existing.invoice_id);
+          await sb.from('payment_schedules').delete().eq('id', existing.id);
         }
-      } else if (existing?.id) {
-        await supabase.from('payment_schedules').delete().eq('id', existing.id);
+        return;
+      }
+
+      const vatRate = Number(paymentData.deposit_vat_rate || 22);
+      const vatAmount = Math.round(depositAmount * vatRate) / 100;
+      const gross = depositAmount + vatAmount;
+
+      let invoiceId: string | null = existing?.invoice_id || null;
+
+      if (paymentData.deposit_invoiced) {
+        const invPayload: any = {
+          customer_id: customerId || null,
+          invoice_date: depositDate,
+          description: 'Acconto vendita',
+          subtotal: depositAmount,
+          vat_rate: vatRate,
+          vat_amount: vatAmount,
+          total: gross,
+          tranche_type: 'acconto',
+          status: 'emessa',
+        };
+        if (paymentData.deposit_invoice_number.trim()) invPayload.invoice_number = paymentData.deposit_invoice_number.trim();
+
+        if (invoiceId) {
+          await sb.from('customer_invoices').update(invPayload).eq('id', invoiceId);
+        } else {
+          const { data: inv, error: invErr } = await sb.from('customer_invoices').insert(invPayload).select('id').single();
+          if (invErr) throw invErr;
+          invoiceId = inv.id;
+          await sb.from('invoice_sales').insert({ invoice_id: invoiceId, sale_id: saleId });
+        }
+      } else if (invoiceId) {
+        await sb.from('customer_invoices').delete().eq('id', invoiceId);
+        invoiceId = null;
+      }
+
+      const payload: any = {
+        sale_id: saleId,
+        amount: depositAmount,
+        due_date: depositDate,
+        paid_date: depositDate,
+        is_paid: true,
+        payment_type: 'acconto',
+        invoice_id: invoiceId,
+        is_invoiced: !!invoiceId,
+        invoice_number: invoiceId ? (paymentData.deposit_invoice_number.trim() || null) : null,
+        invoiced_amount: invoiceId ? gross : null,
+      };
+      let scheduleId = existing?.id as string | undefined;
+      if (scheduleId) {
+        await sb.from('payment_schedules').update(payload).eq('id', scheduleId);
+      } else {
+        const { data: sch } = await sb.from('payment_schedules').insert(payload).select('id').single();
+        scheduleId = sch?.id;
+      }
+
+      // Incasso reale (visibile in contabilità/dashboard) solo se c'è una fattura
+      if (invoiceId) {
+        const { data: existingPay } = await sb
+          .from('customer_payments')
+          .select('id')
+          .eq('invoice_id', invoiceId)
+          .maybeSingle();
+        const payPayload = {
+          invoice_id: invoiceId,
+          payment_schedule_id: scheduleId || null,
+          payment_date: depositDate,
+          amount: gross,
+          method: paymentData.payment_method || 'bonifico',
+          tranche_type: 'acconto',
+        };
+        if (existingPay?.id) {
+          await sb.from('customer_payments').update(payPayload).eq('id', existingPay.id);
+        } else {
+          await sb.from('customer_payments').insert(payPayload);
+        }
       }
     } catch (e) {
       console.error('Errore sincronizzazione acconto:', e);
+      toast.error("Errore nel salvataggio dell'anticipo");
     }
   };
 
