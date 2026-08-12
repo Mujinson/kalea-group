@@ -140,8 +140,11 @@ const TimbratureCard = () => {
         site,
       });
       if (gpsError) toast.warning('Timbratura salvata senza GPS: ' + gpsError);
+      else if (type === 'arrive_home')
+        toast.success('Per oggi è tutto', { description: `Ti auguriamo una buona serata. ${farewell}!` });
       else toast.success('Timbratura registrata');
       await load();
+
     } catch (e: any) {
       toast.error('Errore: ' + (e?.message || 'timbratura non salvata'));
     } finally {
