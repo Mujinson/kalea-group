@@ -258,6 +258,9 @@ const AdminSales = () => {
     deposit_date: '',
     balance_due_date: '',
     is_paid: false,
+    deposit_invoiced: false,
+    deposit_invoice_number: '',
+    deposit_vat_rate: '22',
   });
 
   const handleDataChange = useCallback(() => {
