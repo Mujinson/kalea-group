@@ -91,6 +91,9 @@ const OperaioHome = () => {
 
       <TimbratureCard />
 
+      <MonthlyHoursCard />
+
+
       <button
         onClick={() => navigate('crea-preventivo')}
         className="w-full h-[56px] rounded-xl bg-[#8B6F4E] text-white font-medium text-[15px] flex items-center justify-center gap-2"
