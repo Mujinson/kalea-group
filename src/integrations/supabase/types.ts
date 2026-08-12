@@ -2122,7 +2122,7 @@ export type Database = {
             foreignKeyName: "invoice_sales_invoice_id_fkey"
             columns: ["invoice_id"]
             isOneToOne: false
-            referencedRelation: "_deprecated_commercial_invoices"
+            referencedRelation: "customer_invoices"
             referencedColumns: ["id"]
           },
           {
