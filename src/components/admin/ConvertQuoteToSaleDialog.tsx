@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { normalizeVatRate } from '@/lib/finance';
 import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -195,7 +196,9 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
     if (!quote) return 0.22;
     const vat = Number(quote.vat_amount || 0);
     if (subtotal > 0 && vat > 0) return Math.round((vat / subtotal) * 100) / 100;
-    return quote.vat_included ? 0 : 0.22;
+    if (quote.vat_included) return 0;
+    // fallback: aliquota del preventivo (frazione o percentuale), mai una costante
+    return normalizeVatRate(quote.vat_rate) / 100;
   }, [quote, subtotal]);
 
   const matPreview = useMemo(() => (quote ? extractMaterialLines(quote) : []), [quote]);
@@ -261,7 +264,9 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       const vatAmount = Number(quote.vat_amount) || 0;
       const sub = round2(totalAmount - vatAmount);
       const unitPrice = totalQty > 0 ? round2(sub / totalQty) : 0;
-      const vatRate = sub > 0 && vatAmount > 0 ? Math.round((vatAmount / sub) * 100) / 100 : (quote.vat_included ? 0 : 0.22);
+      const vatRate = sub > 0 && vatAmount > 0
+        ? Math.round((vatAmount / sub) * 100) / 100
+        : (quote.vat_included ? 0 : normalizeVatRate(quote.vat_rate) / 100);
       const saleLines = extractSaleLines(quote);
 
 
