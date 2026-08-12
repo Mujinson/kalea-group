@@ -97,7 +97,7 @@ export function CrmKpiTile({ label, value, color = "indigo", icon, hint, onClick
         clickable && "crm-card-hover cursor-pointer",
       )}
     >
-      <div className="flex items-start justify-between gap-2">
+      <div className="flex items-start justify-between gap-2 min-h-[32px]">
         <p className="text-[10.5px] font-semibold uppercase tracking-[0.10em] text-crm-ink-muted leading-tight">
           {label}
         </p>
