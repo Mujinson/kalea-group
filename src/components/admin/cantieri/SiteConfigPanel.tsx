@@ -461,7 +461,56 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
               );
             })}
           </div>
+
+          {(equipment || []).length > 0 && (
+            <div className="mt-4 space-y-2">
+              <div className="text-xs uppercase tracking-wide text-muted-foreground">Stato attrezzatura</div>
+              {(equipment || []).map((e: any) => (
+                <div key={e.id} className="grid grid-cols-2 md:grid-cols-6 gap-2 items-center p-2 border rounded-lg">
+                  <span className="text-sm font-medium col-span-2 md:col-span-1">{e.type}</span>
+                  <Input
+                    type="number"
+                    placeholder="Richiesti"
+                    defaultValue={e.quantity_needed ?? ""}
+                    onBlur={(ev) => updateEquipment(e.id, { quantity_needed: ev.target.value === "" ? null : Number(ev.target.value) })}
+                    className="h-9"
+                  />
+                  <Input
+                    type="number"
+                    placeholder="In cantiere"
+                    defaultValue={e.quantity_on_site ?? 0}
+                    onBlur={(ev) => updateEquipment(e.id, { quantity_on_site: ev.target.value === "" ? 0 : Number(ev.target.value) })}
+                    className="h-9"
+                  />
+                  <Select value={e.status || "da_portare"} onValueChange={(v) => updateEquipment(e.id, { status: v })}>
+                    <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="da_portare">Da portare</SelectItem>
+                      <SelectItem value="in_cantiere">In cantiere</SelectItem>
+                      <SelectItem value="da_ritirare">Da ritirare</SelectItem>
+                      <SelectItem value="mancante">Mancante</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    type="date"
+                    title="Data prevista"
+                    defaultValue={e.expected_date || ""}
+                    onBlur={(ev) => updateEquipment(e.id, { expected_date: ev.target.value || null })}
+                    className="h-9"
+                  />
+                  <Input
+                    type="date"
+                    title="Data rientro"
+                    defaultValue={e.returned_date || ""}
+                    onBlur={(ev) => updateEquipment(e.id, { returned_date: ev.target.value || null })}
+                    className="h-9"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
+
       </Card>
 
       {/* ============ Checklist ============ */}
