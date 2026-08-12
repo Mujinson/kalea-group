@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2 } from 'lucide-react';
+import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
 import { useSpeech } from '@/hooks/useSpeech';
 
@@ -24,7 +24,53 @@ const ESEMPI = [
   'Attrezzature mancanti al cantiere Bellagio',
 ];
 
+const MAX_STORICO = 15;
+
+/** Trasforma qualsiasi errore in un messaggio chiaro in italiano. */
+function messaggioErrore(raw: unknown): string {
+  const m = String((raw as any)?.message ?? raw ?? '').trim();
+  const low = m.toLowerCase();
+  if (!m) return 'Non sono riuscito a rispondere. Riprova tra qualche secondo.';
+  if (low.includes('failed to fetch') || low.includes('networkerror') || low.includes('load failed'))
+    return 'Connessione assente o instabile: controlla la rete e riprova.';
+  if (low.includes('abort')) return 'Richiesta interrotta.';
+  if (low.includes('401') || low.includes('sessione')) return 'Sessione scaduta: rientra nel CRM e riprova.';
+  if (low.includes('403')) return 'Non hai i permessi per vedere questo dato.';
+  if (low.includes('429') || low.includes('troppe richieste')) return 'Troppe richieste di fila: aspetta qualche secondo e riprova.';
+  if (low.includes('402') || low.includes('crediti')) return 'Crediti AI esauriti: ricaricali per continuare a usare l\'assistente.';
+  if (low.includes('500') || low.includes('502') || low.includes('503'))
+    return 'L\'assistente non è raggiungibile in questo momento. Riprova tra poco.';
+  // messaggi tecnici (SQL, stack, JSON) -> generico
+  if (/[{}<>]|select |pgrst|jwt|undefined is not/i.test(m))
+    return 'Non sono riuscito a recuperare il dato. Riprova, o prova a chiedere in modo diverso.';
+  return m;
+}
+
 const FUNCTIONS_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/ai-assistant`;
+
+function ThinkingIndicator() {
+  const FRASI = ['Sto pensando', 'Sto cercando nei dati', 'Ci sono quasi'];
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % FRASI.length), 2600);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <p className="text-[12px] text-crm-ink-subtle inline-flex items-center gap-2" aria-live="polite">
+      <Sparkles className="w-3.5 h-3.5 text-crm-primary animate-pulse" />
+      <span>{FRASI[i]}</span>
+      <span className="inline-flex items-center gap-1" aria-hidden>
+        {[0, 1, 2].map((d) => (
+          <span
+            key={d}
+            className="w-1 h-1 rounded-full bg-crm-primary/70 animate-bounce"
+            style={{ animationDelay: `${d * 140}ms`, animationDuration: '900ms' }}
+          />
+        ))}
+      </span>
+    </p>
+  );
+}
 
 export default function AiAssistantBar() {
   const navigate = useNavigate();
@@ -34,6 +80,34 @@ export default function AiAssistantBar() {
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // Cronologia recente delle domande, per utente
+  const [userKey, setUserKey] = useState<string | null>(null);
+  const [storico, setStorico] = useState<string[]>([]);
+  const [storicoAperto, setStoricoAperto] = useState(false);
+
+  useEffect(() => {
+    let attivo = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (!attivo) return;
+      const k = `kalea:ai-storico:${data.user?.id ?? 'anon'}`;
+      setUserKey(k);
+      try {
+        const raw = localStorage.getItem(k);
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(parsed)) setStorico(parsed.filter((x) => typeof x === 'string').slice(0, MAX_STORICO));
+      } catch { /* storico corrotto */ }
+    });
+    return () => { attivo = false; };
+  }, []);
+
+  const salvaStorico = useCallback((domanda: string) => {
+    setStorico((prev) => {
+      const next = [domanda, ...prev.filter((d) => d.toLowerCase() !== domanda.toLowerCase())].slice(0, MAX_STORICO);
+      if (userKey) { try { localStorage.setItem(userKey, JSON.stringify(next)); } catch { /* quota */ } }
+      return next;
+    });
+  }, [userKey]);
 
   // Risposta vocale (spenta di default, scelta ricordata)
   const [voiceReply, setVoiceReply] = useState(
@@ -82,6 +156,8 @@ export default function AiAssistantBar() {
       ]);
 
     setTurns((prev) => [...prev, { id, domanda, risposta: '', riferimenti: [], streaming: true }]);
+    setStoricoAperto(false);
+    salvaStorico(domanda);
 
     const patch = (p: Partial<Turn>) =>
       setTurns((prev) => prev.map((t) => (t.id === id ? { ...t, ...p } : t)));
@@ -139,7 +215,7 @@ export default function AiAssistantBar() {
               streaming: false,
             });
           } else if (event === 'error') {
-            patch({ errore: payload?.errore || 'Errore durante la risposta.', streaming: false });
+            patch({ errore: messaggioErrore(payload?.errore) , streaming: false });
           }
         }
       }
@@ -149,12 +225,12 @@ export default function AiAssistantBar() {
         if (voiceReplyRef.current) void speech.speak(acc);
       }
     } catch (e: any) {
-      patch({ errore: e?.message || 'Errore nella richiesta all\'assistente.', streaming: false });
+      patch({ errore: messaggioErrore(e), streaming: false });
     } finally {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 30);
     }
-  }, [loading, turns, speech]);
+  }, [loading, turns, speech, salvaStorico]);
 
   const voice = useVoiceInput({
     onInterim: (t) => setInput(t),
@@ -165,11 +241,11 @@ export default function AiAssistantBar() {
 
   return (
     <div className="px-3 md:px-6 pt-3 md:pt-4">
-      <div className="rounded-crm bg-crm-surface border border-crm-border shadow-crm-sm overflow-hidden">
+      <div className="relative rounded-crm bg-crm-surface border border-crm-border shadow-crm-sm">
         {/* Barra domanda */}
         <form
           onSubmit={(e) => { e.preventDefault(); ask(input); }}
-          className="flex items-center gap-2 h-12 px-3"
+          className="flex items-center gap-1 sm:gap-2 h-12 px-2 sm:px-3"
         >
           {voice.listening ? (
             <span className="w-4 h-4 shrink-0 inline-flex items-center justify-center" aria-hidden>
@@ -192,7 +268,7 @@ export default function AiAssistantBar() {
                   : "Chiedi all'assistente: incassi, preventivi, ore, cantieri…"
             }
             aria-label="Chiedi all'assistente AI"
-            className="flex-1 h-full bg-transparent text-[13px] text-crm-ink placeholder:text-crm-ink-subtle outline-none"
+            className="flex-1 min-w-0 h-full bg-transparent text-[16px] sm:text-[13px] text-crm-ink placeholder:text-crm-ink-subtle outline-none"
           />
 
           {/* onda animata durante la registrazione */}
@@ -220,9 +296,24 @@ export default function AiAssistantBar() {
               type="button"
               onClick={() => { setTurns([]); setInput(''); }}
               title="Nuova conversazione"
-              className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
+              className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
             >
               <X className="w-4 h-4" />
+            </button>
+          )}
+
+          {storico.length > 0 && !voice.listening && (
+            <button
+              type="button"
+              onClick={() => setStoricoAperto((v) => !v)}
+              title="Cronologia recente"
+              aria-label="Cronologia recente"
+              aria-expanded={storicoAperto}
+              className={`w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm transition ${
+                storicoAperto ? 'bg-crm-bg-soft text-crm-ink' : 'text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
+              }`}
+            >
+              <History className="w-4 h-4" />
             </button>
           )}
 
@@ -234,7 +325,7 @@ export default function AiAssistantBar() {
               title={voice.listening ? 'Ferma e invia' : 'Detta la domanda'}
               aria-label={voice.listening ? 'Ferma la registrazione e invia' : 'Detta la domanda'}
               aria-pressed={voice.listening}
-              className={`w-8 h-8 inline-flex items-center justify-center rounded-crm-sm transition disabled:opacity-40 ${
+              className={`w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm transition disabled:opacity-40 ${
                 voice.listening
                   ? 'bg-red-500 text-white'
                   : 'text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
@@ -263,7 +354,7 @@ export default function AiAssistantBar() {
               localStorage.setItem('kalea:ai-voice-reply', next ? '1' : '0');
               if (!next) speech.stop();
             }}
-            className={`h-8 px-2 inline-flex items-center gap-1.5 rounded-crm-sm border transition shrink-0 ${
+            className={`h-9 sm:h-8 px-2 inline-flex items-center gap-1.5 rounded-crm-sm border transition shrink-0 ${
               voiceReply
                 ? 'border-crm-primary/40 bg-crm-primary/10 text-crm-primary'
                 : 'border-crm-border text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
@@ -280,7 +371,7 @@ export default function AiAssistantBar() {
               onClick={speech.stop}
               title="Interrompi audio"
               aria-label="Interrompi audio"
-              className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm bg-crm-bg-soft text-crm-ink border border-crm-border hover:border-crm-border-strong transition"
+              className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm bg-crm-bg-soft text-crm-ink border border-crm-border hover:border-crm-border-strong transition"
             >
               <Square className="w-3.5 h-3.5 fill-current" />
             </button>
@@ -291,7 +382,7 @@ export default function AiAssistantBar() {
                 onClick={() => void speech.speak(ultimaRisposta)}
                 title="Ripeti l'ultima risposta"
                 aria-label="Ripeti l'ultima risposta"
-                className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
+                className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition"
               >
                 <Repeat2 className="w-4 h-4" />
               </button>
@@ -302,12 +393,52 @@ export default function AiAssistantBar() {
             type="submit"
             disabled={!input.trim() || loading}
             title="Invia"
-            className="w-8 h-8 inline-flex items-center justify-center rounded-crm-sm text-white disabled:opacity-40 transition"
+            className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-white disabled:opacity-40 transition"
             style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #A25DDC 100%)' }}
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
           </button>
         </form>
+
+        {/* Cronologia recente */}
+        {storicoAperto && storico.length > 0 && (
+          <>
+            <button
+              type="button"
+              aria-label="Chiudi cronologia"
+              className="fixed inset-0 z-40 cursor-default"
+              onClick={() => setStoricoAperto(false)}
+            />
+            <div className="absolute z-50 right-2 sm:right-3 top-[52px] w-[min(22rem,calc(100vw-2rem))] rounded-crm bg-crm-surface border border-crm-border shadow-crm-md overflow-hidden animate-crm-fade-up">
+              <div className="flex items-center justify-between px-3 py-2 border-b border-crm-border">
+                <span className="text-[11px] font-medium uppercase tracking-wide text-crm-ink-subtle">Cronologia recente</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStorico([]);
+                    if (userKey) localStorage.removeItem(userKey);
+                    setStoricoAperto(false);
+                  }}
+                  className="text-[11px] text-crm-ink-muted hover:text-crm-ink"
+                >
+                  Cancella
+                </button>
+              </div>
+              <div className="max-h-[46vh] overflow-auto py-1">
+                {storico.map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => { setInput(d); void ask(d); }}
+                    className="w-full text-left px-3 py-2.5 text-[13px] text-crm-ink hover:bg-crm-bg-soft transition truncate"
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         {voice.error && (
           <div className="flex items-start gap-2 px-3 pb-2 text-[12px] text-red-600">
@@ -402,11 +533,7 @@ export default function AiAssistantBar() {
                 )}
               </div>
             ))}
-            {loading && !turns[turns.length - 1]?.risposta && (
-              <p className="text-[12px] text-crm-ink-subtle inline-flex items-center gap-2">
-                <Loader2 className="w-3.5 h-3.5 animate-spin" /> Sto cercando nei dati…
-              </p>
-            )}
+            {loading && !turns[turns.length - 1]?.risposta && <ThinkingIndicator />}
           </div>
         )}
       </div>
