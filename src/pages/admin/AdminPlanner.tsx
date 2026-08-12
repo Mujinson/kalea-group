@@ -241,11 +241,69 @@ export default function AdminPlanner() {
     return true;
   }), [sites, filterStatus, filterPriority]);
 
-  const filteredAssignments = useMemo(() => assignments.filter((a) => {
-    if (filterCrew && a.crew_id !== filterCrew) return false;
-    if (!filteredSites.some((s) => s.id === a.site_id)) return false;
-    return true;
-  }), [assignments, filterCrew, filteredSites]);
+  // Assegnazioni "dirette": operai assegnati al cantiere (site_workers), senza squadra.
+  // Coprono l'intero periodo del cantiere così da comparire su tutta la settimana.
+  const directAssignments = useMemo<Assignment[]>(() => {
+    const bySite = new Map<string, any[]>();
+    siteWorkers.forEach((sw) => {
+      if (!bySite.has(sw.site_id)) bySite.set(sw.site_id, []);
+      bySite.get(sw.site_id)!.push(sw);
+    });
+    const out: Assignment[] = [];
+    bySite.forEach((rows, siteId) => {
+      const site: any = sites.find((s) => s.id === siteId);
+      if (!site || isSiteDone(site.status)) return;
+      const starts = rows.map((r) => r.start_date).filter(Boolean) as string[];
+      const start = [site.start_date, site.planned_start_date, ...starts].filter(Boolean).sort()[0]
+        || format(new Date(), 'yyyy-MM-dd');
+      const ends = rows.map((r) => r.end_date).filter(Boolean) as string[];
+      const end = (site.end_date || site.planned_end_date || ends.sort().slice(-1)[0]
+        || format(addDays(new Date(), 7), 'yyyy-MM-dd')) as string;
+      if (end < start) return;
+      out.push({
+        id: `direct:${siteId}`,
+        crew_id: `direct:${siteId}`,
+        site_id: siteId,
+        start_date: start,
+        end_date: end,
+        hours_per_day: 8,
+        notes: null,
+      });
+    });
+    return out;
+  }, [siteWorkers, sites]);
+
+  const directCrews = useMemo(() => {
+    const m = new Map<string, Crew>();
+    directAssignments.forEach((a) => {
+      const n = siteWorkers.filter((sw) => sw.site_id === a.site_id).length;
+      const site: any = sites.find((s) => s.id === a.site_id);
+      m.set(a.crew_id, {
+        id: a.crew_id,
+        name: `${n} ${n === 1 ? 'operaio' : 'operai'}`,
+        color: '#0EA5E9',
+        max_workers: n,
+        lead_worker_id: null,
+        notes: site?.title || null,
+        active: true,
+      });
+    });
+    return m;
+  }, [directAssignments, siteWorkers, sites]);
+
+  const crewFor = useCallback(
+    (id: string) => crews.find((c) => c.id === id) || directCrews.get(id) || null,
+    [crews, directCrews],
+  );
+
+  const filteredAssignments = useMemo(() => {
+    const all = filterCrew ? assignments : [...assignments, ...directAssignments];
+    return all.filter((a) => {
+      if (filterCrew && a.crew_id !== filterCrew) return false;
+      if (!filteredSites.some((s) => s.id === a.site_id)) return false;
+      return true;
+    });
+  }, [assignments, directAssignments, filterCrew, filteredSites]);
 
   // KPI
   const kpis = useMemo(() => {
@@ -255,17 +313,26 @@ export default function AdminPlanner() {
     const busyCrewIds = new Set(todaysAssign.map((a) => a.crew_id));
     const workersToday = new Set<string>();
     todaysAssign.forEach((a) => crewMembers.filter((m) => m.crew_id === a.crew_id).forEach((m) => workersToday.add(m.worker_id)));
+    // Operai assegnati direttamente a un cantiere attivo oggi
+    directAssignments.forEach((a) => {
+      if (a.start_date > today || a.end_date < today) return;
+      siteWorkers.filter((sw) => sw.site_id === a.site_id).forEach((sw) => workersToday.add(sw.worker_id || sw.worker_user_id));
+    });
+    // Operai che hanno timbrato oggi
+    todayEntries.forEach((e) => workersToday.add(e.worker_id || e.user_id));
     const freeCrews = crews.filter((c) => c.active && !busyCrewIds.has(c.id)).length;
     const overdue = sites.filter((s) => s.planned_end_date && s.planned_end_date < today && !isSiteDone(s.status)).length;
     const ws = startOfWeek(new Date(), { weekStartsOn: 1 });
     const we = endOfWeek(new Date(), { weekStartsOn: 1 });
     let weekHours = 0;
-    assignments.forEach((a) => {
+    [...assignments, ...directAssignments].forEach((a) => {
       const s = parseISO(a.start_date) < ws ? ws : parseISO(a.start_date);
       const e = parseISO(a.end_date) > we ? we : parseISO(a.end_date);
       if (e < s) return;
       const days = differenceInCalendarDays(e, s) + 1;
-      const crewSize = crewMembers.filter((m) => m.crew_id === a.crew_id).length || 1;
+      const crewSize = a.crew_id.startsWith('direct:')
+        ? siteWorkers.filter((sw) => sw.site_id === a.site_id).length || 1
+        : crewMembers.filter((m) => m.crew_id === a.crew_id).length || 1;
       weekHours += days * Number(a.hours_per_day || 8) * crewSize;
     });
     const sat = crews.length
@@ -277,7 +344,7 @@ export default function AdminPlanner() {
       overdue: Math.max(overdue, serverKpis.sitesOverdue),
       weekHours: Math.round(weekHours), sat,
     };
-  }, [sites, assignments, crews, crewMembers, serverKpis]);
+  }, [sites, assignments, directAssignments, siteWorkers, todayEntries, crews, crewMembers, serverKpis]);
 
   const conflicts = useMemo(() => computeConflicts(assignments, crews, crewMembers, sites), [assignments, crews, crewMembers, sites]);
 
