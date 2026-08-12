@@ -124,7 +124,7 @@ const TOOLS = [
     type: 'function',
     function: {
       name: 'ore_dipendente',
-      description: 'Totale ore lavorate da un dipendente in un periodo, da rapportini (site_work_logs) e timbrature (worker_time_entries), suddivise per cantiere.',
+      description: 'Ore lavorate da un dipendente in un periodo. Fonte primaria: rapportini (site_work_logs.hours_worked su work_date). Solo se non ci sono rapportini nel periodo, stima le ore dalle timbrature grezze (worker_time_entries) e il risultato avrà stima=true: in quel caso dichiara nella risposta che è una stima da timbrature e non da rapportino.',
       parameters: {
         type: 'object',
         properties: {
