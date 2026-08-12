@@ -94,3 +94,29 @@ export const WON_QUOTE_STATUSES = Object.keys(ALIASES).filter((k) =>
 export function quoteStatusLabel(status?: string | null): string {
   return QUOTE_STATUS_LABELS[normalizeQuoteStatus(status)];
 }
+
+/**
+ * Anti-doppio conteggio: un preventivo può essere vinto (o perso) una sola volta.
+ * Quando un preventivo vinto è già stato convertito in vendita, il suo valore
+ * vive nella vendita — quindi va escluso dal calcolo del venduto.
+ */
+export function dedupeWonQuotes<Q extends { status?: string | null; converted_sale_id?: string | null; id?: string }>(
+  quotes: Q[],
+  sales: Array<{ id: string; quote_id?: string | null }>
+): Q[] {
+  const saleIds = new Set(sales.map((s) => s.id));
+  const quoteIdsWithSale = new Set(
+    sales.map((s) => s.quote_id).filter(Boolean) as string[]
+  );
+  const seen = new Set<string>();
+  return quotes.filter((q) => {
+    if (!isQuoteWon(q.status)) return false;
+    if (q.converted_sale_id && saleIds.has(q.converted_sale_id)) return false;
+    if (q.id && quoteIdsWithSale.has(q.id)) return false;
+    if (q.id) {
+      if (seen.has(q.id)) return false;
+      seen.add(q.id);
+    }
+    return true;
+  });
+}
