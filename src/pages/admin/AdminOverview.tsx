@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { isQuoteWon, isQuoteLost, isQuotePending } from '@/lib/quoteStatus';
+import { isQuoteWon, isQuoteLost, isQuotePending, dedupeWonQuotes } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
 import { isSiteActive } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
@@ -298,16 +298,13 @@ const AdminOverview = () => {
   // VENDUTO = vendite + preventivi vinti NON ancora convertiti in vendita
   // (senza il filtro anti-duplicato lo stesso importo veniva contato due volte)
   const sumRevenue = (s: Date, e: Date) => {
-    const saleIds = new Set(sales.map(x => x.id));
-    const quotesNotConverted = quotes.filter(x =>
-      isQuoteWon(x.status) &&
-      !(x.converted_sale_id && saleIds.has(x.converted_sale_id)) &&
-      inRange(x.accepted_date || x.created_at, s, e)
-    );
+    const quotesNotConverted = dedupeWonQuotes(quotes, sales as any)
+      .filter(x => inRange(x.accepted_date || x.created_at, s, e));
     return quotesNotConverted.reduce((a, x) => a + Number(x.total_amount || 0), 0) +
       sales.filter(x => inRange(x.sale_date || x.created_at, s, e))
         .reduce((a, x) => a + Number(x.total_amount || 0), 0);
   };
+
 
 
   const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [quotes, sales, range]);
