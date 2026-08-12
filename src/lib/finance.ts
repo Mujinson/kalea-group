@@ -53,6 +53,9 @@ export const COST_CATEGORIES = [
   { value: 'assicurazioni', label: 'Assicurazioni' },
   { value: 'spese_bancarie', label: 'Spese Bancarie' },
   { value: 'altri_costi_fissi', label: 'Altri Costi Fissi' },
+  { value: 'consulenze', label: 'Consulenze' },
+  { value: 'contributi_tasse', label: 'Contributi e Tasse' },
+  { value: 'automezzi', label: 'Automezzi' },
   { value: 'trasporti', label: 'Trasporti' },
   { value: 'logistica', label: 'Logistica' },
   { value: 'campionature', label: 'Campionature' },
@@ -66,7 +69,7 @@ export const categoryLabel = (v?: string | null) =>
   COST_CATEGORIES.find((c) => c.value === v)?.label || v || '—';
 
 /** Costi generali (non imputabili a commessa) */
-export const GENERAL_COST_CATEGORIES = ['stipendi', 'affitto_magazzino', 'utenze', 'software_saas', 'assicurazioni', 'spese_bancarie', 'altri_costi_fissi'];
+export const GENERAL_COST_CATEGORIES = ['stipendi', 'affitto_magazzino', 'utenze', 'software_saas', 'assicurazioni', 'spese_bancarie', 'altri_costi_fissi', 'consulenze', 'contributi_tasse', 'automezzi'];
 
 /** Moltiplicatore annuo di una frequenza di costo fisso */
 export const yearlyFactor = (frequency?: string | null) => {

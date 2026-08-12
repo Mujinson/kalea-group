@@ -4742,7 +4742,12 @@ export type Database = {
       catalog_macro_category: "articoli" | "accessori" | "servizi"
       catalog_price_list_status: "draft" | "applied" | "archived"
       contract_status: "in_corso" | "completato" | "annullato"
-      cost_frequency: "mensile" | "trimestrale" | "annuale" | "una_tantum"
+      cost_frequency:
+        | "mensile"
+        | "trimestrale"
+        | "annuale"
+        | "una_tantum"
+        | "semestrale"
       customer_status: "opportunity" | "signed" | "working"
       customer_type:
         | "cliente_privato"
@@ -4762,6 +4767,9 @@ export type Database = {
         | "assicurazioni"
         | "spese_bancarie"
         | "altri_costi_fissi"
+        | "consulenze"
+        | "contributi_tasse"
+        | "automezzi"
       invoice_status: "da_pagare" | "pagata" | "scaduta"
       payment_method: "carta_credito" | "bonifico" | "contanti" | "assegno"
       variable_cost_category:
@@ -4916,7 +4924,13 @@ export const Constants = {
       catalog_macro_category: ["articoli", "accessori", "servizi"],
       catalog_price_list_status: ["draft", "applied", "archived"],
       contract_status: ["in_corso", "completato", "annullato"],
-      cost_frequency: ["mensile", "trimestrale", "annuale", "una_tantum"],
+      cost_frequency: [
+        "mensile",
+        "trimestrale",
+        "annuale",
+        "una_tantum",
+        "semestrale",
+      ],
       customer_status: ["opportunity", "signed", "working"],
       customer_type: [
         "cliente_privato",
@@ -4937,6 +4951,9 @@ export const Constants = {
         "assicurazioni",
         "spese_bancarie",
         "altri_costi_fissi",
+        "consulenze",
+        "contributi_tasse",
+        "automezzi",
       ],
       invoice_status: ["da_pagare", "pagata", "scaduta"],
       payment_method: ["carta_credito", "bonifico", "contanti", "assegno"],
