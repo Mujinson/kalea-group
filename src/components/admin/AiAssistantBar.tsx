@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
+import { useSpeech } from '@/hooks/useSpeech';
 
 type Ref = { etichetta: string; percorso: string };
 type Turn = {
