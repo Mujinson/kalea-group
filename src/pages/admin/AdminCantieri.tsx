@@ -168,22 +168,23 @@ const AdminCantieri = () => {
       />
 
       <CrmKpiRow cols={5}>
-        <div onClick={() => setStatusFilter("all")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "all" ? "ring-2 ring-[#0F172A]/40" : "hover:scale-[1.01]"}`}>
+        <div onClick={() => setStatusFilter("all")} className={`h-full rounded-crm cursor-pointer transition ${statusFilter === "all" ? "ring-2 ring-[#0F172A]/40" : ""}`}>
           <CrmKpiTile label="Totale" value={sites?.length || 0} color="indigo" icon={<HardHat className="w-4 h-4" />} />
         </div>
-        <div onClick={() => setStatusFilter("pianificato")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "pianificato" ? "ring-2 ring-violet-500/50" : "hover:scale-[1.01]"}`}>
-          <CrmKpiTile label="Pianificati" value={sites?.filter(s => isSitePlanned(s.status)).length || 0} color="purple" />
+        <div onClick={() => setStatusFilter("pianificato")} className={`h-full rounded-crm cursor-pointer transition ${statusFilter === "pianificato" ? "ring-2 ring-violet-500/50" : ""}`}>
+          <CrmKpiTile label="Pianificati" value={sites?.filter(s => isSitePlanned(s.status)).length || 0} color="purple" icon={<CalendarClock className="w-4 h-4" />} />
         </div>
-        <div onClick={() => setStatusFilter("attivo")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "attivo" ? "ring-2 ring-green-500/50" : "hover:scale-[1.01]"}`}>
-          <CrmKpiTile label="Attivi" value={sites?.filter(s => isSiteActive(s.status)).length || 0} color="green" />
+        <div onClick={() => setStatusFilter("attivo")} className={`h-full rounded-crm cursor-pointer transition ${statusFilter === "attivo" ? "ring-2 ring-green-500/50" : ""}`}>
+          <CrmKpiTile label="Attivi" value={sites?.filter(s => isSiteActive(s.status)).length || 0} color="green" icon={<Activity className="w-4 h-4" />} />
         </div>
-        <div onClick={() => setStatusFilter("completato")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "completato" ? "ring-2 ring-blue-500/50" : "hover:scale-[1.01]"}`}>
-          <CrmKpiTile label="Completati" value={sites?.filter(s => isSiteDone(s.status)).length || 0} color="blue" />
+        <div onClick={() => setStatusFilter("completato")} className={`h-full rounded-crm cursor-pointer transition ${statusFilter === "completato" ? "ring-2 ring-blue-500/50" : ""}`}>
+          <CrmKpiTile label="Completati" value={sites?.filter(s => isSiteDone(s.status)).length || 0} color="blue" icon={<CheckCircle2 className="w-4 h-4" />} />
         </div>
-        <div onClick={() => setStatusFilter("pausa")} className={`cursor-pointer transition rounded-2xl ${statusFilter === "pausa" ? "ring-2 ring-amber-500/50" : "hover:scale-[1.01]"}`}>
-          <CrmKpiTile label="In pausa / altro" value={sites?.filter(s => !isSiteActive(s.status) && !isSiteDone(s.status) && !isSitePlanned(s.status)).length || 0} color="amber" />
+        <div onClick={() => setStatusFilter("pausa")} className={`h-full rounded-crm cursor-pointer transition ${statusFilter === "pausa" ? "ring-2 ring-amber-500/50" : ""}`}>
+          <CrmKpiTile label="In pausa / altro" value={sites?.filter(s => !isSiteActive(s.status) && !isSiteDone(s.status) && !isSitePlanned(s.status)).length || 0} color="amber" icon={<PauseCircle className="w-4 h-4" />} />
         </div>
       </CrmKpiRow>
+
       {statusFilter !== "all" && (
         <p className="text-xs text-[#8A7060]">Filtro: <span className="font-semibold">{statusFilter === 'pausa' ? 'in pausa / altro' : siteStatusLabel(statusFilter)}</span> · <button onClick={() => setStatusFilter("all")} className="underline">rimuovi</button></p>
       )}
