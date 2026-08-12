@@ -127,6 +127,8 @@ export default function AdminPlanner() {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [appointments, setAppointments] = useState<any[]>([]);
+  const [siteWorkers, setSiteWorkers] = useState<any[]>([]);
+  const [todayEntries, setTodayEntries] = useState<any[]>([]);
 
   // Server-side KPIs (count + sum) — affidabili, indipendenti dai filtri client
   const [serverKpis, setServerKpis] = useState({
