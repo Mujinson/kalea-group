@@ -18,19 +18,20 @@ const ServicesTripleSection = () => {
     {
       image: cardFornitura,
       title: "Fornitura e posa pavimenti Biomag, parquet, laminati, LVT-SPC e ceramiche",
-      link: `/${language}/indoor`,
+      link: `/${language}/servizi/fornitura-e-posa`,
     },
     {
       image: cardRigenerazione,
       title: "Pulizia professionale e rigenerazione parquet esistenti",
-      link: `/${language}/parquet`,
+      link: `/${language}/servizi/rigenerazione-parquet`,
     },
     {
       image: cardLevigatura,
       title: "Levigatura, verniciatura e oliatura parquet",
-      link: `/${language}/parquet`,
+      link: `/${language}/servizi/levigatura-verniciatura-oliatura`,
     },
   ];
+
 
   return (
     <section className="relative bg-background py-16 md:py-24">
