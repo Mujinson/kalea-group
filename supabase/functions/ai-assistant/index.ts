@@ -626,7 +626,7 @@ Regole:
     const runTool = async (name: string, args: any) => {
       switch (name) {
         case 'cerca_preventivo': return await cercaPreventivo(sb, args, refs);
-        case 'incassi_periodo': return await incassiPeriodo(sb, args);
+        case 'incassi_periodo': return await incassiPeriodo(sb, args, refs);
         case 'andamento_periodo': return await andamentoPeriodo(sb, args);
         case 'ore_dipendente': return await oreDipendente(sb, args, refs);
         case 'attrezzature_cantiere': return await attrezzatureCantiere(sb, args, refs);
