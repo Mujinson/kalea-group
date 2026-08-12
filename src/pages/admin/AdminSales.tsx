@@ -644,6 +644,38 @@ const AdminSales = () => {
     setActiveTab('products');
   };
 
+  // Registra/aggiorna l'anticipo come rata "acconto" già pagata, così risulta incassato
+  const syncDepositSchedule = async (saleId: string, depositAmount: number, depositDate: string) => {
+    try {
+      const { data: existing } = await supabase
+        .from('payment_schedules')
+        .select('id')
+        .eq('sale_id', saleId)
+        .eq('payment_type', 'acconto')
+        .maybeSingle();
+
+      if (depositAmount > 0) {
+        const payload = {
+          sale_id: saleId,
+          amount: depositAmount,
+          due_date: depositDate,
+          paid_date: depositDate,
+          is_paid: true,
+          payment_type: 'acconto',
+        };
+        if (existing?.id) {
+          await supabase.from('payment_schedules').update(payload).eq('id', existing.id);
+        } else {
+          await supabase.from('payment_schedules').insert(payload);
+        }
+      } else if (existing?.id) {
+        await supabase.from('payment_schedules').delete().eq('id', existing.id);
+      }
+    } catch (e) {
+      console.error('Errore sincronizzazione acconto:', e);
+    }
+  };
+
   const handleUpdateSale = async () => {
     try {
       const firstItem = saleItems[0];
