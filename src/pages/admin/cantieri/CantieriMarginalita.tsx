@@ -77,10 +77,10 @@ const CantieriMarginalita = () => {
         columns={[
           { key: 'title', header: 'Cantiere', sortable: true, cell: (r) => <span className="font-medium">{r.title}</span> },
           { key: 'city', header: 'Città' },
-          { key: 'revenue', header: 'Ricavi', sortable: true, className: 'text-right', accessor: (r) => r.revenue, cell: (r) => fmtEur(r.revenue) },
-          { key: 'costs', header: 'Costi', sortable: true, className: 'text-right', accessor: (r) => r.costs, cell: (r) => fmtEur(r.costs) },
+          { key: 'revenue', header: 'Ricavi (netto)', sortable: true, className: 'text-right', accessor: (r) => r.revenue, cell: (r) => fmtEur(r.revenue) },
+          { key: 'costs', header: 'Costi materiali (netto)', sortable: true, className: 'text-right', accessor: (r) => r.costs, cell: (r) => fmtEur(r.costs) },
           {
-            key: 'margin', header: 'Margine', sortable: true, className: 'text-right font-semibold', accessor: (r) => r.margin,
+            key: 'margin', header: 'Margine materiali', sortable: true, className: 'text-right font-semibold', accessor: (r) => r.margin,
             cell: (r) => <span className={r.margin >= 0 ? 'text-green-600' : 'text-red-600'}>{fmtEur(r.margin)}</span>,
           },
           {
