@@ -86,6 +86,47 @@ const TimbratureCard = () => {
   const next = nextEvents(lastType, entries);
   const summary = summarizeDay(entries);
   const missing = missingRequired(entries);
+  const dayClosed = entries.some((e) => e.event_type === 'arrive_home');
+
+  const [onLeaveNext, setOnLeaveNext] = useState(false);
+
+  // Prossimo giorno lavorativo (salta sabato/domenica)
+  const nextWorkingDay = (() => {
+    const d = new Date();
+    do {
+      d.setDate(d.getDate() + 1);
+    } while (d.getDay() === 0 || d.getDay() === 6);
+    return d;
+  })();
+  const isTomorrow = (() => {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    return t.toDateString() === nextWorkingDay.toDateString();
+  })();
+
+  useEffect(() => {
+    if (!user || !dayClosed) return;
+    (async () => {
+      const iso = `${nextWorkingDay.getFullYear()}-${String(nextWorkingDay.getMonth() + 1).padStart(2, '0')}-${String(nextWorkingDay.getDate()).padStart(2, '0')}`;
+      const { data } = await supabase
+        .from('time_off_requests' as any)
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('status', 'approved')
+        .lte('start_date', iso)
+        .gte('end_date', iso)
+        .limit(1);
+      setOnLeaveNext(((data as any[]) || []).length > 0);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, dayClosed]);
+
+  const farewell = onLeaveNext
+    ? 'Buone ferie'
+    : isTomorrow
+      ? 'A domani'
+      : `A ${nextWorkingDay.toLocaleDateString('it-IT', { weekday: 'long' })}`;
+
 
   const handleClick = async (type: TimbratureEventType) => {
     if (!user) return;
