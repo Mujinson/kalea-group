@@ -34,6 +34,15 @@ export default function AiAssistantBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  // Risposta vocale (spenta di default, scelta ricordata)
+  const [voiceReply, setVoiceReply] = useState(
+    () => typeof localStorage !== 'undefined' && localStorage.getItem('kalea:ai-voice-reply') === '1',
+  );
+  const voiceReplyRef = useRef(voiceReply);
+  voiceReplyRef.current = voiceReply;
+  const speech = useSpeech();
+  const [ultimaRisposta, setUltimaRisposta] = useState('');
+
   // ⌘K / Ctrl+K → focus sulla barra assistente
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
