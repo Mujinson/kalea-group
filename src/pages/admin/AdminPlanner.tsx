@@ -828,22 +828,23 @@ export default function AdminPlanner() {
               {selectedSite.address && <div>📍 {selectedSite.address}</div>}
               {selectedSite.estimated_hours && <div>⏱ Ore stimate: <b>{selectedSite.estimated_hours}h</b></div>}
               <div>
-                <div className="text-xs uppercase font-bold text-muted-foreground mb-1">Squadre assegnate</div>
+                <div className="text-xs uppercase font-bold text-muted-foreground mb-1">Squadre / operai assegnati</div>
                 <div className="space-y-1">
-                  {assignments.filter((a) => a.site_id === selectedSite.id).map((a) => {
+                  {[...assignments, ...directAssignments].filter((a) => a.site_id === selectedSite.id).map((a) => {
                     const c = crewFor(a.crew_id);
                     if (!c) return null;
+                    const isDirect = String(a.id).startsWith('direct:');
                     return (
                       <div key={a.id} className="flex items-center justify-between p-2 rounded" style={{ background: c.color + '15' }}>
                         <div>
                           <div className="font-semibold text-xs flex items-center gap-1.5"><span className="w-2 h-2 rounded-full" style={{ background: c.color }} />{c.name}</div>
                           <div className="text-[10px] text-muted-foreground">{a.start_date} → {a.end_date} ({durationDays(a)}gg · {a.hours_per_day}h/g)</div>
                         </div>
-                        <Button size="sm" variant="ghost" onClick={() => deleteAssignment(a.id)}>×</Button>
+                        {!isDirect && <Button size="sm" variant="ghost" onClick={() => deleteAssignment(a.id)}>×</Button>}
                       </div>
                     );
                   })}
-                  {!assignments.some((a) => a.site_id === selectedSite.id) && <p className="text-xs text-muted-foreground italic">Nessuna squadra</p>}
+                  {![...assignments, ...directAssignments].some((a) => a.site_id === selectedSite.id) && <p className="text-xs text-muted-foreground italic">Nessuna squadra</p>}
                 </div>
                 <Button size="sm" variant="outline" className="w-full mt-2" onClick={() => setAssignDialog({ site_id: selectedSite.id })}><Plus className="w-3 h-3 mr-1" />Assegna squadra</Button>
               </div>
