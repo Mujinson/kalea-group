@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import FinanceOverviewBlock from '@/components/admin/FinanceOverviewBlock';
 import {
   TrendingUp, FileText, HardHat, Target, Users, Wallet,
   AlertTriangle, Package, ChevronRight, ArrowUp, ArrowDown,
