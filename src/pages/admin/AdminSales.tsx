@@ -572,7 +572,7 @@ const AdminSales = () => {
     setAdditionalCosts([]);
     setSalespersonCommissions([]);
     setSaleData({ channel: 'B2B', sale_date: format(new Date(), 'yyyy-MM-dd'), vat_included: false, notes: '' });
-    setPaymentData({ payment_method: '', payment_terms: '', deposit_amount: '', deposit_date: '', balance_due_date: '', is_paid: false });
+    setPaymentData({ payment_method: '', payment_terms: '', deposit_amount: '', deposit_date: '', balance_due_date: '', is_paid: false, deposit_invoiced: false, deposit_invoice_number: '', deposit_vat_rate: '22' });
     setActiveTab('customer');
     setEditingSaleId(null);
   };
