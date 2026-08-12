@@ -617,6 +617,9 @@ const AdminOverview = () => {
         </div>
       )}
 
+      {/* FINANZA — costi, fornitori, IVA, scadenze */}
+      <FinanceOverviewBlock />
+
       {/* KPI ROW — operativa: Preventivi · Cantieri · Margine */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {showCom && (
