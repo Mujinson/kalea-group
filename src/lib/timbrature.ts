@@ -33,39 +33,30 @@ export interface TimeEntry {
   notes: string | null;
 }
 
-/** Returns the logical next events allowed after the last recorded one. */
+/** Returns the single logical next event allowed after the last recorded one. */
 export function nextEvents(lastType: TimbratureEventType | null, entries: TimeEntry[] = []): TimbratureEventType[] {
-  let candidates: TimbratureEventType[];
+  const done = new Set(entries.map((e) => e.event_type));
   switch (lastType) {
     case null:
-      candidates = ['start_home'];
-      break;
+      return ['start_home'];
     case 'start_home':
-      candidates = ['arrive_site'];
-      break;
+      return ['arrive_site'];
     case 'arrive_site':
-      candidates = ['pause_start', 'leave_site'];
-      break;
+      // se la pausa è già stata fatta, il passo successivo è la fine cantiere
+      return done.has('pause_end') ? ['leave_site'] : ['pause_start'];
     case 'pause_start':
-      candidates = ['pause_end'];
-      break;
+      return ['pause_end'];
     case 'pause_end':
-      candidates = ['arrive_site', 'leave_site', 'pause_start'];
-      break;
+      return ['leave_site'];
     case 'leave_site':
-      candidates = ['arrive_home', 'arrive_site'];
-      break;
+      return ['arrive_home'];
     case 'arrive_home':
-      candidates = []; // giornata chiusa
-      break;
+      return [];
+    default:
+      return [];
   }
-  // La giornata si può chiudere solo se tutte le tappe obbligatorie sono state timbrate
-  const missing = missingRequired(entries);
-  return candidates.filter((c) => {
-    if (c !== 'arrive_home') return true;
-    return missing.filter((m) => m !== 'arrive_home').length === 0;
-  });
 }
+
 
 /** Tappe obbligatorie non ancora timbrate nella giornata. */
 export function missingRequired(entries: TimeEntry[]): TimbratureEventType[] {
