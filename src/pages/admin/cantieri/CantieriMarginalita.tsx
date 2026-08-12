@@ -17,16 +17,18 @@ const CantieriMarginalita = () => {
     queryFn: async () => {
       const [sites, cInv, sInv, exp, fixed] = await Promise.all([
         supabase.from('construction_sites').select('id, title, city, status, budget_amount'),
-        supabase.from('customer_invoices').select('site_id, total'),
-        supabase.from('supplier_invoices').select('site_id, total'),
+        supabase.from('customer_invoices').select('site_id, subtotal, total'),
+        supabase.from('supplier_invoices').select('site_id, subtotal, total'),
         supabase.from('site_expenses').select('site_id, amount'),
         supabase.from('fixed_costs').select('amount, frequency'),
       ]);
       if (sites.error) throw sites.error;
+      // Imponibile contro imponibile: l'IVA transita e non va conteggiata.
+      const net = (r: any) => Number(r.subtotal ?? r.total ?? 0);
       const rows = (sites.data || []).map((s: any) => {
-        const revenue = (cInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.total || 0), 0);
+        const revenue = (cInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + net(r), 0);
         const costs =
-          (sInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.total || 0), 0) +
+          (sInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + net(r), 0) +
           (exp.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.amount || 0), 0);
         const margin = revenue - costs;
         const marginPct = revenue > 0 ? (margin / revenue) * 100 : 0;
