@@ -186,7 +186,9 @@ const AdminSettings = () => {
         </CardContent>
       </Card>
 
-      <TelegramSection />
+      <div id="telegram" ref={telegramRef}>
+        <TelegramSection />
+      </div>
     </div>
 
   );
