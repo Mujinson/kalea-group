@@ -1064,3 +1064,71 @@ body:has(.admin-theme) [data-radix-dropdown-menu-content] {
 .leaflet-popup-content {
   margin: 12px !important;
 }
+
+/* ==========================================================================
+   CRM "Glow & Soft" layer — light, futuristic, high legibility.
+   Scoped to .admin-theme so the public site is untouched.
+   Upgrades legacy inline-styled cards / inputs in the strumenti pages.
+   ========================================================================== */
+
+/* --- Cards: bigger radius, soft floating shadow, hairline border --- */
+.admin-theme div[style*="border-radius: 12px"][style*="border: 1px solid rgb(230, 233, 240)"] {
+  border-radius: 24px !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05) !important;
+  position: relative;
+}
+/* soft neon status dot in the card corner */
+.admin-theme div[style*="border-radius: 12px"][style*="border: 1px solid rgb(230, 233, 240)"]::after {
+  content: "";
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.9);
+  pointer-events: none;
+}
+
+/* --- Inputs / selects / textareas: readable, rounded, glow on focus --- */
+.admin-theme input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([class*="crm-"]):not([class*="flex"]),
+.admin-theme textarea:not([class*="flex"]) {
+  border-radius: 14px !important;
+  border: 1.5px solid #E6E9F0 !important;
+  background: #F9FAFB !important;
+  color: #0F172A !important;
+  font-weight: 500;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+.admin-theme input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):focus,
+.admin-theme textarea:focus {
+  border-color: #34D399 !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12) !important;
+  outline: none !important;
+}
+.admin-theme input::placeholder,
+.admin-theme textarea::placeholder {
+  color: #94A3B8 !important;
+  font-weight: 400;
+}
+
+/* --- Section labels: small caps, spaced, but readable --- */
+.admin-theme div[style*="letter-spacing: 0.07em"] {
+  color: #475569 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+}
+
+/* --- Tables inside the tools: stronger rows, easier scanning --- */
+.admin-theme table th {
+  color: #475569 !important;
+  letter-spacing: 0.1em !important;
+  font-weight: 700 !important;
+  background: #F8FAFC;
+}
+.admin-theme table tbody tr:hover {
+  background: rgba(16, 185, 129, 0.05) !important;
+}

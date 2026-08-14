@@ -34,7 +34,7 @@ function SliderRow({ label, min, max, value, step, onChange, format }: any) {
   return (
     <div style={{ marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-        <span style={{ fontSize: 13, color: "#6B6860" }}>{label}</span>
+        <span style={{ fontSize: 13, color: "#475569" }}>{label}</span>
         <span style={{ fontSize: 13, fontWeight: 500 }}>{format(value)}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
@@ -61,7 +61,7 @@ function ProdTable({ items, coeff, markup, goToCreaPreventivo }: {
         <thead>
           <tr>
             {["Articolo", "Unità", "Listino", "Tuo costo", "Tuo prezzo", "Margine %", ""].map(h => (
-              <th key={h} style={{ textAlign: "left", fontSize: 10, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".05em", padding: "8px 10px", borderBottom: "1px solid #E0DDD8" }}>{h}</th>
+              <th key={h} style={{ textAlign: "left", fontSize: 10, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".05em", padding: "8px 10px", borderBottom: "1px solid #E6E9F0" }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -72,19 +72,19 @@ function ProdTable({ items, coeff, markup, goToCreaPreventivo }: {
             const margPct = ((prezzo - costo) / prezzo) * 100;
             return (
               <tr key={a.id ?? i}>
-                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontWeight: 500 }}>
+                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontWeight: 500 }}>
                   {a.nome}
-                  {a.note && <div style={{ fontSize: 11, color: "#9A9890", fontWeight: 400 }}>{a.note}</div>}
+                  {a.note && <div style={{ fontSize: 11, color: "#64748B", fontWeight: 400 }}>{a.note}</div>}
                 </td>
-                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#9A9890" }}>{a.unita}</td>
-                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}>{fmt2(a.listino)}/{a.unita}</td>
-                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#0C447C", fontWeight: 500 }}>{fmt2(costo)}/{a.unita}</td>
-                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#1A1A2E", fontWeight: 500 }}>{fmt2(prezzo)}/{a.unita}</td>
-                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><MargineChip pct={margPct} /></td>
-                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}>
+                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#64748B" }}>{a.unita}</td>
+                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0" }}>{fmt2(a.listino)}/{a.unita}</td>
+                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#0C447C", fontWeight: 500 }}>{fmt2(costo)}/{a.unita}</td>
+                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#1A1A2E", fontWeight: 500 }}>{fmt2(prezzo)}/{a.unita}</td>
+                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0" }}><MargineChip pct={margPct} /></td>
+                <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0" }}>
                   {a.id && (
                     <button onClick={() => goToCreaPreventivo(a.id!)}
-                      style={{ padding: "3px 8px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
+                      style={{ padding: "3px 8px", borderRadius: 6, border: "1px solid #E6E9F0", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
                       → Preventivo
                     </button>
                   )}
@@ -162,32 +162,32 @@ export default function PricingExterno() {
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "8px 4px" }}>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 20, fontWeight: 400, color: "#1A1A2E", marginBottom: 4 }}>Pricing Externo — WPC Outdoor</h1>
-        <p style={{ fontSize: 13, color: "#9A9890" }}>Woodco · Decking in composito per esterni · Listino sincronizzato con il catalogo</p>
+        <p style={{ fontSize: 13, color: "#64748B" }}>Woodco · Decking in composito per esterni · Listino sincronizzato con il catalogo</p>
       </div>
 
-      <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-        <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>Configurazione</div>
+      <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+        <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>Configurazione</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
           <div>
-            <div style={{ fontSize: 13, color: "#6B6860", marginBottom: 10 }}>Sconto fornitore Woodco/Externo</div>
+            <div style={{ fontSize: 13, color: "#475569", marginBottom: 10 }}>Sconto fornitore Woodco/Externo</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
               {SCONTI.map((s, i) => (
                 <button key={s.label} onClick={() => update({ scontoIdx: i })}
                   style={{ padding: "5px 16px", borderRadius: 20, border: "1px solid", cursor: "pointer", fontSize: 12, fontWeight: 500,
                     background: settings.scontoIdx === i ? "#1A1A2E" : "transparent",
-                    color: settings.scontoIdx === i ? "#fff" : "#6B6860",
-                    borderColor: settings.scontoIdx === i ? "#1A1A2E" : "#E0DDD8" }}>
+                    color: settings.scontoIdx === i ? "#fff" : "#475569",
+                    borderColor: settings.scontoIdx === i ? "#1A1A2E" : "#E6E9F0" }}>
                   {s.label}
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#475569" }}>
               Coeff. <strong>{coeff.toFixed(3)}</strong> · Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino
             </div>
           </div>
           <div>
             <SliderRow label="Markup Kalēa sul tuo costo" min={20} max={130} value={markup} step={5} onChange={(v: number) => update({ markup: v })} format={(v: number) => v + "%"} />
-            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#475569" }}>
               {PAVIMENTI.length > 0
                 ? <>Pavimenti in catalogo: <strong>{PAVIMENTI.length}</strong> · Struttura/Accessori: <strong>{ACCESSORI.length}</strong> · Supporti: <strong>{SUPPORTI.length}</strong></>
                 : "Nessun pavimento Externo nel catalogo."}
@@ -203,8 +203,8 @@ export default function PricingExterno() {
       ) : (<>
 
       {PAVIMENTI.length > 0 && (
-        <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-          <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+        <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
             Pavimenti WPC — clicca per preventivo
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 12 }}>
@@ -215,30 +215,30 @@ export default function PricingExterno() {
               const isSel = p.id === selectedId;
               return (
                 <div key={p.id} onClick={() => setSelectedId(p.id)} style={{
-                  border: `1px solid ${isSel ? "#1A1A2E" : "#E0DDD8"}`,
+                  border: `1px solid ${isSel ? "#1A1A2E" : "#E6E9F0"}`,
                   borderRadius: 10, padding: "16px 18px", cursor: "pointer",
                   background: isSel ? "#E6F1FB" : "#fff"
                 }}>
                   <div style={{ fontWeight: 500, fontSize: 15, marginBottom: 4 }}>{p.nome}</div>
-                  <div style={{ fontSize: 12, color: "#9A9890", marginBottom: 12 }}>{p.dims} · {p.note}</div>
+                  <div style={{ fontSize: 12, color: "#64748B", marginBottom: 12 }}>{p.dims} · {p.note}</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
                     <div style={{ background: "#F1F5F9", borderRadius: 6, padding: "8px", textAlign: "center" }}>
-                      <div style={{ fontSize: 10, color: "#9A9890" }}>Listino</div>
+                      <div style={{ fontSize: 10, color: "#64748B" }}>Listino</div>
                       <div style={{ fontSize: 14, fontWeight: 500 }}>{fmt2(p.listino)}</div>
                     </div>
                     <div style={{ background: "#E6F1FB", borderRadius: 6, padding: "8px", textAlign: "center" }}>
-                      <div style={{ fontSize: 10, color: "#9A9890" }}>Tuo costo</div>
+                      <div style={{ fontSize: 10, color: "#64748B" }}>Tuo costo</div>
                       <div style={{ fontSize: 14, fontWeight: 500, color: "#0C447C" }}>{fmt2(costo)}</div>
                     </div>
                     <div style={{ background: "#EAF3DE", borderRadius: 6, padding: "8px", textAlign: "center" }}>
-                      <div style={{ fontSize: 10, color: "#9A9890" }}>Tuo prezzo</div>
+                      <div style={{ fontSize: 10, color: "#64748B" }}>Tuo prezzo</div>
                       <div style={{ fontSize: 14, fontWeight: 500, color: "#27500A" }}>{fmt2(prezzo)}</div>
                     </div>
                   </div>
                   <div style={{ marginTop: 8, display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12 }}>
-                    <span style={{ color: "#6B6860" }}>Margine: <MargineChip pct={margPct} /></span>
+                    <span style={{ color: "#475569" }}>Margine: <MargineChip pct={margPct} /></span>
                     <button onClick={(e) => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
-                      style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
+                      style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid #E6E9F0", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
                       → Preventivo
                     </button>
                   </div>
@@ -250,8 +250,8 @@ export default function PricingExterno() {
       )}
 
       {ACCESSORI.length > 0 && (
-        <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-          <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+        <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
             Struttura, accessori & manutenzione
           </div>
           <ProdTable items={ACCESSORI} coeff={coeff} markup={markup} goToCreaPreventivo={goToCreaPreventivo} />
@@ -259,8 +259,8 @@ export default function PricingExterno() {
       )}
 
       {SUPPORTI.length > 0 && (
-        <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-          <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+        <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
             Supporti regolabili (piedini, prolunga)
           </div>
           <ProdTable items={SUPPORTI} coeff={coeff} markup={markup} goToCreaPreventivo={goToCreaPreventivo} />
@@ -269,24 +269,24 @@ export default function PricingExterno() {
 
       {selected && prev && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-          <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px" }}>
+          <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px" }}>
             <div style={{ fontSize: 16, fontWeight: 500, color: "#1A1A2E", marginBottom: 16 }}>{selected.nome}</div>
             <SliderRow label="mq da posare" min={5} max={300} value={mqPrev} step={5} onChange={setMqPrev} format={(v: number) => v + " mq"} />
             <SliderRow label="Sfrido / sovrappiù (%)" min={5} max={20} value={sfrido} step={1} onChange={setSfrido} format={(v: number) => v + "%"} />
             <SliderRow label="Sconto al cliente (%)" min={0} max={40} value={scCliente} step={1} onChange={setScCliente} format={(v: number) => v + "%"} />
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 10 }}>
-              <span style={{ fontSize: 13, color: "#6B6860" }}>Includi struttura nel preventivo?</span>
+              <span style={{ fontSize: 13, color: "#475569" }}>Includi struttura nel preventivo?</span>
               <button onClick={() => setConStruttura(!conStruttura)}
                 style={{ padding: "4px 14px", borderRadius: 20, border: "1px solid", cursor: "pointer", fontSize: 12,
                   background: conStruttura ? "#1A1A2E" : "transparent",
-                  color: conStruttura ? "#fff" : "#6B6860",
-                  borderColor: conStruttura ? "#1A1A2E" : "#E0DDD8" }}>
+                  color: conStruttura ? "#fff" : "#475569",
+                  borderColor: conStruttura ? "#1A1A2E" : "#E6E9F0" }}>
                 {conStruttura ? "Sì — con struttura" : "No — solo pavimento"}
               </button>
             </div>
           </div>
-          <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px" }}>
-            <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+          <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px" }}>
+            <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
               Riepilogo preventivo
             </div>
             {[
@@ -295,29 +295,29 @@ export default function PricingExterno() {
               conStruttura && { label: "Costo acquisto struttura", value: fmt0(prev.strutturaCosto), color: "#A32D2D" },
               { label: "Totale costo acquisto", value: fmt0(prev.costoAcq), color: "#A32D2D" },
             ].filter(Boolean).map((r: any, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "0.5px solid #E0DDD8", fontSize: 13 }}>
-                <span style={{ color: "#6B6860" }}>{r.label}</span>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "0.5px solid #E6E9F0", fontSize: 13 }}>
+                <span style={{ color: "#475569" }}>{r.label}</span>
                 <span style={{ fontWeight: 500, color: r.color || "#1A1A1A" }}>{r.value}</span>
               </div>
             ))}
-            <div style={{ height: 1, background: "#E0DDD8", margin: "8px 0" }} />
+            <div style={{ height: 1, background: "#E6E9F0", margin: "8px 0" }} />
             {[
               { label: "Prezzo a listino Kalēa", value: fmt0(prev.prezzoList) },
               { label: "Sconto cliente", value: scCliente > 0 ? `-${fmt0(prev.prezzoList - prev.prezzoFin)} (-${scCliente}%)` : "nessuno" },
               { label: "Prezzo finale al cliente", value: fmt0(prev.prezzoFin), big: true, color: "#0C447C" },
             ].map((r: any, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "0.5px solid #E0DDD8", fontSize: 13 }}>
-                <span style={{ color: "#6B6860" }}>{r.label}</span>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "0.5px solid #E6E9F0", fontSize: 13 }}>
+                <span style={{ color: "#475569" }}>{r.label}</span>
                 <span style={{ fontWeight: 500, fontSize: r.big ? 16 : 13, color: r.color || "#1A1A1A" }}>{r.value}</span>
               </div>
             ))}
-            <div style={{ height: 1, background: "#E0DDD8", margin: "8px 0" }} />
+            <div style={{ height: 1, background: "#E6E9F0", margin: "8px 0" }} />
             <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", fontSize: 13 }}>
-              <span style={{ color: "#6B6860" }}>Margine lordo €</span>
+              <span style={{ color: "#475569" }}>Margine lordo €</span>
               <span style={{ fontWeight: 500, color: prev.margE > 0 ? "#27500A" : "#A32D2D" }}>{fmt0(prev.margE)}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", fontSize: 13 }}>
-              <span style={{ color: "#6B6860" }}>Margine lordo %</span>
+              <span style={{ color: "#475569" }}>Margine lordo %</span>
               <span style={{ fontWeight: 500, color: prev.margPct > 25 ? "#27500A" : "#A32D2D" }}>{fmtP(prev.margPct)}</span>
             </div>
           </div>

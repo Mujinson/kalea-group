@@ -154,14 +154,14 @@ export function PricingPagination({
   const btn = (disabled: boolean) => ({
     padding: '4px 12px',
     borderRadius: 6,
-    border: '1px solid #E0DDD8',
+    border: '1px solid #E6E9F0',
     background: 'transparent',
     fontSize: 12,
     cursor: disabled ? 'default' : 'pointer',
     opacity: disabled ? 0.4 : 1,
   } as const);
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 10, fontSize: 12, color: '#6B6860' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 10, fontSize: 12, color: '#475569' }}>
       <button style={btn(page === 0)} disabled={page === 0} onClick={() => setPage(page - 1)}>
         ← Prec
       </button>
@@ -180,7 +180,7 @@ export function PricingLoadingState({ rows = 5 }: { rows?: number }) {
     <div
       style={{
         background: '#fff',
-        border: '1px solid #E0DDD8',
+        border: '1px solid #E6E9F0',
         borderRadius: 12,
         padding: '20px 24px',
         marginBottom: 16,

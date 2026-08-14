@@ -62,7 +62,7 @@ function Slider({ label, min, max, value, step, onChange, format }: any) {
   return (
     <div style={{ marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-        <span style={{ fontSize: 13, color: "#6B6860" }}>{label}</span>
+        <span style={{ fontSize: 13, color: "#475569" }}>{label}</span>
         <span style={{ fontSize: 13, fontWeight: 500 }}>{format(value)}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
@@ -170,28 +170,28 @@ export default function PricingKronos() {
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "28px 20px" }}>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 20, fontWeight: 400, color: "#1A1A2E", marginBottom: 4 }}>Pricing Kronos 2026</h1>
-        <p style={{ fontSize: 13, color: "#9A9890" }}>Kronos Ceramiche · Listino 2026 · 16 collezioni · Calcolo prezzi e margini in tempo reale</p>
+        <p style={{ fontSize: 13, color: "#64748B" }}>Kronos Ceramiche · Listino 2026 · 16 collezioni · Calcolo prezzi e margini in tempo reale</p>
       </div>
 
-      <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-        <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 16, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+      <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+        <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 16, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
           Configurazione sconto & markup
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
           <div>
-            <div style={{ fontSize: 13, color: "#6B6860", marginBottom: 10 }}>Sconto fornitore Kronos</div>
+            <div style={{ fontSize: 13, color: "#475569", marginBottom: 10 }}>Sconto fornitore Kronos</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
               {SCONTI.map((s, i) => (
                 <button key={s.label} onClick={() => update({ scontoIdx: i })}
                   style={{ padding: "5px 16px", borderRadius: 20, border: "1px solid", cursor: "pointer", fontSize: 12, fontWeight: 500,
                     background: scontoIdx === i ? "#1A1A2E" : "transparent",
-                    color: scontoIdx === i ? "#fff" : "#6B6860",
-                    borderColor: scontoIdx === i ? "#1A1A2E" : "#E0DDD8" }}>
+                    color: scontoIdx === i ? "#fff" : "#475569",
+                    borderColor: scontoIdx === i ? "#1A1A2E" : "#E6E9F0" }}>
                   {s.label}
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860", lineHeight: 1.7 }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#475569", lineHeight: 1.7 }}>
               <strong style={{ color: "#1A1A1A" }}>{SCONTI[scontoIdx].label}</strong> · Coefficiente: <strong>{coeff.toFixed(3)}</strong><br />
               Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino Kronos<br />
               Esempio 100€/mq listino → tuo costo <strong>{fmt2(100 * coeff)}</strong>
@@ -201,12 +201,12 @@ export default function PricingKronos() {
             <Slider label="Markup standard" min={20} max={150} value={markup} step={5} onChange={(v: number) => update({ markup: v })} format={(v: number) => v + "%"} />
             <Slider label="Markup premium"  min={30} max={200} value={markupPrem} step={5} onChange={(v: number) => update({ markupPrem: v })} format={(v: number) => v + "%"} />
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 8 }}>
-              <span style={{ fontSize: 13, color: "#6B6860" }}>Usa markup premium nel preventivo</span>
+              <span style={{ fontSize: 13, color: "#475569" }}>Usa markup premium nel preventivo</span>
               <button onClick={() => setUsePrem(!usePrem)}
                 style={{ padding: "4px 14px", borderRadius: 20, border: "1px solid", cursor: "pointer", fontSize: 12,
                   background: usePrem ? "#1A1A2E" : "transparent",
-                  color: usePrem ? "#fff" : "#6B6860",
-                  borderColor: usePrem ? "#1A1A2E" : "#E0DDD8" }}>
+                  color: usePrem ? "#fff" : "#475569",
+                  borderColor: usePrem ? "#1A1A2E" : "#E6E9F0" }}>
                 {usePrem ? "Sì — Premium" : "No — Standard"}
               </button>
             </div>
@@ -222,26 +222,26 @@ export default function PricingKronos() {
           { label: "Margine medio",        value: fmtP(avgMarg),          color: "#27500A" },
         ].map(k => (
           <div key={k.label} style={{ background: "#F1F5F9", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: "#6B6860", marginBottom: 6 }}>{k.label}</div>
+            <div style={{ fontSize: 11, color: "#475569", marginBottom: 6 }}>{k.label}</div>
             <div style={{ fontSize: 19, fontWeight: 300, color: k.color }}>{k.value}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-        <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+      <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+        <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
           Listino Kronos 2026 — clicca un prodotto per il preventivo
         </div>
 
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14, alignItems: "center" }}>
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Cerca articolo..."
-            style={{ padding: "6px 14px", borderRadius: 20, border: "1px solid #E0DDD8", fontSize: 13, outline: "none", width: 200, background: "#F7F6F3" }} />
+            style={{ padding: "6px 14px", borderRadius: 20, border: "1px solid #E6E9F0", fontSize: 13, outline: "none", width: 200, background: "#F8FAFC" }} />
           {COLLEZIONI.map(c => (
             <button key={c} onClick={() => setColFilter(c)}
               style={{ padding: "5px 14px", borderRadius: 20, border: "1px solid", cursor: "pointer", fontSize: 12, whiteSpace: "nowrap",
                 background: colFilter === c ? "#1A1A2E" : "transparent",
-                color: colFilter === c ? "#fff" : "#6B6860",
-                borderColor: colFilter === c ? "#1A1A2E" : "#E0DDD8" }}>
+                color: colFilter === c ? "#fff" : "#475569",
+                borderColor: colFilter === c ? "#1A1A2E" : "#E6E9F0" }}>
               {c}
             </button>
           ))}
@@ -252,12 +252,12 @@ export default function PricingKronos() {
         ) : PRODOTTI.length === 0 ? (
           <PricingEmptyState label="Kronos" />
         ) : (<>
-        <div style={{ maxHeight: 440, overflowY: "auto", borderRadius: 8, border: "1px solid #E0DDD8" }}>
+        <div style={{ maxHeight: 440, overflowY: "auto", borderRadius: 8, border: "1px solid #E6E9F0" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead style={{ position: "sticky", top: 0, background: "#fff", zIndex: 1 }}>
               <tr>
                 {["Collezione", "Articolo", "Formato", "Tipo", "Listino", "Tuo costo", "Prezzo std", "Prezzo prem.", "Margine std", "Sconto max", ""].map(h => (
-                  <th key={h} style={{ textAlign: "left", fontSize: 10, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".05em", padding: "8px 10px", borderBottom: "1px solid #E0DDD8", whiteSpace: "nowrap" }}>{h}</th>
+                  <th key={h} style={{ textAlign: "left", fontSize: 10, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".05em", padding: "8px 10px", borderBottom: "1px solid #E6E9F0", whiteSpace: "nowrap" }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -269,24 +269,24 @@ export default function PricingKronos() {
                 return (
                   <tr key={p.id} onClick={() => setSelectedId(p.id)}
                     style={{ background: isSel ? "#E6F1FB" : "transparent", cursor: "pointer" }}>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 11, color: "#9A9890", whiteSpace: "nowrap" }}>{p.col}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontWeight: 500, whiteSpace: "nowrap" }}>{p.nome}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#6B6860", whiteSpace: "nowrap" }}>{p.fmt}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><TipoBadge tipo={p.tipo} /></td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(p.listino)}/mq</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#0C447C", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(costo)}/mq</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#1A1A2E", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezzo)}/mq</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#534AB7", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezPrem)}/mq</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><MargineChip pct={margPct} /></td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#A32D2D", fontWeight: 500, whiteSpace: "nowrap" }}>max {fmtP(scontoMax)}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", whiteSpace: "nowrap" }}>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontSize: 11, color: "#64748B", whiteSpace: "nowrap" }}>{p.col}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontWeight: 500, whiteSpace: "nowrap" }}>{p.nome}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontSize: 12, color: "#475569", whiteSpace: "nowrap" }}>{p.fmt}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0" }}><TipoBadge tipo={p.tipo} /></td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(p.listino)}/mq</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#0C447C", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(costo)}/mq</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#1A1A2E", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezzo)}/mq</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#534AB7", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezPrem)}/mq</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0" }}><MargineChip pct={margPct} /></td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontSize: 12, color: "#A32D2D", fontWeight: 500, whiteSpace: "nowrap" }}>max {fmtP(scontoMax)}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", whiteSpace: "nowrap" }}>
                       <button onClick={(e) => { e.stopPropagation(); setSelectedId(p.id); }}
                         style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid", cursor: "pointer", fontSize: 11,
-                          background: isSel ? "#1A1A2E" : "transparent", color: isSel ? "#fff" : "#1A1A2E", borderColor: isSel ? "#1A1A2E" : "#E0DDD8" }}>
+                          background: isSel ? "#1A1A2E" : "transparent", color: isSel ? "#fff" : "#1A1A2E", borderColor: isSel ? "#1A1A2E" : "#E6E9F0" }}>
                         {isSel ? "✓" : "Usa"}
                       </button>
                       <button onClick={(e) => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
-                        style={{ marginLeft: 4, padding: "4px 8px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
+                        style={{ marginLeft: 4, padding: "4px 8px", borderRadius: 6, border: "1px solid #E6E9F0", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
                         →
                       </button>
                     </td>
@@ -296,7 +296,7 @@ export default function PricingKronos() {
             </tbody>
           </table>
         </div>
-        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>
+        <div style={{ fontSize: 11, color: "#64748B", marginTop: 8 }}>
           {pagedRows.length} di {totalRows} articoli visualizzati · Prezzi IVA esclusa · Listino Kronos
         </div>
         <PricingPagination page={page} pageCount={pageCount} total={totalRows} setPage={setPage} label="articoli" />
@@ -307,14 +307,14 @@ export default function PricingKronos() {
       {selected && prev && (
         <>
           <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "24px 0 16px" }}>
-            <div style={{ flex: 1, height: 1, background: "#E0DDD8" }} />
-            <span style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".08em", whiteSpace: "nowrap" }}>Calcolatore preventivo ceramiche</span>
-            <div style={{ flex: 1, height: 1, background: "#E0DDD8" }} />
+            <div style={{ flex: 1, height: 1, background: "#E6E9F0" }} />
+            <span style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".08em", whiteSpace: "nowrap" }}>Calcolatore preventivo ceramiche</span>
+            <div style={{ flex: 1, height: 1, background: "#E6E9F0" }} />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px" }}>
+            <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px" }}>
               <div style={{ fontSize: 16, fontWeight: 500, color: "#1A1A2E", marginBottom: 2 }}>{selected.nome} — {selected.col}</div>
-              <div style={{ fontSize: 12, color: "#9A9890", marginBottom: 20 }}>{selected.fmt} · Listino Kronos: {fmt2(selected.listino)}/mq</div>
+              <div style={{ fontSize: 12, color: "#64748B", marginBottom: 20 }}>{selected.fmt} · Listino Kronos: {fmt2(selected.listino)}/mq</div>
               <Slider label="mq da posare"            min={5}   max={500} value={mqPrev}        step={5}  onChange={setMqPrev}        format={(v: number) => v + " mq"} />
               <Slider label="Sfrido / sovrappiù (%)"  min={5}   max={25}  value={sfrido}        step={1}  onChange={setSfrido}        format={(v: number) => v + "%"} />
               <Slider label="Battiscopa (ml stimati)"  min={0}   max={150} value={battML}        step={5}  onChange={setBattML}        format={(v: number) => v + " ml"} />
@@ -329,8 +329,8 @@ export default function PricingKronos() {
                 </div>
               )}
             </div>
-            <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px" }}>
-              <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+            <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px" }}>
+              <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
                 Riepilogo preventivo
               </div>
               {[
@@ -340,12 +340,12 @@ export default function PricingKronos() {
                 { label: "Costo acquisto battiscopa",       value: battML > 0 ? fmt0(prev.battCosto) + ` (${battML}ml)` : "–" },
                 { label: "Totale costo acquisto",          value: fmt0(prev.totAcq),      color: "#A32D2D" },
               ].map((r: any) => (
-                <div key={r.label} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E0DDD8", fontSize: 13 }}>
-                  <span style={{ color: "#6B6860" }}>{r.label}</span>
+                <div key={r.label} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E6E9F0", fontSize: 13 }}>
+                  <span style={{ color: "#475569" }}>{r.label}</span>
                   <span style={{ fontWeight: 500, color: r.color || "#1A1A1A" }}>{r.value}</span>
                 </div>
               ))}
-              <div style={{ height: 1, background: "#E0DDD8", margin: "8px 0" }} />
+              <div style={{ height: 1, background: "#E6E9F0", margin: "8px 0" }} />
               {[
                 { label: "Prezzo ceramiche a listino Kalēa", value: fmt0(prev.prezzoList) },
                 { label: "Sconto cliente",                   value: scontoCliente > 0 ? `− ${fmt0(prev.prezzoList - prev.prezzoFin)} (−${scontoCliente}%)` : "nessuno" },
@@ -353,23 +353,23 @@ export default function PricingKronos() {
                 { label: "+ Battiscopa al cliente",          value: battML > 0 ? fmt0(prev.battVend) : "–" },
                 { label: "Totale preventivo materiali",     value: fmt0(prev.totFin),      color: "#0C447C", big: true },
               ].map((r: any) => (
-                <div key={r.label} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E0DDD8", fontSize: 13 }}>
-                  <span style={{ color: "#6B6860" }}>{r.label}</span>
+                <div key={r.label} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E6E9F0", fontSize: 13 }}>
+                  <span style={{ color: "#475569" }}>{r.label}</span>
                   <span style={{ fontWeight: 500, fontSize: r.big ? 16 : 13, color: r.color || "#1A1A1A" }}>{r.value}</span>
                 </div>
               ))}
-              <div style={{ height: 1, background: "#E0DDD8", margin: "8px 0" }} />
-              <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E0DDD8", fontSize: 13 }}>
-                <span style={{ color: "#6B6860" }}>Margine lordo €</span>
+              <div style={{ height: 1, background: "#E6E9F0", margin: "8px 0" }} />
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E6E9F0", fontSize: 13 }}>
+                <span style={{ color: "#475569" }}>Margine lordo €</span>
                 <span style={{ fontWeight: 500, color: "#27500A" }}>{fmt0(prev.margineE)}</span>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E0DDD8", fontSize: 13 }}>
-                <span style={{ color: "#6B6860" }}>Margine lordo %</span>
+              <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "0.5px solid #E6E9F0", fontSize: 13 }}>
+                <span style={{ color: "#475569" }}>Margine lordo %</span>
                 <span style={{ fontWeight: 500, color: "#27500A" }}>{fmtP(prev.marginePct)}</span>
               </div>
-              <div style={{ height: 1, background: "#E0DDD8", margin: "8px 0" }} />
+              <div style={{ height: 1, background: "#E6E9F0", margin: "8px 0" }} />
               <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: 13 }}>
-                <span style={{ color: "#6B6860" }}>Break-even (prezzo min totale)</span>
+                <span style={{ color: "#475569" }}>Break-even (prezzo min totale)</span>
                 <span style={{ fontWeight: 500, color: "#A32D2D" }}>{fmt0(prev.totAcq)}</span>
               </div>
             </div>
@@ -378,7 +378,7 @@ export default function PricingKronos() {
       )}
 
       {!selected && (
-        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13, marginTop: 8 }}>
+        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#64748B", fontSize: 13, marginTop: 8 }}>
           ↑ Clicca un prodotto nella tabella per aprire il calcolatore preventivo
         </div>
       )}
