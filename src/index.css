@@ -1082,8 +1082,8 @@ body:has(.admin-theme) [data-radix-dropdown-menu-content] {
 .admin-theme div[style*="border-radius: 12px"][style*="border: 1px solid rgb(230, 233, 240)"]::after {
   content: "";
   position: absolute;
-  top: 18px;
-  right: 18px;
+  bottom: 14px;
+  right: 14px;
   width: 7px;
   height: 7px;
   border-radius: 999px;
