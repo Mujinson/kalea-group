@@ -485,8 +485,8 @@ Deno.serve(async (req) => {
     return json({ error: 'forbidden' }, 403);
   }
 
-  let update: any;
-  try { update = await req.json(); } catch { return json({ ok: true }); }
+  const update: any = payload;
+  if (!update) return json({ ok: true });
   // Rispondo subito a Telegram, elaboro in background
   EdgeRuntime.waitUntil(handleUpdate(update).catch((e) => console.error('handleUpdate', e)));
   return json({ ok: true });
