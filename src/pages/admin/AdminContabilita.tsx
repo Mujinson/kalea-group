@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { CrmPageHeader } from '@/components/admin/CrmShell';
+import { StatusSelectPill, PAID_OPTIONS } from '@/components/admin/crm-ui';
+import { toast } from 'sonner';
 import { DataTable, DataTableColumn } from '@/components/admin/DataTable';
 import { format, differenceInDays, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -138,6 +140,26 @@ export default function AdminContabilita() {
 
   useEffect(() => { load(); }, [load]);
 
+  const toggleRata = async (r: Rata, isPaid: boolean) => {
+    const { error } = await supabase
+      .from('payment_schedules')
+      .update({ is_paid: isPaid, paid_date: isPaid ? new Date().toISOString().split('T')[0] : null })
+      .eq('id', r.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(isPaid ? 'Rata segnata come pagata' : 'Rata segnata come da incassare');
+    load();
+  };
+
+  const toggleCommission = async (c: CommissionRow, status: string) => {
+    const { error } = await supabase
+      .from('commissions')
+      .update({ status, paid_at: status === 'pagata' ? new Date().toISOString() : null })
+      .eq('id', c.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(status === 'pagata' ? 'Provvigione liquidata' : 'Provvigione da liquidare');
+    load();
+  };
+
   const today = new Date();
   const insoluti = useMemo(() => rate.filter(r => !r.is_paid && r.due_date && new Date(r.due_date) < today), [rate]);
   const totRateOpen = rate.filter(r => !r.is_paid).reduce((s, r) => s + r.amount, 0);
@@ -155,12 +177,18 @@ export default function AdminContabilita() {
     { key: 'due_date', header: 'Scadenza', cell: (r) => r.due_date ? format(new Date(r.due_date), 'dd/MM/yyyy', { locale: it }) : '—' },
     {
       key: 'is_paid', header: 'Stato', cell: (r) => {
-        if (r.is_paid) return <Badge className="bg-green-100 text-green-800">pagata</Badge>;
-        if (r.due_date && new Date(r.due_date) < today) {
-          const d = differenceInDays(today, new Date(r.due_date));
-          return <Badge className="bg-red-100 text-red-800">scaduta {d}g</Badge>;
-        }
-        return <Badge variant="outline">in scadenza</Badge>;
+        const late = !r.is_paid && r.due_date && new Date(r.due_date) < today;
+        const lateDays = late ? differenceInDays(today, new Date(r.due_date!)) : 0;
+        return (
+          <StatusSelectPill
+            value={r.is_paid ? 'paid' : 'unpaid'}
+            options={[
+              { value: 'unpaid', label: late ? `Scaduta ${lateDays}g` : 'In scadenza', tone: late ? 'danger' : 'warning' },
+              { value: 'paid', label: 'Pagata', tone: 'success' },
+            ]}
+            onChange={(v) => toggleRata(r, v === 'paid')}
+          />
+        );
       }
     },
   ];
@@ -179,10 +207,16 @@ export default function AdminContabilita() {
     { key: 'pct', header: '%', cell: (c) => `${c.pct}%` },
     { key: 'amount', header: 'Provvigione', cell: (c) => <span className="font-semibold">{eur(c.amount)}</span> },
     {
-      key: 'status', header: 'Stato', cell: (c) =>
-        c.status === 'pagata' || c.status === 'paid'
-          ? <Badge className="bg-green-100 text-green-800">pagata</Badge>
-          : <Badge className="bg-amber-100 text-amber-800">da liquidare</Badge>
+      key: 'status', header: 'Stato', cell: (c) => (
+        <StatusSelectPill
+          value={c.status === 'pagata' || c.status === 'paid' ? 'pagata' : 'da_liquidare'}
+          options={[
+            { value: 'da_liquidare', label: 'Da liquidare', tone: 'warning' },
+            { value: 'pagata', label: 'Pagata', tone: 'success' },
+          ]}
+          onChange={(v) => toggleCommission(c, v)}
+        />
+      )
     },
   ];
 
