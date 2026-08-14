@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,13 +18,21 @@ import TelegramSection from '@/components/admin/TelegramSection';
 
 const AdminSettings = () => {
   const { user } = useAdminAuth();
+  const location = useLocation();
+  const telegramRef = useRef<HTMLDivElement>(null);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [checkingPassword, setCheckingPassword] = useState(false);
-  
+   
   // Change password state
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
+
+  useEffect(() => {
+    if (location.hash === '#telegram' && telegramRef.current) {
+      telegramRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [location.hash]);
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -177,7 +186,9 @@ const AdminSettings = () => {
         </CardContent>
       </Card>
 
-      <TelegramSection />
+      <div id="telegram" ref={telegramRef}>
+        <TelegramSection />
+      </div>
     </div>
 
   );

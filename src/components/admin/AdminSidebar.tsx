@@ -199,6 +199,7 @@ const menuStructure: MenuEntry[] = [
       label: 'Impostazioni', icon: Settings, color: '#64748B', adminOnly: true,
       items: [
         { title: 'Generali', url: '/admin/impostazioni', icon: Settings, adminOnly: true },
+        { title: 'Telegram', url: '/admin/impostazioni#telegram', icon: Bot, adminOnly: true },
         { title: 'Import Dati', url: '/admin/import', icon: Upload, adminOnly: true },
       ],
     },
