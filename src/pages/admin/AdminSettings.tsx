@@ -12,6 +12,8 @@ import { CrmPageHeader } from '@/components/admin/CrmShell';
 import { validatePassword, checkPasswordCompromised } from '@/hooks/usePasswordCheck';
 import CommercialiSection from '@/components/admin/CommercialiSection';
 import SocialFeedSection from '@/components/admin/SocialFeedSection';
+import TelegramSection from '@/components/admin/TelegramSection';
+
 
 const AdminSettings = () => {
   const { user } = useAdminAuth();
