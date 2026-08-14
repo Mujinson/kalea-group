@@ -174,7 +174,10 @@ const AdminSettings = () => {
           </Button>
         </CardContent>
       </Card>
+
+      <TelegramSection />
     </div>
+
   );
 };
 
