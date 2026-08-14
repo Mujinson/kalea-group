@@ -496,7 +496,7 @@ const AdminQuotes = () => {
             accessor: (q) => getCustomerName(q),
             cell: (q) => <span className="font-medium">{getCustomerName(q)}</span>,
           },
-          { key: 'status', header: 'Stato', sortable: true, cell: (q) => getStatusBadge(q.status) },
+          { key: 'status', header: 'Stato', sortable: true, cell: (q) => <StatusCell quote={q} /> },
           {
             key: 'created_by',
             header: 'Responsabile',
