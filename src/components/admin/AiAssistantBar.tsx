@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History, Paperclip } from 'lucide-react';
+import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History, Paperclip, FileText, Receipt } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
 import { useSpeech } from '@/hooks/useSpeech';
+import { importCostInvoice } from '@/lib/costInvoiceImport';
 import { parseQuoteFile, parseQuoteText, saveImportedQuote, sembraRichiestaPreventivo, type ImportedQuote } from '@/lib/quoteImport';
 
 type Ref = { etichetta: string; percorso: string };
@@ -281,7 +282,9 @@ export default function AiAssistantBar() {
 
   // ---- Import preventivo esistente (PDF / Excel / immagine) ----
   const fileRef = useRef<HTMLInputElement>(null);
+  const costRef = useRef<HTMLInputElement>(null);
   const [importing, setImporting] = useState(false);
+  const [menuAllegati, setMenuAllegati] = useState(false);
 
   const importaFile = useCallback(async (file: File) => {
     const id = uid();
@@ -305,6 +308,50 @@ export default function AiAssistantBar() {
       if (fileRef.current) fileRef.current.value = '';
     }
   }, [apriPreventivo]);
+
+  // ---- Fatture fornitore (costi): PDF -> ciclo passivo, con allegato ----
+  const importaCosti = useCallback(async (files: File[]) => {
+    if (!files.length) return;
+    const id = uid();
+    setImporting(true);
+    setTurns((prev) => [...prev, {
+      id,
+      domanda: `Fatture di costo: ${files.map((f) => f.name).join(', ')}`,
+      risposta: files.length > 1 ? `Sto leggendo ${files.length} fatture…` : 'Sto leggendo la fattura…',
+      riferimenti: [],
+      streaming: true,
+    }]);
+
+    const ok: string[] = [];
+    const ko: string[] = [];
+    let totale = 0;
+    for (const file of files) {
+      try {
+        const inv = await importCostInvoice(file);
+        totale += Number(inv.total || 0);
+        ok.push(`• ${inv.supplier_name} — fattura ${inv.invoice_number}: ${Number(inv.total || 0).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })} — NON PAGATA${inv.attachment_url ? ' (PDF allegato)' : ''}`);
+      } catch (e) {
+        ko.push(`• ${file.name}: ${messaggioErrore(e)}`);
+      }
+    }
+
+    const righe = [
+      ok.length ? `Registrate fra le fatture di costo:\n${ok.join('\n')}` : '',
+      ok.length > 1 ? `Totale da pagare aggiunto: ${totale.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}.` : '',
+      ko.length ? `Non sono riuscito con:\n${ko.join('\n')}` : '',
+    ].filter(Boolean).join('\n\n');
+
+    setTurns((prev) => prev.map((t) => t.id === id ? {
+      ...t,
+      streaming: false,
+      risposta: righe || 'Nessuna fattura registrata.',
+      errore: !ok.length && ko.length ? 'Nessuna fattura registrata.' : undefined,
+      riferimenti: ok.length ? [{ etichetta: 'Vedi le fatture fornitori', percorso: '/admin/fornitori' }] : [],
+    } : t));
+
+    setImporting(false);
+    if (costRef.current) costRef.current.value = '';
+  }, []);
 
   const attiva = turns.length > 0;
 
@@ -393,20 +440,57 @@ export default function AiAssistantBar() {
             className="hidden"
             onChange={(e) => { const f = e.target.files?.[0]; if (f) void importaFile(f); }}
           />
+          <input
+            ref={costRef}
+            type="file"
+            multiple
+            accept=".pdf,image/*,application/pdf"
+            className="hidden"
+            onChange={(e) => { const f = Array.from(e.target.files || []); if (f.length) void importaCosti(f); }}
+          />
           {!voice.listening && (
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              disabled={importing || loading}
-              title="Importa un preventivo esistente (PDF, Excel, foto)"
-              aria-label="Importa un preventivo esistente"
-              className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition disabled:opacity-40"
-            >
-              {importing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
-            </button>
+            <div className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setMenuAllegati((v) => !v)}
+                disabled={importing || loading}
+                title="Allega un documento"
+                aria-label="Allega un documento"
+                aria-expanded={menuAllegati}
+                className={`w-9 h-9 sm:w-8 sm:h-8 inline-flex items-center justify-center rounded-crm-sm transition disabled:opacity-40 ${
+                  menuAllegati ? 'bg-crm-bg-soft text-crm-ink' : 'text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft'
+                }`}
+              >
+                {importing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+              </button>
+              {menuAllegati && (
+                <div className="absolute right-0 top-11 z-50 w-64 rounded-crm bg-crm-surface border border-crm-border shadow-crm-md p-1">
+                  <button
+                    type="button"
+                    onClick={() => { setMenuAllegati(false); fileRef.current?.click(); }}
+                    className="w-full text-left px-3 py-2 rounded-crm-sm hover:bg-crm-bg-soft flex items-start gap-2"
+                  >
+                    <FileText className="w-4 h-4 mt-0.5 text-crm-primary shrink-0" />
+                    <span>
+                      <span className="block text-[13px] font-medium text-crm-ink">Preventivo da importare</span>
+                      <span className="block text-[11px] text-crm-ink-subtle">PDF, Excel o foto: compilo il generatore</span>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setMenuAllegati(false); costRef.current?.click(); }}
+                    className="w-full text-left px-3 py-2 rounded-crm-sm hover:bg-crm-bg-soft flex items-start gap-2"
+                  >
+                    <Receipt className="w-4 h-4 mt-0.5 text-amber-600 shrink-0" />
+                    <span>
+                      <span className="block text-[13px] font-medium text-crm-ink">Fatture di costo (fornitori)</span>
+                      <span className="block text-[11px] text-crm-ink-subtle">Anche più PDF: le registro come non pagate</span>
+                    </span>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
-
-
 
           {voice.supported && (
             <button

@@ -11,7 +11,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { StatusPill } from '@/components/admin/crm-ui';
 import { DataTable } from '@/components/admin/DataTable';
 import { fmtEur, fmtDateIt, dueTone, SUPPLIER_INVOICE_STATUS_LABEL, PAYMENT_METHODS } from '@/lib/finance';
-import { Plus, Save } from 'lucide-react';
+import { Plus, Save, Paperclip } from 'lucide-react';
+import { getInvoiceAttachmentUrl } from '@/lib/costInvoiceImport';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import SupplierInvoiceDialog from './SupplierInvoiceDialog';
 
@@ -92,6 +93,27 @@ export function SupplierDetailSheet({ supplierId, onOpenChange }: Props) {
     qc.invalidateQueries({ queryKey: ['scadenzario'] });
   };
 
+  const togglePagata = async (r: any) => {
+    const pagata = r.status === 'pagata';
+    const { error } = await supabase.from('supplier_invoices').update({
+      status: pagata ? 'da_pagare' : 'pagata',
+      paid_amount: pagata ? 0 : Number(r.total || 0),
+    }).eq('id', r.id);
+    if (error) { toast({ title: 'Errore', description: error.message, variant: 'destructive' }); return; }
+    toast({ title: pagata ? 'Segnata come non pagata' : 'Segnata come pagata' });
+    qc.invalidateQueries({ queryKey: ['supplier-invoices'] });
+    qc.invalidateQueries({ queryKey: ['suppliers-list'] });
+    qc.invalidateQueries({ queryKey: ['scadenzario'] });
+  };
+
+  const apriAllegato = async (r: any) => {
+    try {
+      window.open(await getInvoiceAttachmentUrl(r.attachment_url), '_blank', 'noopener');
+    } catch (e: any) {
+      toast({ title: 'Allegato non disponibile', description: e?.message, variant: 'destructive' });
+    }
+  };
+
   const residuo = (invoices || []).reduce((s, i) => s + Math.max(0, Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
 
   return (
@@ -139,10 +161,29 @@ export function SupplierDetailSheet({ supplierId, onOpenChange }: Props) {
                   key: 'status',
                   header: 'Stato',
                   cell: (r) => (
-                    <StatusPill size="sm" tone={dueTone(r.due_date, r.status === 'pagata') as any}>
-                      {SUPPLIER_INVOICE_STATUS_LABEL[r.status] || r.status}
-                    </StatusPill>
+                    <button
+                      type="button"
+                      title={r.status === 'pagata' ? 'Segna come non pagata' : 'Segna come pagata'}
+                      onClick={(e) => { e.stopPropagation(); void togglePagata(r); }}
+                    >
+                      <StatusPill size="sm" tone={dueTone(r.due_date, r.status === 'pagata') as any}>
+                        {r.status === 'pagata' ? 'Pagata' : (SUPPLIER_INVOICE_STATUS_LABEL[r.status] || 'Non pagata')}
+                      </StatusPill>
+                    </button>
                   ),
+                },
+                {
+                  key: 'attachment_url',
+                  header: 'PDF',
+                  cell: (r) => (r.attachment_url ? (
+                    <button
+                      type="button"
+                      className="text-crm-primary hover:underline inline-flex items-center gap-1"
+                      onClick={(e) => { e.stopPropagation(); void apriAllegato(r); }}
+                    >
+                      <Paperclip className="w-3.5 h-3.5" /> Apri
+                    </button>
+                  ) : <span className="text-muted-foreground">—</span>),
                 },
                 {
                   key: 'actions',
