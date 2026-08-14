@@ -34,8 +34,7 @@ const TelegramSection = () => {
   const setupWebhook = async () => {
     const t = toast.loading('Collego il bot Telegram…');
     const { data, error } = await supabase.functions.invoke('telegram-bot', {
-      body: {},
-      headers: { 'x-kalea-action': 'setup' },
+      body: { action: 'setup' },
     });
     if (error || !data?.ok) {
       toast.error('Collegamento non riuscito', { id: t, description: data?.description || error?.message });

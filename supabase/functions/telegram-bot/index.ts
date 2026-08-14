@@ -7,7 +7,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-telegram-bot-api-secret-token',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-telegram-bot-api-secret-token, x-kalea-action',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
@@ -447,8 +447,16 @@ Deno.serve(async (req) => {
 
   const url = new URL(req.url);
 
+  // Il body può essere letto una sola volta: lo leggiamo qui e lo riusiamo.
+  let payload: any = null;
+  if (req.method === 'POST') payload = await req.json().catch(() => null);
+
   // Configurazione webhook dal CRM (richiede admin loggato)
-  if (url.searchParams.get('action') === 'setup' || req.headers.get('x-kalea-action') === 'setup') {
+  if (
+    url.searchParams.get('action') === 'setup' ||
+    req.headers.get('x-kalea-action') === 'setup' ||
+    payload?.action === 'setup'
+  ) {
     const authHeader = req.headers.get('Authorization') || '';
     if (!authHeader.startsWith('Bearer ')) return json({ error: 'Non autorizzato' }, 401);
     const sbUser = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!, {
@@ -477,8 +485,8 @@ Deno.serve(async (req) => {
     return json({ error: 'forbidden' }, 403);
   }
 
-  let update: any;
-  try { update = await req.json(); } catch { return json({ ok: true }); }
+  const update: any = payload;
+  if (!update) return json({ ok: true });
   // Rispondo subito a Telegram, elaboro in background
   EdgeRuntime.waitUntil(handleUpdate(update).catch((e) => console.error('handleUpdate', e)));
   return json({ ok: true });
