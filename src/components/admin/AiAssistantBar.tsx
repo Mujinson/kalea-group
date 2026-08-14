@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History } from 'lucide-react';
+import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History, Paperclip } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
 import { useSpeech } from '@/hooks/useSpeech';
+import { parseQuoteFile, saveImportedQuote } from '@/lib/quoteImport';
 
 type Ref = { etichetta: string; percorso: string };
 type Turn = {
@@ -237,6 +238,43 @@ export default function AiAssistantBar() {
     onFinal: (t) => { setInput(t); void ask(t); },
   });
 
+  // ---- Import preventivo esistente (PDF / Excel / immagine) ----
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importing, setImporting] = useState(false);
+
+  const importaFile = useCallback(async (file: File) => {
+    const id = uid();
+    setImporting(true);
+    setTurns((prev) => [...prev, {
+      id,
+      domanda: `Importa preventivo: ${file.name}`,
+      risposta: 'Sto leggendo il documento…',
+      riferimenti: [],
+      streaming: true,
+    }]);
+    try {
+      const q = await parseQuoteFile(file);
+      saveImportedQuote(q);
+      const tot = q.righe.reduce(
+        (s, r) => s + (r.quantita || 0) * (r.prezzo_unitario || 0) * (1 - (r.sconto_pct || 0) / 100), 0,
+      );
+      setTurns((prev) => prev.map((t) => t.id === id ? {
+        ...t,
+        streaming: false,
+        risposta: `Ho letto il preventivo di ${q.cliente?.nome || 'cliente non indicato'}: ${q.righe.length} voci per ${tot.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })} imponibile. Apro il generatore con i dati già compilati: controlla le righe prima di salvare.`,
+        riferimenti: [{ etichetta: 'Apri il preventivo importato', percorso: '/admin/preventivi/nuovo?import=1' }],
+      } : t));
+      navigate('/admin/preventivi/nuovo?import=1');
+    } catch (e) {
+      setTurns((prev) => prev.map((t) => t.id === id
+        ? { ...t, streaming: false, risposta: '', errore: messaggioErrore(e) }
+        : t));
+    } finally {
+      setImporting(false);
+      if (fileRef.current) fileRef.current.value = '';
+    }
+  }, [navigate]);
+
   const attiva = turns.length > 0;
 
   return (
@@ -316,6 +354,28 @@ export default function AiAssistantBar() {
               <History className="w-4 h-4" />
             </button>
           )}
+
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".pdf,.xlsx,.xls,.csv,image/*,application/pdf"
+            className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) void importaFile(f); }}
+          />
+          {!voice.listening && (
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              disabled={importing || loading}
+              title="Importa un preventivo esistente (PDF, Excel, foto)"
+              aria-label="Importa un preventivo esistente"
+              className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition disabled:opacity-40"
+            >
+              {importing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+            </button>
+          )}
+
+
 
           {voice.supported && (
             <button

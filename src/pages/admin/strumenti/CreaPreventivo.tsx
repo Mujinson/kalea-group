@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import WoodcoBlock, { emptyWoodcoSelection, type WoodcoSelection } from "@/components/preventivo/WoodcoBlock";
 import QuoteCatalogSections, { catalogLinesTotal, type CatalogLine } from "@/components/admin/quotes/QuoteCatalogSections";
+import { takeImportedQuote, type ImportedLine } from "@/lib/quoteImport";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 
@@ -1398,6 +1399,49 @@ export default function CreaPreventivo() {
           telefono: leadPhone || "",
           email: leadEmail || "",
         }));
+      }
+
+      // 3) Prefill da preventivo importato (PDF / Excel letto dall'assistente AI)
+      if (searchParams.get("import")) {
+        const imp = takeImportedQuote();
+        if (imp) {
+          const c = imp.cliente || ({} as any);
+          setCliente(prev => ({
+            ...prev,
+            nome: c.nome || "",
+            indirizzo: c.indirizzo || "",
+            citta: c.citta || "",
+            telefono: c.telefono || "",
+            email: c.email || "",
+            partitaIva: c.partitaIva || "",
+            referente: c.referente || "",
+          }));
+          if (imp.cantiere) setCantiere(imp.cantiere);
+          if (imp.data && /^\d{4}-\d{2}-\d{2}$/.test(imp.data)) setDataPrev(imp.data);
+          if (imp.iva_rate && imp.iva_rate > 0) setIvaRate(imp.iva_rate);
+          if (imp.note) setNoteCliente(imp.note);
+          setNoteInterne(prev => [prev, `Importato da documento esistente${imp.numero ? ` (offerta ${imp.numero})` : ""}. Verificare righe e prezzi.`].filter(Boolean).join("\n"));
+
+          const toLine = (r: ImportedLine, i: number): CatalogLine => ({
+            id: `imp-${Date.now()}-${i}`,
+            catalog_id: null,
+            code: r.codice || null,
+            name: r.descrizione || "Voce importata",
+            description: null,
+            quantity: Number(r.quantita) || 0,
+            unit_price: Number(r.prezzo_unitario) || 0,
+            unit: r.unita || "a corpo",
+            discount_pct: Number(r.sconto_pct) || 0,
+          });
+          const righe = Array.isArray(imp.righe) ? imp.righe : [];
+          setArticoli(righe.filter(r => r.sezione === "articolo").map(toLine));
+          setAccessori(righe.filter(r => r.sezione === "accessorio").map(toLine));
+          setServizi(righe.filter(r => r.sezione !== "articolo" && r.sezione !== "accessorio").map(toLine));
+          setStep(2);
+          toast.success(`Preventivo importato: ${righe.length} voci. Controlla i dati prima di salvare.`);
+        } else {
+          toast.error("Nessun preventivo importato da caricare: riprova a inviare il file all'assistente.");
+        }
       }
       return;
     }
