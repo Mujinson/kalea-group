@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History, Paperclip, FileText, Receipt } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
 import { useSpeech } from '@/hooks/useSpeech';
-import { importCostInvoice, sembraRichiestaCosto } from '@/lib/costInvoiceImport';
+import { importCostInvoice } from '@/lib/costInvoiceImport';
 import { parseQuoteFile, parseQuoteText, saveImportedQuote, sembraRichiestaPreventivo, type ImportedQuote } from '@/lib/quoteImport';
 
 type Ref = { etichetta: string; percorso: string };
