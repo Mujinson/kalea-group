@@ -51,6 +51,54 @@ export function takeImportedQuote(): ImportedQuote | null {
 
 const MAX_BYTES = 12 * 1024 * 1024;
 
+const FUNCTION_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/quote-import`;
+
+async function callQuoteImport(payload: Record<string, unknown>): Promise<ImportedQuote> {
+  const { data: sess } = await supabase.auth.getSession();
+  const token = sess.session?.access_token;
+  if (!token) throw new Error("Sessione scaduta: rientra nel CRM.");
+
+  const res = await fetch(FUNCTION_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  let body: any = null;
+  try { body = await res.json(); } catch { /* non JSON */ }
+  if (!res.ok) throw new Error(body?.error || "Non sono riuscito a creare il preventivo.");
+  if (!body?.preventivo?.righe?.length) throw new Error("Nessuna riga di preventivo trovata.");
+  return body.preventivo as ImportedQuote;
+}
+
+/**
+ * Riconosce una richiesta di preventivo dettata (a voce o scritta):
+ * servono almeno un prezzo e un riferimento a lavorazione/quantità.
+ */
+export function sembraRichiestaPreventivo(text: string): boolean {
+  const t = (text || "").toLowerCase();
+  if (t.length < 25) return false;
+  const prezzo = /(\d[\d.,]*\s*(€|euro))|((€|euro)\s*\d)/.test(t) ||
+    /\b(prezzo|costo|tariffa)\b/.test(t);
+  const lavorazione = /\b(fornitura|posa|battiscopa|tappetin|parquet|pavimento|levigatur|smaltiment|primer|collant|preventiv)\w*/.test(t);
+  const quantita = /\b(mq|metri|ml|pz|pezzi|metro)\b/.test(t);
+  const intento = /\b(preventivo|offerta|quotazione)\b/.test(t);
+  const domanda = /^(quanto|quanti|quante|quando|chi|come|dove|perch|mostrami|fammi vedere|elenca|qual)/.test(t.trim());
+  if (domanda && !intento) return false;
+  return prezzo && lavorazione && (quantita || intento);
+}
+
+/** Crea le righe di preventivo da una richiesta dettata a voce o scritta. */
+export async function parseQuoteText(text: string): Promise<ImportedQuote> {
+  const clean = (text || "").trim();
+  if (clean.length < 10) throw new Error("Dimmi almeno voci, quantità e prezzi.");
+  return callQuoteImport({ text: clean.slice(0, 20_000), mode: "dettatura", filename: "dettatura" });
+}
+
 const isSpreadsheet = (f: File) =>
   /\.(xlsx|xls|csv)$/i.test(f.name) ||
   /spreadsheet|excel|csv/i.test(f.type);
@@ -89,24 +137,5 @@ export async function parseQuoteFile(file: File): Promise<ImportedQuote> {
     payload.file_data = await fileToDataUrl(file);
   }
 
-  const { data: sess } = await supabase.auth.getSession();
-  const token = sess.session?.access_token;
-  if (!token) throw new Error("Sessione scaduta: rientra nel CRM.");
-
-  const url = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/quote-import`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  let body: any = null;
-  try { body = await res.json(); } catch { /* non JSON */ }
-  if (!res.ok) throw new Error(body?.error || "Non sono riuscito a leggere il preventivo.");
-  if (!body?.preventivo?.righe?.length) throw new Error("Nessuna riga di preventivo trovata nel file.");
-  return body.preventivo as ImportedQuote;
+  return callQuoteImport(payload);
 }

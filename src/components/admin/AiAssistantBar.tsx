@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Sparkles, Send, Loader2, X, ArrowUpRight, AlertCircle, RotateCcw, Mic, Square, Volume2, VolumeX, Repeat2, History, Paperclip } from 'lucide-react';
 import { useVoiceInput } from '@/hooks/useVoiceInput';
 import { useSpeech } from '@/hooks/useSpeech';
-import { parseQuoteFile, saveImportedQuote } from '@/lib/quoteImport';
+import { parseQuoteFile, parseQuoteText, saveImportedQuote, sembraRichiestaPreventivo, type ImportedQuote } from '@/lib/quoteImport';
 
 type Ref = { etichetta: string; percorso: string };
 type Turn = {
@@ -140,9 +140,48 @@ export default function AiAssistantBar() {
     if (panelRef.current) panelRef.current.scrollTop = panelRef.current.scrollHeight;
   }, [turns, loading]);
 
+  /** Riepilogo + apertura del generatore con i dati già compilati. */
+  const apriPreventivo = useCallback((id: string, q: ImportedQuote, origine: string) => {
+    saveImportedQuote(q);
+    const tot = q.righe.reduce(
+      (s, r) => s + (r.quantita || 0) * (r.prezzo_unitario || 0) * (1 - (r.sconto_pct || 0) / 100), 0,
+    );
+    const voci = q.righe
+      .map((r) => `• ${r.descrizione} — ${r.quantita} ${r.unita || ''} × ${(r.prezzo_unitario || 0).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}`)
+      .join('\n');
+    setTurns((prev) => prev.map((t) => t.id === id ? {
+      ...t,
+      streaming: false,
+      risposta: `${origine} per ${q.cliente?.nome || 'cliente non indicato'}${q.cliente?.citta ? ` (${q.cliente.citta})` : ''}${q.cliente?.referente ? `, rif. ${q.cliente.referente}` : ''}:\n${voci}\nTotale imponibile ${tot.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}. Apro il generatore: controlla le righe prima di salvare.`,
+      riferimenti: [{ etichetta: 'Apri il preventivo', percorso: '/admin/preventivi/nuovo?import=1' }],
+    } : t));
+    navigate('/admin/preventivi/nuovo?import=1');
+  }, [navigate]);
+
+  /** Crea un preventivo da una richiesta dettata a voce o scritta a mano libera. */
+  const creaDaTesto = useCallback(async (richiesta: string) => {
+    const id = uid();
+    setLoading(true);
+    setInput('');
+    setTurns((prev) => [...prev, { id, domanda: richiesta, risposta: 'Sto preparando il preventivo…', riferimenti: [], streaming: true }]);
+    salvaStorico(richiesta);
+    try {
+      const q = await parseQuoteText(richiesta);
+      apriPreventivo(id, q, 'Preventivo pronto');
+    } catch (e) {
+      setTurns((prev) => prev.map((t) => t.id === id
+        ? { ...t, streaming: false, risposta: '', errore: messaggioErrore(e) }
+        : t));
+    } finally {
+      setLoading(false);
+      setTimeout(() => inputRef.current?.focus(), 30);
+    }
+  }, [apriPreventivo, salvaStorico]);
+
   const ask = useCallback(async (text: string) => {
     const domanda = text.trim();
     if (!domanda || loading) return;
+    if (sembraRichiestaPreventivo(domanda)) { void creaDaTesto(domanda); return; }
     setInput('');
     setLoading(true);
     const id = uid();
@@ -231,11 +270,13 @@ export default function AiAssistantBar() {
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 30);
     }
-  }, [loading, turns, speech, salvaStorico]);
+  }, [loading, turns, speech, salvaStorico, creaDaTesto]);
 
   const voice = useVoiceInput({
     onInterim: (t) => setInput(t),
     onFinal: (t) => { setInput(t); void ask(t); },
+    // dettature lunghe (preventivo a voce): più tempo fra una voce e l'altra
+    silenceMs: 3000,
   });
 
   // ---- Import preventivo esistente (PDF / Excel / immagine) ----
@@ -254,17 +295,7 @@ export default function AiAssistantBar() {
     }]);
     try {
       const q = await parseQuoteFile(file);
-      saveImportedQuote(q);
-      const tot = q.righe.reduce(
-        (s, r) => s + (r.quantita || 0) * (r.prezzo_unitario || 0) * (1 - (r.sconto_pct || 0) / 100), 0,
-      );
-      setTurns((prev) => prev.map((t) => t.id === id ? {
-        ...t,
-        streaming: false,
-        risposta: `Ho letto il preventivo di ${q.cliente?.nome || 'cliente non indicato'}: ${q.righe.length} voci per ${tot.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })} imponibile. Apro il generatore con i dati già compilati: controlla le righe prima di salvare.`,
-        riferimenti: [{ etichetta: 'Apri il preventivo importato', percorso: '/admin/preventivi/nuovo?import=1' }],
-      } : t));
-      navigate('/admin/preventivi/nuovo?import=1');
+      apriPreventivo(id, q, 'Ho letto il preventivo');
     } catch (e) {
       setTurns((prev) => prev.map((t) => t.id === id
         ? { ...t, streaming: false, risposta: '', errore: messaggioErrore(e) }
@@ -273,7 +304,7 @@ export default function AiAssistantBar() {
       setImporting(false);
       if (fileRef.current) fileRef.current.value = '';
     }
-  }, [navigate]);
+  }, [apriPreventivo]);
 
   const attiva = turns.length > 0;
 
