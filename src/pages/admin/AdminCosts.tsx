@@ -27,6 +27,7 @@ import {
   Edit2
 } from 'lucide-react';
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
+import { StatusSelectPill, PAID_OPTIONS } from '@/components/admin/crm-ui';
 import CostiOperativiTab from '@/components/admin/costi/CostiOperativiTab';
 import ScadenzarioTable from '@/components/admin/ScadenzarioTable';
 import { fmtEur, fmtDateIt, yearlyFactor } from '@/lib/finance';
@@ -396,6 +397,20 @@ const AdminCosts = () => {
     return fob + (fob * Number(cost.duty_percentage) / 100) + Number(cost.import_logistics_cost) + (Number(cost.internal_transport_cost) || 0);
   };
 
+  // Toggle stato pagamento direttamente dalla tabella
+  const togglePaid = async (table: 'fixed_costs' | 'variable_costs', id: string, isPaid: boolean) => {
+    const { error } = await supabase
+      .from(table)
+      .update({ is_paid: isPaid, paid_date: isPaid ? new Date().toISOString().split('T')[0] : null })
+      .eq('id', id);
+    if (error) {
+      toast({ title: 'Errore', description: error.message, variant: 'destructive' });
+      return;
+    }
+    toast({ title: isPaid ? 'Segnato come pagato' : 'Segnato come da pagare' });
+    if (table === 'fixed_costs') fetchFixedCosts(); else fetchVariableCosts();
+  };
+
   // Helpers
   const formatCurrency = (value: number) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
   const getCategoryLabel = (value: string, categories: { value: string; label: string }[]) => categories.find(c => c.value === value)?.label || value;
@@ -519,7 +534,13 @@ const AdminCosts = () => {
                 header: 'Stato',
                 sortable: true,
                 accessor: (c) => (c.is_paid ? 1 : 0),
-                cell: (c) => <Badge variant={c.is_paid ? 'default' : 'destructive'} className="text-xs">{c.is_paid ? 'Pagato' : 'Da pagare'}</Badge>,
+                cell: (c) => (
+                  <StatusSelectPill
+                    value={c.is_paid ? 'paid' : 'unpaid'}
+                    options={PAID_OPTIONS}
+                    onChange={(v) => togglePaid('fixed_costs', c.id, v === 'paid')}
+                  />
+                ),
               },
               {
                 key: 'amount',
@@ -602,7 +623,13 @@ const AdminCosts = () => {
                 header: 'Stato',
                 sortable: true,
                 accessor: (c) => (c.is_paid ? 1 : 0),
-                cell: (c) => <Badge variant={c.is_paid ? 'default' : 'destructive'} className="text-xs">{c.is_paid ? 'Pagato' : 'Da pagare'}</Badge>,
+                cell: (c) => (
+                  <StatusSelectPill
+                    value={c.is_paid ? 'paid' : 'unpaid'}
+                    options={PAID_OPTIONS}
+                    onChange={(v) => togglePaid('variable_costs', c.id, v === 'paid')}
+                  />
+                ),
               },
               {
                 key: 'amount',
