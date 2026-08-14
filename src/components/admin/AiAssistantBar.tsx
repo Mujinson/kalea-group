@@ -275,6 +275,8 @@ export default function AiAssistantBar() {
   const voice = useVoiceInput({
     onInterim: (t) => setInput(t),
     onFinal: (t) => { setInput(t); void ask(t); },
+    // dettature lunghe (preventivo a voce): più tempo fra una voce e l'altra
+    silenceMs: 3000,
   });
 
   // ---- Import preventivo esistente (PDF / Excel / immagine) ----
