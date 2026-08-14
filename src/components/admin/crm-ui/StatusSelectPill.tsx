@@ -9,6 +9,21 @@ import {
 import { cn } from "@/lib/utils";
 import { StatusPill, StatusTone } from "./StatusPill";
 
+const TONE_DOT: Record<StatusTone, string> = {
+  success: "var(--crm-success)",
+  warning: "var(--crm-warning)",
+  danger: "var(--crm-danger)",
+  info: "var(--crm-info)",
+  primary: "var(--crm-primary)",
+  purple: "var(--crm-purple)",
+  teal: "var(--crm-teal)",
+  pink: "#F472B6",
+  amber: "#F59E0B",
+  sky: "#0EA5E9",
+  slate: "#64748B",
+  neutral: "#94A3B8",
+};
+
 export interface StatusOption<T extends string = string> {
   value: T;
   label: string;
