@@ -353,6 +353,34 @@ const AdminQuotes = () => {
     return <Badge variant="outline" className={`${s.color} text-xs font-medium`}>● {s.label}</Badge>;
   };
 
+  // Badge cliccabile: ciclo Nuova → Inviata → In trattativa → Vinta / Persa
+  const StatusCell = ({ quote }: { quote: Quote }) => {
+    const s = QUOTE_STATUSES.find(qs => qs.value === quote.status) || QUOTE_STATUSES[0];
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+          <button
+            type="button"
+            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs font-medium transition hover:opacity-80 ${s.color}`}
+          >
+            ● {s.label}
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" onClick={(e) => e.stopPropagation()}>
+          {QUOTE_STATUSES.filter(o => o.value !== quote.status).map(o => (
+            <DropdownMenuItem
+              key={o.value}
+              onClick={(e) => { e.stopPropagation(); updateQuoteStatus(quote.id, o.value); }}
+            >
+              {o.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  };
+
+
   const getCustomerName = (quote: Quote) => {
     // Fonte di verità: il record CRM collegato (cliente o lead). Il campo
     // client_name viene usato solo come fallback quando non c'è collegamento,
