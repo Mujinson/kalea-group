@@ -341,7 +341,19 @@ export default function AdminLeads() {
                     {visibleCols.includes('code') && <td className="px-4 py-3"><span className="inline-flex items-center px-2 py-0.5 rounded bg-[#F1F5F9] text-[11px] font-mono text-[#0F172A]">{l.code || '—'}</span></td>}
                     {visibleCols.includes('name') && <td className="px-4 py-3 font-medium text-[#0F172A]">{display}</td>}
                     {visibleCols.includes('company_name') && <td className="px-4 py-3 text-[#475569]">{l.company_name || '—'}</td>}
-                    {visibleCols.includes('status') && <td className="px-4 py-3"><LeadStatusBadge status={l.status} /></td>}
+                    {visibleCols.includes('status') && (
+                      <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                        <LeadStatusBadge
+                          status={l.status}
+                          onChange={async (v) => {
+                            const { error } = await supabase.from('leads').update({ status: v }).eq('id', l.id);
+                            if (error) { toast.error(error.message); return; }
+                            toast.success('Stato lead aggiornato');
+                            qc.invalidateQueries({ queryKey: ['admin-leads'] });
+                          }}
+                        />
+                      </td>
+                    )}
                     {visibleCols.includes('responsibile') && (
                       <td className="px-4 py-3">
                         {l.assigned_salesperson_id
