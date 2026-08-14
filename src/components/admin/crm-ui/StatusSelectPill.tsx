@@ -9,6 +9,21 @@ import {
 import { cn } from "@/lib/utils";
 import { StatusPill, StatusTone } from "./StatusPill";
 
+const TONE_DOT: Record<StatusTone, string> = {
+  success: "var(--crm-success)",
+  warning: "var(--crm-warning)",
+  danger: "var(--crm-danger)",
+  info: "var(--crm-info)",
+  primary: "var(--crm-primary)",
+  purple: "var(--crm-purple)",
+  teal: "var(--crm-teal)",
+  pink: "#F472B6",
+  amber: "#F59E0B",
+  sky: "#0EA5E9",
+  slate: "#64748B",
+  neutral: "#94A3B8",
+};
+
 export interface StatusOption<T extends string = string> {
   value: T;
   label: string;
@@ -72,7 +87,7 @@ export function StatusSelectPill<T extends string = string>({
           </StatusPill>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-[180px]" onClick={(e) => e.stopPropagation()}>
+      <DropdownMenuContent align="start" className="min-w-[190px] bg-popover text-popover-foreground">
         {options.map((o) => (
           <DropdownMenuItem
             key={o.value}
@@ -80,13 +95,18 @@ export function StatusSelectPill<T extends string = string>({
               e.preventDefault();
               void handle(o.value);
             }}
-            className="gap-2"
+            className="gap-2 text-[13px] font-medium text-foreground"
           >
-            <StatusPill size="sm" tone={o.tone ?? "neutral"}>{o.label}</StatusPill>
+            <span
+              className="w-2.5 h-2.5 rounded-full shrink-0"
+              style={{ background: TONE_DOT[o.tone ?? "neutral"] }}
+            />
+            <span className="flex-1 truncate">{o.label}</span>
             {o.value === value && <Check className="w-3.5 h-3.5 ml-auto text-crm-primary" />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
+
     </DropdownMenu>
   );
 }
