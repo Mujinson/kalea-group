@@ -355,6 +355,28 @@ export default function AiAssistantBar() {
             </button>
           )}
 
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".pdf,.xlsx,.xls,.csv,image/*,application/pdf"
+            className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) void importaFile(f); }}
+          />
+          {!voice.listening && (
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              disabled={importing || loading}
+              title="Importa un preventivo esistente (PDF, Excel, foto)"
+              aria-label="Importa un preventivo esistente"
+              className="w-9 h-9 sm:w-8 sm:h-8 shrink-0 inline-flex items-center justify-center rounded-crm-sm text-crm-ink-muted hover:text-crm-ink hover:bg-crm-bg-soft transition disabled:opacity-40"
+            >
+              {importing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+            </button>
+          )}
+
+
+
           {voice.supported && (
             <button
               type="button"
