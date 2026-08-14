@@ -4098,6 +4098,36 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_allowed_chats: {
+        Row: {
+          approved: boolean
+          chat_id: string
+          chat_type: string | null
+          created_at: string
+          id: string
+          last_message_at: string | null
+          title: string | null
+        }
+        Insert: {
+          approved?: boolean
+          chat_id: string
+          chat_type?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          title?: string | null
+        }
+        Update: {
+          approved?: boolean
+          chat_id?: string
+          chat_type?: string | null
+          created_at?: string
+          id?: string
+          last_message_at?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
       time_off_requests: {
         Row: {
           approved_by: string | null
