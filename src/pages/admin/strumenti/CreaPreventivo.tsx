@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import WoodcoBlock, { emptyWoodcoSelection, type WoodcoSelection } from "@/components/preventivo/WoodcoBlock";
 import QuoteCatalogSections, { catalogLinesTotal, type CatalogLine } from "@/components/admin/quotes/QuoteCatalogSections";
+import { takeImportedQuote, type ImportedLine } from "@/lib/quoteImport";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 
