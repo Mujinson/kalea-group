@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { StatusSelectPill } from "@/components/admin/crm-ui";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -83,13 +84,32 @@ const CantieriMateriali = () => {
     toast.success("Eliminato");
   };
 
-  const getDeliveryBadge = (notes: string | null) => {
-    if (!notes) return null;
-    if (notes.includes("Stato: consegnato")) return <Badge className="bg-green-100 text-green-700 text-xs">Consegnato</Badge>;
-    if (notes.includes("Stato: in_transito")) return <Badge className="bg-blue-100 text-blue-700 text-xs">In transito</Badge>;
-    if (notes.includes("Stato: in_attesa")) return <Badge className="bg-amber-100 text-amber-700 text-xs">In attesa</Badge>;
-    return null;
+  const deliveryStatus = (notes: string | null) => {
+    if (notes?.includes("Stato: consegnato")) return "consegnato";
+    if (notes?.includes("Stato: in_transito")) return "in_transito";
+    return "in_attesa";
   };
+
+  const setDeliveryStatus = async (m: any, next: string) => {
+    const parts = (m.notes || "").split(" | ").filter((x: string) => x && !x.startsWith("Stato: "));
+    parts.push(`Stato: ${next}`);
+    const { error } = await supabase.from("site_materials").update({ notes: parts.join(" | ") }).eq("id", m.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Stato consegna aggiornato");
+    queryClient.invalidateQueries({ queryKey: ["cm-materials"] });
+  };
+
+  const getDeliveryBadge = (m: any) => (
+    <StatusSelectPill
+      value={deliveryStatus(m.notes)}
+      options={[
+        { value: "in_attesa", label: "In attesa", tone: "warning" },
+        { value: "in_transito", label: "In transito", tone: "info" },
+        { value: "consegnato", label: "Consegnato", tone: "success" },
+      ]}
+      onChange={(v) => setDeliveryStatus(m, v)}
+    />
+  );
 
   return (
     <div className="space-y-6">
@@ -175,7 +195,7 @@ const CantieriMateriali = () => {
                     <td className="py-2 text-xs text-right">{m.quantity} {m.unit}</td>
                     <td className="py-2 text-xs text-right">€{(m.unit_cost || 0).toFixed(2)}</td>
                     <td className="py-2 text-xs text-right font-medium">€{(m.total_cost || 0).toLocaleString("it-IT")}</td>
-                    <td className="py-2">{getDeliveryBadge(m.notes)}</td>
+                    <td className="py-2">{getDeliveryBadge(m)}</td>
                     <td className="py-2 text-right">
                       <Button size="icon" variant="ghost" onClick={() => handleDelete(m.id)}>
                         <Trash2 className="w-3 h-3 text-destructive" />

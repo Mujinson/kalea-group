@@ -8,6 +8,8 @@
  */
 export { StatusPill } from "./StatusPill";
 export type { StatusTone } from "./StatusPill";
+export { StatusSelectPill, PAID_OPTIONS } from "./StatusSelectPill";
+export type { StatusOption } from "./StatusSelectPill";
 export { KpiCard } from "./KpiCard";
 export type { KpiTone } from "./KpiCard";
 export { PageHeader, PageTab } from "./PageHeader";

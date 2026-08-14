@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { DataTable } from '@/components/admin/DataTable';
-import { StatusPill } from '@/components/admin/crm-ui';
+import { StatusPill, StatusSelectPill, PAID_OPTIONS } from '@/components/admin/crm-ui';
+import { toast } from 'sonner';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,6 +23,7 @@ interface Row {
 }
 
 export function CostiOperativiTab() {
+  const qc = useQueryClient();
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [category, setCategory] = useState('all');
@@ -66,6 +68,17 @@ export function CostiOperativiTab() {
   }), [data, from, to, category, site]);
 
   const total = rows.reduce((s, r) => s + r.amount, 0);
+
+  const togglePaid = async (r: Row, isPaid: boolean) => {
+    const table = r.source === 'Spesa cantiere' ? 'site_expenses' : 'variable_costs';
+    const realId = r.id.slice(2);
+    const patch: any = { is_paid: isPaid };
+    if (table === 'variable_costs') patch.paid_date = isPaid ? new Date().toISOString().split('T')[0] : null;
+    const { error } = await supabase.from(table).update(patch).eq('id', realId);
+    if (error) { toast.error(error.message); return; }
+    toast.success(isPaid ? 'Segnato come pagato' : 'Segnato come da pagare');
+    qc.invalidateQueries({ queryKey: ['costi-operativi'] });
+  };
 
   return (
     <div className="space-y-3">
@@ -117,7 +130,13 @@ export function CostiOperativiTab() {
           },
           {
             key: 'isPaid', header: 'Stato',
-            cell: (r) => <StatusPill size="sm" tone={r.isPaid ? 'success' : 'warning'}>{r.isPaid ? 'Pagato' : 'Da pagare'}</StatusPill>,
+            cell: (r) => (
+              <StatusSelectPill
+                value={r.isPaid ? 'paid' : 'unpaid'}
+                options={PAID_OPTIONS}
+                onChange={(v) => togglePaid(r, v === 'paid')}
+              />
+            ),
           },
           { key: 'amount', header: 'Importo', sortable: true, className: 'text-right font-semibold', accessor: (r) => r.amount, cell: (r) => fmtEur(r.amount) },
         ]}

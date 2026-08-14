@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { StatusSelectPill } from '@/components/admin/crm-ui';
 import { Plus, Search, Eye, Users, TrendingUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
@@ -426,18 +427,22 @@ const AdminCustomers = () => {
               key: 'status',
               header: 'Stato',
               sortable: true,
-              cell: (c) => {
-                const s = getStatusInfo(c.status);
-                return (
-                  <Badge variant="secondary" className={`text-xs ${
-                    s.value === 'opportunity' ? 'bg-yellow-100 text-yellow-800' :
-                    s.value === 'signed' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
-                  }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${s.color}`} />
-                    {s.label}
-                  </Badge>
-                );
-              },
+              cell: (c) => (
+                <StatusSelectPill
+                  value={c.status || 'opportunity'}
+                  options={[
+                    { value: 'opportunity', label: 'Opportunity', tone: 'amber' },
+                    { value: 'signed', label: 'Signed', tone: 'success' },
+                    { value: 'working', label: 'Working', tone: 'info' },
+                  ]}
+                  onChange={async (v) => {
+                    const { error } = await supabase.from('customers').update({ status: v as any }).eq('id', c.id);
+                    if (error) { toast.error(error.message); return; }
+                    toast.success('Stato cliente aggiornato');
+                    fetchCustomers();
+                  }}
+                />
+              ),
             },
             { key: 'email', header: 'Email', cell: (c) => c.email || '—' },
             { key: 'city', header: 'Città', sortable: true, cell: (c) => c.city || '—' },
