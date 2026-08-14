@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { CrmPageHeader, CrmKpiRow, CrmKpiTile } from '@/components/admin/CrmShell';
+import { StatusSelectPill } from '@/components/admin/crm-ui';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { Plus, Euro, FileText, Wallet, AlertTriangle, TrendingUp } from 'lucide-react';
@@ -34,6 +35,15 @@ const STATUS_COLORS: Record<string, string> = {
   scaduta: 'bg-red-100 text-red-700',
   annullata: 'bg-slate-100 text-slate-500 line-through',
 };
+
+const INVOICE_STATUS_OPTIONS = [
+  { value: 'bozza', label: 'Bozza', tone: 'neutral' as const },
+  { value: 'emessa', label: 'Emessa', tone: 'info' as const },
+  { value: 'parziale', label: 'Parziale', tone: 'warning' as const },
+  { value: 'pagata', label: 'Pagata', tone: 'success' as const },
+  { value: 'scaduta', label: 'Scaduta', tone: 'danger' as const },
+  { value: 'annullata', label: 'Annullata', tone: 'slate' as const },
+];
 
 export default function AdminFatturazione() {
   const qc = useQueryClient();
@@ -217,7 +227,21 @@ export default function AdminFatturazione() {
                       <td className="p-3 text-xs">{i.tranche_type || '—'}</td>
                       <td className="p-3 text-right tabular-nums font-semibold">{eur(i.total)}</td>
                       <td className="p-3 text-right tabular-nums">{eur(i.paid_amount)}</td>
-                      <td className="p-3"><Badge className={STATUS_COLORS[i.status] || ''}>{i.status}</Badge></td>
+                                      <td className="p-3">
+                        <StatusSelectPill
+                          value={i.status}
+                          options={INVOICE_STATUS_OPTIONS}
+                          onChange={async (v) => {
+                            const { error } = await supabase
+                              .from('customer_invoices')
+                              .update({ status: v })
+                              .eq('id', i.id);
+                            if (error) { toast.error(error.message); return; }
+                            toast.success('Stato fattura aggiornato');
+                            qc.invalidateQueries({ queryKey: ['customer_invoices'] });
+                          }}
+                        />
+                      </td>
                       <td className="p-3 text-right">
                         {['emessa', 'parziale', 'scaduta', 'bozza'].includes(i.status) && (
                           <Button size="sm" variant="outline" onClick={() => setPaymentDialog({ open: true, invoice: i })}>
