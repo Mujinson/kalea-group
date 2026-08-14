@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { StatusSelectPill } from '@/components/admin/crm-ui';
 import { Check, X, Loader2, CalendarOff } from 'lucide-react';
 
 interface Row {
@@ -51,6 +52,16 @@ const AdminTimeOff = () => {
   };
 
   useEffect(() => { load(); }, [filter]);
+
+  const setPending = async (id: string) => {
+    const { error } = await supabase
+      .from('time_off_requests')
+      .update({ status: 'pending', decided_at: null, decision_note: null })
+      .eq('id', id);
+    if (error) { toast.error(error.message); return; }
+    toast.success('Rimessa in attesa');
+    load();
+  };
 
   const decide = async (id: string, status: 'approved' | 'rejected') => {
     const decision_note = status === 'rejected' ? (prompt('Motivo del rifiuto (opzionale):') || null) : null;
@@ -117,12 +128,15 @@ const AdminTimeOff = () => {
                   </td>
                   <td className="px-4 py-3 max-w-[260px] truncate text-muted-foreground">{r.note || '—'}</td>
                   <td className="px-4 py-3">
-                    <span
-                      className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full text-white"
-                      style={{ background: statusColor(r.status) }}
-                    >
-                      {r.status}
-                    </span>
+                    <StatusSelectPill
+                      value={r.status}
+                      options={[
+                        { value: 'pending', label: 'In attesa', tone: 'warning' },
+                        { value: 'approved', label: 'Approvata', tone: 'success' },
+                        { value: 'rejected', label: 'Rifiutata', tone: 'danger' },
+                      ]}
+                      onChange={(v) => (v === 'pending' ? setPending(r.id) : decide(r.id, v as 'approved' | 'rejected'))}
+                    />
                   </td>
                   <td className="px-4 py-3 text-right">
                     {r.status === 'pending' ? (
