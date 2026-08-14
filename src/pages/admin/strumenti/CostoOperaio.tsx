@@ -28,7 +28,7 @@ function Slider({
   return (
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-        <span style={{ fontSize: 13, color: '#6B6860' }}>{label}</span>
+        <span style={{ fontSize: 13, color: '#475569' }}>{label}</span>
         <span style={{ fontSize: 13, fontWeight: 500, color: '#1A1A1A' }}>{format(value)}</span>
       </div>
       <UISlider
@@ -62,11 +62,11 @@ function MetricCard({
         textAlign: 'center',
       }}
     >
-      <div style={{ fontSize: 11, color: '#6B6860', marginBottom: 6, lineHeight: 1.4 }}>
+      <div style={{ fontSize: 11, color: '#475569', marginBottom: 6, lineHeight: 1.4 }}>
         {label}
       </div>
       <div style={{ fontSize: 22, fontWeight: 300, color }}>{value}</div>
-      {sub && <div style={{ fontSize: 11, color: '#9A9890', marginTop: 4 }}>{sub}</div>}
+      {sub && <div style={{ fontSize: 11, color: '#64748B', marginTop: 4 }}>{sub}</div>}
     </div>
   );
 }
@@ -89,11 +89,11 @@ function DetailRow({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '7px 0',
-        borderBottom: '0.5px solid #E0DDD8',
+        borderBottom: '0.5px solid #E6E9F0',
         fontSize: 13,
       }}
     >
-      <span style={{ color: '#6B6860' }}>{label}</span>
+      <span style={{ color: '#475569' }}>{label}</span>
       <span
         style={{
           fontWeight: 500,
@@ -215,7 +215,7 @@ export default function CostoOperaio() {
         <h1 style={{ fontSize: 20, fontWeight: 400, color: '#1A1A2E', marginBottom: 4 }}>
           Costo Reale Operaio
         </h1>
-        <p style={{ fontSize: 13, color: '#9A9890' }}>
+        <p style={{ fontSize: 13, color: '#64748B' }}>
           CCNL Edilizia Artigianato · Aggiorna gli slider per ricalcolare in tempo reale
         </p>
       </div>
@@ -245,7 +245,7 @@ export default function CostoOperaio() {
         <div
           style={{
             background: '#fff',
-            border: '1px solid #E0DDD8',
+            border: '1px solid #E6E9F0',
             borderRadius: 12,
             padding: '20px 24px',
           }}
@@ -254,12 +254,12 @@ export default function CostoOperaio() {
             style={{
               fontSize: 11,
               fontWeight: 500,
-              color: '#9A9890',
+              color: '#64748B',
               textTransform: 'uppercase',
               letterSpacing: '.07em',
               marginBottom: 16,
               paddingBottom: 10,
-              borderBottom: '1px solid #E0DDD8',
+              borderBottom: '1px solid #E6E9F0',
             }}
           >
             Parametri retributivi & operativi
@@ -284,11 +284,11 @@ export default function CostoOperaio() {
             format={(v) => v + ' giorni'}
           />
 
-          <div style={{ height: 1, background: '#E0DDD8', margin: '12px 0' }} />
+          <div style={{ height: 1, background: '#E6E9F0', margin: '12px 0' }} />
           <div
             style={{
               fontSize: 11,
-              color: '#9A9890',
+              color: '#64748B',
               textTransform: 'uppercase',
               letterSpacing: '.05em',
               marginBottom: 10,
@@ -325,11 +325,11 @@ export default function CostoOperaio() {
             format={(v) => '€ ' + v}
           />
 
-          <div style={{ height: 1, background: '#E0DDD8', margin: '12px 0' }} />
+          <div style={{ height: 1, background: '#E6E9F0', margin: '12px 0' }} />
           <div
             style={{
               fontSize: 11,
-              color: '#9A9890',
+              color: '#64748B',
               textTransform: 'uppercase',
               letterSpacing: '.05em',
               marginBottom: 10,
@@ -362,7 +362,7 @@ export default function CostoOperaio() {
           <div
             style={{
               background: '#fff',
-              border: '1px solid #E0DDD8',
+              border: '1px solid #E6E9F0',
               borderRadius: 12,
               padding: '20px 24px',
             }}
@@ -371,12 +371,12 @@ export default function CostoOperaio() {
               style={{
                 fontSize: 11,
                 fontWeight: 500,
-                color: '#9A9890',
+                color: '#64748B',
                 textTransform: 'uppercase',
                 letterSpacing: '.07em',
                 marginBottom: 14,
                 paddingBottom: 10,
-                borderBottom: '1px solid #E0DDD8',
+                borderBottom: '1px solid #E6E9F0',
               }}
             >
               Costo lavoro mensile — CCNL Edilizia
@@ -394,7 +394,7 @@ export default function CostoOperaio() {
             <DetailRow label="TFR (≈6,91% lordo/12)" value={fmt(tfr)} />
             <DetailRow label="Quota Cassa Edile datore (≈4,2%)" value={fmt(cassaEdile)} />
             <DetailRow label="Studio paghe" value="€ 100" />
-            <div style={{ height: 1, background: '#E0DDD8', margin: '8px 0' }} />
+            <div style={{ height: 1, background: '#E6E9F0', margin: '8px 0' }} />
             <DetailRow
               label="Subtotale costo lavoro"
               value={fmt(subtotLavoro)}
@@ -406,7 +406,7 @@ export default function CostoOperaio() {
           <div
             style={{
               background: '#fff',
-              border: '1px solid #E0DDD8',
+              border: '1px solid #E6E9F0',
               borderRadius: 12,
               padding: '20px 24px',
             }}
@@ -415,12 +415,12 @@ export default function CostoOperaio() {
               style={{
                 fontSize: 11,
                 fontWeight: 500,
-                color: '#9A9890',
+                color: '#64748B',
                 textTransform: 'uppercase',
                 letterSpacing: '.07em',
                 marginBottom: 14,
                 paddingBottom: 10,
-                borderBottom: '1px solid #E0DDD8',
+                borderBottom: '1px solid #E6E9F0',
               }}
             >
               Costi operativi mensili
@@ -432,9 +432,9 @@ export default function CostoOperaio() {
               label={`Albergo trasferta (${s.trasfertaGg} notti)`}
               value={fmt(costiHotel)}
             />
-            <div style={{ height: 1, background: '#E0DDD8', margin: '8px 0' }} />
+            <div style={{ height: 1, background: '#E6E9F0', margin: '8px 0' }} />
             <DetailRow label="Subtotale operativi" value={fmt(subtotOp)} highlight color="#0C447C" />
-            <div style={{ height: 1, background: '#E0DDD8', margin: '8px 0' }} />
+            <div style={{ height: 1, background: '#E6E9F0', margin: '8px 0' }} />
             <DetailRow label="TOTALE MENSILE" value={fmt(totMese)} highlight color="#0C447C" />
           </div>
         </div>
@@ -443,7 +443,7 @@ export default function CostoOperaio() {
       <div
         style={{
           background: '#fff',
-          border: '1px solid #E0DDD8',
+          border: '1px solid #E6E9F0',
           borderRadius: 12,
           padding: '20px 24px',
         }}
@@ -452,12 +452,12 @@ export default function CostoOperaio() {
           style={{
             fontSize: 11,
             fontWeight: 500,
-            color: '#9A9890',
+            color: '#64748B',
             textTransform: 'uppercase',
             letterSpacing: '.07em',
             marginBottom: 16,
             paddingBottom: 10,
-            borderBottom: '1px solid #E0DDD8',
+            borderBottom: '1px solid #E6E9F0',
           }}
         >
           Motore di pricing posa — soglie di prezzo al mq
@@ -490,7 +490,7 @@ export default function CostoOperaio() {
               onChange={(v) => update({ margineTarget: v })}
               format={(v) => v + '%'}
             />
-            <div style={{ fontSize: 12, color: '#9A9890', lineHeight: 1.7, marginTop: 8 }}>
+            <div style={{ fontSize: 12, color: '#64748B', lineHeight: 1.7, marginTop: 8 }}>
               SPC: 35–45 mq/gg &nbsp;·&nbsp; Ceramica: 10–15 mq/gg &nbsp;·&nbsp; Parquet: 15–25
               mq/gg &nbsp;·&nbsp; Resina: 8–12 mq/gg
             </div>

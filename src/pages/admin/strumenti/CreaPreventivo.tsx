@@ -154,7 +154,7 @@ function Slider({ label, min, max, value, step, onChange, format, unit, editable
   return (
     <div style={{marginBottom:12}}>
       <div style={{display:"flex",justifyContent:"space-between",marginBottom:4,alignItems:"center"}}>
-        <span style={{fontSize:13,color:"#6B6860"}}>{label}</span>
+        <span style={{fontSize:13,color:"#475569"}}>{label}</span>
         {editable ? (
           <span style={{fontSize:13,fontWeight:500,display:"inline-flex",alignItems:"center",gap:4}}>
             <input
@@ -166,9 +166,9 @@ function Slider({ label, min, max, value, step, onChange, format, unit, editable
                 const v = e.target.value === "" ? 0 : Number(e.target.value);
                 if (!Number.isNaN(v)) onChange(v);
               }}
-              style={{width:72,textAlign:"right",border:"1px solid #E0DDD8",borderRadius:6,padding:"2px 6px",fontSize:13,fontWeight:500,background:"#fff"}}
+              style={{width:72,textAlign:"right",border:"1px solid #E6E9F0",borderRadius:6,padding:"2px 6px",fontSize:13,fontWeight:500,background:"#fff"}}
             />
-            {unit && <span style={{color:"#6B6860"}}>{unit}</span>}
+            {unit && <span style={{color:"#475569"}}>{unit}</span>}
           </span>
         ) : (
           <span style={{fontSize:13,fontWeight:500}}>{format(value)}</span>
@@ -186,8 +186,8 @@ function Btn({ active, onClick, children, color }: any) {
     <button onClick={onClick} style={{
       padding:"5px 14px",borderRadius:20,border:"1px solid",cursor:"pointer",fontSize:12,fontWeight:500,
       background:active?(color||"#1A1A2E"):"transparent",
-      color:active?"#fff":(color||"#6B6860"),
-      borderColor:active?(color||"#1A1A2E"):"#E0DDD8",
+      color:active?"#fff":(color||"#475569"),
+      borderColor:active?(color||"#1A1A2E"):"#E6E9F0",
     }}>{children}</button>
   );
 }
@@ -340,13 +340,13 @@ function ClienteSearch({ onSelect, selected, onClear }: {
 
   if (selected) {
     return (
-      <div style={{padding:"10px 12px",background:selected.source==="lead"?"#E6F1FB":"#EAF3DE",border:"1px solid #E0DDD8",borderRadius:8,marginBottom:10,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+      <div style={{padding:"10px 12px",background:selected.source==="lead"?"#E6F1FB":"#EAF3DE",border:"1px solid #E6E9F0",borderRadius:8,marginBottom:10,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <div>
-          <div style={{fontSize:11,color:"#6B6860",textTransform:"uppercase",letterSpacing:".05em"}}>
+          <div style={{fontSize:11,color:"#475569",textTransform:"uppercase",letterSpacing:".05em"}}>
             {selected.source==="lead" ? "Lead collegato" : "Cliente collegato"}
           </div>
           <div style={{fontWeight:500,fontSize:13}}>{selected.label}</div>
-          <div style={{fontSize:11,color:"#9A9890"}}>{selected.sub}</div>
+          <div style={{fontSize:11,color:"#64748B"}}>{selected.sub}</div>
         </div>
         <button onClick={onClear} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:12}}>Scollega</button>
       </div>
@@ -360,21 +360,21 @@ function ClienteSearch({ onSelect, selected, onClear }: {
         onFocus={()=>setOpen(true)}
         onBlur={()=>setTimeout(()=>setOpen(false),200)}
         placeholder="🔍 Cerca lead o cliente (nome, email, telefono)..."
-        style={{width:"100%",padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,outline:"none",boxSizing:"border-box",background:"#F7F6F3"}}/>
+        style={{width:"100%",padding:"8px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,outline:"none",boxSizing:"border-box",background:"#F8FAFC"}}/>
       {open && q.length >= 2 && (
-        <div style={{position:"absolute",top:"100%",left:0,right:0,marginTop:4,background:"#fff",border:"1px solid #E0DDD8",borderRadius:8,maxHeight:280,overflowY:"auto",zIndex:20,boxShadow:"0 4px 12px rgba(0,0,0,.1)"}}>
-          {loading && <div style={{padding:10,fontSize:12,color:"#9A9890"}}>Ricerca…</div>}
-          {!loading && results.length===0 && <div style={{padding:10,fontSize:12,color:"#9A9890"}}>Nessun risultato — compila manualmente i campi sotto.</div>}
+        <div style={{position:"absolute",top:"100%",left:0,right:0,marginTop:4,background:"#fff",border:"1px solid #E6E9F0",borderRadius:8,maxHeight:280,overflowY:"auto",zIndex:20,boxShadow:"0 4px 12px rgba(0,0,0,.1)"}}>
+          {loading && <div style={{padding:10,fontSize:12,color:"#64748B"}}>Ricerca…</div>}
+          {!loading && results.length===0 && <div style={{padding:10,fontSize:12,color:"#64748B"}}>Nessun risultato — compila manualmente i campi sotto.</div>}
           {results.map(r => (
             <div key={r.source+"-"+r.id} onClick={()=>{onSelect(r);setQ("");setOpen(false);}}
-              style={{padding:"8px 10px",cursor:"pointer",borderBottom:"0.5px solid #E0DDD8"}}
-              onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.background="#F7F6F3";}}
+              style={{padding:"8px 10px",cursor:"pointer",borderBottom:"0.5px solid #E6E9F0"}}
+              onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.background="#F8FAFC";}}
               onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.background="#fff";}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                 <span style={{fontSize:13,fontWeight:500}}>{r.label}</span>
                 <span style={{fontSize:10,padding:"1px 6px",borderRadius:3,background:r.source==="lead"?"#E6F1FB":"#EAF3DE",color:r.source==="lead"?"#0C447C":"#27500A",textTransform:"uppercase"}}>{r.source}</span>
               </div>
-              <div style={{fontSize:11,color:"#9A9890"}}>{r.sub || "—"}</div>
+              <div style={{fontSize:11,color:"#64748B"}}>{r.sub || "—"}</div>
             </div>
           ))}
         </div>
@@ -1774,18 +1774,18 @@ export default function CreaPreventivo() {
     }
   };
 
-  const statoColor: Record<string,string> = { bozza:"#9A9890", inviato:"#0C447C", accettato:"#27500A", rifiutato:"#A32D2D" };
+  const statoColor: Record<string,string> = { bozza:"#64748B", inviato:"#0C447C", accettato:"#27500A", rifiutato:"#A32D2D" };
   const statoLabel: Record<string,string> = { bozza:"Bozza", inviato:"Inviato", accettato:"Accettato", rifiutato:"Rifiutato" };
 
-  const card: any = { background:"#fff", border:"1px solid #E0DDD8", borderRadius:12, padding:"18px 22px", marginBottom:16 };
-  const sectionTitle: any = { fontSize:11, fontWeight:500, color:"#9A9890", textTransform:"uppercase", letterSpacing:".07em", marginBottom:14, paddingBottom:8, borderBottom:"1px solid #E0DDD8" };
+  const card: any = { background:"#fff", border:"1px solid #E6E9F0", borderRadius:12, padding:"18px 22px", marginBottom:16 };
+  const sectionTitle: any = { fontSize:11, fontWeight:500, color:"#64748B", textTransform:"uppercase", letterSpacing:".07em", marginBottom:14, paddingBottom:8, borderBottom:"1px solid #E6E9F0" };
 
   return (
     <div style={{ fontFamily:"'new-order', sans-serif", color:"#1A1A1A", maxWidth:1300, margin:"0 auto", padding:"24px 20px" }}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}}>
         <div>
           <h1 style={{fontSize:22,fontWeight:400,color:"#1A1A2E",marginBottom:4}}>Crea Preventivo Kalēa</h1>
-          <p style={{fontSize:13,color:"#9A9890"}}>Calcola, collega al CRM, genera, salva</p>
+          <p style={{fontSize:13,color:"#64748B"}}>Calcola, collega al CRM, genera, salva</p>
         </div>
         <div style={{display:"flex",gap:8,alignItems:"center"}}>
           {(["bozza","inviato","accettato","rifiutato"] as const).map(s=>(
@@ -1800,17 +1800,17 @@ export default function CreaPreventivo() {
           .map(([n,l])=>(
           <button key={n} onClick={()=>setStep(Number(n))}
             style={{padding:"8px 20px",borderRadius:8,border:"none",cursor:"pointer",fontSize:13,fontWeight:step===Number(n)?500:400,
-              background:step===Number(n)?"#fff":"transparent", color:step===Number(n)?"#1A1A2E":"#9A9890",
+              background:step===Number(n)?"#fff":"transparent", color:step===Number(n)?"#1A1A2E":"#64748B",
               boxShadow:step===Number(n)?"0 1px 3px rgba(0,0,0,.1)":"none"}}>{n}. {l}</button>
         ))}
         {stato === "accettato" ? (
           <button onClick={()=>{ setStato("bozza"); setStep(1); toast.info("Preventivo sbloccato per modifica"); }}
-            style={{marginLeft:8,padding:"8px 14px",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
+            style={{marginLeft:8,padding:"8px 14px",borderRadius:8,border:"1px solid #E6E9F0",background:"#fff",cursor:"pointer",fontSize:12,color:"#475569"}}>
             🔓 Sblocca per modifica
           </button>
         ) : preventivoId && (
           <button onClick={()=>{ setStato("accettato"); setStep(3); toast.success("Preventivo bloccato"); }}
-            style={{marginLeft:8,padding:"8px 14px",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
+            style={{marginLeft:8,padding:"8px 14px",borderRadius:8,border:"1px solid #E6E9F0",background:"#fff",cursor:"pointer",fontSize:12,color:"#475569"}}>
             🔒 Blocca preventivo
           </button>
         )}
@@ -1827,7 +1827,7 @@ export default function CreaPreventivo() {
                 <div style={{position:"relative",marginBottom:10}}>
                   <input value={search} onChange={e=>{setSearch(e.target.value);setShowAll(false);}}
                     placeholder="🔍 Cerca nome, fornitore, categoria..."
-                    style={{width:"100%",padding:"9px 12px",borderRadius:9,border:"1px solid #E0DDD8",fontSize:13,outline:"none",background:"#F7F6F3",boxSizing:"border-box"}}/>
+                    style={{width:"100%",padding:"9px 12px",borderRadius:9,border:"1px solid #E6E9F0",fontSize:13,outline:"none",background:"#F8FAFC",boxSizing:"border-box"}}/>
                 </div>
                 <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:10}}>
                   {FORNITORI_LIST.map(f=>{
@@ -1835,11 +1835,11 @@ export default function CreaPreventivo() {
                     return <button key={f} onClick={()=>{setFornFilt(f);setShowAll(false);}}
                       style={{padding:"3px 11px",borderRadius:16,border:"1px solid",cursor:"pointer",fontSize:11,fontWeight:500,
                         background:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.bg):"transparent",
-                        color:fornFilt===f?(f==="Tutti"?"#fff":fc.c):"#9A9890",
-                        borderColor:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.c):"#E0DDD8"}}>{f}</button>;
+                        color:fornFilt===f?(f==="Tutti"?"#fff":fc.c):"#64748B",
+                        borderColor:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.c):"#E6E9F0"}}>{f}</button>;
                   })}
                 </div>
-                <div style={{maxHeight:520,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8"}}>
+                <div style={{maxHeight:520,overflowY:"auto",borderRadius:8,border:"1px solid #E6E9F0"}}>
                   {prodottiLoading ? (
                     <div style={{ padding: "24px", textAlign: "center", color: "#888", fontSize: 14 }}>
                       Caricamento prodotti dal catalogo...
@@ -1852,16 +1852,16 @@ export default function CreaPreventivo() {
                     const fc=prodStyle(p);
                     return (
                       <div key={p.id}
-                        style={{padding:"9px 12px",borderBottom:"0.5px solid #E0DDD8",borderLeft:"3px solid transparent",display:"flex",alignItems:"center",gap:10}}>
+                        style={{padding:"9px 12px",borderBottom:"0.5px solid #E6E9F0",borderLeft:"3px solid transparent",display:"flex",alignItems:"center",gap:10}}>
                         <div onClick={()=>selectProdotto(p)} style={{flex:1,cursor:"pointer",minWidth:0}}>
                           <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
                             <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
-                            <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                            <span style={{fontSize:14,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#64748B"}}>/mq</span></span>
                           </div>
-                          <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
+                          <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#64748B"}}>
                             <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
                             <span>{p.categoria}</span><span>· {p.dims}</span>
-                            <span style={{marginLeft:"auto",color:"#6B6860"}}>costo {euro(costoMq)}</span>
+                            <span style={{marginLeft:"auto",color:"#475569"}}>costo {euro(costoMq)}</span>
                           </div>
                         </div>
                         <button
@@ -1875,7 +1875,7 @@ export default function CreaPreventivo() {
                   })}
                   {!showAll && filtered.length>25 && (
                     <div style={{padding:10,textAlign:"center"}}>
-                      <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
+                      <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E6E9F0",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#475569"}}>Mostra tutti i {filtered.length} risultati</button>
                     </div>
                   )}
                   </>)}
@@ -1884,14 +1884,14 @@ export default function CreaPreventivo() {
             ) : (
               <>
                 {/* Prodotto selezionato — collassato */}
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14,paddingBottom:12,borderBottom:"1px solid #E0DDD8"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14,paddingBottom:12,borderBottom:"1px solid #E6E9F0"}}>
                   <div>
-                    <div style={{fontSize:11,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:4}}>Prodotto scelto</div>
+                    <div style={{fontSize:11,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:4}}>Prodotto scelto</div>
                     <div style={{fontSize:17,fontWeight:500,color:"#1A1A2E"}}>{prodotto.nome}</div>
-                    <div style={{fontSize:12,color:"#9A9890",marginTop:2}}>{prodotto.dims} · {prodotto.categoria}</div>
+                    <div style={{fontSize:12,color:"#64748B",marginTop:2}}>{prodotto.dims} · {prodotto.categoria}</div>
                     <div style={{display:"flex",gap:6,alignItems:"center",marginTop:8}}>
                       <span style={{fontSize:10,padding:"3px 9px",borderRadius:6,fontWeight:500,background:prodStyle(prodotto).bg,color:prodStyle(prodotto).c}}>{prodBadgeLabel(prodotto)}</span>
-                      <span style={{fontSize:12,color:"#6B6860"}}>{euro(prodotto.listino*prodotto.coeff*(prodotto.mkMult ?? MARKUP))}/mq</span>
+                      <span style={{fontSize:12,color:"#475569"}}>{euro(prodotto.listino*prodotto.coeff*(prodotto.mkMult ?? MARKUP))}/mq</span>
                     </div>
                   </div>
                   <div style={{display:"flex",flexDirection:"column",gap:6,alignItems:"flex-end"}}>
@@ -1900,7 +1900,7 @@ export default function CreaPreventivo() {
                       {addingMore ? "× Chiudi ricerca" : "+ Aggiungi prodotto"}
                     </button>
                     <button onClick={resetProdotto}
-                      style={{padding:"6px 12px",borderRadius:7,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860",whiteSpace:"nowrap"}}>
+                      style={{padding:"6px 12px",borderRadius:7,border:"1px solid #E6E9F0",background:"transparent",cursor:"pointer",fontSize:12,color:"#475569",whiteSpace:"nowrap"}}>
                       ← Cambia prodotto
                     </button>
                   </div>
@@ -1915,7 +1915,7 @@ export default function CreaPreventivo() {
                     <div style={{position:"relative",marginBottom:8}}>
                       <input value={search} onChange={e=>{setSearch(e.target.value);setShowAll(false);}}
                         placeholder="🔍 Cerca nome, fornitore, categoria..."
-                        style={{width:"100%",padding:"8px 10px",borderRadius:8,border:"1px solid #E0DDD8",fontSize:13,outline:"none",background:"#fff",boxSizing:"border-box"}}/>
+                        style={{width:"100%",padding:"8px 10px",borderRadius:8,border:"1px solid #E6E9F0",fontSize:13,outline:"none",background:"#fff",boxSizing:"border-box"}}/>
                     </div>
                     <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:8}}>
                       {FORNITORI_LIST.map(f=>{
@@ -1923,23 +1923,23 @@ export default function CreaPreventivo() {
                         return <button key={f} onClick={()=>{setFornFilt(f);setShowAll(false);}}
                           style={{padding:"3px 10px",borderRadius:16,border:"1px solid",cursor:"pointer",fontSize:11,fontWeight:500,
                             background:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.bg):"transparent",
-                            color:fornFilt===f?(f==="Tutti"?"#fff":fc.c):"#9A9890",
-                            borderColor:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.c):"#E0DDD8"}}>{f}</button>;
+                            color:fornFilt===f?(f==="Tutti"?"#fff":fc.c):"#64748B",
+                            borderColor:fornFilt===f?(f==="Tutti"?"#1A1A2E":fc.c):"#E6E9F0"}}>{f}</button>;
                       })}
                     </div>
-                    <div style={{maxHeight:340,overflowY:"auto",borderRadius:8,border:"1px solid #E0DDD8",background:"#fff"}}>
+                    <div style={{maxHeight:340,overflowY:"auto",borderRadius:8,border:"1px solid #E6E9F0",background:"#fff"}}>
                       {(showAll?filtered:filtered.slice(0,25)).map(p=>{
                         const costoMq=p.listino*p.coeff;
                         const prezzoMq=costoMq*(p.mkMult ?? MARKUP);
                         const fc=prodStyle(p);
                         return (
-                          <div key={p.id} style={{padding:"8px 12px",borderBottom:"0.5px solid #E0DDD8",display:"flex",alignItems:"center",gap:10}}>
+                          <div key={p.id} style={{padding:"8px 12px",borderBottom:"0.5px solid #E6E9F0",display:"flex",alignItems:"center",gap:10}}>
                             <div style={{flex:1,minWidth:0}}>
                               <div style={{display:"flex",justifyContent:"space-between",marginBottom:3}}>
                                 <span style={{fontWeight:500,fontSize:13}}>{p.nome}</span>
-                                <span style={{fontSize:13,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#9A9890"}}>/mq</span></span>
+                                <span style={{fontSize:13,fontWeight:600,color:"#1A1A2E"}}>{euro(prezzoMq)}<span style={{fontSize:10,color:"#64748B"}}>/mq</span></span>
                               </div>
-                              <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#9A9890"}}>
+                              <div style={{display:"flex",gap:6,alignItems:"center",fontSize:11,color:"#64748B"}}>
                                 <span style={{display:"inline-block",padding:"1px 6px",borderRadius:3,fontWeight:500,background:fc.bg,color:fc.c,fontSize:10}}>{prodBadgeLabel(p)}</span>
                                 <span>{p.categoria}</span><span>· {p.dims}</span>
                               </div>
@@ -1955,7 +1955,7 @@ export default function CreaPreventivo() {
                       })}
                       {!showAll && filtered.length>25 && (
                         <div style={{padding:8,textAlign:"center"}}>
-                          <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E0DDD8",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#6B6860"}}>Mostra tutti i {filtered.length} risultati</button>
+                          <button onClick={()=>setShowAll(true)} style={{padding:"5px 16px",borderRadius:8,border:"1px solid #E6E9F0",background:"#F1F5F9",cursor:"pointer",fontSize:12,color:"#475569"}}>Mostra tutti i {filtered.length} risultati</button>
                         </div>
                       )}
                     </div>
@@ -1968,7 +1968,7 @@ export default function CreaPreventivo() {
                 {/* ─── Selezione Woodco da catalogo DB ─── */}
                 {isWoodco && (
                   <div style={{marginBottom:14}}>
-                    <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>
+                    <div style={{fontSize:11,fontWeight:500,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>
                       Configurazione Woodco
                     </div>
                     <WoodcoBlock value={wcSel} onChange={setWcSel} />
@@ -1979,7 +1979,7 @@ export default function CreaPreventivo() {
                 {!isWoodco && (
                   <>
                     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-                      <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em"}}>Tonalità / colori</div>
+                      <div style={{fontSize:11,fontWeight:500,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em"}}>Tonalità / colori</div>
                       <button onClick={addTon}
                         style={{padding:"4px 12px",borderRadius:6,border:"1px solid #1A1A2E",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Tonalità</button>
                     </div>
@@ -1987,7 +1987,7 @@ export default function CreaPreventivo() {
                       {(TONALITA_BY_PRODUCT[prodotto.id] || []).map(t => <option key={t} value={t} />)}
                     </datalist>
                     {tonalita.length === 0 && (
-                      <div style={{fontSize:12,color:"#9A9890",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
+                      <div style={{fontSize:12,color:"#64748B",padding:"8px 0"}}>Aggiungi almeno una tonalità con i relativi mq.</div>
                     )}
                     {tonalita.map((tn, idx) => {
                       const av = prodotto.magazzino ? stockFor(tn.nome) : null;
@@ -1998,17 +1998,17 @@ export default function CreaPreventivo() {
                           <input list={`ton-${prodotto.id}`} value={tn.nome}
                             onChange={e=>updTon(tn.id,"nome",e.target.value)}
                             placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
-                            style={{padding:"8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
+                            style={{padding:"8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E6E9F0"}`,fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
                           <div style={{position:"relative"}}>
                             <input type="number" min={0} step={0.5} value={tn.mq || ""}
                               onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
-                              style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E0DDD8"}`,fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
-                            <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#9A9890",pointerEvents:"none"}}>mq</span>
+                              style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E6E9F0"}`,fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
+                            <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#64748B",pointerEvents:"none"}}>mq</span>
                           </div>
                           <button onClick={()=>delTon(tn.id)} style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
                         </div>
                         {prodotto.magazzino && tn.nome && av !== null && (
-                          <div style={{fontSize:11,marginTop:4,marginLeft:2,color:over?"#A32D2D":"#6B6860"}}>
+                          <div style={{fontSize:11,marginTop:4,marginLeft:2,color:over?"#A32D2D":"#475569"}}>
                             {over
                               ? `⚠ Disponibili solo ${av} mq di "${tn.nome}" — richiesti ${tn.mq} mq. Non è possibile preventivare questa quantità.`
                               : `Disponibili a magazzino: ${av} mq`}
@@ -2018,9 +2018,9 @@ export default function CreaPreventivo() {
                       );
                     })}
                     {tonalita.length > 0 && (
-                      <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F1F5F9",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#6B6860"}}>
+                      <div style={{padding:"10px 12px",background:hasOverstock?"#FBEAEA":"#F1F5F9",borderRadius:8,marginTop:6,fontSize:12,color:hasOverstock?"#A32D2D":"#475569"}}>
                         Totale tonalità: <b style={{color:hasOverstock?"#A32D2D":"#1A1A2E"}}>{tonMqTot} mq</b>
-                        <span style={{color:"#9A9890",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
+                        <span style={{color:"#64748B",marginLeft:8}}>· i mq del preventivo si aggiornano automaticamente</span>
                         {hasOverstock && (
                           <div style={{marginTop:6,fontWeight:500}}>
                             Quantità non disponibile a magazzino — riduci i mq o cambia tonalità prima di salvare il preventivo.
@@ -2032,7 +2032,7 @@ export default function CreaPreventivo() {
                 )}
               </>
             )}
-            <div style={{marginTop:16,paddingTop:16,borderTop:"1px solid #E0DDD8"}}>
+            <div style={{marginTop:16,paddingTop:16,borderTop:"1px solid #E6E9F0"}}>
               <div style={{...sectionTitle,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
                 <span>Prodotti & accessori aggiuntivi</span>
                 <div style={{display:"flex",gap:6,alignItems:"center",flexWrap:"wrap"}}>
@@ -2057,11 +2057,11 @@ export default function CreaPreventivo() {
                   <button onClick={addRiga} style={{padding:"3px 12px",borderRadius:6,border:"1px solid #1A1A2E",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Riga libera</button>
                 </div>
               </div>
-              <div style={{fontSize:11,color:"#9A9890",marginBottom:8}}>
+              <div style={{fontSize:11,color:"#64748B",marginBottom:8}}>
                 Voci libere e prodotti extra. Metti quanto vuoi al centesimo (prezzo unitario €), anche negativo per uno sconto puntuale. Verranno stampate nel preventivo.
               </div>
               {righeMat.length === 0 && (
-                <div style={{fontSize:12,color:"#9A9890",fontStyle:"italic",padding:"8px 0"}}>Nessuna voce aggiuntiva.</div>
+                <div style={{fontSize:12,color:"#64748B",fontStyle:"italic",padding:"8px 0"}}>Nessuna voce aggiuntiva.</div>
               )}
               {righeMat.map(r=>{
                 const qta = Number(r.qta)||0;
@@ -2078,18 +2078,18 @@ export default function CreaPreventivo() {
                 const costoTotRiga = qtaTot * costoUn;
                 const marg = netto - costoTotRiga;
                 return (
-                <div key={r.id} style={{marginBottom:14,padding:"10px 12px",borderRadius:8,border:"1px solid #E0DDD8",background:"#FBFAF7"}}>
+                <div key={r.id} style={{marginBottom:14,padding:"10px 12px",borderRadius:8,border:"1px solid #E6E9F0",background:"#FBFAF7"}}>
                   {/* Riga 1: descrizione + unit + costo/prezzo + elimina */}
                   <div style={{display:"grid",gridTemplateColumns:"minmax(0,2fr) 70px 90px 100px 26px",gap:6,alignItems:"center",marginBottom:8}}>
-                    <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Descrizione voce" style={{padding:"7px 9px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,minWidth:0}}/>
-                    <input value={r.unita} onChange={e=>updRiga(r.id,"unita",e.target.value)} placeholder="mq / pz / ml" style={{padding:"7px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
+                    <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Descrizione voce" style={{padding:"7px 9px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,minWidth:0}}/>
+                    <input value={r.unita} onChange={e=>updRiga(r.id,"unita",e.target.value)} placeholder="mq / pz / ml" style={{padding:"7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
                     <div style={{position:"relative"}}>
-                      <input value={r.costoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="Costo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
-                      <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>€</span>
+                      <input value={r.costoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="Costo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                      <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>€</span>
                     </div>
                     <div style={{position:"relative"}}>
-                      <input value={r.prezzoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="Prezzo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",fontWeight:500,boxSizing:"border-box",background:"#fff"}}/>
-                      <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>€</span>
+                      <input value={r.prezzoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="Prezzo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",fontWeight:500,boxSizing:"border-box",background:"#fff"}}/>
+                      <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>€</span>
                     </div>
                     <button onClick={()=>delRiga(r.id)} title="Elimina riga" style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
                   </div>
@@ -2097,60 +2097,60 @@ export default function CreaPreventivo() {
                   {/* Riga 2: Q.tà · Sfrido% · Q.tà sfrido · Q.tà totale */}
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6,marginBottom:8}}>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
-                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà</span>
-                      <input value={r.qta} type="number" step="0.01" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right"}}/>
+                      <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà</span>
+                      <input value={r.qta} type="number" step="0.01" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right"}}/>
                     </label>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
-                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Sfrido %</span>
+                      <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Sfrido %</span>
                       <div style={{position:"relative"}}>
-                        <input value={sfrPct} type="number" step="0.5" min={0} onChange={e=>updRiga(r.id,"sfridoPct",Number(e.target.value))} style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
-                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>%</span>
+                        <input value={sfrPct} type="number" step="0.5" min={0} onChange={e=>updRiga(r.id,"sfridoPct",Number(e.target.value))} style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>%</span>
                       </div>
                     </label>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
-                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà sfrido</span>
+                      <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà sfrido</span>
                       <input value={Number(qtaSfr.toFixed(3))} type="number" step="0.01" min={0}
                         onChange={e=>{
                           const v = Number(e.target.value);
                           const newPct = qta>0 ? (v/qta)*100 : 0;
                           updRiga(r.id,"sfridoPct", Math.round(newPct*1000)/1000);
                         }}
-                        style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",background:"#fff"}}/>
+                        style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",background:"#fff"}}/>
                     </label>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
-                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà totale</span>
+                      <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà totale</span>
                       <input value={Number(qtaTot.toFixed(3))} type="number" step="0.01" min={0}
                         onChange={e=>{
                           const v = Number(e.target.value);
                           const newPct = qta>0 ? ((v-qta)/qta)*100 : 0;
                           updRiga(r.id,"sfridoPct", Math.round(newPct*1000)/1000);
                         }}
-                        style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",background:"#fff",fontWeight:500}}/>
+                        style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",background:"#fff",fontWeight:500}}/>
                     </label>
                   </div>
 
                   {/* Riga 3: Sconto % ↔ € + totali riga */}
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 2fr",gap:6,alignItems:"end"}}>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
-                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto %</span>
+                      <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto %</span>
                       <div style={{position:"relative"}}>
                         <input value={Number(scPctDisp.toFixed(2))} type="number" step="0.1" min={0}
                           onChange={e=>updRigaMany(r.id,{scontoPct: Number(e.target.value), scontoEur: null})}
-                          style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
-                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>%</span>
+                          style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>%</span>
                       </div>
                     </label>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
-                      <span style={{fontSize:10,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto €</span>
+                      <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto €</span>
                       <div style={{position:"relative"}}>
                         <input value={Number(scEur.toFixed(2))} type="number" step="0.01" min={0}
                           onChange={e=>updRigaMany(r.id,{scontoEur: Number(e.target.value)})}
-                          style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
-                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#9A9890",pointerEvents:"none"}}>€</span>
+                          style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                        <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>€</span>
                       </div>
                     </label>
-                    <div style={{fontSize:11,color:"#6B6860",textAlign:"right",lineHeight:1.5}}>
-                      <div>Lordo: <b style={{color:"#1A1A2E"}}>{euro(lordo)}</b> <span style={{color:"#9A9890"}}>({Number(qtaTot.toFixed(3))} × {euro(prezzoUn)})</span></div>
+                    <div style={{fontSize:11,color:"#475569",textAlign:"right",lineHeight:1.5}}>
+                      <div>Lordo: <b style={{color:"#1A1A2E"}}>{euro(lordo)}</b> <span style={{color:"#64748B"}}>({Number(qtaTot.toFixed(3))} × {euro(prezzoUn)})</span></div>
                       <div>Netto cliente: <b style={{color:"#1A1A2E",fontSize:13}}>{euro(netto)}</b> <span style={{color: marg>=0?"#2D7A4F":"#A32D2D"}}>· margine {euro(marg)}</span></div>
                     </div>
                   </div>
@@ -2166,7 +2166,7 @@ export default function CreaPreventivo() {
             <div style={{...card,marginBottom:0}}>
               <div style={sectionTitle}>Parametri cantiere</div>
               <div style={{marginBottom:14}}>
-                <div style={{fontSize:12,color:"#6B6860",marginBottom:8}}>Complessità posa</div>
+                <div style={{fontSize:12,color:"#475569",marginBottom:8}}>Complessità posa</div>
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8}}>
                   {(["semplice","media","complessa"] as const).map(k=>{
                     const isCustom = overrides.posaMq != null;
@@ -2175,7 +2175,7 @@ export default function CreaPreventivo() {
                     <div key={k} onClick={()=>{ setComplessita(k); resetOv("posaMq"); }} style={{
                       padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
                       background:active?"#1A1A2E":"#F1F5F9",
-                      borderColor:active?"#1A1A2E":"#E0DDD8",
+                      borderColor:active?"#1A1A2E":"#E6E9F0",
                       color:active?"#fff":"#1A1A1A"}}>
                       <div style={{fontWeight:500,fontSize:13,textTransform:"capitalize"}}>{k}</div>
                       <div style={{fontSize:13,fontWeight:600,marginTop:4}}>{PREZZI_POSA[k]}€/mq</div>
@@ -2188,7 +2188,7 @@ export default function CreaPreventivo() {
                       <div onClick={()=>{ if (!isCustom) setOv("posaMq", PREZZI_POSA[complessita]); }} style={{
                         padding:"10px 12px",borderRadius:8,cursor:"pointer",border:"1px solid",
                         background:isCustom?"#C8A96E":"#F1F5F9",
-                        borderColor:isCustom?"#C8A96E":"#E0DDD8",
+                        borderColor:isCustom?"#C8A96E":"#E6E9F0",
                         color:isCustom?"#fff":"#1A1A1A"}}>
                         <div style={{fontWeight:500,fontSize:13}}>Personalizzato</div>
                         {isCustom ? (
@@ -2199,7 +2199,7 @@ export default function CreaPreventivo() {
                             <span style={{fontSize:11}}>€/mq</span>
                           </div>
                         ) : (
-                          <div style={{fontSize:12,marginTop:4,color:"#6B6860"}}>manuale €/mq</div>
+                          <div style={{fontSize:12,marginTop:4,color:"#475569"}}>manuale €/mq</div>
                         )}
                       </div>
                     );
@@ -2230,7 +2230,7 @@ export default function CreaPreventivo() {
             {calc && (
               <div style={{...card,marginBottom:0}}>
                 <div style={sectionTitle}>Prezzi cliente — modifica al centesimo</div>
-                <div style={{fontSize:11,color:"#9A9890",marginBottom:10}}>
+                <div style={{fontSize:11,color:"#64748B",marginBottom:10}}>
                   Cambia il prezzo unitario per allinearlo a quanto pattuito col cliente. Il costo interno resta invariato: il margine si aggiorna in tempo reale così vedi subito se sei ancora coperto.
                 </div>
                 {(() => {
@@ -2246,30 +2246,30 @@ export default function CreaPreventivo() {
                       <div key={row.key} style={{display:"grid",gridTemplateColumns:"1fr 110px 60px 28px",gap:8,alignItems:"center",marginBottom:6,padding:"6px 8px",borderRadius:7,background:overridden?"#FFF6E6":"transparent",border:overridden?"1px solid #E8DFC8":"1px solid transparent"}}>
                         <div style={{fontSize:12,color:"#1A1A2E",minWidth:0,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
                           {overridden ? "🔓 " : "🔒 "}{row.label}
-                          {overridden && <span style={{fontSize:10,color:"#9A9890",marginLeft:6}}>auto: {euro(row.auto)}</span>}
+                          {overridden && <span style={{fontSize:10,color:"#64748B",marginLeft:6}}>auto: {euro(row.auto)}</span>}
                         </div>
                         <input
                           type="number"
                           step="0.01"
                           value={overridden ? overrides[row.key] : row.auto.toFixed(2)}
                           onChange={e=>setOv(row.key, e.target.value===""?undefined:Number(e.target.value))}
-                          style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",fontWeight:overridden?600:400,background:"#fff"}}
+                          style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:13,textAlign:"right",fontWeight:overridden?600:400,background:"#fff"}}
                         />
-                        <span style={{fontSize:11,color:"#9A9890"}}>{row.unit}</span>
+                        <span style={{fontSize:11,color:"#64748B"}}>{row.unit}</span>
                         {overridden ? (
                           <button onClick={()=>resetOv(row.key)} title="Ripristina automatico"
-                            style={{background:"none",border:"none",cursor:"pointer",color:"#6B6860",fontSize:14,padding:0}}>↺</button>
+                            style={{background:"none",border:"none",cursor:"pointer",color:"#475569",fontSize:14,padding:0}}>↺</button>
                         ) : <span/>}
                       </div>
                     );
                   });
                 })()}
 
-                <div style={{marginTop:14,paddingTop:12,borderTop:"1px dashed #E0DDD8"}}>
-                  <div style={{fontSize:11,fontWeight:500,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:6}}>
+                <div style={{marginTop:14,paddingTop:12,borderTop:"1px dashed #E6E9F0"}}>
+                  <div style={{fontSize:11,fontWeight:500,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:6}}>
                     Chiudi il totale a una cifra pattuita
                   </div>
-                  <div style={{fontSize:11,color:"#9A9890",marginBottom:8}}>
+                  <div style={{fontSize:11,color:"#64748B",marginBottom:8}}>
                     Se col cliente hai pattuito, per esempio, <b>€ 8.500,00 IVA inclusa</b>, scrivi qui il totale e aggiungo una riga "Adeguamento commerciale" per far quadrare al centesimo.
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 130px",gap:8,alignItems:"center"}}>
@@ -2278,7 +2278,7 @@ export default function CreaPreventivo() {
                       value={totaleTarget}
                       onChange={e=>setTotaleTarget(e.target.value)}
                       placeholder={`Attuale: ${euro(calc.totaleIva)}`}
-                      style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,textAlign:"right",background:"#fff"}}
+                      style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,textAlign:"right",background:"#fff"}}
                     />
                     <button
                       onClick={()=>{
@@ -2334,16 +2334,16 @@ export default function CreaPreventivo() {
                     {l:"Margine %",v:pct(calc.marginePct),c:calc.marginePct>MARGINE_ALERT?"#27500A":calc.marginePct>MARGINE_BLOCCO?"#633806":"#A32D2D"},
                   ].map(k=>(
                     <div key={k.l} style={{background:"#F1F5F9",borderRadius:8,padding:"10px 12px"}}>
-                      <div style={{fontSize:11,color:"#9A9890"}}>{k.l}</div>
+                      <div style={{fontSize:11,color:"#64748B"}}>{k.l}</div>
                       <div style={{fontSize:16,fontWeight:600,color:k.c}}>{k.v}</div>
                     </div>
                   ))}
                 </div>
-                <div style={{padding:"8px 12px",background:"#F7F6F3",borderRadius:8,marginBottom:12,fontSize:12,color:"#6B6860",display:"flex",justifyContent:"space-between"}}>
+                <div style={{padding:"8px 12px",background:"#F8FAFC",borderRadius:8,marginBottom:12,fontSize:12,color:"#475569",display:"flex",justifyContent:"space-between"}}>
                   <span>Totale IVA inclusa</span>
                   <b style={{color:"#1A1A2E",fontSize:14}}>{euro(calc.totaleIva)}</b>
                 </div>
-                <button onClick={()=>setStep(2)} style={{width:"100%",padding:"11px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#9A9890",color:"#fff"}}>
+                <button onClick={()=>setStep(2)} style={{width:"100%",padding:"11px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#64748B",color:"#fff"}}>
                   {calc.marginePct>MARGINE_BLOCCO ? "Vai a Intestazione & Cliente →" : "⛔ Sblocca prima il margine"}
                 </button>
 
@@ -2360,7 +2360,7 @@ export default function CreaPreventivo() {
           />
 
           <div style={{...card,marginTop:14,display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,flexWrap:"wrap"}}>
-            <div style={{fontSize:13,color:"#6B6860"}}>
+            <div style={{fontSize:13,color:"#475569"}}>
               {calc ? (
                 <>Totale IVA inclusa <b style={{color:"#1A1A2E",fontSize:15}}>{euro(calc.totaleIva)}</b>
                 {calc.marginePct <= MARGINE_BLOCCO && <span style={{color:"#A32D2D",marginLeft:10}}>margine {pct(calc.marginePct)} — sotto soglia</span>}</>
@@ -2385,23 +2385,23 @@ export default function CreaPreventivo() {
               <div style={sectionTitle}>Intestazione preventivo</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
                 <div>
-                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>N° preventivo</div>
+                  <div style={{fontSize:12,color:"#475569",marginBottom:4}}>N° preventivo</div>
                   <input value={numPrev} onChange={e=>setNumPrev(e.target.value)} placeholder="KAL-2026-001"
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
                   <button onClick={()=>setNumPrev(nextNum())} style={{marginTop:4,fontSize:11,color:"#0C447C",background:"none",border:"none",cursor:"pointer",padding:0}}>Genera automatico</button>
                 </div>
                 <div>
-                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Data</div>
+                  <div style={{fontSize:12,color:"#475569",marginBottom:4}}>Data</div>
                   <input value={dataPrev} onChange={e=>setDataPrev(e.target.value)}
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
                 </div>
               </div>
               <div style={{marginBottom:10}}>
-                <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Descrizione cantiere</div>
+                <div style={{fontSize:12,color:"#475569",marginBottom:4}}>Descrizione cantiere</div>
                 <input value={cantiere} onChange={e=>setCantiere(e.target.value)} placeholder="Es. Appartamento via Roma 12, Brescia"
-                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
               </div>
-              <div style={{fontSize:12,color:"#6B6860",marginBottom:8}}>Lingua documento</div>
+              <div style={{fontSize:12,color:"#475569",marginBottom:8}}>Lingua documento</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
                 {["IT","EN","DE","FR","RO"].map(l=><Btn key={l} active={lingua===l} onClick={()=>setLingua(l)}>{l}</Btn>)}
               </div>
@@ -2409,7 +2409,7 @@ export default function CreaPreventivo() {
 
             <div style={card}>
               <div style={sectionTitle}>Dati cliente</div>
-              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>Cerca dal CRM o compila manualmente</div>
+              <div style={{fontSize:11,color:"#475569",marginBottom:6}}>Cerca dal CRM o compila manualmente</div>
               <ClienteSearch
                 selected={crmLink}
                 onSelect={selectCrm}
@@ -2418,14 +2418,14 @@ export default function CreaPreventivo() {
               {[["nome","Nome / Ragione sociale"],["indirizzo","Indirizzo"],["citta","Città"],["telefono","Telefono"],["email","Email"]].map(([k,pl])=>(
                 <div key={k} style={{marginBottom:8}}>
                   <input value={(cliente as any)[k]} onChange={e=>{setCliente(c=>({...c,[k]:e.target.value})); if(k==="nome"&&e.target.value.trim()) setErrors(s=>{const n=new Set(s);n.delete("cliente.nome");return n;});}} placeholder={pl}
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box", ...(k==="nome"?errStyle("cliente.nome"):{})}}/>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box", ...(k==="nome"?errStyle("cliente.nome"):{})}}/>
                   {k==="nome" && hasErr("cliente.nome") && <div style={{fontSize:11,color:"#DC2626",marginTop:3}}>Campo obbligatorio</div>}
                 </div>
               ))}
               <div style={{marginBottom:8}}>
-                <div style={{fontSize:11,color:"#6B6860",marginBottom:4}}>Tipologia cliente</div>
+                <div style={{fontSize:11,color:"#475569",marginBottom:4}}>Tipologia cliente</div>
                 <select value={cliente.tipo} onChange={e=>setCliente(c=>({...c,tipo:e.target.value, tipoAltro: e.target.value==="altro" ? c.tipoAltro : ""}))}
-                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
                   <option value="">Seleziona tipologia…</option>
                   <option value="architetto">Architetto</option>
                   <option value="geometra">Geometra</option>
@@ -2437,18 +2437,18 @@ export default function CreaPreventivo() {
               {cliente.tipo === "altro" && (
                 <div style={{marginBottom:8}}>
                   <input value={cliente.tipoAltro} onChange={e=>setCliente(c=>({...c,tipoAltro:e.target.value}))} placeholder="Specifica di cosa si tratta"
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
                 </div>
               )}
               <div style={{marginBottom:8}}>
                 <input value={cliente.partitaIva} onChange={e=>setCliente(c=>({...c,partitaIva:e.target.value}))} placeholder="Partita IVA / Codice Fiscale"
-                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
               </div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
                 <input value={cliente.referente} onChange={e=>setCliente(c=>({...c,referente:e.target.value}))} placeholder="Persona di riferimento"
-                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
                 <input value={cliente.ruoloReferente} onChange={e=>setCliente(c=>({...c,ruoloReferente:e.target.value}))} placeholder="Ruolo in azienda (es. titolare, geometra…)"
-                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
               </div>
             </div>
           </div>
@@ -2459,13 +2459,13 @@ export default function CreaPreventivo() {
               {pagamenti.map((p,i)=>(
                 <div key={i} style={{marginBottom:12,padding:"10px 12px",background:"#F1F5F9",borderRadius:8}}>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 70px 1fr",gap:8}}>
-                    <input value={p.label} onChange={e=>{const pg=[...pagamenti];pg[i].label=e.target.value;setPagamenti(pg);}} placeholder="Descrizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                    <input value={p.pct} type="number" onChange={e=>{const pg=[...pagamenti];pg[i].pct=Number(e.target.value);setPagamenti(pg);}} style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
-                    <input value={p.data} onChange={e=>{const pg=[...pagamenti];pg[i].data=e.target.value;setPagamenti(pg);}} placeholder="Data / condizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E0DDD8",fontSize:12}}/>
+                    <input value={p.label} onChange={e=>{const pg=[...pagamenti];pg[i].label=e.target.value;setPagamenti(pg);}} placeholder="Descrizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
+                    <input value={p.pct} type="number" onChange={e=>{const pg=[...pagamenti];pg[i].pct=Number(e.target.value);setPagamenti(pg);}} style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
+                    <input value={p.data} onChange={e=>{const pg=[...pagamenti];pg[i].data=e.target.value;setPagamenti(pg);}} placeholder="Data / condizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
                   </div>
                 </div>
               ))}
-              <button onClick={()=>setPagamenti([...pagamenti,{label:"",pct:0,data:"",note:""}])} style={{padding:"5px 12px",borderRadius:6,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Rata</button>
+              <button onClick={()=>setPagamenti([...pagamenti,{label:"",pct:0,data:"",note:""}])} style={{padding:"5px 12px",borderRadius:6,border:"1px solid #E6E9F0",background:"transparent",cursor:"pointer",fontSize:12,color:"#1A1A2E"}}>+ Rata</button>
             </div>
 
             {/* TIPO DI PREVENTIVO + TERMINI */}
@@ -2480,24 +2480,24 @@ export default function CreaPreventivo() {
                       setShowCondizioniFornitura(tp.value==="fornitura_posa"||tp.value==="fornitura");
                     }}
                     style={{padding:"9px 12px",borderRadius:8,fontSize:13,cursor:"pointer",
-                      border:tipoPreventivo===tp.value?"1.5px solid #1A1A2E":"1px solid #E0DDD8",
+                      border:tipoPreventivo===tp.value?"1.5px solid #1A1A2E":"1px solid #E6E9F0",
                       background:tipoPreventivo===tp.value?"#1A1A2E":"#fff",
                       color:tipoPreventivo===tp.value?"#fff":"#1A1A2E",fontWeight:tipoPreventivo===tp.value?600:400}}>
                     {tp.label}
                   </button>
                 ))}
               </div>
-              <div style={{fontSize:12,color:"#9A9890",marginBottom:6}}>
+              <div style={{fontSize:12,color:"#64748B",marginBottom:6}}>
                 Termini e condizioni stampati nel PDF (modificabili per questo preventivo)
               </div>
               <textarea
                 value={terminiCustom ?? (QUOTE_TERMS[tipoPreventivo] || t.termini_testo)}
                 onChange={e=>setTerminiCustom(e.target.value)}
                 rows={10}
-                style={{width:"100%",padding:"10px 12px",borderRadius:8,border:"1px solid #E0DDD8",fontSize:12,lineHeight:1.6,boxSizing:"border-box",fontFamily:"inherit",resize:"vertical"}}
+                style={{width:"100%",padding:"10px 12px",borderRadius:8,border:"1px solid #E6E9F0",fontSize:12,lineHeight:1.6,boxSizing:"border-box",fontFamily:"inherit",resize:"vertical"}}
               />
               {terminiCustom !== null && (
-                <button onClick={()=>setTerminiCustom(null)} style={{marginTop:8,padding:"5px 12px",borderRadius:6,border:"1px solid #E0DDD8",background:"transparent",cursor:"pointer",fontSize:12,color:"#6B6860"}}>
+                <button onClick={()=>setTerminiCustom(null)} style={{marginTop:8,padding:"5px 12px",borderRadius:6,border:"1px solid #E6E9F0",background:"transparent",cursor:"pointer",fontSize:12,color:"#475569"}}>
                   Ripristina testo standard
                 </button>
               )}
@@ -2507,22 +2507,22 @@ export default function CreaPreventivo() {
 
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
                 <div style={sectionTitle}>Condizioni di fornitura</div>
-                <label style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#6B6860",cursor:"pointer",marginBottom:10}}>
+                <label style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#475569",cursor:"pointer",marginBottom:10}}>
                   <input type="checkbox" checked={showCondizioniFornitura} onChange={e=>setShowCondizioniFornitura(e.target.checked)} />
                   Includi nel preventivo
                 </label>
               </div>
               {!showCondizioniFornitura && (
-                <div style={{fontSize:12,color:"#9A9890",marginBottom:10}}>
+                <div style={{fontSize:12,color:"#64748B",marginBottom:10}}>
                   Preventivo di soli servizi: la sezione fornitura non verrà stampata.
                 </div>
               )}
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
                 {showCondizioniFornitura && (<>
                 <div>
-                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Metodo di trasporto</div>
+                  <div style={{fontSize:12,color:"#475569",marginBottom:4}}>Metodo di trasporto</div>
                   <select value={metodoTrasporto} onChange={e=>setMetodoTrasporto(e.target.value)}
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
                     <option>Trasporto a cura Kalēa</option>
                     <option>Corriere espresso</option>
                     <option>Ritiro in sede</option>
@@ -2532,15 +2532,15 @@ export default function CreaPreventivo() {
                   </select>
                 </div>
                 <div>
-                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tempi di consegna</div>
+                  <div style={{fontSize:12,color:"#475569",marginBottom:4}}>Tempi di consegna</div>
                   <input value={tempiConsegna} onChange={e=>setTempiConsegna(e.target.value)} placeholder="Es. 15-20 giorni lavorativi"
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
                 </div>
                 </>)}
                 <div>
-                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Tipo di pagamento</div>
+                  <div style={{fontSize:12,color:"#475569",marginBottom:4}}>Tipo di pagamento</div>
                   <select value={tipoPagamento} onChange={e=>setTipoPagamento(e.target.value)}
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
                     <option>Bonifico bancario</option>
                     <option>Contanti</option>
                     <option>Assegno</option>
@@ -2551,9 +2551,9 @@ export default function CreaPreventivo() {
                   </select>
                 </div>
                 <div>
-                  <div style={{fontSize:12,color:"#6B6860",marginBottom:4}}>Aliquota IVA</div>
+                  <div style={{fontSize:12,color:"#475569",marginBottom:4}}>Aliquota IVA</div>
                   <select value={ivaRate} onChange={e=>setIvaRate(Number(e.target.value))}
-                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
                     <option value={0}>0% (esente)</option>
                     <option value={4}>4%</option>
                     <option value={10}>10%</option>
@@ -2568,7 +2568,7 @@ export default function CreaPreventivo() {
 
             <div style={card}>
               <div style={sectionTitle}>Note visibili al cliente</div>
-              <textarea value={noteCliente} onChange={e=>setNoteCliente(e.target.value)} rows={3} style={{width:"100%",padding:"8px 10px",borderRadius:7,border:"1px solid #E0DDD8",fontSize:13,boxSizing:"border-box"}}/>
+              <textarea value={noteCliente} onChange={e=>setNoteCliente(e.target.value)} rows={3} style={{width:"100%",padding:"8px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
             </div>
 
             <div style={card}>
@@ -2592,7 +2592,7 @@ export default function CreaPreventivo() {
       {step===3 && calc && (
         <div>
           <div style={{display:"flex",gap:10,marginBottom:16}}>
-            <button onClick={generaPDF} style={{padding:"10px 24px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#9A9890",color:"#fff"}}>
+            <button onClick={generaPDF} style={{padding:"10px 24px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#64748B",color:"#fff"}}>
               🖨 Stampa / Salva PDF
             </button>
             <button onClick={salvaPreventivo} disabled={saving} style={{padding:"10px 24px",borderRadius:9,border:"1px solid #1A1A2E",cursor:"pointer",fontSize:14,fontWeight:500,background:"#fff",color:"#1A1A2E"}}>
@@ -2601,22 +2601,22 @@ export default function CreaPreventivo() {
           </div>
 
           {/* ANTEPRIMA DOCUMENTO */}
-          <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E0DDD8",borderRadius:12,padding:"40px 48px",maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
+          <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
 
             {/* Testata */}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
               <div style={{textAlign:"center"}}>
                 {KALEA_LOGO ? <img src={KALEA_LOGO} alt="Kalēa" style={{height:88,display:"block",margin:"0 auto 8px"}}/> : <div style={{fontSize:40,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>}
                 <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
-                <div style={{fontSize:12,color:"#6B6860"}}>Superfici · Pavimentazioni · Posa</div>
-                <div style={{fontSize:11,color:"#9A9890",marginTop:2}}>Desenzano del Garda (BS) · info@kalea.space · kalea.space</div>
-                <div style={{fontSize:11,color:"#9A9890",marginTop:2}}>P.IVA: 04797310986</div>
-                <div style={{fontSize:11,color:"#6B6860"}}>Kalea Group Srl</div>
+                <div style={{fontSize:12,color:"#475569"}}>Superfici · Pavimentazioni · Posa</div>
+                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Desenzano del Garda (BS) · info@kalea.space · kalea.space</div>
+                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>P.IVA: 04797310986</div>
+                <div style={{fontSize:11,color:"#475569"}}>Kalea Group Srl</div>
               </div>
               <div style={{textAlign:"right"}}>
                 <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>{t.titolo}</div>
-                <div style={{fontSize:13,color:"#6B6860",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
-                <div style={{fontSize:13,color:"#6B6860"}}>Data: <strong>{dataPrev}</strong></div>
+                <div style={{fontSize:13,color:"#475569",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
+                <div style={{fontSize:13,color:"#475569"}}>Data: <strong>{dataPrev}</strong></div>
                 <div style={{fontSize:13,color:"#A32D2D"}}>{t.validita}: <strong>{addDays(dataPrev,30)}</strong></div>
               </div>
             </div>
@@ -2624,16 +2624,16 @@ export default function CreaPreventivo() {
             {/* Cliente */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
               <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.cliente}</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.cliente}</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>
-                <div style={{fontSize:13,color:"#6B6860"}}>{cliente.indirizzo}</div>
-                <div style={{fontSize:13,color:"#6B6860"}}>{cliente.citta}</div>
-                <div style={{fontSize:13,color:"#6B6860"}}>{cliente.telefono}</div>
-                <div style={{fontSize:13,color:"#6B6860"}}>{cliente.email}</div>
+                <div style={{fontSize:13,color:"#475569"}}>{cliente.indirizzo}</div>
+                <div style={{fontSize:13,color:"#475569"}}>{cliente.citta}</div>
+                <div style={{fontSize:13,color:"#475569"}}>{cliente.telefono}</div>
+                <div style={{fontSize:13,color:"#475569"}}>{cliente.email}</div>
               </div>
               {cantiere && <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.oggetto}</div>
-                <div style={{fontSize:13,color:"#6B6860"}}>{cantiere}</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.oggetto}</div>
+                <div style={{fontSize:13,color:"#475569"}}>{cantiere}</div>
               </div>}
             </div>
 
@@ -2648,8 +2648,8 @@ export default function CreaPreventivo() {
               </thead>
               <tbody>
                 {(prodotto || righeMat.filter((r:any)=>r.desc).length>0) && (
-                  <tr style={{background:"#F7F6F3"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
+                  <tr style={{background:"#F8FAFC"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
                   </tr>
                 )}
                 {prodotto && (
@@ -2657,7 +2657,7 @@ export default function CreaPreventivo() {
                     <td style={{padding:"8px 12px",fontSize:13}}>
                       {prodotto?.nome} — {prodotto?.dims}
                       {tonalita.filter(x=>x.nome).length>0 && (
-                        <div style={{fontSize:11,color:"#6B6860",marginTop:3}}>
+                        <div style={{fontSize:11,color:"#475569",marginTop:3}}>
                           Tonalità: {tonalita.filter(x=>x.nome).map(x => `${x.nome}${x.mq>0?` (${x.mq} mq)`:""}`).join(" · ")}
                         </div>
                       )}
@@ -2676,8 +2676,8 @@ export default function CreaPreventivo() {
                   </tr>
                 ))}
                 {incPosa && calc.prezzoPosaTot>0 && <>
-                  <tr style={{background:"#F7F6F3"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.posa}</td>
+                  <tr style={{background:"#F8FAFC"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{t.posa}</td>
                   </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>{t.posa} — {complessita}</td>
@@ -2687,8 +2687,8 @@ export default function CreaPreventivo() {
                   </tr>
                 </>}
                 {calc.tappNeeded && <>
-                  <tr style={{background:"#F7F6F3"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{t.tappetino}</td>
+                  <tr style={{background:"#F8FAFC"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{t.tappetino}</td>
                   </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>{t.tappetino}</td>
@@ -2716,8 +2716,8 @@ export default function CreaPreventivo() {
                 {([["Articoli",articoli],["Accessori",accessori],["Servizi",servizi]] as const).map(([label,lines]) =>
                   lines.length > 0 ? (
                     <React.Fragment key={label}>
-                      <tr style={{background:"#F7F6F3"}}>
-                        <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em"}}>{label}</td>
+                      <tr style={{background:"#F8FAFC"}}>
+                        <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{label}</td>
                       </tr>
                       {lines.map((l)=>{
                         const lordo = (Number(l.quantity)||0) * (Number(l.unit_price)||0);
@@ -2726,7 +2726,7 @@ export default function CreaPreventivo() {
                           <tr key={l.id}>
                             <td style={{padding:"8px 12px",fontSize:13}}>
                               {l.name}
-                              {l.description && <div style={{fontSize:11,color:"#6B6860",marginTop:3}}>{l.description}</div>}
+                              {l.description && <div style={{fontSize:11,color:"#475569",marginTop:3}}>{l.description}</div>}
                             </td>
                             <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{l.quantity} {l.unit}</td>
                             <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(Number(l.unit_price)||0)}</td>
@@ -2748,8 +2748,8 @@ export default function CreaPreventivo() {
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
                 {l:`IVA ${ivaRate}%`,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13,gap:12}}>
-                  <span style={{color:"#6B6860"}}>{r.l}</span>
+                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E6E9F0",fontSize:13,gap:12}}>
+                  <span style={{color:"#475569"}}>{r.l}</span>
                   <span style={{color:r.c||"#1A1A1A",whiteSpace:"nowrap"}}>{r.v}</span>
                 </div>
               ))}
@@ -2760,25 +2760,25 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Condizioni di fornitura */}
-            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? "Condizioni di fornitura" : "Condizioni"}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
                 {showCondizioniFornitura && (<>
-                <div><span style={{color:"#6B6860"}}>Metodo di trasporto: </span><span style={{fontWeight:500}}>{metodoTrasporto||"—"}</span></div>
-                <div><span style={{color:"#6B6860"}}>Tempi di consegna: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
+                <div><span style={{color:"#475569"}}>Metodo di trasporto: </span><span style={{fontWeight:500}}>{metodoTrasporto||"—"}</span></div>
+                <div><span style={{color:"#475569"}}>Tempi di consegna: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
                 </>)}
-                <div><span style={{color:"#6B6860"}}>Tipo di pagamento: </span><span style={{fontWeight:500}}>{tipoPagamento||"—"}</span></div>
-                <div><span style={{color:"#6B6860"}}>Aliquota IVA: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
+                <div><span style={{color:"#475569"}}>Tipo di pagamento: </span><span style={{fontWeight:500}}>{tipoPagamento||"—"}</span></div>
+                <div><span style={{color:"#475569"}}>Aliquota IVA: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
               </div>
             </div>
 
 
             {/* Pagamenti */}
-            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8",clear:"both"}}>
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di pagamento</div>
               {pagamenti.map((p:any,i:number)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid #E0DDD8",fontSize:13}}>
-                  <span>{p.label} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"#9A9890",fontSize:12}}> ({p.note})</span>}</span>
+                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid #E6E9F0",fontSize:13}}>
+                  <span>{p.label} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"#64748B",fontSize:12}}> ({p.note})</span>}</span>
                   <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
                 </div>
               ))}
@@ -2786,26 +2786,26 @@ export default function CreaPreventivo() {
 
             {/* Note cliente */}
             {noteCliente && (
-              <div style={{marginTop:20,padding:"12px 16px",background:"#F1F5F9",borderRadius:8,fontSize:13,color:"#6B6860",lineHeight:1.7}}>
-                <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
+              <div style={{marginTop:20,padding:"12px 16px",background:"#F1F5F9",borderRadius:8,fontSize:13,color:"#475569",lineHeight:1.7}}>
+                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
                 {noteCliente}
               </div>
             )}
 
             {/* Termini */}
-            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E0DDD8"}}>
-              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
-              <div style={{fontSize:11,color:"#6B6860",lineHeight:1.8,whiteSpace:"pre-line"}}>{terminiCustom ?? (QUOTE_TERMS[tipoPreventivo] || t.termini_testo)}</div>
+            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0"}}>
+              <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
+              <div style={{fontSize:11,color:"#475569",lineHeight:1.8,whiteSpace:"pre-line"}}>{terminiCustom ?? (QUOTE_TERMS[tipoPreventivo] || t.termini_testo)}</div>
             </div>
 
             {/* Sezione Privacy firma */}
-            <div style={{marginTop:20,padding:"12px 16px",border:"1px solid #E0DDD8",borderRadius:8}}>
-              <div style={{fontSize:11,fontWeight:600,color:"#9A9890",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679</div>
-              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#6B6860"}}>
+            <div style={{marginTop:20,padding:"12px 16px",border:"1px solid #E6E9F0",borderRadius:8}}>
+              <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679</div>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#475569"}}>
                 <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
                 <span>{t.privacy_1}</span>
               </div>
-              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",fontSize:12,color:"#6B6860"}}>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",fontSize:12,color:"#475569"}}>
                 <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
                 <span>{t.privacy_2}</span>
               </div>
@@ -2813,23 +2813,23 @@ export default function CreaPreventivo() {
 
             {/* Accettazione */}
             <div style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
-              <div style={{fontSize:11,color:"#6B6860",marginBottom:6}}>{t.parti_dichiarano}</div>
-              <div style={{fontSize:12,color:"#6B6860",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
+              <div style={{fontSize:11,color:"#475569",marginBottom:6}}>{t.parti_dichiarano}</div>
+              <div style={{fontSize:12,color:"#475569",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
                 <div>
-                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>{t.firma_cliente}</div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#64748B"}}>{t.firma_cliente}</div>
                 </div>
                 <div>
-                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#9A9890"}}>{t.firma_kalēa}</div>
+                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#64748B"}}>{t.firma_kalēa}</div>
                 </div>
               </div>
-              <div style={{marginTop:20,fontSize:12,color:"#6B6860"}}>{t.luogo}: _______________________</div>
+              <div style={{marginTop:20,fontSize:12,color:"#475569"}}>{t.luogo}: _______________________</div>
             </div>
 
             {/* Footer */}
-            <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid #E0DDD8",textAlign:"center",fontSize:11,color:"#9A9890"}}>
+            <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid #E6E9F0",textAlign:"center",fontSize:11,color:"#64748B"}}>
               <div>Kalēa · Desenzano del Garda (BS) · info@kalea.space · kalea.space · P.IVA: 04797310986</div>
-              <div style={{marginTop:2,color:"#6B6860"}}>Kalea Group Srl</div>
+              <div style={{marginTop:2,color:"#475569"}}>Kalea Group Srl</div>
             </div>
           </div>
         </div>

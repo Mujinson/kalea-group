@@ -41,7 +41,7 @@ function SliderRow({ label, min, max, value, step, onChange, format }: any) {
   return (
     <div style={{ marginBottom: 12 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-        <span style={{ fontSize: 13, color: "#6B6860" }}>{label}</span>
+        <span style={{ fontSize: 13, color: "#475569" }}>{label}</span>
         <span style={{ fontSize: 13, fontWeight: 500 }}>{format(value)}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
@@ -139,32 +139,32 @@ export default function PricingParquet() {
     <div style={{ fontFamily: "'new-order', sans-serif", color: "#1A1A1A", maxWidth: 1200, margin: "0 auto", padding: "8px 4px" }}>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: 20, fontWeight: 400, color: "#1A1A2E", marginBottom: 4 }}>Pricing Parquet Woodco 2026</h1>
-        <p style={{ fontSize: 13, color: "#9A9890" }}>Woodco · Dream · Slim · Sense · Element · Ground · Impression · Star · Her · Him · Listino Aprile 2026</p>
+        <p style={{ fontSize: 13, color: "#64748B" }}>Woodco · Dream · Slim · Sense · Element · Ground · Impression · Star · Her · Him · Listino Aprile 2026</p>
       </div>
 
-      <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-        <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>Configurazione</div>
+      <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+        <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>Configurazione</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
           <div>
-            <div style={{ fontSize: 13, color: "#6B6860", marginBottom: 10 }}>Sconto fornitore Woodco Parquet</div>
+            <div style={{ fontSize: 13, color: "#475569", marginBottom: 10 }}>Sconto fornitore Woodco Parquet</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
               {SCONTI.map((s, i) => (
                 <button key={s.label} onClick={() => update({ scontoIdx: i })}
                   style={{ padding: "5px 16px", borderRadius: 20, border: "1px solid", cursor: "pointer", fontSize: 12, fontWeight: 500,
                     background: settings.scontoIdx === i ? "#1A1A2E" : "transparent",
-                    color: settings.scontoIdx === i ? "#fff" : "#6B6860",
-                    borderColor: settings.scontoIdx === i ? "#1A1A2E" : "#E0DDD8" }}>
+                    color: settings.scontoIdx === i ? "#fff" : "#475569",
+                    borderColor: settings.scontoIdx === i ? "#1A1A2E" : "#E6E9F0" }}>
                   {s.label}
                 </button>
               ))}
             </div>
-            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#475569" }}>
               Coeff. <strong>{coeff.toFixed(3)}</strong> · Acquisti al <strong>{(coeff * 100).toFixed(1)}%</strong> del listino
             </div>
           </div>
           <div>
             <SliderRow label="Markup Kalēa sul tuo costo" min={20} max={130} value={settings.markup} step={5} onChange={(v: number) => update({ markup: v })} format={(v: number) => v + "%"} />
-            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#6B6860" }}>
+            <div style={{ background: "#F1F5F9", borderRadius: 8, padding: "10px 14px", fontSize: 12, color: "#475569" }}>
               Range prezzi: Dream 73–315€/mq · Slim 91–169€/mq · Sense 65–116€/mq · Ground 77–144€/mq<br />
               Tuo costo medio: <strong>{fmt2(avgListino * coeff)}/mq</strong> · Tuo prezzo medio: <strong>{fmt2(avgListino * coeff * (1 + mkCoeff))}/mq</strong>
             </div>
@@ -172,19 +172,19 @@ export default function PricingParquet() {
         </div>
       </div>
 
-      <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
-        <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>
+      <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px", marginBottom: 16 }}>
+        <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>
           Listino Parquet 2026 — clicca per preventivo
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14, alignItems: "center" }}>
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Cerca articolo..."
-            style={{ padding: "6px 14px", borderRadius: 20, border: "1px solid #E0DDD8", fontSize: 13, outline: "none", width: 200, background: "#F7F6F3" }} />
+            style={{ padding: "6px 14px", borderRadius: 20, border: "1px solid #E6E9F0", fontSize: 13, outline: "none", width: 200, background: "#F8FAFC" }} />
           {CATEGORIE.map(c => (
             <button key={c} onClick={() => setCatFilter(c)}
               style={{ padding: "5px 12px", borderRadius: 20, border: "1px solid", cursor: "pointer", fontSize: 11, whiteSpace: "nowrap",
                 background: catFilter === c ? "#1A1A2E" : "transparent",
-                color: catFilter === c ? "#fff" : "#6B6860",
-                borderColor: catFilter === c ? "#1A1A2E" : "#E0DDD8" }}>
+                color: catFilter === c ? "#fff" : "#475569",
+                borderColor: catFilter === c ? "#1A1A2E" : "#E6E9F0" }}>
               {c}
             </button>
           ))}
@@ -194,12 +194,12 @@ export default function PricingParquet() {
         ) : PRODOTTI.length === 0 ? (
           <PricingEmptyState label="Woodco Parquet" />
         ) : (<>
-        <div style={{ maxHeight: 460, overflowY: "auto", borderRadius: 8, border: "1px solid #E0DDD8" }}>
+        <div style={{ maxHeight: 460, overflowY: "auto", borderRadius: 8, border: "1px solid #E6E9F0" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead style={{ position: "sticky", top: 0, background: "#fff", zIndex: 1 }}>
               <tr>
                 {["Linea", "Articolo", "Formato", "Tipo", "Listino", "Tuo costo", "Tuo prezzo", "Margine %", "Sconto max", ""].map(h => (
-                  <th key={h} style={{ textAlign: "left", fontSize: 10, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".05em", padding: "8px 10px", borderBottom: "1px solid #E0DDD8", whiteSpace: "nowrap" }}>{h}</th>
+                  <th key={h} style={{ textAlign: "left", fontSize: 10, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".05em", padding: "8px 10px", borderBottom: "1px solid #E6E9F0", whiteSpace: "nowrap" }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -212,23 +212,23 @@ export default function PricingParquet() {
                 return (
                   <tr key={p.id} onClick={() => setSelectedId(p.id)}
                     style={{ background: isSel ? "#FFF3E0" : "transparent", cursor: "pointer" }}>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><CatBadge cat={p.cat} /></td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontWeight: 500, whiteSpace: "nowrap" }}>{p.nome}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#6B6860", whiteSpace: "nowrap" }}>{p.dims}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 11, color: "#9A9890" }}>{p.tipo}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(p.listino)}/mq</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#0C447C", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(costo)}/mq</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", color: "#7B3A10", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezzo)}/mq</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8" }}><MargineChip pct={margPct} /></td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", fontSize: 12, color: "#A32D2D", fontWeight: 500, whiteSpace: "nowrap" }}>max {fmtP(margPct)}</td>
-                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E0DDD8", whiteSpace: "nowrap" }}>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0" }}><CatBadge cat={p.cat} /></td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontWeight: 500, whiteSpace: "nowrap" }}>{p.nome}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontSize: 12, color: "#475569", whiteSpace: "nowrap" }}>{p.dims}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontSize: 11, color: "#64748B" }}>{p.tipo}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(p.listino)}/mq</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#0C447C", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(costo)}/mq</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", color: "#7B3A10", fontWeight: 500, whiteSpace: "nowrap" }}>{fmt2(prezzo)}/mq</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0" }}><MargineChip pct={margPct} /></td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", fontSize: 12, color: "#A32D2D", fontWeight: 500, whiteSpace: "nowrap" }}>max {fmtP(margPct)}</td>
+                    <td style={{ padding: "9px 10px", borderBottom: "0.5px solid #E6E9F0", whiteSpace: "nowrap" }}>
                       <button onClick={e => { e.stopPropagation(); setSelectedId(p.id); }}
                         style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid", cursor: "pointer", fontSize: 11,
-                          background: isSel ? "#7B3A10" : "transparent", color: isSel ? "#fff" : "#7B3A10", borderColor: isSel ? "#7B3A10" : "#E0DDD8" }}>
+                          background: isSel ? "#7B3A10" : "transparent", color: isSel ? "#fff" : "#7B3A10", borderColor: isSel ? "#7B3A10" : "#E6E9F0" }}>
                         {isSel ? "✓" : "Usa"}
                       </button>
                       <button onClick={e => { e.stopPropagation(); goToCreaPreventivo(p.id); }}
-                        style={{ marginLeft: 4, padding: "4px 8px", borderRadius: 6, border: "1px solid #E0DDD8", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
+                        style={{ marginLeft: 4, padding: "4px 8px", borderRadius: 6, border: "1px solid #E6E9F0", cursor: "pointer", fontSize: 11, color: "#0C447C", background: "transparent" }}>
                         →
                       </button>
                     </td>
@@ -238,7 +238,7 @@ export default function PricingParquet() {
             </tbody>
           </table>
         </div>
-        <div style={{ fontSize: 11, color: "#9A9890", marginTop: 8 }}>{pagedRows.length} di {totalRows} articoli · Prezzi IVA esclusa · Sfrido consigliato 10–15%</div>
+        <div style={{ fontSize: 11, color: "#64748B", marginTop: 8 }}>{pagedRows.length} di {totalRows} articoli · Prezzi IVA esclusa · Sfrido consigliato 10–15%</div>
         <PricingPagination page={page} pageCount={pageCount} total={totalRows} setPage={setPage} label="articoli" />
         </>)}
 
@@ -246,9 +246,9 @@ export default function PricingParquet() {
 
       {selected && prev && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-          <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px" }}>
+          <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px" }}>
             <div style={{ fontSize: 15, fontWeight: 500, color: "#1A1A2E", marginBottom: 2 }}>{selected.nome}</div>
-            <div style={{ fontSize: 12, color: "#9A9890", marginBottom: 16 }}>{selected.dims} · {selected.tipo}</div>
+            <div style={{ fontSize: 12, color: "#64748B", marginBottom: 16 }}>{selected.dims} · {selected.tipo}</div>
             <SliderRow label="mq da posare" min={10} max={400} value={mqPrev} step={5} onChange={setMqPrev} format={(v: number) => v + " mq"} />
             <SliderRow label="Sfrido (%)" min={8} max={25} value={sfrido} step={1} onChange={setSfrido} format={(v: number) => v + "%"} />
             <SliderRow label="Battiscopa (ml — 12,10€/ml listino)" min={0} max={120} value={battML} step={5} onChange={setBattML} format={(v: number) => v + " ml"} />
@@ -267,8 +267,8 @@ export default function PricingParquet() {
               </div>
             )}
           </div>
-          <div style={{ background: "#fff", border: "1px solid #E0DDD8", borderRadius: 12, padding: "20px 24px" }}>
-            <div style={{ fontSize: 11, fontWeight: 500, color: "#9A9890", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E0DDD8" }}>Preventivo materiali</div>
+          <div style={{ background: "#fff", border: "1px solid #E6E9F0", borderRadius: 12, padding: "20px 24px" }}>
+            <div style={{ fontSize: 11, fontWeight: 500, color: "#64748B", textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #E6E9F0" }}>Preventivo materiali</div>
             {[
               { label: "mq da ordinare (sfrido incluso)", value: prev.mqOrd.toFixed(1) + " mq" },
               { label: "Tuo costo acquisto totale", value: fmt0(prev.costoAcq), color: "#A32D2D" },
@@ -276,29 +276,29 @@ export default function PricingParquet() {
               { label: "Sconto cliente", value: scCliente > 0 ? `-${fmt0(prev.prezzoList - prev.prezzoFin)} (-${scCliente}%)` : "nessuno" },
               { label: "Prezzo finale al cliente", value: fmt0(prev.prezzoFin), big: true, color: "#0C447C" },
             ].map((r: any, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "0.5px solid #E0DDD8", fontSize: 13 }}>
-                <span style={{ color: "#6B6860" }}>{r.label}</span>
+              <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", borderBottom: "0.5px solid #E6E9F0", fontSize: 13 }}>
+                <span style={{ color: "#475569" }}>{r.label}</span>
                 <span style={{ fontWeight: 500, fontSize: r.big ? 16 : 13, color: r.color || "#1A1A1A" }}>{r.value}</span>
               </div>
             ))}
-            <div style={{ height: 1, background: "#E0DDD8", margin: "8px 0" }} />
+            <div style={{ height: 1, background: "#E6E9F0", margin: "8px 0" }} />
             <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", fontSize: 13 }}>
-              <span style={{ color: "#6B6860" }}>Margine lordo €</span>
+              <span style={{ color: "#475569" }}>Margine lordo €</span>
               <span style={{ fontWeight: 500, color: prev.margE > 0 ? "#27500A" : "#A32D2D" }}>{fmt0(prev.margE)}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", fontSize: 13 }}>
-              <span style={{ color: "#6B6860" }}>Margine lordo %</span>
+              <span style={{ color: "#475569" }}>Margine lordo %</span>
               <span style={{ fontWeight: 500, color: prev.margPct > 25 ? "#27500A" : "#A32D2D" }}>{fmtP(prev.margPct)}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", fontSize: 13 }}>
-              <span style={{ color: "#6B6860" }}>Break-even (prezzo min)</span>
+              <span style={{ color: "#475569" }}>Break-even (prezzo min)</span>
               <span style={{ fontWeight: 500, color: "#A32D2D" }}>{fmt0(prev.costoAcq)}</span>
             </div>
           </div>
         </div>
       )}
       {!selected && (
-        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#9A9890", fontSize: 13 }}>
+        <div style={{ background: "#F1F5F9", borderRadius: 12, padding: "24px", textAlign: "center", color: "#64748B", fontSize: 13 }}>
           ↑ Clicca un articolo nella tabella per aprire il calcolatore preventivo
         </div>
       )}

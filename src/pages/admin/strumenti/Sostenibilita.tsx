@@ -26,7 +26,7 @@ function Slider({
   return (
     <div style={{ marginBottom: 12 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-        <span style={{ fontSize: 13, color: '#6B6860' }}>{label}</span>
+        <span style={{ fontSize: 13, color: '#475569' }}>{label}</span>
         <span style={{ fontSize: 13, fontWeight: 500 }}>{format(value)}</span>
       </div>
       <UISlider
@@ -53,9 +53,9 @@ function MetricCard({
 }) {
   return (
     <div style={{ background: '#F1F5F9', borderRadius: 10, padding: '14px 16px', textAlign: 'center' }}>
-      <div style={{ fontSize: 11, color: '#6B6860', marginBottom: 6, lineHeight: 1.4 }}>{label}</div>
+      <div style={{ fontSize: 11, color: '#475569', marginBottom: 6, lineHeight: 1.4 }}>{label}</div>
       <div style={{ fontSize: 21, fontWeight: 300, color }}>{value}</div>
-      {sub && <div style={{ fontSize: 11, color: '#9A9890', marginTop: 4 }}>{sub}</div>}
+      {sub && <div style={{ fontSize: 11, color: '#64748B', marginTop: 4 }}>{sub}</div>}
     </div>
   );
 }
@@ -77,11 +77,11 @@ function DRow({
         display: 'flex',
         justifyContent: 'space-between',
         padding: '7px 0',
-        borderBottom: '0.5px solid #E0DDD8',
+        borderBottom: '0.5px solid #E6E9F0',
         fontSize: 13,
       }}
     >
-      <span style={{ color: '#6B6860' }}>{label}</span>
+      <span style={{ color: '#475569' }}>{label}</span>
       <span style={{ fontWeight: 500, fontSize: big ? 15 : 13, color: color || '#1A1A1A' }}>
         {value}
       </span>
@@ -271,7 +271,7 @@ export default function Sostenibilita() {
         <h1 style={{ fontSize: 20, fontWeight: 400, color: '#1A1A2E', marginBottom: 4 }}>
           Sostenibilità Finanziaria
         </h1>
-        <p style={{ fontSize: 13, color: '#9A9890' }}>
+        <p style={{ fontSize: 13, color: '#64748B' }}>
           Break-even · Markup consigliato · Scenari di crescita · Anno 1
         </p>
       </div>
@@ -279,7 +279,7 @@ export default function Sostenibilita() {
       <div
         style={{
           background: '#fff',
-          border: '1px solid #E0DDD8',
+          border: '1px solid #E6E9F0',
           borderRadius: 12,
           padding: '20px 24px',
           marginBottom: 16,
@@ -289,12 +289,12 @@ export default function Sostenibilita() {
           style={{
             fontSize: 11,
             fontWeight: 500,
-            color: '#9A9890',
+            color: '#64748B',
             textTransform: 'uppercase',
             letterSpacing: '.07em',
             marginBottom: 16,
             paddingBottom: 10,
-            borderBottom: '1px solid #E0DDD8',
+            borderBottom: '1px solid #E6E9F0',
           }}
         >
           Costi fissi mensili
@@ -323,34 +323,34 @@ export default function Sostenibilita() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
-        <div style={{ background: '#fff', border: '1px solid #E0DDD8', borderRadius: 12, padding: '20px 24px' }}>
-          <div style={{ fontSize: 11, fontWeight: 500, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 16, paddingBottom: 10, borderBottom: '1px solid #E0DDD8' }}>
+        <div style={{ background: '#fff', border: '1px solid #E6E9F0', borderRadius: 12, padding: '20px 24px' }}>
+          <div style={{ fontSize: 11, fontWeight: 500, color: '#64748B', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 16, paddingBottom: 10, borderBottom: '1px solid #E6E9F0' }}>
             Volumi & pricing
           </div>
-          <div style={{ fontSize: 11, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 10 }}>Fornitura materiali</div>
+          <div style={{ fontSize: 11, color: '#64748B', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 10 }}>Fornitura materiali</div>
           <Slider label="mq fornitura / mese" min={10} max={600} value={s.mqForn} step={10} onChange={(v) => update({ mqForn: v })} format={(v) => v + ' mq'} />
           <Slider label="Costo acquisto materiale (€/mq)" min={10} max={100} value={s.costoMat} step={1} onChange={(v) => update({ costoMat: v })} format={(v) => '€ ' + v + '/mq'} />
           <Slider label="Markup materiali" min={20} max={150} value={s.mkMat} step={5} onChange={(v) => update({ mkMat: v })} format={(v) => v + '%'} />
-          <div style={{ height: 1, background: '#E0DDD8', margin: '12px 0' }} />
-          <div style={{ fontSize: 11, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 10 }}>Posa</div>
+          <div style={{ height: 1, background: '#E6E9F0', margin: '12px 0' }} />
+          <div style={{ fontSize: 11, color: '#64748B', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 10 }}>Posa</div>
           <Slider label="mq posa / mese" min={0} max={400} value={s.mqPosa} step={10} onChange={(v) => update({ mqPosa: v })} format={(v) => v + ' mq'} />
           <Slider label="Prezzo posa al cliente (€/mq)" min={12} max={80} value={s.prezzoPosa} step={1} onChange={(v) => update({ prezzoPosa: v })} format={(v) => '€ ' + v + '/mq'} />
           <Slider label="Costo posa reale operaio (€/mq)" min={8} max={40} value={s.costoPosa} step={1} onChange={(v) => update({ costoPosa: v })} format={(v) => '€ ' + v + '/mq'} />
         </div>
 
-        <div style={{ background: '#fff', border: '1px solid #E0DDD8', borderRadius: 12, padding: '20px 24px' }}>
-          <div style={{ fontSize: 11, fontWeight: 500, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 16, paddingBottom: 10, borderBottom: '1px solid #E0DDD8' }}>
+        <div style={{ background: '#fff', border: '1px solid #E6E9F0', borderRadius: 12, padding: '20px 24px' }}>
+          <div style={{ fontSize: 11, fontWeight: 500, color: '#64748B', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 16, paddingBottom: 10, borderBottom: '1px solid #E6E9F0' }}>
             Conto economico mensile
           </div>
           <DRow label="Ricavi fornitura materiali" value={fmt(ricForn)} />
           <DRow label="Ricavi posa" value={fmt(ricPosa)} />
           <DRow label="Fatturato totale" value={fmt(fatt)} color="#0C447C" big />
-          <div style={{ height: 1, background: '#E0DDD8', margin: '8px 0' }} />
+          <div style={{ height: 1, background: '#E6E9F0', margin: '8px 0' }} />
           <DRow label="− Costo acquisto materiali" value={'− ' + fmt(cvMat)} color="#A32D2D" />
           <DRow label="− Costo operaio (posa)" value={'− ' + fmt(cvPosa)} color="#A32D2D" />
           <DRow label="− Costi fissi" value={'− ' + fmt(cfMese)} color="#A32D2D" />
           <DRow label="− Accantonamento 15%" value={'− ' + fmt(accant)} color="#633806" />
-          <div style={{ height: 1, background: '#E0DDD8', margin: '8px 0' }} />
+          <div style={{ height: 1, background: '#E6E9F0', margin: '8px 0' }} />
           <DRow label="Utile netto / mese" value={fmt(utile)} color={utileColor} big />
           <DRow label="Utile netto / anno" value={fmt(utile * 12)} color={utileColor} big />
           <div style={{ background: sit.bg, border: `1px solid ${sit.col}`, borderRadius: 8, padding: '10px 14px', fontSize: 13, color: sit.col, lineHeight: 1.6, marginTop: 12 }}>
@@ -360,9 +360,9 @@ export default function Sostenibilita() {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0 16px' }}>
-        <div style={{ flex: 1, height: 1, background: '#E0DDD8' }} />
-        <span style={{ fontSize: 11, fontWeight: 500, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '.08em', whiteSpace: 'nowrap' }}>Scenari di crescita</span>
-        <div style={{ flex: 1, height: 1, background: '#E0DDD8' }} />
+        <div style={{ flex: 1, height: 1, background: '#E6E9F0' }} />
+        <span style={{ fontSize: 11, fontWeight: 500, color: '#64748B', textTransform: 'uppercase', letterSpacing: '.08em', whiteSpace: 'nowrap' }}>Scenari di crescita</span>
+        <div style={{ flex: 1, height: 1, background: '#E6E9F0' }} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14, marginBottom: 24 }}>
         {[
@@ -389,19 +389,19 @@ export default function Sostenibilita() {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0 16px' }}>
-        <div style={{ flex: 1, height: 1, background: '#E0DDD8' }} />
-        <span style={{ fontSize: 11, fontWeight: 500, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '.08em', whiteSpace: 'nowrap' }}>
+        <div style={{ flex: 1, height: 1, background: '#E6E9F0' }} />
+        <span style={{ fontSize: 11, fontWeight: 500, color: '#64748B', textTransform: 'uppercase', letterSpacing: '.08em', whiteSpace: 'nowrap' }}>
           Markup consigliato sui materiali
         </span>
-        <div style={{ flex: 1, height: 1, background: '#E0DDD8' }} />
+        <div style={{ flex: 1, height: 1, background: '#E6E9F0' }} />
       </div>
-      <div style={{ background: '#fff', border: '1px solid #E0DDD8', borderRadius: 12, padding: '20px 24px' }}>
+      <div style={{ background: '#fff', border: '1px solid #E6E9F0', borderRadius: 12, padding: '20px 24px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14, marginBottom: 16 }}>
           <MkCard label="Markup minimo" value={fmtP(mkMin)} sub={'Copre solo i costi fissi\nbreak-even puro — nessun utile'} bg="#FCEBEB" color="#A32D2D" />
           <MkCard label="Markup target" value={fmtP(mkTarget)} sub={'Costi + accantonamento 15%\nsostenibile nel lungo periodo'} bg="#FAEEDA" color="#633806" />
           <MkCard label="Markup sano" value={fmtP(mkSano)} sub={"Costi + accantonamento + utile\nquesto è l'obiettivo"} bg="#EAF3DE" color="#27500A" />
         </div>
-        <div style={{ background: '#F1F5F9', borderRadius: 8, padding: '14px 16px', fontSize: 13, color: '#6B6860', lineHeight: 1.8 }}>
+        <div style={{ background: '#F1F5F9', borderRadius: 8, padding: '14px 16px', fontSize: 13, color: '#475569', lineHeight: 1.8 }}>
           Con i tuoi costi fissi di <strong style={{ color: '#1A1A1A' }}>{fmt(cfMese)}/mese</strong> e{' '}
           <strong style={{ color: '#1A1A1A' }}>{s.mqForn} mq di fornitura al mese</strong>, il markup minimo è{' '}
           <strong style={{ color: '#A32D2D' }}>{fmtP(mkMin)}</strong>. Per stare bene ti serve tra{' '}
@@ -413,13 +413,13 @@ export default function Sostenibilita() {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '24px 0 16px' }}>
-        <div style={{ flex: 1, height: 1, background: '#E0DDD8' }} />
-        <span style={{ fontSize: 11, fontWeight: 500, color: '#9A9890', textTransform: 'uppercase', letterSpacing: '.08em', whiteSpace: 'nowrap' }}>
+        <div style={{ flex: 1, height: 1, background: '#E6E9F0' }} />
+        <span style={{ fontSize: 11, fontWeight: 500, color: '#64748B', textTransform: 'uppercase', letterSpacing: '.08em', whiteSpace: 'nowrap' }}>
           Perché il 15% di accantonamento
         </span>
-        <div style={{ flex: 1, height: 1, background: '#E0DDD8' }} />
+        <div style={{ flex: 1, height: 1, background: '#E6E9F0' }} />
       </div>
-      <div style={{ background: '#fff', border: '1px solid #E0DDD8', borderRadius: 12, padding: '20px 24px' }}>
+      <div style={{ background: '#fff', border: '1px solid #E6E9F0', borderRadius: 12, padding: '20px 24px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14, marginBottom: 14 }}>
           {[
             {
@@ -440,7 +440,7 @@ export default function Sostenibilita() {
           ].map((b) => (
             <div key={b.titolo} style={{ background: '#F1F5F9', borderRadius: 8, padding: 14 }}>
               <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 8 }}>{b.titolo}</div>
-              <div style={{ fontSize: 13, color: '#6B6860', lineHeight: 1.7 }}>{b.testo}</div>
+              <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.7 }}>{b.testo}</div>
             </div>
           ))}
         </div>
