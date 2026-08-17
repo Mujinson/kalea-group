@@ -1291,6 +1291,57 @@ export default function CreaPreventivo() {
   const [tipoPreventivo, setTipoPreventivo] = useState<QuoteType>("fornitura_posa");
   const [terminiCustom, setTerminiCustom] = useState<string | null>(null);
 
+  // Traduzione integrale del preventivo (voci libere) nella lingua del documento
+  const cambiaLingua = async (l: QuoteLang) => {
+    setLingua(l);
+    if (l === "IT" || traducendo) return;
+
+    const terminiAttuali = terminiCustom ?? (tipoPreventivo === "fornitura_posa" ? "" : (QUOTE_TERMS[tipoPreventivo] || ""));
+
+    const blocchi: string[] = [
+      ...righeMat.map((r: any) => r.desc || ""),
+      ...articoli.flatMap((x: any) => [x.name || "", x.description || ""]),
+      ...accessori.flatMap((x: any) => [x.name || "", x.description || ""]),
+      ...servizi.flatMap((x: any) => [x.name || "", x.description || ""]),
+      ...pagamenti.map((p: any) => p.note || ""),
+      noteCliente || "",
+      tempiConsegna || "",
+      cantiere || "",
+      terminiAttuali,
+    ];
+
+    if (!blocchi.some(s => s.trim())) return;
+
+    setTraducendo(true);
+    try {
+      const out = await translateQuoteTexts(l, blocchi);
+      let i = 0;
+      setRigheMat((rows: any[]) => rows.map((r: any) => ({ ...r, desc: out[i++] ?? r.desc })));
+      i = righeMat.length;
+      const applyCat = (rows: any[]) => rows.map((x: any) => {
+        const name = out[i++] ?? x.name;
+        const description = out[i++] ?? x.description;
+        return { ...x, name, description: x.description ? description : x.description };
+      });
+      setArticoli(applyCat(articoli));
+      setAccessori(applyCat(accessori));
+      setServizi(applyCat(servizi));
+      setPagamenti((rows: any[]) => rows.map((p: any) => ({ ...p, note: p.note ? (out[i++] ?? p.note) : (i++, p.note) })));
+      setNoteCliente(out[i++] ?? noteCliente);
+      setTempiConsegna(out[i++] ?? tempiConsegna);
+      setCantiere(out[i++] ?? cantiere);
+      const nuoviTermini = out[i++];
+      if (terminiAttuali.trim() && nuoviTermini?.trim()) setTerminiCustom(nuoviTermini);
+      toast.success(`Preventivo tradotto in ${l}`);
+    } catch (e: any) {
+      toast.error(e?.message || "Traduzione non riuscita.");
+    } finally {
+      setTraducendo(false);
+    }
+  };
+
+
+
 
   const [searchParams] = useSearchParams();
   const editId = searchParams.get("edit");
