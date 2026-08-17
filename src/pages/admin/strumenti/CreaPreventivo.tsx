@@ -2761,7 +2761,7 @@ export default function CreaPreventivo() {
                       {prodotto?.nome} — {prodotto?.dims}
                       {tonalita.filter(x=>x.nome).length>0 && (
                         <div style={{fontSize:11,color:"#475569",marginTop:3}}>
-                          Tonalità: {tonalita.filter(x=>x.nome).map(x => `${x.nome}${x.mq>0?` (${x.mq} mq)`:""}`).join(" · ")}
+                          {L.tonalita}: {tonalita.filter(x=>x.nome).map(x => `${x.nome}${x.mq>0?` (${x.mq} mq)`:""}`).join(" · ")}
                         </div>
                       )}
                     </td>
@@ -2773,7 +2773,7 @@ export default function CreaPreventivo() {
                 {righeMat.filter((r:any)=>r.desc).map((r:any)=>(
                   <tr key={r.id}>
                     <td style={{padding:"8px 12px",fontSize:13}}>{r.desc}</td>
-                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{r.qta} {r.unita}</td>
+                    <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{r.qta} {trUnita(lingua, r.unita)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(r.prezzoUn)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(r.prezzoUn*r.qta)}</td>
                   </tr>
@@ -2783,7 +2783,7 @@ export default function CreaPreventivo() {
                     <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{t.posa}</td>
                   </tr>
                   <tr>
-                    <td style={{padding:"8px 12px",fontSize:13}}>{t.posa} — {complessita}</td>
+                    <td style={{padding:"8px 12px",fontSize:13}}>{t.posa} — {trComplessita(lingua, complessita)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{mqPrev}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(calc.prezzoPosaMq)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoPosaTot)}</td>
@@ -2816,7 +2816,7 @@ export default function CreaPreventivo() {
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasfertaTot)}</td>
                   </tr>
                 )}
-                {([["Articoli",articoli],["Accessori",accessori],["Servizi",servizi]] as const).map(([label,lines]) =>
+                {([[L.articoli,articoli],[L.accessori,accessori],[L.servizi,servizi]] as const).map(([label,lines]) =>
                   lines.length > 0 ? (
                     <React.Fragment key={label}>
                       <tr style={{background:"#F8FAFC"}}>
@@ -2831,7 +2831,7 @@ export default function CreaPreventivo() {
                               {l.name}
                               {l.description && <div style={{fontSize:11,color:"#475569",marginTop:3}}>{l.description}</div>}
                             </td>
-                            <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{l.quantity} {l.unit}</td>
+                            <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{l.quantity} {trUnita(lingua, l.unit)}</td>
                             <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(Number(l.unit_price)||0)}</td>
                             <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(netto)}</td>
                           </tr>
@@ -2864,24 +2864,24 @@ export default function CreaPreventivo() {
 
             {/* Condizioni di fornitura */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
-              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? "Condizioni di fornitura" : "Condizioni"}</div>
+              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? L.cond_fornitura : L.cond_generiche}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
                 {showCondizioniFornitura && (<>
-                <div><span style={{color:"#475569"}}>Metodo di trasporto: </span><span style={{fontWeight:500}}>{metodoTrasporto||"—"}</span></div>
-                <div><span style={{color:"#475569"}}>Tempi di consegna: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
+                <div><span style={{color:"#475569"}}>{L.metodo_trasporto}: </span><span style={{fontWeight:500}}>{trTrasporto(lingua, metodoTrasporto)||"—"}</span></div>
+                <div><span style={{color:"#475569"}}>{L.tempi_consegna}: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
                 </>)}
-                <div><span style={{color:"#475569"}}>Tipo di pagamento: </span><span style={{fontWeight:500}}>{tipoPagamento||"—"}</span></div>
-                <div><span style={{color:"#475569"}}>Aliquota IVA: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
+                <div><span style={{color:"#475569"}}>{L.tipo_pagamento}: </span><span style={{fontWeight:500}}>{trPagamento(lingua, tipoPagamento)||"—"}</span></div>
+                <div><span style={{color:"#475569"}}>{L.aliquota_iva}: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
               </div>
             </div>
 
 
             {/* Pagamenti */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
-              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>Condizioni di pagamento</div>
+              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{L.cond_pagamento}</div>
               {pagamenti.map((p:any,i:number)=>(
                 <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid #E6E9F0",fontSize:13}}>
-                  <span>{p.label} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"#64748B",fontSize:12}}> ({p.note})</span>}</span>
+                  <span>{trRata(lingua, p.label)} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"#64748B",fontSize:12}}> ({p.note})</span>}</span>
                   <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
                 </div>
               ))}
@@ -2903,7 +2903,7 @@ export default function CreaPreventivo() {
 
             {/* Sezione Privacy firma */}
             <div style={{marginTop:20,padding:"12px 16px",border:"1px solid #E6E9F0",borderRadius:8}}>
-              <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>PRIVACY — D.Lgs. 196/2003 e Reg. UE 2016/679</div>
+              <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>{L.privacy_titolo}</div>
               <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#475569"}}>
                 <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
                 <span>{t.privacy_1}</span>
