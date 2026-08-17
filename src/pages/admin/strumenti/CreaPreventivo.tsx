@@ -1261,8 +1261,10 @@ export default function CreaPreventivo() {
 
 
   // INTESTAZIONE
-  const [lingua, setLingua] = useState("IT");
+  const [lingua, setLingua] = useState<QuoteLang>("IT");
   const t = T[lingua];
+  const L = PDF_LABELS[lingua] || PDF_LABELS.IT;
+  const [traducendo, setTraducendo] = useState(false);
   const [numPrev, setNumPrev] = useState("");
   const [dataPrev, setDataPrev] = useState(today());
   const [cliente, setCliente] = useState(emptyCliente());
