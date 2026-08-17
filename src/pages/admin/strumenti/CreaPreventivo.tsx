@@ -8,6 +8,7 @@ import QuoteCatalogSections, { catalogLinesTotal, type CatalogLine } from "@/com
 import { takeImportedQuote, type ImportedLine } from "@/lib/quoteImport";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
+import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
 
 
 
