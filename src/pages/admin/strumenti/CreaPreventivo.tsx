@@ -2503,7 +2503,10 @@ export default function CreaPreventivo() {
               </div>
               <div style={{fontSize:12,color:"#475569",marginBottom:8}}>Lingua documento</div>
               <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-                {["IT","EN","DE","FR","RO"].map(l=><Btn key={l} active={lingua===l} onClick={()=>setLingua(l)}>{l}</Btn>)}
+                {["IT","EN","DE","FR","RO"].map(l=><Btn key={l} active={lingua===l} onClick={()=>cambiaLingua(l as QuoteLang)}>{l}</Btn>)}
+              </div>
+              <div style={{fontSize:11,color:traducendo?"#1A1A2E":"#64748B",marginTop:6}}>
+                {traducendo ? "Traduzione in corso: voci, descrizioni, note e termini…" : "Cambiando lingua traduco automaticamente tutte le voci, descrizioni, note e i termini del preventivo."}
               </div>
             </div>
 
