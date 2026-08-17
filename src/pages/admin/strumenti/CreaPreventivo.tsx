@@ -1316,17 +1316,19 @@ export default function CreaPreventivo() {
     try {
       const out = await translateQuoteTexts(l, blocchi);
       let i = 0;
-      setRigheMat((rows: any[]) => rows.map((r: any) => ({ ...r, desc: out[i++] ?? r.desc })));
-      i = righeMat.length;
+      setRigheMat(righeMat.map((r: any) => ({ ...r, desc: out[i++] ?? r.desc })));
       const applyCat = (rows: any[]) => rows.map((x: any) => {
         const name = out[i++] ?? x.name;
-        const description = out[i++] ?? x.description;
-        return { ...x, name, description: x.description ? description : x.description };
+        const description = out[i++];
+        return { ...x, name, description: x.description ? (description ?? x.description) : x.description };
       });
       setArticoli(applyCat(articoli));
       setAccessori(applyCat(accessori));
       setServizi(applyCat(servizi));
-      setPagamenti((rows: any[]) => rows.map((p: any) => ({ ...p, note: p.note ? (out[i++] ?? p.note) : (i++, p.note) })));
+      setPagamenti(pagamenti.map((p: any) => {
+        const nota = out[i++];
+        return { ...p, note: p.note ? (nota ?? p.note) : p.note };
+      }));
       setNoteCliente(out[i++] ?? noteCliente);
       setTempiConsegna(out[i++] ?? tempiConsegna);
       setCantiere(out[i++] ?? cantiere);
