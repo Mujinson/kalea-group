@@ -1262,7 +1262,7 @@ export default function CreaPreventivo() {
 
   // INTESTAZIONE
   const [lingua, setLingua] = useState<QuoteLang>("IT");
-  const t = T[lingua];
+  const t = (T as any)[lingua] || T.IT;
   const L = PDF_LABELS[lingua] || PDF_LABELS.IT;
   const [traducendo, setTraducendo] = useState(false);
   const [numPrev, setNumPrev] = useState("");
@@ -1550,7 +1550,10 @@ export default function CreaPreventivo() {
         if (q.status) { const st = normalizeQuoteStatus(q.status); setStato(st); if (st === "accettato") setStep(3); else setStep(1); }
         if (q.project_name) setCantiere(q.project_name);
         const d: any = q.quote_data || {};
-        if (d.lingua) setLingua(d.lingua);
+        if (d.lingua) {
+          const lg = String(d.lingua).toUpperCase() as QuoteLang;
+          setLingua((T as any)[lg] ? lg : "IT");
+        }
         const canonicalCliente = linkedCrm
           ? { ...emptyCliente(), ...(d.cliente || {}), nome: linkedCrm.nome, indirizzo: linkedCrm.indirizzo, citta: linkedCrm.citta, telefono: linkedCrm.telefono, email: linkedCrm.email }
           : { ...emptyCliente(), ...(d.cliente || {}), nome: (q.client_name || d?.cliente?.nome || "") };
