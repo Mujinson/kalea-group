@@ -266,6 +266,203 @@ const TOOLS = [
   },
 ];
 
+// ---------------- write tools ----------------
+const CUSTOMER_TYPES = ['cliente_privato', 'rivenditore', 'costruttore', 'posatore', 'architetto', 'interior_designer', 'showroom', 'studio_design', 'azienda_pubblica'];
+
+async function creaCliente(sb: SupabaseClient, a: any, refs: Ref[]) {
+  const nome = String(a.nome || '').trim();
+  const cognome = String(a.cognome || '').trim();
+  const ragione = String(a.ragione_sociale || '').trim();
+  const etichetta = ragione || [nome, cognome].filter(Boolean).join(' ').trim();
+  if (!etichetta) return { errore_utente: 'Serve almeno il nome o la ragione sociale del cliente.' };
+
+  if (!a.forza) {
+    const { data: dupes } = await sb.from('customers')
+      .select('id, first_name, last_name, company_name, email, city')
+      .or(`company_name.ilike.${like(etichetta)},first_name.ilike.${like(nome || etichetta)},last_name.ilike.${like(cognome || etichetta)}`)
+      .limit(5);
+    if (dupes?.length) {
+      return {
+        gia_esistente: true,
+        candidati: dupes.map((c: any) => ({
+          id: c.id,
+          nome: c.company_name || [c.first_name, c.last_name].filter(Boolean).join(' '),
+          email: c.email, citta: c.city,
+        })),
+        nota: 'Esistono clienti simili: chiedi conferma se crearlo comunque (forza=true) o usare uno esistente.',
+      };
+    }
+  }
+
+  const tipo = CUSTOMER_TYPES.includes(String(a.tipo)) ? a.tipo : 'cliente_privato';
+  const { data, error } = await sb.from('customers').insert({
+    customer_type: tipo,
+    first_name: nome || null,
+    last_name: cognome || null,
+    company_name: ragione || null,
+    email: a.email || null,
+    phone: a.telefono || null,
+    address: a.indirizzo || null,
+    city: a.citta || null,
+    province: a.provincia || null,
+    postal_code: a.cap || null,
+    vat_number: a.partita_iva || null,
+    country: 'Italia',
+    status: 'opportunity',
+  }).select('id').single();
+  if (error) return { errore: error.message };
+
+  refs.push({ etichetta: `Cliente ${etichetta}`, percorso: '/admin/clienti' });
+  return { creato: true, id: data.id, nome: etichetta, tipo };
+}
+
+async function creaPreventivo(sb: SupabaseClient, a: any, refs: Ref[]) {
+  const righeIn = Array.isArray(a.righe) ? a.righe : [];
+  if (!righeIn.length) return { errore_utente: 'Servono le voci del preventivo.' };
+
+  const term = String(a.cliente || '').trim();
+  if (!term) return { errore_utente: 'Serve il cliente a cui intestare il preventivo.' };
+
+  const isUuid = /^[0-9a-f-]{36}$/i.test(term);
+  let cliente: any = null;
+  if (isUuid) {
+    const { data } = await sb.from('customers').select('id, first_name, last_name, company_name, email, phone, address, city').eq('id', term).maybeSingle();
+    cliente = data;
+  } else {
+    const { data } = await sb.from('customers')
+      .select('id, first_name, last_name, company_name, email, phone, address, city')
+      .or(`company_name.ilike.${like(term)},first_name.ilike.${like(term)},last_name.ilike.${like(term)},email.ilike.${like(term)}`)
+      .limit(5);
+    if (!data?.length) {
+      return { cliente_non_trovato: true, cercato: term, nota: 'Chiedi se crearlo in anagrafica con crea_cliente, poi riprova.' };
+    }
+    if (data.length > 1) {
+      return { ambiguo: true, candidati: data.map((c: any) => ({ id: c.id, nome: c.company_name || [c.first_name, c.last_name].filter(Boolean).join(' '), citta: c.city })) };
+    }
+    cliente = data[0];
+  }
+  if (!cliente) return { cliente_non_trovato: true, cercato: term };
+
+  const nomeCliente = cliente.company_name || [cliente.first_name, cliente.last_name].filter(Boolean).join(' ') || term;
+
+  // numero progressivo KAL-YYYY-NNN
+  const yy = new Date().getFullYear();
+  const prefix = `KAL-${yy}-`;
+  const { data: nums } = await sb.from('quotes').select('quote_number').like('quote_number', `${prefix}%`).limit(500);
+  let maxN = 0;
+  for (const r of (nums || []) as any[]) {
+    const m = /^KAL-\d{4}-(\d+)$/.exec(r.quote_number || '');
+    if (m) maxN = Math.max(maxN, parseInt(m[1], 10));
+  }
+  const quoteNumber = `${prefix}${String(maxN + 1).padStart(3, '0')}`;
+
+  const norm = (u: string) => {
+    const s = String(u || '').toLowerCase().trim();
+    if (['m2', 'm²', 'mq'].includes(s)) return 'mq';
+    if (['ml', 'm'].includes(s)) return 'ml';
+    if (['pz', 'pezzi', 'nr', 'n'].includes(s)) return 'pz';
+    if (s.includes('corpo')) return 'a corpo';
+    return s || 'a corpo';
+  };
+
+  const now = Date.now();
+  const lines = righeIn.map((r: any, i: number) => ({
+    id: `ai-${now}-${i}`,
+    catalog_id: null,
+    code: null,
+    name: String(r.descrizione || '').trim() || 'Voce',
+    description: null,
+    quantity: num(r.quantita) || 1,
+    unit_price: num(r.prezzo_unitario),
+    unit: norm(r.unita),
+    discount_pct: num(r.sconto_pct),
+    sezione: String(r.sezione || 'servizio').toLowerCase(),
+  }));
+
+  const pick = (s: string) => lines.filter((l) => l.sezione.startsWith(s)).map(({ sezione, ...rest }) => rest);
+  const articoli = pick('artic');
+  const accessori = pick('access');
+  const servizi = lines.filter((l) => !l.sezione.startsWith('artic') && !l.sezione.startsWith('access')).map(({ sezione, ...rest }) => rest);
+
+  const imponibile = lines.reduce((s, l) => s + l.quantity * l.unit_price * (1 - l.discount_pct / 100), 0);
+  const ivaRate = num(a.iva_rate) > 0 ? num(a.iva_rate) : 22;
+  const iva = imponibile * ivaRate / 100;
+  const totale = imponibile + iva;
+  const r2 = (n: number) => Math.round(n * 100) / 100;
+
+  const mapItem = (kind: string) => (l: any) => ({
+    type: kind,
+    descrizione: l.name,
+    qta: l.quantity,
+    unita: l.unit,
+    prezzo_un: l.unit_price,
+    sconto_pct: l.discount_pct,
+    importo: r2(l.quantity * l.unit_price * (1 - l.discount_pct / 100)),
+  });
+
+  const clienteSnapshot = {
+    nome: nomeCliente,
+    indirizzo: cliente.address || '',
+    citta: cliente.city || '',
+    telefono: cliente.phone || '',
+    email: cliente.email || '',
+    partitaIva: '',
+    referente: '',
+  };
+
+  const quoteData = {
+    cliente: clienteSnapshot,
+    cantiere: a.cantiere || '',
+    prodotto: null,
+    righeMat: [],
+    ivaRate,
+    sconto: 0,
+    lingua: 'it',
+    stato: 'bozza',
+    tipoPreventivo: a.tipo_preventivo || (articoli.length ? 'fornitura_posa' : 'servizi'),
+    showCondizioniFornitura: articoli.length > 0,
+    noteCliente: a.note || '',
+    noteInterne: 'Creato dall\'assistente AI: verifica quantità e prezzi prima di inviare.',
+    catalog: { articoli, accessori, servizi },
+    calc: { imponibile: r2(imponibile), iva: r2(iva), totaleIva: r2(totale) },
+  };
+
+  const { data: q, error } = await sb.from('quotes').insert({
+    customer_id: cliente.id,
+    quote_number: quoteNumber,
+    status: 'draft',
+    total_amount: r2(totale),
+    vat_amount: r2(iva),
+    vat_included: true,
+    vat_rate: ivaRate / 100,
+    notes: a.note || null,
+    items: [...articoli.map(mapItem('articolo')), ...accessori.map(mapItem('accessorio')), ...servizi.map(mapItem('servizio'))],
+    additional_costs: [],
+    project_name: a.cantiere || null,
+    site_address: cliente.address || null,
+    site_city: cliente.city || null,
+    client_name: nomeCliente,
+    quote_data: quoteData,
+  }).select('id, quote_number').single();
+  if (error) return { errore: error.message };
+
+  const percorso = `/admin/preventivi/nuovo?edit=${q.id}`;
+  refs.push({ etichetta: `Preventivo ${q.quote_number}`, percorso });
+  return {
+    creato: true,
+    id: q.id,
+    numero: q.quote_number,
+    cliente: nomeCliente,
+    voci: lines.length,
+    imponibile: r2(imponibile),
+    iva: r2(iva),
+    totale: r2(totale),
+    stato: 'bozza',
+    link: percorso,
+    nota: lines.every((l) => !l.unit_price) ? 'Nessun prezzo indicato: le voci sono a 0, vanno completate nell\'editor.' : undefined,
+  };
+}
+
 
 // ---------------- tool implementations ----------------
 async function fullName(sb: SupabaseClient, table: string, ids: string[]) {
