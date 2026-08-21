@@ -206,7 +206,66 @@ const TOOLS = [
       parameters: { type: 'object', properties: { data: { type: 'string', description: 'YYYY-MM-DD, default oggi' } } },
     },
   },
+  {
+    type: 'function',
+    function: {
+      name: 'crea_cliente',
+      description: 'Crea un nuovo cliente in anagrafica (customers). Usalo quando l\'utente chiede di inserire/aggiungere un cliente nuovo. Se un cliente con nome simile esiste già ritorna gia_esistente con i candidati.',
+      parameters: {
+        type: 'object',
+        properties: {
+          nome: { type: 'string', description: 'Nome di battesimo (per persona fisica)' },
+          cognome: { type: 'string', description: 'Cognome (per persona fisica)' },
+          ragione_sociale: { type: 'string', description: 'Ragione sociale se azienda' },
+          email: { type: 'string' },
+          telefono: { type: 'string' },
+          indirizzo: { type: 'string' },
+          citta: { type: 'string' },
+          provincia: { type: 'string' },
+          cap: { type: 'string' },
+          partita_iva: { type: 'string' },
+          tipo: { type: 'string', description: 'cliente_privato (default), rivenditore, costruttore, posatore, architetto, interior_designer, showroom, studio_design, azienda_pubblica' },
+          forza: { type: 'boolean', description: 'Se true crea comunque anche se esistono omonimi' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'crea_preventivo',
+      description: 'Crea un nuovo preventivo in bozza (quotes) con le voci indicate dall\'utente. Se il cliente non esiste in anagrafica e l\'utente ha chiesto di inserirlo, chiama prima crea_cliente. Ritorna numero preventivo, totali e il link per aprirlo nell\'editor.',
+      parameters: {
+        type: 'object',
+        properties: {
+          cliente: { type: 'string', description: 'Nome cliente o UUID del cliente in anagrafica' },
+          cantiere: { type: 'string', description: 'Nome cantiere / progetto, opzionale' },
+          iva_rate: { type: 'number', description: 'Aliquota IVA in percentuale, default 22' },
+          tipo_preventivo: { type: 'string', description: 'fornitura_posa, fornitura, posa oppure servizi' },
+          note: { type: 'string', description: 'Note per il cliente, opzionale' },
+          righe: {
+            type: 'array',
+            description: 'Voci del preventivo nell\'ordine indicato',
+            items: {
+              type: 'object',
+              properties: {
+                descrizione: { type: 'string' },
+                unita: { type: 'string', description: 'mq, m², ml, pz, a corpo, ore…' },
+                quantita: { type: 'number' },
+                prezzo_unitario: { type: 'number', description: 'Prezzo unitario netto in euro; 0 se non indicato' },
+                sconto_pct: { type: 'number' },
+                sezione: { type: 'string', description: 'articolo, accessorio o servizio (default servizio)' },
+              },
+              required: ['descrizione'],
+            },
+          },
+        },
+        required: ['cliente', 'righe'],
+      },
+    },
+  },
 ];
+
 
 // ---------------- tool implementations ----------------
 async function fullName(sb: SupabaseClient, table: string, ids: string[]) {
