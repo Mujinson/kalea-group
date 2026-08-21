@@ -901,6 +901,8 @@ Regole:
         case 'fatture_da_incassare': return await fattureDaIncassare(sb, args);
         case 'cantieri_attivi': return await cantieriAttivi(sb, args, refs);
         case 'chi_lavora_oggi': return await chiLavoraOggi(sb, args);
+        case 'crea_cliente': return await creaCliente(sb, args, refs);
+        case 'crea_preventivo': return await creaPreventivo(sb, args, refs);
         default: return { errore: 'richiesta non supportata' };
       }
     };
