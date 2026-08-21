@@ -2880,6 +2880,7 @@ export default function CreaPreventivo() {
 
 
             {/* Pagamenti */}
+            {pagamenti.some((p:any)=>(Number(p.pct)||0)>0) && (
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{L.cond_pagamento}</div>
               {pagamenti.filter((p:any)=>(Number(p.pct)||0)>0).map((p:any,i:number)=>(
@@ -2888,8 +2889,9 @@ export default function CreaPreventivo() {
                   <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
                 </div>
               ))}
-
             </div>
+            )}
+
 
             {/* Note cliente */}
             {noteCliente && (
