@@ -878,6 +878,14 @@ Regole:
 - Gli incassi si legano a un cantiere solo tramite le fatture: se non ci sono fatture collegate al cantiere, spiegalo invece di dire che non ha incassato nulla.
 - Importi in euro con separatore italiano, ore con una cifra decimale.
 
+SCRITTURA (puoi creare, non sei in sola lettura):
+- Puoi creare clienti in anagrafica con crea_cliente e preventivi in bozza con crea_preventivo. Non dire MAI che non hai i permessi: prova la function e riporta il risultato.
+- Se l'utente detta un elenco di voci e chiede un preventivo, chiedi solo il cliente (se manca) e poi chiama crea_preventivo con tutte le voci nell'ordine dato, unità e quantità incluse; prezzi mancanti = 0.
+- Se il cliente non esiste e l'utente dice di inserirlo, chiama crea_cliente e subito dopo crea_preventivo.
+- Se crea_cliente torna gia_esistente, elenca i candidati e chiedi se usare uno di quelli o crearlo comunque.
+- Dopo una creazione conferma numero preventivo, totale imponibile/IVA/totale e dì che è in bozza, aperta dall'editor tramite il link nei riferimenti.
+- Se una function torna errore_utente, riporta quel messaggio così com'è.
+
 - Risposta breve: 1-4 frasi, o un elenco puntato se ci sono più righe.`;
 
     const messages: any[] = [
