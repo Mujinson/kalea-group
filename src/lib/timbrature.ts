@@ -189,6 +189,12 @@ export interface DailySummary {
 
 export function summarizeDay(entries: TimeEntry[]): DailySummary {
   const sorted = [...entries].sort((a, b) => a.event_at.localeCompare(b.event_at));
+  if (sorted.length === 0) {
+    return { totalMinutes: 0, workMinutes: 0, pauseMinutes: 0, siteMinutes: 0, travelMinutes: 0, firstAt: null, lastAt: null };
+  }
+  const lastEventAt = sorted[sorted.length - 1].event_at;
+  const lastTs = new Date(lastEventAt).getTime();
+
   let pause = 0;
   let site = 0;
   let pauseStart: number | null = null;
@@ -207,21 +213,26 @@ export function summarizeDay(entries: TimeEntry[]): DailySummary {
     }
     if (e.event_type === 'pause_end') siteStart = t; // riprende conteggio cantiere
   }
-  const first = sorted.find((e) => e.event_type === 'start_home');
-  const last = [...sorted].reverse().find((e) => e.event_type === 'arrive_home');
+  // Giornata incompleta: chiudo i periodi aperti all'ultima timbratura disponibile
+  if (siteStart != null) site += Math.max(0, (lastTs - siteStart) / 60000);
+  // una pausa aperta non viene conteggiata (nessuna fine pausa registrata)
+
+  const first = sorted.find((e) => e.event_type === 'start_home') || sorted[0];
+  const last = [...sorted].reverse().find((e) => e.event_type === 'arrive_home') || sorted[sorted.length - 1];
 
   // Viaggio = casa → primo arrivo cantiere + ultima uscita cantiere → casa
   const firstSite = sorted.find((e) => e.event_type === 'arrive_site');
   const lastLeave = [...sorted].reverse().find((e) => e.event_type === 'leave_site');
+  const arriveHome = [...sorted].reverse().find((e) => e.event_type === 'arrive_home');
   let travel = 0;
   if (first && firstSite) {
     travel += Math.max(0, (new Date(firstSite.event_at).getTime() - new Date(first.event_at).getTime()) / 60000);
   }
-  if (lastLeave && last) {
-    travel += Math.max(0, (new Date(last.event_at).getTime() - new Date(lastLeave.event_at).getTime()) / 60000);
+  if (lastLeave && arriveHome) {
+    travel += Math.max(0, (new Date(arriveHome.event_at).getTime() - new Date(lastLeave.event_at).getTime()) / 60000);
   }
 
-  const totalMin = first && last ? (new Date(last.event_at).getTime() - new Date(first.event_at).getTime()) / 60000 : 0;
+  const totalMin = Math.max(0, (new Date(last.event_at).getTime() - new Date(first.event_at).getTime()) / 60000);
   const workMin = Math.max(0, totalMin - pause);
 
   return {
@@ -235,6 +246,7 @@ export function summarizeDay(entries: TimeEntry[]): DailySummary {
     lastAt: last?.event_at || null,
   };
 }
+
 
 export function formatHM(minutes: number): string {
   if (!minutes || minutes < 0) return '0h';
