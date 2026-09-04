@@ -1844,14 +1844,25 @@ export default function CreaPreventivo() {
     }
     const preview = document.getElementById("pdf-preview") as HTMLElement | null;
     if (!preview) { toast.error("Vai su 'Anteprima & PDF' prima di scaricare"); return; }
+    const wrap = document.getElementById("pdf-preview-wrap") as HTMLElement | null;
     const tId = toast.loading("Generazione PDF...");
+    // disattiva la riduzione mobile: cattura sempre il documento a piena larghezza A4
+    wrap?.classList.add("capturing");
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       const [{ default: html2canvas }, jsPDFmod] = await Promise.all([
         import("html2canvas"),
         import("jspdf"),
       ]);
       const jsPDF = (jsPDFmod as any).jsPDF || (jsPDFmod as any).default;
-      const canvas = await html2canvas(preview, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const canvas = await html2canvas(preview, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        windowWidth: 1200,
+        width: preview.scrollWidth,
+        height: preview.scrollHeight,
+      });
       const imgData = canvas.toDataURL("image/jpeg", 0.92);
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
@@ -1871,6 +1882,7 @@ export default function CreaPreventivo() {
       const fname = `Preventivo_${(numPrev || "Kalea").replace(/[^\w-]+/g, "_")}.pdf`;
       pdf.save(fname);
       toast.success("PDF scaricato", { id: tId });
+
     } catch (e: any) {
       console.error(e);
       toast.error(`Errore PDF: ${e?.message || e}`, { id: tId });
