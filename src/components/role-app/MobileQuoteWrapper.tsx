@@ -80,6 +80,9 @@ const MobileQuoteWrapper = () => {
     }
     setDownloading(true);
     const t = toast.loading('Generazione PDF...');
+    const wrap = root.querySelector('#pdf-preview-wrap') as HTMLElement | null;
+    wrap?.classList.add('capturing');
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       const [{ default: html2canvas }, jsPDFmod] = await Promise.all([
         import('html2canvas'),
@@ -91,7 +94,11 @@ const MobileQuoteWrapper = () => {
         scale: 2,
         backgroundColor: '#ffffff',
         useCORS: true,
+        windowWidth: 1200,
+        width: preview.scrollWidth,
+        height: preview.scrollHeight,
       });
+
 
       const imgData = canvas.toDataURL('image/jpeg', 0.92);
       const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
@@ -118,8 +125,10 @@ const MobileQuoteWrapper = () => {
       console.error(e);
       toast.error(`Errore PDF: ${e.message || e}`, { id: t });
     } finally {
+      wrap?.classList.remove('capturing');
       setDownloading(false);
     }
+
   };
 
   return (
@@ -139,7 +148,7 @@ const MobileQuoteWrapper = () => {
             max-width: 100% !important;
             padding: 16px 12px 120px 12px !important;
           }
-          .mobile-quote-scope div[style*="grid-template-columns"] {
+          .mobile-quote-scope div[style*="grid-template-columns"]:not(#pdf-preview *):not(#pdf-preview) {
             grid-template-columns: 1fr !important;
           }
           .mobile-quote-scope input,
@@ -150,13 +159,12 @@ const MobileQuoteWrapper = () => {
           }
           .mobile-quote-scope button { min-height: 40px; }
           .mobile-quote-scope #pdf-preview {
-            padding: 20px 16px !important;
-            max-width: 100% !important;
             box-shadow: none !important;
             border-radius: 8px !important;
           }
         }
       `}</style>
+
 
       <div ref={scopeRef} className="mobile-quote-scope">
         <CreaPreventivo />

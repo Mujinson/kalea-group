@@ -1844,14 +1844,25 @@ export default function CreaPreventivo() {
     }
     const preview = document.getElementById("pdf-preview") as HTMLElement | null;
     if (!preview) { toast.error("Vai su 'Anteprima & PDF' prima di scaricare"); return; }
+    const wrap = document.getElementById("pdf-preview-wrap") as HTMLElement | null;
     const tId = toast.loading("Generazione PDF...");
+    // disattiva la riduzione mobile: cattura sempre il documento a piena larghezza A4
+    wrap?.classList.add("capturing");
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       const [{ default: html2canvas }, jsPDFmod] = await Promise.all([
         import("html2canvas"),
         import("jspdf"),
       ]);
       const jsPDF = (jsPDFmod as any).jsPDF || (jsPDFmod as any).default;
-      const canvas = await html2canvas(preview, { scale: 2, backgroundColor: "#ffffff", useCORS: true });
+      const canvas = await html2canvas(preview, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        windowWidth: 1200,
+        width: preview.scrollWidth,
+        height: preview.scrollHeight,
+      });
       const imgData = canvas.toDataURL("image/jpeg", 0.92);
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
@@ -1871,10 +1882,14 @@ export default function CreaPreventivo() {
       const fname = `Preventivo_${(numPrev || "Kalea").replace(/[^\w-]+/g, "_")}.pdf`;
       pdf.save(fname);
       toast.success("PDF scaricato", { id: tId });
+
     } catch (e: any) {
       console.error(e);
       toast.error(`Errore PDF: ${e?.message || e}`, { id: tId });
+    } finally {
+      wrap?.classList.remove("capturing");
     }
+
   };
 
   const statoColor: Record<string,string> = { bozza:"#64748B", inviato:"#0C447C", accettato:"#27500A", rifiutato:"#A32D2D" };
@@ -2707,7 +2722,9 @@ export default function CreaPreventivo() {
           </div>
 
           {/* ANTEPRIMA DOCUMENTO */}
-          <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
+          <div id="pdf-preview-wrap" className="pdf-preview-wrap">
+          <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
+
 
             {/* Testata */}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
@@ -2941,10 +2958,14 @@ export default function CreaPreventivo() {
               <div style={{marginTop:2,color:"#475569"}}>Kalea Group Srl</div>
             </div>
           </div>
+          </div>
         </div>
+
       )}
 
       <style>{`
+        .pdf-preview-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        #pdf-preview { width: 800px !important; max-width: 800px !important; flex: none; }
         #pdf-preview .preventivo-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
         #pdf-preview .preventivo-table th,
         #pdf-preview .preventivo-table td { vertical-align: middle; }
@@ -2953,12 +2974,21 @@ export default function CreaPreventivo() {
         #pdf-preview .preventivo-table td:nth-child(3),
         #pdf-preview .preventivo-table td:nth-child(4) { white-space: nowrap; }
         #pdf-preview .preventivo-table td:nth-child(1) { word-break: break-word; }
+        @media (max-width: 900px) {
+          /* mostra il documento in scala, mantenendo il layout A4 identico al PDF */
+          .pdf-preview-wrap:not(.capturing) { zoom: 0.46; overflow-x: hidden; }
+        }
+        @media (max-width: 400px) {
+          .pdf-preview-wrap:not(.capturing) { zoom: 0.40; }
+        }
         @media print {
           body > * { display: none !important; }
+          .pdf-preview-wrap { zoom: 1 !important; display: block !important; }
           #pdf-preview { display: block !important; box-shadow: none !important; border: none !important; }
           button { display: none !important; }
         }
       `}</style>
+
     </div>
   );
 }
