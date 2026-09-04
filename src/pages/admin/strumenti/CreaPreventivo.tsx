@@ -2949,6 +2949,8 @@ export default function CreaPreventivo() {
       )}
 
       <style>{`
+        .pdf-preview-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        #pdf-preview { width: 800px !important; max-width: 800px !important; flex: none; }
         #pdf-preview .preventivo-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
         #pdf-preview .preventivo-table th,
         #pdf-preview .preventivo-table td { vertical-align: middle; }
@@ -2957,12 +2959,21 @@ export default function CreaPreventivo() {
         #pdf-preview .preventivo-table td:nth-child(3),
         #pdf-preview .preventivo-table td:nth-child(4) { white-space: nowrap; }
         #pdf-preview .preventivo-table td:nth-child(1) { word-break: break-word; }
+        @media (max-width: 900px) {
+          /* mostra il documento in scala, mantenendo il layout A4 identico al PDF */
+          .pdf-preview-wrap:not(.capturing) { zoom: 0.46; overflow-x: hidden; }
+        }
+        @media (max-width: 400px) {
+          .pdf-preview-wrap:not(.capturing) { zoom: 0.40; }
+        }
         @media print {
           body > * { display: none !important; }
+          .pdf-preview-wrap { zoom: 1 !important; display: block !important; }
           #pdf-preview { display: block !important; box-shadow: none !important; border: none !important; }
           button { display: none !important; }
         }
       `}</style>
+
     </div>
   );
 }
