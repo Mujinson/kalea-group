@@ -80,6 +80,9 @@ const MobileQuoteWrapper = () => {
     }
     setDownloading(true);
     const t = toast.loading('Generazione PDF...');
+    const wrap = root.querySelector('#pdf-preview-wrap') as HTMLElement | null;
+    wrap?.classList.add('capturing');
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       const [{ default: html2canvas }, jsPDFmod] = await Promise.all([
         import('html2canvas'),
@@ -91,7 +94,11 @@ const MobileQuoteWrapper = () => {
         scale: 2,
         backgroundColor: '#ffffff',
         useCORS: true,
+        windowWidth: 1200,
+        width: preview.scrollWidth,
+        height: preview.scrollHeight,
       });
+
 
       const imgData = canvas.toDataURL('image/jpeg', 0.92);
       const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
