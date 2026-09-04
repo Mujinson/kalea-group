@@ -125,8 +125,10 @@ const MobileQuoteWrapper = () => {
       console.error(e);
       toast.error(`Errore PDF: ${e.message || e}`, { id: t });
     } finally {
+      wrap?.classList.remove('capturing');
       setDownloading(false);
     }
+
   };
 
   return (
