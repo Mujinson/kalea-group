@@ -139,7 +139,7 @@ const MobileQuoteWrapper = () => {
             max-width: 100% !important;
             padding: 16px 12px 120px 12px !important;
           }
-          .mobile-quote-scope div[style*="grid-template-columns"] {
+          .mobile-quote-scope div[style*="grid-template-columns"]:not(#pdf-preview *):not(#pdf-preview) {
             grid-template-columns: 1fr !important;
           }
           .mobile-quote-scope input,
@@ -150,13 +150,12 @@ const MobileQuoteWrapper = () => {
           }
           .mobile-quote-scope button { min-height: 40px; }
           .mobile-quote-scope #pdf-preview {
-            padding: 20px 16px !important;
-            max-width: 100% !important;
             box-shadow: none !important;
             border-radius: 8px !important;
           }
         }
       `}</style>
+
 
       <div ref={scopeRef} className="mobile-quote-scope">
         <CreaPreventivo />
