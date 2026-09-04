@@ -1886,7 +1886,10 @@ export default function CreaPreventivo() {
     } catch (e: any) {
       console.error(e);
       toast.error(`Errore PDF: ${e?.message || e}`, { id: tId });
+    } finally {
+      wrap?.classList.remove("capturing");
     }
+
   };
 
   const statoColor: Record<string,string> = { bozza:"#64748B", inviato:"#0C447C", accettato:"#27500A", rifiutato:"#A32D2D" };
