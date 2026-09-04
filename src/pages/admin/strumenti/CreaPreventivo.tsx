@@ -2943,7 +2943,9 @@ export default function CreaPreventivo() {
               <div style={{marginTop:2,color:"#475569"}}>Kalea Group Srl</div>
             </div>
           </div>
+          </div>
         </div>
+
       )}
 
       <style>{`
