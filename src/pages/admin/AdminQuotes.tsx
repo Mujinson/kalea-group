@@ -22,6 +22,8 @@ import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from '@/components/admin/CrmShell';
 import { ConvertQuoteToSaleDialog } from '@/components/admin/ConvertQuoteToSaleDialog';
+import { promoteLeadToCustomer, quotesNeedingFollowUp } from '@/lib/quoteCrm';
+import { QuoteFollowUpPanel } from '@/components/admin/QuoteFollowUpPanel';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC-01', 'CWC-02', 'CWC-03', 'CWC-04', 'CWC-05', 'CWC-06', 'CWC-07'];
