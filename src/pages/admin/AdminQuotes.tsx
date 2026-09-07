@@ -270,11 +270,14 @@ const AdminQuotes = () => {
       toast.success(`Stato aggiornato a ${label}`);
       fetchData();
 
-      // Preventivo vinto → crea la vendita in automatico con tutte le voci
+      // Preventivo vinto → il lead diventa cliente e si crea la vendita
       const q = quotes.find(x => x.id === quoteId);
-      if (isQuoteWon(newStatus) && q && !q.converted_sale_id && q.customer_id) {
-        setQuoteToConvert({ ...q, status: newStatus } as any);
-        setConvertDialogOpen(true);
+      if (isQuoteWon(newStatus) && q && !q.converted_sale_id) {
+        const withCustomer = await withPromotedCustomer(q);
+        if (withCustomer) {
+          setQuoteToConvert({ ...withCustomer, status: newStatus } as any);
+          setConvertDialogOpen(true);
+        }
       }
 
     } catch (error: any) {
@@ -282,15 +285,25 @@ const AdminQuotes = () => {
     }
   };
 
+  /** Se il preventivo è di un lead, lo promuove a cliente in anagrafica. */
+  const withPromotedCustomer = async (quote: Quote): Promise<Quote | null> => {
+    if (quote.customer_id) return quote;
+    if (!(quote as any).lead_id) { toast.error('Preventivo senza cliente'); return null; }
+    const customerId = await promoteLeadToCustomer((quote as any).lead_id);
+    if (!customerId) { toast.error('Impossibile creare il cliente dal lead'); return null; }
+    await supabase.from('quotes').update({ customer_id: customerId }).eq('id', quote.id);
+    toast.success('Lead convertito in cliente');
+    fetchData();
+    return { ...quote, customer_id: customerId };
+  };
 
-  const convertToSale = (quote: Quote) => {
-    if (!quote.customer_id) {
-      toast.error('Preventivo senza cliente');
-      return;
-    }
-    setQuoteToConvert(quote);
+  const convertToSale = async (quote: Quote) => {
+    const q = await withPromotedCustomer(quote);
+    if (!q) return;
+    setQuoteToConvert(q);
     setConvertDialogOpen(true);
   };
+
 
 
 
