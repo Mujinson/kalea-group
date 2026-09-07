@@ -464,6 +464,13 @@ const AdminQuotes = () => {
         <CrmKpiTile label="Perse" value={statCounts.perse} color="red" />
       </CrmKpiRow>
 
+      <QuoteFollowUpPanel
+        quotes={quotes}
+        getClientName={(q) => getCustomerName(q)}
+        onUpdated={fetchData}
+      />
+
+
 
       <CrmFilterBar>
         <div className="relative flex-1">
