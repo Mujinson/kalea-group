@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import WoodcoBlock, { emptyWoodcoSelection, type WoodcoSelection } from "@/components/preventivo/WoodcoBlock";
 import QuoteCatalogSections, { catalogLinesTotal, type CatalogLine } from "@/components/admin/quotes/QuoteCatalogSections";
 import { takeImportedQuote, type ImportedLine } from "@/lib/quoteImport";
+import { ensureLeadForQuote } from "@/lib/quoteCrm";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
