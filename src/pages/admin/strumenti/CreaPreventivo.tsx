@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import WoodcoBlock, { emptyWoodcoSelection, type WoodcoSelection } from "@/components/preventivo/WoodcoBlock";
 import QuoteCatalogSections, { catalogLinesTotal, type CatalogLine } from "@/components/admin/quotes/QuoteCatalogSections";
 import { takeImportedQuote, type ImportedLine } from "@/lib/quoteImport";
+import { ensureLeadForQuote } from "@/lib/quoteCrm";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
@@ -1789,9 +1790,23 @@ export default function CreaPreventivo() {
 
 
 
+      // Se il cliente è stato digitato a mano, lo registro come lead nel CRM
+      // così al prossimo preventivo i dati sono già in anagrafica.
+      let link = crmLink;
+      if (!link) {
+        const lead = await ensureLeadForQuote(clienteSnapshot as any, cantiere || undefined);
+        if (lead) {
+          link = { source: "lead", id: lead.id, label: clienteSnapshot.nome, nome: clienteSnapshot.nome,
+            indirizzo: clienteSnapshot.indirizzo, citta: clienteSnapshot.citta,
+            telefono: clienteSnapshot.telefono, email: clienteSnapshot.email } as any;
+          setCrmLink(link);
+          if (lead.created) toast.success("Cliente salvato in anagrafica (lead)");
+        }
+      }
+
       const quotePayload: any = {
-        customer_id: crmLink?.source === "customer" ? crmLink.id : null,
-        lead_id: crmLink?.source === "lead" ? crmLink.id : null,
+        customer_id: link?.source === "customer" ? link.id : null,
+        lead_id: link?.source === "lead" ? link.id : null,
         quote_number: num,
         status: statusMap[stato] || "draft",
         total_amount: Math.round(calc.totaleIva * 100) / 100,

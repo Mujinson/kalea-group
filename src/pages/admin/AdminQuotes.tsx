@@ -22,6 +22,8 @@ import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow, CrmFilterBar, CrmTableCard } from '@/components/admin/CrmShell';
 import { ConvertQuoteToSaleDialog } from '@/components/admin/ConvertQuoteToSaleDialog';
+import { promoteLeadToCustomer, quotesNeedingFollowUp } from '@/lib/quoteCrm';
+import { QuoteFollowUpPanel } from '@/components/admin/QuoteFollowUpPanel';
 
 const MGO_COLORS = ['Aurora', 'Corteccia', 'Sabbia', 'Terram', 'Velora', 'Perla', 'Silven', 'Cenere'];
 const CWC_VARIANTS = ['CWC-01', 'CWC-02', 'CWC-03', 'CWC-04', 'CWC-05', 'CWC-06', 'CWC-07'];
@@ -270,11 +272,14 @@ const AdminQuotes = () => {
       toast.success(`Stato aggiornato a ${label}`);
       fetchData();
 
-      // Preventivo vinto → crea la vendita in automatico con tutte le voci
+      // Preventivo vinto → il lead diventa cliente e si crea la vendita
       const q = quotes.find(x => x.id === quoteId);
-      if (isQuoteWon(newStatus) && q && !q.converted_sale_id && q.customer_id) {
-        setQuoteToConvert({ ...q, status: newStatus } as any);
-        setConvertDialogOpen(true);
+      if (isQuoteWon(newStatus) && q && !q.converted_sale_id) {
+        const withCustomer = await withPromotedCustomer(q);
+        if (withCustomer) {
+          setQuoteToConvert({ ...withCustomer, status: newStatus } as any);
+          setConvertDialogOpen(true);
+        }
       }
 
     } catch (error: any) {
@@ -282,15 +287,25 @@ const AdminQuotes = () => {
     }
   };
 
+  /** Se il preventivo è di un lead, lo promuove a cliente in anagrafica. */
+  const withPromotedCustomer = async (quote: Quote): Promise<Quote | null> => {
+    if (quote.customer_id) return quote;
+    if (!(quote as any).lead_id) { toast.error('Preventivo senza cliente'); return null; }
+    const customerId = await promoteLeadToCustomer((quote as any).lead_id);
+    if (!customerId) { toast.error('Impossibile creare il cliente dal lead'); return null; }
+    await supabase.from('quotes').update({ customer_id: customerId }).eq('id', quote.id);
+    toast.success('Lead convertito in cliente');
+    fetchData();
+    return { ...quote, customer_id: customerId };
+  };
 
-  const convertToSale = (quote: Quote) => {
-    if (!quote.customer_id) {
-      toast.error('Preventivo senza cliente');
-      return;
-    }
-    setQuoteToConvert(quote);
+  const convertToSale = async (quote: Quote) => {
+    const q = await withPromotedCustomer(quote);
+    if (!q) return;
+    setQuoteToConvert(q);
     setConvertDialogOpen(true);
   };
+
 
 
 
@@ -448,6 +463,13 @@ const AdminQuotes = () => {
         <CrmKpiTile label="Vinte" value={statCounts.vinte} color="emerald" />
         <CrmKpiTile label="Perse" value={statCounts.perse} color="red" />
       </CrmKpiRow>
+
+      <QuoteFollowUpPanel
+        quotes={quotes}
+        getClientName={(q) => getCustomerName(q)}
+        onUpdated={fetchData}
+      />
+
 
 
       <CrmFilterBar>
