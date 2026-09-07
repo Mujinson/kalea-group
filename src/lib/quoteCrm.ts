@@ -61,6 +61,7 @@ export const ensureLeadForQuote = async (
     contact_person_name: clean(cliente.referente) || null,
     contact_person_role: clean(cliente.ruoloReferente) || null,
     project_type: clean(projectName) || null,
+    vat_number: clean(cliente.partitaIva) || null,
     source: 'preventivo',
     status: 'nuovo',
     pipeline_stage: 'warm',
