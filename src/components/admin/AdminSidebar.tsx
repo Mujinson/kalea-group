@@ -190,6 +190,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Pricing Parquet', url: '/admin/strumenti/pricing-parquet', icon: Layers, adminOnly: true },
         { title: 'Pricing Signature', url: '/admin/strumenti/pricing-signature', icon: Layers, adminOnly: true },
         { title: 'Pricing Externo', url: '/admin/strumenti/pricing-externo', icon: Tag, adminOnly: true },
+        { title: 'Listino pubblico', url: '/admin/strumenti/listino-pubblico', icon: Tag, adminOnly: true },
       ],
     },
   },

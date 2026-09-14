@@ -2789,6 +2789,129 @@ export type Database = {
         }
         Relationships: []
       }
+      public_quote_items: {
+        Row: {
+          category: string
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          name_de: string | null
+          name_en: string | null
+          name_fr: string | null
+          notes: string | null
+          price_max: number
+          price_min: number
+          sort_order: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          name_de?: string | null
+          name_en?: string | null
+          name_fr?: string | null
+          notes?: string | null
+          price_max?: number
+          price_min?: number
+          sort_order?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          name_de?: string | null
+          name_en?: string | null
+          name_fr?: string | null
+          notes?: string | null
+          price_max?: number
+          price_min?: number
+          sort_order?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      public_quote_requests: {
+        Row: {
+          city: string | null
+          created_at: string
+          customer_name: string
+          customer_type: string | null
+          email: string
+          id: string
+          language: string
+          lead_id: string | null
+          lines: Json
+          notes: string | null
+          phone: string | null
+          privacy_consent: boolean
+          province: string | null
+          source_ip: string | null
+          status: string
+          total_max: number
+          total_min: number
+          updated_at: string
+          vat_rate: number
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          customer_name: string
+          customer_type?: string | null
+          email: string
+          id?: string
+          language?: string
+          lead_id?: string | null
+          lines?: Json
+          notes?: string | null
+          phone?: string | null
+          privacy_consent?: boolean
+          province?: string | null
+          source_ip?: string | null
+          status?: string
+          total_max?: number
+          total_min?: number
+          updated_at?: string
+          vat_rate?: number
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          customer_name?: string
+          customer_type?: string | null
+          email?: string
+          id?: string
+          language?: string
+          lead_id?: string | null
+          lines?: Json
+          notes?: string | null
+          phone?: string | null
+          privacy_consent?: boolean
+          province?: string | null
+          source_ip?: string | null
+          status?: string
+          total_max?: number
+          total_min?: number
+          updated_at?: string
+          vat_rate?: number
+        }
+        Relationships: []
+      }
       quotes: {
         Row: {
           accepted_date: string | null

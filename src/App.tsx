@@ -124,6 +124,8 @@ import PricingSignature from "./pages/admin/strumenti/PricingSignature";
 import PricingExterno from "./pages/admin/strumenti/PricingExterno";
 import CreaPreventivo from "./pages/admin/strumenti/CreaPreventivo";
 import CreaContabilita from "./pages/admin/strumenti/CreaContabilita";
+import ListinoPubblico from "./pages/admin/strumenti/ListinoPubblico";
+import PreventivoOnline from "./pages/PreventivoOnline";
 
 import CommercialeApp from "./pages/role-app/CommercialeApp";
 import OperaioApp from "./pages/role-app/OperaioApp";
@@ -314,6 +316,7 @@ const App = () => (
                 <Route path="strumenti/pricing-parquet" element={<PricingParquet />} />
                 <Route path="strumenti/pricing-signature" element={<PricingSignature />} />
                 <Route path="strumenti/pricing-externo" element={<PricingExterno />} />
+                <Route path="strumenti/listino-pubblico" element={<ListinoPubblico />} />
 
                 {/* English aliases (keep compatibility) */}
                 <Route path="sales" element={<AdminSales />} />
@@ -351,6 +354,7 @@ const App = () => (
               <Route path="/it/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/it/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/it/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/it/preventivo-online" element={<><SEOHandler /><Layout><PreventivoOnline /></Layout></>} />
               <Route path="/it/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
               <Route path="/it/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
               <Route path="/it/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
@@ -381,6 +385,7 @@ const App = () => (
               <Route path="/en/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/en/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/en/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/en/preventivo-online" element={<><SEOHandler /><Layout><PreventivoOnline /></Layout></>} />
               <Route path="/en/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
               <Route path="/en/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
               <Route path="/en/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
@@ -411,6 +416,7 @@ const App = () => (
               <Route path="/de/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/de/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/de/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/de/preventivo-online" element={<><SEOHandler /><Layout><PreventivoOnline /></Layout></>} />
               <Route path="/de/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
               <Route path="/de/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
               <Route path="/de/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
@@ -441,6 +447,7 @@ const App = () => (
               <Route path="/fr/area-tecnica" element={<><SEOHandler /><Layout><AreaTecnica /></Layout></>} />
               <Route path="/fr/chi-siamo" element={<><SEOHandler /><Layout><ChiSiamo /></Layout></>} />
               <Route path="/fr/contatti" element={<><SEOHandler /><Layout><Contatti /></Layout></>} />
+              <Route path="/fr/preventivo-online" element={<><SEOHandler /><Layout><PreventivoOnline /></Layout></>} />
               <Route path="/fr/diventa-partner" element={<><SEOHandler /><Layout><DiventaPartner /></Layout></>} />
               <Route path="/fr/privacy" element={<><SEOHandler /><Layout><Privacy /></Layout></>} />
               <Route path="/fr/termini" element={<><SEOHandler /><Layout><Termini /></Layout></>} />
