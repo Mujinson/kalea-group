@@ -209,7 +209,7 @@ Deno.serve(async (req) => {
           province: province || null,
           source: "preventivatore_online",
           status: "nuovo",
-          pipeline_stage: "nuovo",
+          pipeline_stage: "cold",
           notes: summary,
           last_interaction_at: new Date().toISOString(),
         })
