@@ -179,22 +179,45 @@ Deno.serve(async (req) => {
     const totalMax = computed.reduce((s, r) => s + Number(r.total_max), 0);
     const VAT = 22;
 
-    // Lead in CRM (reuses submit_public_lead so dedupe/codes stay consistent)
+    // Lead in CRM
     let leadId: string | null = null;
-    const { data: leadData, error: leadError } = await supabase.rpc("submit_public_lead", {
-      _name: name,
-      _email: email,
-      _phone: phone,
-      _message: `Stima online: ${eur(totalMin)} – ${eur(totalMax)} + IVA\n${computed
-        .map((r) => `• ${r.name}: ${r.quantity} ${r.unit}`)
-        .join("\n")}${notes ? `\n\nNote: ${notes}` : ""}`,
-      _source: "preventivatore_online",
-      _interest: computed.map((r) => r.name).join(", ").slice(0, 250),
-      _city: city || null,
-      _province: province || null,
-    });
-    if (leadError) console.error("lead creation failed:", leadError.message);
-    else leadId = leadData as string;
+    const summary = `Stima online: ${eur(totalMin)} – ${eur(totalMax)} + IVA\n${computed
+      .map((r) => `• ${r.name}: ${r.quantity} ${r.unit}`)
+      .join("\n")}${notes ? `\n\nNote: ${notes}` : ""}`;
+
+    const { data: existingLead } = await supabase
+      .from("leads")
+      .select("id")
+      .eq("email", email)
+      .limit(1)
+      .maybeSingle();
+
+    if (existingLead?.id) {
+      leadId = existingLead.id as string;
+      await supabase
+        .from("leads")
+        .update({ last_interaction_at: new Date().toISOString(), notes: summary })
+        .eq("id", leadId);
+    } else {
+      const { data: leadData, error: leadError } = await supabase
+        .from("leads")
+        .insert({
+          name,
+          email,
+          phone,
+          city: city || null,
+          province: province || null,
+          source: "preventivatore_online",
+          status: "nuovo",
+          pipeline_stage: "nuovo",
+          notes: summary,
+          last_interaction_at: new Date().toISOString(),
+        })
+        .select("id")
+        .single();
+      if (leadError) console.error("lead creation failed:", leadError.message);
+      else leadId = leadData.id as string;
+    }
 
     const { data: saved, error: saveError } = await supabase
       .from("public_quote_requests")
