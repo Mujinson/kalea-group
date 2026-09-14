@@ -57,7 +57,18 @@ Al primo avvio carico un set iniziale di voci con fasce provvisorie: le rivedi t
 - `src/pages/admin/strumenti/ListinoPubblico.tsx` per gestire le voci e le fasce.
 - Le richieste arrivano tra i lead esistenti, filtrabili per fonte.
 
-## Fuori perimetro
+## Fase successiva (non in questa consegna)
 
-- Nessun pagamento online.
+Pagamenti e firma online, da fare dopo che il preventivatore è attivo:
+
+- **Firma del contratto online** sul preventivo definitivo, con copia firmata archiviata nel CRM.
+- **Acconto del 30%** pagabile online alla firma.
+- **Link di pagamento della fattura** a fine lavori, inviato al cliente.
+- Ogni pagamento ricevuto si registra da solo tra gli incassi del CRM.
+
+Serve attivare un sistema di pagamenti integrato (Lovable lo fornisce senza bisogno di un tuo account) e un piano Pro. Ne parliamo quando arriviamo a quel passo.
+
+## Fuori perimetro (per ora)
+
+- Nessun pagamento nel preventivatore pubblico: è solo una stima.
 - Nessun prezzo esatto al pubblico: solo fasce.
