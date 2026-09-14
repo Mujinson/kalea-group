@@ -1,85 +1,63 @@
-# Pricing pages → catalogo Supabase (fonte unica)
+# Preventivatore online per il cliente
 
-Obiettivo: le 6 pagine in `src/pages/admin/strumenti/Pricing*.tsx` smettono di usare array hardcoded e leggono i prezzi da `catalog_products`, filtrati per brand del listino. Layout e stile invariati — cambia solo la fonte dati.
+Una pagina pubblica dove il cliente costruisce da solo una stima indicativa, lascia i suoi dati e riceve il PDF via email. Tu ricevi subito la notifica su Telegram e via email, e il lead entra nel CRM.
 
-## 1. Mapping brand per listino (in `_shared.tsx`)
+## Come lo vive il cliente
 
-Aggiungo una costante esportata:
+1. **Cosa ti serve** — sceglie una o più lavorazioni (anche tutte insieme):
+   - Fornitura pavimento (parquet, SPC/laminato, WPC/esterni, ceramica)
+   - Posa
+   - Verifica e preparazione del sottofondo
+   - Levigatura
+   - Lamatura / rigenerazione
+   - Finitura (olio / vernice)
+   - Rimozione pavimento esistente
+2. **Quanto** — metri quadri per ogni voce, più eventuale piano/accessibilità.
+3. **Stima** — vede subito una fascia di prezzo (da X a Y €) per ogni voce e un totale indicativo, con IVA indicata a parte.
+4. **I tuoi dati** — nome, email, telefono, città, tipo cliente, note. Consenso privacy obbligatorio.
+5. **Ricevi la stima** — conferma a schermo e PDF inviato via email.
 
-```ts
-export const PRICING_BRAND_MATCH: Record<string, (brand: string, collection: string) => boolean> = {
-  flow:        (b, c) => b.includes("flow"),
-  kronos:      (b, c) => b.includes("kronos"),
-  berryalloc:  (b, c) => b.includes("berry"),
-  parquet:     (b, c) => b.includes("woodco") || c.includes("parquet"),
-  signature:   (b, c) => b.includes("signature") || c.includes("signature"),
-  externo:     (b, c) => b.includes("externo") || c.includes("externo"),
-};
-```
-Match case-insensitive (lowercase in confronto).
+In ogni passaggio, e in evidenza sul PDF, il disclaimer: stima puramente indicativa, non vincolante; il preventivo definitivo viene emesso solo dopo il sopralluogo dei tecnici Kalēa.
 
-## 2. Hook condiviso `usePricingCatalog(key)` in `_shared.tsx`
+## Cosa succede dietro le quinte
 
-Esegue una sola volta la query (pattern identico a `CreaPreventivo.tsx` righe 1034-1094):
+- La richiesta viene salvata e diventa un **lead** nel CRM (fonte "preventivatore online"), con tutte le voci scelte e la stima.
+- **Notifica Telegram** immediata sul bot già collegato + **email** a Kalēa con il riepilogo.
+- Il PDF della stima parte via email al cliente.
+- Promemoria automatico nel CRM per richiamarlo il giorno dopo.
 
-- `.from("catalog_products").select("product_code, name, collection, format, list_price, supplier_discount_percentage, unit_of_measure, is_active, catalog_brands(name)")`
-- `.eq("is_active", true).gt("list_price", 0).order("name")`
+## Prezzi
 
-Poi divide client-side in due liste applicando `PRICING_BRAND_MATCH[key]`:
+Le fasce non vengono prese dal catalogo interno: crei un **listino pubblico separato** che gestisci tu da una nuova pagina in amministrazione (Strumenti → Listino pubblico). Per ogni voce: nome, descrizione breve, unità di misura, prezzo minimo, prezzo massimo, attiva sì/no, ordine. Così il pubblico non vede mai i prezzi interni e puoi aggiornare le fasce quando vuoi.
 
-- `prodotti`: righe la cui `collection` NON contiene "accessor"
-- `accessori`: righe la cui `collection` contiene "accessor"
+Al primo avvio carico un set iniziale di voci con fasce provvisorie: le rivedi tu prima di pubblicare.
 
-Ritorna `{ prodotti, accessori, loading, error }`. Ogni elemento è mappato in forma neutra:
-`{ id: product_code, nome: name, dims: format, listino: list_price, unita: unit_of_measure ?? "mq", note: collection, brand: catalog_brands.name }`.
+## Dettagli tecnici
 
-Lo sconto fornitore usato è quello scelto via `useToolSettings` (SCONTI locali già esistenti nelle pagine) — `supplier_discount_percentage` del DB NON viene applicato qui, per non rompere la logica corrente delle pagine.
+**Database**
+- `public_quote_items`: codice, nome, descrizione, categoria (fornitura / posa / preparazione / trattamento / rimozione), unità, `price_min`, `price_max`, `is_active`, `sort_order`, note. Lettura pubblica (`anon`) solo delle righe attive; scrittura solo admin. GRANT espliciti + RLS.
+- `public_quote_requests`: dati cliente, righe scelte (jsonb), totale min/max, lingua, consenso, `lead_id`, stato, timestamp. Nessuna lettura pubblica; inserimento solo tramite funzione server.
 
-## 3. Aggiornamento delle 6 pagine
+**Frontend**
+- Nuova pagina pubblica `src/pages/PreventivoOnline.tsx` su `/:lang/preventivo-online`, wizard a 4 step, stile coerente con il sito (sfondo #F7F1E7, font New Order, nessun overlay sticky). Link nel menu e nelle CTA "Richiedi preventivo".
+- Testi in IT, EN, DE, FR.
+- SEO: title/description dedicati, H1 unico.
 
-Per ognuna di `PricingFlow`, `PricingKronos`, `PricingBerryAlloc`, `PricingParquet`, `PricingSignature`, `PricingExterno`:
+**Backend**
+- Edge function `public-quote-estimate`: valida l'input con zod, ricalcola i totali lato server dai prezzi del listino (mai fidarsi del browser), salva la richiesta, crea/riusa il lead con `submit_public_lead`, crea il promemoria di richiamo, genera l'HTML della stima e invia:
+  - email al cliente con la stima (Resend, stessa configurazione di `send-contact-email`);
+  - email interna a Kalēa;
+  - messaggio Telegram al chat ID già configurato.
+- Rate limiting e honeypot come nella funzione contatti.
 
-- Rimuovo gli array `PRODOTTI` e `ACCESSORI` hardcoded.
-- Chiamo `usePricingCatalog("flow" | "kronos" | ...)`.
-- Mentre `loading === true`: skeleton (3-4 righe grigie animate, stesso stile del box card esistente).
-- Se `!loading && prodotti.length === 0`: banner testuale
-  > "Nessun prodotto trovato nel catalogo per questo listino — verifica i brand in Catalogo → Marche"
-  al posto delle tabelle.
-- Card riepilogo (listino/costo/prezzo/margine medio) ricalcolate su `prodotti` reali con `coeff` e `markup` correnti.
-- Tabelle Prodotti e Accessori usano gli array caricati (le colonne/formattazioni restano identiche).
-- Sconto fornitore (SCONTI locali) + markup + useToolSettings restano invariati.
+**PDF**
+- Generato lato client al momento della conferma (stesso approccio html2canvas/jsPDF dei preventivi CRM) con logo Kalēa, P.IVA 04797310986 e disclaimer; l'email contiene la stessa stima in HTML così il cliente la riceve comunque.
 
-## 4. Pulsante "Crea preventivo"
+**Admin**
+- `src/pages/admin/strumenti/ListinoPubblico.tsx` per gestire le voci e le fasce.
+- Le richieste arrivano tra i lead esistenti, filtrabili per fonte.
 
-Nella card/riga prodotto (accanto al selettore già esistente per il calcolatore inline) aggiungo un bottone piccolo `Crea preventivo` che fa:
+## Fuori perimetro
 
-```ts
-navigate(`/admin/preventivi/nuovo?product_code=${encodeURIComponent(id)}`);
-```
-
-## 5. `CreaPreventivo.tsx` — lettura query param
-
-- Con `useSearchParams()` leggo `product_code`.
-- Dentro l'effect che carica `PRODOTTI`, dopo `setPRODOTTI(mapped)`: se `product_code` presente e trovato in `mapped`, preseleziono quel prodotto e porto `step` allo step calcolo. Se non trovato, nessuna azione (utente parte dalla ricerca normale).
-
-## 6. Cosa NON cambia
-
-- Layout, stili inline, palette, dimensioni delle 6 pagine.
-- Logica SCONTI/markup/useToolSettings.
-- Route esistenti.
-- Nessuna migration DB.
-
-## File toccati
-
-- `src/pages/admin/strumenti/_shared.tsx` (aggiunta `PRICING_BRAND_MATCH` + hook `usePricingCatalog`)
-- `src/pages/admin/strumenti/PricingFlow.tsx`
-- `src/pages/admin/strumenti/PricingKronos.tsx`
-- `src/pages/admin/strumenti/PricingBerryAlloc.tsx`
-- `src/pages/admin/strumenti/PricingParquet.tsx`
-- `src/pages/admin/strumenti/PricingSignature.tsx`
-- `src/pages/admin/strumenti/PricingExterno.tsx`
-- `src/pages/admin/strumenti/CreaPreventivo.tsx` (solo lettura `product_code`)
-
-## Rischio / da confermare
-
-Il match "Signature" (brand+collection contengono "signature") potrebbe sovrapporsi a Woodco Parquet se in DB i prodotti Signature sono registrati sotto brand Woodco con collection "Signature". Se succede, i prodotti Signature apparirebbero anche in Parquet. Vuoi che escluda `signature` dal match Parquet? Procedo con questa esclusione salvo diversa indicazione.
+- Nessun pagamento online.
+- Nessun prezzo esatto al pubblico: solo fasce.
