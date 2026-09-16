@@ -52,6 +52,8 @@ export const ensureLeadForQuote = async (
     .from('leads').select('id').ilike('name', name).limit(1).maybeSingle();
   if (byName) return { id: byName.id, created: false };
 
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data, error } = await supabase.from('leads').insert({
     name,
     email: email || null,
@@ -62,12 +64,16 @@ export const ensureLeadForQuote = async (
     contact_person_role: clean(cliente.ruoloReferente) || null,
     project_type: clean(projectName) || null,
     vat_number: clean(cliente.partitaIva) || null,
+    assigned_user_id: user?.id || null,
     source: 'preventivo',
     status: 'nuovo',
     pipeline_stage: 'warm',
     notes: 'Creato automaticamente dal modulo preventivi',
   }).select('id').single();
-  if (error) { console.error('ensureLeadForQuote', error); return null; }
+  if (error) {
+    console.error('ensureLeadForQuote', error);
+    throw new Error(error.message || 'Impossibile salvare il cliente in anagrafica');
+  }
   return { id: data.id, created: true };
 };
 

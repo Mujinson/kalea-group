@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { ensureLeadForQuote } from "@/lib/quoteCrm";
 
 
 // ─── Tipi ────────────────────────────────────────────────────────────────────
@@ -434,7 +435,22 @@ export default function CreaContabilita() {
       });
 
       const tot = totaliGlobali;
+
+      // Registro il cliente in anagrafica (lead) così è ricercabile nei prossimi preventivi
+      let leadId: string | null = null;
+      try {
+        const lead = await ensureLeadForQuote(cliente as any, cantiere || undefined);
+        if (lead) {
+          leadId = lead.id;
+          if (lead.created) toast.success("Cliente salvato in anagrafica (lead)");
+        }
+      } catch (le: any) {
+        console.error(le);
+        toast.error("Cliente non salvato in anagrafica: " + (le?.message || ""));
+      }
+
       const quotePayload: any = {
+        lead_id: leadId,
         quote_number: num,
         status: statusMap[stato] || "draft",
         client_name: cliente.nome || null,

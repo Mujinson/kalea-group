@@ -1794,13 +1794,18 @@ export default function CreaPreventivo() {
       // così al prossimo preventivo i dati sono già in anagrafica.
       let link = crmLink;
       if (!link) {
-        const lead = await ensureLeadForQuote(clienteSnapshot as any, cantiere || undefined);
-        if (lead) {
-          link = { source: "lead", id: lead.id, label: clienteSnapshot.nome, nome: clienteSnapshot.nome,
-            indirizzo: clienteSnapshot.indirizzo, citta: clienteSnapshot.citta,
-            telefono: clienteSnapshot.telefono, email: clienteSnapshot.email } as any;
-          setCrmLink(link);
-          if (lead.created) toast.success("Cliente salvato in anagrafica (lead)");
+        try {
+          const lead = await ensureLeadForQuote(clienteSnapshot as any, cantiere || undefined);
+          if (lead) {
+            link = { source: "lead", id: lead.id, label: clienteSnapshot.nome, nome: clienteSnapshot.nome,
+              indirizzo: clienteSnapshot.indirizzo, citta: clienteSnapshot.citta,
+              telefono: clienteSnapshot.telefono, email: clienteSnapshot.email } as any;
+            setCrmLink(link);
+            if (lead.created) toast.success("Cliente salvato in anagrafica (lead)");
+          }
+        } catch (le: any) {
+          console.error(le);
+          toast.error("Cliente non salvato in anagrafica: " + (le?.message || ""));
         }
       }
 
