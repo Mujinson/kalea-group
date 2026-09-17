@@ -226,8 +226,8 @@ export const dopInfo = {
     number: '0197',
   },
   manufacturer: {
-    name: 'Kalēa S.r.l.',
-    address: 'Via Example, 123 – 00100 Roma, Italia',
+    name: 'Kalēa Group S.r.l.',
+    address: 'Via Generale Bernasconi, 8A – 25015 Desenzano del Garda (BS), Italia',
   },
   declarationDate: '2024-01-15',
 };
