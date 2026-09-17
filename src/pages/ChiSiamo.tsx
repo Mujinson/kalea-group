@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
-import fondatore1 from "@/assets/fondatore-1.png";
-import fondatore2 from "@/assets/fondatore-2.png";
 import bgCtaCollabora from "@/assets/bg-cta-collabora.png";
 import heroChiSiamo from "@/assets/hero-chi-siamo.webp";
 import cardInnovation from "@/assets/card-innovation.webp";
@@ -106,47 +104,9 @@ const ChiSiamo = () => {
             className="text-center mb-12"
           >
             <h2 className="font-heading text-foreground mb-6">{t('aboutUs.historyTitle')}</h2>
-            
-            {/* Founder Images */}
-            <div className="flex justify-center gap-6 md:gap-10 mb-10">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex flex-col items-center"
-              >
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
-                  <img 
-                    src={fondatore2} 
-                    alt="Gabriel Vladu - Co-fondatore Kalēa®" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-sm md:text-base text-foreground font-medium">Gabriel Vladu</span>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col items-center"
-              >
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border shadow-md mb-2">
-                  <img 
-                    src={fondatore1} 
-                    alt="Andrea Facchinetti - Co-fondatore Kalēa®" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-sm md:text-base text-foreground font-medium">Andrea Facchinetti</span>
-              </motion.div>
-            </div>
 
             <div className="space-y-6 text-center text-muted-foreground max-w-3xl mx-auto">
               <p className="whitespace-pre-line font-medium text-foreground">{t('aboutUs.historyIntro')}</p>
-              <p className="whitespace-pre-line">{t('aboutUs.historyAndrea')}</p>
-              <p className="whitespace-pre-line">{t('aboutUs.historyGabriel')}</p>
               <p className="whitespace-pre-line italic text-foreground/80">{t('aboutUs.historyQuestions')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyIntuition')}</p>
               <p className="whitespace-pre-line">{t('aboutUs.historyMgo')}</p>
