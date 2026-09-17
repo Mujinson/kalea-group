@@ -18,22 +18,14 @@ const Footer = () => {
             <p className="text-muted-foreground text-sm leading-relaxed">{t("footer.tagline")}</p>
           </div>
 
-          {/* Section 2: Sedi */}
+          {/* Section 2: Sede */}
           <div className="flex flex-col justify-start">
             <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
-              {t("footer.legalHQ")}
-            </h4>
-            <div className="space-y-1 text-sm text-muted-foreground mb-5">
-              <p>Via 4 Novembre, 15</p>
-              <p>25078 Vestone (BS) Italy</p>
-            </div>
-            
-            <h4 className="text-sm font-heading font-semibold text-foreground mb-4 uppercase tracking-wider">
-              {t("footer.operationalHQ")}
+              {t("footer.headquarters")}
             </h4>
             <div className="space-y-1 text-sm text-muted-foreground mb-5">
               <p>Via Generale Bernasconi, 8A</p>
-              <p>25015 Desenzano del Garda (BS)</p>
+              <p>25015 Desenzano del Garda (BS), Italy</p>
             </div>
             
             <div className="text-sm text-muted-foreground pt-3 border-t border-foreground/5">

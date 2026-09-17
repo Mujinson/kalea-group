@@ -59,14 +59,9 @@ const Privacy = () => {
                     <div className="bg-secondary/10 p-4 rounded-lg space-y-3">
                       <p className="font-medium text-foreground mb-2">Kalēa®</p>
                       <div>
-                        <p className="font-semibold text-foreground text-sm">{t("footer.legalHQ")}</p>
-                        <p>Via 4 Novembre, 15</p>
-                        <p>25078 Vestone (BS) Italy</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground text-sm">{t("footer.operationalHQ")}</p>
+                        <p className="font-semibold text-foreground text-sm">{t("footer.headquarters")}</p>
                         <p>Via Generale Bernasconi, 8A</p>
-                        <p>25015 Desenzano del Garda (BS)</p>
+                        <p>25015 Desenzano del Garda (BS), Italy</p>
                       </div>
                       <div className="pt-2 border-t border-foreground/10">
                         <p>P.IVA: 04797310986</p>
@@ -225,16 +220,11 @@ const Privacy = () => {
                     {t("privacy.contact.content")}
                   </p>
                   <div className="space-y-3 text-body">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="mb-4">
                       <div>
-                        <p className="font-semibold text-foreground text-sm">{t("footer.legalHQ")}</p>
-                        <p className="text-muted-foreground">Via 4 Novembre, 15</p>
-                        <p className="text-muted-foreground">25078 Vestone (BS) Italy</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground text-sm">{t("footer.operationalHQ")}</p>
+                        <p className="font-semibold text-foreground text-sm">{t("footer.headquarters")}</p>
                         <p className="text-muted-foreground">Via Generale Bernasconi, 8A</p>
-                        <p className="text-muted-foreground">25015 Desenzano del Garda (BS)</p>
+                        <p className="text-muted-foreground">25015 Desenzano del Garda (BS), Italy</p>
                       </div>
                     </div>
                     <div className="space-y-1 text-muted-foreground">

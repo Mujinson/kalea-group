@@ -385,14 +385,9 @@ const Contatti = () => {
                     <h3 className="font-medium mb-3">{t("contacts.locationLabel")}</h3>
                     <div className="space-y-3 text-white/85 font-light text-sm">
                       <div>
-                        <p className="font-medium text-white">{t("footer.legalHQ")}</p>
-                        <p>Via 4 Novembre, 15</p>
-                        <p>25078 Vestone (BS) Italy</p>
-                      </div>
-                      <div>
-                        <p className="font-medium text-white">{t("footer.operationalHQ")}</p>
+                        <p className="font-medium text-white">{t("footer.headquarters")}</p>
                         <p>Via Generale Bernasconi, 8A</p>
-                        <p>25015 Desenzano del Garda (BS)</p>
+                        <p>25015 Desenzano del Garda (BS), Italy</p>
                       </div>
                       <div className="pt-2 border-t border-white/20">
                         <p>P.IVA: 04797310986</p>
