@@ -13,6 +13,10 @@ export interface QuoteClientData {
   ruoloReferente?: string;
   tipo?: string;
   tipoAltro?: string;
+  sdi?: string;
+  pec?: string;
+  iban?: string;
+  banca?: string;
 }
 
 const clean = (v?: string | null) => (v || '').trim();
@@ -48,13 +52,18 @@ export const ensureLeadForQuote = async (
   const province = clean(cliente.provincia).toUpperCase();
   const cap = clean(cliente.cap);
   const fillMissing = async (id: string) => {
-    const { data: l } = await supabase.from('leads').select('province, postal_code, city, address').eq('id', id).maybeSingle();
+    const { data: l } = await supabase.from('leads').select('province, postal_code, city, address, sdi_code, pec, iban, bank_name, vat_number').eq('id', id).maybeSingle();
     if (!l) return;
     const upd: any = {};
     if (!l.province && province) upd.province = province;
     if (!l.postal_code && cap) upd.postal_code = cap;
     if (!l.city && clean(cliente.citta)) upd.city = clean(cliente.citta);
     if (!l.address && clean(cliente.indirizzo)) upd.address = clean(cliente.indirizzo);
+    if (clean(cliente.sdi)) upd.sdi_code = clean(cliente.sdi);
+    if (clean(cliente.pec)) upd.pec = clean(cliente.pec);
+    if (clean(cliente.iban)) upd.iban = clean(cliente.iban);
+    if (clean(cliente.banca)) upd.bank_name = clean(cliente.banca);
+    if (!l.vat_number && clean(cliente.partitaIva)) upd.vat_number = clean(cliente.partitaIva);
     if (Object.keys(upd).length) await supabase.from('leads').update(upd).eq('id', id);
   };
   if (filters.length) {
@@ -80,6 +89,10 @@ export const ensureLeadForQuote = async (
     contact_person_role: clean(cliente.ruoloReferente) || null,
     project_type: clean(projectName) || null,
     vat_number: clean(cliente.partitaIva) || null,
+    sdi_code: clean(cliente.sdi) || null,
+    pec: clean(cliente.pec) || null,
+    iban: clean(cliente.iban) || null,
+    bank_name: clean(cliente.banca) || null,
     assigned_user_id: user?.id || null,
     source: 'preventivo',
     status: 'nuovo',
@@ -100,7 +113,7 @@ export const ensureLeadForQuote = async (
 export const promoteLeadToCustomer = async (leadId: string): Promise<string | null> => {
   const { data: lead } = await supabase
     .from('leads')
-    .select('id, name, email, phone, city, address, province, postal_code, country, company_name, contact_person_name, assigned_salesperson_id')
+    .select('id, name, email, phone, city, address, province, postal_code, country, company_name, contact_person_name, assigned_salesperson_id, vat_number, sdi_code, pec, iban, bank_name')
     .eq('id', leadId).maybeSingle();
   if (!lead) return null;
 
@@ -124,6 +137,11 @@ export const promoteLeadToCustomer = async (leadId: string): Promise<string | nu
     province: lead.province || null,
     postal_code: lead.postal_code || null,
     country: lead.country || 'Italia',
+    vat_number: lead.vat_number || null,
+    sdi_code: lead.sdi_code || null,
+    pec: lead.pec || null,
+    iban: lead.iban || null,
+    bank_name: lead.bank_name || null,
     customer_type: 'cliente_privato' as any,
     status: 'signed' as any,
     assigned_salesperson_id: lead.assigned_salesperson_id || null,
