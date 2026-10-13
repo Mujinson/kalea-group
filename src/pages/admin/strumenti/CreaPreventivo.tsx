@@ -208,7 +208,8 @@ type CrmRecord = {
   email: string;
 };
 
-const emptyCliente = () => ({ nome:"", indirizzo:"", cap:"", citta:"", provincia:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+const emptyCliente = () => ({ nome:"", indirizzo:"", cap:"", citta:"", provincia:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"", sdi:"", pec:"", iban:"", banca:"" });
+const emptySito = () => ({ nome:"", indirizzo:"", cap:"", citta:"", provincia:"", piano:"", accesso:"", referente:"", telefono:"", note:"" });
 const defaultPagamenti = () => ([
   { label:"Acconto", pct:30, data:"", note:"" },
   { label:"A metà lavori", pct:40, data:"", note:"" },
@@ -1271,6 +1272,7 @@ export default function CreaPreventivo() {
   const [cliente, setCliente] = useState(emptyCliente());
   const [crmLink, setCrmLink] = useState<CrmRecord | null>(null);
   const [cantiere, setCantiere] = useState("");
+  const [sito, setSito] = useState(emptySito());
   const [noteCliente, setNoteCliente] = useState("");
   const [noteInterne, setNoteInterne] = useState("");
   const [stato, setStato] = useState<"bozza"|"inviato"|"accettato"|"rifiutato">("bozza");
@@ -1355,7 +1357,7 @@ export default function CreaPreventivo() {
       setNumPrev("");
       setCliente(emptyCliente());
       setCrmLink(null);
-      setCantiere("");
+      setCantiere(""); setSito(emptySito());
       setProdotto(null);
       setComplessita("media");
       setMqPrev(50);
@@ -1524,7 +1526,7 @@ export default function CreaPreventivo() {
         setOverrides({});
         setCrmLink(null);
         setCliente(emptyCliente());
-        setCantiere("");
+        setCantiere(""); setSito(emptySito());
         setTonalita([]);
         setWcSel(emptyWoodcoSelection);
         setPagamenti(defaultPagamenti());
@@ -1559,6 +1561,7 @@ export default function CreaPreventivo() {
           ? { ...emptyCliente(), ...(d.cliente || {}), nome: linkedCrm.nome, indirizzo: linkedCrm.indirizzo, citta: linkedCrm.citta, telefono: linkedCrm.telefono, email: linkedCrm.email }
           : { ...emptyCliente(), ...(d.cliente || {}), nome: (q.client_name || d?.cliente?.nome || "") };
         setCliente(canonicalCliente);
+        setSito({ ...emptySito(), ...(d.sito || {}) });
         setCrmLink(linkedCrm);
         if (d.prodotto) setProdotto(d.prodotto);
         if (d.complessita) setComplessita(d.complessita);
@@ -1755,7 +1758,7 @@ export default function CreaPreventivo() {
         : cliente;
       // Dettaglio completo del preventivo, salvato dentro quotes.quote_data
       const quoteData: any = {
-        cliente: clienteSnapshot, cantiere, prodotto, complessita, mqPrev, sfrido, sconto,
+        cliente: clienteSnapshot, cantiere, sito, prodotto, complessita, mqPrev, sfrido, sconto,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
         ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
         tipoPreventivo, terminiCustom,
@@ -1839,9 +1842,11 @@ export default function CreaPreventivo() {
           calc.prezzoTrasfertaTot ? { label: "Trasferta posatori", importo: calc.prezzoTrasfertaTot } : null,
         ].filter(Boolean),
         created_by: user.email || user.id,
-        project_name: cantiere || null,
-        site_address: clienteSnapshot.indirizzo || null,
-        site_city: clienteSnapshot.citta || null,
+        project_name: cantiere || sito.nome || null,
+        site_address: sito.indirizzo || clienteSnapshot.indirizzo || null,
+        site_city: sito.citta || clienteSnapshot.citta || null,
+        site_postal_code: sito.cap || (clienteSnapshot as any).cap || null,
+        site_province: sito.provincia || (clienteSnapshot as any).provincia || null,
         transport_method: metodoTrasporto || null,
         delivery_time: tempiConsegna || null,
         payment_type: tipoPagamento || null,
@@ -2610,6 +2615,38 @@ export default function CreaPreventivo() {
                 <input value={cliente.ruoloReferente} onChange={e=>setCliente(c=>({...c,ruoloReferente:e.target.value}))} placeholder="Ruolo in azienda (es. titolare, geometra…)"
                   style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
               </div>
+              <div style={{fontSize:11,color:"#475569",margin:"10px 0 4px"}}>Fatturazione elettronica e banca</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+                <input value={(cliente as any).sdi||""} maxLength={7} onChange={e=>setCliente(c=>({...c,sdi:e.target.value.toUpperCase()}))} placeholder="Codice SDI (7 caratteri)"
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
+                <input value={(cliente as any).pec||""} onChange={e=>setCliente(c=>({...c,pec:e.target.value}))} placeholder="PEC"
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:8,marginBottom:8}}>
+                <input value={(cliente as any).iban||""} maxLength={34} onChange={e=>setCliente(c=>({...c,iban:e.target.value.toUpperCase().replace(/\s/g,"")}))} placeholder="IBAN"
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
+                <input value={(cliente as any).banca||""} onChange={e=>setCliente(c=>({...c,banca:e.target.value}))} placeholder="Banca"
+                  style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
+              </div>
+            </div>
+
+            <div style={card}>
+              <div style={sectionTitle}>Dati cantiere</div>
+              <div style={{fontSize:11,color:"#475569",marginBottom:6}}>Dove si eseguono i lavori (se diverso dalla fatturazione)</div>
+              <button type="button" onClick={()=>setSito(s=>({...s,indirizzo:cliente.indirizzo,cap:(cliente as any).cap||"",citta:cliente.citta,provincia:(cliente as any).provincia||"",referente:s.referente||cliente.referente,telefono:s.telefono||cliente.telefono}))}
+                style={{fontSize:11,color:"#0C447C",background:"none",border:"none",cursor:"pointer",padding:0,marginBottom:8}}>Copia indirizzo dai dati cliente</button>
+              {([["nome","Nome cantiere (es. Villa Rossi)"],["indirizzo","Indirizzo cantiere"],["cap","CAP"],["citta","Città"],["provincia","Provincia"],["piano","Piano / scala / interno"],["accesso","Accesso (ascensore, ZTL, parcheggio…)"],["referente","Referente in cantiere"],["telefono","Telefono referente"]] as const).map(([k,pl])=>(
+                <div key={k} style={{marginBottom:8}}>
+                  <input value={(sito as any)[k]||""} maxLength={k==="cap"?5:k==="provincia"?2:undefined} onChange={e=>{
+                    let v=e.target.value; if(k==="cap") v=v.replace(/\D/g,""); if(k==="provincia") v=v.toUpperCase();
+                    setSito(s=>({...s,[k]:v}));
+                    if(k==="cap"&&v.length===5) fetch(`https://api.zippopotam.us/it/${v}`).then(r=>r.ok?r.json():null).then(j=>{const p=j?.places?.[0]; if(p) setSito(s=>({...s,citta:s.citta||p["place name"],provincia:s.provincia||p["state abbreviation"]||""}));}).catch(()=>{});
+                  }} placeholder={pl}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
+                </div>
+              ))}
+              <textarea value={sito.note} onChange={e=>setSito(s=>({...s,note:e.target.value}))} placeholder="Note cantiere (orari, chiavi, condizioni del fondo…)" rows={2}
+                style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",fontFamily:"inherit"}}/>
             </div>
           </div>
 
@@ -2786,16 +2823,26 @@ export default function CreaPreventivo() {
             {/* Cliente */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
               <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.cliente}</div>
+                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{lingua==="IT"?"Dati di fatturazione":t.cliente}</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>
                 <div style={{fontSize:13,color:"#475569"}}>{cliente.indirizzo}</div>
                 <div style={{fontSize:13,color:"#475569"}}>{[(cliente as any).cap, cliente.citta].filter(Boolean).join(" ")}{(cliente as any).provincia ? ` (${(cliente as any).provincia})` : ""}</div>
+                {cliente.partitaIva && <div style={{fontSize:13,color:"#475569"}}>P.IVA/CF: {cliente.partitaIva}</div>}
+                {(cliente as any).sdi && <div style={{fontSize:13,color:"#475569"}}>SDI: {(cliente as any).sdi}</div>}
+                {(cliente as any).pec && <div style={{fontSize:13,color:"#475569"}}>PEC: {(cliente as any).pec}</div>}
+                {(cliente as any).iban && <div style={{fontSize:13,color:"#475569"}}>IBAN: {(cliente as any).iban}{(cliente as any).banca ? ` — ${(cliente as any).banca}` : ""}</div>}
                 <div style={{fontSize:13,color:"#475569"}}>{cliente.telefono}</div>
                 <div style={{fontSize:13,color:"#475569"}}>{cliente.email}</div>
               </div>
-              {cantiere && <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.oggetto}</div>
-                <div style={{fontSize:13,color:"#475569"}}>{cantiere}</div>
+              {(cantiere || sito.indirizzo || sito.nome) && <div>
+                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{lingua==="IT"?"Dati cantiere":t.oggetto}</div>
+                {sito.nome && <div style={{fontSize:14,fontWeight:500}}>{sito.nome}</div>}
+                {cantiere && <div style={{fontSize:13,color:"#475569"}}>{cantiere}</div>}
+                {sito.indirizzo && <div style={{fontSize:13,color:"#475569"}}>{sito.indirizzo}</div>}
+                {(sito.cap||sito.citta) && <div style={{fontSize:13,color:"#475569"}}>{[sito.cap, sito.citta].filter(Boolean).join(" ")}{sito.provincia ? ` (${sito.provincia})` : ""}</div>}
+                {(sito.piano||sito.accesso) && <div style={{fontSize:13,color:"#475569"}}>{[sito.piano && `Piano: ${sito.piano}`, sito.accesso].filter(Boolean).join(" · ")}</div>}
+                {(sito.referente||sito.telefono) && <div style={{fontSize:13,color:"#475569"}}>Ref.: {[sito.referente, sito.telefono].filter(Boolean).join(" — ")}</div>}
+                {sito.note && <div style={{fontSize:12,color:"#64748B",marginTop:4}}>{sito.note}</div>}
               </div>}
             </div>
 
