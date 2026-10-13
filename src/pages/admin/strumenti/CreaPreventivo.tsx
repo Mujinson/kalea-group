@@ -3064,7 +3064,7 @@ export default function CreaPreventivo() {
         #pdf-preview .preventivo-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
         #pdf-preview .preventivo-table th,
         #pdf-preview .preventivo-table td { vertical-align: middle; }
-        #pdf-preview .preventivo-table th { white-space: nowrap; }
+        #pdf-preview .preventivo-table th { white-space: nowrap; color: #fff !important; background: #1A1A2E !important; }
         #pdf-preview .preventivo-table td:nth-child(2),
         #pdf-preview .preventivo-table td:nth-child(3),
         #pdf-preview .preventivo-table td:nth-child(4) { white-space: nowrap; }
