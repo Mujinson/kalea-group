@@ -2992,6 +2992,15 @@ export default function CreaPreventivo() {
                   <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
                 </div>
               ))}
+              {/* Coordinate bancarie Kalēa */}
+              <div style={{marginTop:14,padding:"12px 16px",background:"#F1F5F9",borderRadius:8,fontSize:12,color:"#475569",lineHeight:1.7}}>
+                <div style={{fontSize:11,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>
+                  {{IT:"Coordinate bancarie per bonifico",EN:"Bank details for bank transfer",DE:"Bankdaten für Überweisung",FR:"Coordonnées bancaires pour virement",RO:"Date bancare pentru transfer"}[lingua as "IT"|"EN"|"DE"|"FR"|"RO"] || "Coordinate bancarie per bonifico"}
+                </div>
+                <div><span style={{fontWeight:600,color:"#1A1A2E"}}>Kalea Group Srl</span></div>
+                <div>IBAN: <span style={{fontWeight:600,color:"#1A1A2E",letterSpacing:".03em"}}>IT02 H086 9254 5600 4500 0456 252</span></div>
+                <div>Banca: BCC Gavardo</div>
+              </div>
             </div>
             )}
 
