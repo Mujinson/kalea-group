@@ -208,7 +208,7 @@ type CrmRecord = {
   email: string;
 };
 
-const emptyCliente = () => ({ nome:"", indirizzo:"", citta:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
+const emptyCliente = () => ({ nome:"", indirizzo:"", cap:"", citta:"", provincia:"", telefono:"", email:"", tipo:"", tipoAltro:"", partitaIva:"", referente:"", ruoloReferente:"" });
 const defaultPagamenti = () => ([
   { label:"Acconto", pct:30, data:"", note:"" },
   { label:"A metà lavori", pct:40, data:"", note:"" },
@@ -1703,6 +1703,18 @@ export default function CreaPreventivo() {
     setCliente(c => ({ ...c, nome:r.nome, indirizzo:r.indirizzo, citta:r.citta, telefono:r.telefono, email:r.email }));
   };
 
+  // CAP → città e provincia automatici
+  const lookupCap = async (cap: string) => {
+    try {
+      const res = await fetch(`https://api.zippopotam.us/it/${cap}`);
+      if (!res.ok) { toast.error("CAP non trovato"); return; }
+      const d = await res.json();
+      const p = d?.places?.[0];
+      if (!p) return;
+      setCliente(c => ({ ...c, citta: c.citta || p["place name"] || "", provincia: p["state abbreviation"] || (c as any).provincia || "" }));
+    } catch { /* offline: compilazione manuale */ }
+  };
+
   const salvaPreventivo = async () => {
     // Validazione dettagliata: raccoglie tutti i campi mancanti
     const missing: string[] = [];
@@ -2556,9 +2568,16 @@ export default function CreaPreventivo() {
                 onSelect={selectCrm}
                 onClear={()=>setCrmLink(null)}
               />
-              {[["nome","Nome / Ragione sociale"],["indirizzo","Indirizzo"],["citta","Città"],["telefono","Telefono"],["email","Email"]].map(([k,pl])=>(
+              {[["nome","Nome / Ragione sociale"],["indirizzo","Indirizzo"],["cap","CAP"],["citta","Città"],["provincia","Provincia (es. BS)"],["telefono","Telefono"],["email","Email"]].map(([k,pl])=>(
                 <div key={k} style={{marginBottom:8}}>
-                  <input value={(cliente as any)[k]} onChange={e=>{setCliente(c=>({...c,[k]:e.target.value})); if(k==="nome"&&e.target.value.trim()) setErrors(s=>{const n=new Set(s);n.delete("cliente.nome");return n;});}} placeholder={pl}
+                  <input value={(cliente as any)[k] || ""} maxLength={k==="cap"?5:k==="provincia"?2:undefined} onChange={e=>{
+                    let v = e.target.value;
+                    if (k==="cap") v = v.replace(/\D/g,"");
+                    if (k==="provincia") v = v.toUpperCase();
+                    setCliente(c=>({...c,[k]:v}));
+                    if (k==="cap" && v.length===5) lookupCap(v);
+                    if(k==="nome"&&v.trim()) setErrors(s=>{const n=new Set(s);n.delete("cliente.nome");return n;});
+                  }} placeholder={pl}
                     style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box", ...(k==="nome"?errStyle("cliente.nome"):{})}}/>
                   {k==="nome" && hasErr("cliente.nome") && <div style={{fontSize:11,color:"#DC2626",marginTop:3}}>Campo obbligatorio</div>}
                 </div>
@@ -2770,7 +2789,7 @@ export default function CreaPreventivo() {
                 <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{t.cliente}</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>
                 <div style={{fontSize:13,color:"#475569"}}>{cliente.indirizzo}</div>
-                <div style={{fontSize:13,color:"#475569"}}>{cliente.citta}</div>
+                <div style={{fontSize:13,color:"#475569"}}>{[(cliente as any).cap, cliente.citta].filter(Boolean).join(" ")}{(cliente as any).provincia ? ` (${(cliente as any).provincia})` : ""}</div>
                 <div style={{fontSize:13,color:"#475569"}}>{cliente.telefono}</div>
                 <div style={{fontSize:13,color:"#475569"}}>{cliente.email}</div>
               </div>
