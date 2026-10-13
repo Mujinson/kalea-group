@@ -1821,6 +1821,7 @@ export type Database = {
         Row: {
           address: string | null
           assigned_salesperson_id: string | null
+          bank_name: string | null
           city: string | null
           company_name: string | null
           country: string | null
@@ -1828,6 +1829,7 @@ export type Database = {
           customer_type: Database["public"]["Enums"]["customer_type"]
           email: string | null
           first_name: string | null
+          iban: string | null
           id: string
           last_name: string | null
           notes: string | null
@@ -1846,6 +1848,7 @@ export type Database = {
         Insert: {
           address?: string | null
           assigned_salesperson_id?: string | null
+          bank_name?: string | null
           city?: string | null
           company_name?: string | null
           country?: string | null
@@ -1853,6 +1856,7 @@ export type Database = {
           customer_type: Database["public"]["Enums"]["customer_type"]
           email?: string | null
           first_name?: string | null
+          iban?: string | null
           id?: string
           last_name?: string | null
           notes?: string | null
@@ -1871,6 +1875,7 @@ export type Database = {
         Update: {
           address?: string | null
           assigned_salesperson_id?: string | null
+          bank_name?: string | null
           city?: string | null
           company_name?: string | null
           country?: string | null
@@ -1878,6 +1883,7 @@ export type Database = {
           customer_type?: Database["public"]["Enums"]["customer_type"]
           email?: string | null
           first_name?: string | null
+          iban?: string | null
           id?: string
           last_name?: string | null
           notes?: string | null
@@ -2269,6 +2275,7 @@ export type Database = {
           archived_at: string | null
           assigned_salesperson_id: string | null
           assigned_user_id: string | null
+          bank_name: string | null
           budget_range: string | null
           city: string | null
           code: string | null
@@ -2285,6 +2292,7 @@ export type Database = {
           email: string | null
           first_name: string | null
           has_thermal_insulation: boolean | null
+          iban: string | null
           id: string
           ip_address: string | null
           language: string | null
@@ -2297,6 +2305,7 @@ export type Database = {
           message: string | null
           name: string
           notes: string | null
+          pec: string | null
           phone: string | null
           pipeline_stage: string
           postal_code: string | null
@@ -2309,6 +2318,7 @@ export type Database = {
           qualification_score: number | null
           referrer_id: string | null
           region: string | null
+          sdi_code: string | null
           site_address: string | null
           site_city: string | null
           site_country: string | null
@@ -2326,6 +2336,7 @@ export type Database = {
           archived_at?: string | null
           assigned_salesperson_id?: string | null
           assigned_user_id?: string | null
+          bank_name?: string | null
           budget_range?: string | null
           city?: string | null
           code?: string | null
@@ -2342,6 +2353,7 @@ export type Database = {
           email?: string | null
           first_name?: string | null
           has_thermal_insulation?: boolean | null
+          iban?: string | null
           id?: string
           ip_address?: string | null
           language?: string | null
@@ -2354,6 +2366,7 @@ export type Database = {
           message?: string | null
           name: string
           notes?: string | null
+          pec?: string | null
           phone?: string | null
           pipeline_stage?: string
           postal_code?: string | null
@@ -2366,6 +2379,7 @@ export type Database = {
           qualification_score?: number | null
           referrer_id?: string | null
           region?: string | null
+          sdi_code?: string | null
           site_address?: string | null
           site_city?: string | null
           site_country?: string | null
@@ -2383,6 +2397,7 @@ export type Database = {
           archived_at?: string | null
           assigned_salesperson_id?: string | null
           assigned_user_id?: string | null
+          bank_name?: string | null
           budget_range?: string | null
           city?: string | null
           code?: string | null
@@ -2399,6 +2414,7 @@ export type Database = {
           email?: string | null
           first_name?: string | null
           has_thermal_insulation?: boolean | null
+          iban?: string | null
           id?: string
           ip_address?: string | null
           language?: string | null
@@ -2411,6 +2427,7 @@ export type Database = {
           message?: string | null
           name?: string
           notes?: string | null
+          pec?: string | null
           phone?: string | null
           pipeline_stage?: string
           postal_code?: string | null
@@ -2423,6 +2440,7 @@ export type Database = {
           qualification_score?: number | null
           referrer_id?: string | null
           region?: string | null
+          sdi_code?: string | null
           site_address?: string | null
           site_city?: string | null
           site_country?: string | null

@@ -1,0 +1,2 @@
+ALTER TABLE public.leads ADD COLUMN IF NOT EXISTS sdi_code text, ADD COLUMN IF NOT EXISTS pec text, ADD COLUMN IF NOT EXISTS iban text, ADD COLUMN IF NOT EXISTS bank_name text;
+ALTER TABLE public.customers ADD COLUMN IF NOT EXISTS iban text, ADD COLUMN IF NOT EXISTS bank_name text;

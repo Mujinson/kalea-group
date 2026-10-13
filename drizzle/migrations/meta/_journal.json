@@ -15,6 +15,13 @@
       "when": 1791883049482,
       "tag": "0001_public_quote_requests_admin_only",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791892637968,
+      "tag": "0002_billing_bank_fields",
+      "breakpoints": true
     }
   ]
 }
