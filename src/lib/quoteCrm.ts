@@ -5,6 +5,8 @@ export interface QuoteClientData {
   email?: string;
   telefono?: string;
   citta?: string;
+  provincia?: string;
+  cap?: string;
   indirizzo?: string;
   partitaIva?: string;
   referente?: string;
@@ -43,14 +45,26 @@ export const ensureLeadForQuote = async (
   const filters: string[] = [];
   if (email) filters.push(`email.ilike.${email}`);
   if (phone) filters.push(`phone.eq.${phone}`);
+  const province = clean(cliente.provincia).toUpperCase();
+  const cap = clean(cliente.cap);
+  const fillMissing = async (id: string) => {
+    const { data: l } = await supabase.from('leads').select('province, postal_code, city, address').eq('id', id).maybeSingle();
+    if (!l) return;
+    const upd: any = {};
+    if (!l.province && province) upd.province = province;
+    if (!l.postal_code && cap) upd.postal_code = cap;
+    if (!l.city && clean(cliente.citta)) upd.city = clean(cliente.citta);
+    if (!l.address && clean(cliente.indirizzo)) upd.address = clean(cliente.indirizzo);
+    if (Object.keys(upd).length) await supabase.from('leads').update(upd).eq('id', id);
+  };
   if (filters.length) {
     const { data: existingLead } = await supabase
       .from('leads').select('id').or(filters.join(',')).limit(1).maybeSingle();
-    if (existingLead) return { id: existingLead.id, created: false };
+    if (existingLead) { await fillMissing(existingLead.id); return { id: existingLead.id, created: false }; }
   }
   const { data: byName } = await supabase
     .from('leads').select('id').ilike('name', name).limit(1).maybeSingle();
-  if (byName) return { id: byName.id, created: false };
+  if (byName) { await fillMissing(byName.id); return { id: byName.id, created: false }; }
 
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -59,6 +73,8 @@ export const ensureLeadForQuote = async (
     email: email || null,
     phone: phone || null,
     city: clean(cliente.citta) || null,
+    province: province || null,
+    postal_code: cap || null,
     address: clean(cliente.indirizzo) || null,
     contact_person_name: clean(cliente.referente) || null,
     contact_person_role: clean(cliente.ruoloReferente) || null,
