@@ -36,6 +36,13 @@
       "when": 1791997192431,
       "tag": "0004_sync_lead_on_quote_outcome",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791998227193,
+      "tag": "0005_paid_schedule_is_invoiced",
+      "breakpoints": true
     }
   ]
 }
