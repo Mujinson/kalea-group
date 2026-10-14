@@ -57,7 +57,7 @@ export const siteStatusLabel = (s?: string | null): string => {
 };
 
 /** Stati considerati "cantiere attivo" nelle dashboard e nei KPI. */
-export const ACTIVE_SITE_STATUSES: string[] = ['in_corso', 'meta_lavori'];
+export const ACTIVE_SITE_STATUSES: string[] = ['in_corso', 'meta_lavori', 'sospeso'];
 export const DONE_SITE_STATUSES: string[] = ['completato', 'annullato'];
 
 export const isSiteActive = (s?: string | null) =>

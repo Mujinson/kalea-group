@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { isQuoteWon, isQuoteLost, isQuotePending, dedupeWonQuotes } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
-import { isSiteActive } from "@/lib/siteStatus";
+import { isSiteActive, normalizeSiteStatus } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
@@ -366,6 +366,7 @@ const AdminOverview = () => {
     const today = new Date();
     return {
       count: attivi.length,
+      inPausa: attivi.filter(s => normalizeSiteStatus(s.status) === 'sospeso').length,
       inPartenza: attivi.filter(s => s.start_date && new Date(s.start_date) > today).length,
       inRitardo: attivi.filter(s => s.end_date && new Date(s.end_date) < today).length,
     };
@@ -653,7 +654,7 @@ const AdminOverview = () => {
         {showCan && (
           <BigKPI
             label="Cantieri Attivi" value={cantieriAttivi.count} variant="gold"
-            sub={`${cantieriAttivi.inPartenza} in partenza · ${cantieriAttivi.inRitardo} in ritardo`}
+            sub={`${cantieriAttivi.inPausa} in pausa · ${cantieriAttivi.inPartenza} in partenza · ${cantieriAttivi.inRitardo} in ritardo`}
             icon={HardHat} onClick={() => navigate('/admin/cantieri')}
           />
         )}
