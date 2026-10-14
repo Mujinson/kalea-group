@@ -18,6 +18,7 @@ import {
   Calendar, Plus, FileText, Clock, MessageSquare, CheckCircle2,
   Upload, Download, Eye, Send, Trash2, File, Pencil, Save
 } from 'lucide-react';
+import CustomerPaymentsPanel from '@/components/admin/CustomerPaymentsPanel';
 import { getRegionNames, getProvincesForRegion, getCitiesForProvince } from '@/data/italianTerritories';
 
 const CUSTOMER_TYPES = [
@@ -731,8 +732,9 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
               </CardContent>
             </Card>
 
-            <Tabs defaultValue="sales" className="w-full">
-              <TabsList className="grid grid-cols-7 w-full">
+            <Tabs defaultValue="payments" className="w-full">
+              <TabsList className="grid grid-cols-8 w-full">
+                <TabsTrigger value="payments" className="text-xs">Pagamenti</TabsTrigger>
                 <TabsTrigger value="sales" className="text-xs">Vendite</TabsTrigger>
                 <TabsTrigger value="quotes" className="text-xs">Preventivi</TabsTrigger>
                 <TabsTrigger value="visits" className="text-xs">Visite</TabsTrigger>
@@ -743,6 +745,10 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
               </TabsList>
 
               {/* Sales Tab */}
+              <TabsContent value="payments">
+                <CustomerPaymentsPanel customerId={customerId!} customerName={customer?.company_name || `${customer?.first_name || ''} ${customer?.last_name || ''}`.trim()} quotes={quotes} />
+              </TabsContent>
+
               <TabsContent value="sales" className="space-y-2">
                 <Button size="sm" variant="outline" className="w-full" onClick={() => window.location.href = '/admin/vendite'}>
                   <Plus className="w-3 h-3 mr-1" />Aggiungi Vendita
