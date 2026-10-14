@@ -348,7 +348,8 @@ const SITE_LABEL: Record<string, string> = {
 const ACTION_SCHEMA = {
   type: 'object',
   properties: {
-    azione: { type: 'string', enum: ['nessuna', 'stato_cantiere', 'aggiorna_lead', 'fattura_fornitore_pagata'] },
+    azione: { type: 'string', enum: ['nessuna', 'stato_cantiere', 'aggiorna_lead', 'fattura_fornitore_pagata', 'incasso_ricevuto'] },
+    importo: { type: 'number', description: 'Importo in euro se citato' },
     nome: { type: 'string', description: 'Nome del cantiere / contatto / fornitore o numero fattura, come scritto' },
     stato_cantiere: { type: 'string', enum: ['pianificato', 'in_corso', 'meta_lavori', 'sospeso', 'completato', 'annullato'] },
     stato_lead: { type: 'string', enum: ['new', 'contacted', 'qualified', 'lost'] },
@@ -370,16 +371,46 @@ async function findOne(sb: any, table: string, cols: string[], q: string, select
   return { rows: [] as any[] };
 }
 
+async function markIncasso(sb: any, nome: string, importo?: number): Promise<string> {
+  const { data } = await sb.from('payment_schedules')
+    .select('id, amount, due_date, payment_type, sales(customer_name)').eq('is_paid', false).order('due_date').limit(200);
+  let rows: any[] = data || [];
+  const n = nome.toLowerCase().trim();
+  if (n) {
+    const words = n.split(/\s+/).filter((w) => w.length > 2);
+    const byName = rows.filter((r) => { const c = (r.sales?.customer_name || '').toLowerCase(); return c.includes(n) || words.some((w) => c.includes(w)); });
+    if (byName.length) rows = byName;
+  }
+  if (importo) {
+    const byAmt = rows.filter((r) => Math.abs(Number(r.amount) - importo) < 1);
+    if (byAmt.length) rows = byAmt;
+  }
+  if (!n && !importo) rows = [];
+  const list = (rs: any[]) => rs.map((r) => `• ${euro(Number(r.amount))} – ${r.sales?.customer_name || '—'} (${r.payment_type || 'rata'}, scad. ${r.due_date})`).join('\n');
+  if (!rows.length) {
+    const open = (data || []).slice(0, 10);
+    return open.length ? `❓ Non capisco quale incasso. Quelli ancora da incassare sono:\n${list(open)}` : '✅ Non risulta nessun incasso aperto.';
+  }
+  if (rows.length > 1) return `❓ Ci sono più incassi aperti, quale?\n${list(rows)}`;
+  const r = rows[0];
+  const { error } = await sb.from('payment_schedules').update({ is_paid: true, paid_date: new Date().toISOString().slice(0, 10) }).eq('id', r.id);
+  if (error) return `⚠️ Non sono riuscito ad aggiornare: ${error.message}`;
+  return `✅ Incasso di <b>${euro(Number(r.amount))}</b> da ${r.sales?.customer_name || '—'} (${r.payment_type || 'rata'}) segnato come <b>incassato</b>.\n${APP_URL}/admin/pagamenti`;
+}
+
 async function tryCrmAction(sb: any, text: string): Promise<string | null> {
   const a = await aiTool(
     `Capisci se l'utente vuole MODIFICARE qualcosa nel CRM di Kalēa. Se fa solo una domanda, azione="nessuna".
 - "il cantiere X è concluso/finito/chiuso" → stato_cantiere completato; "iniziato/partito" → in_corso; "a metà" → meta_lavori; "fermo/in pausa" → sospeso.
 - "il contatto/lead X l'ho chiamato" → aggiorna_lead contacted; "non è interessato/perso" → lost; con eventuale nota.
 - "ho pagato la fattura di X" → fattura_fornitore_pagata.
+- "X mi ha pagato / incassato il saldo/acconto di X / l'incasso da 10.820 è arrivato" → incasso_ricevuto (nome = cliente se c'è, importo se c'è).
 Riporta il nome così come scritto.`,
     [{ type: 'text', text }], 'azione_crm', ACTION_SCHEMA,
   ).catch(() => null);
-  if (!a || a.azione === 'nessuna' || !a.nome) return null;
+  if (!a || a.azione === 'nessuna') return null;
+  if (a.azione === 'incasso_ricevuto') return await markIncasso(sb, a.nome || '', a.importo);
+  if (!a.nome) return null;
   const today = new Date().toISOString().slice(0, 10);
 
   if (a.azione === 'stato_cantiere' && a.stato_cantiere) {
@@ -525,7 +556,7 @@ async function handleUpdate(update: any) {
     }
 
     // ----- Comandi di modifica CRM (es. "il cantiere Bellagio è concluso")
-    if (/(cantier|lead|contatto|fattur|chiud|conclus|finit|complet|sospes|pausa|riprend|annull|iniziat|partit|pagat|perso|interessat|aggiorn|segna|metti|cambia)/i.test(effectiveText)) {
+    if (/(cantier|lead|contatto|fattur|incass|pagato|saldo|acconto|bonific|chiud|conclus|finit|complet|sospes|pausa|riprend|annull|iniziat|partit|pagat|perso|interessat|aggiorn|segna|metti|cambia)/i.test(effectiveText)) {
       const done = await tryCrmAction(sb, effectiveText);
       if (done) { await send(chatId, done); return; }
     }
