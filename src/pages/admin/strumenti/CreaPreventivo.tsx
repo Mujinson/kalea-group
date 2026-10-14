@@ -1286,6 +1286,9 @@ export default function CreaPreventivo() {
 
   // CONDIZIONI DI FORNITURA
   const [ivaRate, setIvaRate] = useState<number>(22);
+  const [reverseCharge, setReverseCharge] = useState(false);
+  const RC_NOTE = "Operazione in reverse charge (inversione contabile) ai sensi dell'art. 17, c. 6, DPR 633/72 – IVA non applicata.";
+  const ivaLabel = reverseCharge ? "Reverse charge (IVA 0%)" : `IVA ${ivaRate}%`;
   const [metodoTrasporto, setMetodoTrasporto] = useState<string>("Trasporto a cura Kalēa");
   const [tempiConsegna, setTempiConsegna] = useState<string>("");
   const [tipoPagamento, setTipoPagamento] = useState<string>("Bonifico bancario");
@@ -1593,6 +1596,7 @@ export default function CreaPreventivo() {
         if (Array.isArray(d.tonalita)) setTonalita(d.tonalita);
         if (d.wcSel) setWcSel(d.wcSel);
         if (d.noteCliente) setNoteCliente(d.noteCliente);
+        setReverseCharge(!!d.reverseCharge || (typeof d.noteCliente === 'string' && /reverse charge/i.test(d.noteCliente) && Number(d.ivaRate) === 0));
         if (d.noteInterne) setNoteInterne(d.noteInterne);
         if (d.overrides && typeof d.overrides === "object") setOverrides(d.overrides);
         toast.success("Preventivo caricato", { id: tId });
@@ -1760,7 +1764,7 @@ export default function CreaPreventivo() {
       const quoteData: any = {
         cliente: clienteSnapshot, cantiere, sito, prodotto, complessita, mqPrev, sfrido, sconto,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
-        ivaRate, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
+        ivaRate, reverseCharge, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
         tipoPreventivo, terminiCustom,
 
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
@@ -2749,8 +2753,9 @@ export default function CreaPreventivo() {
                 </div>
                 <div>
                   <div style={{fontSize:12,color:"#475569",marginBottom:4}}>Aliquota IVA</div>
-                  <select value={ivaRate} onChange={e=>setIvaRate(Number(e.target.value))}
+                  <select value={reverseCharge ? "rc" : ivaRate} onChange={e=>{ const v=e.target.value; if (v==="rc") { setReverseCharge(true); setIvaRate(0); } else { setReverseCharge(false); setIvaRate(Number(v)); } }}
                     style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",background:"#fff"}}>
+                    <option value="rc">Reverse charge (IVA 0%)</option>
                     <option value={0}>0% (esente)</option>
                     <option value={4}>4%</option>
                     <option value={10}>10%</option>
@@ -2955,7 +2960,7 @@ export default function CreaPreventivo() {
                 {l:t.subtotale,v:euro(calc.prezzoLordoTot)},
                 sconto>0 && {l:`${t.sconto_label||"Sconto"} ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
-                {l:`IVA ${ivaRate}%`,v:euro(calc.iva)},
+                {l:ivaLabel,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
                 <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E6E9F0",fontSize:13,gap:12}}>
                   <span style={{color:"#475569"}}>{r.l}</span>
@@ -2977,8 +2982,9 @@ export default function CreaPreventivo() {
                 <div><span style={{color:"#475569"}}>{L.tempi_consegna}: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
                 </>)}
                 <div><span style={{color:"#475569"}}>{L.tipo_pagamento}: </span><span style={{fontWeight:500}}>{trPagamento(lingua, tipoPagamento)||"—"}</span></div>
-                <div><span style={{color:"#475569"}}>{L.aliquota_iva}: </span><span style={{fontWeight:500}}>{ivaRate}%</span></div>
+                <div><span style={{color:"#475569"}}>{L.aliquota_iva}: </span><span style={{fontWeight:500}}>{reverseCharge ? "Reverse charge (0%)" : `${ivaRate}%`}</span></div>
               </div>
+              {reverseCharge && <div style={{marginTop:10,fontSize:12,color:"#475569",fontStyle:"italic"}}>{RC_NOTE}</div>}
             </div>
 
 
