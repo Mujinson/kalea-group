@@ -98,7 +98,7 @@ export function CrmKpiTile({ label, value, color = "indigo", icon, hint, onClick
       )}
     >
       <div className="flex items-start justify-between gap-2 min-h-[32px]">
-        <p className="min-w-0 text-[10.5px] font-semibold uppercase tracking-[0.10em] text-crm-ink-muted leading-tight line-clamp-2 break-words">
+        <p className="min-w-0 text-[10px] font-semibold uppercase tracking-[0.04em] text-crm-ink-muted leading-tight line-clamp-2 [overflow-wrap:normal] [word-break:keep-all]">
           {label}
         </p>
         {icon && (
