@@ -1957,6 +1957,78 @@ export type Database = {
         }
         Relationships: []
       }
+      gabriel_email_tasks: {
+        Row: {
+          account: string
+          area: string
+          azienda: string | null
+          azione: string | null
+          bozza_risposta: string | null
+          cliente: string | null
+          created_at: string
+          from_email: string | null
+          from_name: string | null
+          gmail_thread_id: string | null
+          id: string
+          mail_key: string
+          message_id: string | null
+          priorita: string
+          progetto: string | null
+          received_at: string | null
+          riassunto: string | null
+          richiesta: string | null
+          status: string
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          account: string
+          area?: string
+          azienda?: string | null
+          azione?: string | null
+          bozza_risposta?: string | null
+          cliente?: string | null
+          created_at?: string
+          from_email?: string | null
+          from_name?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          mail_key: string
+          message_id?: string | null
+          priorita?: string
+          progetto?: string | null
+          received_at?: string | null
+          riassunto?: string | null
+          richiesta?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account?: string
+          area?: string
+          azienda?: string | null
+          azione?: string | null
+          bozza_risposta?: string | null
+          cliente?: string | null
+          created_at?: string
+          from_email?: string | null
+          from_name?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          mail_key?: string
+          message_id?: string | null
+          priorita?: string
+          progetto?: string | null
+          received_at?: string | null
+          riassunto?: string | null
+          richiesta?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       inventory: {
         Row: {
           color: string | null
