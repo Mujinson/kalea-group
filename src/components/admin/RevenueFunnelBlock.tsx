@@ -1,3 +1,4 @@
+import { CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -15,15 +16,15 @@ import { Wallet, Receipt, Hourglass, FileText, XCircle, ThumbsUp, ThumbsDown, Ch
 
 const RT_TABLES: any = ['payment_schedules', 'customer_invoices', 'quotes', 'sales'];
 const WON = ['accepted', 'converted', 'invoiced'];
-type Kind = 'incassato' | 'fatturato' | 'da_ricevere' | 'preventivato' | 'perso' | 'vinti';
+type Kind = 'incassato' | 'fatturato' | 'da_ricevere' | 'scaduto' | 'preventivato' | 'perso' | 'vinti';
 const today = () => new Date().toISOString().split('T')[0];
 const r2 = (n: number) => Math.round(n * 100) / 100;
 const fd = (d?: string | null) => (d ? format(new Date(d), 'd MMM yyyy', { locale: it }) : '—');
 const n = (v: any) => Number(v || 0);
 
-export default function RevenueFunnelBlock() {
+export default function RevenueFunnelBlock({ variant = 'dashboard', lead }: { variant?: 'dashboard' | 'billing'; lead?: ReactNode } = {}) {
   const qc = useQueryClient();
-  const [period, setPeriod] = useState<'year' | 'all'>('year');
+  const [period, setPeriod] = useState<'year' | 'all'>(variant === 'billing' ? 'all' : 'year');
   const [open, setOpen] = useState<Kind | null>(null);
   const [customerId, setCustomerId] = useState<string | null>(null);
 
@@ -82,6 +83,41 @@ export default function RevenueFunnelBlock() {
     { k: 'perso', label: 'Chiusura negativa', value: `${c.closed ? (100 - c.pWon).toFixed(0) : 0}%`, hint: `${c.lost.length} persi su ${c.closed} · ${c.closed ? (100 - c.pVal).toFixed(0) : 0}% del valore`, icon: <ThumbsDown />, tone: 'text-red-600 bg-red-50' },
   ];
 
+  const sheet = (
+    <>
+      <Sheet open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
+          <SheetHeader><SheetTitle>{open === 'scaduto' ? 'Scaduto' : tiles.find((t) => t.k === open)?.label}</SheetTitle></SheetHeader>
+          <div className="mt-4">
+            {open === 'da_ricevere' && <PaymentsList rows={c.unpaid} onChanged={refresh} onCustomer={setCustomerId} />}
+            {open === 'scaduto' && <PaymentsList rows={c.overdue} onChanged={refresh} onCustomer={setCustomerId} />}
+            {open === 'incassato' && <PaymentsList rows={c.paid} onChanged={refresh} onCustomer={setCustomerId} />}
+            {open === 'fatturato' && <InvoicesList rows={c.inv} onCustomer={setCustomerId} />}
+            {open === 'preventivato' && <QuotesList rows={c.qs} />}
+            {open === 'perso' && <QuotesList rows={c.lost} />}
+            {open === 'vinti' && <QuotesList rows={c.won} />}
+          </div>
+        </SheetContent>
+      </Sheet>
+      <CustomerDetailSheet customerId={customerId} open={!!customerId} onClose={() => setCustomerId(null)} onUpdate={refresh} />
+    </>
+  );
+
+  if (variant === 'billing') {
+    return (
+      <>
+        <CrmKpiRow cols={5}>
+          {lead}
+          <CrmKpiTile label="Fatturato" value={fmtEur(c.fatturato)} color="blue" icon={<Receipt className="w-4 h-4" />} hint={`${c.inv.length} fatture + rate incassate`} onClick={() => setOpen('fatturato')} />
+          <CrmKpiTile label="Incassato" value={fmtEur(c.incassato)} color="green" icon={<Wallet className="w-4 h-4" />} hint={`${c.paid.length} pagamenti ricevuti`} onClick={() => setOpen('incassato')} />
+          <CrmKpiTile label="Da incassare" value={fmtEur(c.daRicevere)} color="amber" icon={<Hourglass className="w-4 h-4" />} hint={`${c.unpaid.length} rate in attesa`} onClick={() => setOpen('da_ricevere')} />
+          <CrmKpiTile label="Scaduto" value={fmtEur(c.scaduto)} color="red" icon={<XCircle className="w-4 h-4" />} hint={`${c.overdue.length} rate oltre scadenza`} onClick={() => setOpen('scaduto')} />
+        </CrmKpiRow>
+        {sheet}
+      </>
+    );
+  }
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
@@ -111,21 +147,7 @@ export default function RevenueFunnelBlock() {
         ))}
       </div>
 
-      <Sheet open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
-        <SheetContent className="w-full sm:max-w-xl overflow-y-auto">
-          <SheetHeader><SheetTitle>{tiles.find((t) => t.k === open)?.label}</SheetTitle></SheetHeader>
-          <div className="mt-4">
-            {open === 'da_ricevere' && <PaymentsList rows={c.unpaid} onChanged={refresh} onCustomer={setCustomerId} />}
-            {open === 'incassato' && <PaymentsList rows={c.paid} onChanged={refresh} onCustomer={setCustomerId} />}
-            {open === 'fatturato' && <InvoicesList rows={c.inv} onCustomer={setCustomerId} />}
-            {open === 'preventivato' && <QuotesList rows={c.qs} />}
-            {open === 'perso' && <QuotesList rows={c.lost} />}
-            {open === 'vinti' && <QuotesList rows={c.won} />}
-          </div>
-        </SheetContent>
-      </Sheet>
-
-      <CustomerDetailSheet customerId={customerId} open={!!customerId} onClose={() => setCustomerId(null)} onUpdate={refresh} />
+      {sheet}
     </div>
   );
 }
