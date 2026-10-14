@@ -372,6 +372,19 @@ async function handleUpdate(update: any) {
     return;
   }
 
+  // ----- Briefing personale di Gabriel: scrivi "oggi"
+  if (/^\/?(oggi|briefing|buongiorno)\b/i.test(text) && chatId === (Deno.env.get('TELEGRAM_NOTIFY_CHAT_ID') || '733155347')) {
+    await send(chatId, '☕ Preparo il briefing…');
+    const r = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/gabriel-assistant`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}` },
+      body: JSON.stringify({ format: 'telegram' }),
+    });
+    const d = await r.json().catch(() => ({}));
+    await send(chatId, d?.telegram_text || `⚠️ Briefing non disponibile (${d?.error || r.status})`);
+    return;
+  }
+
   const doc = msg.document;
   const photo = Array.isArray(msg.photo) ? msg.photo[msg.photo.length - 1] : null;
   const voice = msg.voice || msg.audio;
