@@ -746,7 +746,7 @@ const CustomerDetailSheet = ({ customerId, open, onClose, onUpdate }: CustomerDe
 
               {/* Sales Tab */}
               <TabsContent value="payments">
-                <CustomerPaymentsPanel customerId={customerId} customerName={customer?.company_name || `${customer?.first_name || ''} ${customer?.last_name || ''}`.trim()} quotes={quotes} />
+                <CustomerPaymentsPanel customerId={customerId!} customerName={customer?.company_name || `${customer?.first_name || ''} ${customer?.last_name || ''}`.trim()} quotes={quotes} />
               </TabsContent>
 
               <TabsContent value="sales" className="space-y-2">
