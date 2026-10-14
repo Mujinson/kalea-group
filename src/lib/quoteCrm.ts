@@ -149,7 +149,7 @@ export const promoteLeadToCustomer = async (leadId: string): Promise<string | nu
   }).select('id').single();
   if (error) { console.error('promoteLeadToCustomer', error); return null; }
 
-  await supabase.from('leads').update({ status: 'convertito', pipeline_stage: 'hot' }).eq('id', leadId);
+  await supabase.from('leads').update({ status: 'vinto', pipeline_stage: 'hot' }).eq('id', leadId);
   return data.id;
 };
 

@@ -29,6 +29,13 @@
       "when": 1791993061114,
       "tag": "0003_gabriel_email_tasks",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791997192431,
+      "tag": "0004_sync_lead_on_quote_outcome",
+      "breakpoints": true
     }
   ]
 }
