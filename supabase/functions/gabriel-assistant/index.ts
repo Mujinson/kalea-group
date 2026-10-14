@@ -110,13 +110,17 @@ Deno.serve(async (req) => {
     const url = Deno.env.get("SUPABASE_URL")!;
     const sb = createClient(url, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
     const auth = req.headers.get("Authorization")?.replace("Bearer ", "") || "";
-    const { data: u } = await sb.auth.getUser(auth);
-    if (!u?.user) return json({ error: "Non autorizzato" }, 401);
-    const { data: isAdmin } = await sb.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
-    if (!isAdmin) return json({ error: "Solo amministratori" }, 403);
+    const internal = auth === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!internal) {
+      const { data: u } = await sb.auth.getUser(auth);
+      if (!u?.user) return json({ error: "Non autorizzato" }, 401);
+      const { data: isAdmin } = await sb.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
+      if (!isAdmin) return json({ error: "Solo amministratori" }, 403);
+    }
 
     const body = await req.json().catch(() => ({}));
     const report = await build(sb);
+    if (internal) return json({ telegram_text: toTelegram(report) });
     if (body?.send_telegram) {
       const token = Deno.env.get("TELEGRAM_BOT_TOKEN") || Deno.env.get("TELEGRAM_API_KEY") || "";
       const chat = Deno.env.get("TELEGRAM_NOTIFY_CHAT_ID") || "733155347";
