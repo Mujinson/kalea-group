@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { isQuoteWon, isQuoteLost, isQuotePending, dedupeWonQuotes } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
-import { isSiteActive } from "@/lib/siteStatus";
+import { isSiteActive, normalizeSiteStatus } from "@/lib/siteStatus";
 import { supabase } from '@/integrations/supabase/client';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
