@@ -74,6 +74,10 @@ const menuStructure: MenuEntry[] = [
     item: { title: 'Dashboard', url: '/admin', icon: LayoutDashboard, color: '#3B82F6', adminOnly: false },
   },
   {
+    type: 'single',
+    item: { title: 'Assistente di Gabriel', url: '/admin/assistente', icon: Brain, color: '#A25DDC', adminOnly: true },
+  },
+  {
     type: 'group',
     group: {
       label: 'Lead', icon: Sparkles, color: '#F59E0B', adminOnly: false,
