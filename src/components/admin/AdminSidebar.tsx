@@ -48,6 +48,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { Brain } from 'lucide-react';
 
 interface MenuItem {
   title: string;
