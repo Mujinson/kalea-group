@@ -71,6 +71,7 @@ import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminInventory from "./pages/admin/AdminInventory";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminMargini from "./pages/admin/AdminMargini";
+import AssistenteGabriel from "./pages/admin/AssistenteGabriel";
 import AdminCosts from "./pages/admin/AdminCosts";
 import AdminPayments from "./pages/admin/AdminPayments";
 import AdminContabilita from "./pages/admin/AdminContabilita";
@@ -272,6 +273,7 @@ const App = () => (
                 <Route path="catalogo/prezzi" element={<CatalogPrices />} />
                 <Route path="analytics" element={<AdminAnalytics />} />
                 <Route path="margini" element={<AdminMargini />} />
+                <Route path="assistente" element={<AssistenteGabriel />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
                 <Route path="appuntamenti" element={<AdminAppointments />} />
