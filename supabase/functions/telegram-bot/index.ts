@@ -329,7 +329,7 @@ async function createCostInvoice(sb: any, parsed: any, file?: { bytes: Uint8Arra
 async function crmSnapshot(sb: any) {
   const [quotes, sites, sup, leads, inv] = await Promise.all([
     sb.from('quotes').select('quote_number, client_name, status, total_amount, created_at').order('created_at', { ascending: false }).limit(15),
-    sb.from('construction_sites').select('title, status, city, planned_start_date, planned_end_date, budget_amount').limit(20),
+    sb.from('construction_sites').select('title, status, city, start_date, end_date').order('created_at', { ascending: false }).limit(30),
     sb.from('supplier_invoices').select('invoice_number, total, paid_amount, status, due_date, suppliers(name)').neq('status', 'pagata').limit(20),
     sb.from('leads').select('name, company_name, city, status, created_at').order('created_at', { ascending: false }).limit(15),
     sb.from('customer_invoices').select('invoice_number, total, paid_amount, status, due_date').order('invoice_date', { ascending: false }).limit(20),
@@ -338,6 +338,93 @@ async function crmSnapshot(sb: any) {
     preventivi: quotes.data || [], cantieri: sites.data || [],
     fatture_fornitori_aperte: sup.data || [], lead: leads.data || [], fatture_clienti: inv.data || [],
   }).slice(0, 60_000);
+}
+
+const SITE_LABEL: Record<string, string> = {
+  pianificato: 'Pianificato', in_corso: 'In corso', meta_lavori: 'A metà lavori',
+  sospeso: 'Sospeso', completato: 'Completato', annullato: 'Annullato',
+};
+
+const ACTION_SCHEMA = {
+  type: 'object',
+  properties: {
+    azione: { type: 'string', enum: ['nessuna', 'stato_cantiere', 'aggiorna_lead', 'fattura_fornitore_pagata'] },
+    nome: { type: 'string', description: 'Nome del cantiere / contatto / fornitore o numero fattura, come scritto' },
+    stato_cantiere: { type: 'string', enum: ['pianificato', 'in_corso', 'meta_lavori', 'sospeso', 'completato', 'annullato'] },
+    stato_lead: { type: 'string', enum: ['new', 'contacted', 'qualified', 'lost'] },
+    nota: { type: 'string' },
+  },
+  required: ['azione'],
+};
+
+async function findOne(sb: any, table: string, cols: string[], q: string, select: string) {
+  const term = q.replace(/[%,()]/g, ' ').trim();
+  if (!term) return { rows: [] as any[] };
+  const words = term.split(/\s+/).filter((w) => w.length > 3);
+  const stems = words.map((w) => w.slice(0, Math.max(4, w.length - 2)));
+  for (const t of [term, ...words, ...stems]) {
+    const or = cols.map((c) => `${c}.ilike.%${t}%`).join(',');
+    const { data } = await sb.from(table).select(select).or(or).limit(5);
+    if (data?.length) return { rows: data as any[] };
+  }
+  return { rows: [] as any[] };
+}
+
+async function tryCrmAction(sb: any, text: string): Promise<string | null> {
+  const a = await aiTool(
+    `Capisci se l'utente vuole MODIFICARE qualcosa nel CRM di Kalēa. Se fa solo una domanda, azione="nessuna".
+- "il cantiere X è concluso/finito/chiuso" → stato_cantiere completato; "iniziato/partito" → in_corso; "a metà" → meta_lavori; "fermo/in pausa" → sospeso.
+- "il contatto/lead X l'ho chiamato" → aggiorna_lead contacted; "non è interessato/perso" → lost; con eventuale nota.
+- "ho pagato la fattura di X" → fattura_fornitore_pagata.
+Riporta il nome così come scritto.`,
+    [{ type: 'text', text }], 'azione_crm', ACTION_SCHEMA,
+  ).catch(() => null);
+  if (!a || a.azione === 'nessuna' || !a.nome) return null;
+  const today = new Date().toISOString().slice(0, 10);
+
+  if (a.azione === 'stato_cantiere' && a.stato_cantiere) {
+    const { rows } = await findOne(sb, 'construction_sites', ['title', 'project_name', 'city'], a.nome, 'id, title, city, status, start_date');
+    if (!rows.length) return `❓ Non trovo nessun cantiere che corrisponda a "${a.nome}".`;
+    if (rows.length > 1) return `❓ Ho trovato più cantieri, quale?\n${rows.map((r: any) => `• ${r.title}${r.city ? ` (${r.city})` : ''}`).join('\n')}`;
+    const s = rows[0];
+    const patch: any = { status: a.stato_cantiere };
+    if (a.stato_cantiere === 'completato') patch.end_date = today;
+    if (a.stato_cantiere === 'in_corso' && !s.start_date) patch.start_date = today;
+    const { error } = await sb.from('construction_sites').update(patch).eq('id', s.id);
+    if (error) return `⚠️ Non sono riuscito ad aggiornare: ${error.message}`;
+    return `✅ Cantiere <b>${s.title}</b>: ${SITE_LABEL[s.status] || s.status || '—'} → <b>${SITE_LABEL[a.stato_cantiere]}</b>\n${APP_URL}/admin/cantieri/${s.id}`;
+  }
+
+  if (a.azione === 'aggiorna_lead') {
+    const { rows } = await findOne(sb, 'leads', ['name', 'company_name'], a.nome, 'id, name, company_name, status, notes');
+    if (!rows.length) return `❓ Non trovo nessun contatto "${a.nome}".`;
+    if (rows.length > 1) return `❓ Ho trovato più contatti, quale?\n${rows.map((r: any) => `• ${r.name}${r.company_name ? ` (${r.company_name})` : ''}`).join('\n')}`;
+    const l = rows[0];
+    const patch: any = { last_interaction_at: new Date().toISOString() };
+    if (a.stato_lead) patch.status = a.stato_lead;
+    if (a.nota) patch.notes = `${l.notes ? l.notes + '\n' : ''}[${new Date().toLocaleDateString('it-IT')} Telegram] ${a.nota}`;
+    const { error } = await sb.from('leads').update(patch).eq('id', l.id);
+    if (error) return `⚠️ Non sono riuscito ad aggiornare: ${error.message}`;
+    return `✅ Contatto <b>${l.name}</b> aggiornato${a.stato_lead ? ` → ${a.stato_lead}` : ''}${a.nota ? `\n📝 ${a.nota}` : ''}`;
+  }
+
+  if (a.azione === 'fattura_fornitore_pagata') {
+    let { rows } = await findOne(sb, 'supplier_invoices', ['invoice_number'], a.nome, 'id, invoice_number, total, status, suppliers(name)');
+    if (!rows.length) {
+      const sup = await findOne(sb, 'suppliers', ['name'], a.nome, 'id, name');
+      if (sup.rows.length === 1) {
+        const { data } = await sb.from('supplier_invoices').select('id, invoice_number, total, status, suppliers(name)').eq('supplier_id', sup.rows[0].id).neq('status', 'pagata').limit(5);
+        rows = data || [];
+      }
+    }
+    if (!rows.length) return `❓ Non trovo fatture aperte per "${a.nome}".`;
+    if (rows.length > 1) return `❓ Ci sono più fatture aperte, quale numero?\n${rows.map((r: any) => `• ${r.invoice_number} – ${euro(Number(r.total))}`).join('\n')}`;
+    const f = rows[0];
+    const { error } = await sb.from('supplier_invoices').update({ status: 'pagata', paid_amount: f.total }).eq('id', f.id);
+    if (error) return `⚠️ Non sono riuscito ad aggiornare: ${error.message}`;
+    return `✅ Fattura ${f.invoice_number} di ${f.suppliers?.name || ''} segnata come <b>pagata</b> (${euro(Number(f.total))})`;
+  }
+  return null;
 }
 
 function looksLikeQuoteRequest(t: string) {
@@ -435,6 +522,12 @@ async function handleUpdate(update: any) {
       const r = await createQuote(sb, parsed, voice ? 'dettatura vocale' : 'dettatura');
       await send(chatId, `✅ <b>Preventivo creato</b> ${r.numero}\nCliente: ${r.cliente}\nRighe: ${r.righe}\nImponibile: ${euro(r.imponibile)} · IVA: ${euro(r.iva)} · Totale: ${euro(r.totale)}\n\nApri e genera il PDF:\n${APP_URL}/admin/preventivi/nuovo?edit=${r.id}`);
       return;
+    }
+
+    // ----- Comandi di modifica CRM (es. "il cantiere Bellagio è concluso")
+    if (/(cantier|lead|contatto|fattur|chiud|conclus|finit|complet|sospes|pausa|riprend|annull|iniziat|partit|pagat|perso|interessat|aggiorn|segna|metti|cambia)/i.test(effectiveText)) {
+      const done = await tryCrmAction(sb, effectiveText);
+      if (done) { await send(chatId, done); return; }
     }
 
     // ----- Domanda sul CRM
