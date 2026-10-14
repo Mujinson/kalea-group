@@ -342,10 +342,14 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
     setDueDate('');
   }, [open, quote?.id]);
 
-  const baseAmount = Number(quote?.total_amount || 0);
-  const subtotal = Math.round(((baseAmount / (1 + (Number(vatRate) || 0) / 100)) * pct) / 100 * 100) / 100;
-  const vatAmount = Math.round((subtotal * vatRate) / 100 * 100) / 100;
-  const total = subtotal + vatAmount;
+  const quoteValue = Number(quote?.total_amount || 0);
+  // si fattura solo ciò che resta: valore preventivo meno fatture già emesse
+  const baseAmount = Math.max(0, Number(quote?.residuo ?? quoteValue));
+  const alreadyInvoiced = Math.max(0, quoteValue - baseAmount);
+  const safePct = Math.min(100, Math.max(0, Number(pct) || 0));
+  const total = Math.round(baseAmount * safePct) / 100;
+  const subtotal = Math.round((total / (1 + (Number(vatRate) || 0) / 100)) * 100) / 100;
+  const vatAmount = Math.round((total - subtotal) * 100) / 100;
 
   const handleSchemeChange = (v: string) => {
     setScheme(v);
@@ -399,6 +403,8 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
 
   const save = async () => {
     if (!quote) return;
+    if (total <= 0) { toast.error('Niente da fatturare'); return; }
+    if (total > baseAmount + 0.01) { toast.error(`Puoi fatturare al massimo ${eur(baseAmount)}`); return; }
     setSaving(true);
     const customerId = await ensureCustomerId();
     if (!customerId) { setSaving(false); toast.error('Preventivo senza cliente CRM collegato'); return; }
@@ -435,7 +441,9 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
           <div className="space-y-3">
             <div className="rounded-lg bg-muted/40 p-3 text-sm">
               <div className="font-medium">{quote.quote_number} · {quote.project_name}</div>
-              <div className="text-muted-foreground">Valore preventivo: <span className="font-semibold">{eur(baseAmount)}</span></div>
+              <div className="text-muted-foreground">Valore preventivo: <span className="font-semibold">{eur(quoteValue)}</span></div>
+              {alreadyInvoiced > 0.01 && <div className="text-muted-foreground">Già fatturato: <span className="font-semibold">{eur(alreadyInvoiced)}</span></div>}
+              <div>Resta da fatturare: <span className="font-bold">{eur(baseAmount)}</span></div>
             </div>
 
             <div>
@@ -463,8 +471,8 @@ function InvoiceDialog({ open, quote, onClose, onSaved }: any) {
                 </Select>
               </div>
               <div>
-                <Label>% del preventivo</Label>
-                <Input type="number" min={0} max={100} step={0.01} value={pct} onChange={(e) => setPct(Number(e.target.value))} />
+                <Label>% di quanto resta</Label>
+                <Input type="number" min={0} max={100} step={0.01} value={pct} onChange={(e) => setPct(Math.min(100, Math.max(0, Number(e.target.value))))} />
               </div>
             </div>
 
