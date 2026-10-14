@@ -125,17 +125,17 @@ function BigKPI({
   return (
     <div
       onClick={onClick}
-      className={`relative px-4 py-3 transition-all ${onClick ? 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md' : ''}`}
-      style={{ ...styles[variant], borderRadius: 12 }}
+      className={`relative px-4 py-3 h-full min-w-0 overflow-hidden flex flex-col transition-all ${onClick ? 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md' : ''}`}
+      style={{ ...styles[variant], borderRadius: 12, containerType: 'inline-size' } as React.CSSProperties}
     >
       <div className="flex items-center justify-between mb-1">
-        <span style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, color: labelColor }}>
+        <span className="truncate" style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 600, color: labelColor }}>
           {label}
         </span>
         {Icon && <Icon className="w-4 h-4 opacity-60" />}
       </div>
       <div className="flex items-baseline gap-2 leading-none">
-        <span className="tabular-nums" style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-0.02em' }}>{display}</span>
+        <span className="tabular-nums whitespace-nowrap truncate max-w-full" style={{ fontSize: 'clamp(18px, 13cqi, 40px)', fontWeight: 800, letterSpacing: '-0.02em' }}>{display}</span>
       </div>
       <div className="mt-1.5 flex items-center gap-2 min-h-[16px]">
         {delta !== null && delta !== undefined && (
@@ -144,7 +144,7 @@ function BigKPI({
             {Math.abs(delta).toFixed(1)}%
           </span>
         )}
-        {sub && <span style={{ fontSize: 11, color: subColor }}>{sub}</span>}
+        {sub && <span className="truncate" style={{ fontSize: 11, color: subColor }}>{sub}</span>}
       </div>
       {children}
     </div>
@@ -314,19 +314,24 @@ const AdminOverview = () => {
   const revenueDelta = revenuePrev > 0 ? ((revenuePeriod - revenuePrev) / revenuePrev) * 100 : null;
   const revenueYTD = useMemo(() => sumRevenue(startOfYear(new Date()), endOfYear(new Date())), [quotes, sales]);
 
-  // FATTURATO / INCASSATO / DA INCASSARE dal nuovo sistema fatture
+  // FATTURATO / INCASSATO / DA INCASSARE — stessa logica del blocco "Soldi e preventivi":
+  // le rate del piano pagamenti sono la fonte degli incassi; una rata incassata è anche fatturata.
   const financials = useMemo(() => {
-    const active = customerInvoices.filter(i => i.status !== 'annullata');
-    const fatturato = active.reduce((s, i) => s + Number(i.total || 0), 0);
-    const incassato = active.reduce((s, i) => s + Number(i.paid_amount || 0), 0);
-    const daIncassare = active
-      .filter(i => ['emessa','parziale','scaduta'].includes(i.status))
-      .reduce((s, i) => s + (Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
-    const scaduto = active
-      .filter(i => i.status === 'scaduta')
-      .reduce((s, i) => s + (Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
+    const inR = (d?: string | null) => !!d && inRange(d, range.start, range.end);
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const ps = paymentSchedules as any[];
+    const invs = customerInvoices.filter((i: any) => i.status !== 'annullata' && inR(i.invoice_date || i.created_at));
+    const fromPaid = ps.filter(r => r.is_invoiced && !r.invoice_id && inR(r.paid_date || r.due_date));
+    const fatturato = invs.reduce((s: number, i: any) => s + Number(i.total || 0), 0)
+      + fromPaid.reduce((s, r) => s + Number(r.invoiced_amount ?? r.amount ?? 0), 0);
+    const incassato = ps.filter(r => r.is_paid && inR(r.paid_date || r.due_date))
+      .reduce((s, r) => s + Number(r.amount || 0), 0);
+    const unpaid = ps.filter(r => !r.is_paid);
+    const daIncassare = unpaid.reduce((s, r) => s + Number(r.amount || 0), 0);
+    const scaduto = unpaid.filter(r => r.due_date && r.due_date < todayStr)
+      .reduce((s, r) => s + Number(r.amount || 0), 0);
     return { fatturato, incassato, daIncassare, scaduto };
-  }, [customerInvoices]);
+  }, [customerInvoices, paymentSchedules, range]);
   const goalPct = goal > 0 ? (revenueYTD / goal) * 100 : 0;
 
   const preventiviPeriod = useMemo(() => {
@@ -594,7 +599,7 @@ const AdminOverview = () => {
 
       {/* KPI ROW — split finanziario: Venduto / Fatturato / Incassato / Da incassare */}
       {showCom && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 items-stretch">
           <BigKPI
             label="Venduto" value={revenuePeriod} format="eur" variant="dark"
             delta={revenueDelta} sub={`Preventivi accettati · vs ${eurShort(revenuePrev)}`}
@@ -602,7 +607,7 @@ const AdminOverview = () => {
           />
           <BigKPI
             label="Fatturato" value={financials.fatturato} format="eur" variant="light"
-            sub="Fatture emesse ai clienti"
+            sub="Fatture + rate incassate"
             icon={FileText} onClick={() => navigate('/admin/fatturazione')}
           />
           <BigKPI
@@ -613,7 +618,7 @@ const AdminOverview = () => {
           <BigKPI
             label="Da incassare" value={financials.daIncassare} format="eur" variant="semaphore"
             semaphore={financials.scaduto > 0 ? 'red' : financials.daIncassare > 0 ? 'amber' : 'green'}
-            sub={financials.scaduto > 0 ? `${eurShort(financials.scaduto)} scaduto` : 'Fatture aperte'}
+            sub={financials.scaduto > 0 ? `${eurShort(financials.scaduto)} scaduto` : 'Rate ancora da ricevere'}
             icon={HardHat} onClick={() => navigate('/admin/fatturazione')}
           />
         </div>
