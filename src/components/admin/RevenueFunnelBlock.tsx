@@ -66,7 +66,7 @@ export default function RevenueFunnelBlock() {
     { k: 'fatturato', label: 'Fatturato', value: fmtEur(c.fatturato), hint: `${c.inv.length} fatture emesse`, icon: <Receipt />, tone: 'text-indigo-600 bg-indigo-50' },
     { k: 'da_ricevere', label: 'Da ricevere', value: fmtEur(c.daRicevere), hint: c.scaduto > 0 ? `di cui scaduto ${fmtEur(c.scaduto)}` : `${c.unpaid.length} rate in attesa`, icon: <Hourglass />, tone: 'text-amber-600 bg-amber-50' },
     { k: 'preventivato', label: 'Preventivato', value: fmtEur(c.preventivato), hint: `${c.qs.length} preventivi · ${c.qs.length - c.closed} aperti`, icon: <FileText />, tone: 'text-blue-600 bg-blue-50' },
-    { k: 'perso', label: 'Preventivato perso', value: fmtEur(c.perso), hint: `${c.lost.length} preventivi persi`, icon: <XCircle />, tone: 'text-red-600 bg-red-50' },
+    { k: 'perso', label: 'Perso', value: fmtEur(c.perso), hint: `${c.lost.length} preventivi persi`, icon: <XCircle />, tone: 'text-red-600 bg-red-50' },
     { k: 'vinti', label: 'Chiusura positiva', value: `${c.pWon.toFixed(0)}%`, hint: `${c.won.length} vinti su ${c.closed} · ${c.pVal.toFixed(0)}% del valore`, icon: <ThumbsUp />, tone: 'text-emerald-600 bg-emerald-50' },
     { k: 'perso', label: 'Chiusura negativa', value: `${c.closed ? (100 - c.pWon).toFixed(0) : 0}%`, hint: `${c.lost.length} persi su ${c.closed} · ${c.closed ? (100 - c.pVal).toFixed(0) : 0}% del valore`, icon: <ThumbsDown />, tone: 'text-red-600 bg-red-50' },
   ];
