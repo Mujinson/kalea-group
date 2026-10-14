@@ -1,3 +1,4 @@
+import RevenueFunnelBlock from '@/components/admin/RevenueFunnelBlock';
 import { useState, useMemo, useEffect } from 'react';
 import { WON_QUOTE_STATUSES } from '@/lib/quoteStatus';
 import { useNavigate } from 'react-router-dom';
@@ -144,13 +145,10 @@ export default function AdminFatturazione() {
         subtitle="Gestisci fatture, tranche e incassi separati dal venduto"
       />
 
-      <CrmKpiRow cols={5}>
-        <CrmKpiTile label="Venduto" value={eur(kpi.venduto)} color="indigo" icon={<TrendingUp className="w-4 h-4" />} hint="Vendite + preventivi accettati" />
-        <CrmKpiTile label="Fatturato" value={eur(kpi.fatturato)} color="blue" icon={<FileText className="w-4 h-4" />} hint="Totale fatture emesse" />
-        <CrmKpiTile label="Incassato" value={eur(kpi.incassato)} color="green" icon={<Wallet className="w-4 h-4" />} hint="Pagamenti ricevuti" />
-        <CrmKpiTile label="Da incassare" value={eur(kpi.daIncassare)} color="amber" icon={<Euro className="w-4 h-4" />} hint="Fatture aperte" />
-        <CrmKpiTile label="Scaduto" value={eur(kpi.scaduto)} color="red" icon={<AlertTriangle className="w-4 h-4" />} hint="Oltre scadenza" />
-      </CrmKpiRow>
+      <RevenueFunnelBlock
+        variant="billing"
+        lead={<CrmKpiTile label="Venduto" value={eur(kpi.venduto)} color="indigo" icon={<TrendingUp className="w-4 h-4" />} hint="Vendite + preventivi accettati" onClick={() => setTab('da-fatturare')} />}
+      />
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList>
