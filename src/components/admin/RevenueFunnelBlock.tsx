@@ -1,4 +1,5 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,6 +13,7 @@ import { fmtEur } from '@/lib/finance';
 import CustomerDetailSheet from '@/components/admin/CustomerDetailSheet';
 import { Wallet, Receipt, Hourglass, FileText, XCircle, ThumbsUp, ThumbsDown, Check, RotateCcw, ChevronRight, User } from 'lucide-react';
 
+const RT_TABLES: any = ['payment_schedules', 'customer_invoices', 'quotes', 'sales'];
 const WON = ['accepted', 'converted', 'invoiced'];
 type Kind = 'incassato' | 'fatturato' | 'da_ricevere' | 'preventivato' | 'perso' | 'vinti';
 const today = () => new Date().toISOString().split('T')[0];
@@ -29,13 +31,17 @@ export default function RevenueFunnelBlock() {
     queryKey: ['revenue-funnel'],
     queryFn: async () => {
       const [ps, inv, q] = await Promise.all([
-        supabase.from('payment_schedules').select('id, amount, is_paid, paid_date, due_date, payment_type, notes, sale_id, sales(customer_id, customer_name)'),
+        supabase.from('payment_schedules').select('id, amount, is_paid, paid_date, due_date, payment_type, notes, sale_id, is_invoiced, invoice_id, invoice_number, invoiced_amount, sales(customer_id, customer_name)'),
         supabase.from('customer_invoices').select('id, invoice_number, total, paid_amount, invoice_date, due_date, status, customer_id, customers(company_name, first_name, last_name)'),
         supabase.from('quotes').select('id, quote_number, client_name, project_name, status, total_amount, created_at, customer_id'),
       ]);
       return { ps: (ps.data || []) as any[], inv: (inv.data || []) as any[], q: (q.data || []) as any[] };
     },
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
+  useRealtimeSubscription({ tables: RT_TABLES, onDataChange: useCallback(() => qc.invalidateQueries({ queryKey: ['revenue-funnel'] }), [qc]) });
   const refresh = () => { qc.invalidateQueries({ queryKey: ['revenue-funnel'] }); qc.invalidateQueries({ queryKey: ['finance-overview'] }); };
 
   const c = useMemo(() => {
@@ -44,7 +50,12 @@ export default function RevenueFunnelBlock() {
     const d = data || { ps: [], inv: [], q: [] };
     const paid = d.ps.filter((r) => r.is_paid && ok(r.paid_date || r.due_date)).sort((a, b) => (b.paid_date || '').localeCompare(a.paid_date || ''));
     const unpaid = d.ps.filter((r) => !r.is_paid).sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''));
-    const inv = d.inv.filter((r) => ok(r.invoice_date)).sort((a, b) => (b.invoice_date || '').localeCompare(a.invoice_date || ''));
+    // incassato = fatturato: le rate incassate senza fattura collegata contano come fatturate
+    const fromPaid = d.ps.filter((r) => r.is_invoiced && !r.invoice_id && ok(r.paid_date || r.due_date)).map((r) => ({
+      id: 'ps-' + r.id, invoice_number: r.invoice_number || 'Da incasso', total: n(r.invoiced_amount ?? r.amount), paid_amount: n(r.invoiced_amount ?? r.amount),
+      invoice_date: r.paid_date || r.due_date, customer_id: r.sales?.customer_id, customers: { company_name: r.sales?.customer_name },
+    }));
+    const inv = [...d.inv.filter((r) => ok(r.invoice_date)), ...fromPaid].sort((a, b) => (b.invoice_date || '').localeCompare(a.invoice_date || ''));
     const qs = d.q.filter((r) => ok(r.created_at) && r.status !== 'draft').sort((a, b) => b.created_at.localeCompare(a.created_at));
     const won = qs.filter((r) => WON.includes(r.status));
     const lost = qs.filter((r) => r.status === 'rejected');
