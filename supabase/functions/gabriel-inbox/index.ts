@@ -5,7 +5,7 @@ import { ImapFlow } from "npm:imapflow@1.0.164";
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
-type Mail = { account: string; area: "kalea" | "geopietra"; from: string; subject: string; date: string; snippet?: string; link?: string };
+type Mail = { uid?: number; account: string; area: "kalea" | "geopietra"; from: string; subject: string; date: string; snippet?: string; link?: string };
 const DAYS = 7;
 
 async function imapUnanswered(user: string, pass: string): Promise<Mail[]> {
@@ -22,7 +22,7 @@ async function imapUnanswered(user: string, pass: string): Promise<Mail[]> {
         const f = m.envelope?.from?.[0];
         const addr = (f?.address || "").toLowerCase();
         if (/noreply|no-reply|newsletter|mailer-daemon|notification/.test(addr)) continue;
-        out.push({ account: user, area: "kalea", from: f?.name || addr, subject: m.envelope?.subject || "(senza oggetto)", date: (m.envelope?.date || new Date()).toISOString() });
+        out.push({ uid: Number(m.uid), account: user, area: "kalea", from: f?.name || addr, subject: m.envelope?.subject || "(senza oggetto)", date: (m.envelope?.date || new Date()).toISOString() });
       }
     }
   } finally { lock.release(); await client.logout().catch(() => {}); }
@@ -63,14 +63,28 @@ Deno.serve(async (req) => {
     const { data: isAdmin } = await sb.rpc("has_role", { _user_id: u.user.id, _role: "admin" });
     if (!isAdmin) return json({ error: "Solo amministratori" }, 403);
 
+    const body = await req.json().catch(() => ({}));
+    if (body?.read_uid && body?.account) {
+      const pw = body.account === "info@kalea.space" ? Deno.env.get("HOSTINGER_INFO_PASSWORD") : body.account === "gabriel@kalea.space" ? Deno.env.get("HOSTINGER_GABRIEL_PASSWORD") : null;
+      if (!pw) return json({ error: "Casella non valida" }, 400);
+      const c = new ImapFlow({ host: "imap.hostinger.com", port: 993, secure: true, auth: { user: body.account, pass: pw }, logger: false });
+      await c.connect();
+      const lock = await c.getMailboxLock("INBOX");
+      try {
+        const m = await c.fetchOne(String(Number(body.read_uid)), { source: true, envelope: true }, { uid: true });
+        const { simpleParser } = await import("npm:mailparser@3.7.1");
+        const parsed: any = await simpleParser(m.source);
+        return json({ from: parsed.from?.text, to: parsed.to?.text, subject: parsed.subject, date: parsed.date, text: parsed.text || "", html: parsed.html || null, attachments: (parsed.attachments || []).map((a: any) => a.filename) });
+      } finally { lock.release(); await c.logout().catch(() => {}); }
+    }
     const errors: string[] = [];
     const jobs: Promise<Mail[]>[] = [
       imapUnanswered("info@kalea.space", Deno.env.get("HOSTINGER_INFO_PASSWORD") || "").catch((e) => { errors.push(`info@kalea.space: ${e.message}`); return []; }),
       imapUnanswered("gabriel@kalea.space", Deno.env.get("HOSTINGER_GABRIEL_PASSWORD") || "").catch((e) => { errors.push(`gabriel@kalea.space: ${e.message}`); return []; }),
       gmailUnanswered().catch((e) => { errors.push(`gabriel.geopietra@gmail.com: ${e.message}`); return []; }),
     ];
-    const own = /gabriel@kalea\.space|info@kalea\.space|gabriel\.geopietra|^bo@geopietra|notifichedigitali/i;
-    const mails = (await Promise.all(jobs)).flat().filter((m) => !own.test(m.from) && !/notifichedigitali|Valore Spedito|Ordini in corso/i.test(m.subject)).sort((a, b) => b.date.localeCompare(a.date));
+    const own = /gabriel@kalea\.space|info@kalea\.space|gabriel\.geopietra|^bo@geopietra/i;
+    const mails = (await Promise.all(jobs)).flat().filter((m) => !own.test(m.from) && !/Valore Spedito|Ordini in corso/i.test(m.subject)).sort((a, b) => b.date.localeCompare(a.date));
     return json({ mails, errors });
   } catch (e) {
     return json({ error: String((e as Error).message || e) }, 500);
