@@ -135,7 +135,7 @@ function BigKPI({
         {Icon && <Icon className="w-4 h-4 opacity-60" />}
       </div>
       <div className="flex items-baseline gap-2 leading-none">
-        <span className="tabular-nums whitespace-nowrap truncate max-w-full" style={{ fontSize: 'clamp(18px, 13cqi, 40px)', fontWeight: 800, letterSpacing: '-0.02em' }}>{display}</span>
+        <span className="tabular-nums whitespace-nowrap truncate max-w-full" style={{ fontSize: 'clamp(18px, 15cqi, 40px)', fontWeight: 800, letterSpacing: '-0.02em' }}>{display}</span>
       </div>
       <div className="mt-1.5 flex items-center gap-2 min-h-[16px]">
         {delta !== null && delta !== undefined && (

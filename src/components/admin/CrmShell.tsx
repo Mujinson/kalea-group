@@ -110,7 +110,7 @@ export function CrmKpiTile({ label, value, color = "indigo", icon, hint, onClick
           </div>
         )}
       </div>
-      <div className="mt-auto max-w-full truncate whitespace-nowrap leading-none font-bold tabular-nums text-crm-ink" style={{ fontSize: "clamp(16px, 12cqi, 30px)" }}>
+      <div className="mt-auto max-w-full truncate whitespace-nowrap leading-none font-bold tabular-nums text-crm-ink" style={{ fontSize: "clamp(16px, 14cqi, 30px)" }}>
         {value}
       </div>
       {hint ? <div className="text-[11.5px] text-crm-ink-muted line-clamp-1 min-h-[16px]">{hint}</div> : <div className="min-h-[16px]" aria-hidden />}
