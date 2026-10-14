@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Brain, Send, Loader2, Mail, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import GabrielEmailTasks from '@/components/admin/GabrielEmailTasks';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 type Item = { title: string; detail?: string; link?: string; area: string };
@@ -96,6 +97,8 @@ export default function AssistenteGabriel() {
           {total === 0 && <div className="text-center text-crm-ink-muted py-10">Niente in sospeso. Buona giornata! ☀️</div>}
         </div>
       )}
+
+      <GabrielEmailTasks />
 
       <Dialog open={!!openMail} onOpenChange={(o) => !o && setOpenMail(null)}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
