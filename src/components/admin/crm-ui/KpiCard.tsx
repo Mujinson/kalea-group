@@ -41,14 +41,14 @@ export function KpiCard({
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
       className={cn(
-        "group crm-card p-5 flex flex-col gap-3 animate-crm-fade-up",
+        "group crm-card p-5 flex flex-col gap-3 animate-crm-fade-up h-full min-w-0 overflow-hidden [container-type:inline-size]",
         clickable && "cursor-pointer crm-card-hover",
         className,
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.10em] text-crm-ink-muted">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.10em] text-crm-ink-muted line-clamp-2 break-words">
             {label}
           </p>
         </div>
@@ -62,11 +62,11 @@ export function KpiCard({
         )}
       </div>
 
-      <div className="min-h-[44px] flex items-end">
+      <div className="min-h-[44px] flex items-end min-w-0 mt-auto">
         {loading ? (
           <div className="crm-shimmer h-9 w-32 rounded-md" />
         ) : (
-          <div className="text-[34px] leading-none font-bold tabular-nums text-crm-ink">
+          <div className="max-w-full truncate whitespace-nowrap leading-none font-bold tabular-nums text-crm-ink" style={{ fontSize: "clamp(16px, 12cqi, 34px)" }}>
             {value}
           </div>
         )}

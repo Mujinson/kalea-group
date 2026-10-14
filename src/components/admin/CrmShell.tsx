@@ -93,12 +93,12 @@ export function CrmKpiTile({ label, value, color = "indigo", icon, hint, onClick
       onClick={onClick}
       disabled={!clickable}
       className={cn(
-        "w-full h-full text-left crm-card p-4 flex flex-col justify-between gap-2 animate-crm-fade-up disabled:cursor-default",
+        "w-full h-full min-h-[124px] min-w-0 overflow-hidden text-left crm-card p-4 flex flex-col gap-2 animate-crm-fade-up disabled:cursor-default [container-type:inline-size]",
         clickable && "crm-card-hover cursor-pointer",
       )}
     >
       <div className="flex items-start justify-between gap-2 min-h-[32px]">
-        <p className="text-[10.5px] font-semibold uppercase tracking-[0.10em] text-crm-ink-muted leading-tight">
+        <p className="min-w-0 text-[10.5px] font-semibold uppercase tracking-[0.10em] text-crm-ink-muted leading-tight line-clamp-2 break-words">
           {label}
         </p>
         {icon && (
@@ -110,10 +110,10 @@ export function CrmKpiTile({ label, value, color = "indigo", icon, hint, onClick
           </div>
         )}
       </div>
-      <div className="text-[28px] md:text-[30px] leading-none font-bold tabular-nums text-crm-ink mt-1">
+      <div className="mt-auto max-w-full truncate whitespace-nowrap leading-none font-bold tabular-nums text-crm-ink" style={{ fontSize: "clamp(16px, 12cqi, 30px)" }}>
         {value}
       </div>
-      {hint && <div className="text-[11.5px] text-crm-ink-muted">{hint}</div>}
+      {hint ? <div className="text-[11.5px] text-crm-ink-muted line-clamp-1 min-h-[16px]">{hint}</div> : <div className="min-h-[16px]" aria-hidden />}
     </button>
   );
 }
@@ -125,7 +125,7 @@ export function CrmKpiRow({ children, cols }: { children: ReactNode; cols?: numb
     : cols === 5 ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
     : cols === 3 ? "grid-cols-1 sm:grid-cols-3"
     : "grid-cols-2 md:grid-cols-4";
-  return <div className={`grid ${gridCols} gap-3`}>{children}</div>;
+  return <div className={`grid ${gridCols} gap-3 items-stretch [&>*]:min-w-0`}>{children}</div>;
 }
 
 export function CrmFilterBar({ children }: { children: ReactNode }) {
