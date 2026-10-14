@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Brain, Send, Loader2, Mail, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 type Item = { title: string; detail?: string; link?: string; area: string };
 type Section = { key: string; label: string; emoji: string; tone: string; items: Item[] };
@@ -36,6 +37,15 @@ export default function AssistenteGabriel() {
     setMailLoading(false);
     if (error || d?.error) return toast.error(d?.error || 'Errore lettura email');
     setMails(d.mails); setMailErr(d.errors || []);
+  };
+
+  const [openMail, setOpenMail] = useState<any | null>(null);
+  const readMail = async (m: any) => {
+    if (m.link) return window.open(m.link, '_blank');
+    setOpenMail({ loading: true, subject: m.subject });
+    const { data: d, error } = await supabase.functions.invoke('gabriel-inbox', { body: { read_uid: m.uid, account: m.account } });
+    if (error || d?.error) { setOpenMail(null); return toast.error(d?.error || 'Impossibile aprire la email'); }
+    setOpenMail(d);
   };
 
   const total = data?.sections.reduce((n, s) => n + s.items.length, 0) ?? 0;
@@ -87,6 +97,19 @@ export default function AssistenteGabriel() {
         </div>
       )}
 
+      <Dialog open={!!openMail} onOpenChange={(o) => !o && setOpenMail(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader><DialogTitle>{openMail?.subject}</DialogTitle></DialogHeader>
+          {openMail?.loading ? <Loader2 className="w-5 h-5 animate-spin" /> : openMail && (
+            <div className="space-y-3 text-sm">
+              <div className="text-crm-ink-muted">Da: {openMail.from}<br />A: {openMail.to}<br />{openMail.date && new Date(openMail.date).toLocaleString('it-IT')}</div>
+              {openMail.attachments?.length > 0 && <div className="text-crm-ink-muted">📎 {openMail.attachments.join(', ')}</div>}
+              <div className="whitespace-pre-wrap break-words text-crm-ink">{openMail.text}</div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {mails && (
         <div className="grid md:grid-cols-2 gap-4">
           {[['kalea', '✉️ Email Kalēa® senza risposta'], ['geopietra', '🤝 Email Geopietra senza risposta']].map(([area, label]) => {
@@ -98,12 +121,12 @@ export default function AssistenteGabriel() {
                 <ul className="divide-y divide-crm-border">
                   {list.map((m, i) => (
                     <li key={i} className="py-2">
-                      <a href={m.link || undefined} target="_blank" rel="noreferrer" className="block">
+                      <button type="button" onClick={() => readMail(m)} className="block w-full text-left hover:bg-crm-bg-soft rounded px-2 -mx-2">
                         <div className="text-sm text-crm-ink truncate"><b>{m.from}</b> – {m.subject}</div>
                         <div className="text-xs text-crm-ink-muted truncate">
                           {new Date(m.date).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · {m.account}{m.snippet ? ` · ${m.snippet}` : ''}
                         </div>
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
