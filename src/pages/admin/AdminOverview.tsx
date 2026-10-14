@@ -366,6 +366,7 @@ const AdminOverview = () => {
     const today = new Date();
     return {
       count: attivi.length,
+      inPausa: attivi.filter(s => normalizeSiteStatus(s.status) === 'sospeso').length,
       inPartenza: attivi.filter(s => s.start_date && new Date(s.start_date) > today).length,
       inRitardo: attivi.filter(s => s.end_date && new Date(s.end_date) < today).length,
     };
@@ -653,7 +654,7 @@ const AdminOverview = () => {
         {showCan && (
           <BigKPI
             label="Cantieri Attivi" value={cantieriAttivi.count} variant="gold"
-            sub={`${cantieriAttivi.inPartenza} in partenza · ${cantieriAttivi.inRitardo} in ritardo`}
+            sub={`${cantieriAttivi.inPausa} in pausa · ${cantieriAttivi.inPartenza} in partenza · ${cantieriAttivi.inRitardo} in ritardo`}
             icon={HardHat} onClick={() => navigate('/admin/cantieri')}
           />
         )}
