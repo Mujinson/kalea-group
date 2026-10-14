@@ -48,6 +48,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { Brain } from 'lucide-react';
 
 interface MenuItem {
   title: string;
@@ -72,6 +73,10 @@ const menuStructure: MenuEntry[] = [
   {
     type: 'single',
     item: { title: 'Dashboard', url: '/admin', icon: LayoutDashboard, color: '#3B82F6', adminOnly: false },
+  },
+  {
+    type: 'single',
+    item: { title: 'Assistente di Gabriel', url: '/admin/assistente', icon: Brain, color: '#A25DDC', adminOnly: true },
   },
   {
     type: 'group',
