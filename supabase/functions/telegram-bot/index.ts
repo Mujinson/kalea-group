@@ -329,7 +329,7 @@ async function createCostInvoice(sb: any, parsed: any, file?: { bytes: Uint8Arra
 async function crmSnapshot(sb: any) {
   const [quotes, sites, sup, leads, inv] = await Promise.all([
     sb.from('quotes').select('quote_number, client_name, status, total_amount, created_at').order('created_at', { ascending: false }).limit(15),
-    sb.from('construction_sites').select('title, status, city, planned_start_date, planned_end_date, budget_amount').limit(20),
+    sb.from('construction_sites').select('title, status, city, start_date, end_date').order('created_at', { ascending: false }).limit(30),
     sb.from('supplier_invoices').select('invoice_number, total, paid_amount, status, due_date, suppliers(name)').neq('status', 'pagata').limit(20),
     sb.from('leads').select('name, company_name, city, status, created_at').order('created_at', { ascending: false }).limit(15),
     sb.from('customer_invoices').select('invoice_number, total, paid_amount, status, due_date').order('invoice_date', { ascending: false }).limit(20),
