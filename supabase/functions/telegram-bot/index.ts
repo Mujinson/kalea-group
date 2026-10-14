@@ -556,7 +556,7 @@ async function handleUpdate(update: any) {
     }
 
     // ----- Comandi di modifica CRM (es. "il cantiere Bellagio è concluso")
-    if (/(cantier|lead|contatto|fattur|chiud|conclus|finit|complet|sospes|pausa|riprend|annull|iniziat|partit|pagat|perso|interessat|aggiorn|segna|metti|cambia)/i.test(effectiveText)) {
+    if (/(cantier|lead|contatto|fattur|incass|pagato|saldo|acconto|bonific|chiud|conclus|finit|complet|sospes|pausa|riprend|annull|iniziat|partit|pagat|perso|interessat|aggiorn|segna|metti|cambia)/i.test(effectiveText)) {
       const done = await tryCrmAction(sb, effectiveText);
       if (done) { await send(chatId, done); return; }
     }
