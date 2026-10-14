@@ -27,6 +27,17 @@ export default function AssistenteGabriel() {
     if (send) d.telegram === 'sent' ? toast.success('Briefing inviato su Telegram') : toast.error(`Telegram: ${d.telegram}`);
   };
 
+  const [mails, setMails] = useState<any[] | null>(null);
+  const [mailErr, setMailErr] = useState<string[]>([]);
+  const [mailLoading, setMailLoading] = useState(false);
+  const loadMails = async () => {
+    setMailLoading(true);
+    const { data: d, error } = await supabase.functions.invoke('gabriel-inbox', { body: {} });
+    setMailLoading(false);
+    if (error || d?.error) return toast.error(d?.error || 'Errore lettura email');
+    setMails(d.mails); setMailErr(d.errors || []);
+  };
+
   const total = data?.sections.reduce((n, s) => n + s.items.length, 0) ?? 0;
 
   return (
@@ -44,6 +55,10 @@ export default function AssistenteGabriel() {
         <Button size="lg" variant="outline" onClick={() => run(true)} disabled={sending}>
           {sending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
           Mandami il briefing su Telegram
+        </Button>
+        <Button size="lg" variant="outline" onClick={loadMails} disabled={mailLoading}>
+          {mailLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
+          Controlla cosa ho lasciato indietro
         </Button>
       </div>
 
@@ -72,10 +87,32 @@ export default function AssistenteGabriel() {
         </div>
       )}
 
-      <div className="rounded-crm border border-dashed border-crm-border p-4 text-sm text-crm-ink-muted flex gap-3">
-        <Mail className="w-5 h-5 shrink-0" />
-        <div><b className="text-crm-ink">Prossimo passo:</b> lettura delle email (info@kalea.space, gabriel@kalea.space, gabriel.geopietra@gmail.com) e sezione Geopietra.</div>
-      </div>
+      {mails && (
+        <div className="grid md:grid-cols-2 gap-4">
+          {[['kalea', '✉️ Email Kalēa® senza risposta'], ['geopietra', '🤝 Email Geopietra senza risposta']].map(([area, label]) => {
+            const list = mails.filter((m) => m.area === area);
+            return (
+              <div key={area} className="rounded-crm bg-crm-surface border border-crm-border p-4">
+                <div className="font-semibold text-crm-ink mb-2">{label} <span className="text-crm-ink-subtle font-normal">({list.length})</span></div>
+                {list.length === 0 && <div className="text-sm text-crm-ink-muted">Tutto risposto 👍</div>}
+                <ul className="divide-y divide-crm-border">
+                  {list.map((m, i) => (
+                    <li key={i} className="py-2">
+                      <a href={m.link || undefined} target="_blank" rel="noreferrer" className="block">
+                        <div className="text-sm text-crm-ink truncate"><b>{m.from}</b> – {m.subject}</div>
+                        <div className="text-xs text-crm-ink-muted truncate">
+                          {new Date(m.date).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })} · {m.account}{m.snippet ? ` · ${m.snippet}` : ''}
+                        </div>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+          {mailErr.length > 0 && <div className="md:col-span-2 text-sm text-destructive">{mailErr.join(' · ')}</div>}
+        </div>
+      )}
     </div>
   );
 }

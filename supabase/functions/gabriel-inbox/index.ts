@@ -69,7 +69,8 @@ Deno.serve(async (req) => {
       imapUnanswered("gabriel@kalea.space", Deno.env.get("HOSTINGER_GABRIEL_PASSWORD") || "").catch((e) => { errors.push(`gabriel@kalea.space: ${e.message}`); return []; }),
       gmailUnanswered().catch((e) => { errors.push(`gabriel.geopietra@gmail.com: ${e.message}`); return []; }),
     ];
-    const mails = (await Promise.all(jobs)).flat().sort((a, b) => b.date.localeCompare(a.date));
+    const own = /gabriel@kalea\.space|info@kalea\.space|gabriel\.geopietra|^bo@geopietra|notifichedigitali/i;
+    const mails = (await Promise.all(jobs)).flat().filter((m) => !own.test(m.from) && !/notifichedigitali|Valore Spedito|Ordini in corso/i.test(m.subject)).sort((a, b) => b.date.localeCompare(a.date));
     return json({ mails, errors });
   } catch (e) {
     return json({ error: String((e as Error).message || e) }, 500);
