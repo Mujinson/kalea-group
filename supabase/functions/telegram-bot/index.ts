@@ -348,7 +348,8 @@ const SITE_LABEL: Record<string, string> = {
 const ACTION_SCHEMA = {
   type: 'object',
   properties: {
-    azione: { type: 'string', enum: ['nessuna', 'stato_cantiere', 'aggiorna_lead', 'fattura_fornitore_pagata'] },
+    azione: { type: 'string', enum: ['nessuna', 'stato_cantiere', 'aggiorna_lead', 'fattura_fornitore_pagata', 'incasso_ricevuto'] },
+    importo: { type: 'number', description: 'Importo in euro se citato' },
     nome: { type: 'string', description: 'Nome del cantiere / contatto / fornitore o numero fattura, come scritto' },
     stato_cantiere: { type: 'string', enum: ['pianificato', 'in_corso', 'meta_lavori', 'sospeso', 'completato', 'annullato'] },
     stato_lead: { type: 'string', enum: ['new', 'contacted', 'qualified', 'lost'] },

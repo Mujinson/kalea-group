@@ -25,7 +25,7 @@ async function build(sb: any) {
     sb.from("leads").select("id,name,company_name,status,pipeline_stage,created_at,last_interaction_at,project_type").is("deleted_at", null).is("archived_at", null).limit(500),
     sb.from("quotes").select("id,quote_number,client_name,status,total_amount,sent_date,created_at,lead_id").in("status", ["draft", "sent"]).limit(500),
     sb.from("customer_reminders").select("id,title,reminder_date,is_completed").eq("is_completed", false).lte("reminder_date", todayStr).limit(200),
-    sb.from("payment_schedules").select("id,amount,due_date,is_paid,payment_type").eq("is_paid", false).lte("due_date", new Date(now.getTime() + 7 * 86400000).toISOString().slice(0, 10)).limit(200),
+    sb.from("payment_schedules").select("id,amount,due_date,is_paid,payment_type,sales(customer_name)").eq("is_paid", false).lte("due_date", new Date(now.getTime() + 7 * 86400000).toISOString().slice(0, 10)).limit(200),
     sb.from("supplier_invoices").select("id,invoice_number,total,paid_amount,due_date,status").neq("status", "pagata").lte("due_date", new Date(now.getTime() + 7 * 86400000).toISOString().slice(0, 10)).limit(200),
     sb.from("construction_sites").select("id,title,city,status,planned_end_date").in("status", ["attivo", "in_corso", "active", "in_lavorazione"]).limit(200),
     sb.from("fixed_costs").select("id,description,amount,next_due_date,is_paid").eq("is_paid", false).lte("next_due_date", new Date(now.getTime() + 7 * 86400000).toISOString().slice(0, 10)).limit(200),
@@ -69,7 +69,8 @@ async function build(sb: any) {
   const money: Item[] = [];
   for (const p of schedules.data || []) {
     const late = p.due_date < todayStr;
-    const it = { title: `${late ? "Incasso scaduto" : "Incasso in arrivo"} ${eur(p.amount || 0)}`, detail: `Scadenza ${fmtDay(p.due_date)}${p.payment_type ? " · " + p.payment_type : ""}`, link: "/admin/pagamenti", area: "kalea" as const };
+    const who = (p as any).sales?.customer_name;
+    const it = { title: `${late ? "Incasso scaduto" : "Incasso in arrivo"} ${eur(p.amount || 0)}${who ? " – " + who : ""}`, detail: `Scadenza ${fmtDay(p.due_date)}${p.payment_type ? " · " + p.payment_type : ""}`, link: "/admin/pagamenti", area: "kalea" as const };
     money.push(it); if (late) urgent.push(it);
   }
   for (const s of supInv.data || []) money.push({ title: `Pagare fornitore – fatt. ${s.invoice_number || ""} ${eur((s.total || 0) - (s.paid_amount || 0))}`, detail: `Scadenza ${s.due_date ? fmtDay(s.due_date) : "—"}`, link: "/admin/fornitori", area: "admin" });
