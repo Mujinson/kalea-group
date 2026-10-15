@@ -98,8 +98,8 @@ const Footer = () => {
                   info@kalea.space
                 </a>
               </li>
-              <li className="flex items-start gap-3">
-                <Phone size={16} className="text-primary mt-0.5 flex-shrink-0" />
+              <li className="flex items-center gap-3">
+                <Phone size={16} className="text-primary flex-shrink-0" />
                 <div>
                   <a
                     href="tel:+393520351738"
