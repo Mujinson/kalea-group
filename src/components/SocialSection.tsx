@@ -75,7 +75,7 @@ const SocialSection = () => {
       id: "facebook",
       name: t("social.facebook"),
       handle: "Kalēa Group",
-      url: "https://www.facebook.com/people/Kalea/61585013655612/",
+      url: "https://www.facebook.com/Kalea.space",
       icon: <Facebook className="w-7 h-7" strokeWidth={1.5} />,
       gradient: "from-[#BFA78C] via-[#A08B6E] to-[#7A6A58]",
     },
