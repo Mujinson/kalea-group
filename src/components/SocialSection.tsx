@@ -75,7 +75,7 @@ const SocialSection = () => {
       id: "facebook",
       name: t("social.facebook"),
       handle: "Kalēa Group",
-      url: "https://www.facebook.com/people/Kalea/61585013655612/",
+      url: "https://www.facebook.com/Kalea.space",
       icon: <Facebook className="w-7 h-7" strokeWidth={1.5} />,
       gradient: "from-[#BFA78C] via-[#A08B6E] to-[#7A6A58]",
     },
@@ -126,6 +126,40 @@ const SocialSection = () => {
             const post = latest[channel.id];
             const hasPost = !!(post?.postUrl || post?.imageUrl);
             const href = post?.postUrl || channel.url;
+
+            // Facebook: live page plugin with real posts
+            if (channel.id === "facebook") {
+              const pluginSrc = `https://www.facebook.com/plugins/page.php?href=${encodeURIComponent(channel.url)}&tabs=timeline&width=340&height=500&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false&locale=it_IT`;
+              return (
+                <motion.div
+                  key={channel.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  whileHover={{ y: -6 }}
+                  className="group relative shrink-0 w-[260px] md:w-[300px] aspect-[4/5] rounded-2xl overflow-hidden snap-start bg-white"
+                >
+                  <iframe
+                    src={pluginSrc}
+                    title="Kalēa Group su Facebook"
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full border-0"
+                    allow="encrypted-media; clipboard-write; picture-in-picture; web-share"
+                  />
+                  <a
+                    href={channel.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${t("social.follow")} ${channel.name}`}
+                    className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 shadow-md text-[#1877F2] hover:scale-110 transition-transform"
+                  >
+                    <ArrowUpRight className="w-4 h-4" strokeWidth={2} />
+                  </a>
+                </motion.div>
+              );
+            }
+
             return (
             <motion.a
               key={channel.id}
