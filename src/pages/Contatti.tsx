@@ -371,6 +371,12 @@ const Contatti = () => {
                     >
                       +39 352 035 1738
                     </a>
+                    <a
+                      href="tel:+393394730218"
+                      className="block text-white/85 hover:text-white transition-colors font-light"
+                    >
+                      +39 339 473 0218
+                    </a>
                     <p className="text-sm text-white/70 mt-1 font-light">
                       {t("contacts.phoneHours")}
                     </p>
