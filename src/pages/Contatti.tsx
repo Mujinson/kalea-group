@@ -132,7 +132,7 @@ const Contatti = () => {
           "@type": "LocalBusiness",
           name: "Kalēa",
           url: "https://kalea.space",
-          telephone: "+39 352 035 1738",
+          telephone: ["+39 352 035 1738", "+39 339 473 0218"],
           email: "info@kalea.space",
           image: "https://kalea.space/favicon-k-512.png",
           areaServed: ["IT", "EU"],
@@ -370,6 +370,12 @@ const Contatti = () => {
                       className="text-white/85 hover:text-white transition-colors font-light"
                     >
                       +39 352 035 1738
+                    </a>
+                    <a
+                      href="tel:+393394730218"
+                      className="block text-white/85 hover:text-white transition-colors font-light"
+                    >
+                      +39 339 473 0218
                     </a>
                     <p className="text-sm text-white/70 mt-1 font-light">
                       {t("contacts.phoneHours")}
