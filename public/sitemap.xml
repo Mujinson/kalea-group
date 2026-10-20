@@ -268,4 +268,38 @@
     <priority>0.3</priority>
   </url>
 
+  <!-- Servizi -->
+  <url>
+    <loc>https://www.kalea.space/it/servizi/fornitura-e-posa</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/servizi/fornitura-e-posa"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/servizi/fornitura-e-posa"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/servizi/fornitura-e-posa"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/servizi/fornitura-e-posa"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/servizi/fornitura-e-posa"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.kalea.space/it/servizi/rigenerazione-parquet</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/servizi/rigenerazione-parquet"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/servizi/rigenerazione-parquet"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/servizi/rigenerazione-parquet"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/servizi/rigenerazione-parquet"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/servizi/rigenerazione-parquet"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.kalea.space/it/servizi/levigatura-verniciatura-oliatura</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/servizi/levigatura-verniciatura-oliatura"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/servizi/levigatura-verniciatura-oliatura"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/servizi/levigatura-verniciatura-oliatura"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/servizi/levigatura-verniciatura-oliatura"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/servizi/levigatura-verniciatura-oliatura"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>

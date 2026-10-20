@@ -408,13 +408,13 @@ const Contatti = () => {
             <div className="bg-white/10 border border-white/15 backdrop-blur-sm rounded-2xl p-8">
               <h3 className="text-xl font-light italic mb-4">{t("contacts.hoursTitle")}</h3>
               <div className="space-y-2 text-white/85 font-light">
-                <div className="flex justify-between">
+                <div className="flex justify-between gap-4">
                   <span>{t("contacts.hoursWeekdays")}</span>
-                  <span className="font-medium text-white">9:00 - 18:00</span>
+                  <span className="font-medium text-white text-right">8:00 - 12:00<br />13:30 - 18:00</span>
                 </div>
                 <div className="flex justify-between">
                   <span>{t("contacts.hoursSaturday")}</span>
-                  <span className="font-medium text-white">9:00 - 13:00</span>
+                  <span className="font-medium text-white">8:00 - 12:00</span>
                 </div>
                 <div className="flex justify-between">
                   <span>{t("contacts.hoursSunday")}</span>
