@@ -34,6 +34,8 @@ import IndoorSpc from "./pages/IndoorSpc";
 import ServizioDetail from "./pages/ServizioDetail";
 import LocalLanding from "./pages/LocalLanding";
 import LocalZones from "./pages/LocalZones";
+import Blog from "./pages/Blog";
+import BlogPostPage from "./pages/BlogPost";
 import SpcCollectionDetail from "./pages/SpcCollectionDetail";
 import IndoorLaminati from "./pages/IndoorLaminati";
 import LaminatoCollectionDetail from "./pages/LaminatoCollectionDetail";
@@ -479,6 +481,8 @@ const App = () => (
               <Route path="/fr/parquet/:slug" element={<><SEOHandler /><Layout><ParquetCollectionDetail /></Layout></>} />
 
               {/* Servizi (all languages) */}
+              <Route path="/it/blog" element={<Layout><Blog /></Layout>} />
+              <Route path="/it/blog/:slug" element={<Layout><BlogPostPage /></Layout>} />
               <Route path="/it/zone" element={<Layout><LocalZones /></Layout>} />
               <Route path="/it/zone/:slug" element={<Layout><LocalLanding /></Layout>} />
               <Route path="/it/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />
