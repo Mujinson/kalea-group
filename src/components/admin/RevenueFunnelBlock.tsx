@@ -231,14 +231,16 @@ function PaymentsList({ rows, onChanged, onCustomer }: { rows: any[]; onChanged:
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold">{fmtEur(r.amount)}</div>
                       <div className={`text-[11px] ${late ? 'text-red-600' : 'text-muted-foreground'}`}>
-                        {r.is_paid ? `Incassato il ${fd(r.paid_date)}` : `${late ? 'Scaduto il' : 'Previsto il'} ${fd(r.due_date)}`}
+                        {r.is_paid ? `Incassato il ${fd(r.paid_date)}` : `${late ? 'Scaduto il' : 'Previsto il'} ${fd(r.due_date)}`}{r.notes ? ` · ${r.notes}` : ''}
                       </div>
                     </div>
                     {r.is_paid ? (
-                      <Button size="sm" variant="ghost" onClick={() => setPaid(r, false)}><RotateCcw className="w-3.5 h-3.5 mr-1" />Annulla</Button>
+                      r.isInvoice ? null : (
+                        <Button size="sm" variant="ghost" onClick={() => setPaid(r, false)}><RotateCcw className="w-3.5 h-3.5 mr-1" />Annulla</Button>
+                      )
                     ) : (
                       <>
-                        <Button size="sm" variant="outline" onClick={() => setPartial({ id: r.id, v: '' })}>In parte</Button>
+                        {!r.isInvoice && <Button size="sm" variant="outline" onClick={() => setPartial({ id: r.id, v: '' })}>In parte</Button>}
                         <Button size="sm" onClick={() => setPaid(r, true)}><Check className="w-3.5 h-3.5 mr-1" />Ricevuto tutto</Button>
                       </>
                     )}
