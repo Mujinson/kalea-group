@@ -34,6 +34,15 @@ export const localCities: LocalCity[] = [
   { slug: "lago-di-garda", name: "Lago di Garda", prov: "BS/VR/TN", km: 0,
     note: "Copriamo tutta la sponda bresciana e veronese del Garda. Le case sul lago vivono umidità, sbalzi di temperatura e affitti brevi: per questo proponiamo superfici stabili, impermeabili e facili da pulire, sia dentro che su terrazze e bordi piscina.",
     areas: ["Sirmione", "Peschiera", "Salò", "Manerba", "Padenghe", "Bardolino", "Lazise", "Garda"] },
+  { slug: "bergamo", name: "Bergamo", prov: "BG", km: 50,
+    note: "Bergamo è una delle nostre province di riferimento: seguiamo ristrutturazioni di appartamenti, case indipendenti e attività commerciali, con squadre nostre e un unico referente dal sopralluogo alla consegna.",
+    areas: ["Città Alta", "Bergamo centro", "Seriate", "Grumello del Monte", "Dalmine", "Stezzano", "Curno"] },
+  { slug: "milano", name: "Milano", prov: "MI", km: 110,
+    note: "A Milano e provincia lavoriamo su appartamenti, uffici e show room: soluzioni rapide e pulite, ideali per ristrutturazioni da consegnare in tempi stretti, tra un affitto e l'altro.",
+    areas: ["Città Studi", "Porta Romana", "Isola", "San Siro", "Sesto San Giovanni", "Rho", "Monza"] },
+  { slug: "como", name: "Como", prov: "CO", km: 90,
+    note: "Sul lago di Como e nel comasco seguiamo ville, case di pregio e ristrutturazioni: superfici impermeabili e resistenti per case sul lago, parquet vero per gli interni di carattere.",
+    areas: ["Como città", "Como nord", "Erba", "Cantù", "Mariano Comense", "Cernobbio"] },
   { slug: "sirmione", name: "Sirmione", prov: "BS", km: 10,
     note: "A Sirmione seguiamo ville, hotel e appartamenti per affitti turistici. Organizziamo i lavori fuori stagione o in finestre brevi, così la struttura resta chiusa il meno possibile.",
     areas: ["Colombare", "Lugana", "Centro storico"] },
@@ -52,9 +61,6 @@ export const localCities: LocalCity[] = [
   { slug: "verona", name: "Verona", prov: "VR", km: 40,
     note: "Arriviamo a Verona e provincia con squadre nostre. Seguiamo appartamenti in centro, uffici e locali, con preventivo chiaro e un unico referente dal sopralluogo alla consegna.",
     areas: ["Centro storico", "Borgo Trento", "Valpolicella", "Villafranca", "Sona", "Castelnuovo del Garda"] },
-  { slug: "mantova", name: "Mantova", prov: "MN", km: 50,
-    note: "Copriamo anche Mantova e l'alto mantovano (Castiglione delle Stiviere, Solferino, Volta Mantovana), zone a pochi chilometri dal lago dove lavoriamo spesso su case nuove e ristrutturazioni.",
-    areas: ["Castiglione delle Stiviere", "Solferino", "Volta Mantovana", "Mantova città"] },
 ];
 
 export const localProducts: LocalProduct[] = [
