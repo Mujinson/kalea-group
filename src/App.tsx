@@ -34,6 +34,7 @@ import IndoorSpc from "./pages/IndoorSpc";
 import ServizioDetail from "./pages/ServizioDetail";
 import LocalLanding from "./pages/LocalLanding";
 import LocalZones from "./pages/LocalZones";
+import LandingSopralluogo from "./pages/LandingSopralluogo";
 import Blog from "./pages/Blog";
 import BlogPostPage from "./pages/BlogPost";
 import SpcCollectionDetail from "./pages/SpcCollectionDetail";
