@@ -38,7 +38,7 @@ export const localCities: LocalCity[] = [
     note: "Bergamo è una delle nostre province di riferimento: seguiamo ristrutturazioni di appartamenti, case indipendenti e attività commerciali, con squadre nostre e un unico referente dal sopralluogo alla consegna.",
     areas: ["Città Alta", "Bergamo centro", "Seriate", "Grumello del Monte", "Dalmine", "Stezzano", "Curno"] },
   { slug: "milano", name: "Milano", prov: "MI", km: 110,
-    note: "A Milano e provincia lavoriamo su appartamenti, uffici e show room: soluzioni rapide e pulite, ideali per chi vive nel cantiere o consegnare in tempi stretti tra un affitto e l'altro.",
+    note: "A Milano e provincia lavoriamo su appartamenti, uffici e show room: soluzioni rapide e pulite, ideali per ristrutturazioni da consegnare in tempi stretti, tra un affitto e l'altro.",
     areas: ["Città Studi", "Porta Romana", "Isola", "San Siro", "Sesto San Giovanni", "Rho", "Monza"] },
   { slug: "como", name: "Como", prov: "CO", km: 90,
     note: "Sul lago di Como e nel comasco seguiamo ville, case di pregio e ristrutturazioni: superfici impermeabili e resistenti per case sul lago, parquet vero per gli interni di carattere.",
