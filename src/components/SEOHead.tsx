@@ -9,6 +9,7 @@ interface SEOHeadProps {
   ogType?: string;
   canonicalPath?: string;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  italianOnly?: boolean;
 }
 
 const BASE_URL = "https://www.kalea.space";
@@ -22,6 +23,7 @@ const SEOHead = ({
   ogType = "website",
   canonicalPath,
   structuredData,
+  italianOnly = false,
 }: SEOHeadProps) => {
   const location = useLocation();
   
@@ -76,7 +78,7 @@ const SEOHead = ({
     canonicalElement.setAttribute("href", `${BASE_URL}${canonical}`);
     
     // Hreflang tags
-    const languages = ["it", "en", "de", "fr"];
+    const languages = italianOnly ? ["it"] : ["it", "en", "de", "fr"];
     const pathWithoutLang = location.pathname.replace(/^\/(it|en|de|fr)/, "");
     
     // Remove existing hreflang tags
@@ -92,11 +94,13 @@ const SEOHead = ({
     });
     
     // Add x-default
-    const xDefault = document.createElement("link");
-    xDefault.rel = "alternate";
-    xDefault.hreflang = "x-default";
-    xDefault.href = `${BASE_URL}/en${pathWithoutLang}`;
-    document.head.appendChild(xDefault);
+    if (!italianOnly) {
+      const xDefault = document.createElement("link");
+      xDefault.rel = "alternate";
+      xDefault.hreflang = "x-default";
+      xDefault.href = `${BASE_URL}/en${pathWithoutLang}`;
+      document.head.appendChild(xDefault);
+    }
 
     // Structured data (JSON-LD) — managed by SEOHead
     document.querySelectorAll('script[data-seohead-jsonld]').forEach(el => el.remove());
