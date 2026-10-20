@@ -2215,6 +2215,48 @@ export type Database = {
           },
         ]
       }
+      landing_requests: {
+        Row: {
+          city: string | null
+          created_at: string
+          email: string | null
+          id: string
+          lead_id: string | null
+          message: string | null
+          name: string
+          phone: string
+          privacy_consent: boolean
+          source_ip: string | null
+          work_type: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          lead_id?: string | null
+          message?: string | null
+          name: string
+          phone: string
+          privacy_consent?: boolean
+          source_ip?: string | null
+          work_type?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          lead_id?: string | null
+          message?: string | null
+          name?: string
+          phone?: string
+          privacy_consent?: boolean
+          source_ip?: string | null
+          work_type?: string | null
+        }
+        Relationships: []
+      }
       lead_activities: {
         Row: {
           created_at: string
