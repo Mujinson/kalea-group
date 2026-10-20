@@ -3298,6 +3298,7 @@ export type Database = {
           payment_terms: string | null
           product_type: string
           quantity_sqm: number
+          quote_id: string | null
           sale_date: string
           sale_price: number
           subtotal_amount: number
@@ -3327,6 +3328,7 @@ export type Database = {
           payment_terms?: string | null
           product_type: string
           quantity_sqm: number
+          quote_id?: string | null
           sale_date?: string
           sale_price: number
           subtotal_amount?: number
@@ -3356,6 +3358,7 @@ export type Database = {
           payment_terms?: string | null
           product_type?: string
           quantity_sqm?: number
+          quote_id?: string | null
           sale_date?: string
           sale_price?: number
           subtotal_amount?: number
