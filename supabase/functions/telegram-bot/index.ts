@@ -358,6 +358,9 @@ const ACTION_SCHEMA = {
   required: ['azione'],
 };
 
+// Il CRM usa stati in italiano (leadConstants.ts): mappiamo i valori inglesi dello schema AI
+const LEAD_STATUS_MAP: Record<string, string> = { new: 'nuovo', contacted: 'contattato', qualified: 'qualificato', lost: 'perso' };
+
 async function findOne(sb: any, table: string, cols: string[], q: string, select: string) {
   const term = q.replace(/[%,()]/g, ' ').trim();
   if (!term) return { rows: [] as any[] };
@@ -432,11 +435,11 @@ Riporta il nome così come scritto.`,
     if (rows.length > 1) return `❓ Ho trovato più contatti, quale?\n${rows.map((r: any) => `• ${r.name}${r.company_name ? ` (${r.company_name})` : ''}`).join('\n')}`;
     const l = rows[0];
     const patch: any = { last_interaction_at: new Date().toISOString() };
-    if (a.stato_lead) patch.status = a.stato_lead;
+    if (a.stato_lead) patch.status = LEAD_STATUS_MAP[a.stato_lead] || a.stato_lead;
     if (a.nota) patch.notes = `${l.notes ? l.notes + '\n' : ''}[${new Date().toLocaleDateString('it-IT')} Telegram] ${a.nota}`;
     const { error } = await sb.from('leads').update(patch).eq('id', l.id);
     if (error) return `⚠️ Non sono riuscito ad aggiornare: ${error.message}`;
-    return `✅ Contatto <b>${l.name}</b> aggiornato${a.stato_lead ? ` → ${a.stato_lead}` : ''}${a.nota ? `\n📝 ${a.nota}` : ''}`;
+    return `✅ Contatto <b>${l.name}</b> aggiornato${a.stato_lead ? ` → ${LEAD_STATUS_MAP[a.stato_lead] || a.stato_lead}` : ''}${a.nota ? `\n📝 ${a.nota}` : ''}`;
   }
 
   if (a.azione === 'fattura_fornitore_pagata') {
