@@ -543,6 +543,19 @@ function PaymentDialog({ open, invoice, onClose, onSaved }: any) {
     });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
+    // Segna pagate le rate collegate a questa fattura, coprendo l'importo incassato (dalla più vecchia)
+    const { data: scheds } = await supabase
+      .from('payment_schedules')
+      .select('id, amount')
+      .eq('invoice_id', invoice.id)
+      .eq('is_paid', false)
+      .order('due_date');
+    let remaining = amount;
+    for (const s of scheds || []) {
+      if (Number(s.amount) > remaining + 0.01) continue; // incasso parziale: la rata resta aperta
+      await supabase.from('payment_schedules').update({ is_paid: true, paid_date: date }).eq('id', s.id);
+      remaining -= Number(s.amount);
+    }
     toast.success('Incasso registrato');
     onSaved();
     onClose();
