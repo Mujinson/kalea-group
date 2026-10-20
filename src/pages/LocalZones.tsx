@@ -6,7 +6,7 @@ const LocalZones = () => (
   <div className="bg-background pt-32 pb-24">
     <SEOHead
       title="Zone servite — Lavoriamo in tutta Italia, soprattutto in Lombardia | Kalēa®"
-      description="Lavoriamo dappertutto, ma soprattutto in Lombardia: fornitura e posa di pavimenti SPC, parquet, laminati, MgO ed esterni a Desenzano del Garda, sul Lago di Garda, a Brescia, Verona, Mantova e in tutta Italia."
+      description="Lavoriamo dappertutto, ma soprattutto in Lombardia: fornitura e posa di pavimenti SPC, parquet, laminati, MgO ed esterni a Bergamo, Milano, Como, Desenzano del Garda, sul Lago di Garda, a Brescia e in tutta Italia."
       canonicalPath="/it/zone"
       italianOnly
     />

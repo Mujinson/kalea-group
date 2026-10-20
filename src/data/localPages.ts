@@ -52,9 +52,6 @@ export const localCities: LocalCity[] = [
   { slug: "verona", name: "Verona", prov: "VR", km: 40,
     note: "Arriviamo a Verona e provincia con squadre nostre. Seguiamo appartamenti in centro, uffici e locali, con preventivo chiaro e un unico referente dal sopralluogo alla consegna.",
     areas: ["Centro storico", "Borgo Trento", "Valpolicella", "Villafranca", "Sona", "Castelnuovo del Garda"] },
-  { slug: "mantova", name: "Mantova", prov: "MN", km: 50,
-    note: "Copriamo anche Mantova e l'alto mantovano (Castiglione delle Stiviere, Solferino, Volta Mantovana), zone a pochi chilometri dal lago dove lavoriamo spesso su case nuove e ristrutturazioni.",
-    areas: ["Castiglione delle Stiviere", "Solferino", "Volta Mantovana", "Mantova città"] },
 ];
 
 export const localProducts: LocalProduct[] = [
