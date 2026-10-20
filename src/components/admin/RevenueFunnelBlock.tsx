@@ -49,21 +49,39 @@ export default function RevenueFunnelBlock({ variant = 'dashboard', lead }: { va
     const y = new Date().getFullYear();
     const ok = (d?: string | null) => period === 'all' || (!!d && new Date(d).getFullYear() === y);
     const d = data || { ps: [], inv: [], q: [] };
-    const paid = d.ps.filter((r) => r.is_paid && ok(r.paid_date || r.due_date)).sort((a, b) => (b.paid_date || '').localeCompare(a.paid_date || ''));
-    const unpaid = d.ps.filter((r) => !r.is_paid).sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''));
+    const custName = (r: any) => r.customers?.company_name || `${r.customers?.first_name || ''} ${r.customers?.last_name || ''}`.trim() || '—';
+    // Anti doppio conteggio: le rate già coperte da una fattura (invoice_id) vivono sulla fattura
+    const invWithPs = new Set(d.ps.filter((r) => r.invoice_id).map((r) => r.invoice_id));
+    const direct = d.ps.filter((r) => !r.invoice_id);
+    const paidPs = direct.filter((r) => r.is_paid && ok(r.paid_date || r.due_date));
+    const unpaidPs = direct.filter((r) => !r.is_paid);
+    // Fatture senza rate collegate: contano da sole (incassato = paid_amount, da ricevere = residuo)
+    const standalone = d.inv.filter((r) => r.status !== 'annullata' && !invWithPs.has(r.id));
+    const invAsPaid = standalone.filter((r) => n(r.paid_amount) > 0 && ok(r.invoice_date)).map((r) => ({
+      id: 'inv-' + r.id, isInvoice: true, invoice_id: r.id, amount: n(r.paid_amount), is_paid: true,
+      paid_date: r.invoice_date, due_date: r.due_date, notes: `Fattura ${r.invoice_number || ''}`,
+      sales: { customer_id: r.customer_id, customer_name: custName(r) },
+    }));
+    const invAsOpen = standalone.filter((r) => n(r.total) - n(r.paid_amount) > 0.01 && ok(r.invoice_date)).map((r) => ({
+      id: 'inv-' + r.id, isInvoice: true, invoice_id: r.id, amount: r2(n(r.total) - n(r.paid_amount)), is_paid: false,
+      due_date: r.due_date || r.invoice_date, notes: `Fattura ${r.invoice_number || ''}`,
+      sales: { customer_id: r.customer_id, customer_name: custName(r) },
+    }));
+    const paid = [...paidPs, ...invAsPaid].sort((a, b) => (b.paid_date || '').localeCompare(a.paid_date || ''));
+    const unpaid = [...unpaidPs, ...invAsOpen].sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''));
     // incassato = fatturato: le rate incassate senza fattura collegata contano come fatturate
-    const fromPaid = d.ps.filter((r) => r.is_invoiced && !r.invoice_id && ok(r.paid_date || r.due_date)).map((r) => ({
+    const fromPaid = paidPs.filter((r) => r.is_invoiced).map((r) => ({
       id: 'ps-' + r.id, invoice_number: r.invoice_number || 'Da incasso', total: n(r.invoiced_amount ?? r.amount), paid_amount: n(r.invoiced_amount ?? r.amount),
       invoice_date: r.paid_date || r.due_date, customer_id: r.sales?.customer_id, customers: { company_name: r.sales?.customer_name },
     }));
-    const inv = [...d.inv.filter((r) => ok(r.invoice_date)), ...fromPaid].sort((a, b) => (b.invoice_date || '').localeCompare(a.invoice_date || ''));
+    const inv = [...d.inv.filter((r) => r.status !== 'annullata' && ok(r.invoice_date)), ...fromPaid].sort((a, b) => (b.invoice_date || '').localeCompare(a.invoice_date || ''));
     const qs = d.q.filter((r) => ok(r.created_at) && r.status !== 'draft').sort((a, b) => b.created_at.localeCompare(a.created_at));
     const won = qs.filter((r) => WON.includes(r.status));
     const lost = qs.filter((r) => r.status === 'rejected');
     const sum = (a: any[], k: string) => a.reduce((s, r) => s + n(r[k]), 0);
     const vinto = sum(won, 'total_amount'), perso = sum(lost, 'total_amount');
     const closed = won.length + lost.length;
-    const overdue = unpaid.filter((r) => r.due_date < today());
+    const overdue = unpaid.filter((r) => r.due_date && r.due_date < today());
     return {
       paid, unpaid, inv, qs, won, lost, vinto, perso, closed, overdue,
       incassato: sum(paid, 'amount'), daRicevere: sum(unpaid, 'amount'), scaduto: sum(overdue, 'amount'),
@@ -161,6 +179,15 @@ function PaymentsList({ rows, onChanged, onCustomer }: { rows: any[]; onChanged:
   if (!rows.length) return <p className="text-sm text-muted-foreground text-center py-8">Nessun pagamento.</p>;
 
   const setPaid = async (r: any, paid: boolean) => {
+    // Fatture senza rata: l'incasso si registra come pagamento sulla fattura (il trigger aggiorna paid_amount)
+    if (r.isInvoice) {
+      if (!paid) return;
+      const { error } = await supabase.from('customer_payments').insert({ invoice_id: r.invoice_id, payment_date: today(), amount: r.amount, method: 'bonifico', notes: 'Incasso registrato da dashboard' });
+      if (error) return toast.error(error.message);
+      toast.success(`Incassati ${fmtEur(r.amount)}`);
+      onChanged();
+      return;
+    }
     const { error } = await supabase.from('payment_schedules').update({ is_paid: paid, paid_date: paid ? today() : null }).eq('id', r.id);
     if (error) return toast.error(error.message);
     toast.success(paid ? `Incassati ${fmtEur(r.amount)}` : 'Rimesso tra i da ricevere');
