@@ -88,6 +88,7 @@ const LocalLanding = () => {
           </div>
           <p className="mt-8 text-muted-foreground"><strong className="text-foreground">Ideale per:</strong> {p.ideal}</p>
           <p className="mt-3 text-muted-foreground"><strong className="text-foreground">Zone servite:</strong> {c.areas.join(", ")} e dintorni.</p>
+          <p className="mt-2 text-sm text-muted-foreground/80">Lavoriamo dappertutto, ma soprattutto in Lombardia: questo è uno dei territori dove i nostri cantieri sono più frequenti.</p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link to="/it/preventivo-online"><Button size="lg" className="gap-2">Calcola il preventivo <ArrowRight className="w-4 h-4" /></Button></Link>
             <a href="tel:+393520351738"><Button size="lg" variant="outline" className="gap-2"><Phone className="w-4 h-4" /> +39 352 035 1738</Button></a>

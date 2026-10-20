@@ -164,7 +164,7 @@ const Contatti = () => {
               closes: "12:00",
             },
           ],
-          areaServed: ["Desenzano del Garda", "Lago di Garda", "Brescia", "Verona", "Milano", "Lombardia"],
+          areaServed: ["Desenzano del Garda", "Lago di Garda", "Brescia", "Verona", "Milano", "Lombardia", "Tutta Italia"],
         }}
       />
 
