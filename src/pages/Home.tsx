@@ -54,15 +54,15 @@ const Home = () => {
   return (
     <div className="relative bg-background">
       <SEOHead
-        title={language === 'it' ? "Kalēa® — Fornitura e Posa Pavimentazioni Chiavi in Mano" :
+        title={language === 'it' ? "Kalēa® — Fornitura e Posa Pavimenti a Desenzano del Garda" :
                language === 'en' ? "Kalēa® — Turnkey Flooring Supply and Installation" :
                language === 'de' ? "Kalēa® — Schlüsselfertige Bodenbeläge Lieferung und Verlegung" :
                "Kalēa® — Fourniture et Pose de Revêtements Clé en Main"}
-        description={language === 'it' ? "Kalēa®: servizio chiavi in mano di fornitura e posa di pavimentazioni parquet, MgO, SPC, laminati e rivestimenti. Soluzioni complete per interni ed esterni, progettate e realizzate in Italia." :
+        description={language === 'it' ? "Kalēa®: fornitura e posa chiavi in mano di parquet, pavimenti SPC, MgO, laminati, gres e decking a Desenzano del Garda. Serviamo Lago di Garda, Brescia, Verona e Milano, per privati, architetti e imprese." :
                      language === 'en' ? "Kalēa®: turnkey supply and installation of parquet, MgO, SPC, laminate flooring and wall coverings. Complete solutions for interiors and exteriors, designed and made in Italy." :
                      language === 'de' ? "Kalēa®: schlüsselfertige Lieferung und Verlegung von Parkett, MgO, SPC, Laminatböden und Wandverkleidungen. Komplettlösungen für Innen- und Außenbereiche, designed and made in Italy." :
                      "Kalēa® : fourniture et pose clé en main de parquets, revêtements MgO, SPC, stratifiés et revêtements muraux. Solutions complètes pour intérieurs et extérieurs, conçues et réalisées en Italie."}
-        keywords={language === 'it' ? "fornitura e posa pavimenti, pavimentazioni chiavi in mano, posa parquet, pavimenti MgO, pavimenti SPC, pavimenti laminati, rivestimenti interni, rivestimenti esterni, pavimenti di design, pavimenti luxury, pavimenti Made in Italy" :
+        keywords={language === 'it' ? "fornitura e posa pavimenti, pavimenti desenzano del garda, pavimenti lago di garda, pavimenti brescia, posa parquet brescia, pavimenti spc lago di garda, parquet desenzano, pavimentazioni chiavi in mano, posa parquet, pavimenti MgO, pavimenti SPC, pavimenti laminati, rivestimenti interni, rivestimenti esterni, pavimenti di design, pavimenti luxury, pavimenti Made in Italy" :
                   language === 'en' ? "turnkey flooring, flooring supply and installation, parquet installation, MgO flooring, SPC flooring, laminate flooring, interior wall coverings, exterior wall coverings, luxury flooring, Made in Italy flooring" :
                   language === 'de' ? "schlüsselfertige Bodenbeläge, Boden Lieferung und Verlegung, Parkett Verlegung, MgO Boden, SPC Boden, Laminatboden, Innenwandverkleidungen, Außenwandverkleidungen, Luxus Bodenbeläge, Made in Italy" :
                   "revêtements clé en main, fourniture et pose revêtements, pose parquet, sol MgO, sol SPC, sol stratifié, revêtements muraux intérieurs, revêtements muraux extérieurs, revêtements de luxe, Made in Italy"}

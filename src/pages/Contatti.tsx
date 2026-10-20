@@ -130,12 +130,41 @@ const Contatti = () => {
         structuredData={{
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
-          name: "Kalēa",
-          url: "https://kalea.space",
+          name: "Kalēa® Surface System® — Kalea Group S.r.l.",
+          url: "https://www.kalea.space",
           telephone: ["+39 352 035 1738", "+39 339 473 0218"],
           email: "info@kalea.space",
-          image: "https://kalea.space/favicon-k-512.png",
-          areaServed: ["IT", "EU"],
+          image: "https://www.kalea.space/favicon-k-512.png",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Via Generale Bernasconi, 8A",
+            postalCode: "25015",
+            addressLocality: "Desenzano del Garda",
+            addressRegion: "BS",
+            addressCountry: "IT",
+          },
+          geo: { "@type": "GeoCoordinates", latitude: 45.4622, longitude: 10.535 },
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              opens: "08:00",
+              closes: "12:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              opens: "13:30",
+              closes: "18:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: "Saturday",
+              opens: "08:00",
+              closes: "12:00",
+            },
+          ],
+          areaServed: ["Desenzano del Garda", "Lago di Garda", "Brescia", "Verona", "Milano", "Lombardia"],
         }}
       />
 

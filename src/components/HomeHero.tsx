@@ -33,7 +33,7 @@ const HomeHero = () => {
         <div className="relative z-10 h-full flex flex-col items-center justify-center">
           {/* H1 for SEO - visually hidden but accessible */}
           <h1 className="sr-only">
-            Kalēa® — Surface System® | Superfici di pregio per interni ed esterni
+            Kalēa® — Surface System® | Fornitura e posa pavimenti a Desenzano del Garda, Lago di Garda e Brescia
           </h1>
           
           {/* Centered Logo */}

@@ -895,11 +895,11 @@ export const translations: Record<Language, Translations> = {
       },
       testimonials: {
         title: "Dicono di noi",
-        role1: "Showroom – Milano",
+        role1: "Cliente privato – Milano",
         quote1: "Kalēa® ci ha permesso di differenziarci con un sistema di superfici unico e di alta qualità.",
-        role2: "Architetto – Roma",
+        role2: "Impresa edile – Canzo (CO)",
         quote2: "Il supporto tecnico è eccezionale. Un partner affidabile per i miei progetti.",
-        role3: "Rivenditore – Firenze",
+        role3: "Impresa – Bonate Sotto (BG)",
         quote3: "I clienti apprezzano la qualità superiore delle superfici Kalēa®.",
       },
       applications: {
@@ -2081,11 +2081,11 @@ export const translations: Record<Language, Translations> = {
       },
       testimonials: {
         title: "What they say about us",
-        role1: "Showroom – Milan",
+        role1: "Private client – Milan",
         quote1: "Kalēa allowed us to differentiate with a unique, high-quality surface system.",
-        role2: "Architect – Rome",
+        role2: "Building contractor – Canzo (CO)",
         quote2: "Technical support is exceptional. A reliable partner for my projects.",
-        role3: "Retailer – Florence",
+        role3: "Contractor – Bonate Sotto (BG)",
         quote3: "Clients appreciate the superior quality of Kalēa surfaces.",
       },
       applications: {
@@ -3249,11 +3249,11 @@ export const translations: Record<Language, Translations> = {
       },
       testimonials: {
         title: "Was sie über uns sagen",
-        role1: "Showroom – Mailand",
+        role1: "Privatkundin – Mailand",
         quote1: "Kalēa hat uns ermöglicht, uns mit einem einzigartigen, hochwertigen Oberflächensystem abzuheben.",
-        role2: "Architekt – Rom",
+        role2: "Bauunternehmen – Canzo (CO)",
         quote2: "Der technische Support ist außergewöhnlich. Ein zuverlässiger Partner für meine Projekte.",
-        role3: "Händler – Florenz",
+        role3: "Unternehmen – Bonate Sotto (BG)",
         quote3: "Kunden schätzen die überlegene Qualität der Kalēa-Oberflächen.",
       },
       applications: {
@@ -4423,11 +4423,11 @@ export const translations: Record<Language, Translations> = {
       },
       testimonials: {
         title: "Ce qu'ils disent de nous",
-        role1: "Showroom – Milan",
+        role1: "Cliente privée – Milan",
         quote1: "Kalēa nous a permis de nous différencier avec un système de surfaces unique et de haute qualité.",
-        role2: "Architecte – Rome",
+        role2: "Entreprise de construction – Canzo (CO)",
         quote2: "Le support technique est exceptionnel. Un partenaire fiable pour mes projets.",
-        role3: "Revendeur – Florence",
+        role3: "Entreprise – Bonate Sotto (BG)",
         quote3: "Les clients apprécient la qualité supérieure des surfaces Kalēa.",
       },
       applications: {
