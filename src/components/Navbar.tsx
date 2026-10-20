@@ -200,7 +200,7 @@ const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   // Pages that should always have dark navbar (no dark hero)
-  const forceDarkNavbar = location.pathname.includes('/area-tecnica') || location.pathname.includes('/chi-siamo');
+  const forceDarkNavbar = location.pathname.includes('/area-tecnica') || location.pathname.includes('/chi-siamo') || /^\/it\/blog/.test(location.pathname) || location.pathname === '/it/zone';
   
   // Homepage has dark hero background, so start with light navbar style (white text on transparent)
   const isHomePage = location.pathname === `/${language}` || location.pathname === `/${language}/`;

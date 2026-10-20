@@ -360,4 +360,13 @@
   <url><loc>https://www.kalea.space/it/zone/posa-pavimenti-verona</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.kalea.space/it/zone/posa-pavimenti-mantova</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
+
+  <!-- Blog (solo IT) -->
+  <url><loc>https://www.kalea.space/it/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.kalea.space/it/blog/pavimento-spc-cos-e-pro-contro</loc><lastmod>2026-10-20</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.kalea.space/it/blog/parquet-prefinito-come-scegliere</loc><lastmod>2026-10-20</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.kalea.space/it/blog/pavimento-vinilico-spc-o-laminato</loc><lastmod>2026-10-20</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.kalea.space/it/blog/pavimento-per-esterni-quale-scegliere</loc><lastmod>2026-10-20</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.kalea.space/it/blog/levigatura-parquet-quando-conviene-costo</loc><lastmod>2026-10-20</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
 </urlset>

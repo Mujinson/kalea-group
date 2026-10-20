@@ -88,6 +88,14 @@ const Footer = () => {
                   Zone servite
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/it/blog"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Blog
+                </Link>
+              </li>
             </ul>
           </div>
 
