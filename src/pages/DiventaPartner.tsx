@@ -147,9 +147,9 @@ const DiventaPartner = () => {
   ];
 
   const testimonials = [
-    { name: "Marco Rossi", role: t("partner.testimonials.role1"), quote: t("partner.testimonials.quote1") },
-    { name: "Anna Bianchi", role: t("partner.testimonials.role2"), quote: t("partner.testimonials.quote2") },
-    { name: "Giovanni Verdi", role: t("partner.testimonials.role3"), quote: t("partner.testimonials.quote3") },
+    { name: "Barbara R.", role: t("partner.testimonials.role1"), quote: t("partner.testimonials.quote1") },
+    { name: "Luigi N.", role: t("partner.testimonials.role2"), quote: t("partner.testimonials.quote2") },
+    { name: "Claudio G.", role: t("partner.testimonials.role3"), quote: t("partner.testimonials.quote3") },
   ];
 
   const categories = [
