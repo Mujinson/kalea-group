@@ -304,6 +304,7 @@
 
 
   <!-- Zone servite (solo IT) -->
+  <url><loc>https://www.kalea.space/it/sopralluogo-gratuito</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.kalea.space/it/zone</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.kalea.space/it/zone/pavimenti-spc-desenzano-del-garda</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.kalea.space/it/zone/pavimenti-spc-lago-di-garda</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>

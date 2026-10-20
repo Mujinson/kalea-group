@@ -34,6 +34,7 @@ import IndoorSpc from "./pages/IndoorSpc";
 import ServizioDetail from "./pages/ServizioDetail";
 import LocalLanding from "./pages/LocalLanding";
 import LocalZones from "./pages/LocalZones";
+import LandingSopralluogo from "./pages/LandingSopralluogo";
 import Blog from "./pages/Blog";
 import BlogPostPage from "./pages/BlogPost";
 import SpcCollectionDetail from "./pages/SpcCollectionDetail";
@@ -484,6 +485,7 @@ const App = () => (
               <Route path="/it/blog" element={<Layout><Blog /></Layout>} />
               <Route path="/it/blog/:slug" element={<Layout><BlogPostPage /></Layout>} />
               <Route path="/it/zone" element={<Layout><LocalZones /></Layout>} />
+              <Route path="/it/sopralluogo-gratuito" element={<Layout><LandingSopralluogo /></Layout>} />
               <Route path="/it/zone/:slug" element={<Layout><LocalLanding /></Layout>} />
               <Route path="/it/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />
               <Route path="/en/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />
