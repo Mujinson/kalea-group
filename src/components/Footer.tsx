@@ -80,6 +80,14 @@ const Footer = () => {
                   {t("footer.certifications")}
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/it/zone"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Zone servite
+                </Link>
+              </li>
             </ul>
           </div>
 
