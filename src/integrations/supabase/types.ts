@@ -1909,6 +1909,225 @@ export type Database = {
           },
         ]
       }
+      email_campaign_recipients: {
+        Row: {
+          attempts: number
+          campaign_id: string
+          created_at: string
+          email: string
+          error: string | null
+          follow_up_at: string | null
+          follow_up_due_date: string | null
+          follow_up_message_id: string | null
+          greeting_name: string | null
+          id: string
+          lead_id: string | null
+          planned_send_date: string | null
+          replied_at: string | null
+          resend_message_id: string | null
+          sent_at: string | null
+          status: string
+          template_version: string
+          unsubscribe_token: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          campaign_id: string
+          created_at?: string
+          email: string
+          error?: string | null
+          follow_up_at?: string | null
+          follow_up_due_date?: string | null
+          follow_up_message_id?: string | null
+          greeting_name?: string | null
+          id?: string
+          lead_id?: string | null
+          planned_send_date?: string | null
+          replied_at?: string | null
+          resend_message_id?: string | null
+          sent_at?: string | null
+          status?: string
+          template_version?: string
+          unsubscribe_token?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          campaign_id?: string
+          created_at?: string
+          email?: string
+          error?: string | null
+          follow_up_at?: string | null
+          follow_up_due_date?: string | null
+          follow_up_message_id?: string | null
+          greeting_name?: string | null
+          id?: string
+          lead_id?: string | null
+          planned_send_date?: string | null
+          replied_at?: string | null
+          resend_message_id?: string | null
+          sent_at?: string | null
+          status?: string
+          template_version?: string
+          unsubscribe_token?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_campaign_recipients_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "email_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_campaign_recipients_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_campaigns: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          daily_limit: number
+          follow_up_after_days: number
+          id: string
+          last_run_date: string | null
+          name: string
+          presentation_url: string
+          reply_to: string
+          send_time: string
+          sender_email: string
+          sender_name: string
+          skip_it_holidays: boolean
+          started_at: string | null
+          status: string
+          timezone: string
+          updated_at: string
+          weekdays_only: boolean
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          daily_limit?: number
+          follow_up_after_days?: number
+          id?: string
+          last_run_date?: string | null
+          name: string
+          presentation_url?: string
+          reply_to?: string
+          send_time?: string
+          sender_email?: string
+          sender_name?: string
+          skip_it_holidays?: boolean
+          started_at?: string | null
+          status?: string
+          timezone?: string
+          updated_at?: string
+          weekdays_only?: boolean
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          daily_limit?: number
+          follow_up_after_days?: number
+          id?: string
+          last_run_date?: string | null
+          name?: string
+          presentation_url?: string
+          reply_to?: string
+          send_time?: string
+          sender_email?: string
+          sender_name?: string
+          skip_it_holidays?: boolean
+          started_at?: string | null
+          status?: string
+          timezone?: string
+          updated_at?: string
+          weekdays_only?: boolean
+        }
+        Relationships: []
+      }
+      email_events: {
+        Row: {
+          created_at: string
+          id: string
+          payload: Json | null
+          recipient_id: string | null
+          resend_message_id: string | null
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payload?: Json | null
+          recipient_id?: string | null
+          resend_message_id?: string | null
+          type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payload?: Json | null
+          recipient_id?: string | null
+          resend_message_id?: string | null
+          type?: string
+        }
+        Relationships: []
+      }
+      email_suppressions: {
+        Row: {
+          created_at: string
+          email: string
+          lead_id: string | null
+          reason: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          lead_id?: string | null
+          reason: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          lead_id?: string | null
+          reason?: string
+        }
+        Relationships: []
+      }
+      email_templates: {
+        Row: {
+          html_body: string
+          id: string
+          key: string
+          subject: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          html_body: string
+          id?: string
+          key: string
+          subject: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          html_body?: string
+          id?: string
+          key?: string
+          subject?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       fixed_costs: {
         Row: {
           amount: number
@@ -2403,7 +2622,10 @@ export type Database = {
           created_at: string
           created_by_user_id: string | null
           deleted_at: string | null
+          do_not_contact: boolean
           email: string | null
+          email_invalid: boolean
+          email_opt_out_at: string | null
           first_name: string | null
           has_thermal_insulation: boolean | null
           iban: string | null
@@ -2464,7 +2686,10 @@ export type Database = {
           created_at?: string
           created_by_user_id?: string | null
           deleted_at?: string | null
+          do_not_contact?: boolean
           email?: string | null
+          email_invalid?: boolean
+          email_opt_out_at?: string | null
           first_name?: string | null
           has_thermal_insulation?: boolean | null
           iban?: string | null
@@ -2525,7 +2750,10 @@ export type Database = {
           created_at?: string
           created_by_user_id?: string | null
           deleted_at?: string | null
+          do_not_contact?: boolean
           email?: string | null
+          email_invalid?: boolean
+          email_opt_out_at?: string | null
           first_name?: string | null
           has_thermal_insulation?: boolean | null
           iban?: string | null

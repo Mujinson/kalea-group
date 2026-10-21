@@ -43,6 +43,13 @@
       "when": 1791998227193,
       "tag": "0005_paid_schedule_is_invoiced",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792586518415,
+      "tag": "0006_email_campaigns",
+      "breakpoints": true
     }
   ]
 }
