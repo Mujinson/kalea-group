@@ -241,7 +241,7 @@ function TemplatesEditor({ tpls, setTpls }: { tpls: any[]; setTpls: (t: any[]) =
   const [html, setHtml] = useState('');
   useEffect(() => { if (t) { setSubject(t.subject); setHtml(t.html_body); } }, [key, t?.id]);
   if (!t) return null;
-  const preview = html.replaceAll('{{saluto}}', 'Buongiorno Mario,').replaceAll('{{presentazione_url}}', '#').replaceAll('{{unsubscribe_url}}', '#').replaceAll('{{mittente}}', 'Andrea Facchinetti<br>Kalēa');
+  const preview = html.split('{{saluto}}').join('Buongiorno Mario,').split('{{presentazione_url}}').join('#').split('{{unsubscribe_url}}').join('#').split('{{mittente}}').join('Andrea Facchinetti<br>Kalēa');
   const save = async () => {
     const { data, error } = await supabase.from('email_templates').update({ subject, html_body: html }).eq('id', t.id).select().single();
     if (error) return toast.error(error.message);
