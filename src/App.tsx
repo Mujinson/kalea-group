@@ -88,6 +88,8 @@ import AppLangRedirect from "./pages/AppLangRedirect";
 import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminQuoteCreate from "./pages/admin/AdminQuoteCreate";
 import AdminLeads from "./pages/admin/AdminLeads";
+import AdminCampagne from "./pages/admin/AdminCampagne";
+import Disiscrizione from "./pages/Disiscrizione";
 import AdminTimeOff from "./pages/admin/AdminTimeOff";
 import AdminCommissions from "./pages/admin/AdminCommissions";
 import AdminPipeline from "./pages/admin/AdminPipeline";
@@ -280,6 +282,7 @@ const App = () => (
                 <Route path="margini" element={<AdminMargini />} />
                 <Route path="assistente" element={<AssistenteGabriel />} />
                 <Route path="leads" element={<AdminLeads />} />
+                <Route path="campagne" element={<AdminCampagne />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
                 <Route path="appuntamenti" element={<AdminAppointments />} />
                 <Route path="chatbot" element={<AdminChatbot />} />
@@ -485,6 +488,7 @@ const App = () => (
               <Route path="/it/blog" element={<Layout><Blog /></Layout>} />
               <Route path="/it/blog/:slug" element={<Layout><BlogPostPage /></Layout>} />
               <Route path="/it/zone" element={<Layout><LocalZones /></Layout>} />
+              <Route path="/disiscrizione" element={<Disiscrizione />} />
               <Route path="/it/sopralluogo-gratuito" element={<Layout><LandingSopralluogo /></Layout>} />
               <Route path="/it/zone/:slug" element={<Layout><LocalLanding /></Layout>} />
               <Route path="/it/servizi/:slug" element={<><SEOHandler /><Layout><ServizioDetail /></Layout></>} />

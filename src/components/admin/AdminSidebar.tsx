@@ -48,7 +48,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { Brain } from 'lucide-react';
+import { Brain, Send } from 'lucide-react';
 
 interface MenuItem {
   title: string;
@@ -87,6 +87,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Pipeline', url: '/admin/pipeline', icon: Kanban, adminOnly: false },
         { title: 'Appuntamenti', url: '/admin/appuntamenti', icon: CalendarClock, adminOnly: false },
         { title: 'Chatbot', url: '/admin/chatbot', icon: Bot, adminOnly: true },
+        { title: 'Campagne email', url: '/admin/campagne', icon: Send, adminOnly: true },
       ],
     },
   },

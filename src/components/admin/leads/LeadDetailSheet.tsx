@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import LeadCampaignBadge from './LeadCampaignBadge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -108,6 +109,7 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                   <SheetTitle className="text-[22px] font-semibold text-[#0F172A] mt-1 truncate">{displayName}</SheetTitle>
                   <div className="flex items-center gap-2 mt-2">
                     <LeadStatusBadge status={lead.status} />
+                    <LeadCampaignBadge leadId={lead.id} />
                     <Select value={lead.status} onValueChange={quickStatus}>
                       <SelectTrigger className="h-7 w-[160px] text-xs"><SelectValue /></SelectTrigger>
                       <SelectContent>
