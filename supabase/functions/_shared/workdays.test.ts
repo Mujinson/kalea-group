@@ -14,8 +14,8 @@ describe("working days", () => {
   test("follow-up 10 working days after Wed 21 Oct 2026 is Wed 4 Nov (skips 1 Nov Sunday)", () => {
     expect(addWorkingDays("2026-10-21", 10)).toBe("2026-11-04");
   });
-  test("10 working days across Christmas skip 25 and 26 Dec", () => {
-    expect(addWorkingDays("2026-12-21", 10)).toBe("2027-01-05");
+  test("10 working days across Christmas skip 25, 26 Dec, 1 and 6 Jan", () => {
+    expect(addWorkingDays("2026-12-21", 10)).toBe("2027-01-07");
   });
 });
 
