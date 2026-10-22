@@ -1,5 +1,5 @@
-import { PDFDocument } from 'pdf-lib';
 import { supabase } from '@/integrations/supabase/client';
+import { mergeQuotePdfs } from '@/lib/mergeQuotePdfs';
 
 export type QuoteAttachment = { id: string; name: string; pages: number; path?: string; url?: string };
 export const QUOTE_ATTACHMENT_BUCKET = 'quote-attachments';
@@ -14,16 +14,6 @@ export async function attachmentBytes(attachment: QuoteAttachment): Promise<Arra
   const response = await fetch(attachment.url);
   if (!response.ok) throw new Error(`Impossibile leggere ${attachment.name}`);
   return response.arrayBuffer();
-}
-
-export async function mergeQuotePdfs(quote: ArrayBuffer | Uint8Array, attachments: (ArrayBuffer | Uint8Array)[]) {
-  const result = await PDFDocument.load(quote);
-  for (const bytes of attachments) {
-    const document = await PDFDocument.load(bytes);
-    const pages = await result.copyPages(document, document.getPageIndices());
-    pages.forEach((page) => result.addPage(page));
-  }
-  return result.save();
 }
 
 export async function downloadQuotePdf(quote: ArrayBuffer, attachments: QuoteAttachment[], filename: string) {
