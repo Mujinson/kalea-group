@@ -10,6 +10,8 @@ import { ensureLeadForQuote } from "@/lib/quoteCrm";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
+import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
+import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
 
 
 
@@ -1038,6 +1040,8 @@ const T: any = {
 
 export default function CreaPreventivo() {
   const [step, setStep] = useState(1);
+  const [technicalAttachments, setTechnicalAttachments] = useState<QuoteAttachment[]>([]);
+  const [exportingPdf, setExportingPdf] = useState(false);
   const [PRODOTTI, setPRODOTTI] = useState<ProdottoCalcolo[]>([]);
   const [prodottiLoading, setProdottiLoading] = useState(true);
 
@@ -1556,6 +1560,7 @@ export default function CreaPreventivo() {
         if (q.status) { const st = normalizeQuoteStatus(q.status); setStato(st); if (st === "accettato") setStep(3); else setStep(1); }
         if (q.project_name) setCantiere(q.project_name);
         const d: any = q.quote_data || {};
+        setTechnicalAttachments(Array.isArray(d.technicalAttachments) ? d.technicalAttachments : []);
         if (d.lingua) {
           const lg = String(d.lingua).toUpperCase() as QuoteLang;
           setLingua((T as any)[lg] ? lg : "IT");
@@ -1769,6 +1774,7 @@ export default function CreaPreventivo() {
 
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
         catalog: { articoli, accessori, servizi },
+        technicalAttachments,
       };
 
       const mapCatalog = (kind: string) => (r: CatalogLine) => ({
@@ -1878,7 +1884,19 @@ export default function CreaPreventivo() {
     }
   };
 
+  const persistAttachments = async (next: QuoteAttachment[]) => {
+    if (!preventivoId) throw new Error('Salva prima il preventivo');
+    const { data, error } = await supabase.from('quotes').select('quote_data').eq('id', preventivoId).single();
+    if (error) throw error;
+    const { error: saveError } = await supabase.from('quotes').update({
+      quote_data: { ...(data.quote_data || {}), technicalAttachments: next },
+    }).eq('id', preventivoId).select('id').single();
+    if (saveError) throw saveError;
+    setTechnicalAttachments(next);
+  };
+
   const generaPDF = async () => {
+    if (exportingPdf) return;
     if (calc && calc.marginePct < MARGINE_BLOCCO) {
       alert(`⛔ BLOCCO: Margine ${pct(calc.marginePct)} sotto il ${MARGINE_BLOCCO}%. Rivedi il preventivo.`);
       return;
@@ -1887,6 +1905,7 @@ export default function CreaPreventivo() {
     if (!preview) { toast.error("Vai su 'Anteprima & PDF' prima di scaricare"); return; }
     const wrap = document.getElementById("pdf-preview-wrap") as HTMLElement | null;
     const tId = toast.loading("Generazione PDF...");
+    setExportingPdf(true);
     // disattiva la riduzione mobile: cattura sempre il documento a piena larghezza A4
     wrap?.classList.add("capturing");
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
@@ -1921,7 +1940,7 @@ export default function CreaPreventivo() {
         heightLeft -= pageH;
       }
       const fname = `Preventivo_${(numPrev || "Kalea").replace(/[^\w-]+/g, "_")}.pdf`;
-      pdf.save(fname);
+      await downloadQuotePdf(pdf.output('arraybuffer'), technicalAttachments, fname);
       toast.success("PDF scaricato", { id: tId });
 
     } catch (e: any) {
@@ -1929,6 +1948,7 @@ export default function CreaPreventivo() {
       toast.error(`Errore PDF: ${e?.message || e}`, { id: tId });
     } finally {
       wrap?.classList.remove("capturing");
+      setExportingPdf(false);
     }
 
   };
@@ -2794,8 +2814,8 @@ export default function CreaPreventivo() {
       {step===3 && calc && (
         <div>
           <div style={{display:"flex",gap:10,marginBottom:16}}>
-            <button onClick={generaPDF} style={{padding:"10px 24px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#64748B",color:"#fff"}}>
-              🖨 Stampa / Salva PDF
+            <button data-quote-export onClick={generaPDF} disabled={exportingPdf} style={{padding:"10px 24px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#64748B",color:"#fff"}}>
+              {exportingPdf ? 'Generazione PDF…' : '🖨 Stampa / Salva PDF'}
             </button>
             <button onClick={salvaPreventivo} disabled={saving} style={{padding:"10px 24px",borderRadius:9,border:"1px solid #1A1A2E",cursor:"pointer",fontSize:14,fontWeight:500,background:"#fff",color:"#1A1A2E"}}>
               {saving ? "Salvataggio…" : preventivoId ? "💾 Aggiorna" : "💾 Salva preventivo"}
@@ -2803,6 +2823,7 @@ export default function CreaPreventivo() {
           </div>
 
           {/* ANTEPRIMA DOCUMENTO */}
+          <QuoteAttachments quoteId={preventivoId} attachments={technicalAttachments} onChange={persistAttachments} />
           <div id="pdf-preview-wrap" className="pdf-preview-wrap">
           <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
 
