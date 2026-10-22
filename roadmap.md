@@ -1,3 +1,3 @@
-- [ ] Add persistent technical PDF attachments to quote editor and append after quote pages.
-- [ ] Rebrand ST4 sheet without changing technical data and attach to latest Kronos quote.
-- [ ] Verify PDF content, merge order, persistence and editor flow.
+- [x] Add persistent technical PDF attachments to quote editor and append after quote pages.
+- [x] Rebrand ST4 sheet without changing technical data and attach to latest Kronos quote.
+- [x] Verify PDF content, merge order, persistence and editor flow.
