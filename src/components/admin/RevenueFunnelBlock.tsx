@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { fmtEur } from '@/lib/finance';
+import { revenueSources } from '@/lib/revenueSources';
 import CustomerDetailSheet from '@/components/admin/CustomerDetailSheet';
 import { Wallet, Receipt, Hourglass, FileText, XCircle, ThumbsUp, ThumbsDown, Check, RotateCcw, ChevronRight, User } from 'lucide-react';
 
@@ -50,13 +51,8 @@ export default function RevenueFunnelBlock({ variant = 'dashboard', lead }: { va
     const ok = (d?: string | null) => period === 'all' || (!!d && new Date(d).getFullYear() === y);
     const d = data || { ps: [], inv: [], q: [] };
     const custName = (r: any) => r.customers?.company_name || `${r.customers?.first_name || ''} ${r.customers?.last_name || ''}`.trim() || '—';
-    // Anti doppio conteggio: le rate già coperte da una fattura (invoice_id) vivono sulla fattura
-    const invWithPs = new Set(d.ps.filter((r) => r.invoice_id).map((r) => r.invoice_id));
-    const direct = d.ps.filter((r) => !r.invoice_id);
-    const paidPs = direct.filter((r) => r.is_paid && ok(r.paid_date || r.due_date));
-    const unpaidPs = direct.filter((r) => !r.is_paid);
+    const { paidPs, unpaidPs, standalone, unlinkedPaidPs } = revenueSources(d.ps, d.inv, ok);
     // Fatture senza rate collegate: contano da sole (incassato = paid_amount, da ricevere = residuo)
-    const standalone = d.inv.filter((r) => r.status !== 'annullata' && !invWithPs.has(r.id));
     const invAsPaid = standalone.filter((r) => n(r.paid_amount) > 0 && ok(r.invoice_date)).map((r) => ({
       id: 'inv-' + r.id, isInvoice: true, invoice_id: r.id, amount: n(r.paid_amount), is_paid: true,
       paid_date: r.invoice_date, due_date: r.due_date, notes: `Fattura ${r.invoice_number || ''}`,
@@ -70,7 +66,7 @@ export default function RevenueFunnelBlock({ variant = 'dashboard', lead }: { va
     const paid = [...paidPs, ...invAsPaid].sort((a, b) => (b.paid_date || '').localeCompare(a.paid_date || ''));
     const unpaid = [...unpaidPs, ...invAsOpen].sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''));
     // incassato = fatturato: le rate incassate senza fattura collegata contano come fatturate
-    const fromPaid = paidPs.filter((r) => r.is_invoiced).map((r) => ({
+    const fromPaid = unlinkedPaidPs.filter((r) => r.is_invoiced).map((r) => ({
       id: 'ps-' + r.id, invoice_number: r.invoice_number || 'Da incasso', total: n(r.invoiced_amount ?? r.amount), paid_amount: n(r.invoiced_amount ?? r.amount),
       invoice_date: r.paid_date || r.due_date, customer_id: r.sales?.customer_id, customers: { company_name: r.sales?.customer_name },
     }));
