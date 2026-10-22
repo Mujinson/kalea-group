@@ -57,6 +57,13 @@
       "when": 1792690602066,
       "tag": "0007_quote_attachment_storage_access",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792691322913,
+      "tag": "0008_bind_quote_attachment_reads_to_caller",
+      "breakpoints": true
     }
   ]
 }
