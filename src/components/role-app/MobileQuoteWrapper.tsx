@@ -18,7 +18,6 @@ const MobileQuoteWrapper = () => {
   const navigate = useNavigate();
   const scopeRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<number>(1);
-  const [downloading, setDownloading] = useState(false);
 
   // Observe the active step button (CreaPreventivo's own tabs) to keep
   // the bottom bar in sync with the inner state.
@@ -70,65 +69,10 @@ const MobileQuoteWrapper = () => {
     (btn as HTMLButtonElement).click();
   };
 
-  const downloadPdf = async () => {
-    const root = scopeRef.current;
-    if (!root) return;
-    const preview = root.querySelector('#pdf-preview') as HTMLElement | null;
-    if (!preview) {
-      toast.error('Apri prima l\'anteprima (step 3)');
-      return;
-    }
-    setDownloading(true);
-    const t = toast.loading('Generazione PDF...');
-    const wrap = root.querySelector('#pdf-preview-wrap') as HTMLElement | null;
-    wrap?.classList.add('capturing');
-    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    try {
-      const [{ default: html2canvas }, jsPDFmod] = await Promise.all([
-        import('html2canvas'),
-        import('jspdf'),
-      ]);
-      const jsPDF = (jsPDFmod as any).jsPDF || (jsPDFmod as any).default;
-
-      const canvas = await html2canvas(preview, {
-        scale: 2,
-        backgroundColor: '#ffffff',
-        useCORS: true,
-        windowWidth: 1200,
-        width: preview.scrollWidth,
-        height: preview.scrollHeight,
-      });
-
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.92);
-      const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-      const imgW = pageW;
-      const imgH = (canvas.height * imgW) / canvas.width;
-
-      let heightLeft = imgH;
-      let position = 0;
-      pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-      heightLeft -= pageH;
-      while (heightLeft > 0) {
-        position = heightLeft - imgH;
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-        heightLeft -= pageH;
-      }
-
-      const fname = `Preventivo_Kalea_${new Date().toISOString().slice(0, 10)}.pdf`;
-      pdf.save(fname);
-      toast.success('PDF scaricato', { id: t });
-    } catch (e: any) {
-      console.error(e);
-      toast.error(`Errore PDF: ${e.message || e}`, { id: t });
-    } finally {
-      wrap?.classList.remove('capturing');
-      setDownloading(false);
-    }
-
+  const downloadPdf = () => {
+    const button = scopeRef.current?.querySelector<HTMLButtonElement>('[data-quote-export]');
+    if (!button) { toast.error("Apri prima l'anteprima (step 3)"); return; }
+    button.click();
   };
 
   return (
@@ -188,11 +132,10 @@ const MobileQuoteWrapper = () => {
               <Save className="w-4 h-4" /> Salva CRM
             </button>
             <button
-              disabled={downloading}
               onClick={downloadPdf}
               className="h-12 rounded-xl bg-[#8B6F4E] text-white font-medium text-[14px] flex items-center justify-center gap-2 disabled:opacity-60"
             >
-              <Download className="w-4 h-4" /> {downloading ? 'PDF...' : 'Scarica PDF'}
+              <Download className="w-4 h-4" /> Scarica PDF
             </button>
           </div>
         )}
