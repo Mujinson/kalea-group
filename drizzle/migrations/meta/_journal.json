@@ -64,6 +64,13 @@
       "when": 1792691322913,
       "tag": "0008_bind_quote_attachment_reads_to_caller",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793141034957,
+      "tag": "0009_quote_won_sync_customer",
+      "breakpoints": true
     }
   ]
 }

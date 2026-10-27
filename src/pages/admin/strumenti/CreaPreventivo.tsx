@@ -1834,11 +1834,19 @@ export default function CreaPreventivo() {
         }
       }
 
+      // Non perdere i collegamenti/stati esistenti (lead d'origine, preventivo già convertito)
+      let prev: any = null;
+      if (preventivoId) {
+        const { data: p } = await supabase.from("quotes").select("lead_id, customer_id, status").eq("id", preventivoId).maybeSingle();
+        prev = p;
+      }
+      let nextStatus = statusMap[stato] || "draft";
+      if (stato === "accettato" && ["converted", "invoiced"].includes(prev?.status)) nextStatus = prev.status;
       const quotePayload: any = {
-        customer_id: link?.source === "customer" ? link.id : null,
-        lead_id: link?.source === "lead" ? link.id : null,
+        customer_id: link?.source === "customer" ? link.id : (prev?.customer_id ?? null),
+        lead_id: link?.source === "lead" ? link.id : (prev?.lead_id ?? null),
         quote_number: num,
-        status: statusMap[stato] || "draft",
+        status: nextStatus,
         total_amount: Math.round(calc.totaleIva * 100) / 100,
         vat_amount: Math.round(calc.iva * 100) / 100,
         vat_included: true,
