@@ -2463,30 +2463,16 @@ export default function CreaPreventivo() {
                       onClick={()=>{
                         const target = Number(totaleTarget);
                         if (!target || isNaN(target)) { toast.error("Inserisci un totale valido"); return; }
-                        const currentNet = calc.prezzoNetto;
-                        const deltaNet = target - currentNet;
-                        // deltaLordo * (1 - sconto/100) = deltaNet (IVA aggiunta dopo)
-                        const factor = (1 - sconto/100);
-                        const deltaLordo = factor > 0 ? deltaNet / factor : deltaNet;
-                        const rounded = Math.round(deltaLordo * 100) / 100;
-                        if (Math.abs(rounded) < 0.01) { toast.success("Totale già corretto"); return; }
-                        setRigheMat(prev => {
-                          const existing = prev.findIndex((r:any) => r.__adjustment);
-                          const row = {
-                            id: existing >= 0 ? prev[existing].id : Date.now()+Math.random(),
-                            desc: "Adeguamento commerciale",
-                            qta: 1, unita: "a corpo",
-                            costoUn: 0,
-                            prezzoUn: existing >= 0 ? Math.round((prev[existing].prezzoUn + rounded) * 100)/100 : rounded,
-                            __adjustment: true,
-                          };
-                          if (existing >= 0) {
-                            const copy = [...prev]; copy[existing] = row; return copy;
-                          }
-                          return [...prev, row];
-                        });
+                        // Netto reale = totale voci senza eventuali vecchi "Adeguamento commerciale"
+                        const adjSum = righeMat.filter((r:any)=>r.__adjustment).reduce((s:number,r:any)=>s+(Number(r.qta)||0)*(Number(r.prezzoUn)||0),0);
+                        const nettoReale = calc.prezzoLordoTot - adjSum;
+                        if (nettoReale <= 0) { toast.error("Aggiungi prima le voci del preventivo"); return; }
+                        if (target > nettoReale) { toast.error(`Il netto concordato supera il netto reale (${euro(nettoReale)})`); return; }
+                        const pct = (1 - target / nettoReale) * 100;
+                        setRigheMat(prev => prev.filter((r:any) => !r.__adjustment));
+                        setSconto(pct);
                         setTotaleTarget("");
-                        toast.success(`Netto chiuso a ${euro(target)} + IVA`);
+                        toast.success(`Sconto ${euro(nettoReale - target)} applicato: netto ${euro(target)} + IVA`);
                       }}
                       style={{padding:"8px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500}}>
                       Applica
