@@ -55,6 +55,15 @@ const CeramicaCollectionDetail = () => {
         title={`${collection.name} | Ceramiche Kalēa®`}
         description={`${collection.tagline}. ${collection.description}`}
         keywords={`${collection.name}, ${collection.effect}, gres porcellanato, ceramiche Kalēa, ${collection.applications.join(", ")}`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: collection.name,
+          description: `${collection.tagline}. ${collection.description}`,
+          image: new URL(collection.hero, "https://www.kalea.space").href,
+          category: "Gres porcellanato",
+          brand: { "@type": "Brand", name: "Kalēa" },
+        }}
       />
 
       {/* Hero */}

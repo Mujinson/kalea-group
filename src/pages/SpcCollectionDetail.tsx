@@ -22,6 +22,15 @@ const SpcCollectionDetail = () => {
       <SEOHead
         title={`${collection.name} | SPC Selection | Kalēa®`}
         description={collection.description.slice(0, 155)}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: collection.name,
+          description: collection.description,
+          image: new URL(collection.image, "https://www.kalea.space").href,
+          category: "Pavimento SPC",
+          brand: { "@type": "Brand", name: "Kalēa" },
+        }}
       />
 
       {/* Hero */}
