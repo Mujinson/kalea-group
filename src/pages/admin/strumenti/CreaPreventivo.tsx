@@ -2449,26 +2449,25 @@ export default function CreaPreventivo() {
                     Chiudi il totale a una cifra pattuita
                   </div>
                   <div style={{fontSize:11,color:"#64748B",marginBottom:8}}>
-                    Se col cliente hai pattuito, per esempio, <b>€ 8.500,00 IVA inclusa</b>, scrivi qui il totale e aggiungo una riga "Adeguamento commerciale" per far quadrare al centesimo.
+                    Se col cliente hai pattuito, per esempio, <b>€ 12.500,00 + IVA</b>, scrivi qui l'imponibile netto: aggiungo una riga "Adeguamento commerciale" e l'IVA viene calcolata sopra.
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 130px",gap:8,alignItems:"center"}}>
                     <input
                       type="number" step="0.01" min="0"
                       value={totaleTarget}
                       onChange={e=>setTotaleTarget(e.target.value)}
-                      placeholder={`Attuale: ${euro(calc.totaleIva)}`}
+                      placeholder={`Netto attuale: ${euro(calc.prezzoNetto)}`}
                       style={{padding:"8px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,textAlign:"right",background:"#fff"}}
                     />
                     <button
                       onClick={()=>{
                         const target = Number(totaleTarget);
                         if (!target || isNaN(target)) { toast.error("Inserisci un totale valido"); return; }
-                        const currentTot = calc.totaleIva;
-                        const deltaIva = target - currentTot;
-                        // Converti in imponibile: deltaImponibile * (1 + iva/100) + eventuale sconto% deve dare deltaIva
-                        // Se sconto%: deltaLordo * (1 - sconto/100) * (1 + iva/100) = deltaIva
-                        const factor = (1 - sconto/100) * (1 + ivaRate/100);
-                        const deltaLordo = factor > 0 ? deltaIva / factor : deltaIva;
+                        const currentNet = calc.prezzoNetto;
+                        const deltaNet = target - currentNet;
+                        // deltaLordo * (1 - sconto/100) = deltaNet (IVA aggiunta dopo)
+                        const factor = (1 - sconto/100);
+                        const deltaLordo = factor > 0 ? deltaNet / factor : deltaNet;
                         const rounded = Math.round(deltaLordo * 100) / 100;
                         if (Math.abs(rounded) < 0.01) { toast.success("Totale già corretto"); return; }
                         setRigheMat(prev => {
@@ -2487,7 +2486,7 @@ export default function CreaPreventivo() {
                           return [...prev, row];
                         });
                         setTotaleTarget("");
-                        toast.success(`Totale chiuso a ${euro(target)}`);
+                        toast.success(`Netto chiuso a ${euro(target)} + IVA`);
                       }}
                       style={{padding:"8px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500}}>
                       Applica
