@@ -2449,7 +2449,7 @@ export default function CreaPreventivo() {
                     Chiudi il totale a una cifra pattuita
                   </div>
                   <div style={{fontSize:11,color:"#64748B",marginBottom:8}}>
-                    Se col cliente hai pattuito, per esempio, <b>€ 12.500,00 + IVA</b>, scrivi qui l'imponibile netto: aggiungo una riga "Adeguamento commerciale" e l'IVA viene calcolata sopra.
+                    Se col cliente hai pattuito, per esempio, <b>€ 12.500,00 + IVA</b>, scrivi qui il netto concordato: la differenza dal netto reale diventa sconto, poi si aggiunge l'IVA.
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 130px",gap:8,alignItems:"center"}}>
                     <input
@@ -2964,7 +2964,7 @@ export default function CreaPreventivo() {
             <div style={{marginLeft:"auto",width:280}}>
               {[
                 {l:t.subtotale,v:euro(calc.prezzoLordoTot)},
-                sconto>0 && {l:`${t.sconto_label||"Sconto"} ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
+                sconto>0 && {l:`${t.sconto_label||"Sconto"} ${Math.round(sconto*100)/100}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
                 {l:ivaLabel,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
