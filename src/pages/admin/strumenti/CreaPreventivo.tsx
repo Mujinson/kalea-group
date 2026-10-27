@@ -2819,9 +2819,11 @@ export default function CreaPreventivo() {
                 {KALEA_LOGO ? <img src={KALEA_LOGO} alt="Kalēa" style={{height:88,display:"block",margin:"0 auto 8px"}}/> : <div style={{fontSize:40,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>}
                 <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
                 <div style={{fontSize:12,color:"#475569"}}>{t.payoff2}</div>
-                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Desenzano del Garda (BS) · info@kalea.space · kalea.space</div>
-                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>P.IVA: 04797310986</div>
                 <div style={{fontSize:11,color:"#475569"}}>Kalea Group Srl</div>
+                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Desenzano del Garda (BS)</div>
+                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>P.IVA: 04797310986</div>
+                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Codice univoco: 0000000</div>
+                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>info@kalea.space · www.kalea.space</div>
               </div>
               <div style={{textAlign:"right"}}>
                 <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>{t.titolo}</div>
