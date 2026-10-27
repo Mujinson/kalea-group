@@ -2486,7 +2486,7 @@ export default function CreaPreventivo() {
                           return [...prev, row];
                         });
                         setTotaleTarget("");
-                        toast.success(`Totale chiuso a ${euro(target)}`);
+                        toast.success(`Netto chiuso a ${euro(target)} + IVA`);
                       }}
                       style={{padding:"8px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500}}>
                       Applica
