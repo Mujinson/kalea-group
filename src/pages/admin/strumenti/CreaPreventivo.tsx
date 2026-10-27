@@ -2822,7 +2822,7 @@ export default function CreaPreventivo() {
                 <div style={{fontSize:11,color:"#475569"}}>Kalea Group Srl</div>
                 <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Desenzano del Garda (BS)</div>
                 <div style={{fontSize:11,color:"#64748B",marginTop:2}}>P.IVA: 04797310986</div>
-                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Codice univoco: 0000000</div>
+                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Codice univoco: T9K4ZHO</div>
                 <div style={{fontSize:11,color:"#64748B",marginTop:2}}>info@kalea.space · www.kalea.space</div>
               </div>
               <div style={{textAlign:"right"}}>
