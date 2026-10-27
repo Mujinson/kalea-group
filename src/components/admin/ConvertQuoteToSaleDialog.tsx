@@ -206,10 +206,24 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
   useEffect(() => {
     if (!open) return;
     const base = round2(Number(quote?.total_amount || 0) - Number(quote?.vat_amount || 0));
-    setRates([
-      newRate('Acconto', round2(base * 0.3), 0),
-      newRate('Saldo', round2(base * 0.7), 30),
-    ]);
+    // Rate accettate nel preventivo (quote_data.pagamenti: label + pct)
+    const plan = (Array.isArray(quote?.quote_data?.pagamenti) ? quote!.quote_data.pagamenti : [])
+      .filter((p: any) => Number(p?.pct) > 0);
+    if (plan.length) {
+      let used = 0;
+      setRates(plan.map((p: any, i: number) => {
+        const isLast = i === plan.length - 1;
+        const amt = isLast ? round2(base - used) : round2(base * Number(p.pct) / 100);
+        used = round2(used + amt);
+        const label = [p.label, p.data].filter(Boolean).join(' — ') || `Rata ${i + 1}`;
+        return newRate(label, amt, i * 30);
+      }));
+    } else {
+      setRates([
+        newRate('Acconto', round2(base * 0.3), 0),
+        newRate('Saldo', round2(base * 0.7), 30),
+      ]);
+    }
     setCreateSite(true);
     setAddCommission(false);
     setSalespersonId('');
