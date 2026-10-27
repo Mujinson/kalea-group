@@ -2387,7 +2387,7 @@ export default function CreaPreventivo() {
               </div>
               <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={0.01} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
               <Slider label="Sfrido (%)" min={0} max={25} value={sfrido} step={0.1} onChange={setSfrido} format={(v:any)=>v+"%"} unit="%" editable/>
-              <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={0.1} onChange={setSconto} format={(v:any)=>v+"%"} unit="%" editable/>
+              <Slider label="Sconto cliente (%)" min={0} max={90} value={sconto} step={0.1} onChange={setSconto} format={(v:any)=>(Math.round(v*100)/100)+"%"} unit="%" editable/>
               <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
                 <Btn active={incPosa} onClick={()=>setIncPosa(!incPosa)}>{incPosa?"✓ ":""}Posa</Btn>
                 <Btn active={false} onClick={()=>{
