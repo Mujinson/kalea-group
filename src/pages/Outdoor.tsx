@@ -43,7 +43,7 @@ const Outdoor = () => {
       name: "KALEA ELEMENTS",
       description: "Viti e clips in alluminio per pavimenti esterni WPC, ceiling e rivestimenti a parete.",
       image: productKaleaElements,
-      link: `/${language}/kalea-elements`,
+      link: `/${language}/externo`,
     },
     {
       name: "EXTERNO",

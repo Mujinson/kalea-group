@@ -156,7 +156,7 @@ const BiomagFloor = () => {
         >
           <motion.img 
             src={heroImage} 
-            alt="" 
+            alt="Pavimento BIOMAG FLOOR® posato in un interno contemporaneo" 
             className="absolute inset-0 w-full h-full object-cover will-change-transform"
             style={{ 
               y: heroImageY,
