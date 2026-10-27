@@ -2387,7 +2387,7 @@ export default function CreaPreventivo() {
               </div>
               <Slider label="mq da posare" min={1} max={5000} value={mqPrev} step={0.01} onChange={setMqPrev} format={(v:any)=>v+" mq"} unit="mq" editable/>
               <Slider label="Sfrido (%)" min={0} max={25} value={sfrido} step={0.1} onChange={setSfrido} format={(v:any)=>v+"%"} unit="%" editable/>
-              <Slider label="Sconto cliente (%)" min={0} max={40} value={sconto} step={0.1} onChange={setSconto} format={(v:any)=>v+"%"} unit="%" editable/>
+              <Slider label="Sconto cliente (%)" min={0} max={90} value={sconto} step={0.1} onChange={setSconto} format={(v:any)=>(Math.round(v*100)/100)+"%"} unit="%" editable/>
               <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap"}}>
                 <Btn active={incPosa} onClick={()=>setIncPosa(!incPosa)}>{incPosa?"✓ ":""}Posa</Btn>
                 <Btn active={false} onClick={()=>{
@@ -2449,7 +2449,7 @@ export default function CreaPreventivo() {
                     Chiudi il totale a una cifra pattuita
                   </div>
                   <div style={{fontSize:11,color:"#64748B",marginBottom:8}}>
-                    Se col cliente hai pattuito, per esempio, <b>€ 12.500,00 + IVA</b>, scrivi qui l'imponibile netto: aggiungo una riga "Adeguamento commerciale" e l'IVA viene calcolata sopra.
+                    Se col cliente hai pattuito, per esempio, <b>€ 12.500,00 + IVA</b>, scrivi qui il netto concordato: la differenza dal netto reale diventa sconto, poi si aggiunge l'IVA.
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 130px",gap:8,alignItems:"center"}}>
                     <input
@@ -2463,30 +2463,16 @@ export default function CreaPreventivo() {
                       onClick={()=>{
                         const target = Number(totaleTarget);
                         if (!target || isNaN(target)) { toast.error("Inserisci un totale valido"); return; }
-                        const currentNet = calc.prezzoNetto;
-                        const deltaNet = target - currentNet;
-                        // deltaLordo * (1 - sconto/100) = deltaNet (IVA aggiunta dopo)
-                        const factor = (1 - sconto/100);
-                        const deltaLordo = factor > 0 ? deltaNet / factor : deltaNet;
-                        const rounded = Math.round(deltaLordo * 100) / 100;
-                        if (Math.abs(rounded) < 0.01) { toast.success("Totale già corretto"); return; }
-                        setRigheMat(prev => {
-                          const existing = prev.findIndex((r:any) => r.__adjustment);
-                          const row = {
-                            id: existing >= 0 ? prev[existing].id : Date.now()+Math.random(),
-                            desc: "Adeguamento commerciale",
-                            qta: 1, unita: "a corpo",
-                            costoUn: 0,
-                            prezzoUn: existing >= 0 ? Math.round((prev[existing].prezzoUn + rounded) * 100)/100 : rounded,
-                            __adjustment: true,
-                          };
-                          if (existing >= 0) {
-                            const copy = [...prev]; copy[existing] = row; return copy;
-                          }
-                          return [...prev, row];
-                        });
+                        // Netto reale = totale voci senza eventuali vecchi "Adeguamento commerciale"
+                        const adjSum = righeMat.filter((r:any)=>r.__adjustment).reduce((s:number,r:any)=>s+(Number(r.qta)||0)*(Number(r.prezzoUn)||0),0);
+                        const nettoReale = calc.prezzoLordoTot - adjSum;
+                        if (nettoReale <= 0) { toast.error("Aggiungi prima le voci del preventivo"); return; }
+                        if (target > nettoReale) { toast.error(`Il netto concordato supera il netto reale (${euro(nettoReale)})`); return; }
+                        const pct = (1 - target / nettoReale) * 100;
+                        setRigheMat(prev => prev.filter((r:any) => !r.__adjustment));
+                        setSconto(pct);
                         setTotaleTarget("");
-                        toast.success(`Netto chiuso a ${euro(target)} + IVA`);
+                        toast.success(`Sconto ${euro(nettoReale - target)} applicato: netto ${euro(target)} + IVA`);
                       }}
                       style={{padding:"8px 12px",borderRadius:7,border:"1px solid #1A1A2E",background:"#1A1A2E",color:"#fff",cursor:"pointer",fontSize:12,fontWeight:500}}>
                       Applica
@@ -2978,7 +2964,7 @@ export default function CreaPreventivo() {
             <div style={{marginLeft:"auto",width:280}}>
               {[
                 {l:t.subtotale,v:euro(calc.prezzoLordoTot)},
-                sconto>0 && {l:`${t.sconto_label||"Sconto"} ${sconto}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
+                sconto>0 && {l:`${t.sconto_label||"Sconto"} ${Math.round(sconto*100)/100}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
                 {l:ivaLabel,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
