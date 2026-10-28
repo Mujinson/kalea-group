@@ -1697,11 +1697,11 @@ export default function CreaPreventivo() {
     const push = (key: string, desc: string, qta: number, unita: string, costUn: number, clientUnit: number) => {
       if (qta > 0 && (costUn || clientUnit)) out.push({ key, desc, qta, unita, supplierPrice: Math.round(costUn * 100) / 100, supplierDiscountPct: 0, clientUnit });
     };
-    if (prodotto) push("mat", prodotto.nome || "Materiale", calc.mqOrd, "mq", calc.costoMatMq, calc.mqOrd > 0 ? calc.prezzoMatTot / calc.mqOrd : 0);
-    if (calc.prezzoPosaTot || calc.costoPosaTot) push("posa", "Posa in opera", mqPrev, "mq", COSTO_POSA_INTERNO, calc.prezzoPosaMq);
-    if (calc.tappNeeded) push("tapp", "Tappetino", mqPrev, "mq", COSTO_TAPPETINO_INTERNO, calc.prezzoTappMq);
-    if (calc.prezzoTrasporto) push("trasp", "Trasporto", calc.kmExtra, "km", COSTO_KM, calc.prezzoTrasportoKm);
-    if (calc.prezzoTrasfertaTot) push("trasf", "Trasferta posa", mqPrev, "mq", mqPrev > 0 ? calc.costoTrasfertaTot / mqPrev : 0, calc.supplMq);
+    if (calc && prodotto) push("mat", prodotto.nome || "Materiale", calc.mqOrd, "mq", calc.costoMatMq, calc.mqOrd > 0 ? calc.prezzoMatTot / calc.mqOrd : 0);
+    if (calc && (calc.prezzoPosaTot || calc.costoPosaTot)) push("posa", "Posa in opera", mqPrev, "mq", COSTO_POSA_INTERNO, calc.prezzoPosaMq);
+    if (calc?.tappNeeded) push("tapp", "Tappetino", mqPrev, "mq", COSTO_TAPPETINO_INTERNO, calc.prezzoTappMq);
+    if (calc?.prezzoTrasporto) push("trasp", "Trasporto", calc.kmExtra, "km", COSTO_KM, calc.prezzoTrasportoKm);
+    if (calc?.prezzoTrasfertaTot) push("trasf", "Trasferta posa", mqPrev, "mq", mqPrev > 0 ? calc.costoTrasfertaTot / mqPrev : 0, calc.supplMq);
     (wcSel.accessories || []).forEach((a: any, i: number) => push(`wca-${i}`, a.nome || a.name || "Accessorio", Number(a.qta) || 0, a.unita || "pz", Number(a.costoUn) || 0, Number(a.prezzoUn) || 0));
     righeMat.forEach((r: any) => {
       const qtaTot = (Number(r.qta) || 0) * (1 + (Number(r.sfridoPct) || 0) / 100);
@@ -1714,7 +1714,7 @@ export default function CreaPreventivo() {
   }, [calc, prodotto, mqPrev, wcSel, righeMat]);
   const accDeposit = (() => {
     const first = Array.isArray(pagamenti) ? pagamenti.find((p: any) => Number(p?.pct) > 0) : null;
-    return first ? calc.prezzoNetto * Number(first.pct) / 100 : 0;
+    return first ? (calc?.prezzoNetto || 0) * Number(first.pct) / 100 : 0;
   })();
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0, sfridoPct:0, scontoPct:0, scontoEur:null }]);
