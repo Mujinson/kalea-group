@@ -10,6 +10,7 @@ import {Label} from '@/components/ui/label';
 import {Tabs,TabsList,TabsTrigger} from '@/components/ui/tabs';
 import {Dialog,DialogContent,DialogHeader,DialogTitle} from '@/components/ui/dialog';
 import {Checkbox} from '@/components/ui/checkbox';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from '@/components/ui/select';
 import {AlertTriangle,RefreshCw,Wallet,Plus,Users} from 'lucide-react';
 import {toast} from 'sonner';
 import {calculateProfit,costOccurrences,money,type CostSource,type ProfitJob} from '@/lib/companyProfit';
@@ -24,6 +25,8 @@ export default function CompanyProfitBlock(){
  const now=new Date().toISOString().slice(0,10),[from,setFrom]=useState(`${now.slice(0,4)}-01-01`),[to,setTo]=useState(now),[mode,setMode]=useState('forecast'),[detail,setDetail]=useState(''),[selected,setSelected]=useState<CostSource|null>(null),[job,setJob]=useState<ProfitJob|null>(null),[payrollOpen,setPayrollOpen]=useState(false),[invoiceOpen,setInvoiceOpen]=useState(false);
  const {data,error,isLoading,refetch}=useQuery({queryKey:['company-profit'],queryFn:loadProfitData,refetchInterval:30000});
  const [genericOpen,setGenericOpen]=useState(false);
+ const [linkQuote,setLinkQuote]=useState('');
+ const linkSale=async()=>{if(!job?.saleId||!linkQuote)return;const {error}=await supabase.from('sales').update({quote_id:linkQuote}).eq('id',job.saleId);if(error)return toast.error(error.message);toast.success('Vendita collegata al preventivo');setJob(null);setLinkQuote('');void refetch();};
  useRealtimeSubscription({tables:[...PROFIT_TABLES],onDataChange:()=>{void refetch();}});
  const calc=useMemo(()=>{
  if(!data||from>to)return null;
@@ -100,6 +103,7 @@ export default function CompanyProfitBlock(){
  {job&&data&&calc&&<Dialog open onOpenChange={o=>{if(!o)setJob(null);}}><DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto"><DialogHeader><DialogTitle>{job.label}</DialogTitle></DialogHeader><div className="grid grid-cols-2 gap-3 text-sm"><p>Netto concordato {fmtEur(data.jobs.find(j=>j.key===job.key)?.revenue)}</p><p>Costi previsti {fmtEur(job.estimate.total)}</p><p>Costi registrati {fmtEur(job.actual)}</p><p>Quota prevista sostituita {fmtEur(job.replacement)}</p><p>Utile {mode==='forecast'&&!job.estimate.known&&!job.complete?'Da completare':fmtEur(job.profit)}</p></div>{job.warnings.map(w=><p key={w} className="text-sm text-crm-warning">{w}</p>)}
  {(mode==='forecast'?calc.lifetime:calc.period).costs.filter(c=>c.jobKey===job.key).map((c,i)=><div key={`${c.key}-${i}`} className="flex items-center gap-3 border-b border-crm-border py-2 text-sm"><span className="flex-1">{c.label} · {fmtDateIt(c.date)}</span><span>{fmtEur(c.amount)}</span><Button variant="outline" size="sm" onClick={()=>{const s=data.sources.find(s=>s.key===c.key);if(s)setSelected(s);}}>Verifica</Button></div>)}
  {job.quoteId&&<><Label className="flex items-center gap-2"><Checkbox checked={job.complete} onCheckedChange={v=>complete(job,v===true)}/>Tutti i costi del lavoro sono stati registrati</Label>{!job.estimate.capturedAt&&<Button variant="outline" onClick={()=>snapshot(job)}>Conferma e fissa la stima storica</Button>}<Link className="text-crm-primary text-sm" to={`/admin/preventivi/modifica?edit=${job.quoteId}`}>Apri preventivo e contabilità interna</Link></>}
+ {!job.quoteId&&job.saleId&&<><Label>Preventivo del lavoro</Label><Select value={linkQuote} onValueChange={setLinkQuote}><SelectTrigger><SelectValue placeholder="Collega il preventivo corretto"/></SelectTrigger><SelectContent>{data.jobs.filter(j=>j.quoteId&&!j.saleId).map(j=><SelectItem key={j.key} value={j.quoteId||j.key}>{j.label}</SelectItem>)}</SelectContent></Select><Button disabled={!linkQuote} onClick={linkSale}>Collega vendita e preventivo</Button></>}
  </DialogContent></Dialog>}
  {selected&&data&&<ProfitCostDialog key={selected.key} source={selected} sources={data.sources} jobs={data.jobs} allocations={data.allocations} onClose={()=>setSelected(null)} onSaved={()=>{void refetch();}}/>}
  {payrollOpen&&data&&<ProfitPayrollDialog data={data} onClose={()=>setPayrollOpen(false)} onSaved={()=>{void refetch();}}/>}
