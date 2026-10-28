@@ -1,0 +1,20 @@
+import {describe,it} from 'node:test';
+import {strict as assert} from 'node:assert';
+const expect = (actual: any) => ({toBe: (expected: any) => assert.equal(actual,expected),toBeCloseTo: (expected: number,digits: number) => assert.ok(Math.abs(actual-expected)<10**(-digits),`${actual} != ${expected}`)});
+import {buildJobs,calculateProfit,costOccurrences,accountingSnapshot, type CostSource} from './companyProfit';
+import {DEFAULT_CREW_SETTINGS,workerMonthlyCost} from './crewCosts';
+const quotes=[{id:'q',status:'accepted',created_at:'2026-10-01',quote_data:{calc:{prezzoNetto:12500},contabilita:{snapshot:{total:7000,labor:1000,known:true,capturedAt:'2026-10-01'}}}}];
+const jobs=()=>buildJobs(quotes,[],[],DEFAULT_CREW_SETTINGS,[]);
+const cost:CostSource={key:'supplier:x',label:'Materiali',amount:2000,date:'2026-10-10',jobKey:'quote:q',category:'materials',verified:true};
+const alloc={source_key:cost.key,scope:'job',quote_id:'q',category:'materials',amount:2000,replaced_estimate:1800,competence_date:'2026-10-10',net_verified:true};
+describe('Utile aziendale',()=>{
+ it('counts converted quote/sale once and keeps agreed net 12500 not VAT gross',()=>{const r=buildJobs(quotes,[{id:'s',quote_id:'q',subtotal_amount:12500,total_amount:15250}],[],DEFAULT_CREW_SETTINGS,[]);expect(r.length).toBe(1);expect(r[0].revenue).toBe(12500);});
+ it('partial actual replaces only its estimated share',()=>{const r=calculateProfit(jobs(),[cost],[alloc],'2026-01-01','2026-12-31');expect(r.cost).toBe(7200);expect(r.profit).toBe(5300);expect(r.average).toBe(5300);});
+ it('extra expense is added without removing unpurchased materials',()=>{expect(calculateProfit(jobs(),[cost],[],'2026-01-01','2026-12-31').cost).toBe(9000);});
+ it('reconciled document does not count twice',()=>{const duplicate={...cost,key:'expense:y'};expect(calculateProfit(jobs(),[cost,duplicate],[alloc,{...alloc,source_key:'expense:y',scope:'duplicate',duplicate_of:cost.key,replaced_estimate:0}], '2026-01-01','2026-12-31').cost).toBe(7200);});
+ it('unassigned and inventory purchases are not silently job expenses',()=>{const r=calculateProfit(jobs(),[{...cost,jobKey:undefined}],[],'2026-01-01','2026-12-31');expect(r.unassigned.length).toBe(1);expect(r.cost).toBe(7000);const stock=calculateProfit(jobs(),[cost],[{...alloc,scope:'inventory',quote_id:null,replaced_estimate:0}],'2026-01-01','2026-12-31');expect(stock.cost).toBe(7000);});
+ it('completed job uses all real costs and retains losses',()=>{const j=jobs();j[0].complete=true;const r=calculateProfit(j,[{...cost,amount:14000}],[],'2026-01-01','2026-12-31');expect(r.profit).toBe(-1500);expect(r.average).toBe(-1500);});
+ it('full fixed worker cost is 3997 excluding travel and meals',()=>expect(workerMonthlyCost(DEFAULT_CREW_SETTINGS)).toBe(3997));
+ it('recurring monthly and quarterly overhead respects competence',()=>{expect(costOccurrences({...cost,amount:300,frequency:'mensile',date:'2026-01-01'},'2026-10-01','2026-10-31')[0].amount).toBe(300);expect(costOccurrences({...cost,amount:900,frequency:'trimestrale',date:'2026-01-01'},'2026-10-01','2026-10-31')[0].amount).toBe(300);});
+ it('snapshot captures quote labor/travel without future catalog changes',()=>{const s=accountingSnapshot([{key:'r',desc:'r',qta:10,unita:'mq',supplierPrice:20,supplierDiscountPct:0,clientUnit:50}],{},0,{enabled:true,days:2,workers:1},DEFAULT_CREW_SETTINGS);expect(s.total).toBeCloseTo(200+3997/22*2+30,2);expect(s.known).toBe(true);});
+});

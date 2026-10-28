@@ -3209,6 +3209,127 @@ export type Database = {
         }
         Relationships: []
       }
+      profit_cost_allocations: {
+        Row: {
+          amount: number
+          category: string
+          competence_date: string
+          created_at: string
+          duplicate_of: string | null
+          id: string
+          net_verified: boolean
+          note: string | null
+          quote_id: string | null
+          replaced_estimate: number
+          sale_id: string | null
+          scope: string
+          source_key: string
+        }
+        Insert: {
+          amount: number
+          category?: string
+          competence_date: string
+          created_at?: string
+          duplicate_of?: string | null
+          id?: string
+          net_verified?: boolean
+          note?: string | null
+          quote_id?: string | null
+          replaced_estimate?: number
+          sale_id?: string | null
+          scope: string
+          source_key: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          competence_date?: string
+          created_at?: string
+          duplicate_of?: string | null
+          id?: string
+          net_verified?: boolean
+          note?: string | null
+          quote_id?: string | null
+          replaced_estimate?: number
+          sale_id?: string | null
+          scope?: string
+          source_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profit_cost_allocations_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profit_cost_allocations_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profit_job_closures: {
+        Row: {
+          costs_complete: boolean
+          quote_id: string
+          updated_at: string
+        }
+        Insert: {
+          costs_complete?: boolean
+          quote_id: string
+          updated_at?: string
+        }
+        Update: {
+          costs_complete?: boolean
+          quote_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profit_job_closures_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: true
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profit_payroll_months: {
+        Row: {
+          amount: number
+          confirmed: boolean
+          id: string
+          month: string
+          worker_id: string
+        }
+        Insert: {
+          amount: number
+          confirmed?: boolean
+          id?: string
+          month: string
+          worker_id: string
+        }
+        Update: {
+          amount?: number
+          confirmed?: boolean
+          id?: string
+          month?: string
+          worker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profit_payroll_months_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       public_quote_items: {
         Row: {
           category: string

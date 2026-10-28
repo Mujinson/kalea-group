@@ -7,6 +7,7 @@ import { computeCrew, type CrewTrip } from "@/lib/crewCosts";
 import { AccExtras, AccRow, computeAccounting, DEFAULT_EXTRAS, marginLevel } from "@/lib/quoteAccounting";
 
 export interface AccountingState {
+  snapshot?: import('@/lib/companyProfit').Estimate;
   overrides?: Record<string, { supplierPrice?: number; supplierDiscountPct?: number }>;
   extras?: Partial<AccExtras>;
   crewTrip?: CrewTrip;

@@ -3,3 +3,6 @@
 - [x] Verify PDF content, merge order, persistence and editor flow.
 - [x] Costi squadra/trasferta nel preventivo, cantiere e dashboard
 - [x] Riepilogo utile aziendale e medio per lavoro: definire fonti nette e regole anti-duplicazione, presentare il piano.
+- [x] Implementare fonti economiche, ripartizione e riconciliazione costi, snapshot preventivi.
+- [x] Dashboard utile previsto/consuntivo, dettaglio lavori, costo mensile operai.
+- [x] Test calcoli e verifica con dati reali.
