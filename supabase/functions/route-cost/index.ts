@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
         travelMode: 'DRIVE',
         routingPreference: 'TRAFFIC_UNAWARE',
         extraComputations: ['TOLLS'],
-        routeModifiers: { vehicleInfo: { emissionType: 'DIESEL' }, tollPasses: ['IT_TELEPASS'] },
+        routeModifiers: { vehicleInfo: { emissionType: 'DIESEL' } },
         languageCode: 'it-IT',
         regionCode: 'IT',
       }),
