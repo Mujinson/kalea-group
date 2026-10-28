@@ -8,6 +8,7 @@ import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import FinanceOverviewBlock from '@/components/admin/FinanceOverviewBlock';
 import RevenueFunnelBlock from '@/components/admin/RevenueFunnelBlock';
+import CrewCostDashboardBlock from '@/components/admin/CrewCostDashboardBlock';
 import {
   TrendingUp, FileText, HardHat, Target, Users, Wallet,
   AlertTriangle, Package, ChevronRight, ArrowUp, ArrowDown,
@@ -638,6 +639,8 @@ const AdminOverview = () => {
       </div>
 
       <RevenueFunnelBlock />
+
+      <CrewCostDashboardBlock />
 
       {/* FINANZA — costi, fornitori, IVA, scadenze */}
       <FinanceOverviewBlock />

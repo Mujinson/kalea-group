@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { format, differenceInDays } from "date-fns";
 import SiteConfigPanel, { priorityBadge } from "@/components/admin/cantieri/SiteConfigPanel";
 import SiteIssuesPanel from "@/components/admin/cantieri/SiteIssuesPanel";
+import SiteDailyCostsPanel from "@/components/admin/cantieri/SiteDailyCostsPanel";
 import SiteStatusSelect from "@/components/admin/cantieri/SiteStatusSelect";
 
 const EXPENSE_TYPES = [
@@ -542,6 +543,7 @@ const AdminCantiereDetail = () => {
           <TabsTrigger value="worklogs" className="gap-2"><Clock className="w-4 h-4" /> Registro ({workLogs?.length || 0})</TabsTrigger>
           <TabsTrigger value="media" className="gap-2"><Image className="w-4 h-4" /> Media ({media?.length || 0})</TabsTrigger>
           <TabsTrigger value="issues" className="gap-2"><AlertTriangle className="w-4 h-4" /> Segnalazioni</TabsTrigger>
+          <TabsTrigger value="crewcosts" className="gap-2"><Receipt className="w-4 h-4" /> Costi squadra</TabsTrigger>
         </TabsList>
 
         <TabsContent value="config">
@@ -752,6 +754,10 @@ const AdminCantiereDetail = () => {
         </TabsContent>
 
         {/* MEDIA TAB */}
+        <TabsContent value="crewcosts">
+          <SiteDailyCostsPanel siteId={site.id} quoteId={site.quote_id} startDate={site.start_date || site.planned_start_date} />
+        </TabsContent>
+
         <TabsContent value="media">
           <Card className="bg-white">
             <CardHeader className="pb-3">
