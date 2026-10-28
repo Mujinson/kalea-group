@@ -35,8 +35,9 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
       if (error instanceof FunctionsHttpError) { try { msg = (await error.context.json()).error || msg; } catch { /* */ } }
       return toast.error(msg);
     }
-    set({ destination: dest, kmOneWay: data.kmOneWay, minutesOneWay: data.minutesOneWay, tollOneWay: data.tollOneWay });
-    toast.success(`${data.kmOneWay} km · ${data.minutesOneWay} min · pedaggio ${eur(data.tollOneWay)} (sola andata)`);
+    set({ destination: dest, kmOneWay: data.kmOneWay, minutesOneWay: data.minutesOneWay, ...(data.tollKnown ? { tollOneWay: data.tollOneWay } : {}) });
+    if (data.tollKnown) toast.success(`${data.kmOneWay} km · ${data.minutesOneWay} min · pedaggio ${eur(data.tollOneWay)} (sola andata)`);
+    else toast.warning(`${data.kmOneWay} km · ${data.minutesOneWay} min. Google non ha il pedaggio di questa tratta: inseriscilo a mano (sola andata).`);
   };
 
   const inp: React.CSSProperties = { width: 80, padding: "4px 6px", border: "1px solid #E6E9F0", borderRadius: 6, fontSize: 12, textAlign: "right" };
