@@ -6,6 +6,8 @@ import { computeCrew, CrewSettings, CrewTrip, DEFAULT_CREW_SETTINGS } from "@/li
 
 const eur = (v: number) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(v || 0);
 
+const n0 = (v: unknown) => Number(v) || 0;
+
 export function useCrewSettings() {
   const [s, setS] = useState<CrewSettings>(DEFAULT_CREW_SETTINGS);
   useEffect(() => {
@@ -46,6 +48,9 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
     <input type="number" step={step} style={inp} value={(t[k] as number) ?? 0} onChange={(e) => set({ [k]: Number(e.target.value) } as any)} />
   );
   const diff = c.perWorkerDay - settings.reference_daily;
+  const home = computeCrew({ ...t, trasferta: "off" }, settings);
+  const away = computeCrew({ ...t, trasferta: "on" }, settings);
+  const cheaper = home.total <= away.total ? "off" : "on";
 
   return (
     <div style={{ marginTop: 16, padding: 12, background: "#F0F7FF", borderRadius: 8, display: "grid", gap: 10 }}>
@@ -95,6 +100,21 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
             </div>
           ))}
         </div>
+        {n0(t.kmOneWay) > 0 && n0(t.days) > 0 && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {([["off", "Torna a casa ogni giorno", home], ["on", "Resta in albergo", away]] as const).map(([k, l, r]) => {
+              const sel = c.isTrasferta === (k === "on");
+              return (
+                <button key={k} onClick={() => set({ trasferta: k })} style={{ textAlign: "left", padding: 10, borderRadius: 8, cursor: "pointer", background: "#fff", border: sel ? "2px solid #1A1A2E" : "1px solid #E6E9F0" }}>
+                  <div style={{ fontSize: 12, fontWeight: 600 }}>{l} {cheaper === k && <span style={{ color: "#15803D" }}>· conviene</span>}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700 }}>{eur(r.total)}</div>
+                  <div style={{ fontSize: 11, color: "#64748B" }}>Gasolio {eur(r.fuel)} · Telepass {eur(r.tolls)} · Pasti {eur(r.meals)} · Albergo {eur(r.hotel)}</div>
+                  {k === "off" && t.minutesOneWay ? <div style={{ fontSize: 11, color: "#64748B" }}>{Math.round(t.minutesOneWay * 2 * n0(t.days) / 60)} ore di viaggio totali per operaio</div> : null}
+                </button>
+              );
+            })}
+          </div>
+        )}
         <div style={{ fontSize: 12, color: diff > 0 ? "#B45309" : "#15803D" }}>
           Costo per operaio al giorno {eur(c.perWorkerDay)} · media di riferimento {eur(settings.reference_daily)} ({diff >= 0 ? "+" : ""}{eur(diff)})
         </div>
