@@ -43,7 +43,7 @@ export default function CompanyProfitBlock(){
  if(occurrence)activeMonths.push({worker:w,month:m,amount:occurrence.amount,confirmed:!!existing?.confirmed});}
  cursor.setUTCMonth(cursor.getUTCMonth()+1);}
  const payroll=money(activeMonths.reduce((s,p)=>s+p.amount,0));
- const payrollEvidence=period.costs.filter(c=>['stipendi','contributi_tasse'].includes(c.category));
+ const payrollEvidence=period.costs.filter(c=>['stipendi','contributi_tasse'].includes(c.category)&&c.scope!=='payroll_evidence');
  const jobLabor=money(period.costs.filter(c=>c.scope==='job').reduce((s,c)=>s+c.labor,0));
  const payrollRecorded=money(payrollEvidence.reduce((s,c)=>s+c.amount,0));
  // Reconciliation is explicit: payroll evidence is displayed separately until marked duplicate of another source.
@@ -59,6 +59,7 @@ export default function CompanyProfitBlock(){
  if(data.workers.some(w=>w.status==='attivo'&&!w.hire_date))warnings.push('Operai senza data di assunzione: registra il costo mensile');
  if(data.jobs.some(j=>!j.quoteId))warnings.push('Vendite senza preventivo collegato: verificare eventuali doppioni');
  if(payrollConflict)warnings.push('Stipendi/contributi e costo mensile operai da riconciliare');
+ if(payroll===0&&period.costs.some(c=>c.scope==='payroll_evidence'))warnings.push('Giustificativi operai senza costo mensile registrato');
  if(jobLabor>payroll&&payroll>0)warnings.push('Manodopera attribuita superiore al costo mensile');
  if(bills.some(i=>!i.jobKey))warnings.push('Fatture clienti senza lavoro collegato');
  const actualRows=period.rows.map(j=>{const revenue=money(bills.filter(i=>i.jobKey===j.key).reduce((s,i)=>s+Number(i.subtotal||0),0));const costs=period.costs.filter(c=>c.jobKey===j.key&&c.scope==='job');return {...j,revenue,forecastCost:money(costs.reduce((s,c)=>s+c.amount,0)),profit:money(revenue-costs.reduce((s,c)=>s+c.amount,0))};}).filter(j=>j.revenue||j.forecastCost);
