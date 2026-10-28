@@ -22,6 +22,8 @@ describe("costi squadra", () => {
     assert.equal(c.isTrasferta, true);
     assert.equal(c.nights, 3);
     close(c.tolls, 40);
+    close(c.fuel, (400 + 20 * 4) * 0.1 * 1.75);
+    assert.ok(computeCrew({ kmOneWay: 200, days: 6 }, S).fuel > c.fuel);
     close(c.hotel, 80 * 2 * 3);
     close(c.meals, 15 * 2 * 4 + 25 * 2 * 3);
   });

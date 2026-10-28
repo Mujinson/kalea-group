@@ -80,8 +80,14 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
           {c.isTrasferta && <label style={lab}>Notti
             <input type="number" style={inp} value={t.nights ?? c.nights} onChange={(e) => set({ nights: Number(e.target.value) })} />
           </label>}
+          {c.isTrasferta && <label style={lab}>Viaggi A/R
+            <input type="number" style={inp} value={t.tripsOverride ?? c.trips} onChange={(e) => set({ tripsOverride: Number(e.target.value) })} />
+          </label>}
+          {c.isTrasferta && <label style={lab}>Km/giorno sul posto
+            <input type="number" style={inp} value={t.localKmDay ?? 20} onChange={(e) => set({ localKmDay: Number(e.target.value) })} />
+          </label>}
         </div>
-        {t.minutesOneWay ? <div style={{ fontSize: 12, color: "#64748B" }}>Viaggio: {t.minutesOneWay} min sola andata · {c.kmAR} km A/R · {c.trips} viaggi A/R</div> : null}
+        {t.minutesOneWay ? <div style={{ fontSize: 12, color: "#64748B" }}>Viaggio: {t.minutesOneWay} min sola andata · {c.kmAR} km A/R · {c.trips} viaggi A/R{c.isTrasferta ? ` + ${c.localKm} km sul posto (in trasferta si dorme lì: il viaggio lungo si paga solo all'andata e al ritorno)` : ""}</div> : null}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 8 }}>
           {[["Operai", c.labor], ["Gasolio", c.fuel], ["Telepass", c.tolls], ["Pasti", c.meals], ["Albergo", c.hotel], ["Totale squadra", c.total], ["Al giorno", c.perDay]].map(([k, v]) => (
             <div key={k as string} style={{ padding: 8, background: "#fff", borderRadius: 6, border: "1px solid #E6E9F0" }}>
