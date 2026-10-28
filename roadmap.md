@@ -2,3 +2,4 @@
 - [x] Rebrand ST4 sheet without changing technical data and attach to latest Kronos quote.
 - [x] Verify PDF content, merge order, persistence and editor flow.
 - [x] Costi squadra/trasferta nel preventivo, cantiere e dashboard
+- [x] Riepilogo utile aziendale e medio per lavoro: definire fonti nette e regole anti-duplicazione, presentare il piano.
