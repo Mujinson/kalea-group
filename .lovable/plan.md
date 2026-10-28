@@ -33,7 +33,9 @@ Valori standard: costo operaio al giorno, consumo del furgone (l/100 km), prezzo
   - stimato contro reale per ogni cantiere, per vedere dove si spende più del previsto
 
 ## Mi servono da te
-1. Costo di un operaio al giorno (solo la paga, senza pranzo e viaggio).
+- **Costo fisso operaio (dato da te):** netto 2.000 € + tasse 1.297 € + Cape circa 300 € + altro F24 400 € = **3.997 € al mese**. Diviso per circa 22 giorni lavorativi fa **circa 182 € al giorno** per operaio, senza pranzo, gasolio e Telepass. Nelle impostazioni metto le quattro voci separate e il numero di giorni lavorativi al mese, così il costo al giorno si ricalcola da solo.
+
+1. Confermi 22 giorni lavorativi al mese per il calcolo?
 2. Consumo del furgone e prezzo del gasolio da usare (per esempio 10 l/100 km e 1,75 €/l).
 3. Pranzo, albergo e cena: quanto spendete di solito.
 4. Da che distanza o da quante ore di viaggio si fa trasferta invece di tornare a casa.
