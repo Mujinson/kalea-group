@@ -2,18 +2,22 @@ import { useEffect, useMemo, useState } from "react";
 import * as XLSX from "xlsx";
 import { supabase } from "@/integrations/supabase/client";
 import type { CatalogLine } from "./QuoteCatalogSections";
+import CrewCostsBlock, { useCrewSettings } from "./CrewCostsBlock";
+import { computeCrew, type CrewTrip } from "@/lib/crewCosts";
 import { AccExtras, AccRow, computeAccounting, DEFAULT_EXTRAS, marginLevel } from "@/lib/quoteAccounting";
 
 export interface AccountingState {
   overrides?: Record<string, { supplierPrice?: number; supplierDiscountPct?: number }>;
   extras?: Partial<AccExtras>;
+  crewTrip?: CrewTrip;
 }
 
 const eur = (n: number) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(n || 0);
 const pct = (n: number) => `${(n || 0).toFixed(1)}%`;
 const COLORS = { ok: "#15803D", warn: "#B45309", bad: "#B91C1C" } as const;
 
-export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDiscountPct, deposit, value, onChange, title }: {
+export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDiscountPct, deposit, value, onChange, title, defaultDestination }: {
+  defaultDestination?: string;
   baseRows: AccRow[];
   catalogLines: CatalogLine[];
   globalDiscountPct: number;
@@ -66,7 +70,10 @@ export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDis
     return [...baseRows, ...cat].map((r) => ({ ...r, ...(ov[r.key] || {}) }));
   }, [baseRows, catalogLines, costs, ov]);
 
-  const acc = computeAccounting(rows, extras, globalDiscountPct, deposit);
+  const crewSettings = useCrewSettings();
+  const crewTrip = value.crewTrip || {};
+  const crewCost = crewTrip.enabled ? computeCrew({ days: 1, workers: 1, vans: 1, ...crewTrip }, crewSettings).total : 0;
+  const acc = computeAccounting(rows, extras, globalDiscountPct, deposit, crewCost);
   const lvl = marginLevel(acc.marginPct);
 
   if (!isAdmin) return null;
@@ -91,7 +98,7 @@ export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDis
     aoa.push([]);
     aoa.push(["TOTALE VOCI", "", "", "", "", "", { f: `SUM(G${start}:G${last})` }, "", "", { f: `SUM(J${start}:J${last})` }, { f: `SUM(K${start}:K${last})` }, ""]);
     const ex = tot + 1;
-    const exRows: [string, number][] = [["Trasporto (km A/R)", acc.extra.trasporto], ["Scarico con gru", acc.extra.gru], ["Smaltimento rifiuti", acc.extra.smaltimento], ["Riconoscenza / provvigione", acc.extra.riconoscenza], ["Posa interna / squadra", acc.extra.squadra]];
+    const exRows: [string, number][] = [["Trasporto (km A/R)", acc.extra.trasporto], ["Scarico con gru", acc.extra.gru], ["Smaltimento rifiuti", acc.extra.smaltimento], ["Riconoscenza / provvigione", acc.extra.riconoscenza], ["Posa interna / squadra", acc.extra.squadra], ["Squadra e trasferta (operai, gasolio, Telepass, pasti, albergo)", acc.extra.squadraTrasferta]];
     exRows.forEach(([n, v]) => aoa.push([n, "", "", "", "", "", v]));
     const exEnd = ex + exRows.length - 1;
     aoa.push(["SPESE KALĒA TOTALI", "", "", "", "", "", { f: `G${tot}+SUM(G${ex}:G${exEnd})` }]);
@@ -169,6 +176,7 @@ export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDis
             {exItem("Riconoscenza / provvigione", "rewardEnabled", "rewardPct", "% del netto")}
             {exItem("Posa interna / squadra", "crewEnabled", "crew", "€")}
           </div>
+          <CrewCostsBlock trip={crewTrip} settings={crewSettings} defaultDestination={defaultDestination} onChange={(t) => onChange({ ...value, crewTrip: t })} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 10, marginTop: 16 }}>
             {[
               ["Spese Kalēa totali", eur(acc.totalCost)],

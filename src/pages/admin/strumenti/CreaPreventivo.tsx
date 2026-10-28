@@ -2845,7 +2845,7 @@ export default function CreaPreventivo() {
           </div>
 
           {/* ANTEPRIMA DOCUMENTO */}
-          <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} title={numPrev || cantiere} />
+          <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} title={numPrev || cantiere} defaultDestination={[sito?.indirizzo, sito?.cap, sito?.citta, sito?.provincia].filter(Boolean).join(', ')} />
           <QuoteAttachments quoteId={preventivoId} attachments={technicalAttachments} onChange={persistAttachments} />
           <div id="pdf-preview-wrap" className="pdf-preview-wrap">
           <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
