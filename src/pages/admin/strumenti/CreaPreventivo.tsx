@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import WoodcoBlock, { emptyWoodcoSelection, type WoodcoSelection } from "@/components/preventivo/WoodcoBlock";
 import QuoteAccountingPanel, { type AccountingState } from "@/components/admin/quotes/QuoteAccountingPanel";
+import { accountingSnapshot } from '@/lib/companyProfit';
+import { DEFAULT_CREW_SETTINGS } from '@/lib/crewCosts';
 import QuoteCatalogSections, { catalogLinesTotal, type CatalogLine } from "@/components/admin/quotes/QuoteCatalogSections";
 import { takeImportedQuote, type ImportedLine } from "@/lib/quoteImport";
 import { ensureLeadForQuote } from "@/lib/quoteCrm";
@@ -1793,6 +1795,17 @@ export default function CreaPreventivo() {
       const clienteSnapshot = crmLink
         ? { ...cliente, nome: crmLink.nome || crmLink.label || cliente.nome, indirizzo: crmLink.indirizzo || cliente.indirizzo, citta: crmLink.citta || cliente.citta, telefono: crmLink.telefono || cliente.telefono, email: crmLink.email || cliente.email }
         : cliente;
+      const catalogIds = [...articoli, ...accessori, ...servizi].map(l => l.catalog_id).filter(Boolean);
+      const [costResult, crewResult] = await Promise.all([
+        catalogIds.length ? supabase.from('catalog_products').select('id,list_price,supplier_discount_percentage,net_cost,purchase_price').in('id', catalogIds) : Promise.resolve({data: [], error: null}),
+        supabase.from('crew_cost_settings').select('*').limit(1).maybeSingle(),
+      ]);
+      if (costResult.error || crewResult.error) throw costResult.error || crewResult.error;
+      const accountingRows = [...accBaseRows, ...[...articoli, ...accessori, ...servizi].map(l => {
+        const p = costResult.data?.find(p => p.id === l.catalog_id);
+        return {key:`cat-${l.id}`,desc:l.name,qta:Number(l.quantity)||0,unita:l.unit,supplierPrice:Number(p?.list_price||p?.net_cost||p?.purchase_price||0),supplierDiscountPct:p?.list_price?Number(p.supplier_discount_percentage||0):0,clientUnit:Number(l.unit_price||0)*(1-Number(l.discount_pct||0)/100)};
+      })].map(r => ({...r, ...contabilita.overrides?.[r.key]}));
+      const accountingSaved = {...contabilita, snapshot: accountingSnapshot(accountingRows, contabilita.extras, sconto, contabilita.crewTrip, {...DEFAULT_CREW_SETTINGS,...crewResult.data})};
       // Dettaglio completo del preventivo, salvato dentro quotes.quote_data
       const quoteData: any = {
         cliente: clienteSnapshot, cantiere, sito, prodotto, complessita, mqPrev, sfrido, sconto,
@@ -1803,7 +1816,7 @@ export default function CreaPreventivo() {
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
         catalog: { articoli, accessori, servizi },
         technicalAttachments,
-        contabilita,
+        contabilita: accountingSaved,
       };
 
       const mapCatalog = (kind: string) => (r: CatalogLine) => ({
