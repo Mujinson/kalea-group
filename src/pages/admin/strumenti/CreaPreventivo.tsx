@@ -1714,7 +1714,7 @@ export default function CreaPreventivo() {
   }, [calc, prodotto, mqPrev, wcSel, righeMat]);
   const accDeposit = (() => {
     const first = Array.isArray(pagamenti) ? pagamenti.find((p: any) => Number(p?.pct) > 0) : null;
-    return first ? calc.prezzoNetto * Number(first.pct) / 100 : 0;
+    return first ? (calc?.prezzoNetto || 0) * Number(first.pct) / 100 : 0;
   })();
 
   const addRiga = () => setRigheMat(r=>[...r,{ id:Date.now(), desc:"", qta:1, unita:"a corpo", costoUn:0, prezzoUn:0, sfridoPct:0, scontoPct:0, scontoEur:null }]);
