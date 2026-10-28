@@ -30,7 +30,7 @@ export const netUnitCost = (price: number, discPct: number) =>
 
 export const markupPct = (cost: number, sell: number) => (cost > 0 ? ((sell - cost) / cost) * 100 : 0);
 
-export function computeAccounting(rows: AccRow[], extras: AccExtras, globalDiscountPct: number, deposit = 0) {
+export function computeAccounting(rows: AccRow[], extras: AccExtras, globalDiscountPct: number, deposit = 0, crewTripCost = 0) {
   const f = 1 - (Number(globalDiscountPct) || 0) / 100;
   const lines = rows.map((r) => {
     const costUnit = netUnitCost(r.supplierPrice, r.supplierDiscountPct);
@@ -47,6 +47,7 @@ export function computeAccounting(rows: AccRow[], extras: AccExtras, globalDisco
     smaltimento: extras.wasteEnabled ? Number(extras.waste) || 0 : 0,
     riconoscenza: extras.rewardEnabled ? clientNet * (Number(extras.rewardPct) || 0) / 100 : 0,
     squadra: extras.crewEnabled ? Number(extras.crew) || 0 : 0,
+    squadraTrasferta: Number(crewTripCost) || 0,
   };
   const extraTot = Object.values(extra).reduce((s, v) => s + v, 0);
   const totalCost = linesCost + extraTot;
