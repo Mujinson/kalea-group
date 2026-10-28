@@ -5,13 +5,14 @@ export interface CrewSettings {
   fuel_l_100km: number; fuel_price: number;
   lunch: number; hotel: number; dinner: number;
   trasferta_km: number; reference_daily: number;
+  toll_eur_km: number;
 }
 
 export const DEFAULT_CREW_SETTINGS: CrewSettings = {
   origin: "Alzano Lombardo (BG)",
   net_salary: 2000, taxes: 1297, cape: 300, other_f24: 400, work_days_month: 22,
   fuel_l_100km: 10, fuel_price: 1.75, lunch: 15, hotel: 80, dinner: 25,
-  trasferta_km: 150, reference_daily: 300,
+  trasferta_km: 150, reference_daily: 300, toll_eur_km: 0.10,
 };
 
 export interface CrewTrip {

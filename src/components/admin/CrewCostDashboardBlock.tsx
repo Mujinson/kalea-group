@@ -16,7 +16,7 @@ const SETTINGS_FIELDS: [keyof CrewSettings, string][] = [
   ["origin", "Partenza furgone"], ["net_salary", "Netto operaio €/mese"], ["taxes", "Tasse €/mese"], ["cape", "Cape €/mese"],
   ["other_f24", "Altro F24 €/mese"], ["work_days_month", "Giorni lavorativi/mese"], ["fuel_l_100km", "Consumo furgone l/100km"],
   ["fuel_price", "Prezzo gasolio €/l"], ["lunch", "Pranzo €/persona"], ["dinner", "Cena €/persona"], ["hotel", "Albergo €/notte"],
-  ["trasferta_km", "Trasferta da km (sola andata)"], ["reference_daily", "Media riferimento €/giorno"],
+  ["trasferta_km", "Trasferta da km (sola andata)"], ["toll_eur_km", "Pedaggio furgone €/km autostrada"], ["reference_daily", "Media riferimento €/giorno"],
 ];
 
 export default function CrewCostDashboardBlock() {
