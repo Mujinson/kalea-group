@@ -30,7 +30,7 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
   const calcRoute = async () => {
     if (!dest.trim()) return toast.error("Inserisci l'indirizzo del cantiere");
     setLoading(true);
-    const { data, error } = await supabase.functions.invoke("route-cost", { body: { origin: settings.origin, destination: dest } });
+    const { data, error } = await supabase.functions.invoke("route-cost", { body: { origin: settings.origin, destination: dest, tollEurKm: settings.toll_eur_km } });
     setLoading(false);
     if (error) {
       let msg = error.message;
@@ -38,8 +38,8 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
       return toast.error(msg);
     }
     set({ destination: dest, kmOneWay: data.kmOneWay, minutesOneWay: data.minutesOneWay, ...(data.tollKnown ? { tollOneWay: data.tollOneWay } : {}) });
-    if (data.tollKnown) toast.success(`${data.kmOneWay} km · ${data.minutesOneWay} min · pedaggio ${eur(data.tollOneWay)} (sola andata)`);
-    else toast.warning(`${data.kmOneWay} km · ${data.minutesOneWay} min. Google non ha il pedaggio di questa tratta: inseriscilo a mano (sola andata).`);
+    if (data.tollKnown) toast.success(`${data.kmOneWay} km · ${data.minutesOneWay} min · pedaggio ${eur(data.tollOneWay)} sola andata${data.tollSource === 'stima_km' ? ` (stima: ${data.tollKm} km di autostrada × ${settings.toll_eur_km} €/km)` : ''}`);
+    else toast.warning(`${data.kmOneWay} km · ${data.minutesOneWay} min. Percorso senza autostrade a pedaggio.`);
   };
 
   const inp: React.CSSProperties = { width: 80, padding: "4px 6px", border: "1px solid #E6E9F0", borderRadius: 6, fontSize: 12, textAlign: "right" };

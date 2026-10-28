@@ -1219,6 +1219,7 @@ export type Database = {
           reference_daily: number
           singleton: boolean
           taxes: number
+          toll_eur_km: number
           trasferta_km: number
           updated_at: string
           work_days_month: number
@@ -1237,6 +1238,7 @@ export type Database = {
           reference_daily?: number
           singleton?: boolean
           taxes?: number
+          toll_eur_km?: number
           trasferta_km?: number
           updated_at?: string
           work_days_month?: number
@@ -1255,6 +1257,7 @@ export type Database = {
           reference_daily?: number
           singleton?: boolean
           taxes?: number
+          toll_eur_km?: number
           trasferta_km?: number
           updated_at?: string
           work_days_month?: number

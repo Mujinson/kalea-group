@@ -32,6 +32,7 @@ Deno.serve(async (req) => {
 
     let body: any;
     try { body = await req.json(); } catch { return json({ error: 'Richiesta non valida.' }, 400); }
+    const tollEurKm = Math.min(1, Math.max(0, Number(body?.tollEurKm) || 0.10));
     const origin = String(body?.origin || '').trim().slice(0, 200);
     const destination = String(body?.destination || '').trim().slice(0, 300);
     if (!origin || destination.length < 3) return json({ error: 'Inserisci l’indirizzo del cantiere.' }, 400);
@@ -42,7 +43,7 @@ Deno.serve(async (req) => {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         'X-Connection-Api-Key': GOOGLE_MAPS_API_KEY,
         'Content-Type': 'application/json',
-        'X-Goog-FieldMask': 'routes.distanceMeters,routes.duration,routes.travelAdvisory.tollInfo',
+        'X-Goog-FieldMask': 'routes.distanceMeters,routes.duration,routes.travelAdvisory.tollInfo,routes.legs.steps.distanceMeters,routes.legs.steps.navigationInstruction.instructions',
       },
       body: JSON.stringify({
         origin: { address: origin },
@@ -64,12 +65,22 @@ Deno.serve(async (req) => {
     if (!route || route.distanceMeters == null) return json({ error: 'Nessun percorso trovato per questo indirizzo.' }, 404);
     const prices = route.travelAdvisory?.tollInfo?.estimatedPrice || [];
     const eur = prices.find((p: any) => p.currencyCode === 'EUR') || prices[0];
-    const toll = eur ? Number(eur.units || 0) + Number(eur.nanos || 0) / 1e9 : 0;
+    const googleToll = eur ? Number(eur.units || 0) + Number(eur.nanos || 0) / 1e9 : 0;
+    // Google spesso non ha le tariffe italiane: stimiamo dai km su tratte a pedaggio.
+    let tollMeters = 0;
+    for (const leg of route.legs || []) for (const st of leg.steps || []) {
+      const ins = String(st?.navigationInstruction?.instructions || '').toLowerCase();
+      if (ins.includes('pedaggio') || ins.includes('toll')) tollMeters += Number(st.distanceMeters) || 0;
+    }
+    const tollKm = Math.round(tollMeters / 100) / 10;
+    const toll = googleToll > 0 ? googleToll : tollKm * tollEurKm;
     return json({
       kmOneWay: Math.round((route.distanceMeters / 1000) * 10) / 10,
       minutesOneWay: Math.round(parseFloat(String(route.duration || '0').replace('s', '')) / 60),
       tollOneWay: Math.round(toll * 100) / 100,
-      tollKnown: !!eur,
+      tollKnown: googleToll > 0 || tollKm > 0,
+      tollKm,
+      tollSource: googleToll > 0 ? 'google' : tollKm > 0 ? 'stima_km' : 'nessuna',
     });
   } catch (e) {
     console.error(e);

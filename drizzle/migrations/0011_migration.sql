@@ -1,0 +1,1 @@
+ALTER TABLE public.crew_cost_settings ADD COLUMN IF NOT EXISTS toll_eur_km numeric NOT NULL DEFAULT 0.10;
