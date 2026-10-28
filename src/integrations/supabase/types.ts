@@ -1204,6 +1204,63 @@ export type Database = {
           },
         ]
       }
+      crew_cost_settings: {
+        Row: {
+          cape: number
+          dinner: number
+          fuel_l_100km: number
+          fuel_price: number
+          hotel: number
+          id: string
+          lunch: number
+          net_salary: number
+          origin: string
+          other_f24: number
+          reference_daily: number
+          singleton: boolean
+          taxes: number
+          trasferta_km: number
+          updated_at: string
+          work_days_month: number
+        }
+        Insert: {
+          cape?: number
+          dinner?: number
+          fuel_l_100km?: number
+          fuel_price?: number
+          hotel?: number
+          id?: string
+          lunch?: number
+          net_salary?: number
+          origin?: string
+          other_f24?: number
+          reference_daily?: number
+          singleton?: boolean
+          taxes?: number
+          trasferta_km?: number
+          updated_at?: string
+          work_days_month?: number
+        }
+        Update: {
+          cape?: number
+          dinner?: number
+          fuel_l_100km?: number
+          fuel_price?: number
+          hotel?: number
+          id?: string
+          lunch?: number
+          net_salary?: number
+          origin?: string
+          other_f24?: number
+          reference_daily?: number
+          singleton?: boolean
+          taxes?: number
+          trasferta_km?: number
+          updated_at?: string
+          work_days_month?: number
+        }
+        Relationships: []
+      }
       crew_members: {
         Row: {
           created_at: string
@@ -3898,6 +3955,65 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "site_checklist_items_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_daily_costs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          fuel: number
+          hotel: number
+          id: string
+          is_estimate: boolean
+          labor: number
+          meals: number
+          notes: string | null
+          other: number
+          site_id: string
+          tolls: number
+          work_date: string
+          workers_count: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          fuel?: number
+          hotel?: number
+          id?: string
+          is_estimate?: boolean
+          labor?: number
+          meals?: number
+          notes?: string | null
+          other?: number
+          site_id: string
+          tolls?: number
+          work_date: string
+          workers_count?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          fuel?: number
+          hotel?: number
+          id?: string
+          is_estimate?: boolean
+          labor?: number
+          meals?: number
+          notes?: string | null
+          other?: number
+          site_id?: string
+          tolls?: number
+          work_date?: string
+          workers_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_daily_costs_site_id_fkey"
             columns: ["site_id"]
             isOneToOne: false
             referencedRelation: "construction_sites"
