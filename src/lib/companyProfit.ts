@@ -52,6 +52,7 @@ export function costOccurrences(source:CostSource,from:string,to:string):{date:s
  if(!interval)return source.date>=from&&source.date<=to?[{date:source.date,amount:source.amount}]:[];
  // Monthly competence, spreading quarterly/yearly expenses over their covered months.
  const start=new Date(`${source.date.slice(0,7)}-01T12:00:00Z`), end=new Date(`${to}T23:59:59Z`), result=[];
+ if(Number.isNaN(start.getTime())||Number.isNaN(end.getTime()))return [];
  const cursor=new Date(start);
  while(cursor<=end){const y=cursor.getUTCFullYear(),m=cursor.getUTCMonth();const first=new Date(Date.UTC(y,m,1)),last=new Date(Date.UTC(y,m+1,0));
  const f=new Date(`${from}T00:00:00Z`),t=new Date(`${to}T00:00:00Z`);

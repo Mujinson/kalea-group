@@ -22,7 +22,7 @@ import {SupplierInvoiceDialog} from '@/components/admin/fornitori/SupplierInvoic
 
 export default function CompanyProfitBlock(){
  const now=new Date().toISOString().slice(0,10),[from,setFrom]=useState(`${now.slice(0,4)}-01-01`),[to,setTo]=useState(now),[mode,setMode]=useState('forecast'),[detail,setDetail]=useState(''),[selected,setSelected]=useState<CostSource|null>(null),[job,setJob]=useState<ProfitJob|null>(null),[payrollOpen,setPayrollOpen]=useState(false),[invoiceOpen,setInvoiceOpen]=useState(false);
- const {data,error,isLoading,refetch}=useQuery({queryKey:['company-profit'],queryFn:loadProfitData});
+ const {data,error,isLoading,refetch}=useQuery({queryKey:['company-profit'],queryFn:loadProfitData,refetchInterval:30000});
  const [genericOpen,setGenericOpen]=useState(false);
  useRealtimeSubscription({tables:[...PROFIT_TABLES],onDataChange:()=>{void refetch();}});
  const calc=useMemo(()=>{
