@@ -1,4 +1,6 @@
-import {describe,it,expect} from 'bun:test';
+import {describe,it} from 'node:test';
+import {strict as assert} from 'node:assert';
+const expect = (actual: any) => ({toBe: (expected: any) => assert.equal(actual,expected),toBeCloseTo: (expected: number,digits: number) => assert.ok(Math.abs(actual-expected)<10**(-digits),`${actual} != ${expected}`)});
 import {buildJobs,calculateProfit,costOccurrences,accountingSnapshot, type CostSource} from './companyProfit';
 import {DEFAULT_CREW_SETTINGS,workerMonthlyCost} from './crewCosts';
 const quotes=[{id:'q',status:'accepted',created_at:'2026-10-01',quote_data:{calc:{prezzoNetto:12500},contabilita:{snapshot:{total:7000,labor:1000,known:true,capturedAt:'2026-10-01'}}}}];

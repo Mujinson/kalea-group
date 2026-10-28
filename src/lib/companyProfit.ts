@@ -43,7 +43,7 @@ export function buildJobs(quotes:any[],sales:any[],products:any[],settings:any,c
  const revenue=net!=null?money(net):q.total_amount!=null&&q.vat_amount!=null?money(q.total_amount-q.vat_amount):0;
  out.push({key:`quote:${q.id}`,quoteId:q.id,saleId:sale?.id,label:[q.quote_number,q.quote_data?.cliente?.nome||q.customer_name||q.title].filter(Boolean).join(' · '),date:(q.accepted_date||q.created_at||'').slice(0,10),revenue,estimate:legacyEstimate(q,products,settings),complete:closures.some(c=>c.quote_id===q.id&&c.costs_complete),actual:0,replacement:0,forecastCost:0,profit:0,warnings:net==null?['Netto da verificare']:[]});
  }
- for(const s of sales){if(usedSales.has(s.id))continue;out.push({key:`sale:${s.id}`,saleId:s.id,label:s.customer_name||'Vendita',date:(s.sale_date||s.created_at||'').slice(0,10),revenue:money(s.subtotal_amount),estimate:{total:0,labor:0,known:false},complete:false,actual:0,replacement:0,forecastCost:0,profit:0,warnings:['Preventivo/costi mancanti']});}
+ for(const s of sales){if(usedSales.has(s.id))continue;out.push({key:`sale:${s.id}`,saleId:s.id,label:s.customer_name||'Vendita',date:(s.sale_date||s.created_at||'').slice(0,10),revenue:money(s.subtotal_amount),estimate:{total:0,labor:0,known:false},complete:false,actual:0,replacement:0,forecastCost:0,profit:0,warnings:['Vendita senza collegamento: verificare eventuale doppione']});}
  return out;
 }
 export function costOccurrences(source:CostSource,from:string,to:string):{date:string;amount:number}[]{

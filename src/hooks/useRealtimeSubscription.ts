@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
-type TableName = 'customers' | 'sales' | 'quotes' | 'inventory' | 'payment_schedules' | 'fixed_costs' | 'variable_costs' | 'static_costs' | 'leads' | 'construction_sites' | 'appointments' | 'supplier_payments' | 'app_settings' | 'customer_reminders' | 'customer_invoices' | 'customer_payments' | 'salespeople' | 'workers' | 'suppliers' | 'catalog_products' | 'site_materials' | 'site_expenses' | 'site_workers' | 'site_work_logs' | 'commissions' | 'payment_agreements';
+type TableName = keyof import('@/integrations/supabase/types').Database['public']['Tables'];
 
 interface UseRealtimeSubscriptionOptions {
   tables: TableName[];
@@ -11,7 +11,7 @@ interface UseRealtimeSubscriptionOptions {
 
 export const useRealtimeSubscription = ({ tables, onDataChange }: UseRealtimeSubscriptionOptions) => {
   useEffect(() => {
-    const channel = supabase.channel('crm-realtime-sync');
+    const channel = supabase.channel(`crm-realtime-sync-${crypto.randomUUID()}`);
 
     tables.forEach((table) => {
       channel.on(
