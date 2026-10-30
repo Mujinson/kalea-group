@@ -31,12 +31,12 @@ const ParquetCollectionDetail = () => {
         keywords={`parquet ${collection.name}, ${collection.tagline}, parquet rovere, pavimenti in legno`}
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Product",
+          "@type": "CollectionPage",
           name: `Parquet ${collection.name}`,
           description: collection.description,
           image: new URL(collection.image, "https://www.kalea.space").href,
-          category: "Parquet",
-          brand: { "@type": "Brand", name: "Kalēa" },
+          about: { "@type": "Thing", name: "Parquet" },
+          publisher: { "@type": "Organization", name: "Kalēa®" },
         }}
       />
 

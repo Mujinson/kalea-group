@@ -24,12 +24,12 @@ const SpcCollectionDetail = () => {
         description={collection.description.slice(0, 155)}
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Product",
+          "@type": "CollectionPage",
           name: collection.name,
           description: collection.description,
           image: new URL(collection.image, "https://www.kalea.space").href,
-          category: "Pavimento SPC",
-          brand: { "@type": "Brand", name: "Kalēa" },
+          about: { "@type": "Thing", name: "Pavimento SPC" },
+          publisher: { "@type": "Organization", name: "Kalēa®" },
         }}
       />
 
