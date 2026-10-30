@@ -137,12 +137,12 @@ const BiomagFloor = () => {
         keywords="pavimento fibra naturale, pavimento ecologico, pavimento biodegradabile, pavimento fonoassorbente, BIOMAG FLOOR, pavimento sostenibile, fornitura e posa pavimento, pavimenti naturali"
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Product",
+          "@type": "CollectionPage",
           name: "BIOMAG FLOOR®",
-          brand: { "@type": "Brand", name: "Kalēa" },
-          category: "Flooring",
+          publisher: { "@type": "Organization", name: "Kalēa®" },
+          about: { "@type": "Thing", name: "BIOMAG FLOOR®" },
           description: "Pavimento in ossido di magnesio: waterproof, ignifugo, fonoassorbente, con servizio di fornitura e posa professionale.",
-          url: `https://kalea.space/${language}/biomag-floor`,
+          url: `https://www.kalea.space/${language}/biomag-floor`,
         }}
       />
       {/* Hero Section - Sticky with scroll shrink effect */}
