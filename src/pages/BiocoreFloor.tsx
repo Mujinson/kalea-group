@@ -67,12 +67,12 @@ const BiocoreFloor = () => {
         keywords="SPC Hypermatt, pavimento ultra matte, pavimento laser finish, pavimento SPC, pavimento impermeabile, pavimento di design, Hypermatt Kalēa, fornitura e posa pavimenti"
         structuredData={{
           "@context": "https://schema.org",
-          "@type": "Product",
+          "@type": "CollectionPage",
           name: "Hypermatt SPC",
-          brand: { "@type": "Brand", name: "Kalēa" },
-          category: "Flooring",
+          publisher: { "@type": "Organization", name: "Kalēa®" },
+          about: { "@type": "Thing", name: "Hypermatt SPC" },
           description: "Pavimento SPC ultra-matte con finitura laser, impermeabile, sistema Välinge 5G.",
-          url: "https://kalea.space/it/hypermatt",
+          url: `https://www.kalea.space/${language}/hypermatt`,
         }}
       />
 

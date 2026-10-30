@@ -95,8 +95,8 @@ const Home = () => {
               {
                 "@type": "Offer",
                 itemOffered: {
-                  "@type": "Product",
-                  name: "BIOMAG FLOOR®",
+                  "@type": "Service",
+                  name: "Fornitura e posa BIOMAG FLOOR®",
                   description: "Pavimento in ossido di magnesio, waterproof e ignifugo, con fornitura e posa professionale.",
                   category: "Pavimenti",
                 },
@@ -104,8 +104,8 @@ const Home = () => {
               {
                 "@type": "Offer",
                 itemOffered: {
-                  "@type": "Product",
-                  name: "Hypermatt",
+                  "@type": "Service",
+                  name: "Fornitura e posa Hypermatt",
                   description: "Collezione SPC ultra-matte con finitura laser. Realismo estremo del legno e del cemento.",
                   category: "Pavimenti flottanti",
                 },
