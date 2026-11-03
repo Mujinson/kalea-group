@@ -1828,6 +1828,7 @@ export default function CreaPreventivo() {
         unita: r.unit,
         prezzo_un: r.unit_price,
         sconto_pct: r.discount_pct,
+        dettagli: r.details || undefined,
         importo: (Number(r.quantity) || 0) * (Number(r.unit_price) || 0) * (1 - (Number(r.discount_pct) || 0) / 100),
       });
 
@@ -3010,6 +3011,11 @@ export default function CreaPreventivo() {
                             <td style={{padding:"8px 12px",fontSize:13}}>
                               {l.name}
                               {l.description && <div style={{fontSize:11,color:"#475569",marginTop:3}}>{l.description}</div>}
+                              {String(l.details||"").split("\n").map((s:string)=>s.trim()).filter(Boolean).length>0 && (
+                                <ul style={{margin:"4px 0 0",paddingLeft:16,fontSize:11.5,color:"#475569",lineHeight:1.5}}>
+                                  {String(l.details).split("\n").map((s:string)=>s.trim()).filter(Boolean).map((s:string,i:number)=><li key={i}>{s}</li>)}
+                                </ul>
+                              )}
                             </td>
                             <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{l.quantity} {trUnita(lingua, l.unit)}</td>
                             <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(Number(l.unit_price)||0)}</td>
