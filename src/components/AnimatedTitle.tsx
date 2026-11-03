@@ -82,37 +82,43 @@ const AnimatedTitle = ({
 
   return (
     <Tag key={animationKey} className={className} aria-label={text}>
-      {letters.map((letter, index) => {
-        const isSpace = letter === " ";
-        const isBreak = letter === "\n";
-        const hasRegistered = letter.includes("®");
-
-        if (isBreak) {
-          return <br key={`${animationKey}:${index}`} />;
-        }
-
-        return reduceMotion ? (
-          <span
-            key={`${animationKey}:${index}`}
-            className={`inline-block ${hasRegistered ? 'whitespace-nowrap' : ''}`}
-            style={{ whiteSpace: isSpace ? "pre" : undefined }}
-          >
-            {isSpace ? "\u00A0" : letter}
-          </span>
-        ) : (
-          <motion.span
-            key={`${animationKey}:${index}`}
-            custom={index}
-            variants={letterVariants}
-            initial="hidden"
-            animate={armed ? "show" : "hidden"}
-            className={`inline-block will-change-transform ${hasRegistered ? 'whitespace-nowrap' : ''}`}
-            style={{ whiteSpace: isSpace ? "pre" : undefined }}
-          >
-            {isSpace ? "\u00A0" : letter}
-          </motion.span>
-        );
-      })}
+      {(() => {
+        // Group letters into whole words: a word never breaks in the middle.
+        const out: ReactNode[] = [];
+        let word: { letter: string; index: number }[] = [];
+        const flush = (k: number) => {
+          if (!word.length) return;
+          const w = word;
+          word = [];
+          out.push(
+            <span key={`${animationKey}:w${k}`} className="inline-block whitespace-nowrap">
+              {w.map(({ letter, index }) =>
+                reduceMotion ? (
+                  <span key={`${animationKey}:${index}`} className="inline-block">{letter}</span>
+                ) : (
+                  <motion.span
+                    key={`${animationKey}:${index}`}
+                    custom={index}
+                    variants={letterVariants}
+                    initial="hidden"
+                    animate={armed ? "show" : "hidden"}
+                    className="inline-block will-change-transform"
+                  >
+                    {letter}
+                  </motion.span>
+                )
+              )}
+            </span>
+          );
+        };
+        letters.forEach((letter, index) => {
+          if (letter === " ") { flush(index); out.push(" "); }
+          else if (letter === "\n") { flush(index); out.push(<br key={`${animationKey}:br${index}`} />); }
+          else word.push({ letter, index });
+        });
+        flush(letters.length);
+        return out;
+      })()}
 
       {suffix &&
         (reduceMotion ? (

@@ -1132,3 +1132,10 @@ body:has(.admin-theme) [data-radix-dropdown-menu-content] {
 .admin-theme table tbody tr:hover {
   background: rgba(16, 185, 129, 0.05) !important;
 }
+
+/* Global rule: words never break mid-word on any device; whole words wrap. */
+h1, h2, h3, h4, h5, h6, p, a, button, span, li, label {
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: manual;
+}

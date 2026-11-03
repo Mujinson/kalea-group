@@ -18,9 +18,9 @@ export default {
         heading: ['new-order', 'New Order', 'sans-serif'],
       },
       fontSize: {
-        'hero-xl': ['3.75rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'hero-lg': ['3.25rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' }],
-        'hero-md': ['2.5rem', { lineHeight: '1.15', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'hero-xl': ['clamp(1.75rem, 5.5vw, 3.75rem)', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'hero-lg': ['clamp(1.75rem, 5vw, 3.25rem)', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'hero-md': ['clamp(1.625rem, 7vw, 2.5rem)', { lineHeight: '1.15', letterSpacing: '-0.02em', fontWeight: '600' }],
         'subtitle': ['1.375rem', { lineHeight: '1.5', fontWeight: '300' }],
         'body-lg': ['1.125rem', { lineHeight: '1.6', fontWeight: '400' }],
         'body': ['1rem', { lineHeight: '1.6', fontWeight: '300' }],

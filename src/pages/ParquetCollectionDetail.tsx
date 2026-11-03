@@ -63,7 +63,7 @@ const ParquetCollectionDetail = () => {
             </p>
             <AnimatedTitle
               text={collection.name}
-              className="text-5xl md:text-7xl lg:text-8xl text-kalea-tan font-bold tracking-tight mb-4 whitespace-nowrap"
+              className="text-[clamp(2rem,8vw,6rem)] text-kalea-tan font-bold tracking-tight mb-4"
             />
             <motion.p
               initial={{ opacity: 0, y: 16 }}
