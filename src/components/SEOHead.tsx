@@ -15,6 +15,15 @@ interface SEOHeadProps {
 const BASE_URL = "https://www.kalea.space";
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.jpg`;
 
+export const BRAND_PAYOFF = "Kalēa – Surface System®";
+
+export const withBrandPayoff = (title: string) => {
+  if (/Surface System/i.test(title)) return title;
+  const replaced = title.replace(/Kal[eē]a®?(\s*)$/u, `${BRAND_PAYOFF}$1`);
+  if (replaced !== title) return replaced;
+  return `${title} | ${BRAND_PAYOFF}`;
+};
+
 const SEOHead = ({
   title,
   description,
@@ -28,8 +37,9 @@ const SEOHead = ({
   const location = useLocation();
   
   useEffect(() => {
-    // Update title
-    document.title = title;
+    // Brand payoff: every title carries "Kalēa – Surface System®"
+    const brandedTitle = withBrandPayoff(title);
+    document.title = brandedTitle;
     
     // Helper to update or create meta tag
     const setMetaTag = (name: string, content: string, isProperty = false) => {
@@ -51,19 +61,19 @@ const SEOHead = ({
     }
     
     // Open Graph tags
-    setMetaTag("og:title", title, true);
+    setMetaTag("og:title", brandedTitle, true);
     setMetaTag("og:description", description, true);
     setMetaTag("og:type", ogType, true);
     setMetaTag("og:image", ogImage, true);
     setMetaTag("og:url", `${BASE_URL}${location.pathname}`, true);
-    setMetaTag("og:site_name", "Kalēa®", true);
+    setMetaTag("og:site_name", BRAND_PAYOFF, true);
     setMetaTag("og:locale", location.pathname.startsWith("/it") ? "it_IT" : 
                             location.pathname.startsWith("/de") ? "de_DE" :
                             location.pathname.startsWith("/fr") ? "fr_FR" : "en_US", true);
     
     // Twitter Card tags
     setMetaTag("twitter:card", "summary_large_image");
-    setMetaTag("twitter:title", title);
+    setMetaTag("twitter:title", brandedTitle);
     setMetaTag("twitter:description", description);
     setMetaTag("twitter:image", ogImage);
     

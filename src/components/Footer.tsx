@@ -14,7 +14,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
           {/* Section 1: Logo Only */}
           <div className="md:col-span-1">
-            <img src={logoFooter} alt="Kalēa®" className="h-20 mb-4" />
+            <img src={logoFooter} alt="Kalēa – Surface System®" className="h-20 mb-2" />
+            <p className="text-foreground text-sm font-heading font-semibold tracking-wider uppercase mb-3 whitespace-nowrap">Kalēa – Surface System®</p>
             <p className="text-muted-foreground text-sm leading-relaxed">{t("footer.tagline")}</p>
           </div>
 
@@ -193,7 +194,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-6 pt-4 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Kalēa®. {t("footer.copyright")}
+            © {currentYear} Kalēa – Surface System®. {t("footer.copyright")}
           </p>
           <div className="flex gap-6">
             <Link
