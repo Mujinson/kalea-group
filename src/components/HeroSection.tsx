@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -165,7 +166,7 @@ const HeroSection = ({
 
 export default HeroSection;
 
-const HeroCta = ({ to, className, children }: { to: string; className?: string; children: React.ReactNode }) =>
+const HeroCta = ({ to, className, children }: { to: string; className?: string; children: ReactNode }) =>
   /^(tel:|mailto:|https?:)/.test(to) ? (
     <a href={to} className={className} {...(to.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{children}</a>
   ) : (
