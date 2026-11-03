@@ -16,7 +16,7 @@ const LocalZones = () => (
         Lavoriamo dappertutto, ma soprattutto in Lombardia. Dalla sede di Desenzano del Garda seguiamo fornitura e posa su tutto il Lago di Garda, a Bergamo, Milano, Como, Brescia e Verona — e accettiamo cantieri in tutta Italia.
       </p>
       <p className="text-sm text-muted-foreground/80 mb-12 max-w-2xl">
-        Le zone qui sotto sono quelle dove lavoriamo più spesso; per progetti altrove in Italia scrivici o usa il preventivo online: valutiamo ogni richiesta.
+        Le zone qui sotto sono quelle dove lavoriamo più spesso; per progetti altrove in Italia chiamaci o scrivici su WhatsApp: valutiamo ogni richiesta.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {localCities.map((c) => (

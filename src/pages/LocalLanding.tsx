@@ -55,7 +55,7 @@ const LocalLanding = () => {
         title={`${p.keyword} ${where}`}
         subtitle={`Fornitura e posa ${p.short} con squadre Kalēa®`}
         backgroundImage={p.hero}
-        ctaPrimary={{ text: "Preventivo online", link: "/it/preventivo-online" }}
+        ctaPrimary={{ text: "Chiamaci ora", link: "tel:+393520351738" }}
       />
 
       <section className="relative z-10 bg-background py-16 md:py-24">
@@ -90,7 +90,7 @@ const LocalLanding = () => {
           <p className="mt-3 text-muted-foreground"><strong className="text-foreground">Zone servite:</strong> {c.areas.join(", ")} e dintorni.</p>
           <p className="mt-2 text-sm text-muted-foreground/80">Lavoriamo dappertutto, ma soprattutto in Lombardia: questo è uno dei territori dove i nostri cantieri sono più frequenti.</p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Link to="/it/preventivo-online"><Button size="lg" className="gap-2">Calcola il preventivo <ArrowRight className="w-4 h-4" /></Button></Link>
+            <a href="https://wa.me/393520351738?text=Ciao%2C%20vorrei%20richiedere%20un%20preventivo%20gratuito%20per%20i%20vostri%20pavimenti." target="_blank" rel="noopener noreferrer"><Button size="lg" className="gap-2">Scrivici su WhatsApp <ArrowRight className="w-4 h-4" /></Button></a>
             <a href="tel:+393520351738"><Button size="lg" variant="outline" className="gap-2"><Phone className="w-4 h-4" /> +39 352 035 1738</Button></a>
             <Link to={p.link}><Button size="lg" variant="ghost" className="gap-2">{p.linkLabel} <ArrowRight className="w-4 h-4" /></Button></Link>
           </div>

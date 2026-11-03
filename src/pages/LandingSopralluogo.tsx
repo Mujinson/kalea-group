@@ -172,8 +172,8 @@ const LandingSopralluogo = () => {
         title="Sopralluogo gratuito, preventivo senza impegno"
         subtitle="Fornitura e posa di pavimenti con un unico referente, dal sopralluogo alla consegna"
         backgroundImage={heroImg}
-        ctaPrimary={{ text: "Calcola il preventivo online", link: "/it/preventivo-online" }}
-        ctaSecondary={{ text: "Scrivici dal modulo", link: "#richiedi" }}
+        ctaPrimary={{ text: "Chiamaci ora", link: "tel:+393520351738" }}
+        ctaSecondary={{ text: "Scrivici su WhatsApp", link: "https://wa.me/393520351738?text=Ciao%2C%20vorrei%20richiedere%20un%20preventivo%20gratuito%20per%20i%20vostri%20pavimenti." }}
       />
 
       {/* Barra di fiducia */}
@@ -396,11 +396,11 @@ const LandingSopralluogo = () => {
                 <Phone className="w-4 h-4 mr-2" /> Chiama ora
               </Button>
             </a>
-            <Link to="/it/preventivo-online">
+            <a href="https://wa.me/393520351738?text=Ciao%2C%20vorrei%20richiedere%20un%20preventivo%20gratuito%20per%20i%20vostri%20pavimenti." target="_blank" rel="noopener noreferrer">
               <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                Calcola il preventivo online
+                Scrivici su WhatsApp
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
