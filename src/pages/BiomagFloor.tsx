@@ -178,7 +178,7 @@ const BiomagFloor = () => {
             <div className="max-w-4xl mx-auto">
               <AnimatedTitle
                 text={t('hero.stonecore.title')}
-                className="text-[clamp(1.5rem,6vw,4.5rem)] text-white font-bold mb-4 tracking-tight whitespace-nowrap"
+                className="text-[clamp(1.5rem,6vw,4.5rem)] text-white font-bold mb-4 tracking-tight"
               />
 
               <motion.p

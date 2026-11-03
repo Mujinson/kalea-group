@@ -137,7 +137,7 @@ const Externo = () => {
       <section className="relative z-[1] bg-background py-20 md:py-28">
         <div className="container-custom">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12 md:mb-16">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t("externo.collectionsTitle") || "Le Collezioni Externo"}</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{t("externo.collectionsTitle") !== "externo.collectionsTitle" ? t("externo.collectionsTitle") : "Le Collezioni Externo"}</h2>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto italic">{t("externo.collectionsSubtitle") || "Due linee, infinite possibilità per il tuo spazio outdoor."}</p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
