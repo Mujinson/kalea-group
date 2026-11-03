@@ -139,7 +139,7 @@ const BiomagFloor = () => {
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: "BIOMAG FLOOR®",
-          publisher: { "@type": "Organization", name: "Kalēa®" },
+          publisher: { "@type": "Organization", name: "Kalēa – Surface System®" },
           about: { "@type": "Thing", name: "BIOMAG FLOOR®" },
           description: "Pavimento in ossido di magnesio: waterproof, ignifugo, fonoassorbente, con servizio di fornitura e posa professionale.",
           url: `https://www.kalea.space/${language}/biomag-floor`,
