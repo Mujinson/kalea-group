@@ -12,6 +12,7 @@ export interface CatalogLine {
   unit_price: number;
   unit: string;
   discount_pct: number;
+  details?: string | null;
 }
 
 const ARTICOLI_CATS = ["Pavimenti", "Ceramiche", "Rivestimenti parete", "Soffitti", "Sottofondi", "Outdoor"];
@@ -190,6 +191,13 @@ function LineRow({
           <Trash2 className="w-4 h-4" />
         </button>
       </div>
+      <textarea
+        value={line.details || ""}
+        onChange={(e) => onChange({ details: e.target.value })}
+        rows={2}
+        placeholder={"Cosa include questa voce (una riga per elemento, senza prezzi), es.:\nFornitura profili L in alluminio 3,5x200x3,5\nTaglio a misura e posa in opera"}
+        style={{ width: "100%", boxSizing: "border-box", marginTop: 6, padding: "7px 8px", borderRadius: 6, border: "1px dashed #D8DCE4", fontSize: 12, resize: "vertical", fontFamily: "inherit", color: "#475569", background: "#fff" }}
+      />
       <div style={{ marginTop: 6, textAlign: "right", fontSize: 11, color: "#475569" }}>
         Imponibile <b style={{ color: "#1A1A2E" }}>{euro(imponibile)}</b> · IVA {ivaRate}% <b style={{ color: "#1A1A2E" }}>{euro(iva)}</b> · Totale <b style={{ color: "#1A1A2E" }}>{euro(imponibile + iva)}</b>
       </div>
