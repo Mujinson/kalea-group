@@ -134,7 +134,7 @@ const LandingSopralluogo = () => {
       areaServed: ["Lombardia", "Italia"],
       provider: {
         "@type": "HomeAndConstructionBusiness",
-        name: "Kalēa Group S.r.l.",
+        name: "Kalēa – Surface System®", legalName: "Kalea Group S.r.l.",
         telephone: "+39 352 035 1738",
         url: BASE,
         address: {

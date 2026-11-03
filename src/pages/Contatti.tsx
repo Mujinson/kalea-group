@@ -130,7 +130,7 @@ const Contatti = () => {
         structuredData={{
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
-          name: "Kalēa® Surface System® — Kalea Group S.r.l.",
+          name: "Kalēa – Surface System®", legalName: "Kalea Group S.r.l.",
           url: "https://www.kalea.space",
           telephone: ["+39 352 035 1738", "+39 339 473 0218"],
           email: "info@kalea.space",

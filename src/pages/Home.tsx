@@ -76,7 +76,7 @@ const Home = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "Kalēa® Surface System",
+            name: "Kalēa – Surface System®",
             url: "https://www.kalea.space",
             logo: "https://www.kalea.space/favicon-k.png",
             description: "Servizio chiavi in mano di fornitura e posa di pavimentazioni e rivestimenti di design. Progettato e realizzato in Italia.",

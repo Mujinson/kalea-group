@@ -28,7 +28,7 @@ const LocalLanding = () => {
       areaServed: { "@type": "Place", name: c.name },
       provider: {
         "@type": "HomeAndConstructionBusiness",
-        name: "Kalēa Group S.r.l.",
+        name: "Kalēa – Surface System®", legalName: "Kalea Group S.r.l.",
         telephone: "+39 352 035 1738",
         url: BASE,
         address: { "@type": "PostalAddress", streetAddress: "Via Generale Bernasconi, 8A", postalCode: "25015", addressLocality: "Desenzano del Garda", addressRegion: "BS", addressCountry: "IT" },
