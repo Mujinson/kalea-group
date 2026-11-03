@@ -124,13 +124,13 @@ const HeroSection = ({
                       x: { duration: 0.8, times: [0, 0.6, 1], ease: "easeOut" },
                     }}
                   >
-                    <Link
+                    <HeroCta
                       to={ctaPrimary.link}
                       className="group inline-flex items-center justify-center gap-2 bg-white/[0.12] backdrop-blur-[10px] border border-white/30 text-white font-medium tracking-wide text-button rounded-full px-10 py-3.5 hover:bg-white/[0.22] hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-200"
                     >
                       {ctaPrimary.text}
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    </HeroCta>
                   </motion.div>
                 )}
 
@@ -145,12 +145,12 @@ const HeroSection = ({
                       x: { duration: 0.8, times: [0, 0.6, 1], ease: "easeOut" },
                     }}
                   >
-                    <Link
+                    <HeroCta
                       to={ctaSecondary.link}
                       className="inline-flex items-center justify-center gap-2 bg-white/[0.12] backdrop-blur-[10px] border border-white/30 text-white font-medium tracking-wide text-button rounded-full px-10 py-3.5 hover:bg-white/[0.22] hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-200"
                     >
                       {ctaSecondary.text}
-                    </Link>
+                    </HeroCta>
                   </motion.div>
                 )}
               </div>
@@ -164,3 +164,10 @@ const HeroSection = ({
 };
 
 export default HeroSection;
+
+const HeroCta = ({ to, className, children }: { to: string; className?: string; children: React.ReactNode }) =>
+  /^(tel:|mailto:|https?:)/.test(to) ? (
+    <a href={to} className={className} {...(to.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}>{children}</a>
+  ) : (
+    <Link to={to} className={className}>{children}</Link>
+  );

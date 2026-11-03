@@ -65,7 +65,7 @@ export const blogPosts: BlogPost[] = [
         "Niente demolizione, niente macerie, niente settimane di cantiere: il pavimento nuovo si posa sopra il vecchio, resiste all'acqua e la casa torna abitabile in pochi giorni.",
       ] },
     ],
-    cta: { text: "Calcola il preventivo per il tuo pavimento SPC", link: "/it/preventivo-online" },
+    cta: { text: "Richiedi un sopralluogo gratuito", link: "/it/sopralluogo-gratuito" },
     related: [
       { text: "Collezioni SPC Kalēa®", link: "/it/indoor/spc" },
       { text: "Pavimenti SPC a Desenzano del Garda", link: "/it/zone/pavimenti-spc-desenzano-del-garda" },
