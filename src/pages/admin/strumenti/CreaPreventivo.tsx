@@ -2323,6 +2323,9 @@ export default function CreaPreventivo() {
                     <button onClick={()=>delRiga(r.id)} title="Elimina riga" style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
                   </div>
 
+                  <textarea value={r.dettagli||""} onChange={e=>updRiga(r.id,"dettagli",e.target.value)} rows={3}
+                    placeholder={"Dettaglio voce senza prezzi (una riga per elemento), es.:\nFornitura profili L in alluminio 3,5x200x3,5\nTaglio a misura e incollaggio\nSigillatura giunti"}
+                    style={{width:"100%",boxSizing:"border-box",padding:"7px 9px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,marginBottom:8,resize:"vertical",fontFamily:"inherit"}}/>
                   {/* Riga 2: Q.tà · Sfrido% · Q.tà sfrido · Q.tà totale */}
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6,marginBottom:8}}>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
@@ -2942,7 +2945,14 @@ export default function CreaPreventivo() {
                 )}
                 {righeMat.filter((r:any)=>r.desc).map((r:any)=>(
                   <tr key={r.id}>
-                    <td style={{padding:"8px 12px",fontSize:13}}>{r.desc}</td>
+                    <td style={{padding:"8px 12px",fontSize:13}}>
+                      <div>{r.desc}</div>
+                      {String(r.dettagli||"").split("\n").map((s:string)=>s.trim()).filter(Boolean).length>0 && (
+                        <ul style={{margin:"4px 0 0",paddingLeft:16,fontSize:11.5,color:"#475569",lineHeight:1.5}}>
+                          {String(r.dettagli).split("\n").map((s:string)=>s.trim()).filter(Boolean).map((s:string,i:number)=><li key={i}>{s}</li>)}
+                        </ul>
+                      )}
+                    </td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{r.qta} {trUnita(lingua, r.unita)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right"}}>{euro(r.prezzoUn)}</td>
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(r.prezzoUn*r.qta)}</td>
