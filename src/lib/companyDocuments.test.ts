@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'bun:test';
 import { expiryStatus } from './companyDocuments';
 
 const today = new Date(2026, 10, 5);
