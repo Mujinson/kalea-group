@@ -89,6 +89,7 @@ import AdminQuotes from "./pages/admin/AdminQuotes";
 import AdminQuoteCreate from "./pages/admin/AdminQuoteCreate";
 import AdminLeads from "./pages/admin/AdminLeads";
 import AdminCampagne from "./pages/admin/AdminCampagne";
+import AdminDocumenti from "./pages/admin/AdminDocumenti";
 import Disiscrizione from "./pages/Disiscrizione";
 import AdminTimeOff from "./pages/admin/AdminTimeOff";
 import AdminCommissions from "./pages/admin/AdminCommissions";
@@ -283,6 +284,7 @@ const App = () => (
                 <Route path="assistente" element={<AssistenteGabriel />} />
                 <Route path="leads" element={<AdminLeads />} />
                 <Route path="campagne" element={<AdminCampagne />} />
+                <Route path="documenti" element={<AdminDocumenti />} />
                 <Route path="pipeline" element={<AdminPipeline />} />
                 <Route path="appuntamenti" element={<AdminAppointments />} />
                 <Route path="chatbot" element={<AdminChatbot />} />
