@@ -109,6 +109,7 @@ const menuStructure: MenuEntry[] = [
       items: [
         { title: 'Lista clienti', url: '/admin/clienti', icon: Users, adminOnly: false },
         { title: 'Media', url: '/admin/media', icon: Image, adminOnly: false },
+        { title: 'Documenti aziendali', url: '/admin/documenti', icon: FileText, adminOnly: true },
         { title: 'Mappa', url: '/admin/mappa', icon: Map, adminOnly: false },
       ],
     },
