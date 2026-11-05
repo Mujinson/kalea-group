@@ -26,7 +26,7 @@ export default function QuoteAttachments({ quoteId, attachments, onChange }: {
       for (const file of Array.from(files)) {
         if (!file.name.toLowerCase().endsWith('.pdf')) throw new Error('Seleziona un file PDF');
         const bytes = await file.arrayBuffer();
-        const pdf = await PDFDocument.load(bytes);
+        const pdf = await PDFDocument.load(bytes, { ignoreEncryption: true });
         const id = crypto.randomUUID();
         const path = `${quoteId}/${id}.pdf`;
         const { error } = await supabase.storage.from(QUOTE_ATTACHMENT_BUCKET).upload(path, file, { contentType: 'application/pdf' });
