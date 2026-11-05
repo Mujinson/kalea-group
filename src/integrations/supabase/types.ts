@@ -923,6 +923,68 @@ export type Database = {
           },
         ]
       }
+      company_documents: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          doc_type: string | null
+          document_number: string | null
+          expiry_date: string | null
+          file_name: string | null
+          file_path: string | null
+          id: string
+          issue_date: string | null
+          issuer: string | null
+          notes: string | null
+          title: string
+          updated_at: string
+          worker_id: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          doc_type?: string | null
+          document_number?: string | null
+          expiry_date?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          issue_date?: string | null
+          issuer?: string | null
+          notes?: string | null
+          title: string
+          updated_at?: string
+          worker_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          doc_type?: string | null
+          document_number?: string | null
+          expiry_date?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          id?: string
+          issue_date?: string | null
+          issuer?: string | null
+          notes?: string | null
+          title?: string
+          updated_at?: string
+          worker_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_documents_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       construction_sites: {
         Row: {
           access_difficulty: string | null
