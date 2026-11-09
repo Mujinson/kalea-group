@@ -1,3 +1,4 @@
+import { openSiteAttachment } from "@/lib/siteAttachments";
 import { siteStatusLabel } from '@/lib/siteStatus';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
