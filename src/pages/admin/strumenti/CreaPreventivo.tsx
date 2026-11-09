@@ -155,6 +155,7 @@ const TONALITA_BY_PRODUCT: Record<string, string[]> = {
 const euro = (n: number) => "€ " + (Math.round(n*100)/100).toLocaleString("it-IT",{minimumFractionDigits:2,maximumFractionDigits:2});
 const pct = (n: number) => n.toFixed(1)+"%";
 const today = () => new Date().toLocaleDateString("it-IT");
+const fmtDataIso = (iso: string) => { if (!iso) return ""; const p = iso.split("-"); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : iso; };
 const addDays = (d: any, n: number) => { const x=new Date(); x.setDate(x.getDate()+n); return x.toLocaleDateString("it-IT"); };
 const nextNum = () => { const n=(parseInt(localStorage.getItem("kal_prev_num")||"0")+1); localStorage.setItem("kal_prev_num", String(n)); return "KAL-"+new Date().getFullYear()+"-"+String(n).padStart(3,"0"); };
 
@@ -396,6 +397,7 @@ function ClienteSearch({ onSelect, selected, onClear }: {
 const T: any = {
   IT: {
     titolo: "PREVENTIVO", validita: "Valido fino al", cliente: "Cliente",
+    inizio_lavori: "Inizio lavori previsto", fine_lavori: "Fine lavori prevista",
     indirizzo: "Indirizzo", telefono: "Telefono", email: "Email",
     desc: "Descrizione", mq: "mq", prezzo_unit: "Prezzo unit.", totale: "Totale",
     fornitura: "Fornitura materiali", posa: "Posa in opera", tappetino: "Materassino/sottofondo",
@@ -525,6 +527,7 @@ const T: any = {
   },
   EN: {
     titolo: "QUOTATION", validita: "Valid until", cliente: "Client",
+    inizio_lavori: "Planned work start", fine_lavori: "Planned work end",
     indirizzo: "Address", telefono: "Phone", email: "Email",
     desc: "Description", mq: "sqm", prezzo_unit: "Unit price", totale: "Total",
     fornitura: "Materials supply", posa: "Installation", tappetino: "Underlay/membrane",
@@ -654,6 +657,7 @@ const T: any = {
   },
   DE: {
     titolo: "KOSTENVORANSCHLAG", validita: "Gültig bis", cliente: "Kunde",
+    inizio_lavori: "Geplanter Arbeitsbeginn", fine_lavori: "Geplantes Arbeitsende",
     indirizzo: "Adresse", telefono: "Telefon", email: "E-Mail",
     desc: "Beschreibung", mq: "m²", prezzo_unit: "Einzelpreis", totale: "Gesamt",
     fornitura: "Materiallieferung", posa: "Verlegung", tappetino: "Unterlagsmatte",
@@ -783,6 +787,7 @@ const T: any = {
   },
   FR: {
     titolo: "DEVIS", validita: "Valable jusqu'au", cliente: "Client",
+    inizio_lavori: "Début des travaux prévu", fine_lavori: "Fin des travaux prévue",
     indirizzo: "Adresse", telefono: "Téléphone", email: "E-mail",
     desc: "Description", mq: "m²", prezzo_unit: "Prix unit.", totale: "Total",
     fornitura: "Fourniture matériaux", posa: "Pose", tappetino: "Sous-couche",
@@ -912,6 +917,7 @@ const T: any = {
   },
   RO: {
     titolo: "OFERTĂ DE PREȚ", validita: "Valabilă până la", cliente: "Client",
+    inizio_lavori: "Începere lucrări prevăzută", fine_lavori: "Finalizare lucrări prevăzută",
     indirizzo: "Adresă", telefono: "Telefon", email: "Email",
     desc: "Descriere", mq: "mp", prezzo_unit: "Preț unitar", totale: "Total",
     fornitura: "Furnizare materiale", posa: "Montaj", tappetino: "Strat suport",
@@ -1281,6 +1287,8 @@ export default function CreaPreventivo() {
   const [crmLink, setCrmLink] = useState<CrmRecord | null>(null);
   const [cantiere, setCantiere] = useState("");
   const [sito, setSito] = useState(emptySito());
+  const [dataInizioLavori, setDataInizioLavori] = useState("");
+  const [dataFineLavori, setDataFineLavori] = useState("");
   const [noteCliente, setNoteCliente] = useState("");
   const [noteInterne, setNoteInterne] = useState("");
   const [stato, setStato] = useState<"bozza"|"inviato"|"accettato"|"rifiutato">("bozza");
@@ -1368,7 +1376,7 @@ export default function CreaPreventivo() {
       setNumPrev("");
       setCliente(emptyCliente());
       setCrmLink(null);
-      setCantiere(""); setSito(emptySito());
+      setCantiere(""); setSito(emptySito()); setDataInizioLavori(""); setDataFineLavori("");
       setProdotto(null);
       setComplessita("media");
       setMqPrev(50);
@@ -1537,7 +1545,7 @@ export default function CreaPreventivo() {
         setOverrides({});
         setCrmLink(null);
         setCliente(emptyCliente());
-        setCantiere(""); setSito(emptySito());
+        setCantiere(""); setSito(emptySito()); setDataInizioLavori(""); setDataFineLavori("");
         setTonalita([]);
         setWcSel(emptyWoodcoSelection);
         setPagamenti(defaultPagamenti());
@@ -1575,6 +1583,7 @@ export default function CreaPreventivo() {
           : { ...emptyCliente(), ...(d.cliente || {}), nome: (q.client_name || d?.cliente?.nome || "") };
         setCliente(canonicalCliente);
         setSito({ ...emptySito(), ...(d.sito || {}) });
+        setDataInizioLavori(d.dataInizioLavori || ""); setDataFineLavori(d.dataFineLavori || "");
         setCrmLink(linkedCrm);
         if (d.prodotto) setProdotto(d.prodotto);
         if (d.complessita) setComplessita(d.complessita);
@@ -1809,6 +1818,7 @@ export default function CreaPreventivo() {
       // Dettaglio completo del preventivo, salvato dentro quotes.quote_data
       const quoteData: any = {
         cliente: clienteSnapshot, cantiere, sito, prodotto, complessita, mqPrev, sfrido, sconto,
+        dataInizioLavori, dataFineLavori,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
         ivaRate, reverseCharge, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
         tipoPreventivo, terminiCustom,
@@ -2737,7 +2747,19 @@ export default function CreaPreventivo() {
                 </div>
               ))}
               <textarea value={sito.note} onChange={e=>setSito(s=>({...s,note:e.target.value}))} placeholder="Note cantiere (orari, chiavi, condizioni del fondo…)" rows={2}
-                style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",fontFamily:"inherit"}}/>
+                 style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box",fontFamily:"inherit"}}/>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginTop:8}}>
+                <div>
+                  <div style={{fontSize:11,color:"#475569",marginBottom:3}}>Data prevista inizio lavori</div>
+                  <input type="date" value={dataInizioLavori} onChange={e=>setDataInizioLavori(e.target.value)}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
+                </div>
+                <div>
+                  <div style={{fontSize:11,color:"#475569",marginBottom:3}}>Data prevista fine lavori <span style={{color:"#94A3B8"}}>(facoltativa)</span></div>
+                  <input type="date" value={dataFineLavori} min={dataInizioLavori||undefined} onChange={e=>setDataFineLavori(e.target.value)}
+                    style={{width:"100%",padding:"7px 10px",borderRadius:7,border:"1px solid #E6E9F0",fontSize:13,boxSizing:"border-box"}}/>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2913,6 +2935,8 @@ export default function CreaPreventivo() {
                 <div style={{fontSize:13,color:"#475569",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
                 <div style={{fontSize:13,color:"#475569"}}>{t.data_label}: <strong>{dataPrev}</strong></div>
                 <div style={{fontSize:13,color:"#A32D2D"}}>{t.validita}: <strong>{addDays(dataPrev,30)}</strong></div>
+                {dataInizioLavori && <div style={{fontSize:13,color:"#475569",marginTop:4}}>{t.inizio_lavori}: <strong>{fmtDataIso(dataInizioLavori)}</strong></div>}
+                {dataFineLavori && <div style={{fontSize:13,color:"#475569"}}>{t.fine_lavori}: <strong>{fmtDataIso(dataFineLavori)}</strong></div>}
               </div>
             </div>
 
