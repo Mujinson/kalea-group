@@ -1974,22 +1974,50 @@ export default function CreaPreventivo() {
         width: preview.scrollWidth,
         height: preview.scrollHeight,
       });
-      const imgData = canvas.toDataURL("image/jpeg", 0.92);
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
-      const imgW = pageW;
-      const imgH = (canvas.height * imgW) / canvas.width;
-      let heightLeft = imgH;
-      let position = 0;
-      pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
-      heightLeft -= pageH;
-      while (heightLeft > 0) {
-        position = heightLeft - imgH;
-        pdf.addPage();
-        pdf.addImage(imgData, "JPEG", 0, position, imgW, imgH);
-        heightLeft -= pageH;
+      // Interruzioni di pagina intelligenti: mai tagliare righe, paragrafi o blocchi a metà
+      const domW = preview.scrollWidth;
+      const ratio = canvas.width / domW;
+      const mmPerPx = pageW / domW;
+      const topMarginMm = 10, bottomMarginMm = 8;
+      const baseRect = preview.getBoundingClientRect();
+      const blocks = Array.from(preview.querySelectorAll<HTMLElement>("tr, p, h1, h2, h3, h4, li, img, [data-pdf-block]"))
+        .map((el) => { const r = el.getBoundingClientRect(); return { top: r.top - baseRect.top, bottom: r.bottom - baseRect.top }; })
+        .filter((b) => b.bottom - b.top > 0);
+      const totalH = preview.scrollHeight;
+      const slices: Array<[number, number]> = [];
+      let start = 0;
+      while (start < totalH - 1) {
+        const usableMm = pageH - bottomMarginMm - (slices.length ? topMarginMm : 0);
+        const maxH = usableMm / mmPerPx;
+        let cut = Math.min(start + maxH, totalH);
+        if (cut < totalH) {
+          let moved = true;
+          while (moved) {
+            moved = false;
+            for (const b of blocks) {
+              if (b.top < cut - 0.5 && b.bottom > cut + 0.5 && b.top > start + 1 && b.bottom - b.top < maxH * 0.9) {
+                cut = b.top; moved = true;
+              }
+            }
+          }
+          if (cut <= start + 20) cut = Math.min(start + maxH, totalH);
+        }
+        slices.push([start, cut]);
+        start = cut;
       }
+      slices.forEach(([a, b], i) => {
+        const sy = Math.round(a * ratio), sh = Math.max(1, Math.round((b - a) * ratio));
+        const pc = document.createElement("canvas");
+        pc.width = canvas.width; pc.height = sh;
+        const ctx = pc.getContext("2d")!;
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, pc.width, pc.height);
+        ctx.drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh);
+        if (i > 0) pdf.addPage();
+        pdf.addImage(pc.toDataURL("image/jpeg", 0.92), "JPEG", 0, i > 0 ? topMarginMm : 0, pageW, (b - a) * mmPerPx);
+      });
       const fname = `Preventivo_${(numPrev || "Kalea").replace(/[^\w-]+/g, "_")}.pdf`;
       await downloadQuotePdf(pdf.output('arraybuffer'), technicalAttachments, fname);
       toast.success("PDF scaricato", { id: tId });
