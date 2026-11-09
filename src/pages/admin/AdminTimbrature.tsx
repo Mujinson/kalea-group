@@ -200,7 +200,7 @@ const AdminTimbrature = () => {
     });
 
   const totalWorkHours = grouped.reduce((s, g) => s + g.summary.workMinutes / 60, 0);
-  const totalSiteHours = grouped.reduce((s, g) => s + g.summary.siteMinutes / 60, 0);
+  const totalSiteHours = grouped.reduce((s, g) => s + (g.summary.workMinutes > 0 ? g.summary.siteMinutes / 60 : 0), 0);
 
   const stageHeaders = STAGE_ORDER.map((t) => EVENT_LABELS[t].short);
 

@@ -77,21 +77,21 @@ export function downloadTimbratureXLSX(days: ExportDay[], filename: string, roun
     const t = computeDayTimes(d.entries, rounded);
     aoa.push([
       d.date, d.name, d.complete ? 'Completato' : 'Incompleto',
-      ...STAGE_ORDER.map((k) => (t.stages[k] == null ? null : (t.stages[k] as number) / 1440)),
+      ...STAGE_ORDER.map((k) => {
+        const v = t.stages[k];
+        return v == null ? null : `${String(Math.floor(v / 60)).padStart(2, '0')}:${String(v % 60).padStart(2, '0')}`;
+      }),
       t.pauseMinutes,
+      // Giornata incompleta: niente ore, così Ore totali = Ore cantiere + Viaggio anche nei totali.
       t.totalHours == null ? null : r2(t.totalHours),
-      t.siteHours == null ? null : r2(t.siteHours),
-      t.travelHours == null ? null : r2(t.travelHours),
+      t.totalHours == null || t.siteHours == null ? null : r2(t.siteHours),
+      t.totalHours == null || t.travelHours == null ? null : r2(t.travelHours),
     ]);
   });
   const ws = XLSX.utils.aoa_to_sheet(aoa);
   const n = days.length;
   const firstTime = 3, pauseCol = firstTime + STAGE_ORDER.length;
   for (let r = 1; r <= n; r++) {
-    for (let c = firstTime; c < pauseCol; c++) {
-      const cell = ws[XLSX.utils.encode_cell({ r, c })];
-      if (cell) { cell.t = 'n'; cell.z = 'hh:mm'; }
-    }
     for (let c = pauseCol + 1; c <= pauseCol + 3; c++) {
       const cell = ws[XLSX.utils.encode_cell({ r, c })];
       if (cell) cell.z = '0.00';
