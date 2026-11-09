@@ -24,6 +24,7 @@ import SiteConfigPanel, { priorityBadge } from "@/components/admin/cantieri/Site
 import SiteIssuesPanel from "@/components/admin/cantieri/SiteIssuesPanel";
 import SiteDailyCostsPanel from "@/components/admin/cantieri/SiteDailyCostsPanel";
 import SiteStatusSelect from "@/components/admin/cantieri/SiteStatusSelect";
+import SiteCrewPanel from "@/components/admin/cantieri/SiteCrewPanel";
 
 const EXPENSE_TYPES = [
   "Materiali", "Trasporto", "Attrezzatura", "Manodopera esterna",
@@ -547,6 +548,7 @@ const AdminCantiereDetail = () => {
         </TabsList>
 
         <TabsContent value="config">
+          <div className="mb-4"><SiteCrewPanel site={site} /></div>
           <SiteConfigPanel siteId={id!} site={site} />
         </TabsContent>
 

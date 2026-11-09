@@ -87,6 +87,22 @@ const AdminAppointments = () => {
   const calEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
   const calendarDays = eachDayOfInterval({ start: calStart, end: calEnd });
 
+  // Squadre di posa assegnate ai cantieri (dal Planner / scheda cantiere)
+  const { data: crewAssignments = [] } = useQuery({
+    queryKey: ["calendar-crew-assignments"],
+    enabled: isAdmin,
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from("crew_assignments")
+        .select("id, site_id, start_date, end_date, crews(name, color), construction_sites(title, project_name, city)");
+      return data || [];
+    },
+  });
+  const getCrewForDay = (day: Date) => {
+    const d = format(day, "yyyy-MM-dd");
+    return crewAssignments.filter((a: any) => a.start_date <= d && (a.end_date || a.start_date) >= d);
+  };
+
   const getAppointmentsForDay = (day: Date) =>
     filteredAppointments.filter((a) => isSameDay(new Date(a.appointment_date), day));
 
@@ -214,6 +230,17 @@ const AdminAppointments = () => {
                       {format(day, "d")}
                     </p>
                     <div className="space-y-0.5">
+                      {getCrewForDay(day).map((a: any) => (
+                        <a
+                          key={a.id}
+                          href={`/admin/cantieri/${a.site_id}`}
+                          className="block text-[10px] px-1.5 py-0.5 rounded truncate text-primary-foreground"
+                          style={{ backgroundColor: a.crews?.color || "hsl(var(--primary))" }}
+                          title={`${a.crews?.name || "Squadra"} – ${a.construction_sites?.project_name || a.construction_sites?.title || "Cantiere"}`}
+                        >
+                          🔨 {a.crews?.name}: {a.construction_sites?.project_name || a.construction_sites?.title || a.construction_sites?.city}
+                        </a>
+                      ))}
                       {dayAppts.slice(0, 3).map((apt) => {
                         const color = getPersonColor(apt.assigned_to);
                         return (
