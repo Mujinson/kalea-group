@@ -1186,6 +1186,7 @@ export default function CreaPreventivo() {
   const [addingMore, setAddingMore] = useState(false);
   const [righeMat, setRigheMat] = useState<any[]>([]);
   const [contabilita, setContabilita] = useState<AccountingState>({});
+  const [accTotals, setAccTotals] = useState<{ totalCost: number; clientNet: number } | null>(null);
   // Sezioni catalogo (stile Geopietra): Articoli, Accessori, Servizi
   const [articoli, setArticoli] = useState<CatalogLine[]>([]);
   const [accessori, setAccessori] = useState<CatalogLine[]>([]);
@@ -2584,10 +2585,12 @@ export default function CreaPreventivo() {
                 <div style={sectionTitle}>Verifica margine</div>
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:12}}>
                   {[
-                    {l:"Costi tuoi",v:euro(calc.costoTotale),c:"#A32D2D"},
+                    ...(()=>{const costi=(accTotals?.totalCost||0)>0?accTotals!.totalCost:calc.costoTotale;const mE=calc.prezzoNetto-costi;const mP=calc.prezzoNetto>0?(mE/calc.prezzoNetto)*100:0;return [
+                    {l:"Costi tuoi",v:euro(costi),c:"#A32D2D"},
                     {l:"Prezzo netto",v:euro(calc.prezzoNetto),c:"#0C447C"},
-                    {l:"Margine €",v:euro(calc.margineE),c:calc.margineE>0?"#27500A":"#A32D2D"},
-                    {l:"Margine %",v:pct(calc.marginePct),c:calc.marginePct>MARGINE_ALERT?"#27500A":calc.marginePct>MARGINE_BLOCCO?"#633806":"#A32D2D"},
+                    {l:"Margine €",v:euro(mE),c:mE>0?"#27500A":"#A32D2D"},
+                    {l:"Margine %",v:pct(mP),c:mP>MARGINE_ALERT?"#27500A":mP>MARGINE_BLOCCO?"#633806":"#A32D2D"},
+                  ];})(),
                   ].map(k=>(
                     <div key={k.l} style={{background:"#F1F5F9",borderRadius:8,padding:"10px 12px"}}>
                       <div style={{fontSize:11,color:"#64748B"}}>{k.l}</div>
@@ -2912,7 +2915,7 @@ export default function CreaPreventivo() {
           </div>
 
           {/* ANTEPRIMA DOCUMENTO */}
-          <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} title={numPrev || cantiere} defaultDestination={[sito?.indirizzo, sito?.cap, sito?.citta, sito?.provincia].filter(Boolean).join(', ')} />
+          <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} onTotals={setAccTotals} title={numPrev || cantiere} defaultDestination={[sito?.indirizzo, sito?.cap, sito?.citta, sito?.provincia].filter(Boolean).join(', ')} />
           <QuoteAttachments quoteId={preventivoId} attachments={technicalAttachments} onChange={persistAttachments} />
           <div id="pdf-preview-wrap" className="pdf-preview-wrap">
           <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>

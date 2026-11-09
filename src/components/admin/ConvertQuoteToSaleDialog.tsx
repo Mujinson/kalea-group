@@ -297,7 +297,8 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       }
 
       // Costo totale: net_cost catalogo se disponibile, altrimenti costo unitario del preventivo
-      const totalCost = matLines.reduce((s, m) => {
+      const snapCost = Number((quote as any)?.quote_data?.contabilita?.snapshot?.total) || 0;
+      const totalCost = snapCost > 0 ? snapCost : matLines.reduce((s, m) => {
         const pid = m.catalog_id || (m.product_code ? codeToId.get(m.product_code) : null);
         const unitCost = (pid && costById.get(pid)) || m.unit_cost || 0;
         return s + m.quantity * unitCost;

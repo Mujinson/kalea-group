@@ -17,7 +17,8 @@ const eur = (n: number) => new Intl.NumberFormat("it-IT", { style: "currency", c
 const pct = (n: number) => `${(n || 0).toFixed(1)}%`;
 const COLORS = { ok: "#15803D", warn: "#B45309", bad: "#B91C1C" } as const;
 
-export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDiscountPct, deposit, value, onChange, title, defaultDestination }: {
+export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDiscountPct, deposit, value, onChange, title, defaultDestination, onTotals }: {
+  onTotals?: (t: { totalCost: number; clientNet: number }) => void;
   defaultDestination?: string;
   baseRows: AccRow[];
   catalogLines: CatalogLine[];
@@ -76,6 +77,7 @@ export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDis
   const crewCost = crewTrip.enabled ? computeCrew({ days: 1, workers: 1, vans: 1, ...crewTrip }, crewSettings).total : 0;
   const acc = computeAccounting(rows, extras, globalDiscountPct, deposit, crewCost);
   const lvl = marginLevel(acc.marginPct);
+  useEffect(() => { onTotals?.({ totalCost: acc.totalCost, clientNet: acc.clientNet }); }, [acc.totalCost, acc.clientNet]);
 
   if (!isAdmin) return null;
 
