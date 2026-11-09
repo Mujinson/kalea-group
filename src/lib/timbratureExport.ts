@@ -99,9 +99,9 @@ export function downloadTimbratureXLSX(days: ExportDay[], filename: string, roun
   }
   const totRow = n + 1;
   ws[XLSX.utils.encode_cell({ r: totRow, c: 0 })] = { t: 's', v: 'TOTALE' };
-  for (let c = pauseCol; c <= pauseCol + 3; c++) {
+  for (let c = pauseCol + 1; c <= pauseCol + 3; c++) {
     const col = XLSX.utils.encode_col(c);
-    ws[XLSX.utils.encode_cell({ r: totRow, c })] = { t: 'n', f: `SUM(${col}2:${col}${n + 1})`, z: c === pauseCol ? '0' : '0.00' };
+    ws[XLSX.utils.encode_cell({ r: totRow, c })] = { t: 'n', f: `SUM(${col}2:${col}${n + 1})`, z: '0.00' };
   }
   ws['!ref'] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: totRow, c: pauseCol + 3 } });
   const wb = XLSX.utils.book_new();

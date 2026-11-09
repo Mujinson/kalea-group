@@ -201,7 +201,6 @@ const AdminTimbrature = () => {
 
   const totalWorkHours = grouped.reduce((s, g) => s + g.summary.workMinutes / 60, 0);
   const totalSiteHours = grouped.reduce((s, g) => s + g.summary.siteMinutes / 60, 0);
-  const totalPauseMin = grouped.reduce((s, g) => s + g.summary.pauseMinutes, 0);
 
   const stageHeaders = STAGE_ORDER.map((t) => EVENT_LABELS[t].short);
 
@@ -212,7 +211,7 @@ const AdminTimbrature = () => {
       const it = (s: string) => s.replace('.', ',');
       lines.push([r.date, r.name, r.status, ...r.stageTimes.map((t) => (t === '—' ? '' : t)), r.pause, it(r.work), it(r.site), r.alerts].join(';'));
     });
-    lines.push(['TOTALE', '', '', ...stageHeaders.map(() => ''), String(totalPauseMin), totalWorkHours.toFixed(2).replace('.', ','), totalSiteHours.toFixed(2).replace('.', ','), ''].join(';'));
+    lines.push(['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2).replace('.', ','), totalSiteHours.toFixed(2).replace('.', ','), ''].join(';'));
     const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -237,7 +236,7 @@ const AdminTimbrature = () => {
       startY: 28,
       head: [['Data', 'Posatore', 'Stato', ...stageHeaders, 'Pausa', 'Ore lav.', 'Ore cant.', 'Alert']],
       body: buildRows().map((r) => [r.date, r.name, r.status, ...r.stageTimes, r.pause, r.work, r.site, r.alerts]),
-      foot: [['TOTALE', '', '', ...stageHeaders.map(() => ''), String(totalPauseMin), totalWorkHours.toFixed(2), totalSiteHours.toFixed(2), '']],
+      foot: [['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2), totalSiteHours.toFixed(2), '']],
       styles: { fontSize: 8 },
       headStyles: { fillColor: [30, 27, 75] },
       footStyles: { fillColor: [245, 240, 232], textColor: 30 },
