@@ -4035,6 +4035,10 @@ export type Database = {
           file_url: string
           id: string
           site_id: string
+          source_attachment_id: string | null
+          source_quote_id: string | null
+          storage_bucket: string | null
+          storage_path: string | null
           uploaded_by: string | null
         }
         Insert: {
@@ -4046,6 +4050,10 @@ export type Database = {
           file_url: string
           id?: string
           site_id: string
+          source_attachment_id?: string | null
+          source_quote_id?: string | null
+          storage_bucket?: string | null
+          storage_path?: string | null
           uploaded_by?: string | null
         }
         Update: {
@@ -4057,6 +4065,10 @@ export type Database = {
           file_url?: string
           id?: string
           site_id?: string
+          source_attachment_id?: string | null
+          source_quote_id?: string | null
+          storage_bucket?: string | null
+          storage_path?: string | null
           uploaded_by?: string | null
         }
         Relationships: [
@@ -5541,6 +5553,10 @@ export type Database = {
           _source?: string
         }
         Returns: string
+      }
+      sync_quote_attachments_to_site: {
+        Args: { _quote_id: string; _site_id: string }
+        Returns: undefined
       }
     }
     Enums: {

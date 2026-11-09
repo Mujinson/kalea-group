@@ -505,7 +505,7 @@ const InfoTab = ({ site }: { site: any }) => {
       {attachments.length > 0 && (
         <Block title="Allegati">
           {attachments.map((a) => (
-            <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer" className="flex justify-between items-center border-b last:border-0 py-2">
+            <a key={a.id} href={a.file_url} target="_blank" rel="noreferrer" onClick={(e) => { if (a.storage_path) { e.preventDefault(); openSiteAttachment(a); } }} className="flex justify-between items-center border-b last:border-0 py-2">
               <span className="truncate">{a.category ? `[${a.category}] ` : ''}{a.file_name}</span>
               <span className="text-[#1E1B4B] text-[12px]">Apri</span>
             </a>

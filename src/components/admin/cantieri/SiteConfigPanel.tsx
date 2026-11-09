@@ -224,7 +224,7 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
   };
   const delAtt = async (id: string, url: string) => {
     const parts = url.split("/site-media/");
-    if (parts[1]) await supabase.storage.from("site-media").remove([parts[1]]);
+    if (parts[1] && !url.startsWith("quote-attachments/")) await supabase.storage.from("site-media").remove([parts[1]]);
     await supabase.from("site_attachments" as any).delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["site-attachments", siteId] });
   };
@@ -565,7 +565,7 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
                   <span className="font-medium">{a.file_name}</span>
                 </div>
                 <div className="flex gap-1">
-                  <Button size="icon" variant="ghost" onClick={() => window.open(a.file_url, "_blank")}><Download className="w-4 h-4" /></Button>
+                  <Button size="icon" variant="ghost" onClick={() => openSiteAttachment(a)}><Download className="w-4 h-4" /></Button>
                   <Button size="icon" variant="ghost" onClick={() => delAtt(a.id, a.file_url)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                 </div>
               </div>
