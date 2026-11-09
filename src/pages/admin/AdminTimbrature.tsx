@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { reverseGeocode } from '@/lib/geo';
+import { downloadTimbratureXLSX } from '@/lib/timbratureExport';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -203,12 +204,13 @@ const AdminTimbrature = () => {
   const stageHeaders = STAGE_ORDER.map((t) => EVENT_LABELS[t].short);
 
   const exportCSV = () => {
-    const header = ['Data', 'Posatore', 'Stato', ...stageHeaders, 'Pausa (min)', 'Ore lavorate', 'Ore cantiere', 'Alert fuori-cantiere'];
+    const header = ['Data', 'Posatore', 'Stato', ...stageHeaders, 'Pausa (min)', 'Ore totali (viaggio incluso)', 'Ore cantiere', 'Alert fuori-cantiere'];
     const lines = [header.join(';')];
     buildRows().forEach((r) => {
-      lines.push([r.date, r.name, r.status, ...r.stageTimes, r.pause, r.work, r.site, r.alerts].join(';'));
+      const it = (s: string) => s.replace('.', ',');
+      lines.push([r.date, r.name, r.status, ...r.stageTimes.map((t) => (t === '—' ? '' : t)), r.pause, it(r.work), it(r.site), r.alerts].join(';'));
     });
-    lines.push(['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2), '', ''].join(';'));
+    lines.push(['TOTALE', '', '', ...stageHeaders.map(() => ''), '', totalWorkHours.toFixed(2).replace('.', ','), '', ''].join(';'));
     const blob = new Blob(['\uFEFF' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -242,6 +244,15 @@ const AdminTimbrature = () => {
     doc.save(`timbrature-${periodLabel()}${workerId !== 'all' ? '-' + workerId : ''}.pdf`);
   };
 
+  const exportExcel = (rounded: boolean) => {
+    const days = grouped.map((g) => {
+      const w = workerByUserId.get(g.userId);
+      return { date: g.date, name: w ? `${w.first_name} ${w.last_name}` : g.userId, complete: g.stages.isComplete, entries: g.entries };
+    });
+    const base = `timbrature-${rounded ? 'commercialista-' : ''}${periodLabel()}${workerId !== 'all' ? '-' + workerId : ''}`;
+    downloadTimbratureXLSX(days, base, rounded);
+  };
+
   const clearRange = () => { setFromDate(''); setToDate(''); };
 
   return (
@@ -254,6 +265,12 @@ const AdminTimbrature = () => {
         <div className="flex gap-2">
           <Button variant="outline" onClick={exportCSV} disabled={grouped.length === 0}>
             <Download className="w-4 h-4 mr-2" /> CSV
+          </Button>
+          <Button variant="outline" onClick={() => exportExcel(false)} disabled={grouped.length === 0}>
+            <Download className="w-4 h-4 mr-2" /> Excel
+          </Button>
+          <Button variant="outline" onClick={() => exportExcel(true)} disabled={grouped.length === 0}>
+            <Download className="w-4 h-4 mr-2" /> Export commercialista
           </Button>
           <Button onClick={exportPDF} disabled={grouped.length === 0}>
             <FileText className="w-4 h-4 mr-2" /> PDF
