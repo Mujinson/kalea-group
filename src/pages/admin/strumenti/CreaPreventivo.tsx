@@ -1931,11 +1931,12 @@ export default function CreaPreventivo() {
       if (preventivoId) {
         const { error } = await supabase.from("quotes").update(quotePayload).eq("id", preventivoId);
         if (error) throw error;
-        toast.success("Preventivo aggiornato");
+        toast.success("Preventivo aggiornato"); markDraftSaved();
       } else {
         const { data, error } = await supabase.from("quotes").insert(quotePayload).select("id").single();
         if (error) throw error;
         setPreventivoId(data.id);
+        markDraftSaved(data.id);
         toast.success("Preventivo salvato" + (crmLink ? ` e collegato al ${crmLink.source}` : ""));
       }
     } catch (e:any) {
@@ -2049,8 +2050,102 @@ export default function CreaPreventivo() {
   const card: any = { background:"#fff", border:"1px solid #E6E9F0", borderRadius:12, padding:"18px 22px", marginBottom:16 };
   const sectionTitle: any = { fontSize:11, fontWeight:500, color:"#64748B", textTransform:"uppercase", letterSpacing:".07em", marginBottom:14, paddingBottom:8, borderBottom:"1px solid #E6E9F0" };
 
+  // ===== Salvataggio automatico bozza (locale) =====
+  const draftKey = `kal_quote_draft:${preventivoId || editId || "new"}`;
+  const savedJsonRef = useRef<string>("");
+  const draftReadyRef = useRef(false);
+  const [draftFound, setDraftFound] = useState<{savedAt:number; data:any}|null>(null);
+  const draftSnapshot = {numPrev,dataPrev,cliente,crmLink,cantiere,sito,dataInizioLavori,dataFineLavori,noteCliente,noteInterne,stato,pagamenti,ivaRate,reverseCharge,metodoTrasporto,tempiConsegna,tipoPagamento,showCondizioniFornitura,tipoPreventivo,terminiCustom,prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,contabilita,articoli,accessori,servizi,overrides,tonalita,wcSel,lingua,technicalAttachments,step};
+  const draftJson = JSON.stringify(draftSnapshot);
+  useEffect(() => {
+    draftReadyRef.current = false;
+    setDraftFound(null);
+    try {
+      const raw = localStorage.getItem(`kal_quote_draft:${editId || "new"}`);
+      if (raw) { const p = JSON.parse(raw); if (p?.data) setDraftFound(p); }
+    } catch {}
+    const t = setTimeout(() => { savedJsonRef.current = JSON.stringify(draftSnapshotRef.current); draftReadyRef.current = true; }, 2500);
+    return () => clearTimeout(t);
+  }, [editId]);
+  const draftSnapshotRef = useRef(draftSnapshot);
+  draftSnapshotRef.current = draftSnapshot;
+  useEffect(() => {
+    if (!draftReadyRef.current || draftJson === savedJsonRef.current) return;
+    const t = setTimeout(() => {
+      try { localStorage.setItem(draftKey, JSON.stringify({ savedAt: Date.now(), data: draftSnapshot })); } catch {}
+    }, 600);
+    return () => clearTimeout(t);
+  }, [draftJson, draftKey]);
+  useEffect(() => {
+    const h = (e: BeforeUnloadEvent) => { if (draftReadyRef.current && JSON.stringify(draftSnapshotRef.current) !== savedJsonRef.current) { e.preventDefault(); e.returnValue = ""; } };
+    window.addEventListener("beforeunload", h);
+    return () => window.removeEventListener("beforeunload", h);
+  }, []);
+  const markDraftSaved = (newId?: string) => {
+    savedJsonRef.current = JSON.stringify(draftSnapshotRef.current);
+    try { localStorage.removeItem(draftKey); localStorage.removeItem("kal_quote_draft:new"); if (newId) localStorage.removeItem(`kal_quote_draft:${newId}`); } catch {}
+  };
+  const restoreDraft = () => {
+    const d = draftFound?.data; if (!d) return;
+      if (d.numPrev !== undefined) setNumPrev(d.numPrev);
+      if (d.dataPrev !== undefined) setDataPrev(d.dataPrev);
+      if (d.cliente !== undefined) setCliente(d.cliente);
+      if (d.crmLink !== undefined) setCrmLink(d.crmLink);
+      if (d.cantiere !== undefined) setCantiere(d.cantiere);
+      if (d.sito !== undefined) setSito(d.sito);
+      if (d.dataInizioLavori !== undefined) setDataInizioLavori(d.dataInizioLavori);
+      if (d.dataFineLavori !== undefined) setDataFineLavori(d.dataFineLavori);
+      if (d.noteCliente !== undefined) setNoteCliente(d.noteCliente);
+      if (d.noteInterne !== undefined) setNoteInterne(d.noteInterne);
+      if (d.stato !== undefined) setStato(d.stato);
+      if (d.pagamenti !== undefined) setPagamenti(d.pagamenti);
+      if (d.ivaRate !== undefined) setIvaRate(d.ivaRate);
+      if (d.reverseCharge !== undefined) setReverseCharge(d.reverseCharge);
+      if (d.metodoTrasporto !== undefined) setMetodoTrasporto(d.metodoTrasporto);
+      if (d.tempiConsegna !== undefined) setTempiConsegna(d.tempiConsegna);
+      if (d.tipoPagamento !== undefined) setTipoPagamento(d.tipoPagamento);
+      if (d.showCondizioniFornitura !== undefined) setShowCondizioniFornitura(d.showCondizioniFornitura);
+      if (d.tipoPreventivo !== undefined) setTipoPreventivo(d.tipoPreventivo);
+      if (d.terminiCustom !== undefined) setTerminiCustom(d.terminiCustom);
+      if (d.prodotto !== undefined) setProdotto(d.prodotto);
+      if (d.complessita !== undefined) setComplessita(d.complessita);
+      if (d.mqPrev !== undefined) setMqPrev(d.mqPrev);
+      if (d.sfrido !== undefined) setSfrido(d.sfrido);
+      if (d.incPosa !== undefined) setIncPosa(d.incPosa);
+      if (d.incTapp !== undefined) setIncTapp(d.incTapp);
+      if (d.kmDist !== undefined) setKmDist(d.kmDist);
+      if (d.incTrasporto !== undefined) setIncTrasporto(d.incTrasporto);
+      if (d.sconto !== undefined) setSconto(d.sconto);
+      if (d.righeMat !== undefined) setRigheMat(d.righeMat);
+      if (d.contabilita !== undefined) setContabilita(d.contabilita);
+      if (d.articoli !== undefined) setArticoli(d.articoli);
+      if (d.accessori !== undefined) setAccessori(d.accessori);
+      if (d.servizi !== undefined) setServizi(d.servizi);
+      if (d.overrides !== undefined) setOverrides(d.overrides);
+      if (d.tonalita !== undefined) setTonalita(d.tonalita);
+      if (d.wcSel !== undefined) setWcSel(d.wcSel);
+      if (d.lingua !== undefined) setLingua(d.lingua);
+      if (d.technicalAttachments !== undefined) setTechnicalAttachments(d.technicalAttachments);
+      if (d.step !== undefined) setStep(d.step);
+    setDraftFound(null);
+    toast.success("Bozza ripristinata");
+  };
+  const discardDraft = () => {
+    try { localStorage.removeItem(`kal_quote_draft:${editId || "new"}`); } catch {}
+    setDraftFound(null);
+  };
+
   return (
     <div style={{ fontFamily:"'new-order', sans-serif", color:"#1A1A1A", maxWidth:1300, margin:"0 auto", padding:"24px 20px" }}>
+      {draftFound && (
+        <div style={{display:"flex",gap:10,alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",background:"#FEF3C7",border:"1px solid #F59E0B",borderRadius:8,padding:"10px 14px",marginBottom:16,fontSize:13}}>
+          <span>Hai una bozza non salvata di questo preventivo ({new Date(draftFound.savedAt).toLocaleString("it-IT")}). Vuoi ripristinarla?</span>
+          <span style={{display:"flex",gap:8}}>
+            <button onClick={restoreDraft} style={{padding:"6px 14px",borderRadius:6,border:"none",background:"#1A1A2E",color:"#fff",cursor:"pointer"}}>Ripristina</button>
+            <button onClick={discardDraft} style={{padding:"6px 14px",borderRadius:6,border:"1px solid #CBD5E1",background:"transparent",cursor:"pointer"}}>Scarta</button>
+          </span>
+        </div>
+      )}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}}>
         <div>
           <h1 style={{fontSize:22,fontWeight:400,color:"#1A1A2E",marginBottom:4}}>Crea Preventivo Kalēa</h1>
