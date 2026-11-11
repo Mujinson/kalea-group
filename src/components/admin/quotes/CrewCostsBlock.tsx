@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { FunctionsHttpError } from "@supabase/supabase-js";
 import { toast } from "sonner";
 import { computeCrew, CrewSettings, CrewTrip, DEFAULT_CREW_SETTINGS } from "@/lib/crewCosts";
+import { clearZeroOnFocus } from "@/lib/numericInput";
 
 const eur = (v: number) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(v || 0);
 
@@ -45,7 +46,7 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
   const inp: React.CSSProperties = { width: 80, padding: "4px 6px", border: "1px solid #E6E9F0", borderRadius: 6, fontSize: 12, textAlign: "right" };
   const lab: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 4, fontSize: 11, color: "#64748B" };
   const num = (k: keyof CrewTrip, step = "1") => (
-    <input type="number" step={step} style={inp} value={(t[k] as number) ?? 0} onChange={(e) => set({ [k]: Number(e.target.value) } as any)} />
+    <input type="number" onFocus={clearZeroOnFocus} step={step} style={inp} value={(t[k] as number) ?? 0} onChange={(e) => set({ [k]: Number(e.target.value) } as any)} />
   );
   const diff = c.perWorkerDay - settings.reference_daily;
   const home = computeCrew({ ...t, trasferta: "off" }, settings);
@@ -75,7 +76,7 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
           <label style={lab}>Operai{num("workers")}</label>
           <label style={lab}>Furgoni{num("vans")}</label>
           <label style={lab}>Costo operaio/giorno
-            <input type="number" style={inp} value={t.workerDayOverride ?? Math.round(c.workerDay * 100) / 100} onChange={(e) => set({ workerDayOverride: Number(e.target.value) })} />
+            <input type="number" onFocus={clearZeroOnFocus} style={inp} value={t.workerDayOverride ?? Math.round(c.workerDay * 100) / 100} onChange={(e) => set({ workerDayOverride: Number(e.target.value) })} />
           </label>
           <label style={lab}>Trasferta
             <select style={{ ...inp, width: 110, textAlign: "left" }} value={t.trasferta} onChange={(e) => set({ trasferta: e.target.value as any })}>
@@ -83,13 +84,13 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
             </select>
           </label>
           {c.isTrasferta && <label style={lab}>Notti
-            <input type="number" style={inp} value={t.nights ?? c.nights} onChange={(e) => set({ nights: Number(e.target.value) })} />
+            <input type="number" onFocus={clearZeroOnFocus} style={inp} value={t.nights ?? c.nights} onChange={(e) => set({ nights: Number(e.target.value) })} />
           </label>}
           {c.isTrasferta && <label style={lab}>Viaggi A/R
-            <input type="number" style={inp} value={t.tripsOverride ?? c.trips} onChange={(e) => set({ tripsOverride: Number(e.target.value) })} />
+            <input type="number" onFocus={clearZeroOnFocus} style={inp} value={t.tripsOverride ?? c.trips} onChange={(e) => set({ tripsOverride: Number(e.target.value) })} />
           </label>}
           {c.isTrasferta && <label style={lab}>Km/giorno sul posto
-            <input type="number" style={inp} value={t.localKmDay ?? 20} onChange={(e) => set({ localKmDay: Number(e.target.value) })} />
+            <input type="number" onFocus={clearZeroOnFocus} style={inp} value={t.localKmDay ?? 20} onChange={(e) => set({ localKmDay: Number(e.target.value) })} />
           </label>}
         </div>
         {t.minutesOneWay ? <div style={{ fontSize: 12, color: "#64748B" }}>Viaggio: {t.minutesOneWay} min sola andata · {c.kmAR} km A/R · {c.trips} viaggi A/R{c.isTrasferta ? ` + ${c.localKm} km sul posto (in trasferta si dorme lì: il viaggio lungo si paga solo all'andata e al ritorno)` : ""}</div> : null}

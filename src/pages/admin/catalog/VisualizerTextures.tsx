@@ -26,8 +26,10 @@ export default function VisualizerTextures() {
     queryFn: async () => {
       const paths = rows.map((r) => r.texture_url).filter(Boolean) as string[];
       if (!paths.length) return {};
-      const { data } = await supabase.storage.from("visualizer-textures").createSignedUrls(paths, 3600);
-      return Object.fromEntries((data ?? []).map((d) => [d.path, d.signedUrl]));
+      return Object.fromEntries(paths.map((path) => [
+        path,
+        supabase.storage.from("visualizer-textures").getPublicUrl(path).data.publicUrl,
+      ]));
     },
   });
   const byslug = new Map(rows.map((r) => [r.product_slug, r]));

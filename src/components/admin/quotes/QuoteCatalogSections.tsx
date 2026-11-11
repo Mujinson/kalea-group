@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CatalogProductPicker, { CatalogProduct } from "@/components/admin/cantieri/CatalogProductPicker";
 import { Plus, Trash2, X, GripVertical } from "lucide-react";
+import { clearZeroOnFocus } from "@/lib/numericInput";
 
 export interface CatalogLine {
   id: string;
@@ -160,7 +161,7 @@ function LineRow({
           style={{ padding: "7px 8px", borderRadius: 6, border: "1px solid #E6E9F0", fontSize: 12, minWidth: 0 }}
         />
         <input
-          type="number"
+          type="number" onFocus={clearZeroOnFocus}
           step="0.01"
           value={line.quantity}
           onChange={(e) => onChange({ quantity: Number(e.target.value) })}
@@ -168,7 +169,7 @@ function LineRow({
         />
         <div style={{ position: "relative" }}>
           <input
-            type="number"
+            type="number" onFocus={clearZeroOnFocus}
             step="0.01"
             value={line.unit_price}
             onChange={(e) => onChange({ unit_price: Number(e.target.value) })}
@@ -178,7 +179,7 @@ function LineRow({
         </div>
         <div style={{ position: "relative" }}>
           <input
-            type="number"
+            type="number" onFocus={clearZeroOnFocus}
             step="0.1"
             title="Sconto sulla riga (non è l'IVA)"
             value={line.discount_pct}

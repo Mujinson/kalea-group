@@ -69,9 +69,9 @@ export default function Visualizzatore() {
     (async () => {
       const { data } = await supabase.from("floor_visualizer_textures").select("product_slug, texture_url, real_width_cm, default_rotation, enabled");
       if (!data?.length) return;
-      const paths = data.filter((d) => d.texture_url && !/^https?:/.test(d.texture_url)).map((d) => d.texture_url!);
-      const signed = paths.length ? (await supabase.storage.from("visualizer-textures").createSignedUrls(paths, 86400)).data ?? [] : [];
-      const urlOf = (p: string) => (/^https?:/.test(p) ? p : signed.find((s) => s.path === p)?.signedUrl);
+      const urlOf = (p: string) => /^https?:/.test(p)
+        ? p
+        : supabase.storage.from("visualizer-textures").getPublicUrl(p).data.publicUrl;
       const map = new Map(data.map((d) => [d.product_slug, d]));
       const next = floorRegistry
         .filter((f) => map.get(f.slug)?.enabled !== false)

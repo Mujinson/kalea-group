@@ -15,6 +15,7 @@ import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
 import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
 import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
+import { clearZeroOnFocus } from '@/lib/numericInput';
 
 
 
@@ -167,7 +168,7 @@ function Slider({ label, min, max, value, step, onChange, format, unit, editable
         {editable ? (
           <span style={{fontSize:13,fontWeight:500,display:"inline-flex",alignItems:"center",gap:4}}>
             <input
-              type="number"
+              type="number" onFocus={clearZeroOnFocus}
               value={value}
               min={min}
               step={step}
@@ -2364,7 +2365,7 @@ export default function CreaPreventivo() {
                             placeholder={`Tonalità ${idx+1} (es. ${(TONALITA_BY_PRODUCT[prodotto.id]||["Rovere Naturale"])[0]})`}
                             style={{padding:"8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E6E9F0"}`,fontSize:13,boxSizing:"border-box",width:"100%",minWidth:0,background:"#fff"}}/>
                           <div style={{position:"relative"}}>
-                            <input type="number" min={0} step={0.5} value={tn.mq || ""}
+                            <input type="number" onFocus={clearZeroOnFocus} min={0} step={0.5} value={tn.mq || ""}
                               onChange={e=>updTon(tn.id,"mq",Number(e.target.value))}
                               style={{width:"100%",padding:"8px 32px 8px 10px",borderRadius:7,border:`1px solid ${over?"#A32D2D":"#E6E9F0"}`,fontSize:13,textAlign:"right",boxSizing:"border-box",background:"#fff",MozAppearance:"textfield" as any}}/>
                             <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:11,color:"#64748B",pointerEvents:"none"}}>mq</span>
@@ -2448,11 +2449,11 @@ export default function CreaPreventivo() {
                     <input value={r.desc} onChange={e=>updRiga(r.id,"desc",e.target.value)} placeholder="Descrizione voce" style={{padding:"7px 9px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,minWidth:0}}/>
                     <input value={r.unita} onChange={e=>updRiga(r.id,"unita",e.target.value)} placeholder="mq / pz / ml" style={{padding:"7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
                     <div style={{position:"relative"}}>
-                      <input value={r.costoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="Costo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                      <input value={r.costoUn} type="number" onFocus={clearZeroOnFocus} step="0.01" onChange={e=>updRiga(r.id,"costoUn",Number(e.target.value))} placeholder="Costo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
                       <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>€</span>
                     </div>
                     <div style={{position:"relative"}}>
-                      <input value={r.prezzoUn} type="number" step="0.01" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="Prezzo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",fontWeight:500,boxSizing:"border-box",background:"#fff"}}/>
+                      <input value={r.prezzoUn} type="number" onFocus={clearZeroOnFocus} step="0.01" onChange={e=>updRiga(r.id,"prezzoUn",Number(e.target.value))} placeholder="Prezzo un." style={{width:"100%",padding:"7px 22px 7px 7px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",fontWeight:500,boxSizing:"border-box",background:"#fff"}}/>
                       <span style={{position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>€</span>
                     </div>
                     <button onClick={()=>delRiga(r.id)} title="Elimina riga" style={{background:"none",border:"none",cursor:"pointer",color:"#A32D2D",fontSize:20,padding:0,lineHeight:1}}>×</button>
@@ -2465,18 +2466,18 @@ export default function CreaPreventivo() {
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6,marginBottom:8}}>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
                       <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà</span>
-                      <input value={r.qta} type="number" step="0.01" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right"}}/>
+                      <input value={r.qta} type="number" onFocus={clearZeroOnFocus} step="0.01" onChange={e=>updRiga(r.id,"qta",Number(e.target.value))} style={{padding:"6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right"}}/>
                     </label>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
                       <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Sfrido %</span>
                       <div style={{position:"relative"}}>
-                        <input value={sfrPct} type="number" step="0.5" min={0} onChange={e=>updRiga(r.id,"sfridoPct",Number(e.target.value))} style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
+                        <input value={sfrPct} type="number" onFocus={clearZeroOnFocus} step="0.5" min={0} onChange={e=>updRiga(r.id,"sfridoPct",Number(e.target.value))} style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
                         <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>%</span>
                       </div>
                     </label>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
                       <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà sfrido</span>
-                      <input value={Number(qtaSfr.toFixed(3))} type="number" step="0.01" min={0}
+                      <input value={Number(qtaSfr.toFixed(3))} type="number" onFocus={clearZeroOnFocus} step="0.01" min={0}
                         onChange={e=>{
                           const v = Number(e.target.value);
                           const newPct = qta>0 ? (v/qta)*100 : 0;
@@ -2486,7 +2487,7 @@ export default function CreaPreventivo() {
                     </label>
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
                       <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Q.tà totale</span>
-                      <input value={Number(qtaTot.toFixed(3))} type="number" step="0.01" min={0}
+                      <input value={Number(qtaTot.toFixed(3))} type="number" onFocus={clearZeroOnFocus} step="0.01" min={0}
                         onChange={e=>{
                           const v = Number(e.target.value);
                           const newPct = qta>0 ? ((v-qta)/qta)*100 : 0;
@@ -2501,7 +2502,7 @@ export default function CreaPreventivo() {
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
                       <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto %</span>
                       <div style={{position:"relative"}}>
-                        <input value={Number(scPctDisp.toFixed(2))} type="number" step="0.1" min={0}
+                        <input value={Number(scPctDisp.toFixed(2))} type="number" onFocus={clearZeroOnFocus} step="0.1" min={0}
                           onChange={e=>updRigaMany(r.id,{scontoPct: Number(e.target.value), scontoEur: null})}
                           style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
                         <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>%</span>
@@ -2510,7 +2511,7 @@ export default function CreaPreventivo() {
                     <label style={{display:"flex",flexDirection:"column",gap:3}}>
                       <span style={{fontSize:10,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>Sconto €</span>
                       <div style={{position:"relative"}}>
-                        <input value={Number(scEur.toFixed(2))} type="number" step="0.01" min={0}
+                        <input value={Number(scEur.toFixed(2))} type="number" onFocus={clearZeroOnFocus} step="0.01" min={0}
                           onChange={e=>updRigaMany(r.id,{scontoEur: Number(e.target.value)})}
                           style={{width:"100%",padding:"6px 22px 6px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12,textAlign:"right",boxSizing:"border-box"}}/>
                         <span style={{position:"absolute",right:7,top:"50%",transform:"translateY(-50%)",fontSize:10,color:"#64748B",pointerEvents:"none"}}>€</span>
@@ -2560,7 +2561,7 @@ export default function CreaPreventivo() {
                         <div style={{fontWeight:500,fontSize:13}}>Personalizzato</div>
                         {isCustom ? (
                           <div style={{display:"flex",alignItems:"center",gap:4,marginTop:4}} onClick={e=>e.stopPropagation()}>
-                            <input type="number" step="0.01" min={0} value={overrides.posaMq}
+                            <input type="number" onFocus={clearZeroOnFocus} step="0.01" min={0} value={overrides.posaMq}
                               onChange={e=>setOv("posaMq", e.target.value===""?0:Number(e.target.value))}
                               style={{width:"100%",padding:"3px 6px",borderRadius:5,border:"1px solid rgba(255,255,255,.5)",background:"rgba(255,255,255,.15)",color:"#fff",fontSize:13,fontWeight:600,textAlign:"right",boxSizing:"border-box"}}/>
                             <span style={{fontSize:11}}>€/mq</span>
@@ -2616,7 +2617,7 @@ export default function CreaPreventivo() {
                           {overridden && <span style={{fontSize:10,color:"#64748B",marginLeft:6}}>auto: {euro(row.auto)}</span>}
                         </div>
                         <input
-                          type="number"
+                          type="number" onFocus={clearZeroOnFocus}
                           step="0.01"
                           value={overridden ? overrides[row.key] : row.auto.toFixed(2)}
                           onChange={e=>setOv(row.key, e.target.value===""?undefined:Number(e.target.value))}
@@ -2641,7 +2642,7 @@ export default function CreaPreventivo() {
                   </div>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 130px",gap:8,alignItems:"center"}}>
                     <input
-                      type="number" step="0.01" min="0"
+                      type="number" onFocus={clearZeroOnFocus} step="0.01" min="0"
                       value={totaleTarget}
                       onChange={e=>setTotaleTarget(e.target.value)}
                       placeholder={`Netto attuale: ${euro(calc.prezzoNetto)}`}
@@ -2868,7 +2869,7 @@ export default function CreaPreventivo() {
                 <div key={i} style={{marginBottom:12,padding:"10px 12px",background:"#F1F5F9",borderRadius:8}}>
                   <div style={{display:"grid",gridTemplateColumns:"1fr 70px 1fr",gap:8}}>
                     <input value={p.label} onChange={e=>{const pg=[...pagamenti];pg[i].label=e.target.value;setPagamenti(pg);}} placeholder="Descrizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
-                    <input value={p.pct} type="number" onChange={e=>{const pg=[...pagamenti];pg[i].pct=Number(e.target.value);setPagamenti(pg);}} style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
+                    <input value={p.pct} type="number" onFocus={clearZeroOnFocus} onChange={e=>{const pg=[...pagamenti];pg[i].pct=Number(e.target.value);setPagamenti(pg);}} style={{padding:"5px 6px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
                     <input value={p.data} onChange={e=>{const pg=[...pagamenti];pg[i].data=e.target.value;setPagamenti(pg);}} placeholder="Data / condizione" style={{padding:"5px 8px",borderRadius:6,border:"1px solid #E6E9F0",fontSize:12}}/>
                   </div>
                 </div>
