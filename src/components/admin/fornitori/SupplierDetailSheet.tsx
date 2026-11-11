@@ -15,6 +15,8 @@ import { Plus, Save, Paperclip } from 'lucide-react';
 import { getInvoiceAttachmentUrl } from '@/lib/costInvoiceImport';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import SupplierInvoiceDialog from './SupplierInvoiceDialog';
+import { SupplierForm, supplierPayload } from './SupplierForm';
+import { SupplierOrdersList } from './SupplierOrdersList';
 
 interface Props {
   supplierId: string | null;
@@ -57,18 +59,13 @@ export function SupplierDetailSheet({ supplierId, onOpenChange }: Props) {
   useEffect(() => { if (supplier) setForm(supplier); }, [supplier]);
 
   const saveSupplier = async () => {
-    const { error } = await supabase.from('suppliers').update({
-      name: form.name,
-      vat_number: form.vat_number || null,
-      contact_person: form.contact_person || null,
-      email: form.email || null,
-      phone: form.phone || null,
-      address: form.address || null,
-      notes: form.notes || null,
-    }).eq('id', supplierId!);
+    if (!form.name?.trim()) { toast({ title: 'Inserisci la ragione sociale', variant: 'destructive' }); return; }
+    const { error } = await supabase.from('suppliers').update(supplierPayload(form)).eq('id', supplierId!);
     if (error) { toast({ title: 'Errore', description: error.message, variant: 'destructive' }); return; }
     toast({ title: 'Fornitore aggiornato' });
     qc.invalidateQueries({ queryKey: ['suppliers-list'] });
+    qc.invalidateQueries({ queryKey: ['supplier', supplierId] });
+    qc.invalidateQueries({ queryKey: ['suppliers-min'] });
   };
 
   const savePayment = async () => {
@@ -123,16 +120,10 @@ export function SupplierDetailSheet({ supplierId, onOpenChange }: Props) {
           <SheetHeader><SheetTitle>{supplier?.name || 'Fornitore'}</SheetTitle></SheetHeader>
 
           <div className="mt-4 space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div><Label>Nome</Label><Input value={form.name || ''} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-              <div><Label>P.IVA</Label><Input value={form.vat_number || ''} onChange={(e) => setForm({ ...form, vat_number: e.target.value })} /></div>
-              <div><Label>Contatto</Label><Input value={form.contact_person || ''} onChange={(e) => setForm({ ...form, contact_person: e.target.value })} /></div>
-              <div><Label>Telefono</Label><Input value={form.phone || ''} onChange={(e) => setForm({ ...form, phone: e.target.value })} /></div>
-              <div><Label>Email</Label><Input value={form.email || ''} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
-              <div><Label>Indirizzo</Label><Input value={form.address || ''} onChange={(e) => setForm({ ...form, address: e.target.value })} /></div>
-              <div className="sm:col-span-2"><Label>Note</Label><Textarea value={form.notes || ''} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
-            </div>
+            <SupplierForm form={form} setForm={setForm} />
             <Button onClick={saveSupplier}><Save className="w-4 h-4 mr-1" /> Salva anagrafica</Button>
+
+            {supplierId && <SupplierOrdersList supplierId={supplierId} />}
 
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-sm">Fatture</h3>

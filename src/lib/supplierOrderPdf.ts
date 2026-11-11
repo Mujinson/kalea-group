@@ -6,7 +6,7 @@ import { lineNet, orderTotals, type OrderLine } from "./supplierOrders";
 export interface OrderPdfData {
   order_number: string;
   order_date: string;
-  supplier: { name?: string; address?: string; vat_number?: string; email?: string; phone?: string; contact_person?: string };
+  supplier: { name?: string; address?: string; vat_number?: string; fiscal_code?: string; sdi_code?: string; pec?: string; email?: string; phone?: string; contact_person?: string };
   payment_terms?: string | null;
   requested_delivery_date?: string | null;
   delivery_place?: string | null;
@@ -19,11 +19,13 @@ export interface OrderPdfData {
   lines: OrderLine[];
 }
 
-const OLIVE: [number, number, number] = [96, 91, 58];
-const TAN: [number, number, number] = [154, 128, 96];
-const INK: [number, number, number] = [51, 51, 51];
-const CREAM: [number, number, number] = [247, 241, 231];
-const MUTED: [number, number, number] = [120, 113, 100];
+// Stessa palette neutra del PDF preventivo: blu-notte, grigi ardesia, bordi chiari
+const OLIVE: [number, number, number] = [26, 26, 46];
+const TAN: [number, number, number] = [100, 116, 139];
+const INK: [number, number, number] = [26, 26, 46];
+const CREAM: [number, number, number] = [248, 250, 252];
+const MUTED: [number, number, number] = [71, 85, 105];
+const LINE: [number, number, number] = [230, 233, 240];
 
 const fmtDate = (d?: string | null) => (d ? new Date(d + "T00:00:00").toLocaleDateString("it-IT") : "");
 const eur = (n: number) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(n);
@@ -40,9 +42,6 @@ export async function buildSupplierOrderPdf(o: OrderPdfData): Promise<jsPDF> {
   const W = 210, M = 16;
   doc.setTextColor(...INK);
 
-  // Header band
-  doc.setFillColor(...CREAM);
-  doc.rect(0, 0, W, 46, "F");
   try {
     const logo = await loadImage(logoUrl);
     const h = 16, w = (logo.naturalWidth / logo.naturalHeight) * h;
@@ -63,9 +62,9 @@ export async function buildSupplierOrderPdf(o: OrderPdfData): Promise<jsPDF> {
   doc.setTextColor(...INK);
   doc.text(`N. ${o.order_number}`, W - M, 26, { align: "right" });
   doc.text(`del ${fmtDate(o.order_date)}`, W - M, 31, { align: "right" });
-  doc.setDrawColor(...TAN);
-  doc.setLineWidth(0.6);
-  doc.line(0, 46, W, 46);
+  doc.setDrawColor(...LINE);
+  doc.setLineWidth(0.4);
+  doc.line(M, 46, W - M, 46);
 
   // Supplier & delivery boxes
   let y = 56;
@@ -81,7 +80,8 @@ export async function buildSupplierOrderPdf(o: OrderPdfData): Promise<jsPDF> {
   doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(...MUTED);
   const sup = [
     ...(o.supplier.address ? doc.splitTextToSize(o.supplier.address, colW) : []),
-    o.supplier.vat_number && `P.IVA ${o.supplier.vat_number}`,
+    [o.supplier.vat_number && `P.IVA ${o.supplier.vat_number}`, o.supplier.fiscal_code && o.supplier.fiscal_code !== o.supplier.vat_number && `C.F. ${o.supplier.fiscal_code}`].filter(Boolean).join(" - "),
+    [o.supplier.sdi_code && `SDI ${o.supplier.sdi_code}`, o.supplier.pec && `PEC ${o.supplier.pec}`].filter(Boolean).join(" - "),
     o.supplier.contact_person && `Att.ne ${o.supplier.contact_person}`,
     [o.supplier.phone, o.supplier.email].filter(Boolean).join(" - "),
   ].filter(Boolean) as string[];
@@ -112,8 +112,8 @@ export async function buildSupplierOrderPdf(o: OrderPdfData): Promise<jsPDF> {
     ["Riferimento", o.reference || "-"],
     ["Righe", String(o.lines.length)],
   ];
-  doc.setFillColor(...CREAM);
-  doc.roundedRect(M, y, W - 2 * M, 13, 2, 2, "F");
+  doc.setFillColor(...CREAM); doc.setDrawColor(...LINE); doc.setLineWidth(0.3);
+  doc.roundedRect(M, y, W - 2 * M, 13, 2, 2, "FD");
   const cw = (W - 2 * M) / info.length;
   info.forEach(([k, v], i) => {
     const x = M + 5 + i * cw;
@@ -144,7 +144,8 @@ export async function buildSupplierOrderPdf(o: OrderPdfData): Promise<jsPDF> {
     theme: "plain",
     styles: { font: "helvetica", fontSize: 9, textColor: INK, cellPadding: { top: 1.9, bottom: 1.9, left: 2, right: 2 }, valign: "middle" },
     headStyles: { fillColor: OLIVE, textColor: [255, 255, 255], fontStyle: "bold", fontSize: 8 },
-    alternateRowStyles: { fillColor: [251, 248, 243] },
+    alternateRowStyles: { fillColor: CREAM },
+    bodyStyles: { lineColor: LINE, lineWidth: { bottom: 0.2 } as any },
     columnStyles: o.show_prices
       ? { 0: { cellWidth: 8, textColor: MUTED }, 1: { cellWidth: 24 }, 3: { cellWidth: 12, halign: "center" }, 4: { cellWidth: 15, halign: "right", fontStyle: "bold" }, 5: { cellWidth: 20, halign: "right" }, 6: { cellWidth: 12, halign: "right" }, 7: { cellWidth: 12, halign: "right" }, 8: { cellWidth: 24, halign: "right" } }
       : { 0: { cellWidth: 10, textColor: MUTED }, 1: { cellWidth: 32 }, 3: { cellWidth: 18, halign: "center" }, 4: { cellWidth: 22, halign: "right", fontStyle: "bold" } },
@@ -196,7 +197,7 @@ export async function buildSupplierOrderPdf(o: OrderPdfData): Promise<jsPDF> {
   const pages = doc.getNumberOfPages();
   for (let p = 1; p <= pages; p++) {
     doc.setPage(p);
-    doc.setDrawColor(...TAN); doc.setLineWidth(0.3);
+    doc.setDrawColor(...LINE); doc.setLineWidth(0.3);
     doc.line(M, 285, W - M, 285);
     doc.setFontSize(7); doc.setTextColor(...MUTED);
     doc.text("Kalea – Surface System®", M, 290);

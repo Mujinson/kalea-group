@@ -148,6 +148,13 @@
       "when": 1794421556403,
       "tag": "0020_secure_public_visualizer_texture_signing",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1794421764401,
+      "tag": "0021_supplier_full_profile_and_order_direction",
+      "breakpoints": true
     }
   ]
 }

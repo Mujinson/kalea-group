@@ -4847,6 +4847,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           delivery_place: string | null
+          direction: string
           id: string
           lines: Json
           notes: string | null
@@ -4859,6 +4860,7 @@ export type Database = {
           site_id: string | null
           status: string
           supplier_id: string | null
+          supplier_reference: string | null
           supplier_snapshot: Json
           transport: string | null
           updated_at: string
@@ -4868,6 +4870,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           delivery_place?: string | null
+          direction?: string
           id?: string
           lines?: Json
           notes?: string | null
@@ -4880,6 +4883,7 @@ export type Database = {
           site_id?: string | null
           status?: string
           supplier_id?: string | null
+          supplier_reference?: string | null
           supplier_snapshot?: Json
           transport?: string | null
           updated_at?: string
@@ -4889,6 +4893,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           delivery_place?: string | null
+          direction?: string
           id?: string
           lines?: Json
           notes?: string | null
@@ -4901,6 +4906,7 @@ export type Database = {
           site_id?: string | null
           status?: string
           supplier_id?: string | null
+          supplier_reference?: string | null
           supplier_snapshot?: Json
           transport?: string | null
           updated_at?: string
@@ -4976,42 +4982,69 @@ export type Database = {
       suppliers: {
         Row: {
           address: string | null
+          bank_accounts: Json
+          city: string | null
           contact_person: string | null
           country: string | null
           created_at: string
           email: string | null
+          fiscal_code: string | null
           id: string
           name: string
           notes: string | null
+          payment_terms: string | null
+          pec: string | null
           phone: string | null
+          postal_code: string | null
+          province: string | null
+          sdi_code: string | null
           updated_at: string
           vat_number: string | null
+          website: string | null
         }
         Insert: {
           address?: string | null
+          bank_accounts?: Json
+          city?: string | null
           contact_person?: string | null
           country?: string | null
           created_at?: string
           email?: string | null
+          fiscal_code?: string | null
           id?: string
           name: string
           notes?: string | null
+          payment_terms?: string | null
+          pec?: string | null
           phone?: string | null
+          postal_code?: string | null
+          province?: string | null
+          sdi_code?: string | null
           updated_at?: string
           vat_number?: string | null
+          website?: string | null
         }
         Update: {
           address?: string | null
+          bank_accounts?: Json
+          city?: string | null
           contact_person?: string | null
           country?: string | null
           created_at?: string
           email?: string | null
+          fiscal_code?: string | null
           id?: string
           name?: string
           notes?: string | null
+          payment_terms?: string | null
+          pec?: string | null
           phone?: string | null
+          postal_code?: string | null
+          province?: string | null
+          sdi_code?: string | null
           updated_at?: string
           vat_number?: string | null
+          website?: string | null
         }
         Relationships: []
       }

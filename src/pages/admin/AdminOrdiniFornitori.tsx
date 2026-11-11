@@ -23,6 +23,7 @@ type Order = {
   site_id: string | null; status: string; payment_terms: string | null; requested_delivery_date: string | null;
   delivery_place: string | null; carrier: string | null; transport: string | null; reference: string | null;
   notes: string | null; show_prices: boolean; lines: OrderLine[];
+  direction: string; supplier_reference: string | null;
 };
 
 const emptyLine = (): OrderLine => ({ description: "", um: "MQ", qty: 1, vat: 22 });
@@ -30,6 +31,7 @@ const emptyLine = (): OrderLine => ({ description: "", um: "MQ", qty: 1, vat: 22
 export default function AdminOrdiniFornitori() {
   const qc = useQueryClient();
   const [editing, setEditing] = useState<Order | null>(null);
+  const [dir, setDir] = useState<"tutti" | "uscita" | "entrata">("tutti");
 
   const { data: orders = [] } = useQuery({
     queryKey: ["supplier_orders"],
@@ -41,7 +43,7 @@ export default function AdminOrdiniFornitori() {
   });
   const { data: suppliers = [] } = useQuery({
     queryKey: ["suppliers-min"],
-    queryFn: async () => (await supabase.from("suppliers").select("id,name,address,vat_number,email,phone,contact_person").order("name")).data ?? [],
+    queryFn: async () => (await supabase.from("suppliers").select("*").order("name")).data ?? [],
   });
   const { data: sites = [] } = useQuery({
     queryKey: ["sites-min"],
@@ -52,7 +54,7 @@ export default function AdminOrdiniFornitori() {
     order_number: nextOrderNumber(orders.map((o) => o.order_number), new Date().getFullYear()),
     order_date: today(), supplier_id: null, supplier_snapshot: {}, site_id: null, status: "bozza",
     payment_terms: "", requested_delivery_date: null, delivery_place: "", carrier: "", transport: "",
-    reference: "", notes: "", show_prices: false, lines: [emptyLine()],
+    reference: "", notes: "", show_prices: false, lines: [emptyLine()], direction: "uscita", supplier_reference: "",
   });
 
   if (editing) return <OrderEditor order={editing} suppliers={suppliers} sites={sites} onBack={() => { setEditing(null); qc.invalidateQueries({ queryKey: ["supplier_orders"] }); }} />;
@@ -60,12 +62,18 @@ export default function AdminOrdiniFornitori() {
   return (
     <div className="space-y-4">
       <CrmPageHeader breadcrumb={["Fornitori", "Ordini fornitori"]} title="Ordini fornitori"
-        subtitle="Crea l'ordine con articoli e quantità e scarica il PDF da inviare al fornitore."
+        subtitle="Ordini inviati ai fornitori e conferme d'ordine ricevute: tutto resta salvato."
         actions={<Button size="sm" onClick={() => setEditing(newOrder())}><Plus className="w-4 h-4 mr-2" />Nuovo ordine</Button>} />
+      <div className="flex gap-2">
+        {([["tutti", "Tutti"], ["uscita", "Inviati da noi"], ["entrata", "Ricevuti dal fornitore"]] as const).map(([k, v]) => (
+          <Button key={k} size="sm" variant={dir === k ? "default" : "outline"} onClick={() => setDir(k)}>{v}</Button>
+        ))}
+      </div>
       <div className="rounded-xl border border-border bg-card divide-y divide-border">
         {orders.length === 0 && <p className="p-6 text-sm text-muted-foreground">Nessun ordine ancora. Premi «Nuovo ordine».</p>}
-        {orders.map((o) => (
+        {orders.filter((o) => dir === "tutti" || (o.direction || "uscita") === dir).map((o) => (
           <div key={o.id} className="flex flex-wrap items-center gap-3 p-3 hover:bg-muted/40 cursor-pointer" onClick={() => setEditing(o)}>
+            <Badge variant={o.direction === "entrata" ? "secondary" : "outline"} className="w-20 justify-center">{o.direction === "entrata" ? "Ricevuto" : "Inviato"}</Badge>
             <span className="font-mono text-sm w-32">{o.order_number}</span>
             <span className="text-sm w-24 text-muted-foreground">{new Date(o.order_date).toLocaleDateString("it-IT")}</span>
             <span className="font-medium flex-1 min-w-[160px]">{o.supplier_snapshot?.name || "—"}</span>
@@ -96,7 +104,11 @@ function OrderEditor({ order, suppliers, sites, onBack }: { order: Order; suppli
 
   useEffect(() => {
     const s = suppliers.find((x) => x.id === o.supplier_id);
-    if (s) setO((p) => ({ ...p, supplier_snapshot: { name: s.name, address: s.address, vat_number: s.vat_number, email: s.email, phone: s.phone, contact_person: s.contact_person } }));
+    if (s) setO((p) => ({ ...p, payment_terms: p.payment_terms || s.payment_terms || "", supplier_snapshot: {
+      name: s.name, vat_number: s.vat_number, fiscal_code: s.fiscal_code, sdi_code: s.sdi_code, pec: s.pec,
+      address: [s.address, [s.postal_code, s.city, s.province && `(${s.province})`].filter(Boolean).join(" ")].filter(Boolean).join(" - "),
+      email: s.email, phone: s.phone, contact_person: s.contact_person, bank_accounts: s.bank_accounts || [],
+    } }));
   }, [o.supplier_id, suppliers]);
 
   const setLine = (i: number, patch: Partial<OrderLine>) => setO((p) => ({ ...p, lines: p.lines.map((l, k) => (k === i ? { ...l, ...patch } : l)) }));
@@ -160,6 +172,12 @@ function OrderEditor({ order, suppliers, sites, onBack }: { order: Order; suppli
             <SelectContent>{suppliers.map((s) => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent>
           </Select>
         </F>
+        <F label="Tipo">
+          <Select value={o.direction || "uscita"} onValueChange={(v) => set("direction", v)}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent><SelectItem value="uscita">Inviato da noi al fornitore</SelectItem><SelectItem value="entrata">Ricevuto dal fornitore (conferma)</SelectItem></SelectContent>
+          </Select>
+        </F>
         <F label="Numero"><Input value={o.order_number} onChange={(e) => set("order_number", e.target.value)} /></F>
         <F label="Data ordine"><Input type="date" value={o.order_date} onChange={(e) => set("order_date", e.target.value)} /></F>
         <F label="Stato">
@@ -181,6 +199,7 @@ function OrderEditor({ order, suppliers, sites, onBack }: { order: Order; suppli
         <F label="Luogo di consegna"><Input value={o.delivery_place ?? ""} onChange={(e) => set("delivery_place", e.target.value)} placeholder="Magazzino o indirizzo cantiere" /></F>
         <F label="Pagamento"><Input value={o.payment_terms ?? ""} onChange={(e) => set("payment_terms", e.target.value)} placeholder="Es. RI.BA. 60 gg f.m." /></F>
         <F label="Riferimento"><Input value={o.reference ?? ""} onChange={(e) => set("reference", e.target.value)} placeholder="Es. Rif. Marco / commessa" /></F>
+        <F label="N. ordine / conferma del fornitore"><Input value={o.supplier_reference ?? ""} onChange={(e) => set("supplier_reference", e.target.value)} placeholder="Numero sul loro documento" /></F>
         <F label="Trasporto"><Input value={o.transport ?? ""} onChange={(e) => set("transport", e.target.value)} placeholder="Franco cantiere, ritiro…" /></F>
         <F label="Vettore"><Input value={o.carrier ?? ""} onChange={(e) => set("carrier", e.target.value)} /></F>
         <div className="flex items-center gap-3 pt-6"><Switch id="sp" checked={o.show_prices} onCheckedChange={(v) => set("show_prices", v)} /><Label htmlFor="sp">Mostra prezzi nel PDF</Label></div>

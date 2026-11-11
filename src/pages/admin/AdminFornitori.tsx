@@ -8,10 +8,26 @@ import { Plus, Truck, Receipt, AlertTriangle } from 'lucide-react';
 import { fmtEur } from '@/lib/finance';
 import SupplierDetailSheet from '@/components/admin/fornitori/SupplierDetailSheet';
 import SupplierInvoiceDialog from '@/components/admin/fornitori/SupplierInvoiceDialog';
+import { SupplierForm, supplierPayload } from '@/components/admin/fornitori/SupplierForm';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 const AdminFornitori = () => {
   const [selected, setSelected] = useState<string | null>(null);
   const [newInvoice, setNewInvoice] = useState(false);
+  const [newSup, setNewSup] = useState<any | null>(null);
+  const qc = useQueryClient();
+  const createSupplier = async () => {
+    if (!newSup?.name?.trim()) return toast.error('Inserisci la ragione sociale');
+    const { data, error } = await supabase.from('suppliers').insert(supplierPayload(newSup)).select('id').single();
+    if (error) return toast.error(error.message);
+    toast.success('Fornitore creato');
+    setNewSup(null);
+    qc.invalidateQueries({ queryKey: ['suppliers-list'] });
+    qc.invalidateQueries({ queryKey: ['suppliers-min'] });
+    setSelected(data.id);
+  };
 
   const { data: suppliers, isLoading } = useQuery({
     queryKey: ['suppliers-list'],
@@ -51,7 +67,7 @@ const AdminFornitori = () => {
         breadcrumb={['CRM', 'Finanza', 'Fornitori']}
         title="Fornitori"
         subtitle="Anagrafica, fatture passive e pagamenti"
-        actions={<Button size="sm" onClick={() => setNewInvoice(true)}><Plus className="w-4 h-4 mr-1" /> Nuova fattura</Button>}
+        actions={<div className="flex gap-2"><Button size="sm" variant="outline" onClick={() => setNewSup({ country: 'Italia', bank_accounts: [] })}><Plus className="w-4 h-4 mr-1" /> Nuovo fornitore</Button><Button size="sm" onClick={() => setNewInvoice(true)}><Plus className="w-4 h-4 mr-1" /> Nuova fattura</Button></div>}
       />
 
       <CrmKpiRow>
@@ -66,7 +82,7 @@ const AdminFornitori = () => {
         searchPlaceholder="Cerca fornitore…"
         searchKeys={['name', 'vat_number', 'contact_person', 'phone']}
         emptyTitle="Nessun fornitore"
-        emptyDescription="Aggiungi un fornitore creando la prima fattura passiva."
+        emptyDescription="Premi «Nuovo fornitore» per inserire il primo."
         onRowClick={(r) => setSelected(r.id)}
         columns={[
           { key: 'name', header: 'Nome', sortable: true, cell: (r) => <span className="font-medium">{r.name}</span> },
@@ -88,6 +104,13 @@ const AdminFornitori = () => {
 
       <SupplierDetailSheet supplierId={selected} onOpenChange={(o) => !o && setSelected(null)} />
       <SupplierInvoiceDialog open={newInvoice} onOpenChange={setNewInvoice} />
+      <Dialog open={!!newSup} onOpenChange={(o) => !o && setNewSup(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto admin-theme">
+          <DialogHeader><DialogTitle>Nuovo fornitore</DialogTitle></DialogHeader>
+          {newSup && <SupplierForm form={newSup} setForm={setNewSup} />}
+          <div className="flex justify-end gap-2 pt-2"><Button variant="outline" onClick={() => setNewSup(null)}>Annulla</Button><Button onClick={createSupplier}>Crea fornitore</Button></div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
