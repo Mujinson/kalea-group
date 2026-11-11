@@ -18,6 +18,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import SEOHead from "@/components/SEOHead";
 import { toast } from "sonner";
 import { trackGenerateLead } from "@/lib/analytics";
+import { clearVisualizerAttachment, loadVisualizerAttachment, type VisualizerAttachment } from "@/lib/visualizer/quoteAttachment";
 
 interface PriceItem {
   code: string;
@@ -241,6 +242,7 @@ const PreventivoOnline = () => {
   const [done, setDone] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
 
+  const [vizAtt, setVizAtt] = useState<VisualizerAttachment | null>(() => loadVisualizerAttachment());
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -348,6 +350,7 @@ const PreventivoOnline = () => {
           privacyConsent: form.privacy,
           honeypot: form.honeypot,
           lines: rows.map((r) => ({ code: r.item.code, quantity: r.q })),
+          visualizer: vizAtt ?? undefined,
         },
       });
       if (error || (data as { error?: string })?.error) {
@@ -355,6 +358,7 @@ const PreventivoOnline = () => {
         toast.error(c.errGeneric);
         return;
       }
+      clearVisualizerAttachment();
       trackGenerateLead({ source: "preventivatore_online", method: "estimate_wizard", has_company: false });
       setDone(true);
     } catch (err) {
@@ -613,6 +617,20 @@ const PreventivoOnline = () => {
                             </Select>
                           </div>
                         </div>
+                        {vizAtt && (
+                          <div className="flex gap-3 items-center rounded-lg border border-border p-3">
+                            <img src={vizAtt.image} alt={`${vizAtt.info.category} ${vizAtt.info.product}`} className="w-28 h-20 object-cover rounded" />
+                            <div className="text-sm flex-1 min-w-0">
+                              <p className="font-medium truncate">{vizAtt.info.category} · {vizAtt.info.product}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {lang === "it" ? "Immagine dal visualizzatore, allegata alla richiesta" : lang === "de" ? "Bild aus dem Visualizer, der Anfrage beigefügt" : lang === "fr" ? "Image du visualiseur, jointe à la demande" : "Visualizer image, attached to the request"}
+                              </p>
+                            </div>
+                            <Button type="button" size="sm" variant="ghost" onClick={() => { clearVisualizerAttachment(); setVizAtt(null); }}>
+                              {lang === "it" ? "Rimuovi" : lang === "de" ? "Entfernen" : lang === "fr" ? "Retirer" : "Remove"}
+                            </Button>
+                          </div>
+                        )}
                         <div className="space-y-2">
                           <Label htmlFor="pq-notes">{c.notes}</Label>
                           <Textarea

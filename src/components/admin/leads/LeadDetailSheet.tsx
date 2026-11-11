@@ -35,6 +35,7 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
   const [lead, setLead] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
   const [activities, setActivities] = useState<any[]>([]);
+  const [files, setFiles] = useState<{ id: string; file_name: string; mime_type: string | null; url?: string }[]>([]);
   const [newNote, setNewNote] = useState('');
   const [noteType, setNoteType] = useState<'note' | 'call' | 'email' | 'meeting' | 'whatsapp'>('note');
 
@@ -47,6 +48,10 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
     ]);
     setLead(l);
     setActivities(acts || []);
+    const { data: att } = await supabase.from('lead_attachments').select('id, file_name, file_path, mime_type').eq('lead_id', leadId).order('created_at', { ascending: false });
+    const paths = (att || []).map((a) => a.file_path);
+    const signed = paths.length ? (await supabase.storage.from('lead-attachments').createSignedUrls(paths, 3600)).data ?? [] : [];
+    setFiles((att || []).map((a) => ({ ...a, url: signed.find((x) => x.path === a.file_path)?.signedUrl })));
     setLoading(false);
   }, [leadId]);
 
@@ -182,6 +187,19 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                     <div className="rounded-xl border border-[#E5E7EB] p-4">
                       <div className="text-[11px] uppercase tracking-widest text-[#64748B] mb-1">Note interne</div>
                       <p className="text-[13px] text-[#0F172A] whitespace-pre-wrap">{lead.notes}</p>
+                    </div>
+                  )}
+                  {files.length > 0 && (
+                    <div className="rounded-xl border border-[#E5E7EB] p-4">
+                      <div className="text-[11px] uppercase tracking-widest text-[#64748B] mb-2">Allegati ({files.length})</div>
+                      <div className="grid grid-cols-2 gap-2">
+                        {files.map((f) => (
+                          <a key={f.id} href={f.url} target="_blank" rel="noreferrer" className="block rounded-lg border border-[#E5E7EB] overflow-hidden hover:opacity-90">
+                            {f.mime_type?.startsWith('image/') && f.url ? <img src={f.url} alt={f.file_name} className="w-full h-28 object-cover" /> : null}
+                            <div className="px-2 py-1 text-[12px] text-[#0F172A] truncate">{f.file_name}</div>
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </TabsContent>

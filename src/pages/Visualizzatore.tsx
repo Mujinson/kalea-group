@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { saveVisualizerAttachment } from "@/lib/visualizer/quoteAttachment";
 import { Camera, Download, Eraser, Brush, Undo2, Move, Loader2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -31,6 +32,7 @@ type Tool = "view" | "add" | "remove" | "quad";
 export default function Visualizzatore() {
   const { language } = useTranslation();
   const [params] = useSearchParams();
+  const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<FloorRenderer | null>(null);
@@ -246,6 +248,26 @@ export default function Visualizzatore() {
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   };
 
+  const requestQuote = async (e: React.MouseEvent) => {
+    const r = rendererRef.current;
+    if (!r || !H || !hasPhoto) return; // no photo: plain link
+    e.preventDefault();
+    r.render({ H, ...renderOpts, split: 1 });
+    const blob = await exportRender(r.canvas, floor.name);
+    draw();
+    // downscale to <= 1280px JPEG to keep the upload light
+    const bmp = await createImageBitmap(blob);
+    const s = Math.min(1, 1280 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
+    c.getContext("2d")!.drawImage(bmp, 0, 0, c.width, c.height);
+    saveVisualizerAttachment({
+      image: c.toDataURL("image/jpeg", 0.85),
+      info: { product: floor.name, category: floor.category, slug: floor.slug, formatCm: floor.plankCm, layout: isPlank(floor) ? "doga" : "lastra", rotation: rot, scaleCm: tileCm },
+    });
+    navigate(quoteHref);
+  };
+
   const quoteHref = `/${language}/preventivo-online?prodotto=${encodeURIComponent(`${floor.category} ${floor.name}`)}`;
   const tools: { id: Tool; label: string; icon: any }[] = [
     { id: "view", label: "Prima/dopo", icon: Move },
@@ -363,7 +385,7 @@ export default function Visualizzatore() {
 
             <div className="flex flex-col gap-2">
               <Button onClick={download} disabled={!hasPhoto}><Download className="w-4 h-4 mr-2" />Scarica immagine</Button>
-              <Button asChild variant="outline"><Link to={quoteHref}><FileText className="w-4 h-4 mr-2" />Richiedi preventivo per questo pavimento</Link></Button>
+              <Button asChild variant="outline"><Link to={quoteHref} onClick={requestQuote}><FileText className="w-4 h-4 mr-2" />Richiedi preventivo per questo pavimento</Link></Button>
             </div>
           </aside>
         </div>

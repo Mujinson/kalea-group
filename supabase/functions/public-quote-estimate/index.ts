@@ -99,6 +99,27 @@ Deno.serve(async (req) => {
       ? clean(body.language, 2)
       : "it";
     const consent = body.privacyConsent === true;
+    // Optional render from the floor visualizer
+    const viz = body.visualizer && typeof body.visualizer === "object" ? body.visualizer : null;
+    let vizBytes: Uint8Array | null = null;
+    let vizText = "";
+    let vizB64: string | null = null;
+    if (viz) {
+      const m = /^data:image\/(jpeg|png);base64,([A-Za-z0-9+/=]+)$/.exec(String(viz.image ?? ""));
+      if (m && m[2].length < 4_000_000) {
+        try { vizBytes = Uint8Array.from(atob(m[2]), (ch) => ch.charCodeAt(0)); vizB64 = m[2]; } catch { vizBytes = null; }
+      }
+      const i = viz.info ?? {};
+      const fmt = Array.isArray(i.formatCm) ? `${Number(i.formatCm[0])}×${Number(i.formatCm[1])} cm` : "";
+      vizText = [
+        `Pavimento scelto nel visualizzatore: ${clean(i.category, 40)} ${clean(i.product, 120)}`.trim(),
+        fmt && `Formato: ${clean(i.layout, 20)} ${fmt}`,
+        i.rotation !== undefined && `Direzione posa: ${Number(i.rotation)}°`,
+        i.scaleCm !== undefined && `Scala venatura: ${Number(i.scaleCm)} cm`,
+        i.slug && `Codice visualizzatore: ${clean(i.slug, 80)}`,
+        vizBytes ? "Immagine del visualizzatore allegata al contatto." : "",
+      ].filter(Boolean).join("\n");
+    }
     const lines: LineInput[] = Array.isArray(body.lines) ? body.lines.slice(0, 30) : [];
 
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -183,7 +204,7 @@ Deno.serve(async (req) => {
     let leadId: string | null = null;
     const summary = `Stima online: ${eur(totalMin)} – ${eur(totalMax)} + IVA\n${computed
       .map((r) => `• ${r.name}: ${r.quantity} ${r.unit}`)
-      .join("\n")}${notes ? `\n\nNote: ${notes}` : ""}`;
+      .join("\n")}${notes ? `\n\nNote: ${notes}` : ""}${vizText ? `\n\n${vizText}` : ""}`;
 
     const { data: existingLead } = await supabase
       .from("leads")
@@ -249,6 +270,24 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Visualizer image -> lead attachment
+    let vizPath: string | null = null;
+    if (leadId && vizBytes) {
+      const ext = vizBytes[0] === 0x89 ? "png" : "jpg";
+      vizPath = `${leadId}/visualizzatore-${Date.now()}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("lead-attachments").upload(vizPath, vizBytes, { contentType: `image/${ext === "png" ? "png" : "jpeg"}` });
+      if (upErr) { console.error("viz upload failed:", upErr.message); vizPath = null; }
+      else {
+        const prod = clean(viz?.info?.product, 80).replace(/[^\w\s-]/g, "").trim() || "pavimento";
+        await supabase.from("lead_attachments").insert({
+          lead_id: leadId, file_name: `Visualizzatore - ${prod}.${ext}`, file_path: vizPath, file_size: vizBytes.length, mime_type: `image/${ext === "png" ? "png" : "jpeg"}`,
+        });
+        await supabase.from("lead_activities").insert({
+          lead_id: leadId, type: "note", title: "Immagine dal visualizzatore pavimenti", description: vizText, occurred_at: new Date().toISOString(),
+        });
+      }
+    }
+
     // Follow-up reminder for tomorrow
     if (leadId) {
       const tomorrow = new Date();
@@ -306,9 +345,11 @@ Deno.serve(async (req) => {
           from: "Kalea Website <noreply@kalea.space>",
           to: ["info@kalea.space"],
           subject: `Nuova stima online — ${name} (${eur(totalMin)}–${eur(totalMax)})`,
+          ...(vizB64 ? { attachments: [{ filename: `visualizzatore.${vizBytes![0] === 0x89 ? "png" : "jpg"}`, content: vizB64 }] } : {}),
           html: `<p><strong>${esc(name)}</strong> — ${esc(email)} — ${esc(phone)}<br>
             ${esc(city)} ${esc(province)} — ${esc(customerType)}</p>
             ${notes ? `<p><strong>Note:</strong> ${esc(notes)}</p>` : ""}
+            ${vizText ? `<p style="white-space:pre-line;"><strong>Visualizzatore:</strong><br>${esc(vizText)}</p>` : ""}
             ${estimateHtml}`,
         });
       } catch (e) {
