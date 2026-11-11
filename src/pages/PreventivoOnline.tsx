@@ -248,7 +248,7 @@ const PreventivoOnline = () => {
     city: "",
     province: "",
     customerType: "",
-    notes: "",
+    notes: (() => { const pr = new URLSearchParams(window.location.search).get("prodotto"); return pr ? `Pavimento provato nel visualizzatore: ${pr}` : ""; })(),
     privacy: false,
     honeypot: "",
   });

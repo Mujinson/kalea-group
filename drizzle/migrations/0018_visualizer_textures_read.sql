@@ -1,0 +1,1 @@
+CREATE POLICY "Anyone reads visualizer texture files" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'visualizer-textures');

@@ -183,6 +183,7 @@ const HypermattXL = () => {
         open={!!selectedProduct}
         image={selectedProduct?.image}
         name={selectedProduct?.name}
+        visualizerSlug={selectedProduct ? `hypermatt-${selectedProduct.id}` : undefined}
         onOpenChange={(open) => {
           if (!open) setSelectedProduct(null);
         }}

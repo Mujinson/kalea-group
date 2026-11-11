@@ -139,6 +139,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Prodotti', url: '/admin/catalogo', icon: Package, adminOnly: false },
         { title: 'Prezzi & Margini', url: '/admin/catalogo/prezzi', icon: DollarSign, adminOnly: true },
         { title: 'Marche', url: '/admin/catalogo/marche', icon: Tag, adminOnly: true },
+        { title: 'Texture visualizzatore', url: '/admin/catalogo/texture-visualizzatore', icon: Tag, adminOnly: true },
         { title: 'Collezioni', url: '/admin/catalogo/collezioni', icon: Layers, adminOnly: true },
         { title: 'Categorie', url: '/admin/catalogo/categorie', icon: ListOrdered, adminOnly: true },
         { title: 'Listini & versioni', url: '/admin/catalogo/listini', icon: FileText, adminOnly: true },
