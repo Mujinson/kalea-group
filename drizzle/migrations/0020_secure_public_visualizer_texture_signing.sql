@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Anyone reads visualizer texture files" ON storage.objects;

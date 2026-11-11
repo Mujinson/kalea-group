@@ -141,6 +141,13 @@
       "when": 1794418524188,
       "tag": "0019_supplier_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1794421556403,
+      "tag": "0020_secure_public_visualizer_texture_signing",
+      "breakpoints": true
     }
   ]
 }
