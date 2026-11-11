@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface ProductLightboxProps {
   open: boolean;
   image?: string;
   name?: string;
   onOpenChange: (open: boolean) => void;
+  visualizerSlug?: string;
 }
 
-const ProductLightbox = ({ open, image, name, onOpenChange }: ProductLightboxProps) => {
+const ProductLightbox = ({ open, image, name, onOpenChange, visualizerSlug }: ProductLightboxProps) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const { language } = useTranslation();
 
   useEffect(() => {
     if (!open || !image) {
@@ -75,6 +79,12 @@ const ProductLightbox = ({ open, image, name, onOpenChange }: ProductLightboxPro
               <p className="text-center mt-4 text-lg font-semibold text-foreground uppercase tracking-wider">
                 {name}
               </p>
+              {visualizerSlug && (
+                <Link to={`/${language}/visualizzatore?prodotto=${visualizerSlug}`}
+                  className="mt-3 block text-center rounded-full bg-foreground text-background py-2 text-sm uppercase tracking-wider hover:opacity-90">
+                  Provalo a casa tua
+                </Link>
+              )}
             </div>
           </div>
         )}

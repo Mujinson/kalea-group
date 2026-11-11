@@ -401,6 +401,7 @@ const Externo = () => {
       open={!!selectedProduct}
       image={selectedProduct?.image}
       name={selectedProduct?.name}
+        visualizerSlug={selectedProduct ? `externo-${selectedProduct.id}` : undefined}
       onOpenChange={(open) => {
         if (!open) setSelectedProduct(null);
       }}

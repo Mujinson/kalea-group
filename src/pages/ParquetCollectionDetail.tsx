@@ -77,6 +77,8 @@ const ParquetCollectionDetail = () => {
         </div>
       </section>
 
+      <div className="container mx-auto px-4 pt-8 flex justify-center"><Link to={`/${language}/visualizzatore?prodotto=parquet-${collection.slug}`} className="rounded-full bg-foreground text-background px-6 py-3 text-sm uppercase tracking-wider hover:opacity-90">Provalo a casa tua</Link></div>
+
       <CollectionColorsSection slug={collection.slug} collectionName={collection.name} />
 
       <TechSpecBar

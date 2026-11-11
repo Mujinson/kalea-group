@@ -103,6 +103,7 @@ const Navbar = () => {
     { label: "Discover Kalēa", path: `/${language}/discover-kalea` },
     { label: t('nav.technicalArea'), path: `/${language}/area-tecnica` },
     { label: t('nav.projects'), path: `/${language}/realizzazioni` },
+    { label: "Visualizzatore", path: `/${language}/visualizzatore` },
     { label: t('nav.contacts'), path: `/${language}/contatti` },
   ];
 

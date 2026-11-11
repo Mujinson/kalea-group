@@ -2298,6 +2298,42 @@ export type Database = {
         }
         Relationships: []
       }
+      floor_visualizer_textures: {
+        Row: {
+          created_at: string
+          default_rotation: number
+          enabled: boolean
+          id: string
+          product_slug: string
+          real_height_cm: number | null
+          real_width_cm: number | null
+          texture_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_rotation?: number
+          enabled?: boolean
+          id?: string
+          product_slug: string
+          real_height_cm?: number | null
+          real_width_cm?: number | null
+          texture_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_rotation?: number
+          enabled?: boolean
+          id?: string
+          product_slug?: string
+          real_height_cm?: number | null
+          real_width_cm?: number | null
+          texture_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gabriel_email_tasks: {
         Row: {
           account: string
