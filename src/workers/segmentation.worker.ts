@@ -8,14 +8,15 @@ const RUG_LABELS = new Set(["rug", "carpet"]);
 
 let segPromise: Promise<any> | null = null;
 
-async function getSeg(post: (m: any) => void) {
+async function getSeg(post: (m: any) => void, forceWasm = false) {
   if (segPromise) return segPromise;
-  const hasGPU = typeof (self as any).navigator?.gpu !== "undefined";
+  let hasGPU = false;
+  try { hasGPU = !!(await (self as any).navigator?.gpu?.requestAdapter()); } catch { hasGPU = false; }
   const progress_callback = (p: any) => {
     if (p.status === "progress" && p.total) post({ type: "progress", loaded: p.loaded, total: p.total, file: p.file });
   };
   segPromise = (async () => {
-    if (hasGPU) {
+    if (hasGPU && !forceWasm) {
       try {
         return await pipeline("image-segmentation", MODEL, { device: "webgpu", progress_callback } as any);
       } catch (e) { /* fallback */ }
@@ -29,10 +30,12 @@ self.onmessage = async (ev: MessageEvent) => {
   const { id, blob, includeRug, width, height } = ev.data as { id: number; blob: Blob; includeRug: boolean; width: number; height: number };
   const post = (m: any) => (self as any).postMessage({ id, ...m });
   try {
-    const seg = await getSeg(post);
+    let seg = await getSeg(post);
     post({ type: "status", status: "inference" });
     const image = await RawImage.fromBlob(blob);
-    const out: any[] = await seg(image);
+    let out: any[];
+    try { out = await seg(image); }
+    catch { segPromise = null; seg = await getSeg(post, true); out = await seg(image); }
     // combine masks, resample to requested size (nearest)
     const res = new Uint8ClampedArray(width * height);
     for (const o of out) {
