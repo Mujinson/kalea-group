@@ -44,3 +44,30 @@ describe("estimateQuad", () => {
     assert.deepEqual(estimateQuad(new Uint8Array(100), 10, 10), DEFAULT_QUAD);
   });
 });
+
+import { metricHomography } from "./homography";
+import { parseFormatCm } from "./floorRegistry";
+describe("metricHomography", () => {
+  test("recovers real floor distances for a tilted camera at 1.4 m", () => {
+    const W = 1000, Hh = 750, fov = 65, camH = 1.4, tilt = (25 * Math.PI) / 180;
+    const f = 500 / Math.tan((32.5 * Math.PI) / 180);
+    // camera: x right, y down, z forward; floor at y = +camH in world, camera pitched down by tilt
+    const proj = (X: number, Z: number) => {
+      const y = camH, z = Z;
+      const yc = y * Math.cos(tilt) - z * Math.sin(tilt), zc = y * Math.sin(tilt) + z * Math.cos(tilt);
+      return { x: (f * X / zc + W / 2) / W, y: (f * yc / zc + Hh / 2) / Hh };
+    };
+    const quad = [proj(-1, 5), proj(1, 5), proj(1, 2), proj(-1, 2)];
+    const H = metricHomography(quad, W, Hh, camH, fov)!;
+    assert.ok(H);
+    const a = applyHomography(H, proj(-1, 2)), b = applyHomography(H, proj(1, 2)), c = applyHomography(H, proj(-1, 5));
+    assert.ok(Math.abs(Math.hypot(a.x - b.x, a.y - b.y) - 2) < 0.02, "width 2 m");
+    assert.ok(Math.abs(Math.hypot(a.x - c.x, a.y - c.y) - 3) < 0.02, "depth 3 m");
+  });
+});
+describe("parseFormatCm", () => {
+  test("reads plank format in cm", () => {
+    assert.deepEqual(parseFormatCm(["1829×228 mm", "Spessore 6 mm"]), [22.8, 182.9]);
+    assert.deepEqual(parseFormatCm(["228,6×1524 mm"]), [22.86, 152.4]);
+  });
+});

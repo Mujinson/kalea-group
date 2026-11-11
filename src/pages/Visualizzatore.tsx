@@ -10,10 +10,10 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 import FloorCatalog from "@/components/visualizer/FloorCatalog";
-import { floorRegistry, type VisualizerFloor } from "@/lib/visualizer/floorRegistry";
-import { computeHomography } from "@/lib/visualizer/homography";
+import { floorRegistry, isPlank, type VisualizerFloor } from "@/lib/visualizer/floorRegistry";
+import { computeHomography, metricHomography } from "@/lib/visualizer/homography";
 import { estimateQuad, DEFAULT_QUAD, type Quad } from "@/lib/visualizer/quadEstimate";
-import { featherMask, loadResized, paintCircle } from "@/lib/visualizer/maskOps";
+import { featherMask, loadResized, luminance, paintCircle, refineMask, shadingMap } from "@/lib/visualizer/maskOps";
 import { FloorRenderer } from "@/lib/visualizer/renderer";
 import { exportRender } from "@/lib/visualizer/exportImage";
 import demoSoggiorno from "@/assets/realizzazione-soggiorno-aurora.jpg";
@@ -56,8 +56,8 @@ export default function Visualizzatore() {
   const [rot, setRot] = useState(floor.rotation);
   const [shadow, setShadow] = useState(0.7);
   const [split, setSplit] = useState(1);
-  const [roomW, setRoomW] = useState(4);
-  const [roomD, setRoomD] = useState(5);
+  const [camH, setCamH] = useState(1.4);
+  const lumRef = useRef<Float32Array | null>(null);
   const [mirror, setMirror] = useState(false);
   const [includeRug, setIncludeRug] = useState(false);
   const [floorReady, setFloorReady] = useState(0);
@@ -88,22 +88,30 @@ export default function Visualizzatore() {
   }, []);
 
   const H = useMemo(() => {
+    const p = photoRef.current;
+    const w = p?.width ?? 1024, h = p?.height ?? 768;
+    const m = metricHomography(quad, w, h, camH);
+    if (m) return m;
     try {
-      return computeHomography(quad, [{ x: 0, y: 0 }, { x: roomW, y: 0 }, { x: roomW, y: roomD }, { x: 0, y: roomD }]);
+      return computeHomography(quad, [{ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 4, y: 5 }, { x: 0, y: 5 }]);
     } catch { return null; }
-  }, [quad, roomW, roomD]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quad, camH, hasPhoto]);
+  const renderOpts = { tileM: tileCm / 100, rotDeg: rot, shadow, plankM: [floor.plankCm[0] / 100, floor.plankCm[1] / 100] as [number, number], stagger: isPlank(floor) };
 
   const draw = useCallback(() => {
     const r = rendererRef.current;
     if (!r || !hasPhoto || !H) return;
-    r.render({ H, tileM: tileCm / 100, rotDeg: rot, shadow, split });
-  }, [H, tileCm, rot, shadow, split, hasPhoto]);
+    r.render({ H, ...renderOpts, split });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [H, tileCm, rot, shadow, split, hasPhoto, floor]);
 
   // upload feathered mask
   useEffect(() => {
     const r = rendererRef.current, p = photoRef.current, m = maskRef.current;
     if (!r || !p || !m) return;
     r.setMask(featherMask(m, p.width, p.height, feather), p.width, p.height);
+    if (lumRef.current) r.setShade(shadingMap(lumRef.current, m, p.width, p.height), p.width, p.height);
     drawOverlay();
     draw();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -163,10 +171,11 @@ export default function Visualizzatore() {
       if (!rendererRef.current && canvasRef.current) rendererRef.current = new FloorRenderer(canvasRef.current);
       rendererRef.current!.setPhoto(c);
       maskRef.current = new Uint8ClampedArray(c.width * c.height);
+      lumRef.current = luminance(c, c.width, c.height);
       undoRef.current = [];
       setHasPhoto(true); setSplit(1); setTool("view");
       setBusy("Riconosco il pavimento nella foto…");
-      const m = await segment(c);
+      const m = refineMask(await segment(c), lumRef.current!, c.width, c.height);
       maskRef.current = m;
       setQuad(estimateQuad(m, c.width, c.height));
       setMaskVersion((v) => v + 1);
@@ -229,7 +238,7 @@ export default function Visualizzatore() {
 
   const download = async () => {
     const r = rendererRef.current; if (!r || !H) return;
-    r.render({ H, tileM: tileCm / 100, rotDeg: rot, shadow, split: 1 });
+    r.render({ H, ...renderOpts, split: 1 });
     const blob = await exportRender(r.canvas, floor.name);
     draw();
     const a = document.createElement("a");
@@ -338,15 +347,16 @@ export default function Visualizzatore() {
             <FloorCatalog floors={floors} selected={floor.slug} onSelect={selectFloor} />
 
             <div className="space-y-4 rounded-xl border border-border p-4 bg-card">
-              <Ctl label={`Dimensione texture: ${tileCm} cm`}><Slider value={[tileCm]} min={10} max={300} onValueChange={([v]) => setTileCm(v)} /></Ctl>
+              <p className="text-xs text-muted-foreground">Formato {isPlank(floor) ? "doga" : "lastra"}: {floor.plankCm[0]}×{floor.plankCm[1]} cm</p>
+              <Ctl label={`Scala venatura: ${tileCm} cm`}><Slider value={[tileCm]} min={10} max={300} onValueChange={([v]) => setTileCm(v)} /></Ctl>
               <Ctl label={`Rotazione: ${rot}°`}>
                 <div className="flex gap-1 mb-2">{[0, 45, 90].map((d) => <Button key={d} size="sm" variant={rot === d ? "default" : "outline"} onClick={() => setRot(d)}>{d}°</Button>)}</div>
                 <Slider value={[rot]} min={0} max={180} onValueChange={([v]) => setRot(v)} />
               </Ctl>
               <Ctl label={`Intensità ombre: ${Math.round(shadow * 100)}%`}><Slider value={[shadow * 100]} min={0} max={100} onValueChange={([v]) => setShadow(v / 100)} /></Ctl>
               <Ctl label={`Sfumatura bordi: ${feather}px`}><Slider value={[feather]} min={0} max={15} onValueChange={([v]) => setFeather(v)} /></Ctl>
-              <Ctl label={`Larghezza stanza: ${roomW} m`}><Slider value={[roomW]} min={1} max={12} step={0.5} onValueChange={([v]) => setRoomW(v)} /></Ctl>
-              <Ctl label={`Profondità stanza: ${roomD} m`}><Slider value={[roomD]} min={1} max={15} step={0.5} onValueChange={([v]) => setRoomD(v)} /></Ctl>
+              <Ctl label={`Altezza fotocamera: ${camH.toFixed(1)} m`}><Slider value={[camH * 10]} min={6} max={25} onValueChange={([v]) => setCamH(v / 10)} /></Ctl>
+              <p className="text-xs text-muted-foreground">Se le doghe sembrano troppo grandi o piccole, regola l'altezza da cui hai scattato la foto. Con «Prospettiva» allinea i lati del riquadro alle linee del pavimento o dei muri: le doghe seguono quella direzione.</p>
               <div className="flex items-center justify-between"><Label htmlFor="mir" className="text-sm">Ripetizione a specchio</Label><Switch id="mir" checked={mirror} onCheckedChange={setMirror} /></div>
               <div className="flex items-center justify-between"><Label htmlFor="rug" className="text-sm">Includi tappeti</Label><Switch id="rug" checked={includeRug} onCheckedChange={setIncludeRug} /></div>
             </div>

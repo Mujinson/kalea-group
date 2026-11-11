@@ -45,7 +45,21 @@ export function estimateQuad(mask: Uint8Array | Uint8ClampedArray, w: number, h:
   if (ys.length < h * 0.08) return DEFAULT_QUAD;
   const yTop = ys[Math.floor(ys.length * 0.03)];
   const yBot = ys[ys.length - 1];
-  const L = fitLine(ys, ls), R = fitLine(ys, rs);
+  // Sides clipped by the photo border don't show the floor direction: ignore them
+  // and mirror the other side (camera assumed level), or use a symmetric trapezoid.
+  const edge = Math.max(2, w * 0.01);
+  const lClip = ls.filter((x) => x <= edge).length > ls.length * 0.4;
+  const rClip = rs.filter((x) => x >= w - 1 - edge).length > rs.length * 0.4;
+  let L = lClip ? null : fitLine(ys, ls), R = rClip ? null : fitLine(ys, rs);
+  if (!L && R) L = { a: -R.a, b: w - 1 - R.b };
+  else if (L && !R) R = { a: -L.a, b: w - 1 - L.b };
+  else if (!L && !R) {
+    // symmetric trapezoid converging to the image centre
+    const span = Math.max(1, yBot - yTop), half = w * 0.45, top = w * 0.2;
+    const aR = (half - top) / span;
+    R = { a: aR, b: w / 2 + top - aR * yTop };
+    L = { a: -aR, b: w / 2 - top + aR * yTop };
+  }
   if (!L || !R) return DEFAULT_QUAD;
   const tl = L.a * yTop + L.b, tr = R.a * yTop + R.b;
   const bl = L.a * yBot + L.b, br = R.a * yBot + R.b;

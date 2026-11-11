@@ -36,7 +36,7 @@ self.onmessage = async (ev: MessageEvent) => {
     let out: any[];
     try { out = await seg(image); }
     catch { segPromise = null; seg = await getSeg(post, true); out = await seg(image); }
-    // combine masks, resample to requested size (nearest)
+    // combine masks, resample to requested size (bilinear, soft edges)
     const res = new Uint8ClampedArray(width * height);
     for (const o of out) {
       const lab = String(o.label).toLowerCase();
@@ -44,10 +44,15 @@ self.onmessage = async (ev: MessageEvent) => {
       const m: RawImage = o.mask;
       const mw = m.width, mh = m.height, ch = m.channels;
       for (let y = 0; y < height; y++) {
-        const sy = Math.min(mh - 1, Math.floor((y / height) * mh));
+        const fy = Math.min(mh - 1, Math.max(0, ((y + 0.5) / height) * mh - 0.5));
+        const y0 = Math.floor(fy), y1 = Math.min(mh - 1, y0 + 1), ty = fy - y0;
         for (let x = 0; x < width; x++) {
-          const sx = Math.min(mw - 1, Math.floor((x / width) * mw));
-          if (m.data[(sy * mw + sx) * ch] > 127) res[y * width + x] = 255;
+          const fx = Math.min(mw - 1, Math.max(0, ((x + 0.5) / width) * mw - 0.5));
+          const x0 = Math.floor(fx), x1 = Math.min(mw - 1, x0 + 1), tx = fx - x0;
+          const g = (xx: number, yy: number) => m.data[(yy * mw + xx) * ch];
+          const v = (g(x0, y0) * (1 - tx) + g(x1, y0) * tx) * (1 - ty) + (g(x0, y1) * (1 - tx) + g(x1, y1) * tx) * ty;
+          const i = y * width + x;
+          if (v > res[i]) res[i] = v;
         }
       }
     }
