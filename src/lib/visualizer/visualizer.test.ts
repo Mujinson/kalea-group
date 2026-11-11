@@ -71,3 +71,15 @@ describe("parseFormatCm", () => {
     assert.deepEqual(parseFormatCm(["228,6×1524 mm"]), [22.86, 152.4]);
   });
 });
+
+import { levelQuad } from "./quadEstimate";
+describe("levelQuad", () => {
+  test("is symmetric so planks run straight into the room", () => {
+    const w = 100, h = 100, m = new Uint8Array(w * h);
+    for (let y = 60; y < h; y++) for (let x = 0; x < 70; x++) m[y * w + x] = 255; // off-centre floor
+    const q = levelQuad(m, w, h);
+    assert.ok(Math.abs(q[0].x + q[1].x - 1) < 1e-9);
+    assert.ok(Math.abs(q[3].x + q[2].x - 1) < 1e-9);
+    assert.ok(q[1].x - q[0].x < q[2].x - q[3].x);
+  });
+});

@@ -122,7 +122,7 @@ export function refineMask(soft: Uint8ClampedArray, L: Float32Array, w: number, 
   const r = Math.max(4, Math.round(Math.max(w, h) / 120));
   const q = guidedFilter(L, p, w, h, r, 0.002);
   const bin = new Uint8ClampedArray(soft.length);
-  for (let i = 0; i < q.length; i++) bin[i] = q[i] > 0.55 ? 255 : 0;
+  for (let i = 0; i < q.length; i++) bin[i] = q[i] > 0.42 ? 255 : 0;
   return cleanMask(bin, w, h, Math.max(2, Math.round(Math.max(w, h) / 300)));
 }
 

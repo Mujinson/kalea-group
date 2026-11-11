@@ -72,3 +72,31 @@ export function estimateQuad(mask: Uint8Array | Uint8ClampedArray, w: number, h:
   });
   return [s(tl, yTop), s(tr, yTop), s(br, yBot), s(bl, yBot)];
 }
+
+/**
+ * Level-camera floor quad: assumes the photo is taken holding the phone upright
+ * and facing the room (no roll, no yaw), which is how almost every room photo
+ * is shot. Sides converge to a vanishing point on the vertical centre line at
+ * the estimated horizon, so planks run straight into the room. The horizon is
+ * put at mid-height, or just above the floor's top if the floor reaches higher.
+ */
+export function levelQuad(mask: Uint8Array | Uint8ClampedArray, w: number, h: number): Quad {
+  const rows: number[] = [];
+  const minRun = Math.max(3, w * 0.03);
+  for (let y = 0; y < h; y++) {
+    let c = 0;
+    for (let x = 0; x < w; x++) if (mask[y * w + x] > 127) c++;
+    if (c >= minRun) rows.push(y);
+  }
+  const top = rows.length > h * 0.05 ? rows[Math.floor(rows.length * 0.02)] / h : 0.55;
+  const hy = Math.min(0.5, top - 0.04);
+  const yTop = Math.min(0.9, Math.max(hy + 0.08, top));
+  const yBot = 0.98;
+  // sides through the vanishing point (0.5, hy); bottom half-width 0.45
+  const k = 0.45 / (yBot - hy);
+  const half = (y: number) => k * (y - hy);
+  return [
+    { x: 0.5 - half(yTop), y: yTop }, { x: 0.5 + half(yTop), y: yTop },
+    { x: 0.5 + half(yBot), y: yBot }, { x: 0.5 - half(yBot), y: yBot },
+  ];
+}

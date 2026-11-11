@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import FloorCatalog from "@/components/visualizer/FloorCatalog";
 import { floorRegistry, isPlank, type VisualizerFloor } from "@/lib/visualizer/floorRegistry";
 import { computeHomography, metricHomography } from "@/lib/visualizer/homography";
-import { estimateQuad, DEFAULT_QUAD, type Quad } from "@/lib/visualizer/quadEstimate";
+import { levelQuad, DEFAULT_QUAD, type Quad } from "@/lib/visualizer/quadEstimate";
 import { featherMask, loadResized, luminance, paintCircle, refineMask, shadingMap } from "@/lib/visualizer/maskOps";
 import { FloorRenderer } from "@/lib/visualizer/renderer";
 import { exportRender } from "@/lib/visualizer/exportImage";
@@ -58,7 +58,7 @@ export default function Visualizzatore() {
   const [rot, setRot] = useState(floor.rotation);
   const [shadow, setShadow] = useState(0.7);
   const [split, setSplit] = useState(1);
-  const [camH, setCamH] = useState(1.4);
+  const [camH, setCamH] = useState(1.2);
   const lumRef = useRef<Float32Array | null>(null);
   const [mirror, setMirror] = useState(false);
   const [includeRug, setIncludeRug] = useState(false);
@@ -179,7 +179,7 @@ export default function Visualizzatore() {
       setBusy("Riconosco il pavimento nella foto…");
       const m = refineMask(await segment(c), lumRef.current!, c.width, c.height);
       maskRef.current = m;
-      setQuad(estimateQuad(m, c.width, c.height));
+      setQuad(levelQuad(m, c.width, c.height));
       setMaskVersion((v) => v + 1);
       if (!m.some((v) => v > 127)) setError("Non ho trovato il pavimento: disegnalo con il pennello «Aggiungi».");
     } catch (e: any) {
@@ -354,7 +354,7 @@ export default function Visualizzatore() {
                     <Slider value={[brush]} min={5} max={80} onValueChange={([v]) => setBrush(v)} /></div>
                 )}
                 {tool === "quad" && (
-                  <Button size="sm" variant="ghost" onClick={() => { const p = photoRef.current, m = maskRef.current; if (p && m) setQuad(estimateQuad(m, p.width, p.height)); }}>Stima automatica</Button>
+                  <Button size="sm" variant="ghost" onClick={() => { const p = photoRef.current, m = maskRef.current; if (p && m) setQuad(levelQuad(m, p.width, p.height)); }}>Ripristina automatica</Button>
                 )}
               </div>
             )}
