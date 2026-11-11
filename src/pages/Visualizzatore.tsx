@@ -59,7 +59,7 @@ export default function Visualizzatore() {
   const [roomW, setRoomW] = useState(4);
   const [roomD, setRoomD] = useState(5);
   const [mirror, setMirror] = useState(false);
-  const [includeRug, setIncludeRug] = useState(true);
+  const [includeRug, setIncludeRug] = useState(false);
   const [floorReady, setFloorReady] = useState(0);
 
   // Load CRM overrides (texture + real size)
