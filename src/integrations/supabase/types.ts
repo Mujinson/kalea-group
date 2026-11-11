@@ -4841,6 +4841,87 @@ export type Database = {
           },
         ]
       }
+      supplier_orders: {
+        Row: {
+          carrier: string | null
+          created_at: string
+          created_by: string | null
+          delivery_place: string | null
+          id: string
+          lines: Json
+          notes: string | null
+          order_date: string
+          order_number: string
+          payment_terms: string | null
+          reference: string | null
+          requested_delivery_date: string | null
+          show_prices: boolean
+          site_id: string | null
+          status: string
+          supplier_id: string | null
+          supplier_snapshot: Json
+          transport: string | null
+          updated_at: string
+        }
+        Insert: {
+          carrier?: string | null
+          created_at?: string
+          created_by?: string | null
+          delivery_place?: string | null
+          id?: string
+          lines?: Json
+          notes?: string | null
+          order_date?: string
+          order_number: string
+          payment_terms?: string | null
+          reference?: string | null
+          requested_delivery_date?: string | null
+          show_prices?: boolean
+          site_id?: string | null
+          status?: string
+          supplier_id?: string | null
+          supplier_snapshot?: Json
+          transport?: string | null
+          updated_at?: string
+        }
+        Update: {
+          carrier?: string | null
+          created_at?: string
+          created_by?: string | null
+          delivery_place?: string | null
+          id?: string
+          lines?: Json
+          notes?: string | null
+          order_date?: string
+          order_number?: string
+          payment_terms?: string | null
+          reference?: string | null
+          requested_delivery_date?: string | null
+          show_prices?: boolean
+          site_id?: string | null
+          status?: string
+          supplier_id?: string | null
+          supplier_snapshot?: Json
+          transport?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_orders_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_orders_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       supplier_payments: {
         Row: {
           created_at: string

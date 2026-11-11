@@ -178,6 +178,7 @@ const menuStructure: MenuEntry[] = [
         { title: 'Contabilità', url: '/admin/contabilita', icon: Landmark, adminOnly: true },
         { title: 'Costi', url: '/admin/costi', icon: DollarSign, adminOnly: true },
         { title: 'Fornitori', url: '/admin/fornitori', icon: Truck, adminOnly: true },
+        { title: 'Ordini fornitori', url: '/admin/ordini-fornitori', icon: Truck, adminOnly: true },
         { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard, adminOnly: true },
       ],
     },

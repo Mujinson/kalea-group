@@ -51,6 +51,7 @@ import Normative from "./pages/Normative";
 import Realizzazioni from "./pages/Realizzazioni";
 import { lazy, Suspense } from "react";
 const Visualizzatore = lazy(() => import("./pages/Visualizzatore"));
+const AdminOrdiniFornitori = lazy(() => import("./pages/admin/AdminOrdiniFornitori"));
 const AdminVisualizerTextures = lazy(() => import("./pages/admin/catalog/VisualizerTextures"));
 import Welcome from "./pages/Welcome";
 import DiscoverKalea from "./pages/DiscoverKalea";
@@ -307,6 +308,7 @@ const App = () => (
                 <Route path="timbrature" element={<AdminTimbrature />} />
                 <Route path="costi" element={<AdminCosts />} />
                 <Route path="fornitori" element={<AdminFornitori />} />
+                <Route path="ordini-fornitori" element={<Suspense fallback={null}><AdminOrdiniFornitori /></Suspense>} />
                 <Route path="cantieri-marginalita" element={<CantieriMarginalita />} />
                 <Route path="cantieri/marginalita" element={<CantieriMarginalita />} />
                 <Route path="pagamenti" element={<AdminPayments />} />
