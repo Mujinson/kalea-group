@@ -21,7 +21,7 @@ export function legacyEstimate(q: any, products: any[], settings: any): Estimate
  if(c.costoTrasfertaTot) push('trasf', 1, Number(c.costoTrasfertaTot), 0);
  (d.righeMat || []).filter((r: any)=>!r.__adjustment).forEach((r: any)=>push(`rm-${r.id}`,Number(r.qta||0)*(1+Number(r.sfridoPct||0)/100),Number(r.costoUn||0),0));
  (d.wcSel?.accessories||[]).forEach((r: any,i:number)=>push(`wca-${i}`,Number(r.qta||0),Number(r.costoUn||0),0));
- ['articoli','accessori','servizi'].forEach(kind=>(d.catalog?.[kind]||[]).forEach((l:any)=>{
+ ['articoli','accessori','servizi','serviziB'].forEach(kind=>(d.catalog?.[kind]||[]).forEach((l:any)=>{
  const p=products.find(p=>p.id===l.catalog_id);
  rows.push({key:`cat-${l.id}`,desc:l.name,qta:Number(l.quantity||0),unita:l.unit,supplierPrice:Number(p?.list_price||p?.net_cost||p?.purchase_price||0),supplierDiscountPct:p?.list_price?Number(p.supplier_discount_percentage||0):0,clientUnit:Number(l.unit_price||0)*(1-Number(l.discount_pct||0)/100),...a.overrides?.[`cat-${l.id}`]});
  }));

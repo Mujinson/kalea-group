@@ -19,6 +19,8 @@ export interface CatalogLine {
 const ARTICOLI_CATS = ["Pavimenti", "Ceramiche", "Rivestimenti parete", "Soffitti", "Sottofondi", "Outdoor"];
 const ACCESSORI_CATS = ["Accessori"];
 const SERVIZI_CATS = ["Servizi"];
+// "Servizi B" è solo un'etichetta interna: nel PDF al cliente esce "Servizi".
+export const SERVIZI_B_CATS = ["Servizi"];
 
 const euro = (n: number) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(n || 0);
 
@@ -215,6 +217,8 @@ function Section({
   defaultUnit,
   allowManual = true,
   ivaRate,
+  hint,
+  emptyText,
 }: {
   title: string;
   lines: CatalogLine[];
@@ -223,6 +227,8 @@ function Section({
   defaultUnit?: string;
   allowManual?: boolean;
   ivaRate: number;
+  hint?: string;
+  emptyText?: string;
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSel, setPickerSel] = useState<CatalogProduct | null>(null);
@@ -251,6 +257,11 @@ function Section({
       <div style={titleStyle}>
         <span>
           {title} <span style={{ color: "#475569", marginLeft: 6 }}>({lines.length})</span>
+          {hint && (
+            <span style={{ color: "#64748B", marginLeft: 10, textTransform: "none", letterSpacing: 0, fontWeight: 400, fontSize: 11 }}>
+              {hint}
+            </span>
+          )}
         </span>
         <span style={{ fontSize: 12, color: "#1A1A2E", textTransform: "none", letterSpacing: 0, fontWeight: 600 }}>
           Imponibile {euro(total)} · IVA {ivaRate}% → {euro(totalIva)}
@@ -259,7 +270,7 @@ function Section({
 
       {lines.length === 0 && (
         <div style={{ fontSize: 12, color: "#64748B", fontStyle: "italic", padding: "6px 0 12px" }}>
-          Nessun {title.toLowerCase().replace(/[aeiou]$/, "")} aggiunto. Usa i pulsanti sotto.
+          {emptyText ?? `Nessun ${title.toLowerCase().replace(/[aeiou]$/, "")} aggiunto. Usa i pulsanti sotto.`}
         </div>
       )}
 
@@ -345,6 +356,8 @@ export default function QuoteCatalogSections({
   setAccessori,
   servizi,
   setServizi,
+  serviziB,
+  setServiziB,
   ivaRate = 22,
 }: {
   articoli: CatalogLine[];
@@ -353,6 +366,8 @@ export default function QuoteCatalogSections({
   setAccessori: (v: CatalogLine[]) => void;
   servizi: CatalogLine[];
   setServizi: (v: CatalogLine[]) => void;
+  serviziB: CatalogLine[];
+  setServiziB: (v: CatalogLine[]) => void;
   ivaRate?: number;
 }) {
   return (
@@ -360,6 +375,16 @@ export default function QuoteCatalogSections({
       <Section title="Articoli" lines={articoli} setLines={setArticoli} categoryNames={ARTICOLI_CATS} defaultUnit="mq" ivaRate={ivaRate} />
       <Section title="Accessori" lines={accessori} setLines={setAccessori} categoryNames={ACCESSORI_CATS} defaultUnit="pz" ivaRate={ivaRate} />
       <Section title="Servizi" lines={servizi} setLines={setServizi} categoryNames={SERVIZI_CATS} defaultUnit="a corpo" ivaRate={ivaRate} />
+      <Section
+        title="Servizi B"
+        lines={serviziB}
+        setLines={setServiziB}
+        categoryNames={SERVIZI_B_CATS}
+        defaultUnit="a corpo"
+        ivaRate={ivaRate}
+        hint="appalti pubblici — nel PDF al cliente esce &quot;Servizi&quot;"
+        emptyText="Nessuna voce per appalto pubblico. Le voci di qui stampano come &quot;Servizi&quot; e sostituiscono i Termini e condizioni con le Condizioni generali per appalti pubblici."
+      />
     </div>
   );
 }

@@ -12,6 +12,8 @@ import { takeImportedQuote, type ImportedLine } from "@/lib/quoteImport";
 import { ensureLeadForQuote } from "@/lib/quoteCrm";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
+import { PUBLIC_TENDER_TERMS } from "@/data/quotePublicTenderTerms";
+import { isPublicTenderQuote, publicTenderPagamenti, resolveQuoteAcceptance, resolveQuoteTerms, shouldPrefillSalPagamenti } from "@/lib/publicTenderQuote";
 import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
 import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
 import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
@@ -1192,6 +1194,8 @@ export default function CreaPreventivo() {
   const [articoli, setArticoli] = useState<CatalogLine[]>([]);
   const [accessori, setAccessori] = useState<CatalogLine[]>([]);
   const [servizi, setServizi] = useState<CatalogLine[]>([]);
+  // "Servizi B" = voci per appalti pubblici. Lato cliente si stampa "Servizi".
+  const [serviziB, setServiziB] = useState<CatalogLine[]>([]);
   // Override manuali per riga generata automaticamente (prezzo unit. al cliente, in €)
   // Se undefined → usa il calcolo automatico; se number → l'utente ha forzato quel prezzo al centesimo
   const [overrides, setOverrides] = useState<{
@@ -1315,18 +1319,34 @@ export default function CreaPreventivo() {
   const [tipoPreventivo, setTipoPreventivo] = useState<QuoteType>("fornitura_posa");
   const [terminiCustom, setTerminiCustom] = useState<string | null>(null);
 
+  // Con le voci Servizi B valgono le Condizioni generali per appalti pubblici
+  const standardTerms = QUOTE_TERMS[tipoPreventivo] || t.termini_testo;
+  const terminiEffettivi = resolveQuoteTerms({ serviziB, terminiCustom, standardTerms });
+  const accettazioneEffettiva = resolveQuoteAcceptance(serviziB, t.parti_dichiarano);
+
+  // Alla prima voce Servizi B le rate passano al piano SAL (30/25/25/20),
+  // sempre modificabili. Un piano rate già personalizzato non viene toccato.
+  const updateServiziB = (next: CatalogLine[]) => {
+    if (shouldPrefillSalPagamenti(serviziB, next, pagamenti)) setPagamenti(publicTenderPagamenti());
+    setServiziB(next);
+  };
+
   // Traduzione integrale del preventivo (voci libere) nella lingua del documento
   const cambiaLingua = async (l: QuoteLang) => {
     setLingua(l);
     if (l === "IT" || traducendo) return;
 
-    const terminiAttuali = terminiCustom ?? (tipoPreventivo === "fornitura_posa" ? "" : (QUOTE_TERMS[tipoPreventivo] || ""));
+    const terminiAttuali = terminiCustom
+      ?? (isPublicTenderQuote(serviziB)
+        ? PUBLIC_TENDER_TERMS
+        : (tipoPreventivo === "fornitura_posa" ? "" : (QUOTE_TERMS[tipoPreventivo] || "")));
 
     const blocchi: string[] = [
       ...righeMat.map((r: any) => r.desc || ""),
       ...articoli.flatMap((x: any) => [x.name || "", x.description || ""]),
       ...accessori.flatMap((x: any) => [x.name || "", x.description || ""]),
       ...servizi.flatMap((x: any) => [x.name || "", x.description || ""]),
+      ...serviziB.flatMap((x: any) => [x.name || "", x.description || ""]),
       ...pagamenti.map((p: any) => p.note || ""),
       noteCliente || "",
       tempiConsegna || "",
@@ -1349,6 +1369,7 @@ export default function CreaPreventivo() {
       setArticoli(applyCat(articoli));
       setAccessori(applyCat(accessori));
       setServizi(applyCat(servizi));
+      setServiziB(applyCat(serviziB));
       setPagamenti(pagamenti.map((p: any) => {
         const nota = out[i++];
         return { ...p, note: p.note ? (nota ?? p.note) : p.note };
@@ -1392,6 +1413,7 @@ export default function CreaPreventivo() {
       setArticoli([]);
       setAccessori([]);
       setServizi([]);
+      setServiziB([]);
       setOverrides({});
       setTonalita([]);
       setWcSel(emptyWoodcoSelection);
@@ -1544,6 +1566,7 @@ export default function CreaPreventivo() {
         setArticoli([]);
         setAccessori([]);
         setServizi([]);
+        setServiziB([]);
         setOverrides({});
         setCrmLink(null);
         setCliente(emptyCliente());
@@ -1604,6 +1627,7 @@ export default function CreaPreventivo() {
           if (Array.isArray(d.catalog.articoli)) setArticoli(d.catalog.articoli);
           if (Array.isArray(d.catalog.accessori)) setAccessori(d.catalog.accessori);
           if (Array.isArray(d.catalog.servizi)) setServizi(d.catalog.servizi);
+          if (Array.isArray(d.catalog.serviziB)) setServiziB(d.catalog.serviziB);
         }
         if (Array.isArray(d.pagamenti)) setPagamenti(d.pagamenti);
         setIvaRate(loadedIvaRate);
@@ -1637,7 +1661,7 @@ export default function CreaPreventivo() {
   }), [search, fornFilt]);
 
   const calc = useMemo(()=>{
-    const hasCatalog = (articoli.length + accessori.length + servizi.length) > 0;
+    const hasCatalog = (articoli.length + accessori.length + servizi.length + serviziB.length) > 0;
     if (!prodotto && (righeMat?.length || 0) === 0 && !hasCatalog) return null;
 
     // Per Woodco usiamo il prezzo del listino DB (cascading) + lo sconto fornitore associato
@@ -1692,7 +1716,8 @@ export default function CreaPreventivo() {
     const catalogArticoliTot = catalogLinesTotal(articoli);
     const catalogAccessoriTot = catalogLinesTotal(accessori);
     const catalogServiziTot = catalogLinesTotal(servizi);
-    const catalogTot = catalogArticoliTot + catalogAccessoriTot + catalogServiziTot;
+    const catalogServiziBTot = catalogLinesTotal(serviziB);
+    const catalogTot = catalogArticoliTot + catalogAccessoriTot + catalogServiziTot + catalogServiziBTot;
     const prezzoLordoTot = prezzoMatTot+prezzoPosaTot+prezzoTappTot+prezzoTrasporto+prezzoTrasfertaTot+prezzoExtraTot+catalogTot;
     const scontoAmt = prezzoLordoTot*(sconto/100);
     const prezzoNetto = prezzoLordoTot - scontoAmt;
@@ -1703,7 +1728,7 @@ export default function CreaPreventivo() {
     const prezzoMqTot = mqPrev>0 ? prezzoNetto/mqPrev : 0;
     const scontoMax = prezzoLordoTot>0 ? ((prezzoLordoTot-costoTotale)/prezzoLordoTot)*100 : 0;
     return { costoMatMq,prezzoMatMq,prezzoMatMqAuto,mqOrd,costoMatTot,prezzoMatTot,prezzoPosaMq,prezzoPosaMqAuto,costoPosaTot,prezzoPosaTot,prezzoTappMq,prezzoTappMqAuto,costoTappTot,prezzoTappTot,tappNeeded,prezzoTrasportoKm,prezzoTrasportoKmAuto,costoTrasporto,prezzoTrasporto,kmExtra,trasfertaAttiva,supplMq,supplMqAuto,costoTrasfertaTot,prezzoTrasfertaTot,costoExtraTot,prezzoExtraTot,costoAccTot,prezzoAccTot,costoTotale,prezzoLordoTot,scontoAmt,prezzoNetto,iva,totaleIva,margineE,marginePct,prezzoMqTot,scontoMax };
-  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel,overrides,articoli,accessori,servizi]);
+  }, [prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,ivaRate,isWoodco,wcSel,overrides,articoli,accessori,servizi,serviziB]);
 
   const accBaseRows = useMemo(() => {
     const out: any[] = [];
@@ -1774,7 +1799,7 @@ export default function CreaPreventivo() {
     const errs = new Set<string>();
     const clienteName = (crmLink?.label || crmLink?.nome || cliente.nome || "").trim();
     if (!clienteName) { missing.push("Nome cliente / Ragione sociale"); errs.add("cliente.nome"); }
-    const hasCatalogLine = (articoli.length + accessori.length + servizi.length) > 0;
+    const hasCatalogLine = (articoli.length + accessori.length + servizi.length + serviziB.length) > 0;
     if (!prodotto && (righeMat?.length || 0) === 0 && !hasCatalogLine) {
       missing.push("Almeno un prodotto (principale, aggiuntivo o da catalogo)");
       errs.add("prodotto");
@@ -1806,13 +1831,13 @@ export default function CreaPreventivo() {
       const clienteSnapshot = crmLink
         ? { ...cliente, nome: crmLink.nome || crmLink.label || cliente.nome, indirizzo: crmLink.indirizzo || cliente.indirizzo, citta: crmLink.citta || cliente.citta, telefono: crmLink.telefono || cliente.telefono, email: crmLink.email || cliente.email }
         : cliente;
-      const catalogIds = [...articoli, ...accessori, ...servizi].map(l => l.catalog_id).filter(Boolean);
+      const catalogIds = [...articoli, ...accessori, ...servizi, ...serviziB].map(l => l.catalog_id).filter(Boolean);
       const [costResult, crewResult] = await Promise.all([
         catalogIds.length ? supabase.from('catalog_products').select('id,list_price,supplier_discount_percentage,net_cost,purchase_price').in('id', catalogIds) : Promise.resolve({data: [], error: null}),
         supabase.from('crew_cost_settings').select('*').limit(1).maybeSingle(),
       ]);
       if (costResult.error || crewResult.error) throw costResult.error || crewResult.error;
-      const accountingRows = [...accBaseRows, ...[...articoli, ...accessori, ...servizi].map(l => {
+      const accountingRows = [...accBaseRows, ...[...articoli, ...accessori, ...servizi, ...serviziB].map(l => {
         const p = costResult.data?.find(p => p.id === l.catalog_id);
         return {key:`cat-${l.id}`,desc:l.name,qta:Number(l.quantity)||0,unita:l.unit,supplierPrice:Number(p?.list_price||p?.net_cost||p?.purchase_price||0),supplierDiscountPct:p?.list_price?Number(p.supplier_discount_percentage||0):0,clientUnit:Number(l.unit_price||0)*(1-Number(l.discount_pct||0)/100)};
       })].map(r => ({...r, ...contabilita.overrides?.[r.key]}));
@@ -1826,7 +1851,7 @@ export default function CreaPreventivo() {
         tipoPreventivo, terminiCustom,
 
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
-        catalog: { articoli, accessori, servizi },
+        catalog: { articoli, accessori, servizi, serviziB },
         technicalAttachments,
         contabilita: accountingSaved,
       };
@@ -1866,6 +1891,7 @@ export default function CreaPreventivo() {
         ...articoli.map(mapCatalog("articolo")),
         ...accessori.map(mapCatalog("accessorio")),
         ...servizi.map(mapCatalog("servizio")),
+        ...serviziB.map(mapCatalog("servizio")),
       ].filter(Boolean);
 
 
@@ -2056,7 +2082,7 @@ export default function CreaPreventivo() {
   const savedJsonRef = useRef<string>("");
   const draftReadyRef = useRef(false);
   const [draftFound, setDraftFound] = useState<{savedAt:number; data:any}|null>(null);
-  const draftSnapshot = {numPrev,dataPrev,cliente,crmLink,cantiere,sito,dataInizioLavori,dataFineLavori,noteCliente,noteInterne,stato,pagamenti,ivaRate,reverseCharge,metodoTrasporto,tempiConsegna,tipoPagamento,showCondizioniFornitura,tipoPreventivo,terminiCustom,prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,contabilita,articoli,accessori,servizi,overrides,tonalita,wcSel,lingua,technicalAttachments,step};
+  const draftSnapshot = {numPrev,dataPrev,cliente,crmLink,cantiere,sito,dataInizioLavori,dataFineLavori,noteCliente,noteInterne,stato,pagamenti,ivaRate,reverseCharge,metodoTrasporto,tempiConsegna,tipoPagamento,showCondizioniFornitura,tipoPreventivo,terminiCustom,prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,contabilita,articoli,accessori,servizi,serviziB,overrides,tonalita,wcSel,lingua,technicalAttachments,step};
   const draftJson = JSON.stringify(draftSnapshot);
   useEffect(() => {
     draftReadyRef.current = false;
@@ -2122,6 +2148,7 @@ export default function CreaPreventivo() {
       if (d.articoli !== undefined) setArticoli(d.articoli);
       if (d.accessori !== undefined) setAccessori(d.accessori);
       if (d.servizi !== undefined) setServizi(d.servizi);
+      if (d.serviziB !== undefined) setServiziB(d.serviziB);
       if (d.overrides !== undefined) setOverrides(d.overrides);
       if (d.tonalita !== undefined) setTonalita(d.tonalita);
       if (d.wcSel !== undefined) setWcSel(d.wcSel);
@@ -2711,6 +2738,7 @@ export default function CreaPreventivo() {
             articoli={articoli} setArticoli={setArticoli}
             accessori={accessori} setAccessori={setAccessori}
             servizi={servizi} setServizi={setServizi}
+            serviziB={serviziB} setServiziB={updateServiziB}
             ivaRate={ivaRate}
           />
 
@@ -2897,10 +2925,12 @@ export default function CreaPreventivo() {
                 ))}
               </div>
               <div style={{fontSize:12,color:"#64748B",marginBottom:6}}>
-                Termini e condizioni stampati nel PDF (modificabili per questo preventivo)
+                {isPublicTenderQuote(serviziB)
+                  ? "Termini e condizioni: valgono le Condizioni generali per appalti pubblici (modificabili per questo preventivo)"
+                  : "Termini e condizioni stampati nel PDF (modificabili per questo preventivo)"}
               </div>
               <textarea
-                value={terminiCustom ?? (QUOTE_TERMS[tipoPreventivo] || t.termini_testo)}
+                value={terminiEffettivi}
                 onChange={e=>setTerminiCustom(e.target.value)}
                 rows={10}
                 style={{width:"100%",padding:"10px 12px",borderRadius:8,border:"1px solid #E6E9F0",fontSize:12,lineHeight:1.6,boxSizing:"border-box",fontFamily:"inherit",resize:"vertical"}}
@@ -3011,7 +3041,7 @@ export default function CreaPreventivo() {
           </div>
 
           {/* ANTEPRIMA DOCUMENTO */}
-          <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} onTotals={setAccTotals} title={numPrev || cantiere} defaultDestination={[sito?.indirizzo, sito?.cap, sito?.citta, sito?.provincia].filter(Boolean).join(', ')} />
+          <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi, ...serviziB]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} onTotals={setAccTotals} title={numPrev || cantiere} defaultDestination={[sito?.indirizzo, sito?.cap, sito?.citta, sito?.provincia].filter(Boolean).join(', ')} />
           <QuoteAttachments quoteId={preventivoId} attachments={technicalAttachments} onChange={persistAttachments} />
           <div id="pdf-preview-wrap" className="pdf-preview-wrap">
           <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
@@ -3148,9 +3178,9 @@ export default function CreaPreventivo() {
                     <td style={{padding:"8px 12px",fontSize:13,textAlign:"right",fontWeight:500}}>{euro(calc.prezzoTrasfertaTot)}</td>
                   </tr>
                 )}
-                {([[L.articoli,articoli],[L.accessori,accessori],[L.servizi,servizi]] as const).map(([label,lines]) =>
+                {([[L.articoli,articoli],[L.accessori,accessori],[L.servizi,servizi],[L.servizi,serviziB]] as const).map(([label,lines],i) =>
                   lines.length > 0 ? (
-                    <React.Fragment key={label}>
+                    <React.Fragment key={`${label}-${i}`}>
                       <tr style={{background:"#F8FAFC"}}>
                         <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{label}</td>
                       </tr>
@@ -3248,7 +3278,7 @@ export default function CreaPreventivo() {
             {/* Termini */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0"}}>
               <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
-              <div style={{fontSize:11,color:"#475569",lineHeight:1.8,whiteSpace:"pre-line"}}>{terminiCustom ?? (QUOTE_TERMS[tipoPreventivo] || t.termini_testo)}</div>
+              <div style={{fontSize:11,color:"#475569",lineHeight:1.8,whiteSpace:"pre-line"}}>{terminiEffettivi}</div>
             </div>
 
             {/* Sezione Privacy firma */}
@@ -3266,7 +3296,7 @@ export default function CreaPreventivo() {
 
             {/* Accettazione */}
             <div style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
-              <div style={{fontSize:11,color:"#475569",marginBottom:6}}>{t.parti_dichiarano}</div>
+              <div style={{fontSize:11,color:"#475569",marginBottom:6}}>{accettazioneEffettiva}</div>
               <div style={{fontSize:12,color:"#475569",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
                 <div>
