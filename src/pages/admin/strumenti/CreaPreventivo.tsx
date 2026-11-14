@@ -2923,6 +2923,15 @@ export default function CreaPreventivo() {
                     {tp.label}
                   </button>
                 ))}
+                <button
+                  onClick={()=>{ setStep(1); setTimeout(()=>document.getElementById("sezione-servizi-b")?.scrollIntoView({behavior:"smooth",block:"start"}),150); }}
+                  title="Appalti pubblici: nel PDF al cliente esce solo 'Servizi'"
+                  style={{padding:"9px 12px",borderRadius:8,fontSize:13,cursor:"pointer",
+                    border:isPublicTenderQuote(serviziB)?"1.5px solid #1A1A2E":"1px dashed #94A3B8",
+                    background:isPublicTenderQuote(serviziB)?"#1A1A2E":"#fff",
+                    color:isPublicTenderQuote(serviziB)?"#fff":"#1A1A2E",fontWeight:isPublicTenderQuote(serviziB)?600:400}}>
+                  Servizi B (appalti){isPublicTenderQuote(serviziB)?` · ${serviziB.length}`:""}
+                </button>
               </div>
               <div style={{fontSize:12,color:"#64748B",marginBottom:6}}>
                 {isPublicTenderQuote(serviziB)

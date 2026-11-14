@@ -375,6 +375,7 @@ export default function QuoteCatalogSections({
       <Section title="Articoli" lines={articoli} setLines={setArticoli} categoryNames={ARTICOLI_CATS} defaultUnit="mq" ivaRate={ivaRate} />
       <Section title="Accessori" lines={accessori} setLines={setAccessori} categoryNames={ACCESSORI_CATS} defaultUnit="pz" ivaRate={ivaRate} />
       <Section title="Servizi" lines={servizi} setLines={setServizi} categoryNames={SERVIZI_CATS} defaultUnit="a corpo" ivaRate={ivaRate} />
+      <div id="sezione-servizi-b" style={{scrollMarginTop:80}}>
       <Section
         title="Servizi B"
         lines={serviziB}
@@ -385,6 +386,7 @@ export default function QuoteCatalogSections({
         hint="appalti pubblici — nel PDF al cliente esce &quot;Servizi&quot;"
         emptyText="Nessuna voce per appalto pubblico. Le voci di qui stampano come &quot;Servizi&quot; e sostituiscono i Termini e condizioni con le Condizioni generali per appalti pubblici."
       />
+      </div>
     </div>
   );
 }
