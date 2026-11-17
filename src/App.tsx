@@ -73,6 +73,7 @@ const AnalyticsRouteTracker = () => {
 
 // Admin pages
 import AdminLogin from "./pages/admin/AdminLogin";
+import AdminResetPassword from "./pages/admin/AdminResetPassword";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminSales from "./pages/admin/AdminSales";
@@ -260,6 +261,7 @@ const App = () => (
 
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/reset-password" element={<AdminResetPassword />} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminOverview />} />
 
