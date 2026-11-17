@@ -89,13 +89,20 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
           {c.isTrasferta && <label style={lab}>Viaggi A/R
             <input type="number" onFocus={clearZeroOnFocus} style={inp} value={t.tripsOverride ?? c.trips} onChange={(e) => set({ tripsOverride: Number(e.target.value) })} />
           </label>}
+          <label style={lab}>Inizio lavori
+            <input type="date" style={inp} value={t.startDate ?? ""} onChange={(e) => set({ startDate: e.target.value || null })} />
+          </label>
+          <label style={lab}>Furgone €/km
+            <input type="number" step="0.01" onFocus={clearZeroOnFocus} style={inp} value={t.vanEurKm ?? settings.van_eur_km ?? 0.3} onChange={(e) => set({ vanEurKm: Number(e.target.value) })} />
+          </label>
           {c.isTrasferta && <label style={lab}>Km/giorno sul posto
             <input type="number" onFocus={clearZeroOnFocus} style={inp} value={t.localKmDay ?? 20} onChange={(e) => set({ localKmDay: Number(e.target.value) })} />
           </label>}
         </div>
         {t.minutesOneWay ? <div style={{ fontSize: 12, color: "#64748B" }}>Viaggio: {t.minutesOneWay} min sola andata · {c.kmAR} km A/R · {c.trips} viaggi A/R{c.isTrasferta ? ` + ${c.localKm} km sul posto (in trasferta si dorme lì: il viaggio lungo si paga solo all'andata e al ritorno)` : ""}</div> : null}
+        <div style={{ fontSize: 12, color: "#64748B" }}>Operaio: {eur(c.workerDay)}/giorno {t.startDate ? `(costo mensile diviso per i giorni lavorativi reali del mese, festività escluse)` : `(media ${settings.work_days_month} giorni/mese: inserisci l'inizio lavori per il calcolo sul mese reale)`}</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 8 }}>
-          {[["Operai", c.labor], ["Gasolio", c.fuel], ["Telepass", c.tolls], ["Pasti", c.meals], ["Albergo", c.hotel], ["Totale squadra", c.total], ["Al giorno", c.perDay]].map(([k, v]) => (
+          {[["Operai", c.labor], ["Gasolio", c.fuel], [`Furgone (${c.totalKm} km × ${c.vanEurKm.toFixed(2)} €)`, c.van], ["Telepass", c.tolls], ["Pasti", c.meals], ["Albergo", c.hotel], ["Totale squadra", c.total], ["Al giorno", c.perDay]].map(([k, v]) => (
             <div key={k as string} style={{ padding: 8, background: "#fff", borderRadius: 6, border: "1px solid #E6E9F0" }}>
               <div style={{ fontSize: 11, color: "#64748B" }}>{k}</div><div style={{ fontWeight: 600, fontSize: 14 }}>{eur(v as number)}</div>
             </div>
@@ -109,7 +116,7 @@ export default function CrewCostsBlock({ trip, onChange, settings, defaultDestin
                 <button key={k} onClick={() => set({ trasferta: k })} style={{ textAlign: "left", padding: 10, borderRadius: 8, cursor: "pointer", background: "#fff", border: sel ? "2px solid #1A1A2E" : "1px solid #E6E9F0" }}>
                   <div style={{ fontSize: 12, fontWeight: 600 }}>{l} {cheaper === k && <span style={{ color: "#15803D" }}>· conviene</span>}</div>
                   <div style={{ fontSize: 16, fontWeight: 700 }}>{eur(r.total)}</div>
-                  <div style={{ fontSize: 11, color: "#64748B" }}>Gasolio {eur(r.fuel)} · Telepass {eur(r.tolls)} · Pasti {eur(r.meals)} · Albergo {eur(r.hotel)}</div>
+                  <div style={{ fontSize: 11, color: "#64748B" }}>Gasolio {eur(r.fuel)} · Furgone {eur(r.van)} · Telepass {eur(r.tolls)} · Pasti {eur(r.meals)} · Albergo {eur(r.hotel)}</div>
                   {k === "off" && t.minutesOneWay ? <div style={{ fontSize: 11, color: "#64748B" }}>{Math.round(t.minutesOneWay * 2 * n0(t.days) / 60)} ore di viaggio totali per operaio</div> : null}
                 </button>
               );

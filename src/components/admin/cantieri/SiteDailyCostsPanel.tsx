@@ -39,13 +39,14 @@ export default function SiteDailyCostsPanel({ siteId, quoteId, startDate }: { si
     ]);
     const trip = (q?.quote_data as any)?.contabilita?.crewTrip;
     if (!trip?.enabled) return toast.error("Nel preventivo non ci sono costi squadra");
-    const c = computeCrew({ days: 1, workers: 1, vans: 1, ...trip }, { ...DEFAULT_CREW_SETTINGS, ...(s as any) });
+    const base0 = startDate ? format(new Date(startDate), "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd");
+    const c = computeCrew({ days: 1, workers: 1, vans: 1, ...trip, startDate: base0 }, { ...DEFAULT_CREW_SETTINGS, ...(s as any) });
     const d = splitDaily(c);
     await supabase.from("site_daily_costs").delete().eq("site_id", siteId).eq("is_estimate", true);
-    const base = startDate ? new Date(startDate) : new Date();
     const ins = Array.from({ length: c.days }, (_, i) => ({
-      site_id: siteId, work_date: format(addDays(base, i), "yyyy-MM-dd"), workers_count: c.workers,
-      labor: d.labor, fuel: d.fuel, tolls: d.tolls, meals: d.meals, hotel: d.hotel, other: 0, is_estimate: true, notes: "Stima dal preventivo",
+      site_id: siteId, work_date: c.dates[i] || format(addDays(new Date(base0), i), "yyyy-MM-dd"), workers_count: c.workers,
+      labor: c.dayRates[i] * c.workers, fuel: d.fuel, tolls: d.tolls, meals: d.meals, hotel: d.hotel, other: d.van, is_estimate: true,
+      notes: `Stima dal preventivo · operaio ${eur(c.dayRates[i])}/g · furgone ${eur(d.van)} (usura a km) in Altro`,
     }));
     const { error } = await supabase.from("site_daily_costs").insert(ins);
     if (error) return toast.error(error.message);

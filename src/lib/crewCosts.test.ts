@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { describe, test } from "node:test";
 import { strict as assert } from "node:assert";
-import { computeCrew, DEFAULT_CREW_SETTINGS as S, workerDailyCost, workerMonthlyCost } from "./crewCosts";
+import { workingDaysInMonth, computeCrew, DEFAULT_CREW_SETTINGS as S, workerDailyCost, workerMonthlyCost } from "./crewCosts";
 const close = (a: number, b: number) => assert.ok(Math.abs(a - b) < 1e-6, `${a} != ${b}`);
 
 describe("costi squadra", () => {
@@ -29,5 +29,15 @@ describe("costi squadra", () => {
   });
   test("trasferta forzata spenta resta pendolare", () => {
     assert.equal(computeCrew({ kmOneWay: 300, days: 2, trasferta: "off" }, S).isTrasferta, false);
+  });
+  test("giorni lavorativi reali: dicembre 2026 = 21 (8, 25, 26 festivi), costo operaio = 3997/21", () => {
+    assert.equal(workingDaysInMonth(2026, 12), 21);
+    const c = computeCrew({ days: 1, workers: 1, startDate: "2026-12-01" }, S);
+    close(c.labor, 3997 / 21);
+  });
+  test("furgone a km: 60 km sola andata × 5 giorni = 600 km × 0,30 €", () => {
+    const c = computeCrew({ kmOneWay: 60, days: 5, workers: 1 }, S);
+    close(c.totalKm, 600);
+    close(c.van, 180);
   });
 });
