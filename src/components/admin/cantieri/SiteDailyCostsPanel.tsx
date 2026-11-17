@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Trash2 } from "lucide-react";
-import { computeCrew, DEFAULT_CREW_SETTINGS, splitDaily } from "@/lib/crewCosts";
+import { computeCrew, DEFAULT_CREW_SETTINGS, splitDaily, workerDailyCost } from "@/lib/crewCosts";
+import { siteWorkerDays } from "@/lib/timesheetSiteCosts";
 
 const eur = (v: number) => new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" }).format(v || 0);
 const FIELDS = [["labor", "Operai"], ["fuel", "Gasolio"], ["tolls", "Telepass"], ["meals", "Pasti"], ["hotel", "Albergo"], ["other", "Altro"]] as const;
@@ -53,6 +54,30 @@ export default function SiteDailyCostsPanel({ siteId, quoteId, startDate }: { si
     toast.success(`Importati ${c.days} giorni stimati (${eur(c.total)})`); refresh();
   };
 
+  const importTimesheets = async () => {
+    const [{ data: ents }, { data: sw }, { data: ca }, { data: s }] = await Promise.all([
+      supabase.from("worker_time_entries").select("worker_id,event_date,site_id,event_type").in("event_type", ["arrive_site", "leave_site"]),
+      supabase.from("site_workers").select("worker_id,site_id,start_date,end_date").eq("site_id", siteId),
+      supabase.from("crew_assignments").select("site_id,start_date,end_date,crews(crew_members(worker_id))").eq("site_id", siteId),
+      supabase.from("crew_cost_settings").select("*").limit(1).maybeSingle(),
+    ]);
+    const windows = [
+      ...(sw || []).filter((w: any) => w.worker_id),
+      ...(ca || []).flatMap((a: any) => (a.crews?.crew_members || []).map((m: any) => ({ worker_id: m.worker_id, site_id: a.site_id, start_date: a.start_date, end_date: a.end_date }))),
+    ];
+    const days = siteWorkerDays(siteId, (ents || []) as any, windows as any);
+    const taken = new Set(real.map((r: any) => r.work_date));
+    const settings = { ...DEFAULT_CREW_SETTINGS, ...(s as any) };
+    const ins = [...days.entries()].filter(([d]) => !taken.has(d)).map(([d, ws]) => ({
+      site_id: siteId, work_date: d, workers_count: ws.size, labor: Math.round(workerDailyCost(settings, d) * ws.size * 100) / 100,
+      fuel: 0, tolls: 0, meals: 0, hotel: 0, other: 0, is_estimate: false, notes: "Da timbrature",
+    }));
+    if (!ins.length) return toast.info(days.size ? "Giornate timbrate già presenti" : "Nessuna timbratura trovata per questo cantiere");
+    const { error } = await supabase.from("site_daily_costs").insert(ins);
+    if (error) return toast.error(error.message);
+    toast.success(`Aggiunte ${ins.length} giornate dalle timbrature`); refresh();
+  };
+
   const del = async (id: string) => { await supabase.from("site_daily_costs").delete().eq("id", id); refresh(); };
   const est = rows.filter((r: any) => r.is_estimate), real = rows.filter((r: any) => !r.is_estimate);
   const sum = (rs: any[]) => rs.reduce((s, r) => s + rowTotal(r), 0);
@@ -62,7 +87,7 @@ export default function SiteDailyCostsPanel({ siteId, quoteId, startDate }: { si
     <Card>
       <CardHeader className="flex flex-row items-center justify-between gap-2 flex-wrap">
         <CardTitle className="text-base">Costi squadra giorno per giorno</CardTitle>
-        <Button size="sm" variant="outline" onClick={importEstimate}>Importa stima dal preventivo</Button>
+        <div className="flex gap-2 flex-wrap"><Button size="sm" variant="outline" onClick={importTimesheets}>Importa da timbrature</Button><Button size="sm" variant="outline" onClick={importEstimate}>Importa stima dal preventivo</Button></div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">

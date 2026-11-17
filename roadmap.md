@@ -6,7 +6,7 @@
 - [x] Funzioni interne del database chiuse al pubblico
 - [ ] IVA fattura Woodco ORD-12039 e fattura MGO — attende dati reali da Gabriel
 - [ ] Costi reali vendite Danesi, Ghilardi, Nava, Alin Burda — attende dati
-- [ ] Ordine fornitore consegnato → carico magazzino e costo cantiere
-- [ ] Timbrature → costo giornate cantiere automatico
+- [x] Ordine fornitore consegnato → carico magazzino automatico
+- [x] Timbrature → giornate cantiere (pulsante "Importa da timbrature")
 - [ ] Vista qualifica lead (schede tecniche / chatbot)
 - [ ] Account per Luca Posatore — serve la sua email

@@ -169,6 +169,13 @@
       "when": 1794958218936,
       "tag": "0023_sync_sale_paid_and_lock_functions",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1794958421926,
+      "tag": "0024_supplier_order_delivered_to_stock",
+      "breakpoints": true
     }
   ]
 }
