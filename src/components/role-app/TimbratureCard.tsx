@@ -61,14 +61,14 @@ const TimbratureCard = () => {
       const today = new Date().toISOString().slice(0, 10);
       const { data: a } = await supabase
         .from('site_workers')
-        .select('site_id, construction_sites(id,title,latitude,longitude,start_date,end_date)')
+        .select('site_id, construction_sites(id,title,latitude,longitude,start_date,end_date,planned_start_date,planned_end_date)')
         .eq('worker_user_id', user.id)
         .eq('is_active', true);
       const site = (a || [])
         .map((x: any) => x.construction_sites)
         .filter(Boolean)
         .find((s: any) =>
-          (!s.start_date || s.start_date <= today) && (!s.end_date || s.end_date >= today)
+          (!(s.start_date || s.planned_start_date) || (s.start_date || s.planned_start_date) <= today) && (!(s.end_date || s.planned_end_date) || (s.end_date || s.planned_end_date) >= today)
         );
       if (site) {
         setAssignedSite({
@@ -268,7 +268,7 @@ const TimbratureCard = () => {
 
           {!assignedSite && ['arrive_site', 'leave_site'].some((t) => next.includes(t as any)) && (
             <div className="text-[11px] text-[#8C7B6B] italic">
-              Nessun cantiere assegnato oggi: la timbratura verrà salvata solo con la posizione GPS.
+              Nessun cantiere assegnato oggi: se sei vicino a un cantiere attivo verrà riconosciuto dalla posizione GPS.
             </div>
           )}
         </>

@@ -92,8 +92,21 @@ export async function recordTimbratura(opts: RecordOptions): Promise<{ entry: Ti
 
   let distance: number | null = null;
   let atSite: boolean | null = null;
-  if (site && site.latitude != null && site.longitude != null && lat != null && lng != null) {
-    distance = haversineMeters(lat, lng, site.latitude, site.longitude);
+  // Nessun cantiere assegnato: riconosce il cantiere attivo più vicino dalla posizione GPS
+  if (!site && lat != null && lng != null && ['arrive_site', 'pause_start', 'pause_end', 'leave_site'].includes(eventType)) {
+    const { data: sites } = await supabase.from('construction_sites')
+      .select('id,latitude,longitude,status').in('status', ['pianificato', 'in_corso'])
+      .not('latitude', 'is', null).not('longitude', 'is', null);
+    let best: { id: string; latitude: number; longitude: number; d: number } | null = null;
+    for (const s of (sites || []) as any[]) {
+      const d = haversineMeters(lat, lng, s.latitude, s.longitude);
+      if (d <= siteRadiusM * 1.5 && (!best || d < best.d)) best = { ...s, d };
+    }
+    if (best) opts = { ...opts, site: best };
+  }
+  const siteUsed = opts.site;
+  if (siteUsed && siteUsed.latitude != null && siteUsed.longitude != null && lat != null && lng != null) {
+    distance = haversineMeters(lat, lng, siteUsed.latitude, siteUsed.longitude);
     atSite = distance <= siteRadiusM;
   }
 
@@ -106,7 +119,7 @@ export async function recordTimbratura(opts: RecordOptions): Promise<{ entry: Ti
       latitude: lat,
       longitude: lng,
       accuracy_m: acc,
-      site_id: site?.id ?? null,
+      site_id: siteUsed?.id ?? null,
       distance_from_site_m: distance,
       is_at_site: atSite,
     })

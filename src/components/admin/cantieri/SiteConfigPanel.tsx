@@ -367,6 +367,13 @@ const SiteConfigPanel = ({ siteId, site }: Props) => {
               <div className="grid grid-cols-2 gap-2">
                 <Field label="Latitudine"><Input type="number" step="any" value={form.latitude} onChange={(e) => setForm({ ...form, latitude: e.target.value })} /></Field>
                 <Field label="Longitudine"><Input type="number" step="any" value={form.longitude} onChange={(e) => setForm({ ...form, longitude: e.target.value })} /></Field>
+                <Button type="button" size="sm" variant="outline" className="col-span-2" onClick={async () => {
+                  const q = [form.address, form.city, "Italia"].filter(Boolean).join(", ");
+                  const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(q)}`).then((x) => x.json()).catch(() => []);
+                  if (!r?.[0]) return toast.error("Indirizzo non trovato");
+                  setForm({ ...form, latitude: r[0].lat, longitude: r[0].lon });
+                  toast.success("Posizione trovata: ricordati di salvare");
+                }}>Trova posizione dall'indirizzo</Button>
               </div>
               <Field label="Nome referente"><Input value={form.contact_name} onChange={(e) => setForm({ ...form, contact_name: e.target.value })} /></Field>
               <Field label="Cognome referente"><Input value={form.contact_surname} onChange={(e) => setForm({ ...form, contact_surname: e.target.value })} /></Field>

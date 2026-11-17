@@ -4,7 +4,8 @@
 - [x] Cantieri Villongo e Milano collegati al cliente
 - [x] Avviso alla conversione se il margine è ≥95% (costi mancanti)
 - [x] Funzioni interne del database chiuse al pubblico
-- [ ] IVA fattura Woodco ORD-12039 e fattura MGO — attende dati reali da Gabriel
+- [x] IVA fattura Woodco ORD-12039 (22% inclusa)
+- [ ] Fattura MGO — attende dati reali da Gabriel
 - [ ] Costi reali vendite Danesi, Ghilardi, Nava, Alin Burda — attende dati
 - [x] Ordine fornitore consegnato → carico magazzino automatico
 - [x] Timbrature → giornate cantiere (pulsante "Importa da timbrature")
@@ -12,3 +13,4 @@
 - [x] Modulo Diventa Partner salva nel CRM e avvisa su Telegram
 - [ ] Email dal sito (Contatti e Partner) — manca il servizio email: serve dominio email configurato
 - [ ] Account per Luca Posatore — serve la sua email
+- [x] Timbrature riconoscono il cantiere dalla posizione GPS; coordinate cantieri compilate
