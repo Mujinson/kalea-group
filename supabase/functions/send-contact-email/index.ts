@@ -90,20 +90,6 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    
-    if (!resendApiKey) {
-      console.error("RESEND_API_KEY not configured");
-      return new Response(
-        JSON.stringify({ error: "Email service not configured" }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
-      );
-    }
-
-    const resend = new Resend(resendApiKey);
     const rawData: ContactEmailRequest = await req.json();
 
     // Honeypot check - if filled, it's likely a bot
@@ -159,6 +145,28 @@ const handler = async (req: Request): Promise<Response> => {
     const interestsList = interests.length > 0 
       ? interests.join(", ") 
       : "Nessuno specificato";
+
+    // Avviso Telegram (sempre, anche senza servizio email)
+    const tgToken = Deno.env.get("TELEGRAM_BOT_TOKEN") || "";
+    const tgChat = Deno.env.get("TELEGRAM_NOTIFY_CHAT_ID") || "";
+    let telegramOk = false;
+    if (tgToken && tgChat) {
+      const text = `📩 ${userType || "Contatto sito"}\n${name} ${surname}\n${rawData.email}${phone ? "\n" + phone : ""}\nInteressi: ${interestsList}\n\n${rawData.message.slice(0, 3000)}`;
+      const r = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: tgChat, text }),
+      }).catch(() => null);
+      telegramOk = !!r?.ok;
+    }
+
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (!resendApiKey) {
+      console.error("RESEND_API_KEY not configured");
+      return new Response(JSON.stringify(telegramOk ? { success: true, channel: "telegram" } : { error: "Email service not configured" }), {
+        status: telegramOk ? 200 : 500, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+    const resend = new Resend(resendApiKey);
 
     // Send email to Kalea
     const emailToKalea = await resend.emails.send({

@@ -8,5 +8,7 @@
 - [ ] Costi reali vendite Danesi, Ghilardi, Nava, Alin Burda — attende dati
 - [x] Ordine fornitore consegnato → carico magazzino automatico
 - [x] Timbrature → giornate cantiere (pulsante "Importa da timbrature")
-- [ ] Vista qualifica lead (schede tecniche / chatbot)
+- [x] Vista qualifica lead (schede tecniche / chatbot / partner)
+- [x] Modulo Diventa Partner salva nel CRM e avvisa su Telegram
+- [ ] Email dal sito (Contatti e Partner) — manca il servizio email: serve dominio email configurato
 - [ ] Account per Luca Posatore — serve la sua email

@@ -211,6 +211,20 @@ export default function AdminLeads() {
         <CrmKpiTile label="Proposta" value={counts.proposta} color="amber" />
       </CrmKpiRow>
 
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-muted-foreground">Da qualificare:</span>
+        {[['area_tecnica', 'Schede tecniche'], ['chatbot_website', 'Chatbot'], ['diventa_partner', 'Diventa Partner'], ['website', 'Modulo sito']].map(([src, label]) => {
+          const n = leads.filter((l: any) => l.status === 'nuovo' && l.source === src).length;
+          const on = filters.status === 'nuovo' && filters.source === src;
+          return (
+            <Button key={src} size="sm" variant={on ? 'default' : 'outline'} disabled={!n && !on}
+              onClick={() => setFilters((f) => on ? { ...f, status: '', source: '' } : { ...f, status: 'nuovo', source: src })}>
+              {label} ({n})
+            </Button>
+          );
+        })}
+      </div>
+
       <CrmTableCard>
         {/* Toolbar */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E5E7EB]">

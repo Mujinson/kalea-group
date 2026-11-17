@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { trackGenerateLead } from "@/lib/analytics";
 import {
   Cpu,
@@ -88,7 +89,26 @@ const DiventaPartner = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const details = [
+      `Azienda: ${formData.companyName}`, `Città: ${formData.city}`, `Sito: ${formData.website}`,
+      `Categoria: ${formData.category}`, `Volume: ${formData.volume}`, "", formData.message,
+    ].join("\n");
+    const [leadRes, mailRes] = await Promise.all([
+      supabase.rpc("submit_public_lead", {
+        _name: formData.contactName, _email: formData.email, _phone: formData.phone || null,
+        _message: details, _company_name: formData.companyName || null, _source: "diventa_partner",
+        _interest: interests.join(", ") || "partner", _city: formData.city || null,
+      }),
+      supabase.functions.invoke("send-contact-email", {
+        body: { name: formData.contactName, surname: formData.companyName ? `(${formData.companyName})` : "",
+          email: formData.email, phone: formData.phone, userType: "Diventa Partner", interests, message: details },
+      }),
+    ]);
+    if (leadRes.error && mailRes.error) {
+      toast.error("Invio non riuscito, riprova o scrivi a info@kalea.space");
+      setIsSubmitting(false);
+      return;
+    }
     trackGenerateLead({
       source: "partner_form",
       method: "email",

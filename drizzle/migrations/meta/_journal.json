@@ -176,6 +176,13 @@
       "when": 1794958421926,
       "tag": "0024_supplier_order_delivered_to_stock",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1794958611432,
+      "tag": "0025_fix_submit_public_lead_interest",
+      "breakpoints": true
     }
   ]
 }

@@ -13,6 +13,8 @@ export const LEAD_SOURCES = [
   { value: 'email', label: 'Email' },
   { value: 'sito_web', label: 'Sito web' },
   { value: 'area_tecnica', label: 'Area Tecnica' },
+  { value: 'diventa_partner', label: 'Diventa Partner' },
+  { value: 'website', label: 'Modulo sito' },
   { value: 'facebook', label: 'Facebook' },
   { value: 'instagram', label: 'Instagram' },
   { value: 'linkedin', label: 'LinkedIn' },
