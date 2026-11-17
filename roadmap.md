@@ -14,3 +14,5 @@
 - [ ] Email dal sito (Contatti e Partner) — manca il servizio email: serve dominio email configurato
 - [ ] Account per Luca Posatore — serve la sua email
 - [x] Timbrature riconoscono il cantiere dalla posizione GPS; coordinate cantieri compilate
+- [x] Fatture Nava N3 e Kronos 6 registrate e incassate
+- [ ] Date fine lavori mancanti in 4 cantieri
