@@ -375,9 +375,11 @@ const AdminOverview = () => {
   }, [sites]);
 
   const margine = useMemo(() => {
-    const completed = sales.filter(s => inRange(s.sale_date, range.start, range.end) && Number(s.margin_percentage) > 0);
-    if (!completed.length) return { avg: 0, count: 0 };
-    return { avg: completed.reduce((s, x) => s + Number(x.margin_percentage || 0), 0) / completed.length, count: completed.length };
+    // Margine ponderato sull'imponibile; margini >= 95% = costi mancanti, esclusi finché non verificati.
+    const completed = sales.filter(s => inRange(s.sale_date, range.start, range.end) && Number(s.margin_percentage) > 0 && Number(s.margin_percentage) < 95);
+    const net = completed.reduce((a, x) => a + Number(x.subtotal_amount || 0), 0);
+    if (!completed.length || net <= 0) return { avg: 0, count: 0 };
+    return { avg: completed.reduce((a, x) => a + Number(x.margin_amount || 0), 0) / net * 100, count: completed.length };
   }, [sales, range]);
   const margineSem: 'green' | 'amber' | 'red' = margine.avg >= 30 ? 'green' : margine.avg >= 15 ? 'amber' : 'red';
   const margineColor = margineSem === 'green' ? '#16a34a' : margineSem === 'amber' ? '#d97706' : '#dc2626';
@@ -667,7 +669,7 @@ const AdminOverview = () => {
         {showCom && (
           <BigKPI
             label="Margine Medio" value={margine.avg} format="pct" variant="semaphore" semaphore={margineSem}
-            sub={`Su ${margine.count} vendite`} icon={Target}
+            sub={`Ponderato su ${margine.count} vendite`} icon={Target}
             onClick={() => navigate('/admin/analytics')}
           />
         )}
