@@ -18,6 +18,25 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
+
+  const handleForgot = async () => {
+    const mail = email.trim();
+    if (!mail) {
+      toast.error('Scrivi prima la tua email, poi premi «Password dimenticata?»');
+      return;
+    }
+    setSendingReset(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(mail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setSendingReset(false);
+    if (error) {
+      toast.error('Invio non riuscito, riprova tra qualche minuto');
+      return;
+    }
+    toast.success("Se l'email ha accesso al pannello, riceverai a breve il link per reimpostare la password. Controlla anche lo spam.");
+  };
   const { signIn, user, role, loading } = useAdminAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -169,6 +188,14 @@ const AdminLogin = () => {
                 <label htmlFor="password" className="text-[11px] tracking-[0.25em] uppercase text-[#231811]/70 font-medium">
                   Password
                 </label>
+                <button
+                  type="button"
+                  onClick={handleForgot}
+                  disabled={sendingReset}
+                  className="text-xs text-[#8b6a2a] hover:text-[#231811] underline-offset-4 hover:underline disabled:opacity-60"
+                >
+                  {sendingReset ? 'Invio in corso…' : 'Password dimenticata?'}
+                </button>
               </div>
               <div className="relative">
                 <input
