@@ -1,8 +1,12 @@
-- [x] Add persistent technical PDF attachments to quote editor and append after quote pages.
-- [x] Rebrand ST4 sheet without changing technical data and attach to latest Kronos quote.
-- [x] Verify PDF content, merge order, persistence and editor flow.
-- [x] Costi squadra/trasferta nel preventivo, cantiere e dashboard
-- [x] Riepilogo utile aziendale e medio per lavoro: definire fonti nette e regole anti-duplicazione, presentare il piano.
-- [x] Implementare fonti economiche, ripartizione e riconciliazione costi, snapshot preventivi.
-- [x] Dashboard utile previsto/consuntivo, dettaglio lavori, costo mensile operai.
-- [x] Test calcoli e verifica con dati reali.
+# Roadmap CRM
+- [x] Vendita segnata pagata in automatico quando tutte le rate sono incassate
+- [x] Woodco doppio unificato
+- [x] Cantieri Villongo e Milano collegati al cliente
+- [x] Avviso alla conversione se il margine è ≥95% (costi mancanti)
+- [x] Funzioni interne del database chiuse al pubblico
+- [ ] IVA fattura Woodco ORD-12039 e fattura MGO — attende dati reali da Gabriel
+- [ ] Costi reali vendite Danesi, Ghilardi, Nava, Alin Burda — attende dati
+- [ ] Ordine fornitore consegnato → carico magazzino e costo cantiere
+- [ ] Timbrature → costo giornate cantiere automatico
+- [ ] Vista qualifica lead (schede tecniche / chatbot)
+- [ ] Account per Luca Posatore — serve la sua email

@@ -305,6 +305,10 @@ export const ConvertQuoteToSaleDialog = ({ open, quote, onOpenChange, onConverte
       }, 0);
       const marginAmount = Math.round((sub - totalCost) * 100) / 100;
       const marginPct = sub > 0 ? Math.round((marginAmount / sub) * 10000) / 100 : 0;
+      if (sub > 0 && marginPct >= 95 && !window.confirm(
+        `Attenzione: i costi registrati sono ${totalCost.toFixed(2)} € e il margine risulta ${marginPct}%.\n` +
+        `Probabilmente mancano costi di materiale o posa nel preventivo (sezione Contabilità).\n\nConvertire comunque?`
+      )) { setSubmitting(false); return; }
 
       // Nome cliente
       const { data: custInfo } = await supabase
