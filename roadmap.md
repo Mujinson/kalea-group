@@ -16,3 +16,4 @@
 - [x] Timbrature riconoscono il cantiere dalla posizione GPS; coordinate cantieri compilate
 - [x] Fatture Nava N3 e Kronos 6 registrate e incassate
 - [ ] Date fine lavori mancanti in 4 cantieri
+- [ ] Pulsante assistente CRM spostabile e senza coprire la paginazione

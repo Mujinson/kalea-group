@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MessageSquare, Send, Plus, AlertCircle, RefreshCw, Sparkles, X } from 'lucide-react';
+import { MessageSquare, Send, Plus, AlertCircle, RefreshCw, Sparkles, X, Move } from 'lucide-react';
 
 type ChatMessage =
   | { id: string; role: 'user'; content: string }
@@ -12,14 +12,67 @@ type ChatMessage =
 
 const uid = () => Math.random().toString(36).slice(2, 10);
 
+const BUTTON_SIZE = 56;
+const VIEWPORT_MARGIN = 12;
+const POSITION_STORAGE_KEY = 'crm-assistant-button-position';
+
+type ButtonPosition = { x: number; y: number };
+type DragState = {
+  pointerId: number;
+  startX: number;
+  startY: number;
+  originX: number;
+  originY: number;
+  moved: boolean;
+};
+
+const clampPosition = ({ x, y }: ButtonPosition): ButtonPosition => ({
+  x: Math.min(Math.max(VIEWPORT_MARGIN, x), Math.max(VIEWPORT_MARGIN, window.innerWidth - BUTTON_SIZE - VIEWPORT_MARGIN)),
+  y: Math.min(Math.max(VIEWPORT_MARGIN, y), Math.max(VIEWPORT_MARGIN, window.innerHeight - BUTTON_SIZE - VIEWPORT_MARGIN)),
+});
+
+const initialButtonPosition = (bottomOffset: number): ButtonPosition => {
+  const fallback = clampPosition({
+    x: window.innerWidth - BUTTON_SIZE - 24,
+    y: window.innerHeight - BUTTON_SIZE - Math.max(96, bottomOffset),
+  });
+
+  try {
+    const saved = JSON.parse(window.localStorage.getItem(POSITION_STORAGE_KEY) || 'null');
+    if (Number.isFinite(saved?.x) && Number.isFinite(saved?.y)) return clampPosition(saved);
+  } catch {
+    // A blocked storage must not prevent the assistant from opening.
+  }
+  return fallback;
+};
+
+const saveButtonPosition = (position: ButtonPosition) => {
+  try {
+    window.localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify(position));
+  } catch {
+    // The new position still applies for the current session.
+  }
+};
+
 export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?: number } = {}) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversationId, setConversationId] = useState<string | undefined>();
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [buttonPosition, setButtonPosition] = useState<ButtonPosition>(() => initialButtonPosition(bottomOffset));
+  const [isDragging, setIsDragging] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const dragRef = useRef<DragState | null>(null);
+  const suppressClickRef = useRef(false);
+
+  useEffect(() => {
+    const keepButtonVisible = () => setButtonPosition((position) => clampPosition(position));
+    window.addEventListener('resize', keepButtonVisible);
+    return () => window.removeEventListener('resize', keepButtonVisible);
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -76,22 +129,106 @@ export default function CrmAssistantChat({ bottomOffset = 24 }: { bottomOffset?:
     setTimeout(() => inputRef.current?.focus(), 50);
   };
 
+  const handleDragStart = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (event.button !== 0) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: buttonPosition.x,
+      originY: buttonPosition.y,
+      moved: false,
+    };
+  };
+
+  const handleDragMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    const deltaX = event.clientX - drag.startX;
+    const deltaY = event.clientY - drag.startY;
+    if (!drag.moved && Math.hypot(deltaX, deltaY) < 5) return;
+
+    drag.moved = true;
+    setIsDragging(true);
+    event.preventDefault();
+    setButtonPosition(clampPosition({ x: drag.originX + deltaX, y: drag.originY + deltaY }));
+  };
+
+  const handleDragEnd = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    dragRef.current = null;
+    setIsDragging(false);
+    if (drag.moved) {
+      setButtonPosition((position) => {
+        saveButtonPosition(position);
+        return position;
+      });
+      suppressClickRef.current = true;
+      window.setTimeout(() => {
+        suppressClickRef.current = false;
+      }, 0);
+    }
+  };
+
+  const handlePositionKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    const directions: Record<string, ButtonPosition> = {
+      ArrowLeft: { x: -1, y: 0 },
+      ArrowRight: { x: 1, y: 0 },
+      ArrowUp: { x: 0, y: -1 },
+      ArrowDown: { x: 0, y: 1 },
+    };
+    const direction = directions[event.key];
+    if (!direction) return;
+
+    event.preventDefault();
+    const distance = event.shiftKey ? 48 : 12;
+    setButtonPosition((position) => {
+      const next = clampPosition({
+        x: position.x + direction.x * distance,
+        y: position.y + direction.y * distance,
+      });
+      saveButtonPosition(next);
+      return next;
+    });
+  };
+
   return (
     <>
-      {/* Floating button */}
+      {/* Floating button: drag to move, click to open. Position is remembered. */}
       <button
-        onClick={() => setOpen(true)}
-        aria-label="Apri assistente CRM"
-        title="Assistente CRM"
-        className="fixed right-6 z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105"
+        ref={buttonRef}
+        onClick={() => {
+          if (suppressClickRef.current) {
+            suppressClickRef.current = false;
+            return;
+          }
+          setOpen(true);
+        }}
+        onPointerDown={handleDragStart}
+        onPointerMove={handleDragMove}
+        onPointerUp={handleDragEnd}
+        onPointerCancel={handleDragEnd}
+        onKeyDown={handlePositionKeyDown}
+        aria-label="Apri assistente CRM. Trascina per spostare il pulsante"
+        title="Assistente CRM · trascina per spostare"
+        className={`fixed z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform touch-none select-none ${isDragging ? 'cursor-grabbing scale-105' : 'cursor-grab hover:scale-105'}`}
         style={{
-          bottom: bottomOffset,
+          left: buttonPosition.x,
+          top: buttonPosition.y,
           background: 'linear-gradient(135deg, #0F172A 0%, #2A1F5C 100%)',
           color: '#F5F1E8',
           border: '1px solid rgba(255,255,255,0.15)',
         }}
       >
         <MessageSquare className="w-6 h-6" />
+        <span className="absolute -right-1 -top-1 w-5 h-5 rounded-full bg-background text-foreground ring-1 ring-border flex items-center justify-center" aria-hidden="true">
+          <Move className="w-3 h-3" />
+        </span>
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>
