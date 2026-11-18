@@ -17,3 +17,4 @@
 - [x] Fatture Nava N3 e Kronos 6 registrate e incassate
 - [ ] Date fine lavori mancanti in 4 cantieri
 - [x] Pulsante assistente CRM spostabile e senza coprire la paginazione
+- [x] Condizioni dedicate per fornitura e posa negli appalti pubblici

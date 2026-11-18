@@ -4,6 +4,12 @@
 // Qui vive la parte decisionale (quali testi e quali rate usare), così è
 // testabile senza aprire il generatore di preventivi.
 import { PUBLIC_TENDER_TERMS, PUBLIC_TENDER_ACCEPTANCE } from "../data/quotePublicTenderTerms";
+import {
+  PUBLIC_TENDER_SUPPLY_INSTALL_TERMS,
+  PUBLIC_TENDER_SUPPLY_INSTALL_ACCEPTANCE,
+} from "../data/quotePublicTenderSupplyInstallTerms";
+
+export type PublicTenderKind = "lavorazioni" | "fornitura_posa";
 
 /** Voci "Servizi B" (appalti pubblici). */
 export type ServiziBLines = readonly unknown[];
@@ -53,8 +59,13 @@ export const resolveQuoteTerms = (opts: {
   serviziB: ServiziBLines | undefined | null;
   terminiCustom: string | null;
   standardTerms: string;
+  tenderKind?: PublicTenderKind;
 }): string => {
-  if (isPublicTenderQuote(opts.serviziB)) return opts.terminiCustom ?? PUBLIC_TENDER_TERMS;
+  if (isPublicTenderQuote(opts.serviziB)) {
+    return opts.terminiCustom ?? (opts.tenderKind === "fornitura_posa"
+      ? PUBLIC_TENDER_SUPPLY_INSTALL_TERMS
+      : PUBLIC_TENDER_TERMS);
+  }
   return opts.terminiCustom ?? opts.standardTerms;
 };
 
@@ -62,4 +73,10 @@ export const resolveQuoteTerms = (opts: {
 export const resolveQuoteAcceptance = (
   serviziB: ServiziBLines | undefined | null,
   standardAcceptance: string,
-): string => (isPublicTenderQuote(serviziB) ? PUBLIC_TENDER_ACCEPTANCE : standardAcceptance);
+  tenderKind: PublicTenderKind = "lavorazioni",
+): string => {
+  if (!isPublicTenderQuote(serviziB)) return standardAcceptance;
+  return tenderKind === "fornitura_posa"
+    ? PUBLIC_TENDER_SUPPLY_INSTALL_ACCEPTANCE
+    : PUBLIC_TENDER_ACCEPTANCE;
+};

@@ -10,6 +10,7 @@ import {
   shouldPrefillSalPagamenti,
 } from "./publicTenderQuote";
 import { PUBLIC_TENDER_TERMS } from "../data/quotePublicTenderTerms";
+import { PUBLIC_TENDER_SUPPLY_INSTALL_TERMS } from "../data/quotePublicTenderSupplyInstallTerms";
 
 const line = (name: string) => ({ id: name, name, quantity: 1, unit_price: 0, unit: "a corpo", discount_pct: 0 });
 const STD = [
@@ -51,6 +52,40 @@ describe("voci Servizi B (appalti pubblici)", () => {
   test("la riga di accettazione richiama gli artt. 5, 8, 13 e 17 solo in regime appalto", () => {
     assert.match(resolveQuoteAcceptance([line("Posa")], "standard"), /Artt\. 5, 8, 13 e 17/);
     assert.equal(resolveQuoteAcceptance([], "standard"), "standard");
+  });
+
+  test("fornitura e posa negli appalti usa condizioni dedicate su materiali, consegna e garanzia", () => {
+    const t = resolveQuoteTerms({
+      serviziB: [line("Fornitura e posa")],
+      terminiCustom: null,
+      standardTerms: "TESTO STANDARD",
+      tenderKind: "fornitura_posa",
+    });
+    assert.equal(t, PUBLIC_TENDER_SUPPLY_INSTALL_TERMS);
+    assert.ok(t.includes("Art. 6 – Fornitura, consegna e verifica dei materiali"));
+    assert.ok(t.includes("Art. 19 – Trattamento dei dati personali"));
+    assert.ok(t.includes("30% – Anticipazione iniziale"));
+    assert.ok(t.includes("25% – Primo SAL"));
+    assert.ok(t.includes("25% – Secondo SAL"));
+    assert.ok(t.includes("20% – SAL finale"));
+    assert.ok(!t.includes("la fornitura dei materiali, dei prodotti di posa, dei collanti, degli stucchi e degli accessori resta a carico della Committenza"));
+    assert.ok(!t.includes("**"), "il testo stampato non deve contenere markup markdown");
+  });
+
+  test("fornitura e posa negli appalti approva gli articoli corretti e rispetta il testo personalizzato", () => {
+    assert.match(
+      resolveQuoteAcceptance([line("Fornitura e posa")], "standard", "fornitura_posa"),
+      /Artt\. 5, 6, 9, 14 e 18/,
+    );
+    assert.equal(
+      resolveQuoteTerms({
+        serviziB: [line("Fornitura e posa")],
+        terminiCustom: "MIO TESTO",
+        standardTerms: "TESTO STANDARD",
+        tenderKind: "fornitura_posa",
+      }),
+      "MIO TESTO",
+    );
   });
 
   test("le rate SAL precompilate sono 30/25/25/20 e sommano 100%", () => {

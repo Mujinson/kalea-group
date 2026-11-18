@@ -13,7 +13,8 @@ import { ensureLeadForQuote } from "@/lib/quoteCrm";
 import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti/_shared";
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 import { PUBLIC_TENDER_TERMS } from "@/data/quotePublicTenderTerms";
-import { isStandardPagamenti, isPublicTenderQuote, publicTenderPagamenti, resolveQuoteAcceptance, resolveQuoteTerms, shouldPrefillSalPagamenti } from "@/lib/publicTenderQuote";
+import { PUBLIC_TENDER_SUPPLY_INSTALL_TERMS } from "@/data/quotePublicTenderSupplyInstallTerms";
+import { isStandardPagamenti, isPublicTenderQuote, publicTenderPagamenti, resolveQuoteAcceptance, resolveQuoteTerms, shouldPrefillSalPagamenti, type PublicTenderKind } from "@/lib/publicTenderQuote";
 import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
 import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
 import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
@@ -1319,17 +1320,21 @@ export default function CreaPreventivo() {
   const [tipoPreventivo, setTipoPreventivo] = useState<QuoteType>("fornitura_posa");
   const [terminiCustom, setTerminiCustom] = useState<string | null>(null);
   const [appalto, setAppalto] = useState(false);
+  const [appaltoTipo, setAppaltoTipo] = useState<PublicTenderKind>("lavorazioni");
   const tenderMarker: unknown[] = (appalto || serviziB.length > 0) ? [1] : [];
 
-  // Con le voci Servizi B valgono le Condizioni generali per appalti pubblici
+  // In regime appalto il testo cambia tra sola posa e fornitura + posa.
   const standardTerms = QUOTE_TERMS[tipoPreventivo] || t.termini_testo;
-  const terminiEffettivi = resolveQuoteTerms({ serviziB: tenderMarker, terminiCustom, standardTerms });
-  const accettazioneEffettiva = resolveQuoteAcceptance(tenderMarker, t.parti_dichiarano);
+  const terminiEffettivi = resolveQuoteTerms({ serviziB: tenderMarker, terminiCustom, standardTerms, tenderKind: appaltoTipo });
+  const accettazioneEffettiva = resolveQuoteAcceptance(tenderMarker, t.parti_dichiarano, appaltoTipo);
 
   // Alla prima voce Servizi B le rate passano al piano SAL (30/25/25/20),
   // sempre modificabili. Un piano rate già personalizzato non viene toccato.
   const updateServiziB = (next: CatalogLine[]) => {
     if (shouldPrefillSalPagamenti(serviziB, next, pagamenti)) setPagamenti(publicTenderPagamenti());
+    if (!isPublicTenderQuote(serviziB) && isPublicTenderQuote(next)) {
+      setAppaltoTipo("lavorazioni");
+    }
     setServiziB(next);
   };
 
@@ -1340,7 +1345,7 @@ export default function CreaPreventivo() {
 
     const terminiAttuali = terminiCustom
       ?? (isPublicTenderQuote(tenderMarker)
-        ? PUBLIC_TENDER_TERMS
+        ? (appaltoTipo === "fornitura_posa" ? PUBLIC_TENDER_SUPPLY_INSTALL_TERMS : PUBLIC_TENDER_TERMS)
         : (tipoPreventivo === "fornitura_posa" ? "" : (QUOTE_TERMS[tipoPreventivo] || "")));
 
     const blocchi: string[] = [
@@ -1637,6 +1642,7 @@ export default function CreaPreventivo() {
         if (d.showCondizioniFornitura != null) setShowCondizioniFornitura(!!d.showCondizioniFornitura);
         if (d.tipoPreventivo) setTipoPreventivo(d.tipoPreventivo);
         setAppalto(!!d.appalto);
+        setAppaltoTipo(d.appaltoTipo === "fornitura_posa" ? "fornitura_posa" : "lavorazioni");
         if (typeof d.terminiCustom === "string") setTerminiCustom(d.terminiCustom);
 
         if (d.tempiConsegna) setTempiConsegna(d.tempiConsegna);
@@ -1851,7 +1857,7 @@ export default function CreaPreventivo() {
         dataInizioLavori, dataFineLavori,
         incPosa, incTapp, incTrasporto, kmDist, righeMat, pagamenti,
         ivaRate, reverseCharge, metodoTrasporto, tempiConsegna, tipoPagamento, tonalita, showCondizioniFornitura,
-        tipoPreventivo, terminiCustom, appalto,
+        tipoPreventivo, terminiCustom, appalto, appaltoTipo,
 
         wcSel, noteCliente, noteInterne, calc, lingua, stato, overrides,
         catalog: { articoli, accessori, servizi, serviziB },
@@ -2085,7 +2091,7 @@ export default function CreaPreventivo() {
   const savedJsonRef = useRef<string>("");
   const draftReadyRef = useRef(false);
   const [draftFound, setDraftFound] = useState<{savedAt:number; data:any}|null>(null);
-  const draftSnapshot = {numPrev,dataPrev,cliente,crmLink,cantiere,sito,dataInizioLavori,dataFineLavori,noteCliente,noteInterne,stato,pagamenti,ivaRate,reverseCharge,metodoTrasporto,tempiConsegna,tipoPagamento,showCondizioniFornitura,tipoPreventivo,terminiCustom,appalto,prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,contabilita,articoli,accessori,servizi,serviziB,overrides,tonalita,wcSel,lingua,technicalAttachments,step};
+  const draftSnapshot = {numPrev,dataPrev,cliente,crmLink,cantiere,sito,dataInizioLavori,dataFineLavori,noteCliente,noteInterne,stato,pagamenti,ivaRate,reverseCharge,metodoTrasporto,tempiConsegna,tipoPagamento,showCondizioniFornitura,tipoPreventivo,terminiCustom,appalto,appaltoTipo,prodotto,complessita,mqPrev,sfrido,incPosa,incTapp,kmDist,incTrasporto,sconto,righeMat,contabilita,articoli,accessori,servizi,serviziB,overrides,tonalita,wcSel,lingua,technicalAttachments,step};
   const draftJson = JSON.stringify(draftSnapshot);
   useEffect(() => {
     draftReadyRef.current = false;
@@ -2137,6 +2143,7 @@ export default function CreaPreventivo() {
       if (d.showCondizioniFornitura !== undefined) setShowCondizioniFornitura(d.showCondizioniFornitura);
       if (d.tipoPreventivo !== undefined) setTipoPreventivo(d.tipoPreventivo);
       if (d.appalto !== undefined) setAppalto(!!d.appalto);
+      if (d.appaltoTipo !== undefined) setAppaltoTipo(d.appaltoTipo === "fornitura_posa" ? "fornitura_posa" : "lavorazioni");
       if (d.terminiCustom !== undefined) setTerminiCustom(d.terminiCustom);
       if (d.prodotto !== undefined) setProdotto(d.prodotto);
       if (d.complessita !== undefined) setComplessita(d.complessita);
@@ -2929,18 +2936,27 @@ export default function CreaPreventivo() {
                   </button>
                 ))}
                 <button
-                  onClick={()=>{ setAppalto(true); setTerminiCustom(null); if (isStandardPagamenti(pagamenti)) setPagamenti(publicTenderPagamenti()); }}
-                  title="Appalti pubblici: nel PDF al cliente esce solo 'Servizi'"
+                  onClick={()=>{ setAppalto(true); setAppaltoTipo("lavorazioni"); setTerminiCustom(null); if (isStandardPagamenti(pagamenti)) setPagamenti(publicTenderPagamenti()); }}
+                  title="Appalti pubblici di sola posa: nel PDF al cliente esce solo 'Servizi'"
                   style={{padding:"9px 12px",borderRadius:8,fontSize:13,cursor:"pointer",
-                    border:isPublicTenderQuote(tenderMarker)?"1.5px solid #1A1A2E":"1px dashed #94A3B8",
-                    background:isPublicTenderQuote(tenderMarker)?"#1A1A2E":"#fff",
-                    color:isPublicTenderQuote(tenderMarker)?"#fff":"#1A1A2E",fontWeight:isPublicTenderQuote(tenderMarker)?600:400}}>
+                    border:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="lavorazioni"?"1.5px solid #1A1A2E":"1px dashed #94A3B8",
+                    background:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="lavorazioni"?"#1A1A2E":"#fff",
+                    color:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="lavorazioni"?"#fff":"#1A1A2E",fontWeight:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="lavorazioni"?600:400}}>
                   Servizi B (appalti){serviziB.length?` · ${serviziB.length}`:""}
+                </button>
+                <button
+                  onClick={()=>{ setAppalto(true); setAppaltoTipo("fornitura_posa"); setTipoPreventivo("fornitura_posa"); setShowCondizioniFornitura(true); setTerminiCustom(null); if (isStandardPagamenti(pagamenti)) setPagamenti(publicTenderPagamenti()); }}
+                  title="Appalti pubblici con fornitura dei materiali e posa in opera"
+                  style={{padding:"9px 12px",borderRadius:8,fontSize:13,cursor:"pointer",
+                    border:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="fornitura_posa"?"1.5px solid #1A1A2E":"1px dashed #94A3B8",
+                    background:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="fornitura_posa"?"#1A1A2E":"#fff",
+                    color:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="fornitura_posa"?"#fff":"#1A1A2E",fontWeight:isPublicTenderQuote(tenderMarker)&&appaltoTipo==="fornitura_posa"?600:400}}>
+                  Fornitura e posa (appalti)
                 </button>
               </div>
               <div style={{fontSize:12,color:"#64748B",marginBottom:6}}>
                 {isPublicTenderQuote(tenderMarker)
-                  ? "Termini e condizioni: valgono le Condizioni generali per appalti pubblici (modificabili per questo preventivo)"
+                  ? `Termini e condizioni: ${appaltoTipo === "fornitura_posa" ? "Condizioni generali per fornitura e posa negli appalti pubblici" : "Condizioni generali per appalti pubblici di sola posa"} (modificabili per questo preventivo)`
                   : "Termini e condizioni stampati nel PDF (modificabili per questo preventivo)"}
               </div>
               <textarea
