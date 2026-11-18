@@ -692,8 +692,8 @@ const AdminOverview = () => {
                 <YAxis tick={{ fontSize: 10, fill: 'var(--crm-ink-muted)' }} axisLine={false} tickLine={false}
                   tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(0)}k` : v} />
                 <Tooltip
-                  contentStyle={{ background: 'var(--crm-ink)', border: 'none', borderRadius: 4, fontSize: 11, color: 'var(--crm-surface)' }}
-                  labelStyle={{ color: '#4F46E5', fontWeight: 700 }}
+                  contentStyle={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, color: '#0F172A', boxShadow: '0 4px 12px rgba(15,23,42,0.12)' }} itemStyle={{ color: '#0F172A', fontWeight: 600 }}
+                  labelStyle={{ color: '#475569', fontWeight: 700, textTransform: 'uppercase' }}
                   formatter={(v: any) => eur(v)}
                 />
                 <Area type="monotone" dataKey="fatturato" stroke="#4F46E5" strokeWidth={2} fill="url(#gradFatt)" />
@@ -769,7 +769,7 @@ const AdminOverview = () => {
                   <CartesianGrid strokeDasharray="2 4" stroke="#F1F5F9" vertical={false} />
                   <XAxis dataKey="month" tick={{ fontSize: 10, fill: 'var(--crm-ink-muted)' }} axisLine={false} tickLine={false} />
                   <YAxis tick={{ fontSize: 10, fill: 'var(--crm-ink-muted)' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: 'var(--crm-ink)', border: 'none', borderRadius: 4, fontSize: 11, color: 'var(--crm-surface)' }} />
+                  <Tooltip contentStyle={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 6, fontSize: 13, color: '#0F172A', boxShadow: '0 4px 12px rgba(15,23,42,0.12)' }} itemStyle={{ color: '#0F172A', fontWeight: 600 }} />
                   <Legend wrapperStyle={{ fontSize: 10 }} iconSize={8} />
                   <Bar dataKey="accettati" stackId="a" fill="#16a34a" />
                   <Bar dataKey="attesa" stackId="a" fill="#eab308" />
