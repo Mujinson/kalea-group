@@ -74,7 +74,8 @@ describe("impaginazione PDF preventivo", () => {
 });
 
 import { paginateQuotePdf as paginateFill } from "./quotePdfPagination";
-import { test as fillTest, expect as fillExpect } from "bun:test";
+const fillTest = test;
+const fillExpect = (v: number) => ({ toBeGreaterThan: (n: number) => assert.ok(v > n), toBe: (n: number) => assert.equal(v, n) });
 fillTest("a near-page-tall row does not leave an almost empty page", () => {
   const lines = Array.from({ length: 90 }, (_, i) => ({ top: 120 + i * 20, bottom: 136 + i * 20 }));
   const slices = paginateFill({
