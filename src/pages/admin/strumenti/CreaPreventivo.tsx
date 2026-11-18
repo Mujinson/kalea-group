@@ -19,6 +19,7 @@ import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUn
 import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
 import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
 import { clearZeroOnFocus } from '@/lib/numericInput';
+import { collectQuotePdfTextLines, paginateQuotePdf } from '@/lib/quotePdfPagination';
 
 
 
@@ -2025,46 +2026,35 @@ export default function CreaPreventivo() {
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
-      // Interruzioni di pagina intelligenti: mai tagliare righe, paragrafi o blocchi a metà
       const domW = preview.scrollWidth;
       const ratio = canvas.width / domW;
       const mmPerPx = pageW / domW;
       const topMarginMm = 10, bottomMarginMm = 8;
       const baseRect = preview.getBoundingClientRect();
-      const blocks = Array.from(preview.querySelectorAll<HTMLElement>("tr, p, h1, h2, h3, h4, li, img, [data-pdf-block]"))
+      const elementBlocks = Array.from(preview.querySelectorAll<HTMLElement>("tr, p, h1, h2, h3, h4, li, img, [data-pdf-block]"))
         .map((el) => { const r = el.getBoundingClientRect(); return { top: r.top - baseRect.top, bottom: r.bottom - baseRect.top }; })
         .filter((b) => b.bottom - b.top > 0);
+      // Ogni riga di testo è protetta singolarmente: anche un lungo blocco di
+      // condizioni può quindi continuare sulla pagina successiva senza tagli.
+      const textLines = collectQuotePdfTextLines(preview, baseRect);
       const totalH = preview.scrollHeight;
-      const slices: Array<[number, number]> = [];
-      let start = 0;
-      while (start < totalH - 1) {
-        const usableMm = pageH - bottomMarginMm - (slices.length ? topMarginMm : 0);
-        const maxH = usableMm / mmPerPx;
-        let cut = Math.min(start + maxH, totalH);
-        if (cut < totalH) {
-          let moved = true;
-          while (moved) {
-            moved = false;
-            for (const b of blocks) {
-              if (b.top < cut - 0.5 && b.bottom > cut + 0.5 && b.top > start + 1 && b.bottom - b.top < maxH * 0.9) {
-                cut = b.top; moved = true;
-              }
-            }
-          }
-          if (cut <= start + 20) cut = Math.min(start + maxH, totalH);
-        }
-        slices.push([start, cut]);
-        start = cut;
-      }
+      const slices = paginateQuotePdf({
+        totalHeight: totalH,
+        firstPageHeight: (pageH - bottomMarginMm) / mmPerPx,
+        followingPageHeight: (pageH - topMarginMm - bottomMarginMm) / mmPerPx,
+        blocks: [...elementBlocks, ...textLines],
+      });
       slices.forEach(([a, b], i) => {
-        const sy = Math.round(a * ratio), sh = Math.max(1, Math.round((b - a) * ratio));
+        const sy = Math.max(0, Math.floor(a * ratio));
+        const endY = Math.min(canvas.height, Math.ceil(b * ratio));
+        const sh = Math.max(1, endY - sy);
         const pc = document.createElement("canvas");
         pc.width = canvas.width; pc.height = sh;
         const ctx = pc.getContext("2d")!;
         ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, pc.width, pc.height);
         ctx.drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh);
         if (i > 0) pdf.addPage();
-        pdf.addImage(pc.toDataURL("image/jpeg", 0.92), "JPEG", 0, i > 0 ? topMarginMm : 0, pageW, (b - a) * mmPerPx);
+        pdf.addImage(pc.toDataURL("image/jpeg", 0.92), "JPEG", 0, i > 0 ? topMarginMm : 0, pageW, (sh / ratio) * mmPerPx);
       });
       const fname = `Preventivo_${(numPrev || "Kalea").replace(/[^\w-]+/g, "_")}.pdf`;
       await downloadQuotePdf(pdf.output('arraybuffer'), technicalAttachments, fname);
@@ -3241,7 +3231,7 @@ export default function CreaPreventivo() {
             </table>
 
             {/* Totali */}
-            <div style={{marginLeft:"auto",width:280}}>
+            <div data-pdf-block style={{marginLeft:"auto",width:280}}>
               {[
                 {l:t.subtotale,v:euro(calc.prezzoLordoTot)},
                 sconto>0 && {l:`${t.sconto_label||"Sconto"} ${Math.round(sconto*100)/100}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
@@ -3260,7 +3250,7 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Condizioni di fornitura */}
-            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
+            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? L.cond_fornitura : L.cond_generiche}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
                 {showCondizioniFornitura && (<>
@@ -3276,7 +3266,7 @@ export default function CreaPreventivo() {
 
             {/* Pagamenti */}
             {pagamenti.some((p:any)=>(Number(p.pct)||0)>0) && (
-            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
+            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{L.cond_pagamento}</div>
               {pagamenti.filter((p:any)=>(Number(p.pct)||0)>0).map((p:any,i:number)=>(
                 <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid #E6E9F0",fontSize:13}}>
@@ -3308,11 +3298,15 @@ export default function CreaPreventivo() {
             {/* Termini */}
             <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0"}}>
               <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
-              <div style={{fontSize:11,color:"#475569",lineHeight:1.8,whiteSpace:"pre-line"}}>{terminiEffettivi}</div>
+              <div style={{fontSize:11,color:"#475569",lineHeight:1.8}}>
+                {String(terminiEffettivi || "").split(/\n\s*\n/).filter((block) => block.trim()).map((block, index) => (
+                  <div data-pdf-block key={index} style={{whiteSpace:"pre-line",marginBottom:12}}>{block}</div>
+                ))}
+              </div>
             </div>
 
             {/* Sezione Privacy firma */}
-            <div style={{marginTop:20,padding:"12px 16px",border:"1px solid #E6E9F0",borderRadius:8}}>
+            <div data-pdf-block style={{marginTop:20,padding:"12px 16px",border:"1px solid #E6E9F0",borderRadius:8}}>
               <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>{L.privacy_titolo}</div>
               <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#475569"}}>
                 <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
@@ -3325,7 +3319,7 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Accettazione */}
-            <div style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
+            <div data-pdf-block style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
               <div style={{fontSize:11,color:"#475569",marginBottom:6}}>{accettazioneEffettiva}</div>
               <div style={{fontSize:12,color:"#475569",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>

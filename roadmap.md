@@ -18,3 +18,4 @@
 - [ ] Date fine lavori mancanti in 4 cantieri
 - [x] Pulsante assistente CRM spostabile e senza coprire la paginazione
 - [x] Condizioni dedicate per fornitura e posa negli appalti pubblici
+- [x] PDF preventivi: scritte intere tra una pagina e la successiva, verificato su KAL-2026-036
