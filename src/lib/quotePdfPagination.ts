@@ -10,6 +10,9 @@ export type PdfPageSlice = [number, number];
 const CUT_GAP_PX = 2;
 const BOUNDARY_GUARD_PX = 2;
 const EPSILON_PX = 0.5;
+const MIN_FILL = 0.75;
+const SMALL_BLOCK = 0.2;
+const LINE_BLOCK_PX = 80;
 
 /**
  * Splits the captured document without crossing text lines or protected blocks.
@@ -41,26 +44,30 @@ export function paginateQuotePdf({
   while (start < totalHeight - EPSILON_PX) {
     const maxHeight = slices.length === 0 ? firstPageHeight : followingPageHeight;
     const idealCut = Math.min(start + maxHeight, totalHeight);
-    let cut = idealCut;
-
-    if (idealCut < totalHeight) {
-      // Moving a cut upwards can reveal another block crossing the new cut.
-      // Repeat until the boundary is clear. Oversized blocks are handled by
-      // their individual text-line rectangles instead of being kept together.
+    const findCut = (limit: number) => {
+      let cut = idealCut;
+      if (idealCut >= totalHeight) return cut;
       for (let guard = 0; guard <= sortedBlocks.length; guard += 1) {
         const crossing = sortedBlocks.find((block) =>
           block.top > start + EPSILON_PX &&
           block.top < cut + BOUNDARY_GUARD_PX &&
           block.bottom > cut - BOUNDARY_GUARD_PX &&
-          block.bottom - block.top < maxHeight * 0.95
+          block.bottom - block.top < limit
         );
         if (!crossing) break;
-
         const safeCut = crossing.top - CUT_GAP_PX;
         if (safeCut <= start + EPSILON_PX) break;
         cut = safeCut;
       }
-    }
+      return cut;
+    };
+
+    // Keep blocks together only when it does not waste much of the page.
+    // Otherwise big blocks (long table rows, sections) continue on the next
+    // page, cut between their individual text lines: no near-empty pages.
+    let cut = findCut(maxHeight * 0.95);
+    if (cut - start < maxHeight * MIN_FILL) cut = findCut(maxHeight * SMALL_BLOCK);
+    if (cut - start < maxHeight * MIN_FILL) cut = findCut(LINE_BLOCK_PX);
 
     // A single unbreakable object taller than a page is the only case where a
     // geometric cut is unavoidable. Normal text never takes this fallback,

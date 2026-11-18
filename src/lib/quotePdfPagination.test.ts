@@ -72,3 +72,15 @@ describe("impaginazione PDF preventivo", () => {
     assert.deepEqual(slices, [[0, 300], [300, 560], [560, 820], [820, 1000]]);
   });
 });
+
+import { paginateQuotePdf as paginateFill } from "./quotePdfPagination";
+import { test as fillTest, expect as fillExpect } from "bun:test";
+fillTest("a near-page-tall row does not leave an almost empty page", () => {
+  const lines = Array.from({ length: 90 }, (_, i) => ({ top: 120 + i * 20, bottom: 136 + i * 20 }));
+  const slices = paginateFill({
+    totalHeight: 1900, firstPageHeight: 1000, followingPageHeight: 1000,
+    blocks: [{ top: 100, bottom: 118 }, { top: 120, bottom: 1050 }, ...lines],
+  });
+  fillExpect(slices[0][1]).toBeGreaterThan(750);
+  fillExpect(slices.length).toBe(2);
+});
