@@ -79,6 +79,13 @@ export const translations: Record<Language, Translations> = {
     home: {
       linesTitle: "KALĒA® — SURFACE SYSTEM®",
       linesSubtitle: "Quattro linee integrate per la continuità visiva degli spazi",
+      certification: {
+        eyebrow: "Posatori certificati",
+        title: "Tutti i nostri posatori sono posatori certificati Ravaioli Academy",
+        description: "Decking, cladding e parquet: la nostra squadra segue i percorsi formativi Ravaioli Academy e applica lo stesso protocollo di posa in ogni cantiere.",
+        tags: { decking: "Decking", cladding: "Cladding", parquet: "Parquet" },
+        link: "Scopri la posa Kalēa®",
+      },
       stonecore: {
         title: "BIOMAG FLOOR®",
         description: "Superfici tecniche BIOMAG FLOOR® con texture wood. Posa flottante, continuità visiva, prestazioni certificate.",
@@ -1265,6 +1272,13 @@ export const translations: Record<Language, Translations> = {
     home: {
       linesTitle: "KALĒA® — SURFACE SYSTEM®",
       linesSubtitle: "Four integrated lines for visual continuity across spaces",
+      certification: {
+        eyebrow: "Certified installers",
+        title: "Every Kalēa® installer is certified by Ravaioli Academy",
+        description: "Decking, cladding and parquet: our team completes Ravaioli Academy training paths and applies the same installation protocol on every site.",
+        tags: { decking: "Decking", cladding: "Cladding", parquet: "Parquet" },
+        link: "Discover Kalēa® installation",
+      },
       stonecore: {
         title: "BIOMAG FLOOR®",
         description: "Technical BIOMAG FLOOR® surfaces with wood texture. Floating installation, visual continuity, certified performance.",
@@ -2433,6 +2447,13 @@ export const translations: Record<Language, Translations> = {
     home: {
       linesTitle: "KALĒA® — SURFACE SYSTEM®",
       linesSubtitle: "Vier integrierte Linien für visuelle Kontinuität in Räumen",
+      certification: {
+        eyebrow: "Zertifizierte Verleger",
+        title: "Alle unsere Verleger sind zertifizierte Verleger der Ravaioli Academy",
+        description: "Decking, Cladding und Parkett: Unser Team durchläuft die Ausbildungsprogramme der Ravaioli Academy und wendet auf jeder Baustelle dasselbe Verlegeprotokoll an.",
+        tags: { decking: "Decking", cladding: "Cladding", parquet: "Parkett" },
+        link: "Kalēa®-Verlegung entdecken",
+      },
       stonecore: {
         title: "BIOMAG FLOOR®",
         description: "Technische Oberflächen BIOMAG FLOOR® mit Holztextur. Schwimmende Verlegung, visuelle Kontinuität, zertifizierte Leistung.",
@@ -3601,6 +3622,13 @@ export const translations: Record<Language, Translations> = {
     home: {
       linesTitle: "KALĒA® — SURFACE SYSTEM®",
       linesSubtitle: "Quatre lignes intégrées pour la continuité visuelle des espaces",
+      certification: {
+        eyebrow: "Poseurs certifiés",
+        title: "Tous nos poseurs sont poseurs certifiés Ravaioli Academy",
+        description: "Decking, cladding et parquet : notre équipe suit les parcours de formation Ravaioli Academy et applique le même protocole de pose sur chaque chantier.",
+        tags: { decking: "Decking", cladding: "Cladding", parquet: "Parquet" },
+        link: "Découvrir la pose Kalēa®",
+      },
       stonecore: {
         title: "BIOMAG FLOOR®",
         description: "Surfaces techniques BIOMAG FLOOR® avec texture bois. Pose flottante, continuité visuelle, performance certifiée.",

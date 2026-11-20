@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import HomeHero, { HomeDescription } from "@/components/HomeHero";
 import ChiSiamoManifesto from "@/components/ChiSiamoManifesto";
 import PartnersMarquee from "@/components/PartnersMarquee";
+import CertifiedInstallersSection from "@/components/CertifiedInstallersSection";
 import ServicesTripleSection from "@/components/ServicesTripleSection";
 import MetodoKalea from "@/components/MetodoKalea";
 
@@ -126,6 +127,9 @@ const Home = () => {
 
       {/* Partners marquee (right → left) */}
       <PartnersMarquee />
+
+      {/* Posatori certificati Ravaioli Academy */}
+      <CertifiedInstallersSection />
 
       <div id="chi-siamo-next" className="scroll-mt-20" />
 
