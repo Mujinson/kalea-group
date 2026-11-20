@@ -14,8 +14,8 @@ const CertifiedInstallersSection = () => {
   ];
 
   return (
-    <section className="relative bg-background py-14 md:py-20">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
+    <section className="relative bg-background pb-16 pt-2 md:pb-24">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -24,46 +24,47 @@ const CertifiedInstallersSection = () => {
         >
           <Link
             to={`/${language}/servizi/fornitura-e-posa`}
-            className="group relative block overflow-hidden rounded-2xl border border-foreground/10 bg-card shadow-[0_10px_40px_rgba(74,42,19,0.06)] transition-shadow duration-300 hover:shadow-[0_18px_60px_rgba(74,42,19,0.12)]"
+            className="group grid border-y border-kalea-tan/40 bg-kalea-cream/30 md:grid-cols-[220px_1fr] lg:grid-cols-[260px_1fr]"
           >
-            <div className="grid grid-cols-1 items-center gap-8 p-8 md:grid-cols-[auto_1fr_auto] md:gap-12 md:p-12 lg:p-14">
-              {/* Ravaioli Academy mark */}
-              <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border border-foreground/10 bg-background p-4 md:h-28 md:w-28 md:p-5">
-                <img
-                  src={ravaioliLogo.url}
-                  alt="Ravaioli Academy"
-                  className="h-full w-full object-contain"
-                  loading="lazy"
-                />
-              </div>
+            <div className="flex items-center justify-center border-b border-kalea-tan/30 px-8 py-8 md:border-b-0 md:border-r md:py-12">
+              <img
+                src={ravaioliLogo.url}
+                alt="Ravaioli Academy"
+                className="h-24 w-32 object-contain transition-transform duration-500 group-hover:scale-105 md:h-28 md:w-36"
+                loading="lazy"
+              />
+            </div>
 
-              {/* Message */}
-              <div className="min-w-0">
-                <p className="mb-3 text-xs font-medium uppercase tracking-[0.3em] text-foreground/50 md:text-sm">
+            <div className="min-w-0 px-6 py-8 md:px-10 md:py-10 lg:px-14 lg:py-12">
+              <div className="flex items-start justify-between gap-6">
+                <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-foreground/55 md:text-xs">
                   {t("home.certification.eyebrow")}
                 </p>
-                <h2 className="font-heading text-xl font-semibold leading-tight text-foreground md:text-2xl lg:text-[1.75rem]">
-                  {t("home.certification.title")}
-                </h2>
-                <p className="mt-3 max-w-2xl text-sm font-normal text-foreground/75 md:text-base">
-                  {t("home.certification.description")}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="whitespace-nowrap rounded-full border border-foreground/15 px-4 py-1.5 text-xs font-medium text-foreground/85 md:text-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-foreground/20 text-foreground transition-colors duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </span>
               </div>
 
-              {/* CTA */}
-              <span className="hidden shrink-0 items-center gap-2 border-b border-foreground/30 pb-1 text-sm tracking-wide text-foreground/80 transition-colors group-hover:border-foreground md:inline-flex">
+              <h2 className="mt-4 max-w-4xl font-heading text-3xl font-light leading-[1.08] text-foreground md:text-4xl lg:text-[2.75rem]">
+                {t("home.certification.title")}
+              </h2>
+              <p className="mt-5 max-w-2xl text-sm font-normal leading-relaxed text-foreground/70 md:text-base">
+                {t("home.certification.description")}
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 md:mt-10">
+                {tags.map((tag, index) => (
+                  <span key={tag} className="flex items-center gap-4">
+                    {index > 0 && <span className="h-3 w-px bg-kalea-tan" aria-hidden="true" />}
+                    <span className="whitespace-nowrap text-xs font-medium uppercase tracking-[0.2em] text-foreground/80">
+                      {tag}
+                    </span>
+                  </span>
+                ))}
+              </div>
+
+              <span className="mt-8 inline-flex items-center gap-2 border-b border-foreground/30 pb-1 text-sm tracking-wide text-foreground/80 transition-colors group-hover:border-foreground group-hover:text-foreground">
                 {t("home.certification.link")}
-                <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </span>
             </div>
           </Link>
