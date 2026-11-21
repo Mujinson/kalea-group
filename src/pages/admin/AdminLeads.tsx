@@ -214,7 +214,7 @@ export default function AdminLeads() {
       <div className="flex flex-wrap items-center gap-2 text-sm">
         <span className="text-muted-foreground">Da qualificare:</span>
         {[['area_tecnica', 'Schede tecniche'], ['chatbot_website', 'Chatbot'], ['diventa_partner', 'Diventa Partner'], ['website', 'Modulo sito']].map(([src, label]) => {
-          const n = leads.filter((l: any) => l.status === 'nuovo' && l.source === src).length;
+          const n = (leads || []).filter((l: any) => l.status === 'nuovo' && l.source === src).length;
           const on = filters.status === 'nuovo' && filters.source === src;
           return (
             <Button key={src} size="sm" variant={on ? 'default' : 'outline'} disabled={!n && !on}
