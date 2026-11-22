@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Euro, TrendingUp, TrendingDown, AlertTriangle, HardHat } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { computeMargin, jobRevenue } from "@/lib/margin";
 
 
 
@@ -57,6 +58,17 @@ const CantieriBudget = () => {
     },
   });
 
+  const { data: revenueDocs } = useQuery({
+    queryKey: ["cb-revenue-docs"],
+    queryFn: async () => {
+      const [inv, ps] = await Promise.all([
+        supabase.from("customer_invoices").select("id, site_id, quote_id, subtotal, total, status, paid_amount, invoice_date, due_date, created_at"),
+        supabase.from("payment_schedules").select("sale_id, invoice_id, amount, is_paid, paid_date, due_date, is_invoiced, invoiced_amount"),
+      ]);
+      return { invoices: (inv.data || []) as any[], schedules: (ps.data || []) as any[] };
+    },
+  });
+
   const workerById = new Map((workers || []).map((w: any) => [w.id, w]));
   const workerByUser = new Map((workers || []).map((w: any) => [w.user_id, w]));
 
@@ -73,9 +85,11 @@ const CantieriBudget = () => {
     }, 0);
     const totalSpent = matCost + expCost + laborCost;
     const budget = Number((site as any).budget_amount || 0);
-    const margin = budget - totalSpent;
+    const revenue = jobRevenue({ siteId: site.id, saleId: (site as any).sale_id, quoteId: (site as any).quote_id }, revenueDocs?.invoices || [], revenueDocs?.schedules || []);
+    const { margin } = computeMargin(revenue, { materials: matCost, expenses: expCost, labor: laborCost });
+    const residuo = budget - totalSpent;
     const pct = budget > 0 ? Math.round((totalSpent / budget) * 100) : 0;
-    return { ...site, matCost, expCost, hours, laborCost, totalSpent, budget, margin, pct };
+    return { ...site, matCost, expCost, hours, laborCost, totalSpent, budget, revenue, margin, residuo, pct };
   }) || [];
 
   const totalSpent = siteData.reduce((s, d) => s + d.totalSpent, 0);
@@ -144,7 +158,8 @@ const CantieriBudget = () => {
                   <p className={`text-sm font-bold ${s.margin >= 0 ? "text-green-600" : "text-red-600"}`}>
                     {s.margin >= 0 ? "+" : ""}€{s.margin.toLocaleString("it-IT")}
                   </p>
-                  <p className="text-xs text-muted-foreground">margine</p>
+                  <p className="text-xs text-muted-foreground">margine su fatturato €{s.revenue.toLocaleString("it-IT")}</p>
+                  {s.budget > 0 && <p className={`text-xs ${s.residuo >= 0 ? "text-green-600" : "text-red-600"}`}>budget residuo {s.residuo >= 0 ? "+" : ""}€{s.residuo.toLocaleString("it-IT")}</p>}
                 </div>
               </div>
 

@@ -10,6 +10,7 @@ import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { computeMargin } from '@/lib/margin';
 import { computeRevenueSummary } from '@/lib/revenueSources';
 import { CrmPageHeader } from '@/components/admin/CrmShell';
 
@@ -169,8 +170,9 @@ const AdminAnalytics = () => {
   // Summary calculations
   const totalRevenue = computeRevenueSummary(schedules, invoices, inSelectedPeriod).fatturato;
   const totalCost = filteredSales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * getCostForProduct(s.product_type)), 0);
-  const totalMargin = totalRevenue - totalCost;
-  const avgMarginPercent = totalRevenue > 0 ? (totalMargin / totalRevenue) * 100 : 0;
+  // Margine: fatturato imponibile contro costi netti (stessa funzione di tutto il CRM)
+  const { margin: totalMargin, marginPct: avgMarginPercent } = computeMargin(
+    computeRevenueSummary(schedules, invoices, inSelectedPeriod, { basis: 'net' }).fatturato, totalCost);
   const totalMq = filteredSales.reduce((sum, s) => sum + Number(s.quantity_sqm), 0);
 
   // Margin by product

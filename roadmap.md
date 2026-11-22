@@ -33,3 +33,6 @@
 - [x] Passo 1: elenco record scollegati esportato
 - [x] Passo 2: menu in 7 gruppi
 - [ ] Passi 3-10: unificare fatturato, margini, costi fissi, ore; schermata "Da collegare"; dettaglio cantiere a schede; avviso preventivo/vendita
+
+- [x] Dashboard: Ultimi preventivi reali + cantieri con cliente/luogo/rif
+- [x] Passo 4: funzione margine unica (AdminMargini, CantieriMarginalita, SiteEconomics, Budget vs Consuntivo, Analytics)

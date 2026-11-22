@@ -6,7 +6,7 @@ import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShel
 import { DataTable } from '@/components/admin/DataTable';
 import { Card, CardContent } from '@/components/ui/card';
 import { fmtEur } from '@/lib/finance';
-import { computeRevenueSummary } from '@/lib/revenueSources';
+import { computeMargin, jobRevenue } from '@/lib/margin';
 import { marginColor } from '@/components/admin/cantieri/SiteEconomics';
 import { Percent, TrendingDown, TrendingUp } from 'lucide-react';
 
@@ -16,9 +16,10 @@ const CantieriMarginalita = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['cantieri-marginalita'],
     queryFn: async () => {
-      const [sites, cInv, sInv, exp, fixed] = await Promise.all([
-        supabase.from('construction_sites').select('id, title, city, status, budget_amount'),
-        supabase.from('customer_invoices').select('id, site_id, subtotal, total, status, invoice_date, created_at'),
+      const [sites, cInv, ps, sInv, exp, fixed] = await Promise.all([
+        supabase.from('construction_sites').select('id, title, city, status, budget_amount, sale_id, quote_id'),
+        supabase.from('customer_invoices').select('id, site_id, quote_id, subtotal, total, status, paid_amount, invoice_date, due_date, created_at'),
+        supabase.from('payment_schedules').select('sale_id, invoice_id, amount, is_paid, paid_date, due_date, is_invoiced, invoiced_amount'),
         supabase.from('supplier_invoices').select('site_id, subtotal, total'),
         supabase.from('site_expenses').select('site_id, amount'),
         supabase.from('fixed_costs').select('amount, frequency'),
@@ -27,13 +28,11 @@ const CantieriMarginalita = () => {
       // Imponibile contro imponibile: l'IVA transita e non va conteggiata.
       const net = (r: any) => Number(r.subtotal ?? r.total ?? 0);
       const rows = (sites.data || []).map((s: any) => {
-        const siteInvoices = (cInv.data || []).filter((r: any) => r.site_id === s.id);
-        const revenue = computeRevenueSummary([], siteInvoices, () => true, { basis: 'net' }).fatturato;
+        const revenue = jobRevenue({ siteId: s.id, saleId: s.sale_id, quoteId: s.quote_id }, (cInv.data || []) as any[], (ps.data || []) as any[]);
         const costs =
           (sInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + net(r), 0) +
           (exp.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.amount || 0), 0);
-        const margin = revenue - costs;
-        const marginPct = revenue > 0 ? (margin / revenue) * 100 : 0;
+        const { margin, marginPct } = computeMargin(revenue, costs);
         return { ...s, revenue, costs, margin, marginPct };
       });
       const generalMonthly = (fixed.data || []).reduce((a: number, c: any) => {

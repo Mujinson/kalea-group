@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { computeMargin, jobRevenue } from '@/lib/margin';
 import { supabase } from '@/integrations/supabase/client';
 import { PageHeader, KpiCard, CrmEmptyState } from '@/components/admin/crm-ui';
 import { Input } from '@/components/ui/input';
@@ -41,7 +42,7 @@ export default function AdminMargini() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const [sitesR, salesR, saleItemsR, matsR, expR, logsR, entriesR, workersR, spR, prodR] = await Promise.all([
+      const [sitesR, salesR, saleItemsR, matsR, expR, logsR, entriesR, workersR, spR, prodR, invR, psR] = await Promise.all([
         db.from('construction_sites').select('id,title,project_name,city,budget_amount,sale_id,quote_id,salesperson_id,start_date,planned_start_date,created_at'),
         db.from('sales').select('id,sale_date,total_amount,sale_price,customer_name,created_at'),
         db.from('sale_items').select('sale_id,product_type,product_variant,quantity_sqm,unit_price,total_price'),
@@ -52,7 +53,11 @@ export default function AdminMargini() {
         db.from('workers').select('id,user_id,first_name,last_name,hourly_cost'),
         db.from('salespeople').select('id,first_name,last_name'),
         db.from('catalog_products').select('id,product_code,net_cost'),
+        db.from('customer_invoices').select('id,site_id,quote_id,subtotal,total,status,paid_amount,invoice_date,due_date,created_at'),
+        db.from('payment_schedules').select('sale_id,invoice_id,amount,is_paid,paid_date,due_date,is_invoiced,invoiced_amount'),
       ]);
+      const allInvoices = invR.data || [];
+      const allSchedules = psR.data || [];
 
       const sites = sitesR.data || [];
       const sales = salesR.data || [];
@@ -131,18 +136,19 @@ export default function AdminMargini() {
       const out: MarginRow[] = [];
 
       const push = (r: Omit<MarginRow, 'margin' | 'marginPct'>) => {
-        const margin = r.revenue - r.materials - r.labor - r.expenses;
-        out.push({ ...r, margin, marginPct: r.revenue > 0 ? (margin / r.revenue) * 100 : 0 });
+        const { margin, marginPct } = computeMargin(r.revenue, { materials: r.materials, labor: r.labor, expenses: r.expenses });
+        out.push({ ...r, margin, marginPct });
       };
 
       for (const s of sites) {
         const sale: any = s.sale_id ? saleById.get(s.sale_id) : null;
         if (sale) usedSales.add(sale.id);
-        const revenue = Number(sale?.total_amount ?? sale?.sale_price ?? s.budget_amount ?? 0);
+        const revenue = jobRevenue({ siteId: s.id, saleId: sale?.id, quoteId: s.quote_id }, allInvoices, allSchedules);
+        const sold = Number(sale?.total_amount ?? sale?.sale_price ?? 0);
         push({
           key: `site-${s.id}`,
           label: s.title || s.project_name || 'Cantiere',
-          subtitle: [s.city, sale ? 'con vendita' : 'senza vendita'].filter(Boolean).join(' · '),
+          subtitle: [s.city, sale ? `venduto ${eur(sold)}` : 'senza vendita'].filter(Boolean).join(' · '),
           date: sale?.sale_date || s.start_date || s.planned_start_date || s.created_at?.slice(0, 10) || null,
           salespersonId: s.salesperson_id || null,
           salespersonName: String((s.salesperson_id && spName.get(s.salesperson_id)) || '—'),
@@ -160,11 +166,11 @@ export default function AdminMargini() {
         push({
           key: `sale-${sale.id}`,
           label: sale.customer_name || 'Vendita',
-          subtitle: 'Vendita senza cantiere',
+          subtitle: `Vendita senza cantiere · venduto ${eur(Number(sale.total_amount ?? sale.sale_price ?? 0))}`,
           date: sale.sale_date || sale.created_at?.slice(0, 10) || null,
           salespersonId: null,
           salespersonName: '—',
-          revenue: Number(sale.total_amount ?? sale.sale_price ?? 0),
+          revenue: jobRevenue({ saleId: sale.id }, allInvoices, allSchedules),
           materials: matBySale.get(sale.id) || 0,
           labor: 0,
           expenses: 0,
@@ -210,7 +216,7 @@ export default function AdminMargini() {
       <PageHeader
         breadcrumb={['Statistiche', 'Margini']}
         title="Margini per cantiere e vendita"
-        subtitle="Ricavo, costi reali (materiali, manodopera, spese) e margine netto"
+        subtitle="Fatturato imponibile, costi reali (materiali, manodopera, spese) e margine netto"
       />
 
       <div className="crm-card p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -260,7 +266,7 @@ export default function AdminMargini() {
                 <th className="p-3">Cantiere / Vendita</th>
                 <th className="p-3">Data</th>
                 <th className="p-3">Venditore</th>
-                <th className="p-3 text-right">Ricavo</th>
+                <th className="p-3 text-right">Fatturato (imponibile)</th>
                 <th className="p-3 text-right">Materiali</th>
                 <th className="p-3 text-right">Manodopera</th>
                 <th className="p-3 text-right">Spese</th>

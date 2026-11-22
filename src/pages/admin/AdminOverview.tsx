@@ -328,6 +328,33 @@ const AdminOverview = () => {
   }, [customerInvoices, paymentSchedules]);
   const goalPct = goal > 0 ? (fatturatoYTD / goal) * 100 : 0;
 
+  // Preventivi reali (tabella quotes) normalizzati per pannelli e feed
+  const quoteRows = useMemo(() => [...quotes]
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .map(q => {
+      const s = (q.status || '').toLowerCase();
+      const cust = customers.find(c => c.id === q.customer_id);
+      const lead = leads.find(l => l.id === q.lead_id);
+      const nome = q.client_name || cust?.company_name || [cust?.first_name, cust?.last_name].filter(Boolean).join(' ') || cust?.name || lead?.name || '';
+      return {
+        id: q.id, lead_id: q.lead_id, created_at: q.created_at,
+        numero_preventivo: q.quote_number || 'Preventivo',
+        cliente_nome: [nome, q.site_city].filter(Boolean).join(' · '),
+        importo_totale: Number(q.total_amount || 0),
+        stato: isQuoteWon(s) ? 'accettato' : isQuoteLost(s) ? 'rifiutato' : isQuotePending(s) ? 'inviato' : 'bozza',
+      };
+    }), [quotes, customers, leads]);
+
+  const siteInfo = useCallback((c: any) => {
+    const cust = customers.find(x => x.id === c.customer_id);
+    const lead = leads.find(x => x.id === c.lead_id);
+    const q = quotes.find(x => x.id === c.quote_id) || quotes.find(x => x.quote_number && (c.title || '').includes(x.quote_number));
+    const cliente = cust?.company_name || [cust?.first_name, cust?.last_name].filter(Boolean).join(' ') || cust?.name || q?.client_name || lead?.name || (c.title || '').replace(/^Rif\.?\s*/i, '');
+    const luogo = [c.city || q?.site_city, c.address || q?.site_address].filter(Boolean).join(' · ');
+    const rif = q?.quote_number || c.title;
+    return { cliente, luogo, rif };
+  }, [customers, leads, quotes]);
+
   const preventiviPeriod = useMemo(() => {
     const all = [
       ...preventivi.filter(x => inRange(x.data || x.created_at, range.start, range.end)).map(x => x.stato),
@@ -468,7 +495,7 @@ const AdminOverview = () => {
   // Activity feed
   const activityFeed = useMemo(() => {
     const items: { type: 'preventivo'|'cantiere'|'pagamento'|'lead'; title: string; sub: string; date: Date; onClick?: () => void }[] = [];
-    preventivi.slice(0, 20).forEach(p => items.push({
+    quoteRows.slice(0, 20).forEach(p => items.push({
       type: 'preventivo', title: `${p.numero_preventivo} · ${eurShort(Number(p.importo_totale || 0))}`,
       sub: p.cliente_nome || 'Cliente', date: new Date(p.created_at),
       onClick: () => navigate(`/admin/strumenti/crea-preventivo?id=${p.id}`),
@@ -486,7 +513,7 @@ const AdminOverview = () => {
       date: new Date(l.created_at), onClick: () => navigate(`/admin/leads`),
     }));
     return items.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 10);
-  }, [preventivi, sites, supplierPayments, leads, navigate]);
+  }, [quoteRows, sites, supplierPayments, leads, navigate]);
 
   // Week calendar events
   const weekDays = useMemo(() => {
@@ -529,13 +556,13 @@ const AdminOverview = () => {
   const performanceAgenti = useMemo(() => salespeople.map(sp => {
     const lAss = leads.filter(l => l.assigned_salesperson_id === sp.id).length;
     const lWon = leads.filter(l => l.assigned_salesperson_id === sp.id && ['cliente','won','converted'].includes((l.pipeline_stage || l.status || '').toLowerCase())).length;
-    const pInv = preventivi.filter(p => {
+    const pInv = quoteRows.filter(p => {
       const lead = leads.find(l => l.id === p.lead_id);
       return lead?.assigned_salesperson_id === sp.id && inRange(p.created_at, range.start, range.end);
     });
     const val = pInv.filter(p => ['accettato','fatturato'].includes(p.stato)).reduce((s, x) => s + Number(x.importo_totale || 0), 0);
     return { id: sp.id, nome: `${sp.first_name || ''} ${sp.last_name || ''}`.trim() || 'N/D', lAss, pInv: pInv.length, val, conv: lAss > 0 ? (lWon / lAss) * 100 : 0 };
-  }).sort((a, b) => b.val - a.val), [salespeople, leads, preventivi, range]);
+  }).sort((a, b) => b.val - a.val), [salespeople, leads, quoteRows, range]);
 
   // ─── Render ───────────────────────────────────────────────
   if (loading) return <div className="flex items-center justify-center h-64 text-gray-400 text-xs">CARICAMENTO DASHBOARD...</div>;
@@ -798,9 +825,9 @@ const AdminOverview = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
         {showCom && (
           <Panel title="Ultimi preventivi" right={<button onClick={() => navigate('/admin/preventivi')} className="text-[10px] uppercase font-bold tracking-wider" style={{ color: '#4F46E5' }}>Tutti →</button>}>
-            {preventivi.length ? (
+            {quoteRows.length ? (
               <div className="divide-y" style={{ borderColor: 'rgba(26,26,46,0.04)' }}>
-                {preventivi.slice(0, 5).map(p => (
+                {quoteRows.slice(0, 5).map(p => (
                   <button key={p.id} onClick={() => navigate(`/admin/strumenti/crea-preventivo?id=${p.id}`)}
                     className="w-full text-left py-2 hover:bg-[var(--crm-bg-soft)] flex justify-between items-center gap-2 px-1">
                     <div className="min-w-0">
@@ -836,7 +863,10 @@ const AdminOverview = () => {
                   return (
                     <button key={c.id} onClick={() => navigate(`/admin/cantieri/${c.id}`)} className="w-full text-left">
                       <div className="flex justify-between mb-1">
-                        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--crm-ink)' }} className="truncate">{c.title}</span>
+                        <span className="min-w-0">
+                          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--crm-ink)' }} className="block truncate">{siteInfo(c).cliente || c.title}</span>
+                          <span style={{ fontSize: 10, color: 'var(--crm-ink-muted)' }} className="block truncate">{[siteInfo(c).luogo, siteInfo(c).rif && `Rif. ${siteInfo(c).rif}`].filter(Boolean).join(' · ')}</span>
+                        </span>
                         {ritardo && <span style={{ fontSize: 9, fontWeight: 800, color: 'var(--crm-surface)', background: '#C0392B', padding: '1px 5px', borderRadius: 2 }}>RITARDO</span>}
                       </div>
                       <div className="flex items-center gap-2">

@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { fmtEur } from '@/lib/finance';
 import { TrendingUp } from 'lucide-react';
+import { computeMargin, jobRevenue } from '@/lib/margin';
 
 export const marginColor = (pct: number) => (pct >= 20 ? 'bg-green-500' : pct >= 0 ? 'bg-amber-500' : 'bg-red-500');
 
@@ -10,8 +11,10 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
   const { data } = useQuery({
     queryKey: ['site-economics', siteId],
     queryFn: async () => {
-      const [inv, sup, exp] = await Promise.all([
-        supabase.from('customer_invoices').select('subtotal,total').eq('site_id', siteId),
+      const [site, inv, ps, sup, exp] = await Promise.all([
+        supabase.from('construction_sites').select('sale_id,quote_id').eq('id', siteId).maybeSingle(),
+        supabase.from('customer_invoices').select('id,site_id,quote_id,subtotal,total,status,paid_amount,invoice_date,due_date,created_at'),
+        supabase.from('payment_schedules').select('sale_id,invoice_id,amount,is_paid,paid_date,due_date,is_invoiced,invoiced_amount'),
         supabase.from('supplier_invoices').select('subtotal,total').eq('site_id', siteId),
         supabase.from('site_expenses').select('amount').eq('site_id', siteId),
       ]);
@@ -20,7 +23,7 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
       if (exp.error) throw exp.error;
       // Imponibile contro imponibile: l'IVA non è né ricavo né costo.
       const net = (r: any) => Number(r.subtotal ?? r.total ?? 0);
-      const revenue = (inv.data || []).reduce((s: number, r: any) => s + net(r), 0);
+      const revenue = jobRevenue({ siteId, saleId: site.data?.sale_id, quoteId: site.data?.quote_id }, (inv.data || []) as any[], (ps.data || []) as any[]);
       const costs =
         (sup.data || []).reduce((s: number, r: any) => s + net(r), 0) +
         (exp.data || []).reduce((s: number, r: any) => s + Number(r.amount || 0), 0);
@@ -30,8 +33,7 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
 
   const revenue = data?.revenue || 0;
   const costs = data?.costs || 0;
-  const margin = revenue - costs;
-  const marginPct = revenue > 0 ? (margin / revenue) * 100 : 0;
+  const { margin, marginPct } = computeMargin(revenue, costs);
   const ratio = revenue > 0 ? Math.min(100, (costs / revenue) * 100) : 0;
   const budgetVal = Number(budget || 0);
 
