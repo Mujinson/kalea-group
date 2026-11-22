@@ -21,6 +21,7 @@ import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
 import { clearZeroOnFocus } from '@/lib/numericInput';
 import { buildPremiumQuotePdf } from '@/lib/premiumQuotePdf';
 import quoteCover from '@/assets/quote/lake-interior.webp.asset.json';
+import QuotePdfPreview from '@/components/admin/quotes/QuotePdfPreview';
 
 
 
@@ -3019,7 +3020,8 @@ export default function CreaPreventivo() {
           {/* ANTEPRIMA DOCUMENTO */}
           <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi, ...serviziB]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} onTotals={setAccTotals} title={numPrev || cantiere} defaultDestination={[sito?.indirizzo, sito?.cap, sito?.citta, sito?.provincia].filter(Boolean).join(', ')} />
           <QuoteAttachments quoteId={preventivoId} attachments={technicalAttachments} onChange={persistAttachments} />
-          <div id="pdf-preview-wrap" className="pdf-preview-wrap">
+          <QuotePdfPreview />
+          <div id="pdf-preview-wrap" className="pdf-preview-wrap quote-source-document" aria-hidden="true">
           <div id="pdf-preview" data-quote-number={numPrev} style={{background:"hsl(var(--quote-white))",border:"1px solid hsl(var(--quote-taupe))",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
 
 
@@ -3224,7 +3226,7 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Condizioni di fornitura */}
-            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
+            <div data-quote-supply data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? L.cond_fornitura : L.cond_generiche}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
                 {showCondizioniFornitura && (<>
@@ -3240,7 +3242,7 @@ export default function CreaPreventivo() {
 
             {/* Pagamenti */}
             {pagamenti.some((p:any)=>(Number(p.pct)||0)>0) && (
-            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
+            <div data-quote-payments data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{L.cond_pagamento}</div>
               {pagamenti.filter((p:any)=>(Number(p.pct)||0)>0).map((p:any,i:number)=>(
                 <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid hsl(var(--quote-taupe))",fontSize:13}}>
@@ -3263,7 +3265,7 @@ export default function CreaPreventivo() {
 
             {/* Note cliente */}
             {noteCliente && (
-              <div style={{marginTop:20,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:13,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
+              <div data-quote-notes style={{marginTop:20,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:13,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
                 <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
                 {noteCliente}
               </div>
