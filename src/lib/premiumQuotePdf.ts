@@ -3,7 +3,7 @@ import autoTable from 'jspdf-autotable';
 import regularFont from '@/assets/quote/unicode.ttf.asset.json';
 import boldFont from '@/assets/quote/unicode-bold.ttf.asset.json';
 
-const W = 210, H = 297, M = 16, BOTTOM = 272;
+const W = 210, H = 297, M = 16, BOTTOM = 278;
 function rgb(role: string): [number, number, number] {
   const probe = document.createElement('span');
   probe.style.color = `hsl(var(--quote-${role}))`;
@@ -61,16 +61,15 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
   const logo = await image(logoElement.src, true);
   const logoH = 42 * logo.height / logo.width;
   const number = root.dataset.quoteNumber || '';
-  let companyFooter = '';
+  const brand = 'PAVIMENTAZIONI · RIVESTIMENTI · DECKING · CLADDING';
   const header = () => {
-    doc.setFillColor(...paper); doc.rect(0, 0, W, 35, 'F');
-    doc.addImage(logo.data, 'PNG', M, 9, 48, logoH * 48 / 42);
-    doc.setDrawColor(...bronze); doc.line(73, 10, 73, 28);
+    doc.setFillColor(...paper); doc.rect(0, 0, W, 30, 'F');
+    doc.addImage(logo.data, 'PNG', M, 7, 42, logoH);
+    doc.setDrawColor(...bronze); doc.line(65, 8, 65, 23);
     doc.setFont('Quote', 'normal'); doc.setFontSize(7); doc.setTextColor(...ink);
-    doc.text('PAVIMENTAZIONI · RIVESTIMENTI', 82, 15);
-    doc.text('DECKING · CLADDING', 82, 20);
-    doc.setLineWidth(.6); doc.line(82,24,96,24);
-    doc.setTextColor(...taupe); doc.setFont('Quote','bold'); doc.setFontSize(75); doc.text('K',178,33);
+    doc.text('PAVIMENTAZIONI · RIVESTIMENTI', 72, 12);
+    doc.text('DECKING · CLADDING', 72, 17);
+    doc.text('FORNITURA E POSA', 72, 23);
   };
   let y = 40;
   const newPage = () => { doc.addPage(); header(); y = 40; };
@@ -157,15 +156,6 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
     doc.setDrawColor(...white); doc.setLineWidth(.8); doc.line(0,213,206,213); doc.line(108,213,89,253);
     doc.setDrawColor(...bronze); doc.setLineWidth(1.2); doc.line(206,214,186,253);
     boxes.forEach((box, index) => {
-      if (index === 1) {
-        const center = 150;
-        const title = box.firstElementChild?.textContent || '';
-        doc.setFont('Quote','bold'); doc.setFontSize(10); doc.setTextColor(...ink);
-        doc.text(doc.splitTextToSize(title.toUpperCase(),62),center,226,{align:'center',lineHeightFactor:1.2});
-        doc.setFontSize(14);
-        doc.text((Array.from(box.children).slice(1) as HTMLElement[]).map(el=>el.innerText).join(' '),center,240,{align:'center'});
-        return;
-      }
       const x = index === 0 ? 18 : 115;
       doc.setFontSize(10); doc.setFont('Quote', 'normal'); doc.setTextColor(...(index === 0 ? white : ink));
       const title = box.firstElementChild?.textContent || '';
@@ -186,18 +176,7 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
   const blocks = Array.from(root.children) as HTMLElement[];
   for (const [blockIndex, block] of blocks.entries()) {
     if (block.hasAttribute('data-quote-cover')) continue;
-    if (cover && blockIndex === 1) {
-      const parts = Array.from(block.children) as HTMLElement[];
-      companyFooter = parts[0]?.innerText.replace(/\n/g,' · ') || '';
-      doc.setFont('Quote','normal'); doc.setFontSize(20); doc.setTextColor(...ink);
-      doc.text(cover.querySelector<HTMLElement>('[data-cover-text="title"]')?.innerText || '',M,49);
-      doc.setFontSize(7);
-      doc.text(doc.splitTextToSize(cover.querySelector<HTMLElement>('[data-cover-subtitle]')?.innerText || '',95),M,55);
-      const details = (parts[1]?.innerText.split('\n') || []).slice(1).join('\n');
-      const start = y; y=46; text(details,8,'normal',132,62); y=Math.max(start+23,y+7);
-      continue;
-    }
-    if (((!cover && blockIndex === 0) || blockIndex === 2) && columns(block)) continue;
+    if ((blockIndex === 1 || blockIndex === 2) && columns(block)) continue;
     if (block.tagName === 'TABLE') {
       const table = block as HTMLTableElement;
       const head = Array.from(table.querySelectorAll('thead th')).map(cell => (cell as HTMLElement).innerText);
@@ -210,9 +189,9 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
       doc.setFont('Quote', 'normal'); doc.setFontSize(8.5);
       const firstRow = table.querySelector<HTMLTableRowElement>('tbody tr:has(td:nth-child(2))');
       const firstLines = firstRow ? (doc.splitTextToSize(firstRow.cells[0].innerText, 85) as string[]).length : 1;
-      ensure(Math.min(60, firstLines * 4.45 + 21));
+      ensure(Math.min(220, firstLines * 4.45 + 21));
       autoTable(doc, { startY: y, head: [head], body, theme: 'plain',
-        margin: { top: 40, left: M, right: M, bottom: H - BOTTOM }, showHead: 'everyPage', rowPageBreak: 'auto',
+        margin: { top: 40, left: M, right: M, bottom: H - BOTTOM }, showHead: 'everyPage', rowPageBreak: 'avoid',
         styles: { font: 'Quote', fontSize: 8.5, textColor: ink, cellPadding: 2.5, overflow: 'linebreak', lineColor: taupe, lineWidth: { bottom: 0.15 } },
         headStyles: { fillColor: ink, textColor: white, fontStyle: 'bold', fontSize: 7.5 },
         columnStyles: { 0: { cellWidth: 90 }, 1: { cellWidth: 27, halign: 'right' }, 2: { cellWidth: 30, halign: 'right' }, 3: { cellWidth: 31, halign: 'right' } },
@@ -234,54 +213,20 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
       doc.setDrawColor(...bronze); doc.line(106, y - 4, 194, y - 4);
       rows.forEach((row, index) => {
         const cells = Array.from(row.children) as HTMLElement[];
-        const total = index === rows.length - 1;
-        if (total) {
-          doc.setFillColor(...taupe); doc.lines([[88,0],[-3,9],[-88,0],[3,-9]],106,y-5,[1,1],'F',true);
-          doc.setFillColor(...ink); doc.lines([[44,0],[0,9],[-49,0],[5,-9]],150,y-5,[1,1],'F',true);
-          doc.setDrawColor(...bronze); doc.setLineWidth(.7); doc.line(106,y-5,103,y+4);
-        }
         doc.setFont('Quote', index === rows.length - 1 ? 'bold' : 'normal'); doc.setFontSize(8); doc.setTextColor(...ink);
-        if (cells[0]) doc.text(cells[0].innerText, total ? 109 : 104, y);
-        if (total) doc.setTextColor(...white);
+        if (cells[0]) doc.text(cells[0].innerText, 104, y);
         if (cells[1]) doc.text(cells[1].innerText, 190, y, { align: 'right' });
         y += 7;
       });
       y += 8; continue;
     }
-    if (block.hasAttribute('data-quote-payments')) {
-      const parts = Array.from(block.children) as HTMLElement[];
-      const rows = parts.slice(1,-1).map(row=>(Array.from(row.children) as HTMLElement[]).map(el=>el.innerText.replace(/\n/g,' ')));
-      ensure(25+rows.length*9);
-      autoTable(doc,{startY:y,head:[[parts[0]?.innerText || '', '']],body:rows,
-        margin:{top:40,left:M,right:M,bottom:H-BOTTOM},theme:'plain',
-        styles:{font:'Quote',fontSize:8,cellPadding:3,textColor:white,fillColor:ink,lineColor:muted,lineWidth:{bottom:.15}},
-        headStyles:{fontStyle:'bold',fontSize:9},columnStyles:{0:{cellWidth:126},1:{cellWidth:52,halign:'right',fontStyle:'bold'}},
-        willDrawPage:()=>header()});
-      y=((doc as jsPDF & {lastAutoTable?:{finalY:number}}).lastAutoTable?.finalY ?? y)+9;
-      const bank = parts.at(-1);
-      if (bank) {
-        doc.setFont('Quote','normal'); doc.setFontSize(8);
-        const lines=doc.splitTextToSize(bank.innerText,W-M*2-10) as string[];
-        ensure(lines.length*4.2+14); doc.setFillColor(...paper); doc.rect(M,y-4,W-M*2,lines.length*4.2+10,'F');
-        text(bank.innerText,8,'normal',M+5,W-M*2-10); y+=9;
-      }
-      continue;
-    }
-    if (block.hasAttribute('data-quote-notes')) {
-      doc.setFont('Quote','normal');doc.setFontSize(8.5);
-      const lines=doc.splitTextToSize(fullText,W-M*2-10) as string[];
-      ensure(lines.length*4.5+14);doc.setFillColor(...taupe);doc.rect(M,y-4,W-M*2,lines.length*4.5+10,'F');
-      text(fullText,8.5,'normal',M+5,W-M*2-10);y+=10;continue;
-    }
     const framed = block.hasAttribute('data-quote-framed');
     if (framed) {
       doc.setFont('Quote', 'normal'); doc.setFontSize(8.5);
       const lineCount = (doc.splitTextToSize(fullText, 168) as string[]).length;
-      ensure(Math.min(lineCount * 4.45 + (block.hasAttribute('data-quote-signatures') ? 65 : 22), 225));
+      ensure(Math.min(lineCount * 4.45 + 15, 225));
     } else ensure(18);
-    const frameStart = y - 5;
-    doc.setDrawColor(...bronze); doc.setLineWidth(0.3);
-    if (!framed) doc.line(M, y - 4, W - M, y - 4);
+    doc.setDrawColor(...bronze); doc.setLineWidth(0.3); doc.line(M, y - 4, W - M, y - 4);
     if (block.hasAttribute('data-quote-privacy')) {
       const title = block.firstElementChild as HTMLElement | null;
       if (title) { text(title.innerText, 9, 'bold'); y += 3; }
@@ -306,13 +251,7 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
       const title = block.firstElementChild as HTMLElement | null;
       if (title) { text(title.innerText, 13, 'bold'); y += 5; }
       const clauses = block.querySelectorAll<HTMLElement>('[data-pdf-block]');
-      for (const clause of Array.from(clauses)) {
-        const lines = clause.innerText.split('\n');
-        ensure(15);
-        text(lines[0],8.5,'bold');
-        if (lines.length > 1) text(lines.slice(1).join('\n'),8.5,'normal',M+4,W-M*2-4);
-        y += 4;
-      }
+      for (const clause of Array.from(clauses)) { text(clause.innerText, 8.5); y += 4; }
     } else {
       // Inline labels and values remain on the same line rather than each span consuming a line.
       const lines = block.hasAttribute('data-pdf-block') && !framed
@@ -329,16 +268,14 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
         text(line, framed ? 8.5 : 9);
       }
     }
-    if (framed) { doc.setDrawColor(...(block.hasAttribute('data-quote-signatures') ? ink : taupe)); doc.setLineWidth(.35); doc.roundedRect(M-3,frameStart,W-M*2+6,y-frameStart+5,2,2,'S'); }
     y += 9;
   }
   const pages = doc.getNumberOfPages();
   for (let page = 1; page <= pages; page++) {
     if (page === 1 && cover) continue;
     doc.setPage(page); doc.setFont('Quote', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...muted);
-    doc.setDrawColor(...bronze); doc.line(M, 279, W - M, 279);
-    doc.setFontSize(6);
-    doc.text(doc.splitTextToSize(companyFooter || 'Kalea Group Srl · info@kalea.space · kalea.space · P.IVA 04797310986', W-M*2-18), M, 284,{lineHeightFactor:1.3});
+    doc.setDrawColor(...bronze); doc.line(M, 283, W - M, 283);
+    doc.text('Kalea Group Srl · info@kalea.space · kalea.space · P.IVA 04797310986', M, 288);
     doc.text(`${number} · ${page}/${pages}`, W - M, 293, { align: 'right' });
   }
   return doc;

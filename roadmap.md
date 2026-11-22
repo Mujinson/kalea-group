@@ -1,7 +1,4 @@
 # Roadmap CRM
-- [x] Video: verificata versione v4 già corretta, frase pronunciata una volta e finale con logo chiaro
-- [x] Centrare validità nella fascia bianca della copertina
-- [x] Allineare pagine interne al riferimento e mostrare la stessa impaginazione in anteprima e PDF
 - [x] Copertina: foto allegata da Gabriel inserita; verificati PDF 35/36, logo e dati invariati
 - [x] Restyling grafico preventivi: copertina, dettagli e condizioni, senza cambiare dati; mantenere il logo originale
 - [x] Verifica PDF 35/36: contenuti identici, testo selezionabile, nessuna riga tagliata

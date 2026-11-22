@@ -3,9 +3,6 @@
 @tailwind utilities;
 
 /* Fixed-format quote preview, independent from the editor and website. */
-.quote-source-document { height: 0; overflow: hidden !important; zoom: 1 !important; }
-.quote-rendered-preview { width: 100%; max-width: 800px; margin: 0 auto; }
-.quote-rendered-preview canvas { display: block; width: 100%; height: auto; margin-bottom: 24px; border: 1px solid hsl(var(--quote-taupe)); }
 #pdf-preview {
   color: hsl(var(--quote-ink));
   font-weight: 400;
