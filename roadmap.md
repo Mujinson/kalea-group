@@ -26,3 +26,5 @@
 - [x] PDF preventivi: scritte intere tra una pagina e la successiva, verificato su KAL-2026-036
 - [x] Pagina "Posatori certificati" (/posatori-certificati) in IT/EN/DE/FR, collegata da card homepage e footer
 - [ ] Foto reali dei posatori da inserire in src/data/installers.ts (6 slots pronti)
+- [x] Posatori certificati: foto coerenti per decking, cladding esterno e parquet interno, verificate desktop/mobile
+- [x] Posatori certificati: hero più alta su schermi bassi, titolo completo e non coperto dal menu

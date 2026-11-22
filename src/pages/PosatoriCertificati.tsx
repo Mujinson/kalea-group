@@ -7,11 +7,12 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { installers } from "@/data/installers";
 import ravaioliLogo from "@/assets/ravaioli-logo.png.asset.json";
 
-import heroImage from "@/assets/hero-kalea-surfaces.jpg";
+import heroImage from "@/assets/posatori-hero.webp.asset.json";
 import bandImage from "@/assets/value-timeless-aesthetic.jpg";
-import deckingImage from "@/assets/hero-outdoor.jpg";
-import claddingImage from "@/assets/hero-onewall.jpg";
-import parquetImage from "@/assets/hero-indoor.jpg";
+import deckingImage from "@/assets/card-externo-ambient.jpg";
+// Foto ufficiale Ravaioli Legnami: progetto Wood Court Restaurant, cladding in Western Red Cedar.
+import claddingImage from "@/assets/cladding-esterno-ravaioli.webp.asset.json";
+import parquetImage from "@/assets/card-parquet-ambient.jpg";
 
 const reveal = {
   initial: { opacity: 0, y: 22 },
@@ -67,7 +68,7 @@ const PosatoriCertificati = () => {
 
   const sectors = [
     { key: "Decking", image: deckingImage },
-    { key: "Cladding", image: claddingImage },
+    { key: "Cladding", image: claddingImage.url },
     { key: "Parquet", image: parquetImage },
   ];
 
@@ -86,8 +87,9 @@ const PosatoriCertificati = () => {
       <HeroSection
         title={t("installersPage.heroTitle")}
         subtitle={t("installersPage.heroSubtitle")}
-        backgroundImage={heroImage}
-        minHeight="min-h-[70vh]"
+        backgroundImage={heroImage.url}
+        backgroundPosition="center 68%"
+        minHeight="min-h-[36rem] lg:min-h-[70vh]"
         overlayClassName="bg-gradient-to-b from-kalea-dark/85 via-kalea-dark/60 to-kalea-dark/90"
         ctaPrimary={{
           text: t("installersPage.heroCta"),
