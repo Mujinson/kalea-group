@@ -1,6 +1,7 @@
 # Roadmap CRM
 - [x] Preventivi: passaggio 1 “Intestazione & Cliente”, passaggio 2 “Calcolo & Verifica”
 - [x] Copertina: foto allegata da Gabriel inserita; verificati PDF 35/36, logo e dati invariati
+- [ ] Copertina PDF: logo senza riquadro bianco e validità spostata a destra — verifica visiva da completare
 - [x] Restyling grafico preventivi: copertina, dettagli e condizioni, senza cambiare dati; mantenere il logo originale
 - [x] Verifica PDF 35/36: contenuti identici, testo selezionabile, nessuna riga tagliata
 - [x] Vendita segnata pagata in automatico quando tutte le rate sono incassate

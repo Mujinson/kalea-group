@@ -21,7 +21,7 @@ async function base64(url: string) {
   for (const byte of bytes) binary += String.fromCharCode(byte);
   return btoa(binary);
 }
-async function image(url: string, trim = false) {
+async function image(url: string, trim = false, removeWhiteBackground = false) {
   const img = new Image();
   img.crossOrigin = 'anonymous';
   await new Promise<void>((resolve, reject) => { img.onload = () => resolve(); img.onerror = () => reject(new Error('Immagine PDF non disponibile')); img.src = url; });
@@ -30,6 +30,16 @@ async function image(url: string, trim = false) {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Immagine PDF non disponibile');
   ctx.drawImage(img, 0, 0);
+  if (removeWhiteBackground) {
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
+    for (let i = 0; i < pixels.length; i += 4) {
+      const lightestChannel = Math.min(pixels[i], pixels[i + 1], pixels[i + 2]);
+      if (lightestChannel >= 242) pixels[i + 3] = 0;
+      else if (lightestChannel > 225) pixels[i + 3] = Math.round(pixels[i + 3] * (242 - lightestChannel) / 17);
+    }
+    ctx.putImageData(imageData, 0, 0);
+  }
   if (trim) {
     const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
     let left = canvas.width, top = canvas.height, right = 0, bottom = 0;
@@ -112,7 +122,8 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
     doc.setFillColor(...white); doc.setGState(doc.GState({ opacity: 0.89 }));
     doc.roundedRect(8.2, 69.5, 110, 133.7, 4, 4, 'F');
     doc.setGState(doc.GState({ opacity: 1 }));
-    doc.addImage(logo.data, 'PNG', 21, 13, 52, logoH * 52 / 42);
+    const coverLogo = await image(logoElement.src, true, true);
+    doc.addImage(coverLogo.data, 'PNG', 21, 13, 52, logoH * 52 / 42);
     doc.setDrawColor(...bronze); doc.setLineWidth(0.5); doc.line(82.4, 11.5, 82.4, 38.5);
     doc.setFont('Quote', 'normal'); doc.setFontSize(10); doc.setTextColor(...ink);
     doc.text(['PAVIMENTAZIONI', 'RIVESTIMENTI', 'DECKING', 'CLADDING'], 93, 14.5, { lineHeightFactor: 1.45 });
@@ -156,7 +167,7 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
     doc.setDrawColor(...white); doc.setLineWidth(.8); doc.line(0,213,206,213); doc.line(108,213,89,253);
     doc.setDrawColor(...bronze); doc.setLineWidth(1.2); doc.line(206,214,186,253);
     boxes.forEach((box, index) => {
-      const x = index === 0 ? 18 : 115;
+      const x = index === 0 ? 18 : 128;
       doc.setFontSize(10); doc.setFont('Quote', 'normal'); doc.setTextColor(...(index === 0 ? white : ink));
       const title = box.firstElementChild?.textContent || '';
       doc.text(doc.splitTextToSize(title.toLocaleUpperCase(),65), x + 16, 222, { lineHeightFactor: 1.15 });
