@@ -106,37 +106,70 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
     const photoElement = cover.querySelector<HTMLImageElement>('[data-cover-photo]');
     if (!photoElement) throw new Error('Foto copertina non disponibile');
     const photo = await image(photoElement.src);
-    // Image occupies the photographic band without stretching its proportions.
-    const scale = Math.max(W / photo.width, 238 / photo.height);
+    // Reference coordinates are normalized from the supplied 768 × 1086 A4 artwork.
+    const scale = Math.max(W / photo.width, H / photo.height);
     doc.addImage(photo.data, 'PNG', (W - photo.width * scale) / 2, 0, photo.width * scale, photo.height * scale);
-    doc.setFillColor(...white); doc.setGState(doc.GState({ opacity: 0.94 }));
-    doc.rect(12, 16, 186, 40, 'F'); doc.rect(12, 72, 143, 151, 'F');
+    doc.setFillColor(...white); doc.setGState(doc.GState({ opacity: 0.89 }));
+    doc.roundedRect(8.2, 69.5, 110, 133.7, 4, 4, 'F');
     doc.setGState(doc.GState({ opacity: 1 }));
-    doc.addImage(logo.data, 'PNG', 20, 23, 47, logoH * 47 / 42);
-    doc.setFont('Quote', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...ink);
-    doc.text(doc.splitTextToSize(brand, 108), 78, 28); doc.text('FORNITURA E POSA', 78, 43);
-    y = 85;
-    const coverTexts = Array.from(cover.querySelectorAll<HTMLElement>('[data-cover-text]'));
-    // Adapt typography to unusually long client/project details, never omit them.
-    let coverSize = 10;
-    for (; coverSize > 7; coverSize -= 0.5) {
-      doc.setFont('Quote', 'normal'); doc.setFontSize(coverSize);
-      const height = coverTexts.reduce((sum, el) => sum + (el.dataset.coverText === 'title' ? 21 : (doc.splitTextToSize(el.innerText, 125) as string[]).length * coverSize * .352778 * 1.48 + 3), 0);
-      if (height < 127) break;
-    }
-    for (const el of coverTexts) {
-      const isTitle = el.dataset.coverText === 'title';
-      text(el.innerText, isTitle ? 23 : coverSize, isTitle ? 'bold' : 'normal', 20, 125); y += isTitle ? 5 : 3;
+    doc.addImage(logo.data, 'PNG', 21, 13, 52, logoH * 52 / 42);
+    doc.setDrawColor(...bronze); doc.setLineWidth(0.5); doc.line(82.4, 11.5, 82.4, 38.5);
+    doc.setFont('Quote', 'normal'); doc.setFontSize(10); doc.setTextColor(...ink);
+    doc.text(['PAVIMENTAZIONI', 'RIVESTIMENTI', 'DECKING', 'CLADDING'], 93, 14.5, { lineHeightFactor: 1.45 });
+    doc.text('FORNITURA E POSA', 93, 38.5); doc.setLineWidth(1); doc.line(93, 43, 108, 43);
+    doc.setFontSize(12); doc.setTextColor(...white); doc.text(['Innovate', 'Living', 'Nature'], 179, 18, { lineHeightFactor: 1.2 });
+    const value = (field: string) => cover.querySelector<HTMLElement>(`[data-cover-text="${field}"]`)?.innerText || '';
+    const print = (v: string, x: number, yy: number, size: number, width: number, weight: 'normal' | 'bold' = 'normal') => {
+      doc.setFont('Quote', weight); doc.setFontSize(size); doc.setTextColor(...ink);
+      const lines = doc.splitTextToSize(v, width) as string[];
+      doc.text(lines, x, yy, { lineHeightFactor: 1.3 });
+      return lines.length * size * .352778 * 1.3;
+    };
+    print(value('title'), 16.5, 84, 22, 94);
+    print(cover.querySelector<HTMLElement>('[data-cover-subtitle]')?.innerText || '', 16.5, 92, 10.5, 96);
+    doc.setDrawColor(...bronze); doc.setLineWidth(1); doc.line(16.5, 97, 32, 97);
+    doc.setFillColor(...ink); doc.lines([[69,0],[-5,10.5],[-64,0],[0,-10.5]],16.5,102.5,[1,1],'F',true);
+    doc.setFillColor(...bronze); doc.lines([[2,0],[-5,10.5],[-2,0],[5,-10.5]],86.5,102.5,[1,1],'F',true);
+    doc.setFont('Quote','bold'); doc.setFontSize(13); doc.setTextColor(...white); doc.text(value('number'),20.5,109.6);
+    const calendar = (x: number, yy: number) => {
+      doc.setDrawColor(...bronze); doc.setLineWidth(.45); doc.roundedRect(x,yy,4.2,4.2,.4,.4,'S');
+      doc.line(x,yy+1.3,x+4.2,yy+1.3); doc.line(x+1,yy-.5,x+1,yy+.6); doc.line(x+3.2,yy-.5,x+3.2,yy+.6);
+    };
+    value('dates').split('\n').forEach((line,index) => { calendar(17,118+index*7.2); print(line,28.5,122+index*7.2,10,80); });
+    let detailY = 140;
+    for (const field of ['client','project']) {
+      const lines = value(field).split('\n'); if (!value(field)) continue;
+      const start = detailY;
+      doc.setDrawColor(...bronze); doc.setLineWidth(.6);
+      if (field === 'client') {
+        doc.circle(23, detailY-3, 1.6,'S'); doc.roundedRect(20,detailY-.2,6,2.5,1,1,'S');
+      } else {
+        for (let i=0;i<3;i++) doc.lines([[4,-2],[4,2],[-4,2],[-4,-2]],20,detailY-3+i*1.5,[1,1],'S',true);
+      }
+      detailY += print(lines[0],33.5,detailY,10,77,'bold') + 2;
+      detailY += print(lines.slice(1).join('\n'),33.5,detailY,9,77) + 7;
+      doc.line(16.5,start-5,16.5,detailY-9);
     }
     const boxes = Array.from(cover.querySelectorAll<HTMLElement>('[data-cover-box]'));
-    doc.setFillColor(...taupe); doc.rect(0, 239, W, 39, 'F');
+    doc.setFillColor(...ink); doc.lines([[108,0],[-19,40],[-89,0],[0,-40]],0,213,[1,1],'F',true);
+    doc.setFillColor(...paper); doc.lines([[97,0],[-20,40],[-96,0],[19,-40]],108,213,[1,1],'F',true);
+    doc.setDrawColor(...white); doc.setLineWidth(.8); doc.line(0,213,206,213); doc.line(108,213,89,253);
+    doc.setDrawColor(...bronze); doc.setLineWidth(1.2); doc.line(206,214,186,253);
     boxes.forEach((box, index) => {
-      const x = M + index * 94;
-      doc.setFontSize(8); doc.setFont('Quote', 'normal'); doc.setTextColor(...ink);
-      const lines = doc.splitTextToSize(box.innerText, 83) as string[];
-      if (lines.length > 8) return; // Complete payment plan remains in the economic detail.
-      doc.text(lines, x, 246, { lineHeightFactor: 1.4 });
+      const x = index === 0 ? 18 : 115;
+      doc.setFontSize(10); doc.setFont('Quote', 'normal'); doc.setTextColor(...(index === 0 ? white : ink));
+      const title = box.firstElementChild?.textContent || '';
+      doc.text(doc.splitTextToSize(title.toLocaleUpperCase(),65), x + 16, 222, { lineHeightFactor: 1.15 });
+      calendar(x,220);
+      doc.setTextColor(...(index === 0 ? white : ink)); doc.setFontSize(9);
+      const contents = (Array.from(box.children).slice(1) as HTMLElement[]).map(el=>el.innerText).join('\n');
+      const lines = doc.splitTextToSize(contents, index === 0 ? 76 : 66) as string[];
+      doc.text(lines, x, 237, { lineHeightFactor: 1.4 });
     });
+    doc.setFillColor(...paper); doc.setGState(doc.GState({opacity:.94})); doc.rect(0,253,W,44,'F'); doc.setGState(doc.GState({opacity:1}));
+    doc.setDrawColor(...bronze); doc.setLineWidth(.5); doc.line(13.5,265,13.5,284);
+    print('Kalea Group Srl',21,268,10,120,'bold');
+    print('Desenzano del Garda (BS)\ninfo@kalea.space  |  kalea.space\nP.IVA 04797310986',21,274,9,120);
     newPage();
   } else header();
 
@@ -239,6 +272,7 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
   }
   const pages = doc.getNumberOfPages();
   for (let page = 1; page <= pages; page++) {
+    if (page === 1 && cover) continue;
     doc.setPage(page); doc.setFont('Quote', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...muted);
     doc.setDrawColor(...bronze); doc.line(M, 283, W - M, 283);
     doc.text('Kalea Group Srl · info@kalea.space · kalea.space · P.IVA 04797310986', M, 288);

@@ -3025,9 +3025,10 @@ export default function CreaPreventivo() {
 
             <div data-quote-cover className="quote-cover">
               <img data-cover-photo className="quote-cover-photo" src={quoteCover.url} alt="Ambiente architettonico contemporaneo" />
-              <div className="quote-cover-brand"><img src={KALEA_LOGO} alt="Kalēa®" /><div>PAVIMENTAZIONI · RIVESTIMENTI<br/>DECKING · CLADDING<br/><strong>FORNITURA E POSA</strong></div></div>
+              <div className="quote-cover-brand"><img src={KALEA_LOGO} alt="Kalēa®" /><div>PAVIMENTAZIONI<br/>RIVESTIMENTI<br/>DECKING<br/>CLADDING<br/><strong>FORNITURA E POSA</strong></div><aside>Innovate<br/>Living<br/>Nature</aside></div>
               <div className="quote-cover-panel">
                 <h1 data-cover-text="title">{t.titolo}</h1>
+                <p data-cover-subtitle>{({IT:'PROPOSTA DI FORNITURA E POSA',EN:'SUPPLY AND INSTALLATION PROPOSAL',DE:'ANGEBOT FÜR LIEFERUNG UND VERLEGUNG',FR:'PROPOSITION DE FOURNITURE ET POSE'} as Record<string,string>)[lingua.toUpperCase()] || 'PROPOSTA DI FORNITURA E POSA'}</p>
                 <div data-cover-text="number">N° {numPrev}</div>
                 <div data-cover-text="dates">{t.data_label}: {dataPrev}<br/>{t.validita}: {addDays(dataPrev,30)}</div>
                 <div data-cover-text="client"><strong>{t.cliente}</strong><br/>{cliente.nome}<br/>{cliente.indirizzo}<br/>{[(cliente as any).cap, cliente.citta, (cliente as any).provincia].filter(Boolean).join(" ")}</div>
@@ -3037,6 +3038,7 @@ export default function CreaPreventivo() {
                 {pagamenti.some((p:any)=>Number(p.pct)>0) && <div data-cover-box><strong>{L.cond_pagamento}</strong>{pagamenti.filter((p:any)=>Number(p.pct)>0).map((p:any,i:number)=><div key={i}>{trRata(lingua,p.label)}: {p.pct}%</div>)}</div>}
                 <div data-cover-box><strong>{t.validita}</strong><div>{addDays(dataPrev,30)}</div></div>
               </div>
+              <div className="quote-cover-footer"><strong>Kalea Group Srl</strong><br/>Desenzano del Garda (BS)<br/>info@kalea.space | kalea.space<br/>P.IVA 04797310986</div>
             </div>
 
             {/* Testata */}
