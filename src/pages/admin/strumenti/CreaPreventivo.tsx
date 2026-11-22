@@ -415,8 +415,8 @@ const T: any = {
     firma_cliente: "Firma Cliente", firma_kalēa: "Per Kalēa",
         payoff1: 'Kalēa – Surface System®',
     payoff2: 'Superfici · Pavimentazioni · Posa',
-    step1: 'Calcolo & Verifica',
-    step2: 'Intestazione & Note',
+    step1: 'Intestazione & Cliente',
+    step2: 'Calcolo & Verifica',
     step3: 'Anteprima & PDF',
     scegli_prod: 'Scegli il prodotto',
     articoli: "articoli",
@@ -545,8 +545,8 @@ const T: any = {
     firma_cliente: "Client Signature", firma_kalēa: "For Kalēa",
         payoff1: 'Kalēa – Surface System®',
     payoff2: "Surfaces · Flooring · Installation",
-    step1: "Calculate & Verify",
-    step2: "Header & Notes",
+    step1: "Header & Client",
+    step2: "Calculate & Verify",
     step3: "Preview & PDF",
     scegli_prod: "Choose product",
     articoli: "products",
@@ -675,8 +675,8 @@ const T: any = {
     firma_cliente: "Unterschrift Kunde", firma_kalēa: "Für Kalēa",
         payoff1: 'Kalēa – Surface System®',
     payoff2: "Oberflächen · Böden · Verlegung",
-    step1: "Berechnen & Prüfen",
-    step2: "Kopfzeile & Notizen",
+    step1: "Kopfzeile & Kunde",
+    step2: "Berechnen & Prüfen",
     step3: "Vorschau & PDF",
     scegli_prod: "Produkt wählen",
     articoli: "Artikel",
@@ -805,8 +805,8 @@ const T: any = {
     firma_cliente: "Signature Client", firma_kalēa: "Pour Kalēa",
         payoff1: 'Kalēa – Surface System®',
     payoff2: "Surfaces · Revêtements · Pose",
-    step1: "Calculer & Vérifier",
-    step2: "En-tête & Notes",
+    step1: "En-tête & Client",
+    step2: "Calculer & Vérifier",
     step3: "Aperçu & PDF",
     scegli_prod: "Choisir le produit",
     articoli: "articles",
@@ -935,8 +935,8 @@ const T: any = {
     firma_cliente: "Semnătura Client", firma_kalēa: "Pentru Kalēa",
         payoff1: 'Kalēa – Surface System®',
     payoff2: "Suprafețe · Pardoseli · Montaj",
-    step1: "Calculați & Verificați",
-    step2: "Antet & Note",
+    step1: "Antet & Client",
+    step2: "Calculați & Verificați",
     step3: "Previzualizare & PDF",
     scegli_prod: "Alegeți produsul",
     articoli: "articole",
@@ -2144,7 +2144,7 @@ export default function CreaPreventivo() {
       </div>
 
       <div style={{display:"flex",gap:2,marginBottom:20,background:"#F1F5F9",borderRadius:10,padding:4,width:"fit-content",alignItems:"center"}}>
-        {([["1","Calcolo & Verifica"],["2","Intestazione & Cliente"],["3","Anteprima & PDF"]] as const)
+        {([["1","Intestazione & Cliente"],["2","Calcolo & Verifica"],["3","Anteprima & PDF"]] as const)
           .filter(([n]) => stato !== "accettato" || n === "3")
           .map(([n,l])=>(
           <button key={n} onClick={()=>setStep(Number(n))}
@@ -2165,8 +2165,8 @@ export default function CreaPreventivo() {
         )}
       </div>
 
-      {/* STEP 1 */}
-      {step===1 && (
+      {/* STEP 2 */}
+      {step===2 && (
         <div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
           <div style={card}>
@@ -2682,8 +2682,8 @@ export default function CreaPreventivo() {
                   <span>Totale IVA inclusa</span>
                   <b style={{color:"#1A1A2E",fontSize:14}}>{euro(calc.totaleIva)}</b>
                 </div>
-                <button onClick={()=>setStep(2)} style={{width:"100%",padding:"11px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#64748B",color:"#fff"}}>
-                  {calc.marginePct>MARGINE_BLOCCO ? "Vai a Intestazione & Cliente →" : "⛔ Sblocca prima il margine"}
+                <button onClick={()=>setStep(3)} style={{width:"100%",padding:"11px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:calc.marginePct>MARGINE_BLOCCO?"#1A1A2E":"#64748B",color:"#fff"}}>
+                  {calc.marginePct>MARGINE_BLOCCO ? "Vai ad Anteprima & PDF →" : "⛔ Sblocca prima il margine"}
                 </button>
 
               </div>
@@ -2707,18 +2707,18 @@ export default function CreaPreventivo() {
               ) : "Aggiungi almeno un prodotto, un servizio o una riga manuale per proseguire"}
             </div>
             <button
-              onClick={()=>{ if(!calc){ toast.error("Aggiungi almeno una voce al preventivo"); return; } setStep(2); window.scrollTo({top:0,behavior:"smooth"}); }}
+              onClick={()=>{ if(!calc){ toast.error("Aggiungi almeno una voce al preventivo"); return; } setStep(3); window.scrollTo({top:0,behavior:"smooth"}); }}
               disabled={!calc}
               style={{padding:"12px 26px",borderRadius:9,border:"none",cursor:calc?"pointer":"not-allowed",fontSize:14,fontWeight:500,background:calc?"#1A1A2E":"#C9C6C0",color:"#fff"}}>
-              Avanti → Intestazione & Cliente
+              Avanti → Anteprima & PDF
             </button>
           </div>
         </div>
         </div>
       )}
 
-      {/* STEP 2 */}
-      {step===2 && (
+      {/* STEP 1 */}
+      {step===1 && (
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
           <div>
             <div style={card}>
@@ -2996,8 +2996,8 @@ export default function CreaPreventivo() {
               <button onClick={salvaPreventivo} disabled={saving} style={{flex:1,padding:"11px",borderRadius:9,border:"1px solid #1A1A2E",cursor:"pointer",fontSize:14,fontWeight:500,background:"#fff",color:"#1A1A2E"}}>
                 {saving ? "Salvataggio…" : preventivoId ? "💾 Aggiorna preventivo" : "💾 Salva preventivo"}
               </button>
-              <button onClick={()=>setStep(3)} style={{flex:1,padding:"11px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:"#1A1A2E",color:"#fff"}}>
-                Anteprima & PDF →
+              <button onClick={()=>setStep(2)} style={{flex:1,padding:"11px",borderRadius:9,border:"none",cursor:"pointer",fontSize:14,fontWeight:500,background:"#1A1A2E",color:"#fff"}}>
+                Avanti → Calcolo & Verifica
               </button>
             </div>
           </div>
