@@ -20,7 +20,7 @@ import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
 import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
 import { clearZeroOnFocus } from '@/lib/numericInput';
 import { buildPremiumQuotePdf } from '@/lib/premiumQuotePdf';
-import quoteCover from '@/assets/quote/cover.webp.asset.json';
+import quoteCover from '@/assets/quote/lake-interior.webp.asset.json';
 
 
 

@@ -1,5 +1,5 @@
 # Roadmap CRM
-- [ ] Copertina identica al riferimento: allineamento grafico; foto originale senza scritte richiesta a Gabriel
+- [x] Copertina: foto allegata da Gabriel inserita; verificati PDF 35/36, logo e dati invariati
 - [x] Restyling grafico preventivi: copertina, dettagli e condizioni, senza cambiare dati; mantenere il logo originale
 - [x] Verifica PDF 35/36: contenuti identici, testo selezionabile, nessuna riga tagliata
 - [x] Vendita segnata pagata in automatico quando tutte le rate sono incassate
