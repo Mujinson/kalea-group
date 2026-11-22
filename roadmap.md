@@ -28,3 +28,8 @@
 - [ ] Foto reali dei posatori da inserire in src/data/installers.ts (6 slots pronti)
 - [x] Posatori certificati: foto coerenti per decking, cladding esterno e parquet interno, verificate desktop/mobile
 - [x] Posatori certificati: hero più alta su schermi bassi, titolo completo e non coperto dal menu
+
+## Riordino CRM (audit 22/11)
+- [x] Passo 1: elenco record scollegati esportato
+- [x] Passo 2: menu in 7 gruppi
+- [ ] Passi 3-10: unificare fatturato, margini, costi fissi, ore; schermata "Da collegare"; dettaglio cantiere a schede; avviso preventivo/vendita

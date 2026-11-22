@@ -71,46 +71,27 @@ type MenuEntry =
 
 const menuStructure: MenuEntry[] = [
   {
-    type: 'single',
-    item: { title: 'Dashboard', url: '/admin', icon: LayoutDashboard, color: '#3B82F6', adminOnly: false },
-  },
-  {
-    type: 'single',
-    item: { title: 'Assistente di Gabriel', url: '/admin/assistente', icon: Brain, color: '#A25DDC', adminOnly: true },
+    type: 'group',
+    group: {
+      label: 'Oggi', icon: LayoutDashboard, color: '#3B82F6', adminOnly: false,
+      items: [
+        { title: 'Dashboard', url: '/admin', icon: LayoutDashboard, adminOnly: false },
+        { title: 'Assistente di Gabriel', url: '/admin/assistente', icon: Brain, adminOnly: true },
+      ],
+    },
   },
   {
     type: 'group',
     group: {
-      label: 'Lead', icon: Sparkles, color: '#F59E0B', adminOnly: false,
+      label: 'Clienti e preventivi', icon: Users, color: '#EF4444', adminOnly: false,
       items: [
-        { title: 'Lista lead', url: '/admin/leads', icon: UserPlus, adminOnly: false },
+        { title: 'Lead', url: '/admin/leads', icon: UserPlus, adminOnly: false },
         { title: 'Pipeline', url: '/admin/pipeline', icon: Kanban, adminOnly: false },
-        { title: 'Appuntamenti', url: '/admin/appuntamenti', icon: CalendarClock, adminOnly: false },
-        { title: 'Chatbot', url: '/admin/chatbot', icon: Bot, adminOnly: true },
-        { title: 'Campagne email', url: '/admin/campagne', icon: Send, adminOnly: true },
-      ],
-    },
-  },
-  {
-    type: 'group',
-    group: {
-      label: 'Commerciale', icon: Briefcase, color: '#EF4444', adminOnly: false,
-      items: [
-        { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart, adminOnly: true },
+        { title: 'Clienti', url: '/admin/clienti', icon: Users, adminOnly: false },
         { title: 'Preventivi', url: '/admin/preventivi', icon: FileText, adminOnly: false },
-        { title: 'Commissioni', url: '/admin/commissioni', icon: DollarSign, adminOnly: true },
-      ],
-    },
-  },
-  {
-    type: 'group',
-    group: {
-      label: 'Clienti', icon: Users, color: '#10B981', adminOnly: false,
-      items: [
-        { title: 'Lista clienti', url: '/admin/clienti', icon: Users, adminOnly: false },
-        { title: 'Media', url: '/admin/media', icon: Image, adminOnly: false },
-        { title: 'Documenti aziendali', url: '/admin/documenti', icon: FileText, adminOnly: true },
+        { title: 'Vendite', url: '/admin/vendite', icon: ShoppingCart, adminOnly: true },
         { title: 'Mappa', url: '/admin/mappa', icon: Map, adminOnly: false },
+        { title: 'Campagne email', url: '/admin/campagne', icon: Send, adminOnly: true },
       ],
     },
   },
@@ -119,87 +100,56 @@ const menuStructure: MenuEntry[] = [
     group: {
       label: 'Cantieri', icon: HardHat, color: '#F97316', adminOnly: false,
       items: [
-        { title: 'Dashboard', url: '/admin/cantieri-dashboard', icon: LayoutDashboard, adminOnly: true },
-        { title: 'Planner Operativo', url: '/admin/planner', icon: CalendarClock, adminOnly: true },
         { title: 'Lista cantieri', url: '/admin/cantieri', icon: HardHat, adminOnly: false },
-        { title: 'Operai & Ore', url: '/admin/cantieri-operai', icon: Users, adminOnly: true },
-        { title: 'Timbrature Posatori', url: '/admin/timbrature', icon: CalendarClock, adminOnly: true },
-        { title: 'Ferie / Indisponibilità', url: '/admin/ferie', icon: CalendarClock, adminOnly: true },
+        { title: 'Riepilogo cantieri', url: '/admin/cantieri-dashboard', icon: LayoutDashboard, adminOnly: true },
         { title: 'Materiali', url: '/admin/cantieri-materiali', icon: ListOrdered, adminOnly: true },
         { title: 'Budget vs Consuntivo', url: '/admin/cantieri-budget', icon: DollarSign, adminOnly: true },
         { title: 'Report', url: '/admin/cantieri-report', icon: BarChart3, adminOnly: true },
+        { title: 'Media', url: '/admin/media', icon: Image, adminOnly: false },
       ],
     },
   },
   {
     type: 'group',
     group: {
-      label: 'Catalogo', icon: Library, color: '#0EA5E9', adminOnly: false,
+      label: 'Calendario posa', icon: CalendarClock, color: '#10B981', adminOnly: false,
       items: [
-        { title: 'Prodotti', url: '/admin/catalogo', icon: Package, adminOnly: false },
-        { title: 'Prezzi & Margini', url: '/admin/catalogo/prezzi', icon: DollarSign, adminOnly: true },
-        { title: 'Marche', url: '/admin/catalogo/marche', icon: Tag, adminOnly: true },
-        { title: 'Texture visualizzatore', url: '/admin/catalogo/texture-visualizzatore', icon: Tag, adminOnly: true },
-        { title: 'Collezioni', url: '/admin/catalogo/collezioni', icon: Layers, adminOnly: true },
-        { title: 'Categorie', url: '/admin/catalogo/categorie', icon: ListOrdered, adminOnly: true },
-        { title: 'Listini & versioni', url: '/admin/catalogo/listini', icon: FileText, adminOnly: true },
-        { title: 'Storico modifiche', url: '/admin/catalogo/storico', icon: History, adminOnly: true },
-        { title: 'Importa listino', url: '/admin/catalogo/importa', icon: Upload, adminOnly: true },
-        { title: 'Segnalazioni import', url: '/admin/catalogo/import-flags', icon: AlertTriangle, adminOnly: true },
+        { title: 'Planner operativo', url: '/admin/planner', icon: CalendarClock, adminOnly: true },
+        { title: 'Appuntamenti', url: '/admin/appuntamenti', icon: CalendarClock, adminOnly: false },
+        { title: 'Timbrature posatori', url: '/admin/timbrature', icon: CalendarClock, adminOnly: true },
+        { title: 'Operai & Ore', url: '/admin/cantieri-operai', icon: Users, adminOnly: true },
+        { title: 'Ferie / Indisponibilità', url: '/admin/ferie', icon: CalendarClock, adminOnly: true },
       ],
     },
   },
   {
     type: 'group',
     group: {
-      label: 'Magazzino', icon: Package, color: '#A855F7', adminOnly: true,
-      items: [
-        { title: 'Lista articoli', url: '/admin/magazzino', icon: ListOrdered, adminOnly: true },
-      ],
-    },
-  },
-  {
-    type: 'group',
-    group: {
-      label: 'Statistiche', icon: BarChart3, color: '#06B6D4', adminOnly: true,
-      items: [
-        { title: 'Analytics', url: '/admin/analytics', icon: BarChart3, adminOnly: true },
-        { title: 'Margini', url: '/admin/margini', icon: Percent, adminOnly: true },
-        { title: 'Marginalità cantieri', url: '/admin/cantieri-marginalita', icon: Percent, adminOnly: true },
-      ],
-    },
-  },
-  {
-    type: 'group',
-    group: {
-      label: 'Finanza', icon: Landmark, color: '#22C55E', adminOnly: true,
+      label: 'Fatture e incassi', icon: Landmark, color: '#22C55E', adminOnly: true,
       items: [
         { title: 'Fatturazione & Incassi', url: '/admin/fatturazione', icon: FileText, adminOnly: true },
+        { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard, adminOnly: true },
         { title: 'Contabilità', url: '/admin/contabilita', icon: Landmark, adminOnly: true },
         { title: 'Costi', url: '/admin/costi', icon: DollarSign, adminOnly: true },
-        { title: 'Fornitori', url: '/admin/fornitori', icon: Truck, adminOnly: true },
-        { title: 'Ordini fornitori', url: '/admin/ordini-fornitori', icon: Truck, adminOnly: true },
-        { title: 'Pagamenti', url: '/admin/pagamenti', icon: CreditCard, adminOnly: true },
+        { title: 'Margini', url: '/admin/margini', icon: Percent, adminOnly: true },
+        { title: 'Marginalità cantieri', url: '/admin/cantieri-marginalita', icon: Percent, adminOnly: true },
+        { title: 'Analytics', url: '/admin/analytics', icon: BarChart3, adminOnly: true },
+        { title: 'Commissioni', url: '/admin/commissioni', icon: DollarSign, adminOnly: true },
       ],
     },
   },
   {
     type: 'group',
     group: {
-      label: 'Strumenti', icon: Wrench, color: '#EC4899', adminOnly: true,
+      label: 'Magazzino e fornitori', icon: Package, color: '#A855F7', adminOnly: false,
       items: [
-        
-        
-        
-        { title: 'Costo Operaio', url: '/admin/strumenti/costo-operaio', icon: Calculator, adminOnly: true },
-        { title: 'Sostenibilità', url: '/admin/strumenti/sostenibilita', icon: LineChart, adminOnly: true },
-        { title: 'Pricing Flow', url: '/admin/strumenti/pricing-flow', icon: Tag, adminOnly: true },
-        { title: 'Pricing Kronos', url: '/admin/strumenti/pricing-kronos', icon: Layers, adminOnly: true },
-        { title: 'Pricing BerryAlloc', url: '/admin/strumenti/pricing-berryalloc', icon: Tag, adminOnly: true },
-        { title: 'Pricing Parquet', url: '/admin/strumenti/pricing-parquet', icon: Layers, adminOnly: true },
-        { title: 'Pricing Signature', url: '/admin/strumenti/pricing-signature', icon: Layers, adminOnly: true },
-        { title: 'Pricing Externo', url: '/admin/strumenti/pricing-externo', icon: Tag, adminOnly: true },
-        { title: 'Listino pubblico', url: '/admin/strumenti/listino-pubblico', icon: Tag, adminOnly: true },
+        { title: 'Catalogo prodotti', url: '/admin/catalogo', icon: Package, adminOnly: false },
+        { title: 'Prezzi & Margini', url: '/admin/catalogo/prezzi', icon: DollarSign, adminOnly: true },
+        { title: 'Listini & versioni', url: '/admin/catalogo/listini', icon: FileText, adminOnly: true },
+        { title: 'Importa listino', url: '/admin/catalogo/importa', icon: Upload, adminOnly: true },
+        { title: 'Magazzino', url: '/admin/magazzino', icon: ListOrdered, adminOnly: true },
+        { title: 'Fornitori', url: '/admin/fornitori', icon: Truck, adminOnly: true },
+        { title: 'Ordini fornitori', url: '/admin/ordini-fornitori', icon: Truck, adminOnly: true },
       ],
     },
   },
@@ -210,7 +160,17 @@ const menuStructure: MenuEntry[] = [
       items: [
         { title: 'Generali', url: '/admin/impostazioni', icon: Settings, adminOnly: true },
         { title: 'Telegram', url: '/admin/impostazioni#telegram', icon: Bot, adminOnly: true },
-        { title: 'Import Dati', url: '/admin/import', icon: Upload, adminOnly: true },
+        { title: 'Import dati', url: '/admin/import', icon: Upload, adminOnly: true },
+        { title: 'Documenti aziendali', url: '/admin/documenti', icon: FileText, adminOnly: true },
+        { title: 'Chatbot', url: '/admin/chatbot', icon: Bot, adminOnly: true },
+        { title: 'Costo operaio', url: '/admin/strumenti/costo-operaio', icon: Calculator, adminOnly: true },
+        { title: 'Catalogo: marche', url: '/admin/catalogo/marche', icon: Tag, adminOnly: true },
+        { title: 'Catalogo: collezioni', url: '/admin/catalogo/collezioni', icon: Layers, adminOnly: true },
+        { title: 'Catalogo: categorie', url: '/admin/catalogo/categorie', icon: ListOrdered, adminOnly: true },
+        { title: 'Catalogo: storico', url: '/admin/catalogo/storico', icon: History, adminOnly: true },
+        { title: 'Segnalazioni import', url: '/admin/catalogo/import-flags', icon: AlertTriangle, adminOnly: true },
+        { title: 'Texture visualizzatore', url: '/admin/catalogo/texture-visualizzatore', icon: Tag, adminOnly: true },
+        { title: 'Listino pubblico', url: '/admin/strumenti/listino-pubblico', icon: Tag, adminOnly: true },
       ],
     },
   },
