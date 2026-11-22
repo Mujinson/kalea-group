@@ -148,6 +148,18 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Posatori certificati -->
+  <url>
+    <loc>https://www.kalea.space/it/posatori-certificati</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.kalea.space/it/posatori-certificati"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.kalea.space/en/posatori-certificati"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.kalea.space/de/posatori-certificati"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.kalea.space/fr/posatori-certificati"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.kalea.space/en/posatori-certificati"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Area Tecnica -->
   <url>
     <loc>https://www.kalea.space/it/area-tecnica</loc>

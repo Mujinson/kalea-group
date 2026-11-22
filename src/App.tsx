@@ -49,6 +49,7 @@ import SustainabilityDurability from "./pages/SustainabilityDurability";
 import SustainabilityMaintenance from "./pages/SustainabilityMaintenance";
 import Normative from "./pages/Normative";
 import Realizzazioni from "./pages/Realizzazioni";
+import PosatoriCertificati from "./pages/PosatoriCertificati";
 import { lazy, Suspense } from "react";
 const Visualizzatore = lazy(() => import("./pages/Visualizzatore"));
 const AdminOrdiniFornitori = lazy(() => import("./pages/admin/AdminOrdiniFornitori"));
@@ -384,6 +385,7 @@ const App = () => (
               <Route path="/it/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/it/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
               <Route path="/it/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
+              <Route path="/it/posatori-certificati" element={<><SEOHandler /><Layout><PosatoriCertificati /></Layout></>} />
               <Route path="/it/visualizzatore" element={<><SEOHandler /><Layout><Suspense fallback={null}><Visualizzatore /></Suspense></Layout></>} />
 
               {/* English routes */}
@@ -416,6 +418,7 @@ const App = () => (
               <Route path="/en/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/en/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
               <Route path="/en/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
+              <Route path="/en/posatori-certificati" element={<><SEOHandler /><Layout><PosatoriCertificati /></Layout></>} />
               <Route path="/en/visualizzatore" element={<><SEOHandler /><Layout><Suspense fallback={null}><Visualizzatore /></Suspense></Layout></>} />
 
               {/* German routes */}
@@ -448,6 +451,7 @@ const App = () => (
               <Route path="/de/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/de/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
               <Route path="/de/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
+              <Route path="/de/posatori-certificati" element={<><SEOHandler /><Layout><PosatoriCertificati /></Layout></>} />
               <Route path="/de/visualizzatore" element={<><SEOHandler /><Layout><Suspense fallback={null}><Visualizzatore /></Suspense></Layout></>} />
 
               {/* French routes */}
@@ -480,6 +484,7 @@ const App = () => (
               <Route path="/fr/sostenibilita/manutenzione" element={<><SEOHandler /><Layout><SustainabilityMaintenance /></Layout></>} />
               <Route path="/fr/normative" element={<><SEOHandler /><Layout><Normative /></Layout></>} />
               <Route path="/fr/realizzazioni" element={<><SEOHandler /><Layout><Realizzazioni /></Layout></>} />
+              <Route path="/fr/posatori-certificati" element={<><SEOHandler /><Layout><PosatoriCertificati /></Layout></>} />
               <Route path="/fr/visualizzatore" element={<><SEOHandler /><Layout><Suspense fallback={null}><Visualizzatore /></Suspense></Layout></>} />
 
               {/* Ceramiche collection detail (all languages) */}

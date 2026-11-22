@@ -6,6 +6,70 @@ export interface Translations {
 
 export const translations: Record<Language, Translations> = {
   it: {
+    installersPage: {
+      heroTitle: "Ogni superficie Kalēa® è posata da una mano certificata",
+      heroSubtitle:
+        "I nostri posatori hanno completato i percorsi formativi Ravaioli Academy in decking, cladding e parquet. Stesso protocollo, stesso controllo, in ogni cantiere.",
+      heroCta: "Richiedi la tua squadra",
+      spec01: { value: "100%", label: "Posatori certificati" },
+      spec02: { value: "3", label: "Settori di posa" },
+      spec03: { value: "0", label: "Subappalti" },
+      spec04: { value: "1", label: "Protocollo di posa" },
+      manifestoLabel: "Il metodo",
+      manifestoTitle: "Quattro regole che non cambiano di cantiere in cantiere",
+      principle01Title: "Formazione",
+      principle01Text:
+        "Ogni posatore segue i percorsi Ravaioli Academy prima di entrare in un cantiere Kalēa®.",
+      principle02Title: "Protocollo",
+      principle02Text:
+        "Un unico capitolato: sottofondo, umidità, giunti, dilatazioni e finiture verificati a ogni intervento.",
+      principle03Title: "Controllo",
+      principle03Text:
+        "Il responsabile verifica il cantiere in tre momenti: apertura, quota di posa, consegna.",
+      principle04Title: "Tracciabilità",
+      principle04Text:
+        "Ogni posa è documentata: foto, misure, schede prodotto e data di consegna.",
+      teamLabel: "La squadra",
+      teamTitle: "I nostri posatori",
+      teamIntro:
+        "Squadre interne, non in subappalto: ogni nome corrisponde a una persona che lavora nei tuoi spazi.",
+      specialty: { decking: "Decking", cladding: "Cladding", parquet: "Parquet" },
+      yearsSuffix: "anni in posa",
+      pathLabel: "Percorso",
+      pathTitle: "Come nasce un posatore certificato Kalēa®",
+      path01Title: "Selezione",
+      path01Text:
+        "Valutiamo manualità, precisione e abitudine al cantiere: la posa si impara, la cura no.",
+      path02Title: "Formazione in Academy",
+      path02Text:
+        "Percorsi Ravaioli Academy su decking, cladding e parquet, con prova pratica finale.",
+      path03Title: "Tirocinio guidato",
+      path03Text:
+        "I primi cantieri in coppia con un posatore abilitato, fino all'autonomia verificata.",
+      path04Title: "Abilitazione e aggiornamento",
+      path04Text:
+        "Abilitazione rilasciata e aggiornamento periodico sui nuovi sistemi Kalēa®.",
+      pathNote:
+        "Ravaioli Academy è l'ente di formazione che certifica le nostre squadre: la certificazione viene rinnovata e verificata nel tempo.",
+      sectorsLabel: "Settori",
+      sectorsTitle: "Tre superfici, tre protocolli",
+      sectorDeckingTitle: "Decking",
+      sectorDeckingText:
+        "Terrazze, bordi piscina e esterni: pendenze, distanze e ventilazioni controllate prima della posa.",
+      sectorCladdingTitle: "Cladding",
+      sectorCladdingText:
+        "Facciate e pareti: substrato, agganci e continuità visiva verificati in quota.",
+      sectorParquetTitle: "Parquet",
+      sectorParquetText:
+        "Interni e grandi superfici: umidità del massetto, giunti di dilatazione e accostamenti.",
+      bandQuote: "Una posa perfetta non si vede: si vive.",
+      bandAuthor: "Kalēa® Surface System®",
+      ctaTitle: "Parla con chi posa, non con un commerciale",
+      ctaText:
+        "Dietro ogni superficie Kalēa® c'è un nostro posatore: raccontaci il tuo spazio e ti diamo la squadra giusta.",
+      ctaPrimary: "Richiedi un sopralluogo",
+      ctaSecondary: "Scopri Fornitura e posa",
+    },
     nav: {
       home: "Home",
       lines: "Prodotti",
@@ -1199,6 +1263,70 @@ export const translations: Record<Language, Translations> = {
     },
   },
   en: {
+    installersPage: {
+      heroTitle: "Every Kalēa® surface is laid by a certified hand",
+      heroSubtitle:
+        "Our installers completed Ravaioli Academy training paths in decking, cladding and parquet. Same protocol, same checks, on every site.",
+      heroCta: "Request your team",
+      spec01: { value: "100%", label: "Certified installers" },
+      spec02: { value: "3", label: "Installation sectors" },
+      spec03: { value: "0", label: "Subcontracting" },
+      spec04: { value: "1", label: "Installation protocol" },
+      manifestoLabel: "The method",
+      manifestoTitle: "Four rules that never change from site to site",
+      principle01Title: "Training",
+      principle01Text:
+        "Every installer completes Ravaioli Academy paths before entering a Kalēa® site.",
+      principle02Title: "Protocol",
+      principle02Text:
+        "One single specification: substrate, moisture, joints, expansion and finishes checked on every job.",
+      principle03Title: "Control",
+      principle03Text:
+        "The site manager inspects at three moments: opening, laying level, handover.",
+      principle04Title: "Traceability",
+      principle04Text:
+        "Every installation is documented: photos, measurements, product sheets and handover date.",
+      teamLabel: "The team",
+      teamTitle: "Our installers",
+      teamIntro:
+        "In-house teams, never subcontracted: every name is a person who works in your space.",
+      specialty: { decking: "Decking", cladding: "Cladding", parquet: "Parquet" },
+      yearsSuffix: "years laying",
+      pathLabel: "Path",
+      pathTitle: "How a certified Kalēa® installer is made",
+      path01Title: "Selection",
+      path01Text:
+        "We assess craft, precision and site habit: laying can be taught, care cannot.",
+      path02Title: "Academy training",
+      path02Text:
+        "Ravaioli Academy paths on decking, cladding and parquet, with a final practical test.",
+      path03Title: "Guided apprenticeship",
+      path03Text:
+        "First sites paired with a qualified installer, until verified independence.",
+      path04Title: "Certification and updates",
+      path04Text:
+        "Certification issued and periodic refreshers on new Kalēa® systems.",
+      pathNote:
+        "Ravaioli Academy is the training body that certifies our teams: certification is renewed and verified over time.",
+      sectorsLabel: "Sectors",
+      sectorsTitle: "Three surfaces, three protocols",
+      sectorDeckingTitle: "Decking",
+      sectorDeckingText:
+        "Terraces, pool edges and outdoors: slopes, clearances and ventilation checked before laying.",
+      sectorCladdingTitle: "Cladding",
+      sectorCladdingText:
+        "Facades and walls: substrate, fixings and visual continuity verified at height.",
+      sectorParquetTitle: "Parquet",
+      sectorParquetText:
+        "Interiors and large surfaces: screed moisture, expansion joints and transitions.",
+      bandQuote: "A perfect installation is not seen: it is lived.",
+      bandAuthor: "Kalēa® Surface System®",
+      ctaTitle: "Talk to who lays it, not to a salesperson",
+      ctaText:
+        "Behind every Kalēa® surface there is one of our installers: tell us your space and we assign the right team.",
+      ctaPrimary: "Request a site visit",
+      ctaSecondary: "Discover supply & installation",
+    },
     nav: {
       home: "Home",
       lines: "Products",
@@ -2374,6 +2502,70 @@ export const translations: Record<Language, Translations> = {
     },
   },
   de: {
+    installersPage: {
+      heroTitle: "Jede Kalēa®-Fläche wird von einer zertifizierten Hand verlegt",
+      heroSubtitle:
+        "Unsere Verleger haben die Ausbildungswege der Ravaioli Academy in Decking, Cladding und Parkett absolviert. Dasselbe Protokoll, dieselbe Kontrolle auf jeder Baustelle.",
+      heroCta: "Team anfragen",
+      spec01: { value: "100%", label: "Zertifizierte Verleger" },
+      spec02: { value: "3", label: "Verlegesektoren" },
+      spec03: { value: "0", label: "Subvergabe" },
+      spec04: { value: "1", label: "Verlegeprotokoll" },
+      manifestoLabel: "Die Methode",
+      manifestoTitle: "Vier Regeln, die sich von Baustelle zu Baustelle nicht ändern",
+      principle01Title: "Ausbildung",
+      principle01Text:
+        "Jeder Verleger durchläuft die Wege der Ravaioli Academy, bevor er eine Kalēa®-Baustelle betritt.",
+      principle02Title: "Protokoll",
+      principle02Text:
+        "Ein einziges Lastenheft: Untergrund, Feuchte, Fugen, Dehnungen und Oberflächen bei jedem Einsatz geprüft.",
+      principle03Title: "Kontrolle",
+      principle03Text:
+        "Der Bauleiter prüft in drei Momenten: Baustellenöffnung, Verlegehöhe, Übergabe.",
+      principle04Title: "Nachvollziehbarkeit",
+      principle04Text:
+        "Jede Verlegung ist dokumentiert: Fotos, Maße, Produktdatenblätter und Übergabedatum.",
+      teamLabel: "Das Team",
+      teamTitle: "Unsere Verleger",
+      teamIntro:
+        "Eigene Teams, nie subvergeben: jeder Name ist eine Person, die in Ihren Räumen arbeitet.",
+      specialty: { decking: "Decking", cladding: "Cladding", parquet: "Parkett" },
+      yearsSuffix: "Jahre Verlegung",
+      pathLabel: "Weg",
+      pathTitle: "So entsteht ein zertifizierter Kalēa®-Verleger",
+      path01Title: "Auswahl",
+      path01Text:
+        "Wir prüfen Handwerk, Präzision und Baustellenroutine: Verlegen lernt man, Sorgfalt nicht.",
+      path02Title: "Ausbildung in der Academy",
+      path02Text:
+        "Wege der Ravaioli Academy zu Decking, Cladding und Parkett, mit praktischer Abschlussprüfung.",
+      path03Title: "Geführte Praxis",
+      path03Text:
+        "Die ersten Baustellen im Duo mit einem qualifizierten Verleger, bis zur geprüften Eigenständigkeit.",
+      path04Title: "Zertifizierung und Update",
+      path04Text:
+        "Zertifizierung erteilt und regelmäßige Auffrischung zu neuen Kalēa®-Systemen.",
+      pathNote:
+        "Ravaioli Academy ist die Ausbildungseinrichtung, die unsere Teams zertifiziert: Die Zertifizierung wird regelmäßig erneuert und geprüft.",
+      sectorsLabel: "Sektoren",
+      sectorsTitle: "Drei Flächen, drei Protokolle",
+      sectorDeckingTitle: "Decking",
+      sectorDeckingText:
+        "Terrassen, Poolränder und Außenbereich: Gefälle, Abstände und Belüftung vor der Verlegung geprüft.",
+      sectorCladdingTitle: "Cladding",
+      sectorCladdingText:
+        "Fassaden und Wände: Untergrund, Befestigung und visuelle Kontinuität in der Höhe geprüft.",
+      sectorParquetTitle: "Parkett",
+      sectorParquetText:
+        "Innenräume und große Flächen: Estrichfeuchte, Dehnfugen und Übergänge.",
+      bandQuote: "Eine perfekte Verlegung sieht man nicht: man lebt sie.",
+      bandAuthor: "Kalēa® Surface System®",
+      ctaTitle: "Sprechen Sie mit dem Verleger, nicht mit dem Vertrieb",
+      ctaText:
+        "Hinter jeder Kalēa®-Fläche steht einer unserer Verleger: Beschreiben Sie Ihren Raum, wir stellen das richtige Team.",
+      ctaPrimary: "Besichtigung anfragen",
+      ctaSecondary: "Lieferung und Verlegung entdecken",
+    },
     nav: {
       home: "Home",
       lines: "Produkte",
@@ -3549,6 +3741,70 @@ export const translations: Record<Language, Translations> = {
     },
   },
   fr: {
+    installersPage: {
+      heroTitle: "Chaque surface Kalēa® est posée par une main certifiée",
+      heroSubtitle:
+        "Nos poseurs ont suivi les parcours de formation Ravaioli Academy en decking, cladding et parquet. Même protocole, mêmes contrôles, sur chaque chantier.",
+      heroCta: "Demander votre équipe",
+      spec01: { value: "100%", label: "Poseurs certifiés" },
+      spec02: { value: "3", label: "Secteurs de pose" },
+      spec03: { value: "0", label: "Sous-traitance" },
+      spec04: { value: "1", label: "Protocole de pose" },
+      manifestoLabel: "La méthode",
+      manifestoTitle: "Quatre règles qui ne changent pas d'un chantier à l'autre",
+      principle01Title: "Formation",
+      principle01Text:
+        "Chaque poseur suit les parcours Ravaioli Academy avant d'entrer sur un chantier Kalēa®.",
+      principle02Title: "Protocole",
+      principle02Text:
+        "Un seul cahier des charges: support, humidité, joints, dilatations et finitions vérifiés à chaque intervention.",
+      principle03Title: "Contrôle",
+      principle03Text:
+        "Le responsable vérifie le chantier à trois moments: ouverture, niveau de pose, livraison.",
+      principle04Title: "Traçabilité",
+      principle04Text:
+        "Chaque pose est documentée: photos, mesures, fiches produit et date de livraison.",
+      teamLabel: "L'équipe",
+      teamTitle: "Nos poseurs",
+      teamIntro:
+        "Équipes internes, jamais sous-traitées: chaque nom correspond à une personne qui travaille chez vous.",
+      specialty: { decking: "Decking", cladding: "Cladding", parquet: "Parquet" },
+      yearsSuffix: "ans de pose",
+      pathLabel: "Parcours",
+      pathTitle: "Comment naît un poseur certifié Kalēa®",
+      path01Title: "Sélection",
+      path01Text:
+        "Nous évaluons le geste, la précision et l'habitude du chantier: la pose s'apprend, le soin non.",
+      path02Title: "Formation à l'Academy",
+      path02Text:
+        "Parcours Ravaioli Academy en decking, cladding et parquet, avec épreuve pratique finale.",
+      path03Title: "Compagnonnage encadré",
+      path03Text:
+        "Les premiers chantiers en binôme avec un poseur qualifié, jusqu'à l'autonomie vérifiée.",
+      path04Title: "Agrément et mise à jour",
+      path04Text:
+        "Agrément délivré et remise à niveau périodique sur les nouveaux systèmes Kalēa®.",
+      pathNote:
+        "Ravaioli Academy est l'organisme de formation qui certifie nos équipes: la certification est renouvelée et vérifiée dans le temps.",
+      sectorsLabel: "Secteurs",
+      sectorsTitle: "Trois surfaces, trois protocoles",
+      sectorDeckingTitle: "Decking",
+      sectorDeckingText:
+        "Terrasses, bords de piscine et extérieurs: pentes, distances et ventilations contrôlées avant la pose.",
+      sectorCladdingTitle: "Cladding",
+      sectorCladdingText:
+        "Façades et murs: support, fixations et continuité visuelle vérifiés en hauteur.",
+      sectorParquetTitle: "Parquet",
+      sectorParquetText:
+        "Intérieurs et grandes surfaces: humidité de la chape, joints de dilatation et assemblages.",
+      bandQuote: "Une pose parfaite ne se voit pas: elle se vit.",
+      bandAuthor: "Kalēa® Surface System®",
+      ctaTitle: "Parlez à celui qui pose, pas à un commercial",
+      ctaText:
+        "Derrière chaque surface Kalēa® il y a un de nos poseurs: décrivez-nous votre espace et nous vous donnons la bonne équipe.",
+      ctaPrimary: "Demander une visite",
+      ctaSecondary: "Découvrir fourniture et pose",
+    },
     nav: {
       home: "Accueil",
       lines: "Produits",

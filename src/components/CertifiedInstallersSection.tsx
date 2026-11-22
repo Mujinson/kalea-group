@@ -23,7 +23,7 @@ const CertifiedInstallersSection = () => {
           transition={{ duration: 0.6 }}
         >
           <Link
-            to={`/${language}/servizi/fornitura-e-posa`}
+            to={`/${language}/posatori-certificati`}
             className="group grid border-y border-kalea-tan/40 bg-kalea-cream/30 md:grid-cols-[220px_1fr] lg:grid-cols-[260px_1fr]"
           >
             <div className="flex items-center justify-center border-b border-kalea-tan/30 px-8 py-8 md:border-b-0 md:border-r md:py-12">

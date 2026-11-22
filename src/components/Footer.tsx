@@ -83,6 +83,14 @@ const Footer = () => {
               </li>
               <li>
                 <Link
+                  to={`/${language}/posatori-certificati`}
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("home.certification.eyebrow")}
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/it/zone"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
