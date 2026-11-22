@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
 import ScadenzarioTable from '@/components/admin/ScadenzarioTable';
 import { fmtEur, categoryLabel } from '@/lib/finance';
+import { computeRevenueSummary } from '@/lib/revenueSources';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, CartesianGrid } from 'recharts';
 import { Euro, TrendingDown, TrendingUp, Percent } from 'lucide-react';
 
@@ -22,9 +23,10 @@ export function FinanceOverviewBlock() {
   const { data } = useQuery({
     queryKey: ['finance-overview'],
     queryFn: async () => {
-      const [supInv, custInv, fixed, variable, siteExp] = await Promise.all([
+      const [supInv, custInv, schedules, fixed, variable, siteExp] = await Promise.all([
         supabase.from('supplier_invoices').select('invoice_date, due_date, subtotal, vat_amount, total, paid_amount, status, category, is_reverse_charge'),
-        supabase.from('customer_invoices').select('invoice_date, due_date, subtotal, vat_amount, total, paid_amount, status'),
+        supabase.from('customer_invoices').select('id, invoice_date, due_date, subtotal, vat_amount, total, paid_amount, status'),
+        supabase.from('payment_schedules').select('id, invoice_id, amount, is_paid, paid_date, due_date, is_invoiced, invoiced_amount'),
         supabase.from('fixed_costs').select('cost_date, amount, category'),
         supabase.from('variable_costs').select('cost_date, amount, category'),
         supabase.from('site_expenses').select('expense_date, amount, expense_type'),
@@ -33,6 +35,7 @@ export function FinanceOverviewBlock() {
       return {
         supInv: supInv.data || [],
         custInv: custInv.data || [],
+        schedules: schedules.data || [],
         fixed: fixed.data || [],
         variable: variable.data || [],
         siteExp: siteExp.data || [],
@@ -45,7 +48,7 @@ export function FinanceOverviewBlock() {
   const month = now.getMonth();
 
   const calc = useMemo(() => {
-    const d = data || { supInv: [], custInv: [], fixed: [], variable: [], siteExp: [] };
+    const d = data || { supInv: [], custInv: [], schedules: [], fixed: [], variable: [], siteExp: [] };
 
     const costsInMonth = (y: number, m: number) =>
       d.supInv.filter((r: any) => inMonth(r.invoice_date, y, m)).reduce((s, r: any) => s + Number(r.total || 0), 0) +
@@ -64,10 +67,9 @@ export function FinanceOverviewBlock() {
     const supOverdue = openSup.filter((r: any) => r.due_date && r.due_date < today)
       .reduce((s, r: any) => s + Math.max(0, Number(r.total || 0) - Number(r.paid_amount || 0)), 0);
 
-    const openCust = d.custInv.filter((r: any) => Number(r.paid_amount || 0) < Number(r.total || 0));
-    const custToCollect = openCust.reduce((s, r: any) => s + Math.max(0, Number(r.total || 0) - Number(r.paid_amount || 0)), 0);
-    const custOverdue = openCust.filter((r: any) => r.due_date && r.due_date < today)
-      .reduce((s, r: any) => s + Math.max(0, Number(r.total || 0) - Number(r.paid_amount || 0)), 0);
+    const revAll = computeRevenueSummary(d.schedules as any[], d.custInv as any[], () => true, { today });
+    const custToCollect = revAll.daIncassare;
+    const custOverdue = revAll.scaduto;
 
     // IVA del trimestre corrente
     const q = Math.floor(month / 3);
@@ -83,7 +85,7 @@ export function FinanceOverviewBlock() {
 
     const monthly = MONTHS.map((label, m) => ({
       label,
-      Entrate: d.custInv.filter((r: any) => inMonth(r.invoice_date, year, m)).reduce((s, r: any) => s + Number(r.total || 0), 0),
+      Entrate: computeRevenueSummary(d.schedules as any[], d.custInv as any[], (dt) => inMonth(dt, year, m), { today }).fatturato,
       Uscite: costsInMonth(year, m),
     }));
 

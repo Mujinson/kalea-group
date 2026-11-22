@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { fmtEur } from '@/lib/finance';
-import { revenueSources } from '@/lib/revenueSources';
+import { computeRevenueSummary } from '@/lib/revenueSources';
 import CustomerDetailSheet from '@/components/admin/CustomerDetailSheet';
 import { Wallet, Receipt, Hourglass, FileText, XCircle, ThumbsUp, ThumbsDown, Check, RotateCcw, ChevronRight, User } from 'lucide-react';
 
@@ -51,26 +51,26 @@ export default function RevenueFunnelBlock({ variant = 'dashboard', lead }: { va
     const ok = (d?: string | null) => period === 'all' || (!!d && new Date(d).getFullYear() === y);
     const d = data || { ps: [], inv: [], q: [] };
     const custName = (r: any) => r.customers?.company_name || `${r.customers?.first_name || ''} ${r.customers?.last_name || ''}`.trim() || '—';
-    const { paidPs, unpaidPs, standalone, unlinkedPaidPs } = revenueSources(d.ps, d.inv, ok);
+    const rev = computeRevenueSummary(d.ps, d.inv, ok, { today: today() });
     // Fatture senza rate collegate: contano da sole (incassato = paid_amount, da ricevere = residuo)
-    const invAsPaid = standalone.filter((r) => n(r.paid_amount) > 0 && ok(r.invoice_date)).map((r) => ({
+    const invAsPaid = rev.standalonePaid.map((r) => ({
       id: 'inv-' + r.id, isInvoice: true, invoice_id: r.id, amount: n(r.paid_amount), is_paid: true,
       paid_date: r.invoice_date, due_date: r.due_date, notes: `Fattura ${r.invoice_number || ''}`,
       sales: { customer_id: r.customer_id, customer_name: custName(r) },
     }));
-    const invAsOpen = standalone.filter((r) => n(r.total) - n(r.paid_amount) > 0.01 && ok(r.invoice_date)).map((r) => ({
+    const invAsOpen = rev.standaloneOpen.map((r) => ({
       id: 'inv-' + r.id, isInvoice: true, invoice_id: r.id, amount: r2(n(r.total) - n(r.paid_amount)), is_paid: false,
       due_date: r.due_date || r.invoice_date, notes: `Fattura ${r.invoice_number || ''}`,
       sales: { customer_id: r.customer_id, customer_name: custName(r) },
     }));
-    const paid = [...paidPs, ...invAsPaid].sort((a, b) => (b.paid_date || '').localeCompare(a.paid_date || ''));
-    const unpaid = [...unpaidPs, ...invAsOpen].sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''));
+    const paid = [...rev.paidPs, ...invAsPaid].sort((a, b) => (b.paid_date || '').localeCompare(a.paid_date || ''));
+    const unpaid = [...rev.unpaidPs, ...invAsOpen].sort((a, b) => (a.due_date || '').localeCompare(b.due_date || ''));
     // incassato = fatturato: le rate incassate senza fattura collegata contano come fatturate
-    const fromPaid = unlinkedPaidPs.filter((r) => r.is_invoiced).map((r) => ({
+    const fromPaid = rev.unlinkedInvoicedPs.map((r) => ({
       id: 'ps-' + r.id, invoice_number: r.invoice_number || 'Da incasso', total: n(r.invoiced_amount ?? r.amount), paid_amount: n(r.invoiced_amount ?? r.amount),
       invoice_date: r.paid_date || r.due_date, customer_id: r.sales?.customer_id, customers: { company_name: r.sales?.customer_name },
     }));
-    const inv = [...d.inv.filter((r) => r.status !== 'annullata' && ok(r.invoice_date)), ...fromPaid].sort((a, b) => (b.invoice_date || '').localeCompare(a.invoice_date || ''));
+    const inv = [...rev.billedInvoices, ...fromPaid].sort((a, b) => (b.invoice_date || '').localeCompare(a.invoice_date || ''));
     const qs = d.q.filter((r) => ok(r.created_at) && r.status !== 'draft').sort((a, b) => b.created_at.localeCompare(a.created_at));
     const won = qs.filter((r) => WON.includes(r.status));
     const lost = qs.filter((r) => r.status === 'rejected');
@@ -80,8 +80,8 @@ export default function RevenueFunnelBlock({ variant = 'dashboard', lead }: { va
     const overdue = unpaid.filter((r) => r.due_date && r.due_date < today());
     return {
       paid, unpaid, inv, qs, won, lost, vinto, perso, closed, overdue,
-      incassato: sum(paid, 'amount'), daRicevere: sum(unpaid, 'amount'), scaduto: sum(overdue, 'amount'),
-      fatturato: sum(inv, 'total'), preventivato: sum(qs, 'total_amount'),
+      incassato: rev.incassato, daRicevere: rev.daIncassare, scaduto: rev.scaduto,
+      fatturato: rev.fatturato, preventivato: sum(qs, 'total_amount'),
       pWon: closed ? (won.length / closed) * 100 : 0,
       pVal: vinto + perso ? (vinto / (vinto + perso)) * 100 : 0,
     };

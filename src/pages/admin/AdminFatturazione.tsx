@@ -100,25 +100,16 @@ export default function AdminFatturazione() {
     },
   });
 
-  // KPI: venduto vs fatturato vs incassato vs da incassare
-  const kpi = useMemo(() => {
+  // KPI "Venduto" (Fatturato, Incassato, Da incassare e Scaduto arrivano da RevenueFunnelBlock / src/lib/revenueSources.ts)
+  const venduto = useMemo(() => {
     const salesTotal = sales.reduce((s, v) => s + Number(v.total_amount || 0), 0);
     const quotedIds = new Set(sales.map((s) => s.quote_id).filter(Boolean));
     // preventivi accettati non ancora convertiti in vendita
     const quotesTotal = acceptedQuotes
       .filter((q) => !quotedIds.has(q.id))
       .reduce((s, q) => s + Number(q.total_amount || 0), 0);
-    const venduto = salesTotal + quotesTotal;
-    const fatturato = invoices.filter((i) => i.status !== 'annullata').reduce((s, i) => s + Number(i.total || 0), 0);
-    const incassato = invoices.reduce((s, i) => s + Number(i.paid_amount || 0), 0);
-    const daIncassare = invoices
-      .filter((i) => ['emessa', 'parziale', 'scaduta'].includes(i.status))
-      .reduce((s, i) => s + (Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
-    const scaduto = invoices
-      .filter((i) => i.status === 'scaduta')
-      .reduce((s, i) => s + (Number(i.total || 0) - Number(i.paid_amount || 0)), 0);
-    return { venduto, fatturato, incassato, daIncassare, scaduto };
-  }, [invoices, acceptedQuotes, sales]);
+    return salesTotal + quotesTotal;
+  }, [acceptedQuotes, sales]);
 
 
   // Preventivi da fatturare (accettati con residuo da fatturare)
@@ -147,7 +138,7 @@ export default function AdminFatturazione() {
 
       <RevenueFunnelBlock
         variant="billing"
-        lead={<CrmKpiTile label="Venduto" value={eur(kpi.venduto)} color="indigo" icon={<TrendingUp className="w-4 h-4" />} hint="Vendite + preventivi accettati" onClick={() => setTab('da-fatturare')} />}
+        lead={<CrmKpiTile label="Venduto" value={eur(venduto)} color="indigo" icon={<TrendingUp className="w-4 h-4" />} hint="Vendite + preventivi accettati" onClick={() => setTab('da-fatturare')} />}
       />
 
       <Tabs value={tab} onValueChange={setTab}>

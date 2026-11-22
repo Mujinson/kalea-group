@@ -6,6 +6,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { computeRevenueSummary } from '@/lib/revenueSources';
 import FinanceOverviewBlock from '@/components/admin/FinanceOverviewBlock';
 import RevenueFunnelBlock from '@/components/admin/RevenueFunnelBlock';
 import CrewCostDashboardBlock from '@/components/admin/CrewCostDashboardBlock';
@@ -314,27 +315,18 @@ const AdminOverview = () => {
   const revenuePeriod = useMemo(() => sumRevenue(range.start, range.end), [quotes, sales, range]);
   const revenuePrev = useMemo(() => sumRevenue(range.prevStart, range.prevEnd), [quotes, sales, range]);
   const revenueDelta = revenuePrev > 0 ? ((revenuePeriod - revenuePrev) / revenuePrev) * 100 : null;
-  const revenueYTD = useMemo(() => sumRevenue(startOfYear(new Date()), endOfYear(new Date())), [quotes, sales]);
 
   // FATTURATO / INCASSATO / DA INCASSARE — stessa logica del blocco "Soldi e preventivi":
   // le rate del piano pagamenti sono la fonte degli incassi; una rata incassata è anche fatturata.
   const financials = useMemo(() => {
     const inR = (d?: string | null) => !!d && inRange(d, range.start, range.end);
-    const todayStr = new Date().toISOString().slice(0, 10);
-    const ps = paymentSchedules as any[];
-    const invs = customerInvoices.filter((i: any) => i.status !== 'annullata' && inR(i.invoice_date || i.created_at));
-    const fromPaid = ps.filter(r => r.is_invoiced && !r.invoice_id && inR(r.paid_date || r.due_date));
-    const fatturato = invs.reduce((s: number, i: any) => s + Number(i.total || 0), 0)
-      + fromPaid.reduce((s, r) => s + Number(r.invoiced_amount ?? r.amount ?? 0), 0);
-    const incassato = ps.filter(r => r.is_paid && inR(r.paid_date || r.due_date))
-      .reduce((s, r) => s + Number(r.amount || 0), 0);
-    const unpaid = ps.filter(r => !r.is_paid);
-    const daIncassare = unpaid.reduce((s, r) => s + Number(r.amount || 0), 0);
-    const scaduto = unpaid.filter(r => r.due_date && r.due_date < todayStr)
-      .reduce((s, r) => s + Number(r.amount || 0), 0);
-    return { fatturato, incassato, daIncassare, scaduto };
+    return computeRevenueSummary(paymentSchedules as any[], customerInvoices as any[], inR);
   }, [customerInvoices, paymentSchedules, range]);
-  const goalPct = goal > 0 ? (revenueYTD / goal) * 100 : 0;
+  const fatturatoYTD = useMemo(() => {
+    const ys = startOfYear(new Date()), ye = endOfYear(new Date());
+    return computeRevenueSummary(paymentSchedules as any[], customerInvoices as any[], (d) => !!d && inRange(d, ys, ye)).fatturato;
+  }, [customerInvoices, paymentSchedules]);
+  const goalPct = goal > 0 ? (fatturatoYTD / goal) * 100 : 0;
 
   const preventiviPeriod = useMemo(() => {
     const all = [
@@ -441,13 +433,13 @@ const AdminOverview = () => {
     const now = new Date();
     for (let i = 11; i >= 0; i--) {
       const ms = startOfMonth(subMonths(now, i)), me = endOfMonth(ms);
-      const rev = sumRevenue(ms, me);
+      const rev = computeRevenueSummary(paymentSchedules as any[], customerInvoices as any[], (d) => !!d && inRange(d, ms, me)).fatturato;
       const mSales = sales.filter(s => inRange(s.sale_date, ms, me) && Number(s.margin_percentage) > 0);
       const mgn = mSales.length ? mSales.reduce((s, x) => s + Number(x.margin_percentage || 0), 0) / mSales.length : 0;
       arr.push({ month: format(ms, 'MMM', { locale: it }), fatturato: rev, margine: Number(mgn.toFixed(1)) });
     }
     return arr;
-  }, [preventivi, quotes, sales]);
+  }, [paymentSchedules, customerInvoices, sales]);
 
   const stato6 = useMemo(() => {
     const arr: { month: string; accettati: number; attesa: number; rifiutati: number }[] = [];
@@ -711,11 +703,11 @@ const AdminOverview = () => {
           <div className="mt-3 pt-3 border-t" style={{ borderColor: 'var(--crm-bg-soft)' }}>
             <div className="flex justify-between" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               <span>YTD</span>
-              <span className="tabular-nums" style={{ color: 'var(--crm-ink)', fontWeight: 700 }}>{eur(revenueYTD)}</span>
+              <span className="tabular-nums" style={{ color: 'var(--crm-ink)', fontWeight: 700 }}>{eur(fatturatoYTD)}</span>
             </div>
             <div className="flex justify-between mt-1" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
               <span>Mancano</span>
-              <span className="tabular-nums" style={{ color: 'var(--crm-ink)', fontWeight: 700 }}>{eur(Math.max(0, goal - revenueYTD))}</span>
+              <span className="tabular-nums" style={{ color: 'var(--crm-ink)', fontWeight: 700 }}>{eur(Math.max(0, goal - fatturatoYTD))}</span>
             </div>
           </div>
         </Panel>
@@ -738,7 +730,7 @@ const AdminOverview = () => {
           </BigKPI>
         )}
         {showFin && (
-          <BigKPI label="Fatturato YTD" value={revenueYTD} format="eur" variant="light"
+          <BigKPI label="Fatturato YTD" value={fatturatoYTD} format="eur" variant="light"
             sub={`${goalPct.toFixed(0)}% obiettivo`} icon={TrendingUp}>
             <div className="mt-2 h-1.5 rounded-full bg-[var(--crm-bg-soft)] overflow-hidden">
               <div className="h-full" style={{ width: `${Math.min(100, goalPct)}%`, background: '#4F46E5', transition: 'width 1s ease-out' }} />

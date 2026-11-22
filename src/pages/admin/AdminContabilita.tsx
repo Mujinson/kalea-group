@@ -11,6 +11,7 @@ import { format, differenceInDays, startOfMonth, endOfMonth, subMonths } from 'd
 import { it } from 'date-fns/locale';
 import { TrendingUp, TrendingDown, DollarSign, AlertTriangle, Receipt, Wallet } from 'lucide-react';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
+import { computeRevenueSummary } from '@/lib/revenueSources';
 
 const eur = (n: number) => `€${Math.round(n || 0).toLocaleString('it-IT')}`;
 
@@ -38,14 +39,14 @@ export default function AdminContabilita() {
   const [rate, setRate] = useState<Rata[]>([]);
   const [cashRows, setCashRows] = useState<CashRow[]>([]);
   const [commissions, setCommissions] = useState<CommissionRow[]>([]);
+  const [revSummary, setRevSummary] = useState({ daIncassare: 0, scaduto: 0 });
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [invRes, schedRes, payRes, supRes, fcRes, vcRes, comRes] = await Promise.all([
-        supabase.from('customer_invoices').select('id, invoice_number, customer_id, total, paid_amount, status, due_date').neq('status', 'annullata'),
-        supabase.from('payment_schedules').select('id, invoice_id, sale_id, amount, due_date, is_paid, paid_date, payment_type').order('due_date', { ascending: true, nullsFirst: false }),
-        supabase.from('customer_payments').select('id, payment_date, amount'),
+      const [invRes, schedRes, supRes, fcRes, vcRes, comRes] = await Promise.all([
+        supabase.from('customer_invoices').select('id, invoice_number, customer_id, total, paid_amount, status, invoice_date, due_date, created_at').neq('status', 'annullata'),
+        supabase.from('payment_schedules').select('id, invoice_id, sale_id, amount, due_date, is_paid, paid_date, is_invoiced, invoiced_amount, payment_type').order('due_date', { ascending: true, nullsFirst: false }),
         supabase.from('supplier_payments').select('id, payment_date, payment_amount'),
         supabase.from('fixed_costs').select('id, amount, frequency, created_at'),
         supabase.from('variable_costs').select('id, amount, cost_date, created_at'),
@@ -96,6 +97,8 @@ export default function AdminContabilita() {
 
 
       // Cash flow ultimi 6 mesi
+      const invoicesData = (invRes.data || []) as any[];
+      const schedulesData = (schedRes.data || []) as any[];
       const months: CashRow[] = [];
       for (let i = 5; i >= 0; i--) {
         const ref = subMonths(new Date(), i);
@@ -106,7 +109,7 @@ export default function AdminContabilita() {
           const dt = new Date(d);
           return dt >= start && dt <= end;
         };
-        const entrate = (payRes.data || []).filter((p: any) => inRange(p.payment_date)).reduce((s, p: any) => s + Number(p.amount || 0), 0);
+        const entrate = computeRevenueSummary(schedulesData, invoicesData, inRange).incassato;
         const uSup = (supRes.data || []).filter((p: any) => inRange(p.payment_date)).reduce((s, p: any) => s + Number(p.payment_amount || 0), 0);
         const uFc = (fcRes.data || []).filter((f: any) => f.frequency === 'mensile' || inRange(f.created_at)).reduce((s, f: any) => s + (f.frequency === 'mensile' ? Number(f.amount || 0) : (inRange(f.created_at) ? Number(f.amount || 0) : 0)), 0);
         const uVc = (vcRes.data || []).filter((v: any) => inRange(v.cost_date || v.created_at)).reduce((s, v: any) => s + Number(v.amount || 0), 0);
@@ -114,6 +117,8 @@ export default function AdminContabilita() {
         months.push({ month: format(ref, 'MMM yy', { locale: it }), entrate, uscite, netto: entrate - uscite });
       }
       setCashRows(months);
+      const revAll = computeRevenueSummary(schedulesData, invoicesData, () => true);
+      setRevSummary({ daIncassare: revAll.daIncassare, scaduto: revAll.scaduto });
 
       const comRows: CommissionRow[] = (comRes.data || []).map((c: any) => ({
         id: c.id,
@@ -162,8 +167,8 @@ export default function AdminContabilita() {
 
   const today = new Date();
   const insoluti = useMemo(() => rate.filter(r => !r.is_paid && r.due_date && new Date(r.due_date) < today), [rate]);
-  const totRateOpen = rate.filter(r => !r.is_paid).reduce((s, r) => s + r.amount, 0);
-  const totInsoluti = insoluti.reduce((s, r) => s + r.amount, 0);
+  const totRateOpen = revSummary.daIncassare;
+  const totInsoluti = revSummary.scaduto;
   const totEntrateMese = cashRows[cashRows.length - 1]?.entrate || 0;
   const totUsciteMese = cashRows[cashRows.length - 1]?.uscite || 0;
   const totComOpen = commissions.filter(c => c.status !== 'pagata' && c.status !== 'paid').reduce((s, c) => s + c.amount, 0);

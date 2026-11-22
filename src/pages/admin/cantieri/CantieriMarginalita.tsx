@@ -6,6 +6,7 @@ import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShel
 import { DataTable } from '@/components/admin/DataTable';
 import { Card, CardContent } from '@/components/ui/card';
 import { fmtEur } from '@/lib/finance';
+import { computeRevenueSummary } from '@/lib/revenueSources';
 import { marginColor } from '@/components/admin/cantieri/SiteEconomics';
 import { Percent, TrendingDown, TrendingUp } from 'lucide-react';
 
@@ -17,7 +18,7 @@ const CantieriMarginalita = () => {
     queryFn: async () => {
       const [sites, cInv, sInv, exp, fixed] = await Promise.all([
         supabase.from('construction_sites').select('id, title, city, status, budget_amount'),
-        supabase.from('customer_invoices').select('site_id, subtotal, total'),
+        supabase.from('customer_invoices').select('id, site_id, subtotal, total, status, invoice_date, created_at'),
         supabase.from('supplier_invoices').select('site_id, subtotal, total'),
         supabase.from('site_expenses').select('site_id, amount'),
         supabase.from('fixed_costs').select('amount, frequency'),
@@ -26,7 +27,8 @@ const CantieriMarginalita = () => {
       // Imponibile contro imponibile: l'IVA transita e non va conteggiata.
       const net = (r: any) => Number(r.subtotal ?? r.total ?? 0);
       const rows = (sites.data || []).map((s: any) => {
-        const revenue = (cInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + net(r), 0);
+        const siteInvoices = (cInv.data || []).filter((r: any) => r.site_id === s.id);
+        const revenue = computeRevenueSummary([], siteInvoices, () => true, { basis: 'net' }).fatturato;
         const costs =
           (sInv.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + net(r), 0) +
           (exp.data || []).filter((r: any) => r.site_id === s.id).reduce((a: number, r: any) => a + Number(r.amount || 0), 0);

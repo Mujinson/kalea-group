@@ -10,6 +10,7 @@ import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import { computeRevenueSummary } from '@/lib/revenueSources';
 import { CrmPageHeader } from '@/components/admin/CrmShell';
 
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#06B6D4'];
@@ -60,6 +61,8 @@ const AdminAnalytics = () => {
   const [sales, setSales] = useState<Sale[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [costs, setCosts] = useState<StaticCost[]>([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [schedules, setSchedules] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('all');
 
@@ -68,7 +71,7 @@ const AdminAnalytics = () => {
   }, []);
 
   useRealtimeSubscription({
-    tables: ['sales', 'customers'],
+    tables: ['sales', 'customers', 'customer_invoices', 'payment_schedules'],
     onDataChange: handleDataChange,
   });
 
@@ -78,10 +81,12 @@ const AdminAnalytics = () => {
 
   const fetchData = async () => {
     try {
-      const [salesRes, customersRes, costsRes] = await Promise.all([
+      const [salesRes, customersRes, costsRes, invRes, psRes] = await Promise.all([
         supabase.from('sales').select('*').order('sale_date', { ascending: false }),
         fetchAllRows(supabase.from('customers').select('id, customer_type, company_name, first_name, last_name')),
         supabase.from('static_costs').select('*'),
+        supabase.from('customer_invoices').select('id, total, subtotal, paid_amount, invoice_date, due_date, status, created_at'),
+        supabase.from('payment_schedules').select('id, invoice_id, amount, is_paid, paid_date, due_date, is_invoiced, invoiced_amount'),
       ]);
 
       if (salesRes.error) throw salesRes.error;
@@ -89,6 +94,8 @@ const AdminAnalytics = () => {
       setSales(salesRes.data || []);
       setCustomers(customersRes || []);
       setCosts(costsRes.data || []);
+      setInvoices(invRes.data || []);
+      setSchedules(psRes.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -126,6 +133,18 @@ const AdminAnalytics = () => {
 
   const filteredSales = getFilteredSales();
 
+  const inSelectedPeriod = (d?: string | null) => {
+    if (period === 'all') return true;
+    if (!d) return false;
+    const now = new Date();
+    const startDate =
+      period === 'month' ? startOfMonth(now)
+      : period === 'quarter' ? startOfMonth(subMonths(now, 2))
+      : period === 'year' ? new Date(now.getFullYear(), 0, 1)
+      : null;
+    return !startDate || new Date(d) >= startDate;
+  };
+
   // Get cost for a product
   const getCostForProduct = (productType: string) => {
     const cost = costs.find(c => c.product_type === productType);
@@ -148,7 +167,7 @@ const AdminAnalytics = () => {
   };
 
   // Summary calculations
-  const totalRevenue = filteredSales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * Number(s.sale_price)), 0);
+  const totalRevenue = computeRevenueSummary(schedules, invoices, inSelectedPeriod).fatturato;
   const totalCost = filteredSales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * getCostForProduct(s.product_type)), 0);
   const totalMargin = totalRevenue - totalCost;
   const avgMarginPercent = totalRevenue > 0 ? (totalMargin / totalRevenue) * 100 : 0;
@@ -203,12 +222,18 @@ const AdminAnalytics = () => {
 
   // Monthly trend
   const monthlyTrend = Array.from({ length: 12 }, (_, i) => {
-    const monthDate = new Date(new Date().getFullYear(), i, 1);
+    const yearNow = new Date().getFullYear();
+    const monthDate = new Date(yearNow, i, 1);
+    const inMonth = (d?: string | null) => {
+      if (!d) return false;
+      const dt = new Date(d);
+      return dt.getMonth() === i && dt.getFullYear() === yearNow;
+    };
     const monthSales = sales.filter(s => {
       const saleDate = new Date(s.sale_date);
-      return saleDate.getMonth() === i && saleDate.getFullYear() === new Date().getFullYear();
+      return saleDate.getMonth() === i && saleDate.getFullYear() === yearNow;
     });
-    const revenue = monthSales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * Number(s.sale_price)), 0);
+    const revenue = computeRevenueSummary(schedules, invoices, inMonth).fatturato;
     const cost = monthSales.reduce((sum, s) => sum + (Number(s.quantity_sqm) * getCostForProduct(s.product_type)), 0);
     const margin = revenue - cost;
     return {
