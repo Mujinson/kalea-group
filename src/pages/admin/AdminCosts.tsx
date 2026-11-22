@@ -31,6 +31,7 @@ import { StatusSelectPill, PAID_OPTIONS } from '@/components/admin/crm-ui';
 import CostiOperativiTab from '@/components/admin/costi/CostiOperativiTab';
 import ScadenzarioTable from '@/components/admin/ScadenzarioTable';
 import { fmtEur, fmtDateIt, yearlyFactor } from '@/lib/finance';
+import { fixedMonthlyTotal } from '@/lib/fixedCosts';
 
 // Types
 interface FixedCost {
@@ -419,7 +420,7 @@ const AdminCosts = () => {
   // Totals
   const totalFixedCosts = fixedCosts.reduce((sum, c) => sum + c.amount, 0);
   const totalVariableCosts = variableCosts.reduce((sum, c) => sum + c.amount, 0);
-  const fixedYearly = fixedCosts.reduce((sum, c) => sum + Number(c.amount) * yearlyFactor(c.frequency), 0);
+  const fixedYearly = fixedMonthlyTotal(fixedCosts as any[]) * 12;
   const nowMonth = new Date().getMonth();
   const nowYear = new Date().getFullYear();
   const toAccrueThisMonth = fixedCosts.reduce((sum, c: any) => {

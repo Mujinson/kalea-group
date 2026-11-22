@@ -9,6 +9,7 @@ import { fmtEur } from '@/lib/finance';
 import { computeMargin, jobRevenue } from '@/lib/margin';
 import { marginColor } from '@/components/admin/cantieri/SiteEconomics';
 import { Percent, TrendingDown, TrendingUp } from 'lucide-react';
+import { fixedMonthlyTotal } from '@/lib/fixedCosts';
 
 const CantieriMarginalita = () => {
   const navigate = useNavigate();
@@ -35,10 +36,7 @@ const CantieriMarginalita = () => {
         const { margin, marginPct } = computeMargin(revenue, costs);
         return { ...s, revenue, costs, margin, marginPct };
       });
-      const generalMonthly = (fixed.data || []).reduce((a: number, c: any) => {
-        const f = c.frequency === 'mensile' ? 1 : c.frequency === 'trimestrale' ? 1 / 3 : c.frequency === 'annuale' ? 1 / 12 : 0;
-        return a + Number(c.amount || 0) * f;
-      }, 0);
+      const generalMonthly = fixedMonthlyTotal((fixed.data || []) as any[]);
       return { rows, generalMonthly };
     },
   });

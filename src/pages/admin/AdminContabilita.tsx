@@ -12,6 +12,7 @@ import { it } from 'date-fns/locale';
 import { TrendingUp, TrendingDown, DollarSign, AlertTriangle, Receipt, Wallet } from 'lucide-react';
 import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { computeRevenueSummary } from '@/lib/revenueSources';
+import { fixedCostsInMonth } from '@/lib/fixedCosts';
 
 const eur = (n: number) => `€${Math.round(n || 0).toLocaleString('it-IT')}`;
 
@@ -48,7 +49,7 @@ export default function AdminContabilita() {
         supabase.from('customer_invoices').select('id, invoice_number, customer_id, total, paid_amount, status, invoice_date, due_date, created_at').neq('status', 'annullata'),
         supabase.from('payment_schedules').select('id, invoice_id, sale_id, amount, due_date, is_paid, paid_date, is_invoiced, invoiced_amount, payment_type').order('due_date', { ascending: true, nullsFirst: false }),
         supabase.from('supplier_payments').select('id, payment_date, payment_amount'),
-        supabase.from('fixed_costs').select('id, amount, frequency, created_at'),
+        supabase.from('fixed_costs').select('id, amount, frequency, cost_date, created_at'),
         supabase.from('variable_costs').select('id, amount, cost_date, created_at'),
         supabase.from('commissions').select('id, user_id, customer_id, customer_name, base_amount, percentage, amount, status, paid_at').order('created_at', { ascending: false }),
       ]);
@@ -111,7 +112,7 @@ export default function AdminContabilita() {
         };
         const entrate = computeRevenueSummary(schedulesData, invoicesData, inRange).incassato;
         const uSup = (supRes.data || []).filter((p: any) => inRange(p.payment_date)).reduce((s, p: any) => s + Number(p.payment_amount || 0), 0);
-        const uFc = (fcRes.data || []).filter((f: any) => f.frequency === 'mensile' || inRange(f.created_at)).reduce((s, f: any) => s + (f.frequency === 'mensile' ? Number(f.amount || 0) : (inRange(f.created_at) ? Number(f.amount || 0) : 0)), 0);
+        const uFc = fixedCostsInMonth((fcRes.data || []) as any[], ref.getFullYear(), ref.getMonth());
         const uVc = (vcRes.data || []).filter((v: any) => inRange(v.cost_date || v.created_at)).reduce((s, v: any) => s + Number(v.amount || 0), 0);
         const uscite = uSup + uFc + uVc;
         months.push({ month: format(ref, 'MMM yy', { locale: it }), entrate, uscite, netto: entrate - uscite });

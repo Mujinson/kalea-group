@@ -7,6 +7,7 @@ import { CrmKpiTile, CrmKpiRow } from '@/components/admin/CrmShell';
 import ScadenzarioTable from '@/components/admin/ScadenzarioTable';
 import { fmtEur, categoryLabel } from '@/lib/finance';
 import { computeRevenueSummary } from '@/lib/revenueSources';
+import { fixedCostsInMonth, fixedCostsInPeriod } from '@/lib/fixedCosts';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, CartesianGrid } from 'recharts';
 import { Euro, TrendingDown, TrendingUp, Percent } from 'lucide-react';
 
@@ -27,7 +28,7 @@ export function FinanceOverviewBlock() {
         supabase.from('supplier_invoices').select('invoice_date, due_date, subtotal, vat_amount, total, paid_amount, status, category, is_reverse_charge'),
         supabase.from('customer_invoices').select('id, invoice_date, due_date, subtotal, vat_amount, total, paid_amount, status'),
         supabase.from('payment_schedules').select('id, invoice_id, amount, is_paid, paid_date, due_date, is_invoiced, invoiced_amount'),
-        supabase.from('fixed_costs').select('cost_date, amount, category'),
+        supabase.from('fixed_costs').select('cost_date, amount, category, frequency'),
         supabase.from('variable_costs').select('cost_date, amount, category'),
         supabase.from('site_expenses').select('expense_date, amount, expense_type'),
       ]);
@@ -52,7 +53,7 @@ export function FinanceOverviewBlock() {
 
     const costsInMonth = (y: number, m: number) =>
       d.supInv.filter((r: any) => inMonth(r.invoice_date, y, m)).reduce((s, r: any) => s + Number(r.total || 0), 0) +
-      d.fixed.filter((r: any) => inMonth(r.cost_date, y, m)).reduce((s, r: any) => s + Number(r.amount || 0), 0) +
+      fixedCostsInMonth(d.fixed as any[], y, m) +
       d.variable.filter((r: any) => inMonth(r.cost_date, y, m)).reduce((s, r: any) => s + Number(r.amount || 0), 0) +
       d.siteExp.filter((r: any) => inMonth(r.expense_date, y, m)).reduce((s, r: any) => s + Number(r.amount || 0), 0);
 
@@ -92,7 +93,7 @@ export function FinanceOverviewBlock() {
     const byCategory = new Map<string, number>();
     const add = (k: string, v: number) => byCategory.set(k, (byCategory.get(k) || 0) + v);
     d.supInv.forEach((r: any) => add(r.category || 'altri', Number(r.total || 0)));
-    d.fixed.forEach((r: any) => add(r.category || 'altri_costi_fissi', Number(r.amount || 0)));
+    d.fixed.forEach((r: any) => add(r.category || 'altri_costi_fissi', fixedCostsInPeriod([r], `${year}-01-01`, `${year}-12-31`)));
     d.variable.forEach((r: any) => add(r.category || 'altri', Number(r.amount || 0)));
     d.siteExp.forEach((r: any) => add(r.expense_type || 'altri', Number(r.amount || 0)));
     const pie = Array.from(byCategory.entries())

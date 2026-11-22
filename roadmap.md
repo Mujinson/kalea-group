@@ -36,3 +36,4 @@
 
 - [x] Dashboard: Ultimi preventivi reali + cantieri con cliente/luogo/rif
 - [x] Passo 4: funzione margine unica (AdminMargini, CantieriMarginalita, SiteEconomics, Budget vs Consuntivo, Analytics)
+- [x] Passo 5: costi fissi con regola unica (src/lib/fixedCosts.ts)
