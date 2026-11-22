@@ -1,4 +1,6 @@
 # Roadmap CRM
+- [x] Restyling grafico preventivi: copertina, dettagli e condizioni, senza cambiare dati; mantenere il logo originale
+- [x] Verifica PDF 35/36: contenuti identici, testo selezionabile, nessuna riga tagliata
 - [x] Vendita segnata pagata in automatico quando tutte le rate sono incassate
 - [x] Woodco doppio unificato
 - [x] Cantieri Villongo e Milano collegati al cliente

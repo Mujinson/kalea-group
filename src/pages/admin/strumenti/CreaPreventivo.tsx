@@ -19,7 +19,8 @@ import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUn
 import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
 import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
 import { clearZeroOnFocus } from '@/lib/numericInput';
-import { collectQuotePdfTextLines, paginateQuotePdf } from '@/lib/quotePdfPagination';
+import { buildPremiumQuotePdf } from '@/lib/premiumQuotePdf';
+import quoteCover from '@/assets/quote/cover.webp.asset.json';
 
 
 
@@ -2010,52 +2011,7 @@ export default function CreaPreventivo() {
     wrap?.classList.add("capturing");
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
-      const [{ default: html2canvas }, jsPDFmod] = await Promise.all([
-        import("html2canvas"),
-        import("jspdf"),
-      ]);
-      const jsPDF = (jsPDFmod as any).jsPDF || (jsPDFmod as any).default;
-      const canvas = await html2canvas(preview, {
-        scale: 2,
-        backgroundColor: "#ffffff",
-        useCORS: true,
-        windowWidth: 1200,
-        width: preview.scrollWidth,
-        height: preview.scrollHeight,
-      });
-      const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-      const domW = preview.scrollWidth;
-      const ratio = canvas.width / domW;
-      const mmPerPx = pageW / domW;
-      const topMarginMm = 10, bottomMarginMm = 8;
-      const baseRect = preview.getBoundingClientRect();
-      const elementBlocks = Array.from(preview.querySelectorAll<HTMLElement>("tr, p, h1, h2, h3, h4, li, img, [data-pdf-block]"))
-        .map((el) => { const r = el.getBoundingClientRect(); return { top: r.top - baseRect.top, bottom: r.bottom - baseRect.top }; })
-        .filter((b) => b.bottom - b.top > 0);
-      // Ogni riga di testo è protetta singolarmente: anche un lungo blocco di
-      // condizioni può quindi continuare sulla pagina successiva senza tagli.
-      const textLines = collectQuotePdfTextLines(preview, baseRect);
-      const totalH = preview.scrollHeight;
-      const slices = paginateQuotePdf({
-        totalHeight: totalH,
-        firstPageHeight: (pageH - bottomMarginMm) / mmPerPx,
-        followingPageHeight: (pageH - topMarginMm - bottomMarginMm) / mmPerPx,
-        blocks: [...elementBlocks, ...textLines],
-      });
-      slices.forEach(([a, b], i) => {
-        const sy = Math.max(0, Math.floor(a * ratio));
-        const endY = Math.min(canvas.height, Math.ceil(b * ratio));
-        const sh = Math.max(1, endY - sy);
-        const pc = document.createElement("canvas");
-        pc.width = canvas.width; pc.height = sh;
-        const ctx = pc.getContext("2d")!;
-        ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, pc.width, pc.height);
-        ctx.drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh);
-        if (i > 0) pdf.addPage();
-        pdf.addImage(pc.toDataURL("image/jpeg", 0.92), "JPEG", 0, i > 0 ? topMarginMm : 0, pageW, (sh / ratio) * mmPerPx);
-      });
+      const pdf = await buildPremiumQuotePdf(preview);
       const fname = `Preventivo_${(numPrev || "Kalea").replace(/[^\w-]+/g, "_")}.pdf`;
       await downloadQuotePdf(pdf.output('arraybuffer'), technicalAttachments, fname);
       toast.success("PDF scaricato", { id: tId });
@@ -3064,54 +3020,70 @@ export default function CreaPreventivo() {
           <QuoteAccountingPanel baseRows={accBaseRows} catalogLines={[...articoli, ...accessori, ...servizi, ...serviziB]} globalDiscountPct={sconto} deposit={accDeposit} value={contabilita} onChange={setContabilita} onTotals={setAccTotals} title={numPrev || cantiere} defaultDestination={[sito?.indirizzo, sito?.cap, sito?.citta, sito?.provincia].filter(Boolean).join(', ')} />
           <QuoteAttachments quoteId={preventivoId} attachments={technicalAttachments} onChange={persistAttachments} />
           <div id="pdf-preview-wrap" className="pdf-preview-wrap">
-          <div id="pdf-preview" style={{background:"#fff",border:"1px solid #E6E9F0",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
+          <div id="pdf-preview" data-quote-number={numPrev} style={{background:"hsl(var(--quote-white))",border:"1px solid hsl(var(--quote-taupe))",borderRadius:12,padding:"40px 48px",width:800,maxWidth:800,margin:"0 auto",boxShadow:"0 4px 20px rgba(0,0,0,.08)"}}>
 
+
+            <div data-quote-cover className="quote-cover">
+              <img data-cover-photo className="quote-cover-photo" src={quoteCover.url} alt="Ambiente architettonico contemporaneo" />
+              <div className="quote-cover-brand"><img src={KALEA_LOGO} alt="Kalēa®" /><div>PAVIMENTAZIONI · RIVESTIMENTI<br/>DECKING · CLADDING<br/><strong>FORNITURA E POSA</strong></div></div>
+              <div className="quote-cover-panel">
+                <h1 data-cover-text="title">{t.titolo}</h1>
+                <div data-cover-text="number">N° {numPrev}</div>
+                <div data-cover-text="dates">{t.data_label}: {dataPrev}<br/>{t.validita}: {addDays(dataPrev,30)}</div>
+                <div data-cover-text="client"><strong>{t.cliente}</strong><br/>{cliente.nome}<br/>{cliente.indirizzo}<br/>{[(cliente as any).cap, cliente.citta, (cliente as any).provincia].filter(Boolean).join(" ")}</div>
+                {(cantiere || sito.nome) && <div data-cover-text="project"><strong>{t.oggetto}</strong><br/>{cantiere || sito.nome}</div>}
+              </div>
+              <div className="quote-cover-boxes">
+                {pagamenti.some((p:any)=>Number(p.pct)>0) && <div data-cover-box><strong>{L.cond_pagamento}</strong>{pagamenti.filter((p:any)=>Number(p.pct)>0).map((p:any,i:number)=><div key={i}>{trRata(lingua,p.label)}: {p.pct}%</div>)}</div>}
+                <div data-cover-box><strong>{t.validita}</strong><div>{addDays(dataPrev,30)}</div></div>
+              </div>
+            </div>
 
             {/* Testata */}
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid #1A1A2E"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid hsl(var(--quote-ink))"}}>
               <div style={{textAlign:"center"}}>
-                {KALEA_LOGO ? <img src={KALEA_LOGO} alt="Kalēa" style={{height:88,display:"block",margin:"0 auto 8px"}}/> : <div style={{fontSize:40,fontWeight:600,color:"#1A1A2E"}}>Kalēa<sup>®</sup></div>}
-                <div style={{fontSize:13,color:"#9A8060",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
-                <div style={{fontSize:12,color:"#475569"}}>{t.payoff2}</div>
-                <div style={{fontSize:11,color:"#475569"}}>Kalea Group Srl</div>
-                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Desenzano del Garda (BS)</div>
-                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>P.IVA: 04797310986</div>
-                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>Codice univoco: T9K4ZHO</div>
-                <div style={{fontSize:11,color:"#64748B",marginTop:2}}>info@kalea.space · www.kalea.space</div>
+                {KALEA_LOGO ? <img data-quote-logo src={KALEA_LOGO} alt="Kalēa" style={{height:88,display:"block",margin:"0 auto 8px"}}/> : <div style={{fontSize:40,fontWeight:600,color:"hsl(var(--quote-ink))"}}>Kalēa<sup>®</sup></div>}
+                <div style={{fontSize:13,color:"hsl(var(--quote-bronze))",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
+                <div style={{fontSize:12,color:"hsl(var(--quote-muted))"}}>{t.payoff2}</div>
+                <div style={{fontSize:11,color:"hsl(var(--quote-muted))"}}>Kalea Group Srl</div>
+                <div style={{fontSize:11,color:"hsl(var(--quote-muted))",marginTop:2}}>Desenzano del Garda (BS)</div>
+                <div style={{fontSize:11,color:"hsl(var(--quote-muted))",marginTop:2}}>P.IVA: 04797310986</div>
+                <div style={{fontSize:11,color:"hsl(var(--quote-muted))",marginTop:2}}>Codice univoco: T9K4ZHO</div>
+                <div style={{fontSize:11,color:"hsl(var(--quote-muted))",marginTop:2}}>info@kalea.space · www.kalea.space</div>
               </div>
               <div style={{textAlign:"right"}}>
-                <div style={{fontSize:22,fontWeight:600,color:"#1A1A2E",letterSpacing:".05em"}}>{t.titolo}</div>
-                <div style={{fontSize:13,color:"#475569",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
-                <div style={{fontSize:13,color:"#475569"}}>{t.data_label}: <strong>{dataPrev}</strong></div>
-                <div style={{fontSize:13,color:"#A32D2D"}}>{t.validita}: <strong>{addDays(dataPrev,30)}</strong></div>
-                {dataInizioLavori && <div style={{fontSize:13,color:"#475569",marginTop:4}}>{t.inizio_lavori}: <strong>{fmtDataIso(dataInizioLavori)}</strong></div>}
-                {dataFineLavori && <div style={{fontSize:13,color:"#475569"}}>{t.fine_lavori}: <strong>{fmtDataIso(dataFineLavori)}</strong></div>}
+                <div style={{fontSize:22,fontWeight:600,color:"hsl(var(--quote-ink))",letterSpacing:".05em"}}>{t.titolo}</div>
+                <div style={{fontSize:13,color:"hsl(var(--quote-muted))",marginTop:4}}>N° <strong>{numPrev||"KAL-2026-001"}</strong></div>
+                <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{t.data_label}: <strong>{dataPrev}</strong></div>
+                <div style={{fontSize:13,color:"hsl(var(--quote-ink))"}}>{t.validita}: <strong>{addDays(dataPrev,30)}</strong></div>
+                {dataInizioLavori && <div style={{fontSize:13,color:"hsl(var(--quote-muted))",marginTop:4}}>{t.inizio_lavori}: <strong>{fmtDataIso(dataInizioLavori)}</strong></div>}
+                {dataFineLavori && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{t.fine_lavori}: <strong>{fmtDataIso(dataFineLavori)}</strong></div>}
               </div>
             </div>
 
             {/* Cliente */}
             <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
               <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{lingua==="IT"?"Dati di fatturazione":t.cliente}</div>
+                <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{lingua==="IT"?"Dati di fatturazione":t.cliente}</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>
-                <div style={{fontSize:13,color:"#475569"}}>{cliente.indirizzo}</div>
-                <div style={{fontSize:13,color:"#475569"}}>{[(cliente as any).cap, cliente.citta].filter(Boolean).join(" ")}{(cliente as any).provincia ? ` (${(cliente as any).provincia})` : ""}</div>
-                {cliente.partitaIva && <div style={{fontSize:13,color:"#475569"}}>P.IVA/CF: {cliente.partitaIva}</div>}
-                {(cliente as any).sdi && <div style={{fontSize:13,color:"#475569"}}>SDI: {(cliente as any).sdi}</div>}
-                {(cliente as any).pec && <div style={{fontSize:13,color:"#475569"}}>PEC: {(cliente as any).pec}</div>}
-                {(cliente as any).iban && <div style={{fontSize:13,color:"#475569"}}>IBAN: {(cliente as any).iban}{(cliente as any).banca ? ` — ${(cliente as any).banca}` : ""}</div>}
-                <div style={{fontSize:13,color:"#475569"}}>{cliente.telefono}</div>
-                <div style={{fontSize:13,color:"#475569"}}>{cliente.email}</div>
+                <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{cliente.indirizzo}</div>
+                <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{[(cliente as any).cap, cliente.citta].filter(Boolean).join(" ")}{(cliente as any).provincia ? ` (${(cliente as any).provincia})` : ""}</div>
+                {cliente.partitaIva && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>P.IVA/CF: {cliente.partitaIva}</div>}
+                {(cliente as any).sdi && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>SDI: {(cliente as any).sdi}</div>}
+                {(cliente as any).pec && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>PEC: {(cliente as any).pec}</div>}
+                {(cliente as any).iban && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>IBAN: {(cliente as any).iban}{(cliente as any).banca ? ` — ${(cliente as any).banca}` : ""}</div>}
+                <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{cliente.telefono}</div>
+                <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{cliente.email}</div>
               </div>
               {(cantiere || sito.indirizzo || sito.nome) && <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{lingua==="IT"?"Dati cantiere":t.oggetto}</div>
+                <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{lingua==="IT"?"Dati cantiere":t.oggetto}</div>
                 {sito.nome && <div style={{fontSize:14,fontWeight:500}}>{sito.nome}</div>}
-                {cantiere && <div style={{fontSize:13,color:"#475569"}}>{cantiere}</div>}
-                {sito.indirizzo && <div style={{fontSize:13,color:"#475569"}}>{sito.indirizzo}</div>}
-                {(sito.cap||sito.citta) && <div style={{fontSize:13,color:"#475569"}}>{[sito.cap, sito.citta].filter(Boolean).join(" ")}{sito.provincia ? ` (${sito.provincia})` : ""}</div>}
-                {(sito.piano||sito.accesso) && <div style={{fontSize:13,color:"#475569"}}>{[sito.piano && `Piano: ${sito.piano}`, sito.accesso].filter(Boolean).join(" · ")}</div>}
-                {(sito.referente||sito.telefono) && <div style={{fontSize:13,color:"#475569"}}>Ref.: {[sito.referente, sito.telefono].filter(Boolean).join(" — ")}</div>}
-                {sito.note && <div style={{fontSize:12,color:"#64748B",marginTop:4}}>{sito.note}</div>}
+                {cantiere && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{cantiere}</div>}
+                {sito.indirizzo && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{sito.indirizzo}</div>}
+                {(sito.cap||sito.citta) && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{[sito.cap, sito.citta].filter(Boolean).join(" ")}{sito.provincia ? ` (${sito.provincia})` : ""}</div>}
+                {(sito.piano||sito.accesso) && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>{[sito.piano && `Piano: ${sito.piano}`, sito.accesso].filter(Boolean).join(" · ")}</div>}
+                {(sito.referente||sito.telefono) && <div style={{fontSize:13,color:"hsl(var(--quote-muted))"}}>Ref.: {[sito.referente, sito.telefono].filter(Boolean).join(" — ")}</div>}
+                {sito.note && <div style={{fontSize:12,color:"hsl(var(--quote-muted))",marginTop:4}}>{sito.note}</div>}
               </div>}
             </div>
 
@@ -3120,14 +3092,14 @@ export default function CreaPreventivo() {
               <thead>
                 <tr>
                   {[t.desc,t.mq,t.prezzo_unit,t.totale].map((h:string)=>(
-                    <th key={h} style={{background:"#1A1A2E",padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"#fff",textTransform:"uppercase",letterSpacing:".05em",width:h===t.desc?"50%":h===t.mq?"16%":h===t.prezzo_unit?"17%":"17%",whiteSpace:"nowrap"}}>{h}</th>
+                    <th key={h} style={{background:"hsl(var(--quote-ink))",padding:"9px 12px",textAlign:h===t.desc?"left":"right",fontSize:11,fontWeight:500,color:"hsl(var(--quote-white))",textTransform:"uppercase",letterSpacing:".05em",width:h===t.desc?"50%":h===t.mq?"16%":h===t.prezzo_unit?"17%":"17%",whiteSpace:"nowrap"}}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {(prodotto || righeMat.filter((r:any)=>r.desc).length>0) && (
-                  <tr style={{background:"#F8FAFC"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
+                  <tr style={{background:"hsl(var(--quote-taupe))"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em"}}>{t.fornitura}</td>
                   </tr>
                 )}
                 {prodotto && (
@@ -3135,7 +3107,7 @@ export default function CreaPreventivo() {
                     <td style={{padding:"8px 12px",fontSize:13}}>
                       {prodotto?.nome} — {prodotto?.dims}
                       {tonalita.filter(x=>x.nome).length>0 && (
-                        <div style={{fontSize:11,color:"#475569",marginTop:3}}>
+                        <div style={{fontSize:11,color:"hsl(var(--quote-muted))",marginTop:3}}>
                           {L.tonalita}: {tonalita.filter(x=>x.nome).map(x => `${x.nome}${x.mq>0?` (${x.mq} mq)`:""}`).join(" · ")}
                         </div>
                       )}
@@ -3150,7 +3122,7 @@ export default function CreaPreventivo() {
                     <td style={{padding:"8px 12px",fontSize:13}}>
                       <div>{r.desc}</div>
                       {String(r.dettagli||"").split("\n").map((s:string)=>s.trim()).filter(Boolean).length>0 && (
-                        <ul style={{margin:"4px 0 0",paddingLeft:16,fontSize:11.5,color:"#475569",lineHeight:1.5}}>
+                        <ul style={{margin:"4px 0 0",paddingLeft:16,fontSize:11.5,color:"hsl(var(--quote-muted))",lineHeight:1.5}}>
                           {String(r.dettagli).split("\n").map((s:string)=>s.trim()).filter(Boolean).map((s:string,i:number)=><li key={i}>{s}</li>)}
                         </ul>
                       )}
@@ -3161,8 +3133,8 @@ export default function CreaPreventivo() {
                   </tr>
                 ))}
                 {incPosa && calc.prezzoPosaTot>0 && <>
-                  <tr style={{background:"#F8FAFC"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{t.posa}</td>
+                  <tr style={{background:"hsl(var(--quote-taupe))"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em"}}>{t.posa}</td>
                   </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>{t.posa} — {trComplessita(lingua, complessita)}</td>
@@ -3172,8 +3144,8 @@ export default function CreaPreventivo() {
                   </tr>
                 </>}
                 {calc.tappNeeded && <>
-                  <tr style={{background:"#F8FAFC"}}>
-                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{t.tappetino}</td>
+                  <tr style={{background:"hsl(var(--quote-taupe))"}}>
+                    <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em"}}>{t.tappetino}</td>
                   </tr>
                   <tr>
                     <td style={{padding:"8px 12px",fontSize:13}}>{t.tappetino}</td>
@@ -3201,8 +3173,8 @@ export default function CreaPreventivo() {
                 {([[L.articoli,articoli],[L.accessori,accessori],[L.servizi,servizi],[L.servizi,serviziB]] as const).map(([label,lines],i) =>
                   lines.length > 0 ? (
                     <React.Fragment key={`${label}-${i}`}>
-                      <tr style={{background:"#F8FAFC"}}>
-                        <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em"}}>{label}</td>
+                      <tr style={{background:"hsl(var(--quote-taupe))"}}>
+                        <td colSpan={4} style={{padding:"7px 12px",fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em"}}>{label}</td>
                       </tr>
                       {lines.map((l)=>{
                         const lordo = (Number(l.quantity)||0) * (Number(l.unit_price)||0);
@@ -3211,9 +3183,9 @@ export default function CreaPreventivo() {
                           <tr key={l.id}>
                             <td style={{padding:"8px 12px",fontSize:13}}>
                               {l.name}
-                              {l.description && <div style={{fontSize:11,color:"#475569",marginTop:3}}>{l.description}</div>}
+                              {l.description && <div style={{fontSize:11,color:"hsl(var(--quote-muted))",marginTop:3}}>{l.description}</div>}
                               {String(l.details||"").split("\n").map((s:string)=>s.trim()).filter(Boolean).length>0 && (
-                                <ul style={{margin:"4px 0 0",paddingLeft:16,fontSize:11.5,color:"#475569",lineHeight:1.5}}>
+                                <ul style={{margin:"4px 0 0",paddingLeft:16,fontSize:11.5,color:"hsl(var(--quote-muted))",lineHeight:1.5}}>
                                   {String(l.details).split("\n").map((s:string)=>s.trim()).filter(Boolean).map((s:string,i:number)=><li key={i}>{s}</li>)}
                                 </ul>
                               )}
@@ -3231,56 +3203,56 @@ export default function CreaPreventivo() {
             </table>
 
             {/* Totali */}
-            <div data-pdf-block style={{marginLeft:"auto",width:280}}>
+            <div data-quote-totals data-pdf-block style={{marginLeft:"auto",width:280}}>
               {[
                 {l:t.subtotale,v:euro(calc.prezzoLordoTot)},
-                sconto>0 && {l:`${t.sconto_label||"Sconto"} ${Math.round(sconto*100)/100}%`,v:`− ${euro(calc.scontoAmt)}`,c:"#633806"},
+                sconto>0 && {l:`${t.sconto_label||"Sconto"} ${Math.round(sconto*100)/100}%`,v:`− ${euro(calc.scontoAmt)}`,c:"hsl(var(--quote-bronze))"},
                 sconto>0 && {l:t.imponibile_sc||t.imponibile||"Imponibile",v:euro(calc.prezzoNetto)},
                 {l:ivaLabel,v:euro(calc.iva)},
               ].filter(Boolean).map((r:any,i:number)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid #E6E9F0",fontSize:13,gap:12}}>
-                  <span style={{color:"#475569"}}>{r.l}</span>
-                  <span style={{color:r.c||"#1A1A1A",whiteSpace:"nowrap"}}>{r.v}</span>
+                <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"0.5px solid hsl(var(--quote-taupe))",fontSize:13,gap:12}}>
+                  <span style={{color:"hsl(var(--quote-muted))"}}>{r.l}</span>
+                  <span style={{color:r.c||"hsl(var(--quote-ink))",whiteSpace:"nowrap"}}>{r.v}</span>
                 </div>
               ))}
-              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid #1A1A2E",marginTop:4,gap:12}}>
+              <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",fontWeight:700,fontSize:16,borderTop:"2px solid hsl(var(--quote-ink))",marginTop:4,gap:12}}>
                 <span>{t.totale_doc}</span>
-                <span style={{color:"#1A1A2E",whiteSpace:"nowrap"}}>{euro(calc.totaleIva)}</span>
+                <span style={{color:"hsl(var(--quote-ink))",whiteSpace:"nowrap"}}>{euro(calc.totaleIva)}</span>
               </div>
             </div>
 
             {/* Condizioni di fornitura */}
-            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
-              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? L.cond_fornitura : L.cond_generiche}</div>
+            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
+              <div style={{fontSize:12,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? L.cond_fornitura : L.cond_generiche}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
                 {showCondizioniFornitura && (<>
-                <div><span style={{color:"#475569"}}>{L.metodo_trasporto}: </span><span style={{fontWeight:500}}>{trTrasporto(lingua, metodoTrasporto)||"—"}</span></div>
-                <div><span style={{color:"#475569"}}>{L.tempi_consegna}: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
+                <div><span style={{color:"hsl(var(--quote-muted))"}}>{L.metodo_trasporto}: </span><span style={{fontWeight:500}}>{trTrasporto(lingua, metodoTrasporto)||"—"}</span></div>
+                <div><span style={{color:"hsl(var(--quote-muted))"}}>{L.tempi_consegna}: </span><span style={{fontWeight:500}}>{tempiConsegna||"—"}</span></div>
                 </>)}
-                <div><span style={{color:"#475569"}}>{L.tipo_pagamento}: </span><span style={{fontWeight:500}}>{trPagamento(lingua, tipoPagamento)||"—"}</span></div>
-                <div><span style={{color:"#475569"}}>{L.aliquota_iva}: </span><span style={{fontWeight:500}}>{reverseCharge ? "Reverse charge (0%)" : `${ivaRate}%`}</span></div>
+                <div><span style={{color:"hsl(var(--quote-muted))"}}>{L.tipo_pagamento}: </span><span style={{fontWeight:500}}>{trPagamento(lingua, tipoPagamento)||"—"}</span></div>
+                <div><span style={{color:"hsl(var(--quote-muted))"}}>{L.aliquota_iva}: </span><span style={{fontWeight:500}}>{reverseCharge ? "Reverse charge (0%)" : `${ivaRate}%`}</span></div>
               </div>
-              {reverseCharge && <div style={{marginTop:10,fontSize:12,color:"#475569",fontStyle:"italic"}}>{RC_NOTE}</div>}
+              {reverseCharge && <div style={{marginTop:10,fontSize:12,color:"hsl(var(--quote-muted))",fontStyle:"italic"}}>{RC_NOTE}</div>}
             </div>
 
 
             {/* Pagamenti */}
             {pagamenti.some((p:any)=>(Number(p.pct)||0)>0) && (
-            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0",clear:"both"}}>
-              <div style={{fontSize:12,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{L.cond_pagamento}</div>
+            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
+              <div style={{fontSize:12,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{L.cond_pagamento}</div>
               {pagamenti.filter((p:any)=>(Number(p.pct)||0)>0).map((p:any,i:number)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid #E6E9F0",fontSize:13}}>
-                  <span>{trRata(lingua, p.label)} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"#64748B",fontSize:12}}> ({p.note})</span>}</span>
+                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid hsl(var(--quote-taupe))",fontSize:13}}>
+                  <span>{trRata(lingua, p.label)} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"hsl(var(--quote-muted))",fontSize:12}}> ({p.note})</span>}</span>
                   <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
                 </div>
               ))}
               {/* Coordinate bancarie Kalēa */}
-              <div style={{marginTop:14,padding:"12px 16px",background:"#F1F5F9",borderRadius:8,fontSize:12,color:"#475569",lineHeight:1.7}}>
-                <div style={{fontSize:11,fontWeight:600,color:"#1A1A2E",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>
+              <div style={{marginTop:14,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:12,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
+                <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>
                   {{IT:"Coordinate bancarie per bonifico",EN:"Bank details for bank transfer",DE:"Bankdaten für Überweisung",FR:"Coordonnées bancaires pour virement",RO:"Date bancare pentru transfer"}[lingua as "IT"|"EN"|"DE"|"FR"|"RO"] || "Coordinate bancarie per bonifico"}
                 </div>
-                <div><span style={{fontWeight:600,color:"#1A1A2E"}}>Kalea Group Srl</span></div>
-                <div>IBAN: <span style={{fontWeight:600,color:"#1A1A2E",letterSpacing:".03em"}}>IT02 H086 9254 5600 4500 0456 252</span></div>
+                <div><span style={{fontWeight:600,color:"hsl(var(--quote-ink))"}}>Kalea Group Srl</span></div>
+                <div>IBAN: <span style={{fontWeight:600,color:"hsl(var(--quote-ink))",letterSpacing:".03em"}}>IT02 H086 9254 5600 4500 0456 252</span></div>
                 <div>Banca: BCC Gavardo</div>
               </div>
             </div>
@@ -3289,16 +3261,16 @@ export default function CreaPreventivo() {
 
             {/* Note cliente */}
             {noteCliente && (
-              <div style={{marginTop:20,padding:"12px 16px",background:"#F1F5F9",borderRadius:8,fontSize:13,color:"#475569",lineHeight:1.7}}>
-                <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
+              <div style={{marginTop:20,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:13,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
+                <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
                 {noteCliente}
               </div>
             )}
 
             {/* Termini */}
-            <div style={{marginTop:28,paddingTop:20,borderTop:"1px solid #E6E9F0"}}>
-              <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
-              <div style={{fontSize:11,color:"#475569",lineHeight:1.8}}>
+            <div data-quote-terms style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))"}}>
+              <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:10}}>{t.termini}</div>
+              <div style={{fontSize:11,color:"hsl(var(--quote-muted))",lineHeight:1.8}}>
                 {String(terminiEffettivi || "").split(/\n\s*\n/).filter((block) => block.trim()).map((block, index) => (
                   <div data-pdf-block key={index} style={{whiteSpace:"pre-line",marginBottom:12}}>{block}</div>
                 ))}
@@ -3306,37 +3278,37 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Sezione Privacy firma */}
-            <div data-pdf-block style={{marginTop:20,padding:"12px 16px",border:"1px solid #E6E9F0",borderRadius:8}}>
-              <div style={{fontSize:11,fontWeight:600,color:"#64748B",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>{L.privacy_titolo}</div>
-              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"#475569"}}>
-                <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
+            <div data-quote-framed data-quote-privacy data-pdf-block style={{marginTop:20,padding:"12px 16px",border:"1px solid hsl(var(--quote-taupe))",borderRadius:8}}>
+              <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em",marginBottom:10}}>{L.privacy_titolo}</div>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",marginBottom:8,fontSize:12,color:"hsl(var(--quote-muted))"}}>
+                <div style={{width:16,height:16,border:"1px solid hsl(var(--quote-ink))",borderRadius:2,marginTop:1}}></div>
                 <span>{t.privacy_1}</span>
               </div>
-              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",fontSize:12,color:"#475569"}}>
-                <div style={{width:16,height:16,border:"1px solid #1A1A2E",borderRadius:2,marginTop:1}}></div>
+              <div style={{display:"grid",gridTemplateColumns:"24px 1fr",gap:8,alignItems:"flex-start",fontSize:12,color:"hsl(var(--quote-muted))"}}>
+                <div style={{width:16,height:16,border:"1px solid hsl(var(--quote-ink))",borderRadius:2,marginTop:1}}></div>
                 <span>{t.privacy_2}</span>
               </div>
             </div>
 
             {/* Accettazione */}
-            <div data-pdf-block style={{marginTop:16,padding:"16px 20px",border:"2px solid #1A1A2E",borderRadius:8}}>
-              <div style={{fontSize:11,color:"#475569",marginBottom:6}}>{accettazioneEffettiva}</div>
-              <div style={{fontSize:12,color:"#475569",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
+            <div data-quote-framed data-quote-signatures data-pdf-block style={{marginTop:16,padding:"16px 20px",border:"2px solid hsl(var(--quote-ink))",borderRadius:8}}>
+              <div style={{fontSize:11,color:"hsl(var(--quote-muted))",marginBottom:6}}>{accettazioneEffettiva}</div>
+              <div style={{fontSize:12,color:"hsl(var(--quote-muted))",marginBottom:16,fontStyle:"italic"}}>{t.accetta}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
                 <div>
-                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#64748B"}}>{t.firma_cliente}</div>
+                  <div style={{borderTop:"1px solid hsl(var(--quote-ink))",paddingTop:6,fontSize:11,color:"hsl(var(--quote-muted))"}}>{t.firma_cliente}</div>
                 </div>
                 <div>
-                  <div style={{borderTop:"1px solid #1A1A2E",paddingTop:6,fontSize:11,color:"#64748B"}}>{t.firma_kalēa}</div>
+                  <div style={{borderTop:"1px solid hsl(var(--quote-ink))",paddingTop:6,fontSize:11,color:"hsl(var(--quote-muted))"}}>{t.firma_kalēa}</div>
                 </div>
               </div>
-              <div style={{marginTop:20,fontSize:12,color:"#475569"}}>{t.luogo}: _______________________</div>
+              <div style={{marginTop:20,fontSize:12,color:"hsl(var(--quote-muted))"}}>{t.luogo}: _______________________</div>
             </div>
 
             {/* Footer */}
-            <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid #E6E9F0",textAlign:"center",fontSize:11,color:"#64748B"}}>
+            <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid hsl(var(--quote-taupe))",textAlign:"center",fontSize:11,color:"hsl(var(--quote-muted))"}}>
               <div>Kalēa · Desenzano del Garda (BS) · info@kalea.space · kalea.space · P.IVA: 04797310986</div>
-              <div style={{marginTop:2,color:"#475569"}}>Kalea Group Srl</div>
+              <div style={{marginTop:2,color:"hsl(var(--quote-muted))"}}>Kalea Group Srl</div>
             </div>
           </div>
           </div>
@@ -3350,7 +3322,7 @@ export default function CreaPreventivo() {
         #pdf-preview .preventivo-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
         #pdf-preview .preventivo-table th,
         #pdf-preview .preventivo-table td { vertical-align: middle; }
-        #pdf-preview .preventivo-table th { white-space: nowrap; color: #fff !important; background: #1A1A2E !important; }
+        #pdf-preview .preventivo-table th { white-space: nowrap; color: hsl(var(--quote-white)) !important; background: hsl(var(--quote-ink)) !important; }
         #pdf-preview .preventivo-table td:nth-child(2),
         #pdf-preview .preventivo-table td:nth-child(3),
         #pdf-preview .preventivo-table td:nth-child(4) { white-space: nowrap; }
