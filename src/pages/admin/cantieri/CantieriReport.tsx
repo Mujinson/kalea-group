@@ -4,8 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, Euro, HardHat, Package, Users, TrendingUp } from "lucide-react";
-
-const COSTO_ORARIO = 25;
+import { buildWorkedHours, groupHoursBySite, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
 
 const CantieriReport = () => {
   const { data: sites } = useQuery({
@@ -38,16 +37,37 @@ const CantieriReport = () => {
   const { data: workLogs } = useQuery({
     queryKey: ["cr-worklogs"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("site_work_logs").select("site_id, hours_worked").limit(1000);
+      const { data, error } = await supabase.from("site_work_logs").select("site_id, worker_id, worker_user_id, work_date, hours_worked, hourly_cost").limit(1000);
       if (error) throw error;
       return data;
     },
   });
 
+  const { data: timeEntries } = useQuery({
+    queryKey: ["cr-time-entries"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true });
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
+  const { data: workers } = useQuery({
+    queryKey: ["cr-workers"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("workers").select("id, user_id, hourly_cost");
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
+  const unifiedLogs = buildWorkedHours({ manualLogs: (workLogs || []) as any[], timeEntries: timeEntries || [], workers: workers || [] });
+  const hoursBySite = groupHoursBySite(unifiedLogs);
+
   const totalMatCost = materials?.reduce((s, m) => s + (m.total_cost || 0), 0) || 0;
   const totalExpCost = expenses?.reduce((s, e) => s + (e.amount || 0), 0) || 0;
-  const totalHours = workLogs?.reduce((s, l) => s + (l.hours_worked || 0), 0) || 0;
-  const totalLaborCost = totalHours * COSTO_ORARIO;
+  const totalHours = sumWorkedHours(unifiedLogs);
+  const totalLaborCost = sumLaborCost(unifiedLogs);
   const grandTotal = totalMatCost + totalExpCost + totalLaborCost;
 
   // Material % vs Labor %
@@ -72,8 +92,9 @@ const CantieriReport = () => {
   const siteSummary = sites?.map(site => {
     const matC = materials?.filter(m => m.site_id === site.id).reduce((s, m) => s + (m.total_cost || 0), 0) || 0;
     const expC = expenses?.filter(e => e.site_id === site.id).reduce((s, e) => s + (e.amount || 0), 0) || 0;
-    const hrs = workLogs?.filter(l => l.site_id === site.id).reduce((s, l) => s + (l.hours_worked || 0), 0) || 0;
-    const labC = hrs * COSTO_ORARIO;
+    const siteWork = hoursBySite.get(site.id);
+    const hrs = siteWork?.hours || 0;
+    const labC = siteWork?.laborCost || 0;
     return { ...site, matC, expC, labC, total: matC + expC + labC, hours: hrs };
   })?.filter(s => s.total > 0).sort((a, b) => b.total - a.total) || [];
 

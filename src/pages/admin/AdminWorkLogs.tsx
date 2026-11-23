@@ -9,12 +9,13 @@ import { Clock, Camera, Package, Search, Calendar, HardHat, User, ChevronDown, C
 import { CrmPageHeader, CrmKpiTile, CrmKpiRow } from "@/components/admin/CrmShell";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
+import { buildWorkedHours, sumWorkedHours } from "@/lib/workedHours";
 
 const AdminWorkLogs = () => {
   const [search, setSearch] = useState("");
   const [expandedLog, setExpandedLog] = useState<string | null>(null);
 
-  const { data: logs, isLoading } = useQuery({
+  const { data: dbLogs, isLoading } = useQuery({
     queryKey: ["admin-work-logs"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,6 +28,39 @@ const AdminWorkLogs = () => {
       return data;
     },
   });
+
+  const { data: timeEntries } = useQuery({
+    queryKey: ["admin-work-logs-time-entries"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("worker_time_entries" as any)
+        .select("id, user_id, worker_id, site_id, event_type, event_at, event_date")
+        .order("event_at", { ascending: true });
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
+  const { data: workers } = useQuery({
+    queryKey: ["admin-work-logs-workers"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("workers").select("id, user_id, first_name, last_name, hourly_cost");
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
+  const { data: sites } = useQuery({
+    queryKey: ["admin-work-logs-sites"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("construction_sites").select("id, title, city");
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
+  const siteMap = Object.fromEntries((sites || []).map((s: any) => [s.id, { title: s.title, city: s.city }]));
+  const logs = buildWorkedHours({ manualLogs: (dbLogs || []) as any[], timeEntries: timeEntries || [], workers: workers || [], siteMap });
 
   const { data: photos } = useQuery({
     queryKey: ["admin-work-photos"],
@@ -52,15 +86,16 @@ const AdminWorkLogs = () => {
     const s = search.toLowerCase();
     return (
       log.construction_sites?.title?.toLowerCase().includes(s) ||
+      log.worker_name?.toLowerCase().includes(s) ||
       log.notes?.toLowerCase().includes(s) ||
       log.materials_used?.some((m: string) => m.toLowerCase().includes(s))
     );
   });
 
   // Stats
-  const totalHours = filteredLogs?.reduce((sum: number, l: any) => sum + (l.hours_worked || 0), 0) || 0;
+  const totalHours = sumWorkedHours(filteredLogs);
   const totalPhotos = photos?.length || 0;
-  const uniqueSites = new Set(filteredLogs?.map((l: any) => l.site_id)).size;
+  const uniqueSites = new Set(filteredLogs?.map((l: any) => l.site_id).filter(Boolean)).size;
   const today = new Date().toISOString().split("T")[0];
   const todayLogs = filteredLogs?.filter((l: any) => l.work_date === today) || [];
 
@@ -106,10 +141,11 @@ const AdminWorkLogs = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm text-foreground truncate">
-                      {log.construction_sites?.title}
+                      {log.construction_sites?.title || "Senza cantiere"}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {format(new Date(log.work_date), "dd MMM yyyy", { locale: it })}
+                      {log.worker_name ? ` · ${log.worker_name}` : ""}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">

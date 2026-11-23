@@ -5,7 +5,7 @@ import { PageHeader, KpiCard, CrmEmptyState } from '@/components/admin/crm-ui';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, TrendingUp, TrendingDown, Percent, AlertTriangle } from 'lucide-react';
-import { summarizeDay, TimeEntry } from '@/lib/timbrature';
+import { buildWorkedHours, groupHoursBySite } from '@/lib/workedHours';
 
 const db = supabase as any;
 
@@ -74,8 +74,6 @@ export default function AdminMargini() {
 
       const prodById = new Map(products.map((p: any) => [p.id, p]));
       const prodByCode = new Map(products.map((p: any) => [String(p.product_code || '').toUpperCase(), p]));
-      const workerByUser = new Map(workers.map((w: any) => [w.user_id, w]));
-      const workerById = new Map(workers.map((w: any) => [w.id, w]));
       const spName = new Map(sps.map((s: any) => [s.id, `${s.first_name || ''} ${s.last_name || ''}`.trim()]));
 
       // --- costi per cantiere ---
@@ -92,32 +90,8 @@ export default function AdminMargini() {
       for (const e of expenses) expBySite.set(e.site_id, (expBySite.get(e.site_id) || 0) + Number(e.amount || 0));
 
       const laborBySite = new Map<string, number>();
-      const loggedDays = new Set<string>();
-      for (const l of logs) {
-        if (!l.site_id) continue;
-        const w: any = workerById.get(l.worker_id) || workerByUser.get(l.worker_user_id);
-        const rate = Number(l.hourly_cost ?? w?.hourly_cost ?? 0);
-        laborBySite.set(l.site_id, (laborBySite.get(l.site_id) || 0) + Number(l.hours_worked || 0) * rate);
-        loggedDays.add(`${l.worker_user_id || w?.user_id}|${l.work_date}`);
-      }
-
-      // ore da timbrature (solo giorni senza work log per quel dipendente)
-      const byUserDay = new Map<string, any[]>();
-      for (const e of entries) {
-        const k = `${e.user_id}|${e.event_date}`;
-        if (!byUserDay.has(k)) byUserDay.set(k, []);
-        byUserDay.get(k)!.push(e);
-      }
-      for (const [k, evs] of byUserDay) {
-        if (loggedDays.has(k)) continue;
-        const siteId = evs.find((e) => e.site_id)?.site_id;
-        if (!siteId) continue;
-        const { siteMinutes } = summarizeDay(evs as TimeEntry[]);
-        const w: any = workerByUser.get(k.split('|')[0]);
-        const rate = Number(w?.hourly_cost || 0);
-        if (!siteMinutes || !rate) continue;
-        laborBySite.set(siteId, (laborBySite.get(siteId) || 0) + (siteMinutes / 60) * rate);
-      }
+      const hoursBySite = groupHoursBySite(buildWorkedHours({ manualLogs: logs, timeEntries: entries, workers }));
+      for (const [siteId, stat] of hoursBySite) laborBySite.set(siteId, stat.laborCost);
 
       // --- materiali da sale_items (per vendite senza cantiere) ---
       const matBySale = new Map<string, number>();

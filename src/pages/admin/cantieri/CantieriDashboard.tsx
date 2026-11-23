@@ -10,6 +10,7 @@ import {
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
+import { buildWorkedHours, groupHoursBySite, sumWorkedHours } from "@/lib/workedHours";
 
 const CantieriDashboard = () => {
   const navigate = useNavigate();
@@ -26,9 +27,27 @@ const CantieriDashboard = () => {
   const { data: workLogs } = useQuery({
     queryKey: ["cd-worklogs"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("site_work_logs").select("site_id, hours_worked, work_date").limit(1000);
+      const { data, error } = await supabase.from("site_work_logs").select("site_id, worker_id, worker_user_id, hours_worked, hourly_cost, work_date").limit(1000);
       if (error) throw error;
       return data;
+    },
+  });
+
+  const { data: timeEntries } = useQuery({
+    queryKey: ["cd-time-entries"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true });
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
+  const { data: workerRates } = useQuery({
+    queryKey: ["cd-worker-rates"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("workers").select("id, user_id, hourly_cost");
+      if (error) throw error;
+      return (data || []) as any[];
     },
   });
 
@@ -61,7 +80,9 @@ const CantieriDashboard = () => {
 
   const activeSites = sites?.filter(s => isSiteActive(s.status)) || [];
   const totalSites = sites?.length || 0;
-  const totalHours = workLogs?.reduce((s, l) => s + (l.hours_worked || 0), 0) || 0;
+  const unifiedLogs = buildWorkedHours({ manualLogs: (workLogs || []) as any[], timeEntries: timeEntries || [], workers: workerRates || [] });
+  const hoursBySite = groupHoursBySite(unifiedLogs);
+  const totalHours = sumWorkedHours(unifiedLogs);
   const totalMaterialCost = materials?.reduce((s, m) => s + (m.total_cost || 0), 0) || 0;
   const totalExpenses = expenses?.reduce((s, e) => s + (e.amount || 0), 0) || 0;
   const unpaidExpenses = expenses?.filter(e => !e.is_paid).reduce((s, e) => s + (e.amount || 0), 0) || 0;
@@ -70,7 +91,7 @@ const CantieriDashboard = () => {
 
   // Per-site stats
   const siteStats = activeSites.map(site => {
-    const siteHours = workLogs?.filter(l => l.site_id === site.id).reduce((s, l) => s + (l.hours_worked || 0), 0) || 0;
+    const siteHours = hoursBySite.get(site.id)?.hours || 0;
     const siteMat = materials?.filter(m => m.site_id === site.id).reduce((s, m) => s + (m.total_cost || 0), 0) || 0;
     const siteExp = expenses?.filter(e => e.site_id === site.id).reduce((s, e) => s + (e.amount || 0), 0) || 0;
     const siteWorkers = workers?.filter(w => w.site_id === site.id && w.is_active).length || 0;
@@ -79,8 +100,7 @@ const CantieriDashboard = () => {
 
   // Today's activity
   const today = new Date().toISOString().split("T")[0];
-  const todayLogs = workLogs?.filter(l => l.work_date === today) || [];
-  const todayHours = todayLogs.reduce((s, l) => s + (l.hours_worked || 0), 0);
+  const todayHours = sumWorkedHours(unifiedLogs.filter(l => l.work_date === today));
 
   // Alerts
   const alerts: { text: string; type: "warning" | "danger" }[] = [];

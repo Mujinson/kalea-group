@@ -15,7 +15,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { toast } from "sonner";
 import { WorkerFormDrawer, type Worker } from "@/components/admin/workers/WorkerFormDrawer";
-import { summarizeDay, formatTime } from "@/lib/timbrature";
+import { buildWorkedHours, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
 
 const statusLabel: Record<string, string> = {
   attivo: "Attivo", ferie: "In ferie", sospeso: "Sospeso", non_attivo: "Non attivo",
@@ -69,39 +69,14 @@ const WorkerDetail = () => {
     queryKey: ["sites-titles"],
     queryFn: async () => {
       const { data } = await supabase.from("construction_sites").select("id,title");
-      return Object.fromEntries((data || []).map((s: any) => [s.id, s.title])) as Record<string, string>;
+      return Object.fromEntries((data || []).map((s: any) => [s.id, { title: s.title }])) as Record<string, { title: string }>;
     },
   });
 
-  const logs = useMemo(() => {
-    const manual = new Set(dbLogs.map((l: any) => String(l.work_date).slice(0, 10)));
-    const byDate = new Map<string, any[]>();
-    timeEntries.forEach((e: any) => {
-      if (!byDate.has(e.event_date)) byDate.set(e.event_date, []);
-      byDate.get(e.event_date)!.push(e);
-    });
-    const virtual: any[] = [];
-    byDate.forEach((entries, date) => {
-      if (manual.has(date)) return;
-      const s = summarizeDay(entries as any);
-      const hours = s.siteMinutes / 60;
-      if (hours <= 0) return;
-      const siteId = entries.find((e) => e.site_id)?.site_id || null;
-      const arrive = entries.find((e) => e.event_type === "arrive_site");
-      const leave = [...entries].reverse().find((e) => e.event_type === "leave_site");
-      virtual.push({
-        id: `tb-${date}`,
-        from_timbrature: true,
-        work_date: date,
-        start_time: arrive ? formatTime(arrive.event_at) : "—",
-        end_time: leave ? formatTime(leave.event_at) : "—",
-        hours_worked: Number(hours.toFixed(2)),
-        hourly_cost: null,
-        construction_sites: siteId ? { title: (sitesMap as any)[siteId] } : null,
-      });
-    });
-    return [...dbLogs, ...virtual].sort((a, b) => String(b.work_date).localeCompare(String(a.work_date)));
-  }, [dbLogs, timeEntries, sitesMap]);
+  const logs = useMemo(
+    () => buildWorkedHours({ manualLogs: dbLogs, timeEntries, workers: worker ? [worker] : [], siteMap: sitesMap }),
+    [dbLogs, timeEntries, worker, sitesMap],
+  );
 
   const { data: assignments = [] } = useQuery({
     queryKey: ["worker-assignments", id],
@@ -123,8 +98,8 @@ const WorkerDetail = () => {
     },
   });
 
-  const totalHours = useMemo(() => logs.reduce((s, l) => s + Number(l.hours_worked || 0), 0), [logs]);
-  const totalCost = useMemo(() => logs.reduce((s, l) => s + Number(l.hours_worked || 0) * Number(l.hourly_cost || worker?.hourly_cost || 0), 0), [logs, worker]);
+  const totalHours = useMemo(() => sumWorkedHours(logs), [logs]);
+  const totalCost = useMemo(() => sumLaborCost(logs), [logs]);
 
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["worker", id] });

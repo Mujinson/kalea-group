@@ -23,7 +23,7 @@ import { WorkLogFormDrawer } from "@/components/admin/workers/WorkLogFormDrawer"
 import { AssignmentBoard } from "@/components/admin/workers/AssignmentBoard";
 import { exportCSV, exportXLSX, exportPDF } from "@/lib/exports";
 import { Calendar } from "@/components/ui/calendar";
-import { summarizeDay, formatTime } from "@/lib/timbrature";
+import { buildWorkedHours, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
 
 const statusColors: Record<string, string> = {
   attivo: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -94,11 +94,9 @@ const CantieriOperaiOre = () => {
   const { data: timeEntries = [] } = useQuery({
     queryKey: ["worker-time-entries-logs"],
     queryFn: async () => {
-      const from = format(new Date(Date.now() - 180 * 86400000), "yyyy-MM-dd");
       const { data, error } = await supabase
         .from("worker_time_entries" as any)
         .select("*")
-        .gte("event_date", from)
         .order("event_at", { ascending: true });
       if (error) throw error;
       return (data || []) as any[];
@@ -106,55 +104,11 @@ const CantieriOperaiOre = () => {
   });
 
   const workerById = useMemo(() => Object.fromEntries(workers.map((w) => [w.id, w])), [workers]);
-  const workerByUserId = useMemo(
-    () => Object.fromEntries(workers.filter((w) => w.user_id).map((w) => [w.user_id, w])),
-    [workers],
-  );
   const siteById = useMemo(() => Object.fromEntries(sites.map((s) => [s.id, s])), [sites]);
 
-  // Converte le timbrature in righe di registro ore (una per operaio/giorno),
-  // saltando i giorni che hanno già un registro manuale.
-  const timbratureLogs = useMemo(() => {
-    const byKey = new Map<string, any[]>();
-    timeEntries.forEach((e) => {
-      const w = e.worker_id ? workerById[e.worker_id] : workerByUserId[e.user_id];
-      if (!w) return;
-      const key = `${w.id}|${e.event_date}`;
-      if (!byKey.has(key)) byKey.set(key, []);
-      byKey.get(key)!.push(e);
-    });
-    const manual = new Set(dbLogs.map((l) => `${l.worker_id}|${String(l.work_date).slice(0, 10)}`));
-    const out: any[] = [];
-    byKey.forEach((entries, key) => {
-      if (manual.has(key)) return;
-      const [workerId, date] = key.split("|");
-      const s = summarizeDay(entries as any);
-      const hours = s.siteMinutes / 60;
-      if (hours <= 0) return;
-      const siteId = entries.find((e) => e.site_id)?.site_id || null;
-      const arrive = entries.find((e) => e.event_type === "arrive_site");
-      const leave = [...entries].reverse().find((e) => e.event_type === "leave_site");
-      out.push({
-        id: `tb-${key}`,
-        from_timbrature: true,
-        worker_id: workerId,
-        site_id: siteId,
-        work_date: date,
-        start_time: arrive ? formatTime(arrive.event_at) : null,
-        end_time: leave ? formatTime(leave.event_at) : null,
-        break_minutes: s.pauseMinutes,
-        hours_worked: Number(hours.toFixed(2)),
-        hourly_cost: null,
-        notes: "Da timbrature",
-        construction_sites: siteId ? { title: (siteById as any)[siteId]?.title } : null,
-      });
-    });
-    return out;
-  }, [timeEntries, dbLogs, workerById, workerByUserId, siteById]);
-
   const logs = useMemo(
-    () => [...dbLogs, ...timbratureLogs].sort((a, b) => String(b.work_date).localeCompare(String(a.work_date))),
-    [dbLogs, timbratureLogs],
+    () => buildWorkedHours({ manualLogs: dbLogs, timeEntries, workers, siteMap: siteById as any }),
+    [dbLogs, timeEntries, workers, siteById],
   );
 
   // KPIs
@@ -168,13 +122,9 @@ const CantieriOperaiOre = () => {
     const d = new Date(l.work_date);
     return d >= monthStart && d <= monthEnd;
   });
-  const hoursToday = todayLogs.reduce((s, l) => s + Number(l.hours_worked || 0), 0);
-  const hoursMonth = monthLogs.reduce((s, l) => s + Number(l.hours_worked || 0), 0);
-  const costMonth = monthLogs.reduce((s, l) => {
-    const w = workerById[l.worker_id || ""];
-    const hc = Number(l.hourly_cost || w?.hourly_cost || 0);
-    return s + Number(l.hours_worked || 0) * hc;
-  }, 0);
+  const hoursToday = sumWorkedHours(todayLogs);
+  const hoursMonth = sumWorkedHours(monthLogs);
+  const costMonth = sumLaborCost(monthLogs);
   const sitesWithLogs = new Set(monthLogs.map((l) => l.site_id)).size || 1;
   const avgCostSite = costMonth / sitesWithLogs;
 

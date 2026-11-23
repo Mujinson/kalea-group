@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Euro, TrendingUp, TrendingDown, AlertTriangle, HardHat } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { computeMargin, jobRevenue } from "@/lib/margin";
+import { buildWorkedHours, groupHoursBySite } from "@/lib/workedHours";
 
 
 
@@ -43,9 +44,18 @@ const CantieriBudget = () => {
   const { data: workLogs } = useQuery({
     queryKey: ["cb-worklogs"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("site_work_logs").select("site_id, hours_worked, hourly_cost, worker_id, worker_user_id").limit(1000);
+      const { data, error } = await supabase.from("site_work_logs").select("site_id, work_date, hours_worked, hourly_cost, worker_id, worker_user_id").limit(1000);
       if (error) throw error;
       return data as any[];
+    },
+  });
+
+  const { data: timeEntries } = useQuery({
+    queryKey: ["cb-time-entries"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true });
+      if (error) throw error;
+      return (data || []) as any[];
     },
   });
 
@@ -69,20 +79,17 @@ const CantieriBudget = () => {
     },
   });
 
-  const workerById = new Map((workers || []).map((w: any) => [w.id, w]));
-  const workerByUser = new Map((workers || []).map((w: any) => [w.user_id, w]));
+  const hoursBySite = groupHoursBySite(
+    buildWorkedHours({ manualLogs: workLogs || [], timeEntries: timeEntries || [], workers: workers || [] }),
+  );
 
   // Build per-site budget comparison (budget reale dal cantiere, costo orario reale per operaio)
   const siteData = sites?.map(site => {
     const matCost = materials?.filter(m => m.site_id === site.id).reduce((s, m) => s + (m.total_cost || 0), 0) || 0;
     const expCost = expenses?.filter(e => e.site_id === site.id).reduce((s, e) => s + (e.amount || 0), 0) || 0;
-    const logs = (workLogs || []).filter((l: any) => l.site_id === site.id);
-    const hours = logs.reduce((s: number, l: any) => s + (Number(l.hours_worked) || 0), 0);
-    const laborCost = logs.reduce((s: number, l: any) => {
-      const w: any = workerById.get(l.worker_id) || workerByUser.get(l.worker_user_id);
-      const rate = Number(l.hourly_cost ?? w?.hourly_cost ?? 0);
-      return s + (Number(l.hours_worked) || 0) * rate;
-    }, 0);
+    const siteWork = hoursBySite.get(site.id);
+    const hours = siteWork?.hours || 0;
+    const laborCost = siteWork?.laborCost || 0;
     const totalSpent = matCost + expCost + laborCost;
     const budget = Number((site as any).budget_amount || 0);
     const revenue = jobRevenue({ siteId: site.id, saleId: (site as any).sale_id, quoteId: (site as any).quote_id }, revenueDocs?.invoices || [], revenueDocs?.schedules || []);

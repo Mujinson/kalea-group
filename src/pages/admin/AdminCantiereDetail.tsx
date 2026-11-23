@@ -25,6 +25,7 @@ import SiteIssuesPanel from "@/components/admin/cantieri/SiteIssuesPanel";
 import SiteDailyCostsPanel from "@/components/admin/cantieri/SiteDailyCostsPanel";
 import SiteStatusSelect from "@/components/admin/cantieri/SiteStatusSelect";
 import SiteCrewPanel from "@/components/admin/cantieri/SiteCrewPanel";
+import { buildWorkedHours, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
 
 const EXPENSE_TYPES = [
   "Materiali", "Trasporto", "Attrezzatura", "Manodopera esterna",
@@ -121,6 +122,33 @@ const AdminCantiereDetail = () => {
     enabled: !!id,
   });
 
+  const { data: timeEntries } = useQuery({
+    queryKey: ["site-time-entries", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("worker_time_entries" as any)
+        .select("id, user_id, worker_id, site_id, event_type, event_at, event_date")
+        .order("event_at", { ascending: true });
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+    enabled: !!id,
+  });
+
+  const { data: workerRates } = useQuery({
+    queryKey: ["site-worker-rates"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("workers").select("id, user_id, first_name, last_name, hourly_cost");
+      if (error) throw error;
+      return (data || []) as any[];
+    },
+  });
+
+  const unifiedWorkLogs = useMemo(
+    () => buildWorkedHours({ manualLogs: (workLogs || []) as any[], timeEntries: timeEntries || [], workers: workerRates || [], siteIdFilter: id }),
+    [workLogs, timeEntries, workerRates, id],
+  );
+
   const { data: originQuote } = useQuery({
     queryKey: ["site-origin-quote", site?.quote_id],
     queryFn: async () => {
@@ -143,12 +171,12 @@ const AdminCantiereDetail = () => {
     const budget = Number((site as any)?.budget_amount) || 0;
     const materialsCost = (materials || []).reduce((s: number, m: any) => s + (Number(m.total_cost) || 0), 0);
     const expensesCost = (expenses || []).reduce((s: number, e: any) => s + (Number(e.amount) || 0), 0);
-    const laborCost = (workLogs || []).reduce((s: number, w: any) => s + ((Number(w.hours_worked) || 0) * (Number(w.hourly_cost) || 0)), 0);
+    const laborCost = sumLaborCost(unifiedWorkLogs);
     const actual = materialsCost + expensesCost + laborCost;
     const delta = budget - actual;
     const pct = budget > 0 ? (actual / budget) * 100 : 0;
     return { budget, materialsCost, expensesCost, laborCost, actual, delta, pct };
-  }, [site, materials, expenses, workLogs]);
+  }, [site, materials, expenses, unifiedWorkLogs]);
 
 
   const { data: kpiChecklist } = useQuery({
@@ -323,7 +351,7 @@ const AdminCantiereDetail = () => {
   const docs = filteredMedia?.filter((m) => m.file_type === "document") || [];
 
   // Stats
-  const totalHours = workLogs?.reduce((sum, l) => sum + (l.hours_worked || 0), 0) || 0;
+  const totalHours = sumWorkedHours(unifiedWorkLogs);
   const totalMaterialCost = materials?.reduce((sum, m) => sum + (m.total_cost || 0), 0) || 0;
   const totalExpenses = expenses?.reduce((sum, e) => sum + (e.amount || 0), 0) || 0;
   const unpaidExpenses = expenses?.filter(e => !e.is_paid).reduce((sum, e) => sum + (e.amount || 0), 0) || 0;
@@ -711,16 +739,16 @@ const AdminCantiereDetail = () => {
               <CardTitle className="text-lg">Registro attività ({totalHours}h totali)</CardTitle>
             </CardHeader>
             <CardContent>
-              {workLogs && workLogs.length > 0 ? (
+              {unifiedWorkLogs.length > 0 ? (
                 <div className="space-y-3">
-                  {workLogs.map((log) => (
+                  {unifiedWorkLogs.map((log) => (
                     <div key={log.id} className="p-3 rounded-xl border">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-xs">{log.hours_worked}h</Badge>
                           <span className="text-xs text-muted-foreground">{format(new Date(log.work_date), "dd/MM/yyyy")}</span>
                         </div>
-                        <span className="text-xs text-muted-foreground">{log.worker_user_id?.slice(0, 8)}...</span>
+                        <span className="text-xs text-muted-foreground">{log.worker_name || (log.worker_user_id ? `${log.worker_user_id.slice(0, 8)}...` : "—")}</span>
                       </div>
                       {log.notes && <p className="text-sm text-muted-foreground mb-2">{log.notes}</p>}
                       {log.materials_used && log.materials_used.length > 0 && (
