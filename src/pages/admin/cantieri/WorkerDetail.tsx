@@ -16,6 +16,7 @@ import { it } from "date-fns/locale";
 import { toast } from "sonner";
 import { WorkerFormDrawer, type Worker } from "@/components/admin/workers/WorkerFormDrawer";
 import { buildWorkedHours, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const statusLabel: Record<string, string> = {
   attivo: "Attivo", ferie: "In ferie", sospeso: "Sospeso", non_attivo: "Non attivo",
@@ -59,9 +60,7 @@ const WorkerDetail = () => {
       q = worker?.user_id
         ? q.or(`worker_id.eq.${id},user_id.eq.${worker.user_id}`)
         : q.eq("worker_id", id);
-      const { data, error } = await q;
-      if (error) throw error;
-      return (data || []) as any[];
+      return fetchAllRows<any>(q);
     },
   });
 

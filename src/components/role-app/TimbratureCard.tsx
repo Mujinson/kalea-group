@@ -15,6 +15,7 @@ import {
   type TimeEntry,
 } from '@/lib/timbrature';
 import { reverseGeocode } from '@/lib/geo';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const TimbratureCard = () => {
   const { user } = useAdminAuth();
@@ -28,13 +29,12 @@ const TimbratureCard = () => {
   const load = useCallback(async () => {
     if (!user) return;
     const today = todayKey();
-    const { data } = await supabase
+    const rows = await fetchAllRows<TimeEntry>(supabase
       .from('worker_time_entries' as any)
       .select('*')
       .eq('user_id', user.id)
       .eq('event_date', today)
-      .order('event_at', { ascending: true });
-    const rows = (data as unknown as TimeEntry[]) || [];
+      .order('event_at', { ascending: true }));
     setEntries(rows);
     setLoading(false);
 

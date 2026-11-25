@@ -39,3 +39,5 @@
 - [x] Passo 4: funzione margine unica (AdminMargini, CantieriMarginalita, SiteEconomics, Budget vs Consuntivo, Analytics)
 - [x] Passo 5: costi fissi con regola unica (src/lib/fixedCosts.ts)
 - [x] Passo 6: ore lavorate e costo manodopera unificati (src/lib/workedHours.ts)
+- [x] QA: paginare tutte le timbrature oltre 1.000 record in ogni schermata ore/costi
+- [x] QA: aggiungere Servizi B senza cambiare il tipo appalto selezionato

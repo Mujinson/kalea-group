@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, TrendingUp, TrendingDown, Percent, AlertTriangle } from 'lucide-react';
 import { buildWorkedHours, groupHoursBySite } from '@/lib/workedHours';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const db = supabase as any;
 
@@ -49,7 +50,7 @@ export default function AdminMargini() {
         db.from('site_materials').select('site_id,quantity,unit_cost,total_cost,product_id'),
         db.from('site_expenses').select('site_id,amount'),
         db.from('site_work_logs').select('site_id,worker_id,worker_user_id,work_date,hours_worked,hourly_cost'),
-        db.from('worker_time_entries').select('id,user_id,worker_id,site_id,event_type,event_at,event_date'),
+        fetchAllRows(db.from('worker_time_entries').select('id,user_id,worker_id,site_id,event_type,event_at,event_date').order('event_at', { ascending: true })),
         db.from('workers').select('id,user_id,first_name,last_name,hourly_cost'),
         db.from('salespeople').select('id,first_name,last_name'),
         db.from('catalog_products').select('id,product_code,net_cost'),
@@ -65,7 +66,7 @@ export default function AdminMargini() {
       const materials = matsR.data || [];
       const expenses = expR.data || [];
       const logs = logsR.data || [];
-      const entries: any[] = entriesR.data || [];
+      const entries: any[] = entriesR || [];
       const workers = workersR.data || [];
       const sps = spR.data || [];
       const products = prodR.data || [];

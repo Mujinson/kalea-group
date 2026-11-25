@@ -72,6 +72,20 @@ function resolvePeriod(period?: string, start?: string, end?: string) {
 const num = (v: unknown) => Number(v ?? 0) || 0;
 const like = (s: string) => `%${s.replace(/[%,]/g, ' ').trim()}%`;
 
+// PostgREST restituisce al massimo 1.000 righe per richiesta: le ore devono
+// comprendere anche le timbrature successive alla prima pagina.
+async function fetchAllRows<T = any>(query: any): Promise<T[]> {
+  const rows: T[] = [];
+  for (let from = 0; from < 1_000_000; from += 1000) {
+    const { data, error } = await query.range(from, from + 999);
+    if (error) throw error;
+    const batch = (data || []) as T[];
+    rows.push(...batch);
+    if (batch.length < 1000) break;
+  }
+  return rows;
+}
+
 type Ref = { etichetta: string; percorso: string };
 
 // ---------------- tool schemas ----------------
@@ -641,11 +655,14 @@ async function oreDipendente(sb: SupabaseClient, a: any, refs: Ref[]) {
       messaggio: 'Nessun rapportino nel periodo e nessun account collegato per stimare dalle timbrature.',
     };
   }
-  const { data: te, error: tErr } = await sb.from('worker_time_entries')
-    .select('event_type, event_at, event_date, site_id').eq('user_id', w.user_id)
-    .gte('event_date', p.start).lte('event_date', p.end).order('event_at').limit(2000);
-  if (tErr) return { errore: tErr.message };
-  const entries = (te || []) as any[];
+  let entries: any[];
+  try {
+    entries = await fetchAllRows<any>(sb.from('worker_time_entries')
+      .select('event_type, event_at, event_date, site_id').eq('user_id', w.user_id)
+      .gte('event_date', p.start).lte('event_date', p.end).order('event_at'));
+  } catch (e: any) {
+    return { errore: e?.message || 'Errore lettura timbrature' };
+  }
 
   const byDay: Record<string, any[]> = {};
   for (const e of entries) (byDay[e.event_date] ||= []).push(e);
@@ -798,10 +815,14 @@ async function cantieriAttivi(sb: SupabaseClient, a: any, refs: Ref[]) {
 
 async function chiLavoraOggi(sb: SupabaseClient, a: any) {
   const day = a.data || iso(today());
-  const { data, error } = await sb.from('worker_time_entries')
-    .select('user_id, worker_id, event_type, event_at, site_id').eq('event_date', day).order('event_at').limit(500);
-  if (error) return { errore: error.message };
-  if (!data?.length) return { data: day, conteggio: 0, messaggio: 'Nessuna timbratura registrata.' };
+  let data: any[];
+  try {
+    data = await fetchAllRows<any>(sb.from('worker_time_entries')
+      .select('user_id, worker_id, event_type, event_at, site_id').eq('event_date', day).order('event_at'));
+  } catch (e: any) {
+    return { errore: e?.message || 'Errore lettura timbrature' };
+  }
+  if (!data.length) return { data: day, conteggio: 0, messaggio: 'Nessuna timbratura registrata.' };
   const workerIds = [...new Set(data.map((r: any) => r.worker_id).filter(Boolean))] as string[];
   const names = await fullName(sb, 'workers', workerIds);
   const siteIds = [...new Set(data.map((r: any) => r.site_id).filter(Boolean))] as string[];

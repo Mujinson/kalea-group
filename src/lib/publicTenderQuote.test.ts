@@ -4,6 +4,7 @@ import { strict as assert } from "node:assert";
 import {
   isPublicTenderQuote,
   isStandardPagamenti,
+  preservePublicTenderKind,
   publicTenderPagamenti,
   resolveQuoteAcceptance,
   resolveQuoteTerms,
@@ -70,6 +71,16 @@ describe("voci Servizi B (appalti pubblici)", () => {
     assert.ok(t.includes("20% – SAL finale"));
     assert.ok(!t.includes("la fornitura dei materiali, dei prodotti di posa, dei collanti, degli stucchi e degli accessori resta a carico della Committenza"));
     assert.ok(!t.includes("**"), "il testo stampato non deve contenere markup markdown");
+  });
+
+  test("la prima voce Servizi B non cambia Fornitura e posa in sola posa", () => {
+    const kind = preservePublicTenderKind("fornitura_posa");
+    assert.equal(kind, "fornitura_posa");
+    assert.equal(
+      resolveQuoteTerms({ serviziB: [line("Posa")], terminiCustom: null, standardTerms: "STANDARD", tenderKind: kind }),
+      PUBLIC_TENDER_SUPPLY_INSTALL_TERMS,
+    );
+    assert.match(resolveQuoteAcceptance([line("Posa")], "standard", kind), /Artt\. 5, 6, 9, 14 e 18/);
   });
 
   test("fornitura e posa negli appalti approva gli articoli corretti e rispetta il testo personalizzato", () => {

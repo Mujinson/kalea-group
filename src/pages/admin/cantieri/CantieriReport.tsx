@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, Euro, HardHat, Package, Users, TrendingUp } from "lucide-react";
 import { buildWorkedHours, groupHoursBySite, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const CantieriReport = () => {
   const { data: sites } = useQuery({
@@ -45,11 +46,9 @@ const CantieriReport = () => {
 
   const { data: timeEntries } = useQuery({
     queryKey: ["cr-time-entries"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true });
-      if (error) throw error;
-      return (data || []) as any[];
-    },
+    queryFn: () => fetchAllRows<any>(
+      supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true }),
+    ),
   });
 
   const { data: workers } = useQuery({

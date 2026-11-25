@@ -26,6 +26,7 @@ import SiteDailyCostsPanel from "@/components/admin/cantieri/SiteDailyCostsPanel
 import SiteStatusSelect from "@/components/admin/cantieri/SiteStatusSelect";
 import SiteCrewPanel from "@/components/admin/cantieri/SiteCrewPanel";
 import { buildWorkedHours, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const EXPENSE_TYPES = [
   "Materiali", "Trasporto", "Attrezzatura", "Manodopera esterna",
@@ -124,14 +125,11 @@ const AdminCantiereDetail = () => {
 
   const { data: timeEntries } = useQuery({
     queryKey: ["site-time-entries", id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("worker_time_entries" as any)
+    queryFn: () => fetchAllRows<any>(
+      supabase.from("worker_time_entries" as any)
         .select("id, user_id, worker_id, site_id, event_type, event_at, event_date")
-        .order("event_at", { ascending: true });
-      if (error) throw error;
-      return (data || []) as any[];
-    },
+        .order("event_at", { ascending: true }),
+    ),
     enabled: !!id,
   });
 

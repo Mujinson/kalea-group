@@ -8,6 +8,7 @@ import { Euro, TrendingUp, TrendingDown, AlertTriangle, HardHat } from "lucide-r
 import { useNavigate } from "react-router-dom";
 import { computeMargin, jobRevenue } from "@/lib/margin";
 import { buildWorkedHours, groupHoursBySite } from "@/lib/workedHours";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 
 
@@ -52,11 +53,9 @@ const CantieriBudget = () => {
 
   const { data: timeEntries } = useQuery({
     queryKey: ["cb-time-entries"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true });
-      if (error) throw error;
-      return (data || []) as any[];
-    },
+    queryFn: () => fetchAllRows<any>(
+      supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true }),
+    ),
   });
 
   const { data: workers } = useQuery({

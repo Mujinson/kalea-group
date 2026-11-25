@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Loader2 } from 'lucide-react';
 import { summarizeDay, formatHM, type TimeEntry } from '@/lib/timbrature';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 const monthRange = (d = new Date()) => {
   const y = d.getFullYear();
@@ -24,14 +25,14 @@ const MonthlyHoursCard = () => {
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const { data } = await supabase
+      const data = await fetchAllRows<TimeEntry>(supabase
         .from('worker_time_entries' as any)
         .select('*')
         .eq('user_id', user.id)
         .gte('event_date', start)
         .lte('event_date', end)
-        .order('event_at', { ascending: true });
-      setEntries((data as unknown as TimeEntry[]) || []);
+        .order('event_at', { ascending: true }));
+      setEntries(data);
       setLoading(false);
     })();
   }, [user, start, end]);

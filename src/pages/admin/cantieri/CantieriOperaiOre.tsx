@@ -24,6 +24,7 @@ import { AssignmentBoard } from "@/components/admin/workers/AssignmentBoard";
 import { exportCSV, exportXLSX, exportPDF } from "@/lib/exports";
 import { Calendar } from "@/components/ui/calendar";
 import { buildWorkedHours, sumLaborCost, sumWorkedHours } from "@/lib/workedHours";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const statusColors: Record<string, string> = {
   attivo: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -93,14 +94,9 @@ const CantieriOperaiOre = () => {
   // Timbrature (worker_time_entries) — fonte reale delle ore dei posatori
   const { data: timeEntries = [] } = useQuery({
     queryKey: ["worker-time-entries-logs"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("worker_time_entries" as any)
-        .select("*")
-        .order("event_at", { ascending: true });
-      if (error) throw error;
-      return (data || []) as any[];
-    },
+    queryFn: () => fetchAllRows<any>(
+      supabase.from("worker_time_entries" as any).select("*").order("event_at", { ascending: true }),
+    ),
   });
 
   const workerById = useMemo(() => Object.fromEntries(workers.map((w) => [w.id, w])), [workers]);

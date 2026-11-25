@@ -14,7 +14,7 @@ import { PRICING_KEY_DEFAULTS, resolvePricingKey } from "@/pages/admin/strumenti
 import { QUOTE_TYPES, QUOTE_TERMS, type QuoteType } from "@/data/quoteTerms";
 import { PUBLIC_TENDER_TERMS } from "@/data/quotePublicTenderTerms";
 import { PUBLIC_TENDER_SUPPLY_INSTALL_TERMS } from "@/data/quotePublicTenderSupplyInstallTerms";
-import { isStandardPagamenti, isPublicTenderQuote, publicTenderPagamenti, resolveQuoteAcceptance, resolveQuoteTerms, shouldPrefillSalPagamenti, type PublicTenderKind } from "@/lib/publicTenderQuote";
+import { isStandardPagamenti, isPublicTenderQuote, preservePublicTenderKind, publicTenderPagamenti, resolveQuoteAcceptance, resolveQuoteTerms, shouldPrefillSalPagamenti, type PublicTenderKind } from "@/lib/publicTenderQuote";
 import { PDF_LABELS, translateQuoteTexts, trTrasporto, trPagamento, trRata, trUnita, trComplessita, type QuoteLang } from "@/lib/quoteTranslate";
 import QuoteAttachments from '@/components/admin/quotes/QuoteAttachments';
 import { downloadQuotePdf, type QuoteAttachment } from '@/lib/quoteAttachments';
@@ -1335,7 +1335,7 @@ export default function CreaPreventivo() {
   const updateServiziB = (next: CatalogLine[]) => {
     if (shouldPrefillSalPagamenti(serviziB, next, pagamenti)) setPagamenti(publicTenderPagamenti());
     if (!isPublicTenderQuote(serviziB) && isPublicTenderQuote(next)) {
-      setAppaltoTipo("lavorazioni");
+      setAppaltoTipo((current) => preservePublicTenderKind(current));
     }
     setServiziB(next);
   };

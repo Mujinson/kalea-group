@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
 import { buildWorkedHours, groupHoursBySite, sumWorkedHours } from "@/lib/workedHours";
+import { fetchAllRows } from "@/lib/fetchAllRows";
 
 const CantieriDashboard = () => {
   const navigate = useNavigate();
@@ -35,11 +36,9 @@ const CantieriDashboard = () => {
 
   const { data: timeEntries } = useQuery({
     queryKey: ["cd-time-entries"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true });
-      if (error) throw error;
-      return (data || []) as any[];
-    },
+    queryFn: () => fetchAllRows<any>(
+      supabase.from("worker_time_entries" as any).select("id, user_id, worker_id, site_id, event_type, event_at, event_date").order("event_at", { ascending: true }),
+    ),
   });
 
   const { data: workerRates } = useQuery({

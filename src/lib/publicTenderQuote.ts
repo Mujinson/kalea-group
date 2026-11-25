@@ -18,6 +18,9 @@ export type ServiziBLines = readonly unknown[];
 export const isPublicTenderQuote = (serviziB: ServiziBLines | undefined | null): boolean =>
   Array.isArray(serviziB) && serviziB.length > 0;
 
+/** Aggiungere o modificare voci Servizi B non cambia mai il tipo appalto scelto. */
+export const preservePublicTenderKind = (currentKind: PublicTenderKind): PublicTenderKind => currentKind;
+
 /** Rate precompilate per appalto pubblico: anticipazione + 3 SAL (30/25/25/20). */
 export const publicTenderPagamenti = () => ([
   { label: "Anticipazione iniziale", pct: 30, data: "", note: "alla conferma dell'ordine, prima dell'avvio delle lavorazioni" },

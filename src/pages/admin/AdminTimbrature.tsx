@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { reverseGeocode } from '@/lib/geo';
 import { downloadTimbratureXLSX } from '@/lib/timbratureExport';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
@@ -137,8 +138,7 @@ const AdminTimbrature = () => {
         if (w?.user_id) q = q.eq('user_id', w.user_id);
       }
 
-      const { data } = await q;
-      const rows = (data as unknown as TimeEntry[]) || [];
+      const rows = await fetchAllRows<TimeEntry>(q);
       setEntries(rows);
       setLoading(false);
 
