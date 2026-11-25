@@ -3,7 +3,7 @@ import autoTable from 'jspdf-autotable';
 import regularFont from '@/assets/quote/unicode.ttf.asset.json';
 import boldFont from '@/assets/quote/unicode-bold.ttf.asset.json';
 
-const W = 210, H = 297, M = 16, BOTTOM = 278;
+const W = 210, H = 297, M = 16, TOP = 22, BOTTOM = 278;
 function rgb(role: string): [number, number, number] {
   const probe = document.createElement('span');
   probe.style.color = `hsl(var(--quote-${role}))`;
@@ -71,19 +71,9 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
   const logo = await image(logoElement.src, true);
   const logoH = 42 * logo.height / logo.width;
   const number = root.dataset.quoteNumber || '';
-  const brand = 'PAVIMENTAZIONI · RIVESTIMENTI · DECKING · CLADDING';
-  const header = () => {
-    doc.setFillColor(...paper); doc.rect(0, 0, W, 30, 'F');
-    doc.addImage(logo.data, 'PNG', M, 7, 42, logoH);
-    doc.setDrawColor(...bronze); doc.line(65, 8, 65, 23);
-    doc.setFont('Quote', 'normal'); doc.setFontSize(7); doc.setTextColor(...ink);
-    doc.text('PAVIMENTAZIONI · RIVESTIMENTI', 72, 12);
-    doc.text('DECKING · CLADDING', 72, 17);
-    doc.text('FORNITURA E POSA', 72, 23);
-  };
-  let y = 40;
-  const newPage = () => { doc.addPage(); header(); y = 40; };
-  const ensure = (height: number) => { if (y + height > BOTTOM && y > 40) newPage(); };
+  let y = TOP;
+  const newPage = () => { doc.addPage(); y = TOP; };
+  const ensure = (height: number) => { if (y + height > BOTTOM && y > TOP) newPage(); };
   const text = (value: string, size = 9, weight: 'normal' | 'bold' = 'normal', x = M, width = W - M * 2) => {
     doc.setFont('Quote', weight); doc.setFontSize(size); doc.setTextColor(...ink);
     const lines = doc.splitTextToSize(value, width) as string[];
@@ -182,7 +172,7 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
     print('Kalea Group Srl',21,268,10,120,'bold');
     print('Desenzano del Garda (BS)\ninfo@kalea.space  |  kalea.space\nP.IVA 04797310986',21,274,9,120);
     newPage();
-  } else header();
+  }
 
   const blocks = Array.from(root.children) as HTMLElement[];
   for (const [blockIndex, block] of blocks.entries()) {
@@ -202,11 +192,10 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
       const firstLines = firstRow ? (doc.splitTextToSize(firstRow.cells[0].innerText, 85) as string[]).length : 1;
       ensure(Math.min(220, firstLines * 4.45 + 21));
       autoTable(doc, { startY: y, head: [head], body, theme: 'plain',
-        margin: { top: 40, left: M, right: M, bottom: H - BOTTOM }, showHead: 'everyPage', rowPageBreak: 'avoid',
+        margin: { top: TOP, left: M, right: M, bottom: H - BOTTOM }, showHead: 'everyPage', rowPageBreak: 'avoid',
         styles: { font: 'Quote', fontSize: 8.5, textColor: ink, cellPadding: 2.5, overflow: 'linebreak', lineColor: taupe, lineWidth: { bottom: 0.15 } },
         headStyles: { fillColor: ink, textColor: white, fontStyle: 'bold', fontSize: 7.5 },
         columnStyles: { 0: { cellWidth: 90 }, 1: { cellWidth: 27, halign: 'right' }, 2: { cellWidth: 30, halign: 'right' }, 3: { cellWidth: 31, halign: 'right' } },
-        willDrawPage: () => { header(); },
       });
       const finalY = (doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY;
       y = (finalY ?? y) + 9;
@@ -221,7 +210,7 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
       const rows = Array.from(block.children) as HTMLElement[];
       ensure(rows.length * 7 + 10);
       doc.setFillColor(...paper); doc.rect(100, y - 4, 94, rows.length * 7 + 8, 'F');
-      doc.setDrawColor(...bronze); doc.line(106, y - 4, 194, y - 4);
+      doc.setDrawColor(...bronze); doc.line(100, y - 4, 194, y - 4);
       rows.forEach((row, index) => {
         const cells = Array.from(row.children) as HTMLElement[];
         doc.setFont('Quote', index === rows.length - 1 ? 'bold' : 'normal'); doc.setFontSize(8); doc.setTextColor(...ink);
