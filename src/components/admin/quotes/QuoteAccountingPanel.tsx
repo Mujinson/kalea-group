@@ -75,6 +75,15 @@ export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDis
   const crewSettings = useCrewSettings();
   const crewTrip = value.crewTrip || {};
   const crewCost = crewTrip.enabled ? computeCrew({ days: 1, workers: 1, vans: 1, ...crewTrip }, crewSettings).total : 0;
+  const defaultMq = useMemo(() => {
+    const isMq = (u?: string) => ["mq", "m2", "m²"].includes((u || "").trim().toLowerCase());
+    const posa = baseRows.find((r) => r.key === "posa" && isMq(r.unita));
+    const mat = baseRows.find((r) => r.key === "mat" && isMq(r.unita));
+    const baseMq = (posa ? posa.qta : mat ? mat.qta : 0) +
+      baseRows.filter((r) => r.key.startsWith("rm-") && isMq(r.unita)).reduce((s, r) => s + (Number(r.qta) || 0), 0);
+    const catMq = catalogLines.filter((l) => isMq(l.unit)).reduce((s, l) => s + (Number(l.quantity) || 0), 0);
+    return Math.round((baseMq + catMq) * 100) / 100;
+  }, [baseRows, catalogLines]);
   const acc = computeAccounting(rows, extras, globalDiscountPct, deposit, crewCost);
   const lvl = marginLevel(acc.marginPct);
   useEffect(() => { onTotals?.({ totalCost: acc.totalCost, clientNet: acc.clientNet }); }, [acc.totalCost, acc.clientNet]);
@@ -179,7 +188,7 @@ export default function QuoteAccountingPanel({ baseRows, catalogLines, globalDis
             {exItem("Riconoscenza / provvigione", "rewardEnabled", "rewardPct", "% del netto")}
             {exItem("Posa interna / squadra", "crewEnabled", "crew", "€")}
           </div>
-          <CrewCostsBlock trip={crewTrip} settings={crewSettings} defaultDestination={defaultDestination} onChange={(t) => onChange({ ...value, crewTrip: t })} />
+          <CrewCostsBlock trip={crewTrip} settings={crewSettings} defaultDestination={defaultDestination} defaultMq={defaultMq} onChange={(t) => onChange({ ...value, crewTrip: t })} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 10, marginTop: 16 }}>
             {[
               ["Spese Kalēa totali", eur(acc.totalCost)],

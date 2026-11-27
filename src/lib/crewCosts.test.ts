@@ -40,4 +40,40 @@ describe("costi squadra", () => {
     close(c.totalKm, 600);
     close(c.van, 180);
   });
+  test("artigiani a mq (Pisa 814 mq): 4 artigiani × 22 mq/g = 88 mq/g → 10 giorni, 9 notti, 17.404 €", () => {
+    const c = computeCrew({
+      mode: "artigiani", kmOneWay: 310.8, tollOneWay: 24.23, trasferta: "on",
+      mq: 814, artisanRateMq: 16, artisanCount: 4, mqPerWorkerDay: 22,
+    }, S);
+    assert.equal(c.mqPerDay, 88);
+    close(c.daysExact, 9.25);
+    assert.equal(c.suggestedDays, 10);
+    assert.equal(c.days, 10);
+    assert.equal(c.nights, 9);
+    close(c.labor, 13024);
+    close(c.lunchTotal, 600);
+    close(c.dinnerTotal, 900);
+    close(c.meals, 1500);
+    close(c.hotel, 2880);
+    assert.equal(c.fuel, 0);
+    assert.equal(c.van, 0);
+    assert.equal(c.tolls, 0);
+    close(c.total, 17404);
+    close(c.perMq, 17404 / 814);
+  });
+  test("artigiani con spese selettive e prezzi personalizzati", () => {
+    const c = computeCrew({
+      mode: "artigiani", kmOneWay: 300, tollOneWay: 20, trasferta: "on",
+      mq: 200, artisanRateMq: 18, artisanCount: 2, mqPerWorkerDay: 25,
+      artisanIncludeLunch: false, artisanIncludeDinner: true, artisanIncludeHotel: true, artisanIncludeTravel: true,
+      dinnerCost: 30, hotelCost: 70,
+    }, S);
+    assert.equal(c.days, 4);
+    assert.equal(c.nights, 3);
+    close(c.labor, 3600);
+    close(c.lunchTotal, 0);
+    close(c.dinnerTotal, 30 * 2 * 3);
+    close(c.hotel, 70 * 2 * 3);
+    assert.ok(c.fuel > 0 && c.tolls > 0 && c.van > 0);
+  });
 });

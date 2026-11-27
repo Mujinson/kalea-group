@@ -18,6 +18,7 @@ export const DEFAULT_CREW_SETTINGS: CrewSettings = {
 
 export interface CrewTrip {
   enabled?: boolean;
+  mode?: "operai" | "artigiani";
   destination?: string;
   kmOneWay?: number;
   minutesOneWay?: number;
@@ -32,6 +33,20 @@ export interface CrewTrip {
   localKmDay?: number | null; // km al giorno sul posto (albergo ↔ cantiere) in trasferta
   vanEurKm?: number | null; // override €/km furgone
   startDate?: string | null; // YYYY-MM-DD: costo operaio sui giorni lavorativi reali del mese
+  lunchCost?: number | null; // override pranzo €/persona/giorno
+  dinnerCost?: number | null; // override cena €/persona/notte
+  hotelCost?: number | null; // override albergo €/persona/notte
+  // Modalità artigiani (a mq)
+  mq?: number | null;
+  artisanRateMq?: number | null; // €/mq manodopera artigiani
+  artisanCount?: number | null; // numero artigiani
+  mqPerWorkerDay?: number | null; // mq posati al giorno per singolo artigiano
+  artisanDays?: number | null; // override giorni; null = ceil(mq / (artigiani × mq/gg))
+  artisanNights?: number | null; // override notti; null = giorni − 1
+  artisanIncludeLunch?: boolean;
+  artisanIncludeDinner?: boolean;
+  artisanIncludeHotel?: boolean;
+  artisanIncludeTravel?: boolean;
 }
 
 const n = (v: unknown) => Number(v) || 0;
@@ -73,31 +88,68 @@ export const workerDailyCost = (s: CrewSettings, date?: string | null) => {
 };
 
 export function computeCrew(trip: CrewTrip, s: CrewSettings) {
-  const days = Math.max(0, n(trip.days));
-  const workers = Math.max(0, n(trip.workers ?? 1));
+  const mode: "operai" | "artigiani" = trip.mode === "artigiani" ? "artigiani" : "operai";
   const vans = Math.max(0, n(trip.vans ?? 1));
   const kmAR = n(trip.kmOneWay) * 2;
   const tollAR = n(trip.tollOneWay) * 2;
   const isTrasferta = trip.trasferta === "on" || (trip.trasferta !== "off" && n(trip.kmOneWay) > 0 && n(trip.kmOneWay) >= n(s.trasferta_km));
-  const nights = isTrasferta ? (trip.nights != null ? Math.max(0, n(trip.nights)) : Math.max(0, days - 1)) : 0;
-  const trips = days === 0 ? 0 : isTrasferta ? (trip.tripsOverride != null ? Math.max(0, n(trip.tripsOverride)) : 1) : days;
-  const localKm = isTrasferta ? (trip.localKmDay != null ? n(trip.localKmDay) : 20) * days : 0;
+  const lunchRate = trip.lunchCost != null ? Math.max(0, n(trip.lunchCost)) : n(s.lunch);
+  const dinnerRate = trip.dinnerCost != null ? Math.max(0, n(trip.dinnerCost)) : n(s.dinner);
+  const hotelRate = trip.hotelCost != null ? Math.max(0, n(trip.hotelCost)) : n(s.hotel);
+  const mq = Math.max(0, n(trip.mq));
+  const artisanRateMq = Math.max(0, n(trip.artisanRateMq));
+  const mqPerWorkerDay = Math.max(0, n(trip.mqPerWorkerDay));
+  const workers = mode === "artigiani" ? Math.max(0, n(trip.artisanCount ?? 1)) : Math.max(0, n(trip.workers ?? 1));
+  const mqPerDay = workers * mqPerWorkerDay;
+  const daysExact = mq > 0 && mqPerDay > 0 ? mq / mqPerDay : 0;
+  const suggestedDays = daysExact > 0 ? Math.ceil(daysExact) : 0;
+  const days = mode === "artigiani"
+    ? (trip.artisanDays != null ? Math.max(0, n(trip.artisanDays)) : suggestedDays)
+    : Math.max(0, n(trip.days));
+  const nights = isTrasferta
+    ? (mode === "artigiani"
+      ? (trip.artisanNights != null ? Math.max(0, n(trip.artisanNights)) : Math.max(0, days - 1))
+      : (trip.nights != null ? Math.max(0, n(trip.nights)) : Math.max(0, days - 1)))
+    : 0;
+  const includeTravel = mode === "artigiani" ? !!trip.artisanIncludeTravel : true;
+  const includeLunch = mode === "artigiani" ? (trip.artisanIncludeLunch ?? true) : true;
+  const includeDinner = mode === "artigiani" ? (trip.artisanIncludeDinner ?? true) : true;
+  const includeHotel = mode === "artigiani" ? (trip.artisanIncludeHotel ?? true) : true;
+  const trips = !includeTravel || days === 0 ? 0 : isTrasferta ? (trip.tripsOverride != null ? Math.max(0, n(trip.tripsOverride)) : 1) : days;
+  const localKm = includeTravel && isTrasferta ? (trip.localKmDay != null ? n(trip.localKmDay) : 20) * days : 0;
   const dates = trip.startDate && days > 0 ? nextWorkingDays(trip.startDate, days) : [];
-  const dayRates = Array.from({ length: days }, (_, i) => trip.workerDayOverride != null ? n(trip.workerDayOverride) : workerDailyCost(s, dates[i]));
-  const labor = dayRates.reduce((a, r) => a + r, 0) * workers;
-  const workerDay = days > 0 ? labor / (workers * days || 1) : workerDailyCost(s);
+  let labor: number;
+  let dayRates: number[];
+  let workerDay: number;
+  if (mode === "artigiani") {
+    labor = mq * artisanRateMq;
+    const rate = days > 0 && workers > 0 ? labor / (days * workers) : 0;
+    dayRates = Array.from({ length: days }, () => rate);
+    workerDay = rate;
+  } else {
+    dayRates = Array.from({ length: days }, (_, i) => trip.workerDayOverride != null ? n(trip.workerDayOverride) : workerDailyCost(s, dates[i]));
+    labor = dayRates.reduce((a, r) => a + r, 0) * workers;
+    workerDay = days > 0 ? labor / (workers * days || 1) : workerDailyCost(s);
+  }
   const vanEurKm = trip.vanEurKm != null ? n(trip.vanEurKm) : n(s.van_eur_km ?? 0.3);
-  const totalKm = (kmAR * trips + localKm) * vans;
+  const totalKm = includeTravel ? (kmAR * trips + localKm) * vans : 0;
   const van = totalKm * vanEurKm;
   const fuelPerTrip = kmAR * n(s.fuel_l_100km) / 100 * n(s.fuel_price);
-  const fuel = (fuelPerTrip * trips + localKm * n(s.fuel_l_100km) / 100 * n(s.fuel_price)) * vans;
-  const tolls = tollAR * vans * trips;
-  const meals = n(s.lunch) * workers * days + n(s.dinner) * workers * nights;
-  const hotel = n(s.hotel) * workers * nights;
+  const fuel = includeTravel ? (fuelPerTrip * trips + localKm * n(s.fuel_l_100km) / 100 * n(s.fuel_price)) * vans : 0;
+  const tolls = includeTravel ? tollAR * vans * trips : 0;
+  const lunchTotal = includeLunch ? lunchRate * workers * days : 0;
+  const dinnerTotal = includeDinner ? dinnerRate * workers * nights : 0;
+  const meals = lunchTotal + dinnerTotal;
+  const hotel = includeHotel ? hotelRate * workers * nights : 0;
   const total = labor + fuel + tolls + meals + hotel + van;
   const perDay = days > 0 ? total / days : 0;
   const perWorkerDay = days > 0 && workers > 0 ? total / (days * workers) : 0;
-  return { dates, dayRates, totalKm, vanEurKm, van, days, workers, vans, kmAR, tollAR, isTrasferta, nights, trips, localKm, workerDay, labor, fuel, tolls, meals, hotel, total, perDay, perWorkerDay };
+  const perMq = mq > 0 ? total / mq : 0;
+  return {
+    mode, dates, dayRates, totalKm, vanEurKm, van, days, workers, vans, kmAR, tollAR, isTrasferta, nights, trips, localKm,
+    workerDay, labor, fuel, tolls, lunchTotal, dinnerTotal, meals, hotel, total, perDay, perWorkerDay, perMq,
+    mq, mqPerDay, daysExact, suggestedDays, lunchRate, dinnerRate, hotelRate,
+  };
 }
 
 /** Ripartisce la stima in righe giornaliere (per il registro cantiere). */
