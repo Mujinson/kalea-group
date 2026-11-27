@@ -67,7 +67,7 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
 
         {budgetVal > 0 && (
           <p className="text-xs text-muted-foreground">
-            Budget costi (interno) {fmtEur(budgetVal)} —{' '}
+            Prezzo netto cantiere {fmtEur(budgetVal)} —{' '}
             <span className={costs <= budgetVal ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}>
               {costs <= budgetVal ? `sotto di ${fmtEur(budgetVal - costs)}` : `sopra di ${fmtEur(costs - budgetVal)}`}
             </span>
