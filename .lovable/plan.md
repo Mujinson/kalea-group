@@ -1,77 +1,38 @@
-# Revisione CRM: doppioni e piano di unificazione (solo lettura)
+# Economics commessa: utile / perdita / pari con tutti i costi
 
-Nessun codice o dato è stato modificato. I numeri vengono da query di sola lettura eseguite oggi.
+## Cosa vedrà Gabriel
+Nella scheda "Economics commessa" del cantiere: Ricavo netto, Materiali, Manodopera (giornate, ore normali, straordinari), Spese sostenute, Spese previste, poi due righe di margine. In alto un badge colorato: verde "In utile", rosso "In perdita", grigio "In pari" (entro ±1 €). Sotto la manodopera, un elenco "Giornate da confermare" con le presenze vicine al cantiere da ammettere o escludere con una spunta.
 
-## 1. Doppioni trovati
+## Passi (piccoli e reversibili, ciascuno da approvare)
 
-Pagine e voci di menu (`src/components/admin/AdminSidebar.tsx`)
-- **Lead + Pipeline**: stessa tabella `leads` mostrata in lista e kanban → resta `/admin/leads` (`AdminLeads.tsx`); Pipeline diventa una vista dentro Lead.
-- **Lista cantieri + Riepilogo cantieri + Report + Budget vs Consuntivo + Marginalità cantieri**: cinque schermate su `construction_sites`, `site_*` → resta `AdminCantieri` / `AdminCantiereDetail`; le altre diventano schede.
-- **Fatturazione & Incassi + Pagamenti + Contabilità**: `customer_invoices`, `payment_schedules`, `customer_payments` → il calcolo comune è già `src/lib/revenueSources.ts`; la schermata da tenere è Fatturazione.
-- **Margini + Marginalità cantieri + Analytics**: calcolo già unico in `src/lib/margin.ts`, ma tre schermate.
-- **Timbrature + Operai & Ore + Planner**: `worker_time_entries`, `site_work_logs` → calcolo unico `src/lib/workedHours.ts`.
-- **Catalogo prodotti + Prezzi & Margini + Listini + Importa + 5 voci "Catalogo:" in Impostazioni**: `catalog_*`.
-- **Squadre**: `crews` / `crew_members` (0 righe) e `workers` (2) / `site_workers` sono due anagrafiche dello stesso concetto; quella usata davvero è `workers`.
+1. **Funzione di calcolo pura + test** — nuovo `src/lib/siteEconomics.ts`, nessuna modifica a pagine o dati.
+   - Ricavo: `jobRevenue` di `src/lib/margin.ts` (invariato).
+   - Materiali: somma `site_materials.total_cost` (fallback `quantity × unit_cost`), come la tabella Materiali.
+   - Manodopera: per operaio/giorno da `worker_time_entries`; presente se almeno una timbratura entro 3.000 m dalle coordinate del cantiere (`construction_sites.latitude/longitude`, distanza ricalcolata con haversine, non solo `site_id`/`is_at_site`). Tariffa giornata 260 € normale / 350 € trasferta, oraria = giornata ÷ 8; ore oltre 8 = straordinario alla stessa tariffa oraria. `workers.hourly_cost × 8` solo se manca la tariffa giornaliera.
+   - Spese: `site_expenses` divise in previste (`notes` che inizia con "PREVISTO", senza distinzione maiuscole/spazi) e sostenute.
+   - Margine = ricavo − materiali − manodopera − spese sostenute; margine con previste = margine − previste; esito utile/perdita/pari.
+   - Test in `src/lib/siteEconomics.test.ts`: 3 km dentro/fuori, 8h esatte, 10h (2h straordinario), trasferta 350, fallback hourly_cost, split PREVISTO, tre esiti.
 
-Moduli che creano lo stesso record in più punti
-- **Cliente**: `AdminCustomers.tsx`, `AdminFatturazione.tsx`, `src/lib/quoteCrm.ts` (dal preventivo), `supabase/functions/ai-assistant` → quella da tenere è `quoteCrm.ts`.
-- **Lead**: `LeadFormDrawer.tsx`, `quoteCrm.ts`, la funzione `submit_public_lead` (sito, Diventa Partner) e il chatbot.
-- **Preventivo**: un solo editor (`CreaPreventivo.tsx`); la tabella `_deprecated_preventivi` è vuota.
+2. **Collegare la scheda** — `src/components/admin/cantieri/SiteEconomics.tsx`: aggiungere letture di `site_materials`, `worker_time_entries` (con `fetchAllRows`, filtro su finestra date del cantiere), `workers`, coordinate cantiere; `site_expenses` legge anche `notes`. Mostrare righe, due margini e badge. Solo lettura.
 
-Campi che salvano la stessa informazione
-- Nome cliente: `customers.company_name/first_name/last_name`, `quotes.client_name`, `sales.customer_name`, `construction_sites.contact_name/contact_surname` → vince `customers`.
-- Indirizzo del cantiere: `quotes.site_address/site_city` e `construction_sites.address/city` → vince il cantiere dopo la firma, il preventivo prima.
-- Totali: `quotes.total_amount`, `sales.total_amount/subtotal_amount`, `construction_sites.budget_amount`, `customer_invoices.total` → vince il preventivo accettato per il venduto e la fattura per il fatturato.
-- Margine salvato: `sales.margin_amount` contro il calcolo di `margin.ts` → vince il calcolo.
-- Collegamento al cliente: `customer_id` ripetuto su `quotes`, `sales`, `construction_sites` e `customer_invoices` → vince `quotes.customer_id`.
+3. **Trasferta**: interruttore per cantiere "In trasferta" (default automatico: distanza dalla sede in `crew_cost_settings.origin` ≥ `trasferta_km`, come in `src/lib/crewCosts.ts`). Finché non esiste la colonna, il valore automatico è solo calcolato, non salvato.
 
-## 2. Doppioni con dati davvero diversi
-- `construction_sites.budget_amount` diverso da `quotes.total_amount`: **5 su 5** cantieri collegati (probabile budget netto o costi, da verificare).
-- Città del cantiere diversa da `quotes.site_city`: **1**.
-- Preventivi senza `customer_id`: **22** (21 con solo il lead, 1 senza né cliente né lead).
-- Allineati (0 differenze): `client_name` del preventivo contro il cliente, cliente e totale tra vendita e preventivo, `sales.customer_name`, cliente tra fattura e preventivo, cliente tra cantiere e preventivo.
+4. **Presente vicino ma non ammesso** (richiede database, approvazione separata):
+   - Nuova tabella `site_attendance_overrides` (site_id, worker_id, work_date, decision 'ammessa'|'esclusa', note, decided_by, timestamps), solo admin, con GRANT e RLS.
+   - Regola: presenza entro 3 km conta di default; Gabriel può spuntare "Escludi" (es. 26–27 novembre, operaio non entrato) o "Ammetti" una giornata fuori raggio/senza cantiere (es. 11–25 novembre). La spunta vince sempre sul GPS.
+   - Opzionale nella stessa migrazione: `construction_sites.travel_mode` ('auto'|'on'|'off') per salvare il passo 3.
+   - Nessuna modifica a `worker_time_entries`: le timbrature originali restano intatte.
 
-## 3. Record presenti due volte nel database
-- `leads` con la stessa email: **53 gruppi, 71 righe in più**. Esempi: `xx` (16 righe segnaposto, es. fc4feb21…, 76027e5b…), gianluca.ruggi@frassociati.it (a3c0614f, ceef7ab5, 375c6527), architetto@marcoturati.it (17ea9d12, b3f4980d, 670e6e97).
-- `leads` con lo stesso telefono: **62 gruppi**.
-- Lead che sono già clienti (stessa email): **4**. Sono Nava (f5a84d43 → cliente 8d8049ac), Metroquadro (f8529dc4 → 63873e04), Danesi (3a9be09b → 4d66698d) e Rusconi (70d3756c → 99e265a0).
-- `customers` con la stessa email o lo stesso telefono: 0. `quotes.quote_number`: 0. `customer_invoices.invoice_number`: 0. `supplier_invoices` (stesso fornitore e numero): 0.
+5. **UI spunte** in `SiteEconomics.tsx`: elenco giornate con operaio, data, ore, distanza minima, stato (GPS / ammessa / esclusa) e due pulsanti; ricalcolo immediato.
 
-## 4. Assetto proposto (7 voci di menu)
-```text
-1 Oggi          dashboard + prossime azioni + assistente
-2 Contatti      Lead (lista/kanban/mappa) + Clienti; scheda unica
-                cliente -> preventivi, cantieri, fatture, pagamenti
-3 Preventivi    Preventivi + Vendite (la vendita è lo stato "accettato")
-4 Cantieri      lista + scheda con tab Budget, Materiali, Media, Ore, Margine
-5 Squadre       Planner, Appuntamenti, Timbrature, Operai, Ferie
-6 Soldi         Fatturazione e incassi, Costi, Margini/Analytics, Commissioni
-7 Catalogo      Prodotti, Listini, Magazzino, Fornitori, Ordini (Impostazioni nel menu utente)
-```
-Regole di unione
-- Nome, telefono ed email si leggono sempre da `customers` tramite `customer_id`. Le copie (`client_name`, `sales.customer_name`) restano come istantanea del documento e non si mostrano come dato principale.
-- Il cantiere mostra l'indirizzo del preventivo come collegamento, non come copia; `budget_amount` diventa "budget costi", con un'etichetta distinta dal totale del preventivo.
-- I lead doppi si uniscono in quello più vecchio: le attività e i preventivi passano al lead tenuto e gli altri vengono archiviati (stato "duplicato"), non cancellati. I 16 "xx" vengono archiviati.
-- I lead già clienti si chiudono come "convertito" con il collegamento al cliente.
-- Le pagine tolte dal menu restano raggiungibili dal loro indirizzo e vengono reindirizzate alla scheda nuova.
+6. **Verifica**: test unitari + controllo nel browser su un cantiere reale con le date 11–27 novembre; confronto valori prima/dopo.
 
-## 5. Rischi
-- **PDF del preventivo** (`premiumQuotePdf.ts`, `CreaPreventivo.tsx`): leggono `client_name` e `site_*` da `quote_data`, quindi non vanno toccati.
-- **Visualizzatore**: non dipende dal CRM, nessun rischio.
-- **Richiesta preventivo pubblica e form del sito** (`public_quote_requests`, `submit_public_lead`): continueranno a creare lead doppi. Serve un controllo che collega invece di duplicare.
-- **Campagne email**: unire i lead cambia i destinatari, quindi va controllato `email_suppressions` per non ricontattare chi si è disiscritto.
-- **Telegram** (`notify_lead_assignment`): le unioni non devono generare notifiche.
-- **Trigger** `sync_customer_on_quote_won` e `create_site_from_accepted_quote`: ricopiano i campi, quindi vanno adeguati prima di nascondere le copie.
+## Dettagli tecnici
+- Distanza: haversine su lat/lng della timbratura vs cantiere; timbrature senza coordinate → solo ammissione manuale.
+- Ore per giorno: come `summarizeDay` di `src/lib/workedHours.ts` (esclusi pausa e viaggio), per non divergere da timbrature e ore.
+- Questa regola vale solo per la scheda commessa; Margini/Marginalità restano su `workedHours.ts` finché non decidi di allinearle (eventuale passo successivo).
+- Rischi: nessuno su PDF, preventivi, campagne, Telegram, form pubblici; il passo 4 è additivo.
 
-## Passi (ognuno piccolo e reversibile; mi fermo dopo ciascuno)
-1. Export CSV dei 71 lead doppi, dei 4 lead già clienti, dei 22 preventivi senza cliente e dei 5 budget diversi (nessuna modifica).
-2. Scheda cliente unica con preventivi, cantieri, fatture, pagamenti e prossima azione, tutti come collegamenti (solo interfaccia).
-3. Pipeline come vista dentro Lead; voce Pipeline nascosta, indirizzo mantenuto.
-4. Le schermate dei cantieri diventano schede del dettaglio cantiere; voci nascoste, indirizzi reindirizzati.
-5. Pagamenti e Contabilità dentro Fatturazione; Margini, Marginalità e Analytics in un'unica pagina.
-6. Etichetta "Budget costi" sul cantiere e nome cliente letto sempre da `customers`.
-7. Un solo modulo per creare clienti (`quoteCrm.ts`), usato da Fatturazione, pagina Clienti e assistente.
-8. Controllo anti-doppione in `submit_public_lead` e in `LeadFormDrawer` (collega il lead esistente). Richiede una migrazione.
-9. Archiviazione dei lead doppi con stato "duplicato" e spostamento di attività e preventivi (modifica dati, con approvazione).
-10. Collegamento dei 21 preventivi con solo lead al cliente corretto (modifica dati, con approvazione).
-11. Menu ridotto alle 7 voci.
+## Domande aperte
+- Tariffe 260/350 fisse per tutti o personalizzabili per operaio (colonna futura su `workers`)?
+- Un cantiere è tutto in trasferta o si decide giorno per giorno?
