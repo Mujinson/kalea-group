@@ -3042,7 +3042,7 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Testata */}
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid hsl(var(--quote-ink))"}}>
+            <div data-quote-header style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:32,paddingBottom:24,borderBottom:"2px solid hsl(var(--quote-ink))"}}>
               <div style={{textAlign:"center"}}>
                 {KALEA_LOGO ? <img data-quote-logo src={KALEA_LOGO} alt="Kalēa" style={{height:88,display:"block",margin:"0 auto 8px"}}/> : <div style={{fontSize:40,fontWeight:600,color:"hsl(var(--quote-ink))"}}>Kalēa<sup>®</sup></div>}
                 <div style={{fontSize:13,color:"hsl(var(--quote-bronze))",letterSpacing:".08em",marginBottom:3}}>Innovate | Living | Nature</div>
@@ -3064,7 +3064,7 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Cliente */}
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
+            <div data-quote-customer style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
               <div>
                 <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:8}}>{lingua==="IT"?"Dati di fatturazione":t.cliente}</div>
                 <div style={{fontSize:14,fontWeight:500}}>{cliente.nome||"—"}</div>

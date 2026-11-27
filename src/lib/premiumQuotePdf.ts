@@ -85,22 +85,6 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
       y += leading;
     }
   };
-  const columns = (block: HTMLElement) => {
-    const children = Array.from(block.children) as HTMLElement[];
-    if (children.length !== 2) return false;
-    const width = (W - M * 2 - 10) / 2;
-    doc.setFont('Quote', 'normal'); doc.setFontSize(8);
-    const texts = children.map(el => doc.splitTextToSize(el.innerText, width) as string[]);
-    const height = Math.max(...texts.map(lines => lines.length)) * 4.18 + 8;
-    ensure(height);
-    const start = y;
-    texts.forEach((lines, index) => {
-      y = start;
-      text(lines.join('\n'), 8, 'normal', M + index * (width + 10), width);
-    });
-    y = start + height;
-    return true;
-  };
   const cover = root.querySelector<HTMLElement>('[data-quote-cover]');
   if (cover) {
     const photoElement = cover.querySelector<HTMLImageElement>('[data-cover-photo]');
@@ -175,9 +159,88 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
   }
 
   const blocks = Array.from(root.children) as HTMLElement[];
-  for (const [blockIndex, block] of blocks.entries()) {
+  for (const block of blocks) {
     if (block.hasAttribute('data-quote-cover')) continue;
-    if ((blockIndex === 1 || blockIndex === 2) && columns(block)) continue;
+    if (block.hasAttribute('data-quote-header')) {
+      const company = block.children[0] as HTMLElement | undefined;
+      const details = block.children[1] as HTMLElement | undefined;
+      if (!company || !details) continue;
+      const start = y;
+      const companyWidth = 68;
+      const centerX = M + companyWidth / 2;
+      const headerLogoWidth = 42;
+      doc.addImage(logo.data, 'PNG', centerX - headerLogoWidth / 2, start - 3, headerLogoWidth, logoH);
+      let companyY = start + logoH + 5;
+      const companyRows = (Array.from(company.children) as HTMLElement[]).filter(el => el.tagName !== 'IMG');
+      companyRows.forEach((row, index) => {
+        const size = index === 0 ? 9 : 8;
+        doc.setFont('Quote', 'normal'); doc.setFontSize(size);
+        doc.setTextColor(...(index === 0 ? bronze : muted));
+        const lines = doc.splitTextToSize(row.innerText.trim(), companyWidth) as string[];
+        doc.text(lines, centerX, companyY, { align: 'center', lineHeightFactor: 1.4 });
+        companyY += lines.length * size * .352778 * 1.4 + .6;
+      });
+      let detailY = start;
+      const detailWidth = 90;
+      (Array.from(details.children) as HTMLElement[]).forEach((row, index) => {
+        if (!row.innerText.trim()) return;
+        if (index === 0) {
+          doc.setFont('Quote', 'bold'); doc.setFontSize(17); doc.setTextColor(...ink);
+          const lines = doc.splitTextToSize(row.innerText.trim(), detailWidth) as string[];
+          doc.text(lines, W - M, detailY, { align: 'right', lineHeightFactor: 1.3 });
+          detailY += lines.length * 7.8 + 2;
+        } else {
+          const strong = row.querySelector('strong');
+          const value = strong?.innerText.trim() || '';
+          const label = value ? row.innerText.slice(0, row.innerText.lastIndexOf(value)).trimEnd() + ' ' : row.innerText.trim();
+          doc.setFontSize(9); doc.setFont('Quote', 'bold');
+          const valueWidth = doc.getTextWidth(value);
+          doc.setFont('Quote', 'normal');
+          if (doc.getTextWidth(label) + valueWidth <= detailWidth) {
+            doc.setTextColor(...muted); doc.text(label, W - M - valueWidth, detailY, { align: 'right' });
+            doc.setFont('Quote', 'bold'); doc.setTextColor(...ink); doc.text(value, W - M, detailY, { align: 'right' });
+            detailY += 5.5;
+          } else {
+            const lines = doc.splitTextToSize(row.innerText.trim(), detailWidth) as string[];
+            doc.setTextColor(...ink); doc.text(lines, W - M, detailY, { align: 'right', lineHeightFactor: 1.4 });
+            detailY += lines.length * 4.5 + 1;
+          }
+        }
+      });
+      y = Math.max(companyY, detailY) + 5;
+      doc.setDrawColor(...ink); doc.setLineWidth(.5); doc.line(M, y, W - M, y);
+      y += 12;
+      continue;
+    }
+    if (block.hasAttribute('data-quote-customer')) {
+      const width = (W - M * 2 - 10) / 2;
+      const start = y;
+      let end = start;
+      (Array.from(block.children) as HTMLElement[]).forEach((column, index) => {
+        y = start;
+        const x = M + index * (width + 10);
+        (Array.from(column.children) as HTMLElement[]).forEach((row, rowIndex) => {
+          const value = row.innerText.trim();
+          if (!value) return;
+          const heading = rowIndex === 0;
+          const primary = rowIndex === 1;
+          const size = heading ? 8 : 9;
+          const weight = heading || primary ? 'bold' : 'normal';
+          doc.setFont('Quote', weight); doc.setFontSize(size);
+          const lines = doc.splitTextToSize(heading ? value.toLocaleUpperCase() : value, width) as string[];
+          for (const line of lines) {
+            ensure(5);
+            doc.setFont('Quote', weight); doc.setFontSize(size); doc.setTextColor(...(primary ? ink : muted));
+            doc.text(line, x, y);
+            y += 4.8;
+          }
+          if (heading) y += 3;
+        });
+        end = Math.max(end, y);
+      });
+      y = end + 9;
+      continue;
+    }
     if (block.tagName === 'TABLE') {
       const table = block as HTMLTableElement;
       const head = Array.from(table.querySelectorAll('thead th')).map(cell => (cell as HTMLElement).innerText);
