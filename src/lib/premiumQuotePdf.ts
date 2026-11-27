@@ -218,7 +218,170 @@ export async function buildPremiumQuotePdf(root: HTMLElement): Promise<jsPDF> {
         if (cells[1]) doc.text(cells[1].innerText, 190, y, { align: 'right' });
         y += 7;
       });
-      y += 8; continue;
+      y += 12; continue;
+    }
+    if (block.hasAttribute('data-quote-supply')) {
+      const titleEl = block.firstElementChild as HTMLElement | null;
+      const gridEl = block.children[1] as HTMLElement | undefined;
+      const extraEl = block.children[2] as HTMLElement | undefined;
+      const items = gridEl ? (Array.from(gridEl.children) as HTMLElement[]) : [];
+      const rowCount = Math.ceil(items.length / 2);
+      const extraLines = extraEl?.innerText.trim()
+        ? (doc.setFont('Quote', 'normal'), doc.setFontSize(8), doc.splitTextToSize(extraEl.innerText.trim(), W - M * 2) as string[])
+        : [];
+      ensure(16 + rowCount * 6.5 + (extraLines.length ? extraLines.length * 4 + 4 : 0));
+      doc.setDrawColor(...taupe); doc.setLineWidth(0.25); doc.line(M, y - 4, W - M, y - 4);
+      y += 2;
+      if (titleEl) {
+        doc.setFont('Quote', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...ink);
+        doc.text(titleEl.innerText.trim().toLocaleUpperCase(), M, y, { charSpace: 0.55 });
+        y += 7;
+      }
+      const colGap = 10;
+      const colWidth = (W - M * 2 - colGap) / 2;
+      for (let i = 0; i < items.length; i += 2) {
+        const pair = [items[i], items[i + 1]].filter(Boolean) as HTMLElement[];
+        let rowHeight = 5.5;
+        pair.forEach((cell, colIndex) => {
+          const x = M + colIndex * (colWidth + colGap);
+          const spans = Array.from(cell.children) as HTMLElement[];
+          const labelText = spans[0]?.innerText ?? '';
+          const valueText = spans[1]?.innerText ?? cell.innerText;
+          doc.setFont('Quote', 'normal'); doc.setFontSize(8.5);
+          if (labelText) {
+            const labelWidth = doc.getTextWidth(labelText);
+            doc.setTextColor(...muted);
+            doc.text(labelText, x, y);
+            const remainingWidth = Math.max(20, colWidth - labelWidth);
+            const valLines = doc.splitTextToSize(valueText, remainingWidth) as string[];
+            doc.setTextColor(...ink);
+            valLines.forEach((line, li) => {
+              doc.text(line, li === 0 ? x + labelWidth : x, y + li * 4.2);
+            });
+            rowHeight = Math.max(rowHeight, valLines.length * 4.2 + 2);
+          } else {
+            const valLines = doc.splitTextToSize(valueText, colWidth) as string[];
+            doc.setTextColor(...ink);
+            valLines.forEach((line, li) => doc.text(line, x, y + li * 4.2));
+            rowHeight = Math.max(rowHeight, valLines.length * 4.2 + 2);
+          }
+        });
+        y += rowHeight;
+      }
+      if (extraLines.length) {
+        y += 2;
+        doc.setFont('Quote', 'normal'); doc.setFontSize(8); doc.setTextColor(...muted);
+        for (const line of extraLines) {
+          ensure(5);
+          doc.text(line, M, y);
+          y += 4;
+        }
+      }
+      y += 8;
+      continue;
+    }
+    if (block.hasAttribute('data-quote-payment')) {
+      const titleEl = block.firstElementChild as HTMLElement | null;
+      const rows = Array.from(block.querySelectorAll<HTMLElement>('[data-quote-payment-row]'));
+      const bankEl = block.querySelector<HTMLElement>('[data-quote-bank]');
+      const bankLines = bankEl ? (Array.from(bankEl.children) as HTMLElement[]) : [];
+      const bankHeight = bankEl ? 12.5 + Math.max(1, bankLines.length - 1) * 5.2 : 0;
+      const estTotal = 16 + rows.length * 8.5 + (bankEl ? bankHeight + 8 : 0);
+      ensure(Math.min(estTotal, 95));
+      doc.setDrawColor(...taupe); doc.setLineWidth(0.25); doc.line(M, y - 4, W - M, y - 4);
+      y += 2;
+      if (titleEl) {
+        doc.setFont('Quote', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...ink);
+        doc.text(titleEl.innerText.trim().toLocaleUpperCase(), M, y, { charSpace: 0.55 });
+        y += 8;
+      }
+      for (const row of rows) {
+        const leftEl = row.children[0] as HTMLElement | undefined;
+        const rightEl = row.children[1] as HTMLElement | undefined;
+        const leftText = leftEl?.innerText.trim() ?? '';
+        const rightText = rightEl?.innerText.trim() ?? '';
+        doc.setFont('Quote', 'normal'); doc.setFontSize(8.5);
+        const leftLines = doc.splitTextToSize(leftText, W - M * 2 - 48) as string[];
+        const rowH = Math.max(leftLines.length * 4.3, 4.5) + 4;
+        ensure(rowH + 2);
+        doc.setFont('Quote', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...ink);
+        leftLines.forEach((line, li) => doc.text(line, M, y + li * 4.3));
+        if (rightText) {
+          doc.setFont('Quote', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...ink);
+          doc.text(rightText, W - M, y, { align: 'right' });
+        }
+        const lineY = y + Math.max(leftLines.length - 1, 0) * 4.3 + 2.6;
+        doc.setDrawColor(...taupe); doc.setLineWidth(0.2); doc.line(M, lineY, W - M, lineY);
+        y = lineY + 5.2;
+      }
+      if (bankEl && bankLines.length) {
+        y += 2;
+        ensure(bankHeight + 4);
+        const boxY = y;
+        doc.setFillColor(...paper);
+        doc.roundedRect(M, boxY, W - M * 2, bankHeight, 2.5, 2.5, 'F');
+        let by = boxY + 6.5;
+        const bx = M + 6;
+        const bankTitle = bankLines[0]?.innerText.trim() ?? '';
+        if (bankTitle) {
+          doc.setFont('Quote', 'bold'); doc.setFontSize(7.5); doc.setTextColor(...ink);
+          doc.text(bankTitle.toLocaleUpperCase(), bx, by, { charSpace: 0.4 });
+          by += 6;
+        }
+        for (let bi = 1; bi < bankLines.length; bi++) {
+          const lineEl = bankLines[bi];
+          const raw = lineEl.innerText.trim();
+          if (!raw) continue;
+          if (bi === 1) {
+            doc.setFont('Quote', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...ink);
+            doc.text(raw, bx, by);
+          } else if (raw.includes(':')) {
+            const colonIdx = raw.indexOf(':');
+            const prefix = raw.slice(0, colonIdx + 1) + ' ';
+            const val = raw.slice(colonIdx + 1).trim();
+            doc.setFont('Quote', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
+            doc.text(prefix, bx, by);
+            const pw = doc.getTextWidth(prefix);
+            const isIban = /^iban/i.test(prefix);
+            doc.setFont('Quote', isIban ? 'bold' : 'normal');
+            doc.setTextColor(...(isIban ? ink : muted));
+            doc.text(val, bx + pw, by, isIban ? { charSpace: 0.25 } : undefined);
+          } else {
+            doc.setFont('Quote', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
+            doc.text(raw, bx, by);
+          }
+          by += 5.2;
+        }
+        y = boxY + bankHeight + 8;
+      } else {
+        y += 6;
+      }
+      continue;
+    }
+    if (block.hasAttribute('data-quote-notes')) {
+      const titleEl = block.firstElementChild as HTMLElement | null;
+      const titleText = titleEl?.innerText.trim() ?? '';
+      const bodyText = fullText.replace(titleText, '').trim();
+      doc.setFont('Quote', 'normal'); doc.setFontSize(8.5);
+      const bodyLines = doc.splitTextToSize(bodyText, W - M * 2 - 12) as string[];
+      const boxH = 14.5 + bodyLines.length * 4.4;
+      ensure(Math.min(boxH + 4, 220));
+      const boxY = y;
+      doc.setFillColor(...paper);
+      doc.roundedRect(M, boxY, W - M * 2, boxH, 2.5, 2.5, 'F');
+      let ny = boxY + 6.5;
+      if (titleText) {
+        doc.setFont('Quote', 'bold'); doc.setFontSize(7.5); doc.setTextColor(...muted);
+        doc.text(titleText.toLocaleUpperCase(), M + 6, ny, { charSpace: 0.4 });
+        ny += 5.8;
+      }
+      doc.setFont('Quote', 'normal'); doc.setFontSize(8.5); doc.setTextColor(...muted);
+      for (const line of bodyLines) {
+        doc.text(line, M + 6, ny);
+        ny += 4.4;
+      }
+      y = boxY + boxH + 8;
+      continue;
     }
     const framed = block.hasAttribute('data-quote-framed');
     if (framed) {

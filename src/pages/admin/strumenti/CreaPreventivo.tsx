@@ -3224,7 +3224,7 @@ export default function CreaPreventivo() {
             </div>
 
             {/* Condizioni di fornitura */}
-            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
+            <div data-quote-supply data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{showCondizioniFornitura ? L.cond_fornitura : L.cond_generiche}</div>
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px 24px",fontSize:13}}>
                 {showCondizioniFornitura && (<>
@@ -3240,16 +3240,16 @@ export default function CreaPreventivo() {
 
             {/* Pagamenti */}
             {pagamenti.some((p:any)=>(Number(p.pct)||0)>0) && (
-            <div data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
+            <div data-quote-payment data-pdf-block style={{marginTop:28,paddingTop:20,borderTop:"1px solid hsl(var(--quote-taupe))",clear:"both"}}>
               <div style={{fontSize:12,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".07em",marginBottom:12}}>{L.cond_pagamento}</div>
               {pagamenti.filter((p:any)=>(Number(p.pct)||0)>0).map((p:any,i:number)=>(
-                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid hsl(var(--quote-taupe))",fontSize:13}}>
+                <div key={i} data-quote-payment-row style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:"0.5px solid hsl(var(--quote-taupe))",fontSize:13}}>
                   <span>{trRata(lingua, p.label)} {p.data&&`— ${p.data}`} {p.note&&<span style={{color:"hsl(var(--quote-muted))",fontSize:12}}> ({p.note})</span>}</span>
                   <span style={{fontWeight:600}}>{euro(calc.totaleIva*p.pct/100)} ({p.pct}%)</span>
                 </div>
               ))}
               {/* Coordinate bancarie Kalēa */}
-              <div style={{marginTop:14,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:12,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
+              <div data-quote-bank style={{marginTop:14,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:12,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
                 <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-ink))",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>
                   {{IT:"Coordinate bancarie per bonifico",EN:"Bank details for bank transfer",DE:"Bankdaten für Überweisung",FR:"Coordonnées bancaires pour virement",RO:"Date bancare pentru transfer"}[lingua as "IT"|"EN"|"DE"|"FR"|"RO"] || "Coordinate bancarie per bonifico"}
                 </div>
@@ -3263,7 +3263,7 @@ export default function CreaPreventivo() {
 
             {/* Note cliente */}
             {noteCliente && (
-              <div style={{marginTop:20,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:13,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
+              <div data-quote-notes data-pdf-block style={{marginTop:20,padding:"12px 16px",background:"hsl(var(--quote-paper))",borderRadius:8,fontSize:13,color:"hsl(var(--quote-muted))",lineHeight:1.7}}>
                 <div style={{fontSize:11,fontWeight:600,color:"hsl(var(--quote-muted))",textTransform:"uppercase",letterSpacing:".05em",marginBottom:6}}>{t.note_cliente}</div>
                 {noteCliente}
               </div>
