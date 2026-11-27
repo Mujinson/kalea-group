@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { LeadStatusBadge } from './LeadStatusBadge';
-import { LEAD_STATUSES, sourceLabel } from './leadConstants';
+import { LEAD_STATUSES, sourceLabel, leadEmailDisplay, LEAD_EMAIL_MISSING } from './leadConstants';
 
 interface Props {
   open: boolean;
@@ -88,6 +88,8 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
       : lead.company_name || lead.name)
     : '';
 
+  const emailDisplay = leadEmailDisplay(lead?.email);
+
   const contactAddress = lead
     ? [lead.address, lead.postal_code, lead.city, lead.province].filter(Boolean).join(', ')
     : '';
@@ -158,7 +160,9 @@ export default function LeadDetailSheet({ open, onClose, leadId, onEdit, onArchi
                       {(lead.first_name || lead.last_name) && <Row label="Referente" value={`${lead.first_name || ''} ${lead.last_name || ''}`.trim()} />}
                       {lead.profession && <Row label="Professione" value={lead.profession} />}
                       {lead.phone && <Row icon={<Phone className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline" href={`tel:${lead.phone}`}>{lead.phone}</a>} />}
-                      {lead.email && <Row icon={<Mail className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline" href={`mailto:${lead.email}`}>{lead.email}</a>} />}
+                      <Row icon={<Mail className="w-4 h-4" />} value={emailDisplay
+                        ? <a className="text-[#0F172A] hover:underline" href={`mailto:${emailDisplay}`}>{emailDisplay}</a>
+                        : <span className="text-[#94A3B8]">{LEAD_EMAIL_MISSING}</span>} />
                       {lead.website && <Row icon={<Globe className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline truncate" href={lead.website} target="_blank" rel="noreferrer">{lead.website}</a>} />}
                       {lead.linkedin_url && <Row icon={<Linkedin className="w-4 h-4" />} value={<a className="text-[#0F172A] hover:underline truncate" href={lead.linkedin_url} target="_blank" rel="noreferrer">LinkedIn</a>} />}
                       {contactAddress && <Row icon={<MapPin className="w-4 h-4" />} value={contactAddress} />}

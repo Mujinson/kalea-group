@@ -4,7 +4,7 @@ import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Phone, Mail, MapPin, User, Loader2, Plus, Search, Filter as FilterIcon, Building2 } from 'lucide-react';
 import LeadFormDrawer from '@/components/admin/leads/LeadFormDrawer';
 import { LeadStatusBadge } from '@/components/admin/leads/LeadStatusBadge';
-import { LEAD_STATUSES, sourceLabel } from '@/components/admin/leads/leadConstants';
+import { LEAD_STATUSES, sourceLabel, leadEmailDisplay, LEAD_EMAIL_MISSING } from '@/components/admin/leads/leadConstants';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -122,10 +122,14 @@ const CommercialeLeads = () => {
                   <Phone className="w-4 h-4" /> Chiama
                 </a>
               )}
-              {l.email && (
-                <a href={`mailto:${l.email}`} className="flex-1 h-11 rounded-lg border border-[#E5E2DD] text-[#1E1B4B] text-[13px] font-medium flex items-center justify-center gap-2">
+              {leadEmailDisplay(l.email) ? (
+                <a href={`mailto:${leadEmailDisplay(l.email)}`} className="flex-1 h-11 rounded-lg border border-[#E5E2DD] text-[#1E1B4B] text-[13px] font-medium flex items-center justify-center gap-2">
                   <Mail className="w-4 h-4" /> Email
                 </a>
+              ) : (
+                <span className="flex-1 h-11 rounded-lg border border-[#E5E2DD] text-[#94A3B8] text-[13px] font-medium flex items-center justify-center gap-2">
+                  <Mail className="w-4 h-4" /> {LEAD_EMAIL_MISSING}
+                </span>
               )}
             </div>
           </div>

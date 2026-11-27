@@ -55,3 +55,15 @@ export const statusMeta = (value: string) =>
 
 export const sourceLabel = (value: string | null | undefined) =>
   LEAD_SOURCES.find((s) => s.value === value)?.label || value || '—';
+
+export const LEAD_EMAIL_MISSING = 'Email mancante';
+
+/**
+ * Email da mostrare a video: null quando il lead non ha un'email reale
+ * (campo vuoto o segnaposto "xx"). Non modifica il valore salvato.
+ */
+export const leadEmailDisplay = (email: string | null | undefined): string | null => {
+  const value = (email ?? '').trim();
+  if (!value || value.toLowerCase() === 'xx') return null;
+  return value;
+};

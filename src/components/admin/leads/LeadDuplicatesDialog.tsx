@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { Trash2, Merge } from 'lucide-react';
+import { leadEmailDisplay, LEAD_EMAIL_MISSING } from './leadConstants';
 
 interface Props {
   open: boolean;
@@ -154,7 +155,9 @@ export const LeadDuplicatesDialog = ({ open, onOpenChange, leads, onDone }: Prop
                       <Checkbox checked={!!selected[l.id]} onCheckedChange={(v) => setSelected((p) => ({ ...p, [l.id]: !!v }))} />
                     )}
                     <span className="font-medium">{l.name || l.company_name || '—'}</span>
-                    <span className="text-muted-foreground">{l.email || l.phone || ''}</span>
+                    <span className="text-muted-foreground">
+                      {leadEmailDisplay(l.email) || l.phone || <span className="text-[#94A3B8]">{LEAD_EMAIL_MISSING}</span>}
+                    </span>
                     <span className="ml-auto text-xs text-muted-foreground">
                       {l.created_at ? format(new Date(l.created_at), 'dd/MM/yyyy') : ''}
                     </span>

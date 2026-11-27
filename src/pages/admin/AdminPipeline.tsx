@@ -16,6 +16,7 @@ import { ArrowRight, Phone, Mail, MapPin, Building2, Thermometer, Plus } from "l
 import { CrmPageHeader } from "@/components/admin/CrmShell";
 import { toast } from "sonner";
 import { fetchAllRows } from "@/lib/fetchAllRows";
+import { leadEmailDisplay, LEAD_EMAIL_MISSING } from "@/components/admin/leads/leadConstants";
 
 const PIPELINE_STAGES = [
   { value: "cold", label: "Cold", color: "bg-blue-50 border-blue-200", badgeColor: "bg-blue-100 text-blue-700", icon: "❄️" },
@@ -167,7 +168,9 @@ const AdminPipeline = () => {
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Email</Label>
-                  <p className="font-medium">{selectedLead.email || "-"}</p>
+                  <p className={leadEmailDisplay(selectedLead.email) ? "font-medium" : "text-[#94A3B8]"}>
+                    {leadEmailDisplay(selectedLead.email) || LEAD_EMAIL_MISSING}
+                  </p>
                 </div>
                 <div>
                   <Label className="text-xs text-muted-foreground">Telefono</Label>

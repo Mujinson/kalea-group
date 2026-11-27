@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { LeadStatusBadge } from '@/components/admin/leads/LeadStatusBadge';
-import { LEAD_STATUSES, sourceLabel } from '@/components/admin/leads/leadConstants';
+import { LEAD_STATUSES, sourceLabel, leadEmailDisplay, LEAD_EMAIL_MISSING } from '@/components/admin/leads/leadConstants';
 import LeadFormDrawer from '@/components/admin/leads/LeadFormDrawer';
 
 const ACTIVITY_ICONS: Record<string, any> = {
@@ -116,10 +116,14 @@ const CommercialeLeadDetail = () => {
               <Phone className="w-4 h-4" /> Chiama
             </a>
           )}
-          {lead.email && (
-            <a href={`mailto:${lead.email}`} className="flex-1 h-11 rounded-lg border border-[#E5E2DD] text-[#1E1B4B] text-[13px] font-medium flex items-center justify-center gap-2">
+          {leadEmailDisplay(lead.email) ? (
+            <a href={`mailto:${leadEmailDisplay(lead.email)}`} className="flex-1 h-11 rounded-lg border border-[#E5E2DD] text-[#1E1B4B] text-[13px] font-medium flex items-center justify-center gap-2">
               <Mail className="w-4 h-4" /> Email
             </a>
+          ) : (
+            <span className="flex-1 h-11 rounded-lg border border-[#E5E2DD] text-[#94A3B8] text-[13px] font-medium flex items-center justify-center gap-2">
+              <Mail className="w-4 h-4" /> {LEAD_EMAIL_MISSING}
+            </span>
           )}
         </div>
       </div>

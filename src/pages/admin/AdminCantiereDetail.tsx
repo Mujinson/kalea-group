@@ -420,7 +420,7 @@ const AdminCantiereDetail = () => {
             {budgetSummary.budget > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3 pt-2 border-t">
                 <div>
-                  <p className="text-xs text-muted-foreground">Budget preventivato</p>
+                  <p className="text-xs text-muted-foreground">Budget costi (interno)</p>
                   <p className="text-lg font-semibold">€{budgetSummary.budget.toLocaleString("it-IT", { minimumFractionDigits: 2 })}</p>
                 </div>
                 <div>

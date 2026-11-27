@@ -22,7 +22,7 @@ import LeadFormDrawer from '@/components/admin/leads/LeadFormDrawer';
 import LeadDetailSheet from '@/components/admin/leads/LeadDetailSheet';
 import LeadDuplicatesDialog from '@/components/admin/leads/LeadDuplicatesDialog';
 import { LeadStatusBadge } from '@/components/admin/leads/LeadStatusBadge';
-import { LEAD_STATUSES, LEAD_SOURCES, sourceLabel } from '@/components/admin/leads/leadConstants';
+import { LEAD_STATUSES, LEAD_SOURCES, sourceLabel, leadEmailDisplay, LEAD_EMAIL_MISSING } from '@/components/admin/leads/leadConstants';
 import { getSalespersonBadgeStyle } from '@/lib/salespersonColors';
 
 const ALL_COLUMNS = [
@@ -376,7 +376,11 @@ export default function AdminLeads() {
                       </td>
                     )}
                     {visibleCols.includes('created_at') && <td className="px-4 py-3 text-[#64748B]">{format(new Date(l.created_at), 'd MMM yyyy · HH:mm', { locale: it })}</td>}
-                    {visibleCols.includes('email') && <td className="px-4 py-3 text-[#475569]">{l.email || '—'}</td>}
+                    {visibleCols.includes('email') && (
+                      <td className="px-4 py-3 text-[#475569]">
+                        {leadEmailDisplay(l.email) ?? <span className="text-[#94A3B8]">{LEAD_EMAIL_MISSING}</span>}
+                      </td>
+                    )}
                     {visibleCols.includes('phone') && <td className="px-4 py-3 text-[#475569]">{l.phone || '—'}</td>}
                     {visibleCols.includes('contact_type') && <td className="px-4 py-3 text-[#475569] capitalize">{l.contact_type || '—'}</td>}
                     {visibleCols.includes('city') && <td className="px-4 py-3 text-[#475569]">{l.city || '—'}</td>}
