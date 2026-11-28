@@ -1039,6 +1039,7 @@ export type Database = {
           status: string
           tipologia: string | null
           title: string
+          travel_mode: string
           updated_at: string
           water_available: boolean | null
           worker_notes: string | null
@@ -1097,6 +1098,7 @@ export type Database = {
           status?: string
           tipologia?: string | null
           title: string
+          travel_mode?: string
           updated_at?: string
           water_available?: boolean | null
           worker_notes?: string | null
@@ -1155,6 +1157,7 @@ export type Database = {
           status?: string
           tipologia?: string | null
           title?: string
+          travel_mode?: string
           updated_at?: string
           water_available?: boolean | null
           worker_notes?: string | null
@@ -4113,6 +4116,57 @@ export type Database = {
             columns: ["site_id"]
             isOneToOne: false
             referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      site_attendance_overrides: {
+        Row: {
+          created_at: string
+          decided_by: string | null
+          decision: string
+          id: string
+          note: string | null
+          site_id: string
+          updated_at: string
+          work_date: string
+          worker_id: string
+        }
+        Insert: {
+          created_at?: string
+          decided_by?: string | null
+          decision: string
+          id?: string
+          note?: string | null
+          site_id: string
+          updated_at?: string
+          work_date: string
+          worker_id: string
+        }
+        Update: {
+          created_at?: string
+          decided_by?: string | null
+          decision?: string
+          id?: string
+          note?: string | null
+          site_id?: string
+          updated_at?: string
+          work_date?: string
+          worker_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_attendance_overrides_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "construction_sites"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "site_attendance_overrides_worker_id_fkey"
+            columns: ["worker_id"]
+            isOneToOne: false
+            referencedRelation: "workers"
             referencedColumns: ["id"]
           },
         ]
