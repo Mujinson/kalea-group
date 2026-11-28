@@ -626,20 +626,21 @@ const AdminOverview = () => {
   const showMag = tab === 'overview' || tab === 'magazzino';
 
   return (
-    <div className="space-y-3 pb-12" style={{ fontFamily: 'inherit' }}>
+    <div className="space-y-3 pb-12 min-w-0" style={{ fontFamily: 'inherit' }}>
       {/* TOP BAR */}
-      <div className="sticky top-0 z-20 -mx-6 px-6 py-2.5 bg-[var(--crm-surface)]/95 backdrop-blur border-b" style={{ borderColor: 'var(--crm-border)' }}>
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="sticky top-0 z-20 -mx-3 md:-mx-6 px-3 md:px-6 py-2.5 bg-[var(--crm-surface)]/95 backdrop-blur border-b" style={{ borderColor: 'var(--crm-border)' }}>
+        <div className="flex flex-wrap items-center justify-between gap-2 md:gap-3">
           <div className="flex items-baseline gap-3">
             <h1 style={{ fontSize: 18, fontWeight: 800, color: 'var(--crm-ink)', letterSpacing: '-0.01em' }}>Kalēa Terminal</h1>
             <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--crm-ink-muted)', fontWeight: 600 }}>
               {range.label}
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex overflow-hidden" style={{ border: '1px solid #E5E7EB', borderRadius: 10 }}>
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 w-full md:w-auto min-w-0">
+            <div className="flex overflow-x-auto max-w-full" style={{ border: '1px solid #E5E7EB', borderRadius: 10 }}>
               {(Object.keys(PERIOD_LABELS) as PeriodKey[]).map(k => (
                 <button key={k} onClick={() => setPeriod(k)}
+                  className="shrink-0 whitespace-nowrap"
                   style={{
                     padding: '6px 12px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
                     background: period === k ? '#4F46E5' : 'var(--crm-surface)',
@@ -650,7 +651,7 @@ const AdminOverview = () => {
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-1.5" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>
+            <div className="flex items-center gap-1.5 shrink-0" style={{ fontSize: 10, color: 'var(--crm-ink-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               LIVE · {format(lastSync, 'HH:mm:ss')}
             </div>
@@ -658,11 +659,12 @@ const AdminOverview = () => {
         </div>
 
         {/* TAB BAR */}
-        <div className="flex gap-0 mt-2 -mb-2.5">
+        <div className="flex gap-0 mt-2 -mb-2.5 overflow-x-auto max-w-full">
           {(Object.keys(TAB_LABELS) as TabKey[]).map(k => (
             <button key={k} onClick={() => setTab(k)}
+              className="shrink-0 whitespace-nowrap"
               style={{
-                padding: '8px 14px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em',
+                padding: '8px 12px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em',
                 color: tab === k ? '#4F46E5' : 'var(--crm-ink-muted)',
                 borderBottom: tab === k ? '2px solid #4F46E5' : '2px solid transparent',
                 transition: 'all 0.15s',

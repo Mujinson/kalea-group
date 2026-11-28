@@ -2131,19 +2131,19 @@ export default function CreaPreventivo() {
           </span>
         </div>
       )}
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:12,marginBottom:20}}>
         <div>
           <h1 style={{fontSize:22,fontWeight:400,color:"#1A1A2E",marginBottom:4}}>Crea Preventivo Kalēa</h1>
           <p style={{fontSize:13,color:"#64748B"}}>Calcola, collega al CRM, genera, salva</p>
         </div>
-        <div style={{display:"flex",gap:8,alignItems:"center"}}>
+        <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
           {(["bozza","inviato","accettato","rifiutato"] as const).map(s=>(
             <Btn key={s} active={stato===s} onClick={()=>setStato(s)} color={statoColor[s]}>{statoLabel[s]}</Btn>
           ))}
         </div>
       </div>
 
-      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F1F5F9",borderRadius:10,padding:4,width:"fit-content",alignItems:"center"}}>
+      <div style={{display:"flex",gap:2,marginBottom:20,background:"#F1F5F9",borderRadius:10,padding:4,width:"fit-content",maxWidth:"100%",overflowX:"auto",alignItems:"center"}}>
         {([["1","Intestazione & Cliente"],["2","Calcolo & Verifica"],["3","Anteprima & PDF"]] as const)
           .filter(([n]) => stato !== "accettato" || n === "3")
           .map(([n,l])=>(
@@ -2168,7 +2168,7 @@ export default function CreaPreventivo() {
       {/* STEP 2 */}
       {step===2 && (
         <div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div style={card}>
             {!prodotto ? (
               <>
@@ -2719,7 +2719,7 @@ export default function CreaPreventivo() {
 
       {/* STEP 1 */}
       {step===1 && (
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <div style={card}>
               <div style={sectionTitle}>Intestazione preventivo</div>

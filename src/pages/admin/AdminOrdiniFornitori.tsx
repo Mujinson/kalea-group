@@ -64,7 +64,7 @@ export default function AdminOrdiniFornitori() {
       <CrmPageHeader breadcrumb={["Fornitori", "Ordini fornitori"]} title="Ordini fornitori"
         subtitle="Ordini inviati ai fornitori e conferme d'ordine ricevute: tutto resta salvato."
         actions={<Button size="sm" onClick={() => setEditing(newOrder())}><Plus className="w-4 h-4 mr-2" />Nuovo ordine</Button>} />
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {([["tutti", "Tutti"], ["uscita", "Inviati da noi"], ["entrata", "Ricevuti dal fornitore"]] as const).map(([k, v]) => (
           <Button key={k} size="sm" variant={dir === k ? "default" : "outline"} onClick={() => setDir(k)}>{v}</Button>
         ))}

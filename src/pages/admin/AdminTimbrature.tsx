@@ -257,13 +257,13 @@ const AdminTimbrature = () => {
   const clearRange = () => { setFromDate(''); setToDate(''); };
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-2 sm:p-6 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-[#0F172A]">Timbrature Posatori</h1>
           <p className="text-sm text-muted-foreground">Ore giornaliere con verifica GPS · export per studio paghe</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={exportCSV} disabled={grouped.length === 0}>
             <Download className="w-4 h-4 mr-2" /> CSV
           </Button>

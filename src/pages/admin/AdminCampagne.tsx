@@ -57,14 +57,14 @@ export default function AdminCampagne() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-2 sm:p-6 space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-crm-ink">Campagne email</h1>
           <p className="text-sm text-crm-ink-muted">Invio automatico nei giorni lavorativi, con limite giornaliero.</p>
         </div>
-        <div className="flex gap-2">
-          <Input placeholder="Nome nuova campagna" value={newName} onChange={(e) => setNewName(e.target.value)} className="w-64 bg-white" />
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full sm:w-auto">
+          <Input placeholder="Nome nuova campagna" value={newName} onChange={(e) => setNewName(e.target.value)} className="flex-1 min-w-0 sm:w-64 bg-white" />
           <Button onClick={create}><Plus className="w-4 h-4 mr-1" />Nuova</Button>
         </div>
       </div>

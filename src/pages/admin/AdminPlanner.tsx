@@ -743,15 +743,15 @@ export default function AdminPlanner() {
 
         {/* Toolbar */}
         <div className="flex items-center justify-between gap-2 flex-wrap bg-white border rounded-md p-2">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 overflow-x-auto max-w-full">
             {(Object.keys(VIEW_LABELS) as ViewMode[]).map((v) => (
               <button key={v} onClick={() => setView(v)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded transition-colors ${view === v ? 'bg-foreground text-background' : 'hover:bg-muted'}`}>
+                className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded transition-colors ${view === v ? 'bg-foreground text-background' : 'hover:bg-muted'}`}>
                 {VIEW_LABELS[v]}
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 max-w-full">
             <Button size="sm" variant="ghost" onClick={() => shift(-1)}><ChevronLeft className="w-4 h-4" /></Button>
             <Button
               size="sm"
@@ -760,7 +760,7 @@ export default function AdminPlanner() {
             >Oggi</Button>
             <Popover>
               <PopoverTrigger asChild>
-                <button className="text-sm font-semibold capitalize min-w-[180px] text-center px-2 py-1 rounded hover:bg-muted transition-colors">
+                <button className="text-sm font-semibold capitalize min-w-0 sm:min-w-[180px] text-center px-2 py-1 rounded hover:bg-muted transition-colors">
                   {periodLabel}
                 </button>
               </PopoverTrigger>
@@ -770,7 +770,7 @@ export default function AdminPlanner() {
             </Popover>
             <Button size="sm" variant="ghost" onClick={() => shift(1)}><ChevronRight className="w-4 h-4" /></Button>
           </div>
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex flex-wrap items-center gap-2 text-xs max-w-full">
             <select value={filterCrew} onChange={(e) => setFilterCrew(e.target.value)} className="border rounded px-2 py-1 bg-background">
               <option value="">Tutte squadre</option>
               {crews.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}

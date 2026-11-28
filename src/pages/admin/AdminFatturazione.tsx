@@ -152,6 +152,7 @@ export default function AdminFatturazione() {
           <Card><CardContent className="p-0">
             {daFatturare.length === 0 && <div className="p-8 text-center text-sm text-muted-foreground">Nessun preventivo accettato da fatturare</div>}
             {daFatturare.length > 0 && (
+              <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
                   <tr>
@@ -184,6 +185,7 @@ export default function AdminFatturazione() {
                   ))}
                 </tbody>
               </table>
+              </div>
             )}
           </CardContent></Card>
         </TabsContent>
@@ -192,6 +194,7 @@ export default function AdminFatturazione() {
           <Card><CardContent className="p-0">
             {invoices.length === 0 && <div className="p-8 text-center text-sm text-muted-foreground">Nessuna fattura ancora emessa</div>}
             {invoices.length > 0 && (
+              <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
                   <tr>
@@ -242,6 +245,7 @@ export default function AdminFatturazione() {
                   ))}
                 </tbody>
               </table>
+              </div>
             )}
           </CardContent></Card>
         </TabsContent>
@@ -250,6 +254,7 @@ export default function AdminFatturazione() {
           <Card><CardContent className="p-0">
             {payments.length === 0 && <div className="p-8 text-center text-sm text-muted-foreground">Nessun incasso registrato</div>}
             {payments.length > 0 && (
+              <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
                   <tr>
@@ -276,6 +281,7 @@ export default function AdminFatturazione() {
                   ))}
                 </tbody>
               </table>
+              </div>
             )}
           </CardContent></Card>
         </TabsContent>
