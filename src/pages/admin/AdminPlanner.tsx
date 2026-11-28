@@ -35,6 +35,7 @@ import {
 } from '@/lib/planner';
 import CrewManagerDialog from '@/components/admin/planner/CrewManagerDialog';
 import AssignmentDialog from '@/components/admin/planner/AssignmentDialog';
+import KaleaGoogleCalendar from '@/components/admin/KaleaGoogleCalendar';
 
 type ViewMode = 'giorno' | 'settimana' | 'mese' | 'anno' | 'gantt' | 'carico' | 'gcal';
 
@@ -471,16 +472,7 @@ export default function AdminPlanner() {
   };
   const APPT_ICON: Record<string, string> = { chiamata: '📞', videochiamata: '🎥', visita: '📍' };
 
-  const renderGcal = () => (
-    <div className="bg-white border rounded-md overflow-hidden">
-      <div className="p-3 border-b bg-amber-50 text-xs text-amber-900">
-        💡 Se non vedi gli eventi: apri Google Calendar → Impostazioni del calendario Kalēa → <b>Rendi disponibile pubblicamente</b>, altrimenti l'embed mostra solo lo scheletro.
-      </div>
-      <div className="w-full" style={{ aspectRatio: '4 / 3', minHeight: 600 }}>
-        <iframe src={GCAL_EMBED_SRC} className="w-full h-full border-0" title="Google Calendar Kalēa" />
-      </div>
-    </div>
-  );
+  const renderGcal = () => <KaleaGoogleCalendar />;
 
   const renderSettimana = () => {
     const ws = startOfWeek(cursor, { weekStartsOn: 1 });

@@ -12,6 +12,7 @@ import FinanceOverviewBlock from '@/components/admin/FinanceOverviewBlock';
 import RevenueFunnelBlock from '@/components/admin/RevenueFunnelBlock';
 import CrewCostDashboardBlock from '@/components/admin/CrewCostDashboardBlock';
 import CompanyProfitBlock from '@/components/admin/profit/CompanyProfitBlock';
+import KaleaGoogleCalendar from '@/components/admin/KaleaGoogleCalendar';
 import {
   TrendingUp, FileText, HardHat, Target, Users, Wallet,
   AlertTriangle, Package, ChevronRight, ArrowUp, ArrowDown,
@@ -703,16 +704,7 @@ const AdminOverview = () => {
       )}
 
       {/* CALENDARIO GOOGLE — appuntamenti e lavori passati, in corso e futuri */}
-      <div className="bg-white border rounded-xl overflow-hidden">
-        <div className="px-4 py-3 border-b text-sm font-semibold">Calendario Kalēa</div>
-        <div className="w-full" style={{ height: 620 }}>
-          <iframe
-            src="https://calendar.google.com/calendar/embed?src=135b1a2f990dd0c5081b9ac59698f6c310f5d5bf93ac607c75d13922ba84eac6%40group.calendar.google.com&ctz=Europe%2FRome&mode=MONTH&showPrint=0"
-            className="w-full h-full border-0"
-            title="Google Calendar Kalēa"
-          />
-        </div>
-      </div>
+      <KaleaGoogleCalendar />
 
       <RevenueFunnelBlock />
 
