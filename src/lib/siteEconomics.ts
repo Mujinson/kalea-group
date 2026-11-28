@@ -1,5 +1,5 @@
 import { haversineMeters } from './geo';
-import { computeMargin } from './margin';
+import { computeMargin, jobRevenue } from './margin';
 import { summarizeDay, type TimeEntry } from './timbrature';
 
 export const SITE_PROXIMITY_METERS = 3000;
@@ -14,15 +14,24 @@ export type AttendanceDecision = 'ammessa' | 'esclusa';
 export type AttendanceStatus = 'gps' | 'ammessa' | 'esclusa' | 'fuori_raggio';
 export type EconomicsOutcome = 'utile' | 'perdita' | 'pari';
 
+export const OUTCOME_META: Record<EconomicsOutcome, { label: string; badgeClass: string; textClass: string }> = {
+  utile: { label: 'In utile', badgeClass: 'bg-green-600 text-white hover:bg-green-600', textClass: 'text-green-600' },
+  perdita: { label: 'In perdita', badgeClass: 'bg-red-600 text-white hover:bg-red-600', textClass: 'text-red-600' },
+  pari: { label: 'In pari', badgeClass: 'bg-slate-500 text-white hover:bg-slate-500', textClass: 'text-slate-600' },
+};
+
 export interface SiteMaterialRow {
+  site_id?: string | null;
   total_cost?: number | string | null;
   quantity?: number | string | null;
   unit_cost?: number | string | null;
 }
 
 export interface SiteExpenseRow {
+  site_id?: string | null;
   amount?: number | string | null;
   notes?: string | null;
+  expense_type?: string | null;
 }
 
 export interface SiteWorkerRow {
@@ -34,6 +43,7 @@ export interface SiteWorkerRow {
 }
 
 export interface AttendanceOverrideRow {
+  site_id?: string | null;
   worker_id: string;
   work_date: string;
   decision: AttendanceDecision;
@@ -101,22 +111,38 @@ export function isPlannedExpense(notes?: string | null): boolean {
   return String(notes ?? '').trim().toUpperCase().startsWith('PREVISTO');
 }
 
+export function isMaterialExpense(expenseType?: string | null): boolean {
+  return String(expenseType ?? '').trim().toLowerCase() === 'materiali';
+}
+
 export function splitSiteExpenses(expenses: SiteExpenseRow[]) {
   let sustained = 0;
   let planned = 0;
+  let materialExpenses = 0;
   let sustainedCount = 0;
   let plannedCount = 0;
+  let materialExpensesCount = 0;
   for (const e of expenses) {
     const amt = num(e.amount);
     if (isPlannedExpense(e.notes)) {
       planned += amt;
       plannedCount += 1;
+    } else if (isMaterialExpense(e.expense_type)) {
+      materialExpenses += amt;
+      materialExpensesCount += 1;
     } else {
       sustained += amt;
       sustainedCount += 1;
     }
   }
-  return { sustained: r2(sustained), planned: r2(planned), sustainedCount, plannedCount };
+  return {
+    sustained: r2(sustained),
+    planned: r2(planned),
+    materialExpenses: r2(materialExpenses),
+    sustainedCount,
+    plannedCount,
+    materialExpensesCount,
+  };
 }
 
 export function classifyOutcome(margin: number, epsilon = BREAK_EVEN_EPSILON): EconomicsOutcome {
@@ -259,8 +285,8 @@ export function computeSiteEconomics(input: ComputeSiteEconomicsInput) {
   const overtimeHours = r2(includedList.reduce((s, d) => s + d.overtimeHours, 0));
   const totalHours = r2(regularHours + overtimeHours);
 
-  const materialsCost = sumSiteMaterials(input.materials);
   const expenses = splitSiteExpenses(input.expenses);
+  const materialsCost = r2(sumSiteMaterials(input.materials) + expenses.materialExpenses);
 
   const current = computeMargin(input.revenue, {
     materials: materialsCost,
@@ -296,4 +322,85 @@ export function computeSiteEconomics(input: ComputeSiteEconomicsInput) {
     days: relevantDays,
     allWorkerDays,
   };
+}
+
+export type SiteEconomicsResult = ReturnType<typeof computeSiteEconomics>;
+
+export interface SiteRecordForEconomics {
+  id: string;
+  sale_id?: string | null;
+  quote_id?: string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  travel_mode?: TravelMode | string | null;
+}
+
+export interface ComputeAllSitesEconomicsInput {
+  sites: SiteRecordForEconomics[];
+  invoices: any[];
+  schedules: any[];
+  materials: SiteMaterialRow[];
+  expenses: SiteExpenseRow[];
+  timeEntries: (TimeEntry & { worker_id?: string | null })[];
+  workers: SiteWorkerRow[];
+  overrides?: AttendanceOverrideRow[];
+  trasfertaKm?: number;
+}
+
+export function computeAllSitesEconomics(
+  input: ComputeAllSitesEconomicsInput
+): Map<string, SiteEconomicsResult & { isTravel: boolean; distanceFromOriginKm: number | null }> {
+  const thresholdKm = input.trasfertaKm && input.trasfertaKm > 0 ? input.trasfertaKm : 150;
+
+  const matBySite = new Map<string, SiteMaterialRow[]>();
+  for (const m of input.materials) {
+    if (!m.site_id) continue;
+    const arr = matBySite.get(m.site_id);
+    if (arr) arr.push(m);
+    else matBySite.set(m.site_id, [m]);
+  }
+
+  const expBySite = new Map<string, SiteExpenseRow[]>();
+  for (const e of input.expenses) {
+    if (!e.site_id) continue;
+    const arr = expBySite.get(e.site_id);
+    if (arr) arr.push(e);
+    else expBySite.set(e.site_id, [e]);
+  }
+
+  const ovBySite = new Map<string, AttendanceOverrideRow[]>();
+  for (const ov of input.overrides || []) {
+    if (!ov.site_id) continue;
+    const arr = ovBySite.get(ov.site_id);
+    if (arr) arr.push(ov);
+    else ovBySite.set(ov.site_id, [ov]);
+  }
+
+  const result = new Map<string, SiteEconomicsResult & { isTravel: boolean; distanceFromOriginKm: number | null }>();
+
+  for (const site of input.sites) {
+    const revenue = jobRevenue(
+      { siteId: site.id, saleId: site.sale_id, quoteId: site.quote_id },
+      input.invoices,
+      input.schedules
+    );
+    const siteCoords = { lat: site.latitude ?? null, lng: site.longitude ?? null };
+    const mode = (site.travel_mode === 'on' || site.travel_mode === 'off' ? site.travel_mode : 'auto') as TravelMode;
+    const { isTravel, distanceFromOriginKm } = resolveIsTravel(mode, siteCoords, thresholdKm);
+
+    const eco = computeSiteEconomics({
+      siteId: site.id,
+      revenue,
+      materials: matBySite.get(site.id) || [],
+      expenses: expBySite.get(site.id) || [],
+      timeEntries: input.timeEntries,
+      workers: input.workers,
+      siteCoords,
+      overrides: ovBySite.get(site.id) || [],
+      isTravel,
+    });
+    result.set(site.id, { ...eco, isTravel, distanceFromOriginKm });
+  }
+
+  return result;
 }

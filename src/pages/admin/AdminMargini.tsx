@@ -1,12 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
-import { computeMargin, jobRevenue } from '@/lib/margin';
+import { jobRevenue } from '@/lib/margin';
 import { supabase } from '@/integrations/supabase/client';
 import { PageHeader, KpiCard, CrmEmptyState } from '@/components/admin/crm-ui';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, TrendingUp, TrendingDown, Percent, AlertTriangle } from 'lucide-react';
-import { buildWorkedHours, groupHoursBySite } from '@/lib/workedHours';
 import { fetchAllRows } from '@/lib/fetchAllRows';
+import {
+  computeAllSitesEconomics,
+  computeSiteEconomics,
+  OUTCOME_META,
+  type AttendanceOverrideRow,
+  type EconomicsOutcome,
+} from '@/lib/siteEconomics';
 
 const db = supabase as any;
 
@@ -25,8 +32,12 @@ interface MarginRow {
   materials: number;
   labor: number;
   expenses: number;
+  plannedExpenses: number;
   margin: number;
   marginPct: number;
+  outcome: EconomicsOutcome;
+  marginWithPlanned: number;
+  outcomeWithPlanned: EconomicsOutcome;
   siteId: string | null;
   saleId: string | null;
 }
@@ -43,15 +54,21 @@ export default function AdminMargini() {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const [sitesR, salesR, saleItemsR, matsR, expR, logsR, entriesR, workersR, spR, prodR, invR, psR] = await Promise.all([
-        db.from('construction_sites').select('id,title,project_name,city,budget_amount,sale_id,quote_id,salesperson_id,start_date,planned_start_date,created_at'),
+      const [sitesR, salesR, saleItemsR, matsR, expR, entriesR, workersR, ovR, settingsR, spR, prodR, invR, psR] = await Promise.all([
+        db.from('construction_sites').select('id,title,project_name,city,budget_amount,sale_id,quote_id,salesperson_id,start_date,planned_start_date,created_at,latitude,longitude,travel_mode'),
         db.from('sales').select('id,sale_date,total_amount,sale_price,customer_name,created_at'),
         db.from('sale_items').select('sale_id,product_type,product_variant,quantity_sqm,unit_price,total_price'),
         db.from('site_materials').select('site_id,quantity,unit_cost,total_cost,product_id'),
-        db.from('site_expenses').select('site_id,amount'),
-        db.from('site_work_logs').select('site_id,worker_id,worker_user_id,work_date,hours_worked,hourly_cost'),
-        fetchAllRows(db.from('worker_time_entries').select('id,user_id,worker_id,site_id,event_type,event_at,event_date').order('event_at', { ascending: true })),
+        db.from('site_expenses').select('site_id,amount,notes,expense_type'),
+        fetchAllRows(
+          db
+            .from('worker_time_entries')
+            .select('id,user_id,worker_id,site_id,event_type,event_at,event_date,latitude,longitude,accuracy_m,distance_from_site_m,is_at_site,notes')
+            .order('event_at', { ascending: true })
+        ),
         db.from('workers').select('id,user_id,first_name,last_name,hourly_cost'),
+        db.from('site_attendance_overrides').select('site_id,worker_id,work_date,decision,note'),
+        db.from('crew_cost_settings').select('trasferta_km').limit(1).maybeSingle(),
         db.from('salespeople').select('id,first_name,last_name'),
         db.from('catalog_products').select('id,product_code,net_cost'),
         db.from('customer_invoices').select('id,site_id,quote_id,subtotal,total,status,paid_amount,invoice_date,due_date,created_at'),
@@ -65,34 +82,29 @@ export default function AdminMargini() {
       const saleItems = saleItemsR.data || [];
       const materials = matsR.data || [];
       const expenses = expR.data || [];
-      const logs = logsR.data || [];
       const entries: any[] = entriesR || [];
       const workers = workersR.data || [];
+      const overrides: AttendanceOverrideRow[] = ovR.data || [];
+      const trasfertaKm = Number(settingsR.data?.trasferta_km || 150);
       const sps = spR.data || [];
       const products = prodR.data || [];
 
       setPeople(sps.map((s: any) => ({ id: s.id, name: `${s.first_name || ''} ${s.last_name || ''}`.trim() })));
 
-      const prodById = new Map(products.map((p: any) => [p.id, p]));
       const prodByCode = new Map(products.map((p: any) => [String(p.product_code || '').toUpperCase(), p]));
       const spName = new Map(sps.map((s: any) => [s.id, `${s.first_name || ''} ${s.last_name || ''}`.trim()]));
 
-      // --- costi per cantiere ---
-      const matBySite = new Map<string, number>();
-      for (const m of materials) {
-        const prod: any = m.product_id ? prodById.get(m.product_id) : null;
-        const cost = prod?.net_cost != null
-          ? Number(prod.net_cost) * Number(m.quantity || 0)
-          : Number(m.total_cost ?? Number(m.unit_cost || 0) * Number(m.quantity || 0));
-        matBySite.set(m.site_id, (matBySite.get(m.site_id) || 0) + (cost || 0));
-      }
-
-      const expBySite = new Map<string, number>();
-      for (const e of expenses) expBySite.set(e.site_id, (expBySite.get(e.site_id) || 0) + Number(e.amount || 0));
-
-      const laborBySite = new Map<string, number>();
-      const hoursBySite = groupHoursBySite(buildWorkedHours({ manualLogs: logs, timeEntries: entries, workers }));
-      for (const [siteId, stat] of hoursBySite) laborBySite.set(siteId, stat.laborCost);
+      const ecoBySite = computeAllSitesEconomics({
+        sites,
+        invoices: allInvoices,
+        schedules: allSchedules,
+        materials,
+        expenses,
+        timeEntries: entries,
+        workers,
+        overrides,
+        trasfertaKm,
+      });
 
       // --- materiali da sale_items (per vendite senza cantiere) ---
       const matBySale = new Map<string, number>();
@@ -102,7 +114,7 @@ export default function AdminMargini() {
           prodByCode.get(String(it.product_type || '').toUpperCase());
         const cost = p?.net_cost != null
           ? Number(p.net_cost) * Number(it.quantity_sqm || 0)
-          : Number(it.total_price || 0) * 0; // nessun costo noto
+          : 0;
         matBySale.set(it.sale_id, (matBySale.get(it.sale_id) || 0) + (cost || 0));
       }
 
@@ -110,27 +122,28 @@ export default function AdminMargini() {
       const usedSales = new Set<string>();
       const out: MarginRow[] = [];
 
-      const push = (r: Omit<MarginRow, 'margin' | 'marginPct'>) => {
-        const { margin, marginPct } = computeMargin(r.revenue, { materials: r.materials, labor: r.labor, expenses: r.expenses });
-        out.push({ ...r, margin, marginPct });
-      };
-
       for (const s of sites) {
         const sale: any = s.sale_id ? saleById.get(s.sale_id) : null;
         if (sale) usedSales.add(sale.id);
-        const revenue = jobRevenue({ siteId: s.id, saleId: sale?.id, quoteId: s.quote_id }, allInvoices, allSchedules);
+        const eco = ecoBySite.get(s.id)!;
         const sold = Number(sale?.total_amount ?? sale?.sale_price ?? 0);
-        push({
+        out.push({
           key: `site-${s.id}`,
           label: s.title || s.project_name || 'Cantiere',
           subtitle: [s.city, sale ? `venduto ${eur(sold)}` : 'senza vendita'].filter(Boolean).join(' · '),
           date: sale?.sale_date || s.start_date || s.planned_start_date || s.created_at?.slice(0, 10) || null,
           salespersonId: s.salesperson_id || null,
           salespersonName: String((s.salesperson_id && spName.get(s.salesperson_id)) || '—'),
-          revenue,
-          materials: (matBySite.get(s.id) || 0) + (sale ? matBySale.get(sale.id) || 0 : 0),
-          labor: laborBySite.get(s.id) || 0,
-          expenses: expBySite.get(s.id) || 0,
+          revenue: eco.revenue,
+          materials: eco.materialsCost,
+          labor: eco.laborCost,
+          expenses: eco.sustainedExpenses,
+          plannedExpenses: eco.plannedExpenses,
+          margin: eco.margin,
+          marginPct: eco.marginPct,
+          outcome: eco.outcome,
+          marginWithPlanned: eco.marginWithPlanned,
+          outcomeWithPlanned: eco.outcomeWithPlanned,
           siteId: s.id,
           saleId: sale?.id || null,
         });
@@ -138,17 +151,35 @@ export default function AdminMargini() {
 
       for (const sale of sales) {
         if (usedSales.has(sale.id)) continue;
-        push({
+        const revenue = jobRevenue({ saleId: sale.id }, allInvoices, allSchedules);
+        const matCost = matBySale.get(sale.id) || 0;
+        const eco = computeSiteEconomics({
+          siteId: `sale-${sale.id}`,
+          revenue,
+          materials: matCost > 0 ? [{ total_cost: matCost }] : [],
+          expenses: [],
+          timeEntries: [],
+          workers: [],
+          siteCoords: {},
+          isTravel: false,
+        });
+        out.push({
           key: `sale-${sale.id}`,
           label: sale.customer_name || 'Vendita',
           subtitle: `Vendita senza cantiere · venduto ${eur(Number(sale.total_amount ?? sale.sale_price ?? 0))}`,
           date: sale.sale_date || sale.created_at?.slice(0, 10) || null,
           salespersonId: null,
           salespersonName: '—',
-          revenue: jobRevenue({ saleId: sale.id }, allInvoices, allSchedules),
-          materials: matBySale.get(sale.id) || 0,
-          labor: 0,
-          expenses: 0,
+          revenue: eco.revenue,
+          materials: eco.materialsCost,
+          labor: eco.laborCost,
+          expenses: eco.sustainedExpenses,
+          plannedExpenses: eco.plannedExpenses,
+          margin: eco.margin,
+          marginPct: eco.marginPct,
+          outcome: eco.outcome,
+          marginWithPlanned: eco.marginWithPlanned,
+          outcomeWithPlanned: eco.outcomeWithPlanned,
           siteId: null,
           saleId: sale.id,
         });
@@ -245,8 +276,11 @@ export default function AdminMargini() {
                 <th className="p-3 text-right">Materiali</th>
                 <th className="p-3 text-right">Manodopera</th>
                 <th className="p-3 text-right">Spese</th>
-                <th className="p-3 text-right">Margine €</th>
+                <th className="p-3 text-right">Previste</th>
+                <th className="p-3 text-right">Margine attuale</th>
+                <th className="p-3 text-right">Margine previsto</th>
                 <th className="p-3 text-right">Margine %</th>
+                <th className="p-3 text-right">Esito</th>
               </tr>
             </thead>
             <tbody>
@@ -264,8 +298,13 @@ export default function AdminMargini() {
                     <td className="p-3 text-right text-crm-ink-muted">{eur(r.materials)}</td>
                     <td className="p-3 text-right text-crm-ink-muted">{eur(r.labor)}</td>
                     <td className="p-3 text-right text-crm-ink-muted">{eur(r.expenses)}</td>
-                    <td className={`p-3 text-right font-semibold ${low ? 'text-crm-danger' : ''}`}>{eur(r.margin)}</td>
+                    <td className="p-3 text-right text-crm-ink-muted">{r.plannedExpenses > 0 ? eur(r.plannedExpenses) : '—'}</td>
+                    <td className={`p-3 text-right font-semibold ${OUTCOME_META[r.outcome].textClass}`}>{eur(r.margin)}</td>
+                    <td className={`p-3 text-right font-semibold ${OUTCOME_META[r.outcomeWithPlanned].textClass}`}>{eur(r.marginWithPlanned)}</td>
                     <td className={`p-3 text-right font-semibold ${low ? 'text-crm-danger' : ''}`}>{r.revenue > 0 ? pct(r.marginPct) : '—'}</td>
+                    <td className="p-3 text-right">
+                      <Badge className={OUTCOME_META[r.outcome].badgeClass}>{OUTCOME_META[r.outcome].label}</Badge>
+                    </td>
                   </tr>
                 );
               })}

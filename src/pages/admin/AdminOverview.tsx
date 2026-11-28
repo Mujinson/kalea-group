@@ -7,6 +7,7 @@ import { useRealtimeSubscription } from '@/hooks/useRealtimeSubscription';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { computeRevenueSummary } from '@/lib/revenueSources';
+import { computeAllSitesEconomics, OUTCOME_META, type AttendanceOverrideRow } from '@/lib/siteEconomics';
 import FinanceOverviewBlock from '@/components/admin/FinanceOverviewBlock';
 import RevenueFunnelBlock from '@/components/admin/RevenueFunnelBlock';
 import CrewCostDashboardBlock from '@/components/admin/CrewCostDashboardBlock';
@@ -254,11 +255,17 @@ const AdminOverview = () => {
   const [paymentAgreements, setPaymentAgreements] = useState<any[]>([]);
   const [customerInvoices, setCustomerInvoices] = useState<any[]>([]);
   const [customerPayments, setCustomerPayments] = useState<any[]>([]);
+  const [siteMaterials, setSiteMaterials] = useState<any[]>([]);
+  const [siteExpenses, setSiteExpenses] = useState<any[]>([]);
+  const [workerTimeEntries, setWorkerTimeEntries] = useState<any[]>([]);
+  const [workers, setWorkers] = useState<any[]>([]);
+  const [siteOverrides, setSiteOverrides] = useState<AttendanceOverrideRow[]>([]);
+  const [trasfertaKm, setTrasfertaKm] = useState<number>(150);
   const [goal, setGoal] = useState<number>(400000);
 
   const fetchAll = useCallback(async () => {
     try {
-      const [q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ciNew, cpNew, gs] = await Promise.all([
+      const [q, s, c, l, sp, pa, inv, sps, ps, ap, rem, cu, fc, vc, sc, ciNew, cpNew, gs, sm, se, wte, wrk, sov, ccs] = await Promise.all([
         fetchAllRows(supabase.from('quotes').select('*')),
         fetchAllRows(supabase.from('sales').select('*')),
         fetchAllRows(supabase.from('construction_sites').select('*')),
@@ -277,6 +284,17 @@ const AdminOverview = () => {
         fetchAllRows(supabase.from('customer_invoices').select('*')),
         fetchAllRows(supabase.from('customer_payments').select('*')),
         supabase.from('app_settings').select('value').eq('key', 'yearly_revenue_goal').maybeSingle(),
+        fetchAllRows(supabase.from('site_materials').select('site_id,total_cost,quantity,unit_cost')),
+        fetchAllRows(supabase.from('site_expenses').select('site_id,amount,notes,expense_type')),
+        fetchAllRows(
+          supabase
+            .from('worker_time_entries')
+            .select('id,user_id,worker_id,event_type,event_at,event_date,latitude,longitude,accuracy_m,site_id,distance_from_site_m,is_at_site,notes')
+            .order('event_at', { ascending: true })
+        ),
+        fetchAllRows(supabase.from('workers').select('id,user_id,first_name,last_name,hourly_cost')),
+        fetchAllRows(supabase.from('site_attendance_overrides').select('site_id,worker_id,work_date,decision,note')),
+        supabase.from('crew_cost_settings').select('trasferta_km').limit(1).maybeSingle(),
       ]);
       setQuotes(q || []); setSales(s || []);
       setSites(c || []); setLeads(l || []); setSupplierPayments(sp || []); setPaymentAgreements(pa || []);
@@ -285,6 +303,11 @@ const AdminOverview = () => {
       setCustomers(cu || []); setFixedCosts(fc || []); setVariableCosts(vc || []);
       setStaticCosts(sc || []);
       setCustomerInvoices(ciNew || []); setCustomerPayments(cpNew || []);
+      setSiteMaterials(sm || []); setSiteExpenses(se || []);
+      setWorkerTimeEntries(wte || []); setWorkers(wrk || []);
+      setSiteOverrides((sov || []) as AttendanceOverrideRow[]);
+      const km = Number((ccs as any)?.data?.trasferta_km);
+      if (Number.isFinite(km) && km > 0) setTrasfertaKm(km);
       const goalVal = (gs as any)?.data?.value?.amount;
       if (typeof goalVal === 'number') setGoal(goalVal);
       setLastSync(new Date());
@@ -294,7 +317,7 @@ const AdminOverview = () => {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
   useRealtimeSubscription({
-    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'customer_invoices', 'customer_payments'],
+    tables: ['quotes', 'sales', 'construction_sites', 'leads', 'supplier_payments', 'payment_agreements', 'inventory', 'app_settings', 'payment_schedules', 'appointments', 'customer_reminders', 'customers', 'fixed_costs', 'variable_costs', 'static_costs', 'customer_invoices', 'customer_payments', 'site_materials', 'site_expenses', 'worker_time_entries', 'workers', 'site_attendance_overrides'],
     onDataChange: fetchAll,
   });
 
@@ -393,13 +416,42 @@ const AdminOverview = () => {
     };
   }, [sites]);
 
+  const sitesEconomicsMap = useMemo(
+    () =>
+      computeAllSitesEconomics({
+        sites,
+        invoices: customerInvoices,
+        schedules: paymentSchedules,
+        materials: siteMaterials,
+        expenses: siteExpenses,
+        timeEntries: workerTimeEntries,
+        workers,
+        overrides: siteOverrides,
+        trasfertaKm,
+      }),
+    [sites, customerInvoices, paymentSchedules, siteMaterials, siteExpenses, workerTimeEntries, workers, siteOverrides, trasfertaKm]
+  );
+
+  const siteEconomicsRows = useMemo(
+    () =>
+      sites
+        .map((c) => {
+          const eco = sitesEconomicsMap.get(c.id);
+          if (!eco) return null;
+          const info = siteInfo(c);
+          return { site: c, info, eco };
+        })
+        .filter((x): x is NonNullable<typeof x> => x !== null),
+    [sites, sitesEconomicsMap, siteInfo]
+  );
+
   const margine = useMemo(() => {
-    // Margine ponderato sull'imponibile; margini >= 95% = costi mancanti, esclusi finché non verificati.
-    const completed = sales.filter(s => inRange(s.sale_date, range.start, range.end) && Number(s.margin_percentage) > 0 && Number(s.margin_percentage) < 95);
-    const net = completed.reduce((a, x) => a + Number(x.subtotal_amount || 0), 0);
-    if (!completed.length || net <= 0) return { avg: 0, count: 0 };
-    return { avg: completed.reduce((a, x) => a + Number(x.margin_amount || 0), 0) / net * 100, count: completed.length };
-  }, [sales, range]);
+    const withRev = siteEconomicsRows.filter((r) => r.eco.revenue > 0);
+    const net = withRev.reduce((a, r) => a + r.eco.revenue, 0);
+    if (!withRev.length || net <= 0) return { avg: 0, count: 0 };
+    const totMargin = withRev.reduce((a, r) => a + r.eco.margin, 0);
+    return { avg: (totMargin / net) * 100, count: withRev.length };
+  }, [siteEconomicsRows]);
   const margineSem: 'green' | 'amber' | 'red' = margine.avg >= 30 ? 'green' : margine.avg >= 15 ? 'amber' : 'red';
   const margineColor = margineSem === 'green' ? '#16a34a' : margineSem === 'amber' ? '#d97706' : '#dc2626';
 
@@ -688,11 +740,77 @@ const AdminOverview = () => {
         {showCom && (
           <BigKPI
             label="Margine Medio" value={margine.avg} format="pct" variant="semaphore" semaphore={margineSem}
-            sub={`Ponderato su ${margine.count} vendite`} icon={Target}
-            onClick={() => navigate('/admin/analytics')}
+            sub={`Motore unico · ${margine.count} cantieri`} icon={Target}
+            onClick={() => navigate('/admin/cantieri/marginalita')}
           />
         )}
       </div>
+
+      {/* ECONOMIA CANTIERI — motore unico */}
+      {(showCan || showFin) && (
+        <Panel
+          title="Economia cantieri"
+          right={
+            <button
+              onClick={() => navigate('/admin/cantieri/marginalita')}
+              className="text-[10px] uppercase font-bold tracking-wider"
+              style={{ color: '#4F46E5' }}
+            >
+              Marginalità →
+            </button>
+          }
+        >
+          {siteEconomicsRows.length ? (
+            <div className="overflow-x-auto">
+              <table className="w-full text-[12px]">
+                <thead>
+                  <tr className="text-left text-[10px] uppercase tracking-wider border-b" style={{ color: 'var(--crm-ink-muted)', borderColor: 'var(--crm-bg-soft)' }}>
+                    <th className="py-2 pr-3">Cantiere</th>
+                    <th className="py-2 px-2 text-right">Ricavo netto</th>
+                    <th className="py-2 px-2 text-right">Costi</th>
+                    <th className="py-2 px-2 text-right">Margine attuale</th>
+                    <th className="py-2 px-2 text-right">Margine previsto</th>
+                    <th className="py-2 pl-2 text-right">Esito</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y" style={{ borderColor: 'rgba(26,26,46,0.05)' }}>
+                  {siteEconomicsRows.map(({ site, info, eco }) => (
+                    <tr
+                      key={site.id}
+                      onClick={() => navigate(`/admin/cantieri/${site.id}`)}
+                      className="cursor-pointer hover:bg-[var(--crm-bg-soft)] transition-colors"
+                    >
+                      <td className="py-2 pr-3 min-w-[160px]">
+                        <div className="font-semibold truncate" style={{ color: 'var(--crm-ink)' }}>
+                          {info.cliente || site.title}
+                        </div>
+                        <div className="text-[10px] truncate" style={{ color: 'var(--crm-ink-muted)' }}>
+                          {[info.luogo, info.rif && `Rif. ${info.rif}`].filter(Boolean).join(' · ')}
+                        </div>
+                      </td>
+                      <td className="py-2 px-2 text-right tabular-nums font-medium">{eur(eco.revenue)}</td>
+                      <td className="py-2 px-2 text-right tabular-nums text-orange-600">{eur(eco.totalCost)}</td>
+                      <td className={`py-2 px-2 text-right tabular-nums font-semibold ${OUTCOME_META[eco.outcome].textClass}`}>
+                        {eur(eco.margin)}
+                      </td>
+                      <td className={`py-2 px-2 text-right tabular-nums font-semibold ${OUTCOME_META[eco.outcomeWithPlanned].textClass}`}>
+                        {eur(eco.marginWithPlanned)}
+                      </td>
+                      <td className="py-2 pl-2 text-right">
+                        <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${OUTCOME_META[eco.outcome].badgeClass}`}>
+                          {OUTCOME_META[eco.outcome].label}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <Empty msg="Nessun cantiere registrato" />
+          )}
+        </Panel>
+      )}
 
       {/* CHART + GAUGES (above the fold) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">

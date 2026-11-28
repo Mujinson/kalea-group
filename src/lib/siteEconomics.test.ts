@@ -3,7 +3,9 @@ import { describe, it as test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   classifyOutcome,
+  computeAllSitesEconomics,
   computeSiteEconomics,
+  isMaterialExpense,
   isPlannedExpense,
   resolveIsTravel,
   splitSiteExpenses,
@@ -194,5 +196,132 @@ describe('siteEconomics', () => {
 
     assert.equal(resolveIsTravel('on', { lat: 45.6704, lng: 9.9382 }, 150).isTravel, true);
     assert.equal(resolveIsTravel('off', SITE_COORDS, 150).isTravel, false);
+  });
+
+  test('spese con expense_type = materiali sommate ai materiali e non alle spese sostenute', () => {
+    assert.equal(isMaterialExpense('materiali'), true);
+    assert.equal(isMaterialExpense('Materiali '), true);
+    assert.equal(isMaterialExpense('vitto'), false);
+
+    const res = computeSiteEconomics({
+      siteId: SITE_ID,
+      revenue: 10000,
+      materials: [{ total_cost: 7406.2 }],
+      expenses: [
+        { amount: 203.8, expense_type: 'materiali', notes: 'Differenza fornitore' },
+        { amount: 100, expense_type: 'vitto', notes: 'Pranzi' },
+        { amount: 300, expense_type: 'materiali', notes: 'PREVISTO materiale extra' },
+      ],
+      timeEntries: [],
+      workers: [],
+      siteCoords: SITE_COORDS,
+      isTravel: false,
+    });
+    assert.equal(res.materialsCost, 7610);
+    assert.equal(res.sustainedExpenses, 100);
+    assert.equal(res.plannedExpenses, 300);
+    assert.equal(res.totalCost, 7710);
+    assert.equal(res.margin, 2290);
+    assert.equal(res.marginWithPlanned, 1990);
+  });
+
+  test('caso 1: cantiere senza spese (solo ricavo, materiali e manodopera)', () => {
+    const d8 = makeDayEntries('2026-11-18', SITE_COORDS.lat, SITE_COORDS.lng, 8);
+    const res = computeSiteEconomics({
+      siteId: 'site-no-exp',
+      revenue: 5000,
+      materials: [{ total_cost: 1500 }],
+      expenses: [],
+      timeEntries: d8,
+      workers: [WORKER],
+      siteCoords: SITE_COORDS,
+      isTravel: false,
+    });
+    assert.equal(res.sustainedExpenses, 0);
+    assert.equal(res.plannedExpenses, 0);
+    assert.equal(res.laborCost, 260);
+    assert.equal(res.totalCost, 1760);
+    assert.equal(res.margin, 3240);
+    assert.equal(res.marginWithPlanned, 3240);
+    assert.equal(res.outcome, 'utile');
+    assert.equal(res.outcomeWithPlanned, 'utile');
+  });
+
+  test('caso 2: cantiere con spese previste (attuale in utile, previsto più basso)', () => {
+    const res = computeSiteEconomics({
+      siteId: 'site-planned',
+      revenue: 12000,
+      materials: [{ total_cost: 7406.2 }],
+      expenses: [
+        { amount: 203.8, expense_type: 'materiali', notes: 'Integrazione' },
+        { amount: 890, expense_type: 'trasporto', notes: 'Trasferta sostenuta' },
+        { amount: 1500, expense_type: 'alloggio', notes: 'PREVISTO albergo settimana prossima' },
+      ],
+      timeEntries: [],
+      workers: [],
+      siteCoords: SITE_COORDS,
+      isTravel: true,
+    });
+    assert.equal(res.materialsCost, 7610);
+    assert.equal(res.sustainedExpenses, 890);
+    assert.equal(res.plannedExpenses, 1500);
+    assert.equal(res.margin, 3500);
+    assert.equal(res.outcome, 'utile');
+    assert.equal(res.marginWithPlanned, 2000);
+    assert.equal(res.outcomeWithPlanned, 'utile');
+  });
+
+  test('caso 3: cantiere in perdita (costi sostenuti superiori al ricavo)', () => {
+    const d8a = makeDayEntries('2026-11-26', SITE_COORDS.lat, SITE_COORDS.lng, 8);
+    const d8b = makeDayEntries('2026-11-27', SITE_COORDS.lat, SITE_COORDS.lng, 8);
+    const res = computeSiteEconomics({
+      siteId: 'site-loss',
+      revenue: 3000,
+      materials: [{ total_cost: 2800 }],
+      expenses: [
+        { amount: 400, expense_type: 'vitto', notes: 'Vitto squadra' },
+        { amount: 500, expense_type: 'alloggio', notes: 'PREVISTO completamento' },
+      ],
+      timeEntries: [...d8a, ...d8b],
+      workers: [WORKER],
+      siteCoords: SITE_COORDS,
+      isTravel: true,
+    });
+    assert.equal(res.laborCost, 700);
+    assert.equal(res.totalCost, 3900);
+    assert.equal(res.margin, -900);
+    assert.equal(res.outcome, 'perdita');
+    assert.equal(res.marginWithPlanned, -1400);
+    assert.equal(res.outcomeWithPlanned, 'perdita');
+  });
+
+  test('computeAllSitesEconomics calcola in batch con le stesse regole', () => {
+    const map = computeAllSitesEconomics({
+      sites: [
+        { id: 's1', latitude: SITE_COORDS.lat, longitude: SITE_COORDS.lng, travel_mode: 'off' },
+        { id: 's2', latitude: SITE_COORDS.lat, longitude: SITE_COORDS.lng, travel_mode: 'on' },
+      ],
+      invoices: [
+        { id: 'i1', site_id: 's1', subtotal: 4000, status: 'pagata' },
+        { id: 'i2', site_id: 's2', subtotal: 1000, status: 'da_pagare' },
+      ],
+      schedules: [],
+      materials: [
+        { site_id: 's1', total_cost: 1000 },
+        { site_id: 's2', total_cost: 1200 },
+      ],
+      expenses: [
+        { site_id: 's2', amount: 200, expense_type: 'materiali', notes: 'Colla' },
+        { site_id: 's2', amount: 300, expense_type: 'alloggio', notes: 'PREVISTO hotel' },
+      ],
+      timeEntries: [],
+      workers: [WORKER],
+    });
+    assert.equal(map.get('s1')?.margin, 3000);
+    assert.equal(map.get('s1')?.outcome, 'utile');
+    assert.equal(map.get('s2')?.materialsCost, 1400);
+    assert.equal(map.get('s2')?.margin, -400);
+    assert.equal(map.get('s2')?.marginWithPlanned, -700);
+    assert.equal(map.get('s2')?.outcome, 'perdita');
   });
 });

@@ -10,28 +10,16 @@ import { fetchAllRows } from '@/lib/fetchAllRows';
 import {
   computeSiteEconomics,
   NORMAL_DAILY_RATE,
+  OUTCOME_META,
   resolveIsTravel,
   TRAVEL_DAILY_RATE,
   type AttendanceOverrideRow,
-  type EconomicsOutcome,
   type TravelMode,
 } from '@/lib/siteEconomics';
 import { SiteAttendancePanel } from './SiteAttendancePanel';
 import { toast } from 'sonner';
 
 export const marginColor = (pct: number) => (pct >= 20 ? 'bg-green-500' : pct >= 0 ? 'bg-amber-500' : 'bg-red-500');
-
-const OUTCOME_BADGE: Record<EconomicsOutcome, { label: string; className: string }> = {
-  utile: { label: 'In utile', className: 'bg-green-600 text-white hover:bg-green-600' },
-  perdita: { label: 'In perdita', className: 'bg-red-600 text-white hover:bg-red-600' },
-  pari: { label: 'In pari', className: 'bg-slate-500 text-white hover:bg-slate-500' },
-};
-
-const OUTCOME_TEXT: Record<EconomicsOutcome, string> = {
-  utile: 'text-green-600',
-  perdita: 'text-red-600',
-  pari: 'text-slate-600',
-};
 
 function addDaysIso(iso: string, delta: number): string {
   const d = new Date(`${iso.slice(0, 10)}T00:00:00Z`);
@@ -55,7 +43,7 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
         supabase.from('customer_invoices').select('id,site_id,quote_id,subtotal,total,status,paid_amount,invoice_date,due_date,created_at'),
         supabase.from('payment_schedules').select('sale_id,invoice_id,amount,is_paid,paid_date,due_date,is_invoiced,invoiced_amount'),
         supabase.from('site_materials').select('total_cost,quantity,unit_cost').eq('site_id', siteId),
-        supabase.from('site_expenses').select('amount,notes').eq('site_id', siteId),
+        supabase.from('site_expenses').select('amount,notes,expense_type').eq('site_id', siteId),
         supabase.from('workers').select('id,user_id,first_name,last_name,hourly_cost'),
         supabase.from('crew_cost_settings').select('trasferta_km').limit(1).maybeSingle(),
         supabase.from('site_attendance_overrides').select('worker_id,work_date,decision,note').eq('site_id', siteId),
@@ -156,7 +144,7 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
             <CardTitle className="text-sm flex items-center gap-2">
               <TrendingUp className="w-4 h-4" /> Economics commessa
             </CardTitle>
-            {eco && <Badge className={OUTCOME_BADGE[outcome].className}>{OUTCOME_BADGE[outcome].label}</Badge>}
+            {eco && <Badge className={OUTCOME_META[outcome].badgeClass}>{OUTCOME_META[outcome].label}</Badge>}
           </div>
 
           <div className="flex items-center gap-1 text-xs">
@@ -219,21 +207,21 @@ export function SiteEconomics({ siteId, budget }: { siteId: string; budget?: num
           <div className="flex items-center justify-between gap-2">
             <div>
               <p className="text-xs text-muted-foreground">Margine attuale (senza previste)</p>
-              <p className={`text-lg font-bold ${OUTCOME_TEXT[outcome]}`}>
+              <p className={`text-lg font-bold ${OUTCOME_META[outcome].textClass}`}>
                 {fmtEur(margin)} <span className="text-xs font-medium">({marginPct.toFixed(1)}%)</span>
               </p>
             </div>
-            <Badge className={OUTCOME_BADGE[outcome].className}>{OUTCOME_BADGE[outcome].label}</Badge>
+            <Badge className={OUTCOME_META[outcome].badgeClass}>{OUTCOME_META[outcome].label}</Badge>
           </div>
           <div className="flex items-center justify-between gap-2 sm:border-l sm:pl-3">
             <div>
               <p className="text-xs text-muted-foreground">Margine con spese previste incluse</p>
-              <p className={`text-lg font-bold ${OUTCOME_TEXT[outcomePlanned]}`}>
+              <p className={`text-lg font-bold ${OUTCOME_META[outcomePlanned].textClass}`}>
                 {fmtEur(eco?.marginWithPlanned ?? 0)}{' '}
                 <span className="text-xs font-medium">({(eco?.marginWithPlannedPct ?? 0).toFixed(1)}%)</span>
               </p>
             </div>
-            <Badge className={OUTCOME_BADGE[outcomePlanned].className}>{OUTCOME_BADGE[outcomePlanned].label}</Badge>
+            <Badge className={OUTCOME_META[outcomePlanned].badgeClass}>{OUTCOME_META[outcomePlanned].label}</Badge>
           </div>
         </div>
 
