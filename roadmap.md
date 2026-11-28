@@ -33,7 +33,11 @@
 ## Riordino CRM (audit 22/11)
 - [x] Passo 1: elenco record scollegati esportato
 - [x] Passo 2: menu in 7 gruppi
-- [ ] Passi 3-10: unificare fatturato, margini, costi fissi, ore; schermata "Da collegare"; dettaglio cantiere a schede; avviso preventivo/vendita
+- [x] Passi 3-6: unificati fatturato, margini, costi fissi e ore
+- [ ] Passo 7: schermata unica "Da collegare" per i record senza legami
+- [ ] Passo 8: dettaglio cantiere a schede unificato
+- [ ] Passo 9: avviso preventivo/vendita senza collegamento
+- [x] Economics commessa: motore unico in src/lib/siteEconomics.ts usato da Dashboard, Marginalità, Margini e scheda cantiere
 
 - [x] Dashboard: Ultimi preventivi reali + cantieri con cliente/luogo/rif
 - [x] Passo 4: funzione margine unica (AdminMargini, CantieriMarginalita, SiteEconomics, Budget vs Consuntivo, Analytics)
